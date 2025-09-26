@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TPL FVG Autisti</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <button id="darkmode-toggle" style="float:right;margin-bottom:10px;">🌙 Modalità Scura</button>
+        <h1>TPL FVG Autisti</h1>
+        <div class="form-group">
+            <label for="linea">Linea:</label>
+            <select id="linea">
+                <option value="">Seleziona una linea</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="partenza">Partenza:</label>
+            <select id="partenza" disabled>
+                <option value="">Seleziona la partenza</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="arrivo">Arrivo:</label>
+            <select id="arrivo" disabled>
+                <option value="">Seleziona l'arrivo</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <button id="calcola" disabled>Calcola Prezzo</button>
+        </div>
+        <div id="prezzo" class="prezzo"></div>
+        <hr>
+        <button id="admin-toggle">Area Amministratore</button>
+        <div id="admin-panel" class="admin-panel" style="display:none;">
+            <h2>Modifica Prezzi Linea</h2>
+            <div class="form-group">
+                <label for="admin-linea">Linea:</label>
+                <select id="admin-linea">
+                    <option value="">Seleziona una linea</option>
+                </select>
+            </div>
+            <div id="admin-prezzi"></div>
+            <button id="admin-save" style="margin-top:16px;">Salva modifiche</button>
+            <div id="admin-json" class="admin-json"></div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
