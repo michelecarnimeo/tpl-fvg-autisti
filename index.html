@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TPL FVG Autisti</title>
+    <link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+    <link as="style" href="https://fonts.googleapis.com/css2?display=swap&family=Work+Sans:wght@400;500;700;900" onload="this.rel='stylesheet'" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1173d4",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                        "foreground-light": "#101922",
+                        "foreground-dark": "#f6f7f8",
+                        "card-light": "#ffffff",
+                        "card-dark": "#1b2734",
+                        "input-light": "#e9ecef",
+                        "input-dark": "#2a3b4c",
+                        "border-light": "#ced4da",
+                        "border-dark": "#3e4c59"
+                    },
+                    fontFamily: {
+                        "display": ["Work Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "0.75rem",
+                        "xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+    <style>
+        .form-select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+            -webkit-print-color-adjust: exact;
+            color-adjust: exact;
+        }
+        .dark .form-select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23d1d5db' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+        }
+    </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-foreground-light dark:text-foreground-dark">
+    <!-- Pagina di Benvenuto -->
+    <div id="welcome-page" class="flex flex-col items-center justify-center min-h-screen p-4">
+        <div class="w-full max-w-md mx-auto text-center">
+            <div class="mb-8">
+                <div class="w-full h-64 bg-center bg-no-repeat bg-cover rounded-xl" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAAHo3xeyinXKzD_peKfnl-RZXDpTizPC5EExekGJy3TKsgM2paQ-PKIvZO_gVX0TPC_TbqLZXmr6DriFHsnLxci-Xsm-s_-uArysGRyn0zW9xitcH9jUbKarMOt1CgfJ8mIMFCTxjOFRkhKgoZwazB3xAFbWm9JBJFM2LQfWNooxTY2l2LgZy8EX7VFwkRYKeBxtV-04JCFqj_pAOuRFlRl_TbKqGKMRP8FXbheFSFrTrIPI2b-nNrI9rbp5H8BGm0QL-lHAtPCKPq");'></div>
+            </div>
+            <h1 class="text-4xl font-bold text-black dark:text-white mb-2">Benvenuto</h1>
+            <p class="text-lg text-black/70 dark:text-white/70 mb-8">
+                Calcola rapidamente il costo del biglietto in base alla tratta.
+            </p>
+            <div class="space-y-4">
+                <button id="start-app" class="w-full max-w-xs mx-auto bg-primary text-white font-bold py-3 px-6 rounded-lg hover:bg-primary/90 focus:outline-none focus:ring-4 focus:ring-primary/30 transition-all duration-300">
+                    Inizia
+                </button>
+                <button id="darkmode-toggle-welcome" class="w-full max-w-xs mx-auto bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-medium py-2 px-4 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600 transition-all duration-300">
+                    <span class="material-symbols-outlined inline-block mr-2">dark_mode</span>
+                    Modalità Scura
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Applicazione Principale -->
+    <div id="main-app" class="flex flex-col min-h-screen" style="display: none;">
+        <header class="bg-card-light dark:bg-card-dark shadow-sm">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <div class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary text-3xl">directions_bus</span>
+                        <h1 class="text-xl font-bold">TPL FVG Autisti</h1>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button id="back-to-welcome" class="p-2 rounded-full hover:bg-primary/10 dark:hover:bg-primary/20" title="Torna al benvenuto">
+                            <span class="material-symbols-outlined">home</span>
+                        </button>
+                        <button id="darkmode-toggle" class="p-2 rounded-full hover:bg-primary/10 dark:hover:bg-primary/20" title="Modalità scura">
+                            <span class="material-symbols-outlined">dark_mode</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <main class="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="max-w-md mx-auto">
+                <div class="bg-card-light dark:bg-card-dark p-6 sm:p-8 rounded-xl shadow-lg space-y-6">
+                    <div class="text-center">
+                        <h2 class="text-2xl sm:text-3xl font-bold">Calcola il costo del biglietto</h2>
+                        <p class="text-foreground-light/70 dark:text-foreground-dark/70 mt-2">Seleziona la tua tratta per un calcolo rapido.</p>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="space-y-2">
+                            <label class="font-medium" for="linea">Linea</label>
+                            <select class="form-select w-full h-12 px-4 bg-input-light dark:bg-input-dark border border-border-light dark:border-border-dark rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors" id="linea" name="linea">
+                                <option value="">Seleziona una linea</option>
+                            </select>
+                        </div>
+                        
+                        <div class="space-y-2">
+                            <label class="font-medium" for="partenza">Partenza</label>
+                            <select class="form-select w-full h-12 px-4 bg-input-light dark:bg-input-dark border border-border-light dark:border-border-dark rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors" id="partenza" name="partenza" disabled>
+                                <option value="">Seleziona la partenza</option>
+                            </select>
+                        </div>
+                        
+                        <div class="space-y-2">
+                            <label class="font-medium" for="arrivo">Arrivo</label>
+                            <select class="form-select w-full h-12 px-4 bg-input-light dark:bg-input-dark border border-border-light dark:border-border-dark rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors" id="arrivo" name="arrivo" disabled>
+                                <option value="">Seleziona l'arrivo</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <button id="calcola" class="w-full bg-primary text-white font-bold h-12 rounded-lg hover:bg-primary/90 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-background-light dark:focus:ring-offset-background-dark focus:ring-primary disabled:bg-gray-400 disabled:cursor-not-allowed" disabled>
+                        Calcola Prezzo
+                    </button>
+                    
+                    <div id="prezzo" class="text-center pt-4 border-t border-border-light dark:border-border-dark">
+                        <h3 class="text-lg font-medium text-foreground-light/80 dark:text-foreground-dark/80">Costo del biglietto</h3>
+                        <p class="text-5xl font-bold text-primary mt-2"></p>
+                    </div>
+                </div>
+                
+                <!-- Area Amministratore -->
+                <div class="mt-8">
+                    <button id="admin-toggle" class="w-full bg-red-600 text-white font-bold h-12 rounded-lg hover:bg-red-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-background-light dark:focus:ring-offset-background-dark focus:ring-red-500">
+                        Area Amministratore
+                    </button>
+                    
+                    <div id="admin-panel" class="bg-card-light dark:bg-card-dark p-6 sm:p-8 rounded-xl shadow-lg mt-6 space-y-6" style="display:none;">
+                        <div class="text-center">
+                            <h2 class="text-2xl font-bold text-red-600">Modifica Prezzi Linea</h2>
+                        </div>
+                        
+                        <div class="space-y-2">
+                            <label class="font-medium" for="admin-linea">Linea</label>
+                            <select class="form-select w-full h-12 px-4 bg-input-light dark:bg-input-dark border border-border-light dark:border-border-dark rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors" id="admin-linea" name="admin-linea">
+                                <option value="">Seleziona una linea</option>
+                            </select>
+                        </div>
+                        
+                        <div id="admin-prezzi" class="overflow-x-auto"></div>
+                        
+                        <button id="admin-save" class="w-full bg-primary text-white font-bold h-12 rounded-lg hover:bg-primary/90 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-background-light dark:focus:ring-offset-background-dark focus:ring-primary">
+                            Salva modifiche
+                        </button>
+                        
+                        <div id="admin-json" class="bg-gray-900 text-green-400 font-mono text-sm p-4 rounded-lg max-h-64 overflow-auto" style="display:none;"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <footer class="py-4 text-center text-sm text-foreground-light/60 dark:text-foreground-dark/60">
+            <p>© 2024 TPL FVG. Tutti i diritti riservati.</p>
+        </footer>
+    </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
