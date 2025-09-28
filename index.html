@@ -4,10 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TPL FVG Autisti</title>
-<<<<<<< HEAD
     <link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
     <link as="style" href="https://fonts.googleapis.com/css2?display=swap&family=Work+Sans:wght@400;500;700;900" onload="this.rel='stylesheet'" rel="stylesheet"/>
-    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script>
         tailwind.config = {
             darkMode: "class",
@@ -20,7 +19,12 @@
                         "foreground-light": "#101922",
                         "foreground-dark": "#f6f7f8",
                         "card-light": "#ffffff",
-                        "card-dark": "#1b2734",
+                            "card-dark": "#1b2734",
+                            "subtle-light": "#e5e7eb",
+                            "subtle-dark": "#1f2937",
+                            "text-light": "#101922",
+                            "text-dark": "#f6f7f8",
+                            "turquoise": "#17b7b1",
                         "input-light": "#e9ecef",
                         "input-dark": "#2a3b4c",
                         "border-light": "#ced4da",
@@ -40,20 +44,7 @@
         }
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
-    <style>
-        .form-select {
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-            background-position: right 0.5rem center;
-            background-repeat: no-repeat;
-            background-size: 1.5em 1.5em;
-            padding-right: 2.5rem;
-            -webkit-print-color-adjust: exact;
-            color-adjust: exact;
-        }
-        .dark .form-select {
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23d1d5db' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-        }
-    </style>
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body class="font-display bg-background-light dark:bg-background-dark text-foreground-light dark:text-foreground-dark">
     <!-- Pagina di Benvenuto -->
@@ -80,12 +71,24 @@
 
     <!-- Applicazione Principale -->
     <div id="main-app" class="flex flex-col min-h-screen" style="display: none;">
-        <header class="bg-card-light dark:bg-card-dark shadow-sm">
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <header class="border-b border-subtle-light dark:border-subtle-dark bg-turquoise dark:bg-card-dark text-white">
+            <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
-                    <div class="flex items-center gap-3">
-                        <span class="material-symbols-outlined text-primary text-3xl">directions_bus</span>
-                        <h1 class="text-xl font-bold">TPL FVG Autisti</h1>
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 flex items-center">
+                            <img src="src/tpl.jpg" alt="TPL" class="h-10 w-10 rounded-md object-cover mr-3" />
+                            <!-- Inline SVG bus icon (cleaner appearance) -->
+                            <svg class="h-8 w-8 text-white" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path d="M17 1H7C5.9 1 5 1.9 5 3V16C5 17.1 5.9 18 7 18V20C7 20.55 7.45 21 8 21C8.55 21 9 20.55 9 20V19H15V20C15 20.55 15.45 21 16 21C16.55 21 17 20.55 17 20V18C18.1 18 19 17.1 19 16V3C19 1.9 18.1 1 17 1ZM7 6H17V9H7V6Z" />
+                            </svg>
+                        </div>
+                        <div class="hidden md:block">
+                            <div class="ml-6 flex items-baseline space-x-4">
+                                <a class="text-text-light dark:text-text-dark hover:bg-primary/10 dark:hover:bg-primary/20 px-3 py-2 rounded-md text-sm font-medium" href="#">Home</a>
+                                <a class="text-text-light dark:text-text-dark hover:bg-primary/10 dark:hover:bg-primary/20 px-3 py-2 rounded-md text-sm font-medium" href="#">Tratte</a>
+                                <a class="text-text-light dark:text-text-dark hover:bg-primary/10 dark:hover:bg-primary/20 px-3 py-2 rounded-md text-sm font-medium" href="#">Tariffe</a>
+                            </div>
+                        </div>
                     </div>
                     <div class="flex items-center gap-2">
                         <button id="back-to-welcome" class="p-2 rounded-full hover:bg-primary/10 dark:hover:bg-primary/20" title="Torna al benvenuto">
@@ -94,77 +97,86 @@
                         <button id="darkmode-toggle" class="p-2 rounded-full hover:bg-primary/10 dark:hover:bg-primary/20" title="Modalità scura">
                             <span class="material-symbols-outlined">dark_mode</span>
                         </button>
+                        <a href="admin.html" class="ml-3 inline-flex items-center gap-2 px-3 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700">Area Amministratore</a>
                     </div>
                 </div>
-            </div>
+            </nav>
         </header>
-        
-        <main class="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div class="max-w-md mx-auto">
-                <div class="bg-card-light dark:bg-card-dark p-6 sm:p-8 rounded-xl shadow-lg space-y-6">
-                    <div class="text-center">
-                        <h2 class="text-2xl sm:text-3xl font-bold">Calcola il costo del biglietto</h2>
-                        <p class="text-foreground-light/70 dark:text-foreground-dark/70 mt-2">Seleziona la tua tratta per un calcolo rapido.</p>
-                    </div>
-                    
-                    <div class="space-y-4">
-                        <div class="space-y-2">
-                            <label class="font-medium" for="linea">Linea</label>
-                            <select class="form-select w-full h-12 px-4 bg-input-light dark:bg-input-dark border border-border-light dark:border-border-dark rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors" id="linea" name="linea">
-                                <option value="">Seleziona una linea</option>
-                            </select>
+
+        <main class="flex-grow flex items-center justify-center py-8 px-4">
+            <div class="w-full max-w-2xl mx-auto">
+                <div class="bg-white dark:bg-subtle-dark rounded-xl shadow-lg p-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Lato sinistro: riepilogo semplice -->
+                        <div class="space-y-6">
+                            <div class="text-center lg:text-left">
+                                    <h1 class="text-2xl font-bold text-text-light dark:text-text-dark">Costo del Biglietto</h1>
+                                    <p class="text-text-light/70 dark:text-text-dark/70">Calcola rapidamente il prezzo per la tratta selezionata</p>
+                                </div>
+
+                                <!-- Select Linea spostata qui (sopra partenza/arrivo) -->
+                                <div class="mb-4">
+                                    <label class="font-medium block mb-2" for="linea">Linea</label>
+                                    <select id="linea" name="linea" class="form-select w-full h-10 px-3 bg-input-light dark:bg-input-dark border border-border-light dark:border-border-dark rounded-lg">
+                                        <option value="">Seleziona una linea</option>
+                                    </select>
+                                </div>
+
+                                <div class="bg-background-light dark:bg-background-dark p-4 rounded-lg">
+                                <div class="flex flex-col gap-3">
+                                    <div class="flex items-center space-x-3 w-full">
+                                        <span class="material-symbols-outlined text-primary">trip_origin</span>
+                                        <span class="font-medium">Partenza</span>
+                                        <div class="flex-1">
+                                            <select id="partenza" name="partenza" disabled class="form-select w-full h-10 px-3 bg-input-light dark:bg-input-dark border border-border-light dark:border-border-dark rounded-lg">
+                                                <option value="">Seleziona la partenza</option>
+                                            </select>
+                                            <div class="text-xs text-text-light/70 dark:text-text-dark/70 mt-1">Selezionato: <span id="summary-partenza">-</span></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-center justify-center">
+                                        <button id="swap-btn" title="Inverte partenza e arrivo" disabled class="p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50">
+                                            <span class="material-symbols-outlined">swap_horiz</span>
+                                        </button>
+                                    </div>
+
+                                    <div class="flex items-center space-x-3 w-full">
+                                        <span class="material-symbols-outlined text-primary">location_on</span>
+                                        <span class="font-medium">Arrivo</span>
+                                        <div class="flex-1">
+                                            <select id="arrivo" name="arrivo" disabled class="form-select w-full h-10 px-3 bg-input-light dark:bg-input-dark border border-border-light dark:border-border-dark rounded-lg">
+                                                <option value="">Seleziona l'arrivo</option>
+                                            </select>
+                                            <div class="text-xs text-text-light/70 dark:text-text-dark/70 mt-1">Selezionato: <span id="summary-arrivo">-</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="text-center lg:text-left">
+                                <p class="text-sm text-text-light/70 dark:text-text-dark/70">Prezzo Totale</p>
+                                <p id="summary-prezzo" class="text-4xl lg:text-5xl font-bold text-primary mt-1">-</p>
+                                <p id="summary-codice" class="text-base font-semibold text-primary mt-2"> </p>
+                            </div>
                         </div>
-                        
-                        <div class="space-y-2">
-                            <label class="font-medium" for="partenza">Partenza</label>
-                            <select class="form-select w-full h-12 px-4 bg-input-light dark:bg-input-dark border border-border-light dark:border-border-dark rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors" id="partenza" name="partenza" disabled>
-                                <option value="">Seleziona la partenza</option>
-                            </select>
+
+                        <!-- Lato destro: controlli dell'app (mantengo gli ID esistenti) -->
+                        <div>
+                            <div class="space-y-4">
+                                <!-- La select 'linea' è stata spostata nella colonna di riepilogo a sinistra -->
+
+                                <!-- Le select Partenza e Arrivo sono mostrate nella colonna di riepilogo a sinistra -->
+                                <!-- swap-btn rimosso qui (presente nel pannello riepilogo a sinistra) -->
+
+                                <button id="calcola" disabled class="w-full bg-primary text-white font-bold h-12 rounded-lg hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary">Calcola Prezzo</button>
+
+                                <div id="prezzo-errore" class="mt-2 text-center text-red-600 text-base font-semibold" style="display:none;"></div>
+                                <!-- admin-toggle spostato nella navbar -->
+
+                                <!-- Area amministratore rimossa da questa pagina. Usa la pagina separata admin.html per modifiche avanzate. -->
+                            </div>
                         </div>
-                        
-                        <div class="space-y-2">
-                            <label class="font-medium" for="arrivo">Arrivo</label>
-                            <select class="form-select w-full h-12 px-4 bg-input-light dark:bg-input-dark border border-border-light dark:border-border-dark rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors" id="arrivo" name="arrivo" disabled>
-                                <option value="">Seleziona l'arrivo</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <button id="calcola" class="w-full bg-primary text-white font-bold h-12 rounded-lg hover:bg-primary/90 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-background-light dark:focus:ring-offset-background-dark focus:ring-primary disabled:bg-gray-400 disabled:cursor-not-allowed" disabled>
-                        Calcola Prezzo
-                    </button>
-                    
-                    <div id="prezzo" class="text-center pt-4 border-t border-border-light dark:border-border-dark">
-                        <h3 class="text-lg font-medium text-foreground-light/80 dark:text-foreground-dark/80">Costo del biglietto</h3>
-                        <p class="text-5xl font-bold text-primary mt-2"></p>
-                    </div>
-                </div>
-                
-                <!-- Area Amministratore -->
-                <div class="mt-8">
-                    <button id="admin-toggle" class="w-full bg-red-600 text-white font-bold h-12 rounded-lg hover:bg-red-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-background-light dark:focus:ring-offset-background-dark focus:ring-red-500">
-                        Area Amministratore
-                    </button>
-                    
-                    <div id="admin-panel" class="bg-card-light dark:bg-card-dark p-6 sm:p-8 rounded-xl shadow-lg mt-6 space-y-6" style="display:none;">
-                        <div class="text-center">
-                            <h2 class="text-2xl font-bold text-red-600">Modifica Prezzi Linea</h2>
-                        </div>
-                        
-                        <div class="space-y-2">
-                            <label class="font-medium" for="admin-linea">Linea</label>
-                            <select class="form-select w-full h-12 px-4 bg-input-light dark:bg-input-dark border border-border-light dark:border-border-dark rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors" id="admin-linea" name="admin-linea">
-                                <option value="">Seleziona una linea</option>
-                            </select>
-                        </div>
-                        
-                        <div id="admin-prezzi" class="overflow-x-auto"></div>
-                        
-                        <button id="admin-save" class="w-full bg-primary text-white font-bold h-12 rounded-lg hover:bg-primary/90 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-background-light dark:focus:ring-offset-background-dark focus:ring-primary">
-                            Salva modifiche
-                        </button>
-                        
-                        <div id="admin-json" class="bg-gray-900 text-green-400 font-mono text-sm p-4 rounded-lg max-h-64 overflow-auto" style="display:none;"></div>
                     </div>
                 </div>
             </div>
@@ -173,54 +185,6 @@
         <footer class="py-4 text-center text-sm text-foreground-light/60 dark:text-foreground-dark/60">
             <p>© 2024 TPL FVG. Tutti i diritti riservati.</p>
         </footer>
+        </div>
+    <script src="script.js" defer></script>
     </div>
-    </div>
-    
-=======
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="container">
-        <button id="darkmode-toggle" style="float:right;margin-bottom:10px;">🌙 Modalità Scura</button>
-        <h1>TPL FVG Autisti</h1>
-        <div class="form-group">
-            <label for="linea">Linea:</label>
-            <select id="linea">
-                <option value="">Seleziona una linea</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="partenza">Partenza:</label>
-            <select id="partenza" disabled>
-                <option value="">Seleziona la partenza</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="arrivo">Arrivo:</label>
-            <select id="arrivo" disabled>
-                <option value="">Seleziona l'arrivo</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <button id="calcola" disabled>Calcola Prezzo</button>
-        </div>
-        <div id="prezzo" class="prezzo"></div>
-        <hr>
-        <button id="admin-toggle">Area Amministratore</button>
-        <div id="admin-panel" class="admin-panel" style="display:none;">
-            <h2>Modifica Prezzi Linea</h2>
-            <div class="form-group">
-                <label for="admin-linea">Linea:</label>
-                <select id="admin-linea">
-                    <option value="">Seleziona una linea</option>
-                </select>
-            </div>
-            <div id="admin-prezzi"></div>
-            <button id="admin-save" style="margin-top:16px;">Salva modifiche</button>
-            <div id="admin-json" class="admin-json"></div>
-        </div>
-    </div>
->>>>>>> b96f21f8aaeb4504219ce2aa4f13697d96c59fb4
-    <script src="script.js"></script>
-</body>
-</html>
