@@ -17,7 +17,6 @@ const adminJsonDiv = document.getElementById('admin-json');
 // --- DARK MODE ---
 const darkModeBtn = document.getElementById('darkmode-toggle');
 
-<<<<<<< HEAD
 // --- WELCOME PAGE ---
 const welcomePage = document.getElementById('welcome-page');
 const mainApp = document.getElementById('main-app');
@@ -62,9 +61,6 @@ backToWelcomeBtn.addEventListener('click', function() {
     showWelcomePage();
 });
 
-
-=======
->>>>>>> b96f21f8aaeb4504219ce2aa4f13697d96c59fb4
 // Popola il dropdown delle linee
 function popolaLinee() {
     lineaSelect.innerHTML = '<option value="">Seleziona una linea</option>';
@@ -114,14 +110,10 @@ function controllaSelezioni() {
     } else {
         calcolaBtn.disabled = true;
     }
-<<<<<<< HEAD
     const prezzoElement = prezzoDiv.querySelector('p');
     if (prezzoElement) {
         prezzoElement.textContent = "";
     }
-=======
-    prezzoDiv.textContent = "";
->>>>>>> b96f21f8aaeb4504219ce2aa4f13697d96c59fb4
 }
 
 // Calcola e mostra il prezzo
@@ -130,12 +122,8 @@ function mostraPrezzo() {
     const partenzaIdx = parseInt(partenzaSelect.value);
     const arrivoIdx = parseInt(arrivoSelect.value);
     const prezzo = tariffario[lineaIdx].prezzi[partenzaIdx][arrivoIdx];
-<<<<<<< HEAD
     const prezzoElement = prezzoDiv.querySelector('p');
     prezzoElement.textContent = `${prezzo.toFixed(2)} €`;
-=======
-    prezzoDiv.textContent = `Prezzo: € ${prezzo.toFixed(2)}`;
->>>>>>> b96f21f8aaeb4504219ce2aa4f13697d96c59fb4
 }
 
 // Popola il select delle linee in area admin
@@ -155,7 +143,6 @@ function popolaAdminLinee() {
 function popolaTabellaPrezzi(lineaIdx) {
     const linea = tariffario[lineaIdx];
     const fermate = linea.fermate;
-<<<<<<< HEAD
     let html = '<div class="overflow-x-auto"><table class="w-full border-collapse border border-border-light dark:border-border-dark"><thead><tr class="bg-gray-50 dark:bg-gray-800">';
     html += '<th class="border border-border-light dark:border-border-dark p-2 text-left font-medium"></th>';
     fermate.forEach(f => { 
@@ -169,27 +156,11 @@ function popolaTabellaPrezzi(lineaIdx) {
                 html += '<td class="border border-border-light dark:border-border-dark p-2 text-center bg-gray-100 dark:bg-gray-700">—</td>';
             } else {
                 html += `<td class="border border-border-light dark:border-border-dark p-2 text-center"><input type="number" min="0" step="0.01" value="${linea.prezzi[i][j]}" data-partenza="${i}" data-arrivo="${j}" data-linea="${lineaIdx}" class="w-20 px-2 py-1 text-center bg-input-light dark:bg-input-dark border border-border-light dark:border-border-dark rounded focus:ring-2 focus:ring-primary focus:border-primary" /></td>`;
-=======
-    let html = '<table><thead><tr><th></th>';
-    fermate.forEach(f => { html += `<th>${f}</th>`; });
-    html += '</tr></thead><tbody>';
-    fermate.forEach((fPart, i) => {
-        html += `<tr><th>${fPart}</th>`;
-        fermate.forEach((fArr, j) => {
-            if (i === j) {
-                html += '<td style="background:#eee">—</td>';
-            } else {
-                html += `<td><input type="number" min="0" step="0.01" value="${linea.prezzi[i][j]}" data-partenza="${i}" data-arrivo="${j}" data-linea="${lineaIdx}" /></td>`;
->>>>>>> b96f21f8aaeb4504219ce2aa4f13697d96c59fb4
             }
         });
         html += '</tr>';
     });
-<<<<<<< HEAD
     html += '</tbody></table></div>';
-=======
-    html += '</tbody></table>';
->>>>>>> b96f21f8aaeb4504219ce2aa4f13697d96c59fb4
     adminPrezziDiv.innerHTML = html;
     // Listener per ogni input
     adminPrezziDiv.querySelectorAll('input[type="number"]').forEach(input => {
@@ -244,7 +215,6 @@ adminLineaSelect.addEventListener('change', function() {
 // Salva modifiche e mostra JSON aggiornato
 adminSaveBtn.addEventListener('click', salvaModifiche);
 
-<<<<<<< HEAD
 // Inizializzazione: mostra la pagina di benvenuto
 showWelcomePage();
 updateDarkModeButtons();
@@ -279,26 +249,4 @@ darkModeBtn.addEventListener('click', function() {
 darkModeWelcomeBtn.addEventListener('click', function() {
     document.documentElement.classList.toggle('dark');
     updateDarkModeButtons();
-=======
-// Carica i dati dal file JSON e inizializza
-fetch('tariffario.json')
-    .then(response => response.json())
-    .then(data => {
-        tariffario = data;
-        popolaLinee();
-    })
-    .catch(err => {
-        prezzoDiv.textContent = 'Errore nel caricamento dei dati.';
-        lineaSelect.disabled = true;
-    });
-
-// --- DARK MODE ---
-darkModeBtn.addEventListener('click', function() {
-    document.body.classList.toggle('dark-mode');
-    if(document.body.classList.contains('dark-mode')) {
-        darkModeBtn.textContent = '☀️ Modalità Chiara';
-    } else {
-        darkModeBtn.textContent = '🌙 Modalità Scura';
-    }
->>>>>>> b96f21f8aaeb4504219ce2aa4f13697d96c59fb4
 });
