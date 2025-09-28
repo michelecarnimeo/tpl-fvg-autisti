@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TPL FVG Autisti</title>
-<<<<<<< HEAD
     <link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
     <link as="style" href="https://fonts.googleapis.com/css2?display=swap&family=Work+Sans:wght@400;500;700;900" onload="this.rel='stylesheet'" rel="stylesheet"/>
     <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
@@ -48,7 +47,7 @@
             background-size: 1.5em 1.5em;
             padding-right: 2.5rem;
             -webkit-print-color-adjust: exact;
-            color-adjust: exact;
+            print-color-adjust: exact;
         }
         .dark .form-select {
             background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23d1d5db' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
@@ -174,53 +173,5 @@
             <p>© 2024 TPL FVG. Tutti i diritti riservati.</p>
         </footer>
     </div>
+    <script src="script.js" defer></script>
     </div>
-    
-=======
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="container">
-        <button id="darkmode-toggle" style="float:right;margin-bottom:10px;">🌙 Modalità Scura</button>
-        <h1>TPL FVG Autisti</h1>
-        <div class="form-group">
-            <label for="linea">Linea:</label>
-            <select id="linea">
-                <option value="">Seleziona una linea</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="partenza">Partenza:</label>
-            <select id="partenza" disabled>
-                <option value="">Seleziona la partenza</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="arrivo">Arrivo:</label>
-            <select id="arrivo" disabled>
-                <option value="">Seleziona l'arrivo</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <button id="calcola" disabled>Calcola Prezzo</button>
-        </div>
-        <div id="prezzo" class="prezzo"></div>
-        <hr>
-        <button id="admin-toggle">Area Amministratore</button>
-        <div id="admin-panel" class="admin-panel" style="display:none;">
-            <h2>Modifica Prezzi Linea</h2>
-            <div class="form-group">
-                <label for="admin-linea">Linea:</label>
-                <select id="admin-linea">
-                    <option value="">Seleziona una linea</option>
-                </select>
-            </div>
-            <div id="admin-prezzi"></div>
-            <button id="admin-save" style="margin-top:16px;">Salva modifiche</button>
-            <div id="admin-json" class="admin-json"></div>
-        </div>
-    </div>
->>>>>>> b96f21f8aaeb4504219ce2aa4f13697d96c59fb4
-    <script src="script.js"></script>
-</body>
-</html>
