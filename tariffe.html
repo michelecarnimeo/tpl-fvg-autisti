@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TPL FVG - Tariffe</title>
+  <!-- Font locali per PWA offline -->
+  <!-- CSS personalizzati -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="src/tpl.jpg" type="image/jpeg">
+  <style>
+    body { font-family: 'Roboto', Arial, sans-serif; }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="container">
+      <div class="navbar-content">
+        <div class="navbar-brand">
+          <img src="src/tpl.jpg" alt="TPL" class="navbar-logo" />
+          <span class="navbar-title">TPL FVG</span>
+        </div>
+        <nav class="navbar-nav">
+          <a href="benvenuto.html" class="nav-link">Home</a>
+          <a href="tratte.html" class="nav-link">Tratte</a>
+          <a href="tariffe.html" class="nav-link active">Tariffe</a>
+              <button id="darkmode-toggle" class="dark-mode-toggle" title="Darkmode">
+                <span>🌙</span>
+              </button>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Tariffe -->
+  <main class="main-content">
+    <div class="container">
+      <h1 class="page-title">Tariffe per linea</h1>
+      
+      <!-- Selettore linea e ricerca -->
+      <div class="line-search-container">
+        <!-- Selettore linea -->
+        <div class="line-selector-container">
+          <div class="form-group">
+            <label class="form-label" for="linea-tariffe">Seleziona Linea</label>
+            <select id="linea-tariffe" class="form-select">
+              <option value="">Seleziona una linea</option>
+              <!-- Opzioni generate da JS -->
+            </select>
+          </div>
+        </div>
+        
+        <!-- Barra di ricerca (nascosta inizialmente) -->
+        <div id="search-container-tariffe" class="search-container" style="display: none;">
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="search-input-tariffe" class="search-input" placeholder="Cerca tratta o codice..." />
+            <button id="clear-search-tariffe" class="clear-btn" style="display: none;">✕</button>
+          </div>
+        </div>
+      </div>
+      
+      <div id="tariffe-grid-container">
+        <div class="main-card fade-in">
+          <h2 id="andata-title" class="page-title">Prezzi e codici biglietto (Andata)</h2>
+          <div class="overflow-x-auto">
+            <table id="tariffe-andata" class="tariffe-table">
+              <!-- Tabella generata da JS -->
+            </table>
+          </div>
+        </div>
+        
+        <div class="main-card fade-in" style="animation-delay: 0.2s;">
+          <h2 id="ritorno-title" class="page-title">Prezzi e codici biglietto (Ritorno)</h2>
+          <div class="overflow-x-auto">
+            <table id="tariffe-ritorno" class="tariffe-table">
+              <!-- Tabella generata da JS -->
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© <span id="footer-year"></span> TPL FVG. Tutti i diritti riservati. · Creato da Michele Carnimeo</p>
+  </footer>
+
+  <!-- Script principale -->
+  <script src="script.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(err => console.error('SW registration failed', err));
+      });
+    }
+  </script>
+</body>
+</html>

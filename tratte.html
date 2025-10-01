@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TPL FVG - Tratte</title>
+  <!-- Font locali per PWA offline -->
+  <!-- CSS personalizzati -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="src/tpl.jpg" type="image/jpeg">
+  <style>
+    body { font-family: 'Roboto', Arial, sans-serif; }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="container">
+      <div class="navbar-content">
+        <div class="navbar-brand">
+          <img src="src/tpl.jpg" alt="TPL" class="navbar-logo" />
+          <span class="navbar-title">TPL FVG</span>
+        </div>
+        <nav class="navbar-nav">
+          <a href="benvenuto.html" class="nav-link">Home</a>
+          <a href="tratte.html" class="nav-link active">Tratte</a>
+          <a href="tariffe.html" class="nav-link">Tariffe</a>
+              <button id="darkmode-toggle" class="dark-mode-toggle" title="Darkmode">
+                <span>🌙</span>
+              </button>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Tratte -->
+  <main class="main-content">
+    <div class="container">
+      <h1 class="page-title">Elenco fermate per linea</h1>
+      
+      <!-- Selettore linea e ricerca -->
+      <div class="line-search-container">
+        <!-- Selettore linea -->
+        <div class="line-selector-container">
+          <div class="form-group">
+            <label class="form-label" for="linea-tratte">Seleziona Linea</label>
+            <select id="linea-tratte" class="form-select">
+              <option value="">Seleziona una linea</option>
+              <!-- Opzioni generate da JS -->
+            </select>
+          </div>
+        </div>
+        
+        <!-- Barra di ricerca (nascosta inizialmente) -->
+        <div id="search-container-tratte" class="search-container" style="display: none;">
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="search-input" class="search-input" placeholder="Cerca fermata..." />
+            <button id="clear-search" class="clear-btn" style="display: none;">✕</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Griglia fermate (nascosta inizialmente) -->
+      <div id="tratte-grid-container" class="tratte-grid" style="display: none;">
+        <div class="tratte-card fade-in">
+          <h3 id="andata-title">Andata</h3>
+          <ul id="tratte-andata" class="tratte-list">
+            <!-- Fermate generate da JS -->
+          </ul>
+        </div>
+        <div class="tratte-card fade-in">
+          <h3 id="ritorno-title">Ritorno</h3>
+          <ul id="tratte-ritorno" class="tratte-list">
+            <!-- Fermate generate da JS -->
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© <span id="footer-year"></span> TPL FVG. Tutti i diritti riservati. · Creato da Michele Carnimeo</p>
+  </footer>
+
+  <!-- Script principale -->
+  <script src="script.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(err => console.error('SW registration failed', err));
+      });
+    }
+  </script>
+</body>
+</html>
