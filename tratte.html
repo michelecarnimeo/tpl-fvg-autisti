@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,10 +11,13 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="src/tpl.jpg" type="image/jpeg">
   <style>
-    body { font-family: 'Roboto', Arial, sans-serif; }
+    body {
+      font-family: 'Roboto', Arial, sans-serif;
+    }
   </style>
 </head>
-<body>
+
+<body class="tratte-page">
   <!-- Navbar -->
   <header class="navbar">
     <div class="container">
@@ -21,14 +25,15 @@
         <div class="navbar-brand">
           <img src="src/tpl.jpg" alt="TPL" class="navbar-logo" />
           <span class="navbar-title">TPL FVG</span>
+          <span class="beta-badge">BETA</span>
         </div>
         <nav class="navbar-nav">
           <a href="benvenuto.html" class="nav-link">Home</a>
           <a href="tratte.html" class="nav-link active">Tratte</a>
           <a href="tariffe.html" class="nav-link">Tariffe</a>
-              <button id="darkmode-toggle" class="dark-mode-toggle" title="Darkmode">
-                <span>🌙</span>
-              </button>
+          <button id="darkmode-toggle" class="dark-mode-toggle" title="Darkmode">
+            <span>🌙</span>
+          </button>
         </nav>
       </div>
     </div>
@@ -37,19 +42,16 @@
   <!-- Main Tratte -->
   <main class="main-content">
     <div class="container">
+      <!-- Titolo -->
       <h1 class="page-title">Elenco fermate per linea</h1>
       
-      <!-- Selettore linea e ricerca -->
-      <div class="line-search-container">
-        <!-- Selettore linea -->
-        <div class="line-selector-container">
-          <div class="form-group">
-            <label class="form-label" for="linea-tratte">Seleziona Linea</label>
-            <select id="linea-tratte" class="form-select">
-              <option value="">Seleziona una linea</option>
-              <!-- Opzioni generate da JS -->
-            </select>
-          </div>
+      <!-- Selettore linea -->
+      <div class="line-selector-container">
+        <div class="form-group">
+          <select id="linea-tratte" class="form-select">
+            <option value="">Seleziona una linea</option>
+            <!-- Opzioni generate da JS -->
+          </select>
         </div>
         
         <!-- Barra di ricerca (nascosta inizialmente) -->
@@ -61,7 +63,7 @@
           </div>
         </div>
       </div>
-      
+
       <!-- Griglia fermate (nascosta inizialmente) -->
       <div id="tratte-grid-container" class="tratte-grid" style="display: none;">
         <div class="tratte-card fade-in">
@@ -95,4 +97,5 @@
     }
   </script>
 </body>
+
 </html>

@@ -1,16 +1,12 @@
 // script.js - Gestione logica TPL FVG
 
 // Elementi DOM
-const welcomePage = document.getElementById('welcome-page');
 const mainApp = document.getElementById('main-app');
-const startAppBtn = document.getElementById('start-app');
 const darkModeToggle = document.getElementById('darkmode-toggle');
-const darkModeToggleWelcome = document.getElementById('darkmode-toggle-welcome');
 const lineaSelect = document.getElementById('linea');
 const partenzaSelect = document.getElementById('partenza');
 const arrivoSelect = document.getElementById('arrivo');
 const swapBtn = document.getElementById('swap-btn');
-const calcolaBtn = document.getElementById('calcola');
 const prezzoErrore = document.getElementById('prezzo-errore');
 const summaryPrezzo = document.getElementById('summary-prezzo');
 const summaryCodice = document.getElementById('summary-codice');
@@ -33,7 +29,7 @@ function setDarkMode(isDark) {
   document.documentElement.classList.toggle('dark', isDark);
   try {
     localStorage.setItem('tpl.isDark', isDark ? '1' : '0');
-  } catch {}
+  } catch { }
   // Aggiorna i colori del body per tutte le pagine
   updateBodyColors(isDark);
 }
@@ -52,16 +48,6 @@ function toggleDark() {
   setDarkMode(isDark);
 }
 
-// Mostra/nasconde welcome
-function showWelcome(show) {
-  if (show) {
-    welcomePage.classList.remove('hidden');
-    mainApp.classList.add('hidden');
-  } else {
-    welcomePage.classList.add('hidden');
-    mainApp.classList.remove('hidden');
-  }
-}
 
 // Popola select linea
 function populateLinee() {
@@ -77,6 +63,7 @@ function populateLinee() {
 
 // Popola select partenza/arrivo
 function populateFermate() {
+  if (!partenzaSelect || !arrivoSelect) return; // Non siamo su index.html
   partenzaSelect.innerHTML = '<option value="">Seleziona la partenza</option>';
   arrivoSelect.innerHTML = '<option value="">Seleziona l\'arrivo</option>';
   if (lineaIdx === '' || !tariffario[lineaIdx]) {
@@ -101,21 +88,27 @@ function populateFermate() {
 
 // Aggiorna riepilogo selezioni
 function updateSummary() {
+  if (!summaryPartenza || !summaryArrivo) return; // Non siamo su index.html
   const fermate = (lineaIdx !== '' && tariffario[lineaIdx]) ? tariffario[lineaIdx].fermate : [];
   summaryPartenza.textContent = partenzaIdx !== '' && fermate[partenzaIdx] ? fermate[partenzaIdx] : '-';
   summaryArrivo.textContent = arrivoIdx !== '' && fermate[arrivoIdx] ? fermate[arrivoIdx] : '-';
 }
 
-// Calcola prezzo e codice
+// Calcola prezzo e codice automaticamente
 function calcolaPrezzo() {
+  if (!summaryPrezzo || !summaryCodice || !prezzoErrore) return; // Non siamo su index.html
   let prezzo = null;
   let codice = '';
   const selezioniValide = lineaIdx !== '' && partenzaIdx !== '' && arrivoIdx !== '' && partenzaIdx !== arrivoIdx;
+
   if (selezioniValide) {
+    // Calcola il prezzo
     try {
       const val = tariffario[parseInt(lineaIdx)].prezzi[parseInt(partenzaIdx)][parseInt(arrivoIdx)];
       prezzo = typeof val === 'number' ? val : null;
-    } catch {}
+    } catch { }
+
+    // Recupera il codice biglietto
     try {
       let c = tariffario[parseInt(lineaIdx)]?.codici?.[parseInt(partenzaIdx)]?.[parseInt(arrivoIdx)] || '';
       if (!c && tariffarioAggiornato) {
@@ -126,21 +119,20 @@ function calcolaPrezzo() {
         if (match?.codice_biglietto) c = match.codice_biglietto;
       }
       codice = c;
-    } catch {}
-  }
-  // Aggiorna UI
-  if (hasCalculated) {
+    } catch { }
+
+    // Mostra automaticamente il risultato
     summaryPrezzo.textContent = prezzo !== null ? prezzo.toFixed(2) + ' €' : '-';
-    summaryCodice.textContent = selezioniValide ? (codice ? `Codice biglietto: ${codice}` : 'Codice non disponibile') : '';
-    prezzoErrore.style.display = (prezzo === null && selezioniValide) ? 'block' : 'none';
+    summaryCodice.textContent = codice ? `Codice biglietto: ${codice}` : 'Codice non disponibile';
+    prezzoErrore.style.display = (prezzo === null) ? 'block' : 'none';
   } else {
+    // Nessuna selezione valida
     summaryPrezzo.textContent = '-';
     summaryCodice.textContent = '';
     prezzoErrore.style.display = 'none';
   }
-  // Abilita/disabilita calcola
-  calcolaBtn.disabled = !selezioniValide;
-  // Il pulsante swap è abilitato se partenza e arrivo sono selezionati (anche se uguali)
+
+  // Il pulsante swap è abilitato se partenza e arrivo sono selezionati
   const swapEnabled = lineaIdx !== '' && partenzaIdx !== '' && arrivoIdx !== '';
   if (swapBtn) {
     swapBtn.disabled = !swapEnabled;
@@ -148,7 +140,7 @@ function calcolaPrezzo() {
 }
 
 // Funzione swap globale
-window.swapRoutes = function() {
+window.swapRoutes = function () {
   if (lineaIdx !== '' && partenzaIdx !== '' && arrivoIdx !== '') {
     const tmp = partenzaIdx;
     partenzaIdx = arrivoIdx;
@@ -162,20 +154,13 @@ window.swapRoutes = function() {
 };
 
 // Funzione calcola globale
-window.calculatePrice = function() {
+window.calculatePrice = function () {
   hasCalculated = true;
   calcolaPrezzo();
 };
 
 // Event listeners
-if (startAppBtn) {
-  startAppBtn.addEventListener('click', () => {
-    showWelcome(false);
-    try { localStorage.setItem('tpl.welcomeDismissed', '1'); } catch {}
-  });
-}
 if (darkModeToggle) darkModeToggle.addEventListener('click', toggleDark);
-if (darkModeToggleWelcome) darkModeToggleWelcome.addEventListener('click', toggleDark);
 if (lineaSelect) {
   lineaSelect.addEventListener('change', e => {
     lineaIdx = e.target.value;
@@ -185,7 +170,7 @@ if (lineaSelect) {
     populateFermate();
     updateSummary();
     calcolaPrezzo();
-    try { localStorage.setItem('tpl.lineaIdx', lineaIdx); } catch {}
+    try { localStorage.setItem('tpl.lineaIdx', lineaIdx); } catch { }
   });
 }
 if (partenzaSelect) {
@@ -194,7 +179,7 @@ if (partenzaSelect) {
     hasCalculated = false;
     updateSummary();
     calcolaPrezzo();
-    try { localStorage.setItem('tpl.partenzaIdx', partenzaIdx); } catch {}
+    try { localStorage.setItem('tpl.partenzaIdx', partenzaIdx); } catch { }
   });
 }
 if (arrivoSelect) {
@@ -203,7 +188,7 @@ if (arrivoSelect) {
     hasCalculated = false;
     updateSummary();
     calcolaPrezzo();
-    try { localStorage.setItem('tpl.arrivoIdx', arrivoIdx); } catch {}
+    try { localStorage.setItem('tpl.arrivoIdx', arrivoIdx); } catch { }
   });
 }
 // I pulsanti swap e calcola usano onclick nell'HTML, non servono listener qui
@@ -218,31 +203,29 @@ async function loadData() {
     tariffario = await res.json();
     console.log('Database caricato, tariffario.length:', tariffario.length);
   } catch { tariffario = []; }
-  try {
-    const res2 = await fetch('tariffario aggiornato.json');
-    if (res2.ok) tariffarioAggiornato = await res2.json();
-  } catch { tariffarioAggiornato = null; }
+
+  // tariffarioAggiornato rimane null (file opzionale non presente)
+  tariffarioAggiornato = null;
+
   populateLinee();
-  
+
   // Notifica che i dati sono pronti
   window.dispatchEvent(new Event('tariffarioLoaded'));
   // Ripristina selezioni da localStorage
   try {
     const storedDark = localStorage.getItem('tpl.isDark');
     setDarkMode(storedDark === '1');
-    const storedWelcome = localStorage.getItem('tpl.welcomeDismissed');
-    showWelcome(storedWelcome !== '1');
     const sLinea = localStorage.getItem('tpl.lineaIdx');
     const sPart = localStorage.getItem('tpl.partenzaIdx');
     const sArr = localStorage.getItem('tpl.arrivoIdx');
     if (sLinea !== null) lineaIdx = sLinea;
     if (sPart !== null) partenzaIdx = sPart;
     if (sArr !== null) arrivoIdx = sArr;
-  } catch {}
+  } catch { }
   populateFermate();
-  if (lineaIdx) lineaSelect.value = lineaIdx;
-  if (partenzaIdx) partenzaSelect.value = partenzaIdx;
-  if (arrivoIdx) arrivoSelect.value = arrivoIdx;
+  if (lineaIdx && lineaSelect) lineaSelect.value = lineaIdx;
+  if (partenzaIdx && partenzaSelect) partenzaSelect.value = partenzaIdx;
+  if (arrivoIdx && arrivoSelect) arrivoSelect.value = arrivoIdx;
   updateSummary();
   calcolaPrezzo();
 }
@@ -256,12 +239,12 @@ function renderTratte(lineaIndex = 0) {
   const searchContainer = document.getElementById('search-container-tratte');
 
   console.log('andataList:', !!andataList, 'ritornoList:', !!ritornoList, 'tariffario[lineaIndex]:', !!tariffario[lineaIndex]);
-  
+
   if (!andataList || !ritornoList || !tariffario[lineaIndex]) {
     console.error('Impossibile generare liste tratte');
     return;
   }
-  
+
   const linea = tariffario[lineaIndex];
   const fermate = linea.fermate;
   console.log('Rendering liste tratte per linea:', linea.nome, 'con', fermate.length, 'fermate');
@@ -297,16 +280,16 @@ function renderTariffe(lineaIndex = 0) {
   const andataTable = document.getElementById('tariffe-andata');
   const ritornoTable = document.getElementById('tariffe-ritorno');
   console.log('andataTable:', !!andataTable, 'ritornoTable:', !!ritornoTable, 'tariffario[lineaIndex]:', !!tariffario[lineaIndex]);
-  
+
   if (!andataTable || !ritornoTable || !tariffario[lineaIndex]) {
     console.error('Impossibile generare tabelle tariffe');
     return;
   }
-  
+
   const linea = tariffario[lineaIndex];
   const fermate = linea.fermate;
   console.log('Rendering tabelle tariffe per linea:', linea.nome, 'con', fermate.length, 'fermate');
-  
+
   // Helper per tabella
   function buildTable(filterFn) {
     let html = '<thead><tr>';
@@ -350,7 +333,7 @@ function renderTariffe(lineaIndex = 0) {
 function populateLineeTratte() {
   const lineaSelect = document.getElementById('linea-tratte');
   if (!lineaSelect) return;
-  
+
   lineaSelect.innerHTML = '<option value="">Seleziona una linea</option>';
   tariffario.forEach((l, i) => {
     const opt = document.createElement('option');
@@ -358,7 +341,7 @@ function populateLineeTratte() {
     opt.textContent = l.nome;
     lineaSelect.appendChild(opt);
   });
-  
+
   // Event listener per cambio linea
   lineaSelect.addEventListener('change', (e) => {
     const selectedIndex = e.target.value;
@@ -366,21 +349,21 @@ function populateLineeTratte() {
     const searchContainer = document.getElementById('search-container-tratte');
     const andataTitle = document.getElementById('andata-title');
     const ritornoTitle = document.getElementById('ritorno-title');
-    
+
     if (selectedIndex !== '') {
       const linea = tariffario[parseInt(selectedIndex)];
       const fermate = linea.fermate;
-      
+
       // Aggiorna titoli
       const firstStop = fermate[0];
       const lastStop = fermate[fermate.length - 1];
       if (andataTitle) andataTitle.textContent = `Fermate (${firstStop} → ${lastStop})`;
       if (ritornoTitle) ritornoTitle.textContent = `Fermate (${lastStop} → ${firstStop})`;
-      
+
       // Mostra griglia e ricerca
       if (gridContainer) gridContainer.style.display = 'grid';
       if (searchContainer) searchContainer.style.display = 'flex';
-      
+
       // Renderizza tratte con l'indice selezionato
       renderTratte(parseInt(selectedIndex));
     } else {
@@ -395,7 +378,7 @@ function populateLineeTratte() {
 function populateLineeTariffe() {
   const lineaSelect = document.getElementById('linea-tariffe');
   if (!lineaSelect) return;
-  
+
   lineaSelect.innerHTML = '<option value="">Seleziona una linea</option>';
   tariffario.forEach((l, i) => {
     const opt = document.createElement('option');
@@ -403,7 +386,7 @@ function populateLineeTariffe() {
     opt.textContent = l.nome;
     lineaSelect.appendChild(opt);
   });
-  
+
   // Event listener per cambio linea
   lineaSelect.addEventListener('change', (e) => {
     const selectedIndex = e.target.value;
@@ -411,21 +394,21 @@ function populateLineeTariffe() {
     const searchContainer = document.getElementById('search-container-tariffe');
     const andataTitle = document.getElementById('andata-title');
     const ritornoTitle = document.getElementById('ritorno-title');
-    
+
     if (selectedIndex !== '') {
       const linea = tariffario[parseInt(selectedIndex)];
       const fermate = linea.fermate;
-      
+
       // Aggiorna titoli
       const firstStop = fermate[0];
       const lastStop = fermate[fermate.length - 1];
       if (andataTitle) andataTitle.textContent = `Prezzi e codici (${firstStop} → ${lastStop})`;
       if (ritornoTitle) ritornoTitle.textContent = `Prezzi e codici (${lastStop} → ${firstStop})`;
-      
+
       // Mostra griglia e ricerca
       if (gridContainer) gridContainer.style.display = 'grid';
       if (searchContainer) searchContainer.style.display = 'flex';
-      
+
       // Renderizza tariffe con l'indice selezionato
       renderTariffe(parseInt(selectedIndex));
     } else {
@@ -440,15 +423,15 @@ function populateLineeTariffe() {
 function setupRicercaTariffe() {
   const searchInput = document.getElementById('search-input-tariffe');
   const clearBtn = document.getElementById('clear-search-tariffe');
-  
+
   if (searchInput && clearBtn) {
     searchInput.addEventListener('input', (e) => {
       const searchTerm = e.target.value.toLowerCase();
       const tables = document.querySelectorAll('.tariffe-table');
-      
+
       // Mostra/nascondi pulsante clear
       clearBtn.style.display = searchTerm ? 'flex' : 'none';
-      
+
       // Filtra righe delle tabelle
       tables.forEach(table => {
         const rows = table.querySelectorAll('tbody tr');
@@ -462,7 +445,7 @@ function setupRicercaTariffe() {
         });
       });
     });
-    
+
     // Pulsante clear
     clearBtn.addEventListener('click', () => {
       searchInput.value = '';
@@ -482,11 +465,11 @@ function setupRicercaTariffe() {
 // Modifico initTratteTariffe per includere tariffe
 function initTratteTariffe() {
   console.log('initTratteTariffe chiamata');
-  
+
   // Per pagina tratte, popola il selettore tratte
   if (window.location.pathname.endsWith('tratte.html')) {
     populateLineeTratte();
-  } 
+  }
   // Per pagina tariffe, popola il selettore tariffe
   else if (window.location.pathname.endsWith('tariffe.html')) {
     populateLineeTariffe();
@@ -497,7 +480,7 @@ function initTratteTariffe() {
 // Avvia logica tratte/tariffe solo se siamo su tratte.html o tariffe.html
 if (window.location.pathname.endsWith('tratte.html') || window.location.pathname.endsWith('tariffe.html')) {
   console.log('Su pagina tratte/tariffe, pathname:', window.location.pathname);
-  
+
   // Ascolta l'evento di caricamento dati
   window.addEventListener('tariffarioLoaded', () => {
     console.log('Evento tariffarioLoaded ricevuto, chiamo initTratteTariffe');
@@ -510,26 +493,26 @@ if (window.location.pathname.endsWith('tratte.html')) {
   window.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('search-input');
     const clearBtn = document.getElementById('clear-search');
-    
+
     if (searchInput && clearBtn) {
       searchInput.addEventListener('input', (e) => {
         const searchTerm = e.target.value.toLowerCase();
         const tratteItems = document.querySelectorAll('.tratte-item');
-        
+
         // Mostra/nascondi pulsante clear
         clearBtn.style.display = searchTerm ? 'flex' : 'none';
-        
+
         // Filtra fermate
         tratteItems.forEach(item => {
           const text = item.textContent.toLowerCase();
           if (text.includes(searchTerm)) {
             item.style.display = '';
-    } else {
+          } else {
             item.style.display = 'none';
           }
         });
       });
-      
+
       // Pulsante clear
       clearBtn.addEventListener('click', () => {
         searchInput.value = '';
