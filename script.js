@@ -75,13 +75,18 @@ function populateLinee() {
 // Popola select partenza/arrivo
 function populateFermate() {
   if (!partenzaSelect || !arrivoSelect) return; // Non siamo su index.html
-  partenzaSelect.innerHTML = '<option value="">Seleziona la partenza</option>';
-  arrivoSelect.innerHTML = '<option value="">Seleziona l\'arrivo</option>';
+  
   if (lineaIdx === '' || !tariffario[lineaIdx]) {
+    partenzaSelect.innerHTML = '<option value="">Prima seleziona una linea</option>';
+    arrivoSelect.innerHTML = '<option value="">Prima seleziona una linea</option>';
     partenzaSelect.disabled = true;
     arrivoSelect.disabled = true;
     return;
   }
+  
+  partenzaSelect.innerHTML = '<option value="">Seleziona la partenza</option>';
+  arrivoSelect.innerHTML = '<option value="">Seleziona l\'arrivo</option>';
+  
   const fermate = tariffario[lineaIdx].fermate;
   fermate.forEach((f, i) => {
     const opt1 = document.createElement('option');
@@ -97,12 +102,30 @@ function populateFermate() {
   arrivoSelect.disabled = false;
 }
 
+// Controlla e aggiorna lo stato della card prezzo
+function updatePriceCardState() {
+  const priceCard = document.getElementById('price-card');
+  if (!priceCard) return;
+  
+  // Attiva la card solo se entrambi i campi partenza e arrivo sono selezionati
+  const bothSelected = partenzaIdx !== '' && arrivoIdx !== '';
+  
+  if (bothSelected) {
+    priceCard.classList.remove('inactive');
+  } else {
+    priceCard.classList.add('inactive');
+  }
+}
+
 // Aggiorna riepilogo selezioni
 function updateSummary() {
   if (!summaryPartenza || !summaryArrivo) return; // Non siamo su index.html
   const fermate = (lineaIdx !== '' && tariffario[lineaIdx]) ? tariffario[lineaIdx].fermate : [];
   summaryPartenza.textContent = partenzaIdx !== '' && fermate[partenzaIdx] ? fermate[partenzaIdx] : '-';
   summaryArrivo.textContent = arrivoIdx !== '' && fermate[arrivoIdx] ? fermate[arrivoIdx] : '-';
+  
+  // Aggiorna lo stato della card prezzo
+  updatePriceCardState();
 }
 
 // Calcola prezzo e codice automaticamente
@@ -134,7 +157,7 @@ function calcolaPrezzo() {
 
     // Mostra automaticamente il risultato
     summaryPrezzo.textContent = prezzo !== null ? prezzo.toFixed(2) + ' €' : '-';
-    summaryCodice.textContent = codice ? `Codice biglietto: ${codice}` : 'Codice non disponibile';
+    summaryCodice.textContent = codice ? codice : '-';
     prezzoErrore.style.display = (prezzo === null) ? 'block' : 'none';
   } else {
     // Nessuna selezione valida
@@ -189,6 +212,7 @@ if (partenzaSelect) {
     partenzaIdx = e.target.value;
     hasCalculated = false;
     updateSummary();
+    updatePriceCardState();
     calcolaPrezzo();
     try { localStorage.setItem('tpl.partenzaIdx', partenzaIdx); } catch { }
   });
@@ -198,6 +222,7 @@ if (arrivoSelect) {
     arrivoIdx = e.target.value;
     hasCalculated = false;
     updateSummary();
+    updatePriceCardState();
     calcolaPrezzo();
     try { localStorage.setItem('tpl.arrivoIdx', arrivoIdx); } catch { }
   });
@@ -538,5 +563,28 @@ if (window.location.pathname.endsWith('tratte.html')) {
     }
   });
 }
+
+// Funzione per tornare in cima alla pagina
+function scrollToTop() {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+}
+
+// Funzione per mostrare/nascondere il pulsante torna su
+function toggleScrollToTopButton() {
+  const scrollButton = document.querySelector('.scroll-to-top');
+  if (scrollButton) {
+    if (window.pageYOffset > 300) {
+      scrollButton.classList.add('visible');
+    } else {
+      scrollButton.classList.remove('visible');
+    }
+  }
+}
+
+// Event listener per lo scroll
+window.addEventListener('scroll', toggleScrollToTopButton);
 
 window.addEventListener('DOMContentLoaded', loadData);

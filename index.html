@@ -23,8 +23,18 @@
     <div class="container">
       <div class="navbar-content">
         <div class="navbar-brand">
-          <img src="src/tpl.jpg" alt="TPL" class="navbar-logo" />
-          <span class="navbar-title">TPL FVG</span>
+          <img src="src/logo.png" alt="TPL" class="navbar-logo" />
+          <div class="navbar-title">
+            <div class="logo-acronym">
+              <div>tpl</div>
+              <div>fvg</div>
+            </div>
+            <div class="logo-text">
+              <div>trasporto</div>
+              <div>pubblico</div>
+              <div>locale</div>
+            </div>
+          </div>
           <span class="beta-badge">BETA</span>
         </div>
         <nav class="navbar-nav">
@@ -49,51 +59,48 @@
         </div>
 
         <div class="form-group">
-          <label class="form-label" for="linea">Linea</label>
           <select id="linea" name="linea" class="form-select">
             <option value="">Seleziona una linea</option>
             <!-- Opzioni generate da JS -->
           </select>
         </div>
         <div class="route-section">
-          <div class="route-row">
-            <div class="route-icon">
-              <span>🚌</span>
-              <span>Partenza</span>
-            </div>
-            <div class="route-select">
-              <select id="partenza" name="partenza" class="form-select" disabled>
-                <option value="">Seleziona la partenza</option>
-                <!-- Opzioni generate da JS -->
-              </select>
-            </div>
+          <div class="route-label">
+            <div class="route-icon">🚌 <span>Partenza da</span></div>
+            <select id="partenza" class="route-select" disabled>
+              <option value="">Seleziona la partenza</option>
+            </select>
           </div>
 
-          <div class="swap-button">
-            <button id="swap-btn" class="swap-btn" type="button" title="Inverte partenza e arrivo"
-              onclick="swapRoutes()">
-              <span>🔄</span>
-            </button>
+          <div class="route-label">
+            <div class="route-icon">📍 <span>Arrivo a</span></div>
+            <select id="arrivo" class="route-select" disabled>
+              <option value="">Seleziona l'arrivo</option>
+            </select>
           </div>
 
-          <div class="route-row">
-            <div class="route-icon">
-              <span>📍</span>
-              <span>Arrivo</span>
-            </div>
-            <div class="route-select">
-              <select id="arrivo" name="arrivo" class="form-select" disabled>
-                <option value="">Seleziona l'arrivo</option>
-                <!-- Opzioni generate da JS -->
-              </select>
-            </div>
-          </div>
+          <button id="swap-btn" class="swap-btn" type="button" title="Inverte partenza e arrivo" onclick="swapRoutes()">
+            <span>⇅</span>
+          </button>
         </div>
 
-        <div class="price-result">
-          <div class="price-label">Prezzo Totale</div>
-          <div id="summary-prezzo" class="price-value">-</div>
-          <div id="summary-codice" class="price-code"></div>
+        <!-- Sezione prezzo divisa in due parti con colori distinti -->
+        <div class="price-card inactive" id="price-card">
+          <!-- Codice biglietto -->
+          <div class="price-section">
+            <div class="price-label">Codice biglietto</div>
+            <div id="summary-codice" class="price-code">-</div>
+          </div>
+          
+          <!-- Divisore -->
+          <div class="price-divider"></div>
+          
+          <!-- Costo biglietto -->
+          <div class="price-section">
+            <div class="price-label">Costo del biglietto</div>
+            <div id="summary-prezzo" class="price-value">-</div>
+          </div>
+          
           <div id="prezzo-errore" class="price-error" style="display: none;">
             ⚠️ Prezzo non disponibile per questa tratta
           </div>
@@ -109,7 +116,7 @@
 
   <!-- Footer -->
   <footer class="footer">
-    <p>© <span id="footer-year"></span> TPL FVG. Tutti i diritti riservati. · Creato da Michele Carnimeo · <a href="test.html" style="color: inherit; text-decoration: none; transition: text-decoration 0.3s ease;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">TPL FVG 0.8 build 21</a></p>
+    <p>© <span id="footer-year"></span> TPL FVG. Tutti i diritti riservati.<br>Creato da Michele Carnimeo · <a href="test.html" style="color: inherit; text-decoration: none; transition: text-decoration 0.3s ease;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">TPL FVG 0.8 build 21</a></p>
   </footer>
 
   <!-- Script principale -->

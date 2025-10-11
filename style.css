@@ -172,14 +172,37 @@ body {
   -webkit-backdrop-filter: var(--backdrop-blur); /* Supporto WebKit per Safari */
   
   /* SUBSECTION 7.3: Spaziatura e bordi */
-  padding: 1rem 0;                              /* Padding verticale */
-  box-shadow: 0 8px 32px 0 rgba(0, 123, 138, 0.3);  /* Ombra ciano */
+  padding: 0.8rem 0;                            /* Padding verticale aumentato per dare spazio al logo */
+  box-shadow: 
+    0 8px 32px 0 rgba(0, 123, 138, 0.3),       /* Ombra ciano */
+    0 0 0 1px rgba(255, 255, 255, 0.05),       /* Bordo esterno sottile */
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),    /* Riflesso luce dall'alto */
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1);         /* Ombra dal basso */
   border-bottom: 1px solid rgba(0, 123, 138, 0.3);   /* Bordo inferiore ciano */
   
   /* SUBSECTION 7.4: Posizionamento sticky */
   position: sticky;  /* Rimanere in cima durante lo scroll */
   top: 0;           /* Posizione in cima */
   z-index: 1000;    /* Sopra tutti gli altri elementi */
+}
+
+/* Effetto rifrazione della luce per navbar */
+.navbar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60%;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.04) 30%,
+    transparent 60%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 1;
 }
 
 /* SUBSECTION 7.5: Layout del contenuto navbar */
@@ -199,10 +222,38 @@ body {
 
 /* Logo TPL nella navbar */
 .navbar-logo {
-  width: 40px;         /* Larghezza logo */
-  height: 40px;        /* Altezza logo */
-  border-radius: 8px;  /* Bordi arrotondati */
-  object-fit: cover;   /* Adatta l'immagine mantenendo proporzioni */
+  width: 50px;         /* Logo quadrato ridotto per navbar sottile */
+  height: 50px;        /* Logo quadrato ridotto per navbar sottile */
+  border-radius: 12px; /* Angoli molto smussati per contorno arrotondato */
+  border: 2px solid rgba(0, 123, 138, 0.7); /* Contorno ciano che avvolge l'immagine */
+  object-fit: contain; /* Adatta l'immagine mantenendo proporzioni e contenuto visibile */
+  align-self: center;  /* Centra verticalmente senza aumentare l'altezza della navbar */
+  box-shadow: 
+    0 2px 8px rgba(0, 123, 138, 0.3),      /* Ombra per profondità */
+    0 0 0 1px rgba(255, 255, 255, 0.1),   /* Bordo esterno sottile */
+    inset 0 1px 0 rgba(255, 255, 255, 0.2), /* Riflesso luce dall'alto */
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1);    /* Ombra dal basso */
+  position: relative;
+}
+
+/* Effetto rifrazione della luce per logo navbar */
+.navbar-logo::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(255, 255, 255, 0.08) 40%,
+    transparent 70%,
+    transparent 100%
+  );
+  border-radius: 12px 12px 6px 6px;
+  pointer-events: none;
+  z-index: 1;
 }
 
 /* Titolo TPL FVG nella navbar */
@@ -212,6 +263,31 @@ body {
   font-weight: 700;                               /* Peso font bold */
   text-decoration: none;                          /* Nessuna sottolineatura */
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);    /* Ombra testo per leggibilità */
+  display: flex;                                 /* Layout flexbox orizzontale */
+  align-items: center;                           /* Allineamento verticale centrale */
+  gap: 0.5rem;                                   /* Spazio ridotto tra acronimo e testo */
+}
+
+.navbar-title .logo-acronym {
+  display: flex;                                 /* Layout flexbox per tpl/fvg */
+  flex-direction: column;                        /* Disposizione verticale */
+  font-family: 'Arial', sans-serif;             /* Font sans-serif spesso */
+  font-weight: 700;                             /* Font molto audace */
+  font-size: 1.4rem;                            /* Dimensione media aumentata di un altro punto */
+  color: rgba(255, 255, 255, 0.95);             /* Testo bianco */
+  letter-spacing: 0.5px;                        /* Spaziatura tra lettere */
+  line-height: 1;                               /* Altezza riga compatta */
+}
+
+.navbar-title .logo-text {
+  display: flex;                                 /* Layout flexbox per trasporto/pubblico/locale */
+  flex-direction: column;                        /* Disposizione verticale */
+  font-family: 'Arial', sans-serif;             /* Font sans-serif leggero */
+  font-weight: 300;                             /* Font leggero */
+  font-size: 0.8rem;                            /* Dimensione piccola aumentata */
+  color: rgba(255, 255, 255, 0.8);              /* Testo bianco più trasparente */
+  letter-spacing: 0.3px;                        /* Spaziatura tra lettere */
+  line-height: 1;                               /* Altezza riga compatta */
 }
 
 /* SUBSECTION 7.7: Badge BETA con glassmorphism */
@@ -260,6 +336,7 @@ body {
   /* SUBSECTION 7.9.2: Dimensioni e bordi */
   padding: 0.5rem 1rem;                     /* Padding interno */
   border-radius: 12px;                      /* Bordi arrotondati */
+  position: relative;                       /* Per posizionamento assoluto del ::before */
   
   /* SUBSECTION 7.9.3: Transizioni e effetti */
   transition: all 0.3s ease;                /* Transizione fluida per tutti i cambiamenti */
@@ -267,6 +344,28 @@ body {
   backdrop-filter: none;                    /* Nessuna sfocatura */
   -webkit-backdrop-filter: none;            /* Nessuna sfocatura WebKit */
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);  /* Ombra testo per leggibilità */
+}
+
+/* Effetto rifrazione della luce per nav-link */
+.nav-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.04) 30%,
+    transparent 60%,
+    transparent 100%
+  );
+  border-radius: 12px 12px 6px 6px;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 /* SUBSECTION 7.10: Effetto hover sui link */
@@ -283,6 +382,11 @@ body {
   /* SUBSECTION 7.10.3: Testo migliorato */
   color: rgba(255, 255, 255, 1);             /* Testo bianco al 100% */
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);  /* Ombra testo più forte */
+}
+
+/* Rifrazione visibile al hover */
+.nav-link:hover::before {
+  opacity: 1;
 }
 
 /* SUBSECTION 7.11: Stato attivo dei link */
@@ -302,6 +406,11 @@ body {
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);       /* Ombra testo molto forte */
 }
 
+/* Rifrazione sempre visibile per stato attivo */
+.nav-link.active::before {
+  opacity: 1;
+}
+
 /* SUBSECTION 7.12: Toggle modalità scura */
 .dark-mode-toggle {
   background: none;                    /* Nessuno sfondo */
@@ -311,6 +420,29 @@ body {
   padding: 0.5rem;                     /* Padding interno */
   border-radius: 6px;                  /* Bordi arrotondati */
   transition: all 0.3s ease;           /* Transizione fluida */
+  position: relative;                  /* Per posizionamento assoluto del ::before */
+}
+
+/* Effetto rifrazione della luce per dark-mode-toggle */
+.dark-mode-toggle::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.06) 0%,
+    rgba(255, 255, 255, 0.03) 30%,
+    transparent 60%,
+    transparent 100%
+  );
+  border-radius: 6px 6px 3px 3px;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 /* Icona del sole in dark mode */
@@ -320,6 +452,11 @@ body {
 
 .dark-mode-toggle:hover {
   background-color: rgba(255, 255, 255, 0.1);  /* Sfondo bianco trasparente al hover */
+}
+
+/* Rifrazione visibile al hover */
+.dark-mode-toggle:hover::before {
+  opacity: 1;
 }
 
 /* ========================================
@@ -379,17 +516,42 @@ body:not(.tratte-page) .main-card {
   max-width: 600px !important;                   /* Larghezza massima 600px */
   margin: 0.25rem auto !important;               /* Margine minimo e centrato */
   
-  /* SUBSECTION 8.4.3: Ombreggiatura base (SENZA HOVER) */
-  box-shadow: var(--glass-shadow);               /* Ombra glassmorphism */
+  /* SUBSECTION 8.4.3: Ombreggiatura con effetto rifrazione */
+  box-shadow: 
+    var(--glass-shadow),                         /* Ombra glassmorphism base */
+    0 0 0 1px rgba(255, 255, 255, 0.05),       /* Bordo esterno sottile */
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),    /* Riflesso luce dall'alto */
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1);         /* Ombra dal basso */
   
   /* SUBSECTION 8.4.4: Bordi e layout */
   border: 1px solid var(--glass-border);         /* Bordo trasparente */
   box-sizing: border-box;                        /* Include bordi nel calcolo */
   max-height: 100%;                              /* Altezza massima */
   overflow-y: auto;                              /* Scroll verticale se necessario */
+  position: relative;                            /* Per posizionamento assoluto del ::before */
   
   /* SUBSECTION 8.4.5: Transizioni RIMOSSE per eliminare effetti hover */
   /* transition: box-shadow 0.3s ease; - COMMENTATO */
+}
+
+/* Effetto rifrazione della luce per main-card */
+.main-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.06) 0%,
+    rgba(255, 255, 255, 0.03) 30%,
+    transparent 60%,
+    transparent 100%
+  );
+  border-radius: 24px 24px 12px 12px;
+  pointer-events: none;
+  z-index: 1;
 }
 
 /* SUBSECTION 8.4.6: EFFETTO HOVER RIMOSSO - Nessun hover per .main-card */
@@ -615,6 +777,29 @@ body:not(.tratte-page) .main-card {
   transition: all 0.3s ease;        /* Transizione fluida */
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);  /* Ombra leggera per visibilità */
   font-weight: 500;                  /* Peso font medium */
+  position: relative;               /* Per posizionamento assoluto del ::before */
+}
+
+/* Effetto rifrazione della luce per form-select */
+.form-select::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.04) 30%,
+    transparent 60%,
+    transparent 100%
+  );
+  border-radius: 12px 12px 6px 6px;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 /* Opzioni del selettore */
@@ -626,10 +811,14 @@ body:not(.tratte-page) .main-card {
 /* Stato focus del selettore */
 .form-select:focus {
   outline: none;                     /* Rimuove il bordo di default */
-  /* border-color: rgba(23, 183, 177, 0.5);  /* Bordo turchese RIMOSSO */
-  border-color: rgba(255, 255, 255, 0.3);  /* Bordo bianco trasparente */
-  /* box-shadow: 0 0 0 3px rgba(23, 183, 177, 0.2);  /* Ombra turchese RIMOSSA */
+  border-color: var(--turchese);     /* Bordo turchese al focus */
+  box-shadow: 0 0 0 3px rgba(23, 183, 177, 0.1);  /* Ombra turchese */
   background: rgba(255, 255, 255, 0.35);  /* Sfondo più opaco */
+}
+
+/* Rifrazione visibile al focus */
+.form-select:focus::before {
+  opacity: 1;
 }
 
 /* Stato disabilitato del selettore */
@@ -641,6 +830,7 @@ body:not(.tratte-page) .main-card {
 
 /* SUBSECTION 9.3: Sezione partenza/arrivo */
 .route-section {
+  position: relative;                     /* Posizione relativa per il pulsante swap */
   background: rgba(255, 255, 255, 0.15);  /* Sfondo bianco trasparente */
   backdrop-filter: blur(10px);            /* Sfocatura del background */
   -webkit-backdrop-filter: blur(10px);    /* Supporto WebKit */
@@ -648,6 +838,212 @@ body:not(.tratte-page) .main-card {
   padding: 1.5rem;                       /* Padding interno */
   margin: 1rem 0;                        /* Margine verticale */
   border: 1px solid rgba(255, 255, 255, 0.2);  /* Bordo bianco trasparente */
+  display: flex;                          /* Layout flex */
+  flex-direction: row;                    /* Direzione orizzontale */
+  align-items: flex-start;                /* Allineamento verticale in alto */
+  padding-top: 0.2rem;                   /* Padding superiore ulteriormente ridotto per spostare le caselle ancora più in alto */
+  gap: 1.5rem;                           /* Gap maggiore tra le caselle */
+  padding-right: 4rem;                   /* Padding destro maggiore per il pulsante */
+}
+
+/* Effetto rifrazione della luce per route-section */
+.route-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.06) 0%,
+    rgba(255, 255, 255, 0.03) 30%,
+    transparent 60%,
+    transparent 100%
+  );
+  border-radius: 20px 20px 10px 10px;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+/* Campo route singolo */
+/* Stili per le etichette esterne */
+.route-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1 1 40%;  /* Occupa il 40% dello spazio per fare più spazio al pulsante */
+  min-width: 0;  /* Permette al flex di funzionare correttamente */
+  align-items: flex-start;  /* Allinea tutto a sinistra */
+  padding-left: 0;          /* Rimuove padding sinistro */
+  margin-left: 0;           /* Rimuove margine sinistro */
+}
+
+.route-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;               /* Gap ridotto tra emoji e testo */
+  font-weight: 600;
+  color: var(--testo-principale);
+  font-size: 0.9rem;
+  justify-content: flex-start;  /* Allinea a sinistra */
+  text-align: left;             /* Testo allineato a sinistra */
+  width: 100%;                  /* Larghezza completa */
+  margin: 0;                    /* Rimuove margini */
+  padding: 0;                   /* Rimuove padding */
+  white-space: nowrap;          /* Evita che il testo vada a capo */
+  min-width: 120px;             /* Larghezza minima per simmetria */
+}
+
+.route-icon span:last-child {
+  display: inline;
+  min-width: 80px;              /* Larghezza minima per simmetria del testo */
+  text-align: left;             /* Allineamento a sinistra */
+}
+
+.route-field {
+  margin-bottom: 0.75rem;                /* Margine inferiore */
+}
+
+/* Select route a tema glassmorphism */
+.route-select {
+  width: 100%;                          /* Larghezza completa */
+  min-width: 0;                         /* Permette al flex di funzionare */
+  padding: 0.75rem;                     /* Padding interno */
+  border: 1px solid var(--glass-border);  /* Bordo glassmorphism */
+  border-radius: 12px;                  /* Bordi arrotondati */
+  font-size: 1rem;                      /* Dimensione font */
+  background: var(--glass-bg);          /* Sfondo glassmorphism */
+  backdrop-filter: var(--backdrop-blur);  /* Sfocatura del background */
+  -webkit-backdrop-filter: var(--backdrop-blur);  /* Supporto WebKit */
+  color: var(--testo-principale);       /* Colore testo principale */
+  transition: all 0.3s ease;           /* Transizione fluida */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(255, 255, 255, 0.3);  /* Ombra più visibile */
+  appearance: none;                     /* Rimuove lo stile di default del browser */
+  -webkit-appearance: none;             /* Supporto WebKit */
+  -moz-appearance: none;                /* Supporto Firefox */
+  position: relative;                   /* Per posizionamento assoluto del ::before */
+}
+
+/* Effetto rifrazione della luce per route-select */
+.route-select::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.04) 30%,
+    transparent 60%,
+    transparent 100%
+  );
+  border-radius: 12px 12px 6px 6px;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.route-select {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23374151' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");  /* Freccia custom */
+  background-repeat: no-repeat;         /* Non ripete l'immagine */
+  background-position: right 0.75rem center;  /* Posizione freccia */
+  background-size: 1rem;                /* Dimensione freccia */
+  padding-right: 2.5rem;                /* Spazio per la freccia */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);  /* Ombra leggera */
+}
+
+.route-select:focus {
+  outline: none;                        /* Rimuove outline di default */
+  border-color: var(--turchese);        /* Bordo turchese al focus */
+  box-shadow: 0 0 0 3px rgba(23, 183, 177, 0.1);  /* Ombra turchese */
+}
+
+/* Rifrazione visibile al focus */
+.route-select:focus::before {
+  opacity: 1;
+}
+
+.route-select:disabled {
+  background: rgba(243, 244, 246, 0.3);  /* Sfondo grigio trasparente quando disabilitato */
+  color: var(--testo-secondario);       /* Testo secondario quando disabilitato */
+  cursor: not-allowed;                 /* Cursore non consentito */
+  backdrop-filter: blur(5px);          /* Sfocatura ridotta quando disabilitato */
+  -webkit-backdrop-filter: blur(5px);  /* Supporto WebKit */
+  background-image: none;              /* Rimuove la freccia dropdown quando disabilitato */
+}
+
+/* Pulsante swap a tema glassmorphism, posizionato alla destra della sezione route */
+.route-section .swap-btn {
+  position: absolute;             /* Posizione assoluta */
+  top: 50%;                      /* Posizione verticale centrata */
+  right: 10px;                   /* Posizionato alla destra della sezione route */
+  transform: translateY(-50%);   /* Centra verticalmente */
+  background: var(--glass-bg);    /* Sfondo glassmorphism */
+  backdrop-filter: var(--backdrop-blur);  /* Sfocatura del background */
+  -webkit-backdrop-filter: var(--backdrop-blur);  /* Supporto WebKit */
+  color: var(--testo-principale); /* Colore testo principale */
+  border: 1px solid var(--glass-border);  /* Bordo glassmorphism */
+  border-radius: 50%;             /* Forma circolare */
+  width: 40px;                    /* Larghezza ridotta */
+  height: 40px;                   /* Altezza ridotta */
+  cursor: pointer;                /* Cursore pointer */
+  display: flex;                  /* Layout flexbox */
+  align-items: center;            /* Allineamento verticale */
+  justify-content: center;        /* Allineamento orizzontale */
+  transition: all 0.3s ease;     /* Transizione fluida */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(255, 255, 255, 0.3);  /* Ombra più profonda */
+  z-index: 10;                    /* Sopra altri elementi */
+}
+
+.route-section .swap-btn:hover {
+  transform: translateY(-50%) scale(1.1);  /* Mantiene posizione e ingrandisce */
+  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.4);  /* Ombra bianca più forte */
+  background: rgba(255, 255, 255, 0.4);  /* Sfondo bianco trasparente al hover */
+  border-color: rgba(255, 255, 255, 0.6);  /* Bordo bianco più opaco */
+}
+
+.route-section .swap-btn span {
+  font-size: 1.2rem;             /* Dimensione icona */
+  font-weight: bold;             /* Peso font bold */
+}
+
+/* Stili dark mode per route section */
+.dark .route-select {
+  background: var(--glass-bg-dark);      /* Sfondo glassmorphism scuro */
+  color: rgba(248, 250, 252, 0.95);     /* Testo chiaro */
+  border-color: var(--glass-border-dark);  /* Bordo glassmorphism scuro */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(255, 255, 255, 0.15);  /* Ombra scura più visibile */
+}
+
+.dark .route-select:focus {
+  border-color: var(--turchese);        /* Bordo turchese al focus */
+  box-shadow: 0 0 0 3px rgba(23, 183, 177, 0.2);  /* Ombra turchese più forte */
+}
+
+.dark .route-select:disabled {
+  background: rgba(30, 41, 59, 0.3);   /* Sfondo scuro trasparente quando disabilitato */
+  color: rgba(148, 163, 184, 0.7);    /* Testo grigio quando disabilitato */
+  background-image: none;              /* Rimuove la freccia dropdown quando disabilitato */
+}
+
+.dark .route-section .swap-btn {
+  background: var(--glass-bg-dark);      /* Sfondo glassmorphism scuro */
+  color: rgba(248, 250, 252, 0.95);     /* Testo chiaro */
+  border-color: var(--glass-border-dark);  /* Bordo glassmorphism scuro */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25), 0 2px 8px rgba(255, 255, 255, 0.1);  /* Ombra scura più profonda */
+}
+
+.dark .route-section .swap-btn:hover {
+  transform: translateY(-50%) scale(1.1);  /* Mantiene posizione e ingrandisce */
+  background: rgba(255, 255, 255, 0.1);  /* Sfondo bianco trasparente al hover */
+  border-color: rgba(255, 255, 255, 0.3);  /* Bordo bianco trasparente */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);  /* Ombra scura più forte */
 }
 
 /* Riga della route */
@@ -695,12 +1091,7 @@ body:not(.tratte-page) .main-card {
 /* ========================================
    SEZIONE 10: BOTTONI E PULSANTI
    ======================================== */
-/* SEZIONE 10.1: Container pulsante swap */
-.swap-button {
-  display: flex;                   /* Layout flexbox */
-  justify-content: center;         /* Centra orizzontalmente */
-  margin: 1rem 0;                 /* Margine verticale */
-}
+/* SEZIONE 10.1: Container pulsante swap rimosso - ora posizionato assoluto */
 
 /* SEZIONE 10.2: Pulsante swap (inverti percorso) */
 .swap-btn {
@@ -710,6 +1101,7 @@ body:not(.tratte-page) .main-card {
   -webkit-backdrop-filter: var(--backdrop-blur); /* Supporto WebKit */
   border: 1px solid var(--glass-border);         /* Bordo trasparente */
   border-radius: 50px;                           /* Bordi completamente arrotondati */
+  position: relative;                            /* Per posizionamento assoluto del ::before */
   
   /* SEZIONE 10.2.2: Dimensioni e layout */
   padding: 0.7rem 1rem;                          /* Padding interno */
@@ -734,21 +1126,31 @@ body:not(.tratte-page) .main-card {
   overflow: hidden;                             /* Nasconde contenuto che esce */
 }
 
-/* SEZIONE 10.2.6: Effetto shimmer del pulsante swap */
+/* SEZIONE 10.2.6: Effetto rifrazione del pulsante swap */
 .swap-btn::before {
-  content: '';                     /* Contenuto vuoto */
-  position: absolute;              /* Posizione assoluta */
-  top: 0;                         /* Posizione in alto */
-  left: -100%;                    /* Posizione iniziale fuori dal pulsante */
-  width: 100%;                    /* Larghezza completa */
-  height: 100%;                   /* Altezza completa */
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);  /* Gradiente shimmer */
-  transition: left 0.5s ease;     /* Transizione della posizione */
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.04) 30%,
+    transparent 60%,
+    transparent 100%
+  );
+  border-radius: 50px 50px 25px 25px;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
-/* Effetto shimmer al hover */
+/* Rifrazione visibile al hover */
 .swap-btn:hover::before {
-  left: 100%;                     /* Muove il gradiente attraverso il pulsante */
+  opacity: 1;
 }
 
 /* SEZIONE 10.2.7: Effetto hover del pulsante swap */
@@ -1003,7 +1405,6 @@ body:not(.tratte-page) .main-card {
 /* SEZIONE 11.6: Codice prezzo in dark mode */
 .dark .price-code {
   color: rgba(248, 250, 252, 0.95);      /* Testo chiaro con 95% opacità */
-  background: rgba(255, 255, 255, 0.05); /* Sfondo bianco molto trasparente */
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);  /* Ombra testo leggera */
 }
 
@@ -1068,40 +1469,135 @@ body:not(.tratte-page) .main-card {
   margin: 1.5rem 0;               /* Margine verticale */
 }
 
+/* SEZIONE 11.12: Sezione prezzo divisa con effetto vetro glassmorphism */
+.price-card {
+  border-radius: 1rem;
+  overflow: hidden;
+  margin: 1rem 0;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 
+    var(--glass-shadow),
+    0 0 0 1px rgba(255, 255, 255, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+/* Effetto rifrazione della luce - overlay gradiente */
+.price-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.05) 25%,
+    transparent 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Stato inattivo - quando i campi non sono selezionati */
+.price-card.inactive {
+  opacity: 0.6;
+}
+
+.price-card.inactive .price-section {
+  opacity: 0.6;
+}
+
+.price-card.inactive .price-label {
+  color: #64748b;
+}
+
+.price-card.inactive .price-code {
+  color: #64748b;
+}
+
+.price-card.inactive .price-value {
+  color: #64748b;
+  text-shadow: none;
+}
+
+/* Sezione prezzo semplificata */
+.price-section {
+  padding: 1rem 1.5rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+/* Effetto rifrazione della luce per price-section */
+.price-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(255, 255, 255, 0.08) 30%,
+    transparent 60%,
+    transparent 100%
+  );
+  border-radius: 16px 16px 8px 8px;
+  pointer-events: none;
+  z-index: 1;
+}
+
 /* Etichetta del prezzo */
 .price-label {
-  color: rgba(71, 85, 105, 0.8);  /* Colore grigio scuro con 80% opacità */
+  color: var(--testo-principale);  /* Colore principale per coerenza */
   font-size: 1rem;                /* Dimensione font standard */
   margin-bottom: 0.8rem;          /* Margine inferiore */
   font-weight: 500;               /* Peso font medium */
   letter-spacing: 1px;            /* Spaziatura tra lettere */
   text-transform: uppercase;      /* Testo maiuscolo */
+  opacity: 0.9;                   /* Opacità per eleganza */
 }
 
 /* Valore del prezzo */
 .price-value {
-  font-size: 4rem;                /* Dimensione font molto grande */
-  font-weight: 900;               /* Peso font extra bold */
-  color: #ffffff;                 /* Testo bianco */
-  margin-bottom: 1rem;            /* Margine inferiore */
-  /* text-shadow: 0 6px 20px rgba(23, 183, 177, 0.8), 0 2px 8px rgba(0, 0, 0, 0.6);  /* Ombra turchese + ombra scura RIMOSSA */
-  text-shadow: 0 6px 20px rgba(255, 255, 255, 0.3), 0 2px 8px rgba(0, 0, 0, 0.6);  /* Ombra bianca + ombra scura */
+  font-family: 'Inter', sans-serif;  /* Font coerente con il resto dell'applicazione */
+  font-size: 3rem;                /* Dimensione font ridotta per compattezza */
+  font-weight: 700;               /* Peso font bold (ridotto da 900 per coerenza) */
+  color: var(--testo-principale);  /* Colore principale per coerenza */
+  margin-bottom: 0.5rem;            /* Margine inferiore ridotto */
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);  /* Ombra leggera per coerenza */
   line-height: 1;                    /* Altezza riga compatta */
   letter-spacing: -0.02em;          /* Spaziatura lettere negativa per compattezza */
 }
 
-/* Codice prezzo */
+/* Codice prezzo - solo testo con dimensione appropriata */
 .price-code {
-  color: rgba(15, 23, 42, 0.85);      /* Colore scuro con 85% opacità */
-  font-size: 0.95rem;                 /* Dimensione font leggermente piccola */
-  background: rgba(255, 255, 255, 0.1);  /* Sfondo bianco trasparente */
-  padding: 0.5rem 1rem;               /* Padding interno */
-  border-radius: 12px;                /* Bordi arrotondati */
-  display: inline-block;              /* Display inline-block */
-  backdrop-filter: blur(5px);         /* Sfocatura del background */
-  -webkit-backdrop-filter: blur(5px); /* Supporto WebKit */
-  font-weight: 600;                   /* Peso font semi-bold */
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);  /* Ombra testo leggera */
+  color: var(--testo-principale);       /* Colore principale per coerenza */
+  font-size: 1.8rem;                   /* Dimensione ridotta per compattezza */
+  font-weight: 700;                    /* Peso font bold */
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);  /* Ombra leggera per coerenza */
+  margin-bottom: 0;                    /* Rimuovo margine inferiore */
+  font-family: 'Inter', sans-serif;    /* Font coerente con il resto dell'applicazione */
+  line-height: 1;                      /* Altezza riga compatta */
+  letter-spacing: 0.1em;               /* Spaziatura lettere per leggibilità del codice */
+}
+
+/* Divisore tra codice e prezzo */
+.price-divider {
+  height: 2px;
+  background: rgba(15, 23, 42, 0.4);  /* Stesso colore del divisore nelle altre pagine */
+  margin: 1rem 1.5rem;
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 /* ========================================
@@ -1212,9 +1708,8 @@ select.form-select:focus,
 #linea-tratte:focus,
 #linea-tariffe:focus {
   outline: none !important;                            /* Nessun outline forzato */
-  /* border-color: rgba(23, 183, 177, 0.5) !important;    /* Bordo turchese forzato RIMOSSO */
-  /* border-color: rgba(255, 255, 255, 0.3) !important;   /* Bordo bianco trasparente forzato RIMOSSO */
-  /* box-shadow: 0 0 0 3px rgba(23, 183, 177, 0.2) !important;  /* Ombra turchese forzata RIMOSSA */
+  border-color: var(--turchese) !important;            /* Bordo turchese forzato */
+  box-shadow: 0 0 0 3px rgba(23, 183, 177, 0.1) !important;  /* Ombra turchese forzata */
   background: rgba(255, 255, 255, 0.35) !important;   /* Sfondo più opaco forzato */
 }
 
@@ -1234,8 +1729,8 @@ select.form-select:focus,
 .dark select.form-select:focus,
 .dark #linea-tratte:focus,
 .dark #linea-tariffe:focus {
-  /* border-color: rgba(23, 183, 177, 0.5) !important;    /* Bordo turchese forzato RIMOSSO */
-  /* border-color: rgba(255, 255, 255, 0.3) !important;    /* Bordo bianco trasparente forzato RIMOSSO */
+  border-color: var(--turchese) !important;            /* Bordo turchese forzato */
+  box-shadow: 0 0 0 3px rgba(23, 183, 177, 0.2) !important;  /* Ombra turchese forzata */
   background: rgba(30, 41, 59, 0.4) !important;        /* Sfondo scuro più opaco forzato */
 }
 
@@ -1701,6 +2196,58 @@ select.form-select:focus,
 }
 
 /* ========================================
+   SEZIONE 12.5: PULSANTE TORNA SU
+   ======================================== */
+.scroll-to-top {
+  position: fixed;                        /* Posizione fissa */
+  bottom: 20px;                          /* Distanza dal basso */
+  right: 20px;                           /* Distanza da destra */
+  width: 50px;                           /* Larghezza */
+  height: 50px;                          /* Altezza */
+  background: var(--glass-bg);           /* Sfondo glassmorphism */
+  backdrop-filter: var(--backdrop-blur); /* Sfocatura del background */
+  -webkit-backdrop-filter: var(--backdrop-blur); /* Supporto WebKit */
+  border: 1px solid var(--glass-border); /* Bordo glassmorphism */
+  border-radius: 50%;                    /* Forma circolare */
+  color: var(--testo-principale);        /* Colore testo */
+  display: flex;                         /* Layout flexbox */
+  align-items: center;                   /* Allineamento verticale */
+  justify-content: center;               /* Allineamento orizzontale */
+  cursor: pointer;                       /* Cursore pointer */
+  transition: all 0.3s ease;            /* Transizione fluida */
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3); /* Ombra */
+  z-index: 1000;                         /* Sopra tutti gli elementi */
+  font-size: 1.2rem;                     /* Dimensione icona */
+  opacity: 0;                            /* Inizialmente invisibile */
+  visibility: hidden;                    /* Non visibile */
+}
+
+.scroll-to-top.visible {
+  opacity: 1;                            /* Visibile */
+  visibility: visible;                   /* Visibile */
+}
+
+.scroll-to-top:hover {
+  transform: scale(1.1);                 /* Ingrandisce al hover */
+  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.4); /* Ombra più forte */
+  background: rgba(255, 255, 255, 0.4); /* Sfondo più opaco */
+}
+
+/* Modalità scura per pulsante torna su */
+.dark .scroll-to-top {
+  background: var(--glass-bg-dark);      /* Sfondo glassmorphism scuro */
+  color: rgba(248, 250, 252, 0.95);     /* Testo chiaro */
+  border-color: var(--glass-border-dark); /* Bordo glassmorphism scuro */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Ombra scura */
+}
+
+.dark .scroll-to-top:hover {
+  background: rgba(255, 255, 255, 0.1); /* Sfondo bianco trasparente al hover */
+  border-color: rgba(255, 255, 255, 0.3); /* Bordo bianco trasparente */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4); /* Ombra scura più forte */
+}
+
+/* ========================================
    SEZIONE 13: FOOTER - GLASSMORPHISM
    ======================================== */
 /* SEZIONE 13.1: Footer principale */
@@ -1725,6 +2272,25 @@ select.form-select:focus,
   margin-top: 0;                                 /* Nessun margine superiore */
   position: relative;                            /* Posizione relativa */
   z-index: 10;                                   /* Sopra altri elementi */
+}
+
+/* Effetto rifrazione della luce per footer */
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 70%;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(255, 255, 255, 0.02) 40%,
+    transparent 70%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 1;
 }
 
 /* SEZIONE 13.2: Footer sticky solo per pagine tratte */
@@ -1819,6 +2385,67 @@ select.form-select:focus,
     margin-left: auto;                            /* Centra orizzontalmente */
     margin-right: auto;                           /* Centra orizzontalmente */
   }
+
+  /* Sezione prezzo divisa per tablet */
+  .price-card {
+    max-width: 400px;                             /* Larghezza massima ridotta */
+    margin-left: auto;                            /* Centra orizzontalmente */
+    margin-right: auto;                           /* Centra orizzontalmente */
+  }
+
+  .price-header {
+    padding: 1.2rem 1.5rem;                      /* Padding ridotto per tablet */
+  }
+
+  .price-body {
+    padding: 1.5rem;                             /* Padding ridotto per tablet */
+  }
+
+  /* Layout compatto per selettori tablet */
+  .route-section {
+    display: flex;                                /* Layout flexbox */
+    flex-direction: column;                       /* Direzione verticale */
+    gap: 0.5rem;                                 /* Spazio ridotto tra elementi */
+    padding-right: 4rem;                         /* Padding destro maggiore per il pulsante */
+    padding-top: 0.1rem;                         /* Padding superiore ulteriormente ridotto per mobile */
+  }
+
+  .route-label {
+    display: flex;                                /* Layout flexbox */
+    flex-direction: column;                       /* Direzione verticale */
+    gap: 0.5rem;                                 /* Spazio tra etichetta e select */
+    align-items: flex-start;                      /* Allinea tutto a sinistra */
+    flex: 1 1 40%;                               /* Occupa il 40% dello spazio per il pulsante */
+    width: 100%;                                 /* Larghezza completa */
+  }
+
+  .route-icon {
+    min-width: 120px;                            /* Larghezza minima per simmetria */
+    font-size: 0.9rem;                           /* Font ridotto */
+    justify-content: flex-start !important;      /* Forza allineamento a sinistra */
+    text-align: left !important;                 /* Forza testo allineato a sinistra */
+    margin: 0 !important;                        /* Forza rimozione margini */
+    padding: 0 !important;                       /* Forza rimozione padding */
+    display: flex !important;                    /* Forza display flex */
+    align-items: center;                         /* Centra verticalmente */
+    width: 100%;                                 /* Larghezza completa */
+  }
+
+  .route-select {
+    flex: 1;                                     /* Occupa spazio rimanente */
+    width: 100%;                                 /* Larghezza completa */
+    min-width: 0;                                /* Permette al flex di funzionare */
+  }
+
+  .swap-button {
+    align-self: center;                          /* Centra il pulsante */
+    margin: 0.5rem 0;                           /* Margine verticale ridotto */
+  }
+
+  .swap-btn {
+    width: 40px;                                 /* Dimensione ridotta */
+    height: 40px;                                /* Dimensione ridotta */
+  }
 }
 
 /* SEZIONE 15.2: Tablet Portrait (max-width: 768px) */
@@ -1830,6 +2457,14 @@ select.form-select:focus,
 
   .navbar-title {
     font-size: 1.2rem;                            /* Titolo navbar ridotto */
+  }
+
+  .navbar-title .logo-acronym {
+    font-size: 1.4rem;                            /* Acronimo ridotto aumentato di un altro punto */
+  }
+
+  .navbar-title .logo-text {
+    font-size: 0.9rem;                            /* Testo ridotto aumentato di un altro punto */
   }
 
   /* Card principale */
@@ -1850,7 +2485,7 @@ select.form-select:focus,
   }
 
   .route-icon {
-    align-self: center;                          /* Centra l'icona */
+    align-self: flex-start !important;           /* Allinea l'icona a sinistra */
   }
 
   /* Griglia tratte - una colonna */
@@ -1907,7 +2542,7 @@ select.form-select:focus,
 
   /* Navbar mobile */
   .navbar {
-    padding: 0.75rem 0;                          /* Padding verticale ridotto */
+    padding: 0.6rem 0;                           /* Padding verticale aumentato per dare spazio al logo */
   }
 
   .navbar-brand {
@@ -1922,12 +2557,28 @@ select.form-select:focus,
   }
 
   .navbar-logo {
-    width: 32px;                                 /* Logo più piccolo */
-    height: 32px;                                /* Logo più piccolo */
+    width: 45px;                                 /* Logo quadrato ridotto per navbar sottile */
+    height: 45px;                                /* Logo quadrato ridotto per navbar sottile */
+    border-radius: 10px;                         /* Angoli molto smussati per contorno arrotondato */
+    border: 2px solid rgba(0, 123, 138, 0.7);   /* Contorno ciano che avvolge l'immagine */
+    box-shadow: 
+      0 2px 8px rgba(0, 123, 138, 0.3),         /* Ombra per profondità */
+      0 0 0 1px rgba(255, 255, 255, 0.1),      /* Bordo esterno sottile */
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),  /* Riflesso luce dall'alto */
+      inset 0 -1px 0 rgba(0, 0, 0, 0.1);       /* Ombra dal basso */
+    align-self: center;                          /* Centra verticalmente */
   }
 
   .navbar-title {
     font-size: 1.1rem;                           /* Titolo ridotto */
+  }
+
+  .navbar-title .logo-acronym {
+    font-size: 1.3rem;                           /* Acronimo ridotto aumentato di un altro punto */
+  }
+
+  .navbar-title .logo-text {
+    font-size: 0.8rem;                           /* Testo ridotto aumentato di un altro punto */
   }
 
   /* Card principale mobile */
@@ -1957,6 +2608,78 @@ select.form-select:focus,
     margin-right: auto;                         /* Centra orizzontalmente */
   }
 
+  /* Sezione prezzo divisa per mobile */
+  .price-card {
+    max-width: 320px;                           /* Larghezza massima ancora più ridotta per mobile */
+    margin-left: auto;                          /* Centra orizzontalmente */
+    margin-right: auto;                         /* Centra orizzontalmente */
+  }
+
+  .price-header {
+    padding: 1rem 1.2rem;                      /* Padding ultra-ridotto per mobile */
+  }
+
+  .price-body {
+    padding: 1.2rem;                           /* Padding ultra-ridotto per mobile */
+  }
+
+  .code-label {
+    font-size: 0.8rem;                         /* Font più piccolo per mobile */
+  }
+
+  .price-code {
+    font-size: 1.5rem;                         /* Font ridotto per mobile ma proporzionale */
+  }
+
+  /* Layout ultra-compatto per selettori mobile */
+  .route-section {
+    gap: 0.25rem;                               /* Spazio ultra-ridotto tra elementi */
+    padding-right: 4rem;                        /* Padding destro maggiore per il pulsante */
+    padding-top: 0.05rem;                       /* Padding superiore ultra-ridotto per mobile */
+  }
+
+  .route-label {
+    gap: 0.25rem;                               /* Spazio ridotto tra etichetta e select */
+    align-items: flex-start;                    /* Allinea tutto a sinistra */
+    flex: 1 1 40%;                             /* Occupa il 40% dello spazio per il pulsante */
+    width: 100%;                               /* Larghezza completa */
+  }
+
+  .route-icon {
+    min-width: 120px;                            /* Larghezza minima per simmetria */
+    font-size: 0.8rem;                          /* Font più piccolo */
+    justify-content: flex-start !important;      /* Forza allineamento a sinistra */
+    text-align: left !important;                 /* Forza testo allineato a sinistra */
+    margin: 0 !important;                        /* Forza rimozione margini */
+    padding: 0 !important;                       /* Forza rimozione padding */
+    display: flex !important;                    /* Forza display flex */
+    align-items: center;                         /* Centra verticalmente */
+    width: 100%;                                 /* Larghezza completa */
+  }
+
+  .route-icon span:last-child {
+    display: inline;                            /* Mostra il testo "Partenza"/"Arrivo" */
+    font-size: 0.75rem;                         /* Font molto piccolo per spazio */
+    min-width: 80px;                            /* Larghezza minima per simmetria */
+    text-align: left;                           /* Allineamento a sinistra */
+  }
+
+  .swap-button {
+    margin: 0.25rem 0;                          /* Margine ultra-ridotto */
+  }
+
+  .swap-btn {
+    width: 35px;                                /* Dimensione ultra-ridotta */
+    height: 35px;                               /* Dimensione ultra-ridotta */
+    font-size: 0.9rem;                          /* Icona più piccola */
+  }
+
+  /* Card principale ultra-compatta per mobile */
+  .main-card {
+    padding: 0.75rem;                           /* Padding ultra-ridotto */
+    margin: 0.5rem 0;                           /* Margine ultra-ridotto */
+  }
+
   /* Pulsante calcola mobile */
   .calculate-btn {
     padding: 0.75rem 1rem;                      /* Padding ridotto */
@@ -1974,6 +2697,8 @@ select.form-select:focus,
     width: 35px;                                /* Dimensione ridotta */
     height: 35px;                               /* Dimensione ridotta */
     font-size: 1rem;                            /* Font ridotto */
+    justify-content: flex-start !important;      /* Forza allineamento a sinistra */
+    align-self: flex-start !important;           /* Allinea l'icona a sinistra */
   }
 
   /* Titolo pagina mobile */
@@ -2053,7 +2778,7 @@ select.form-select:focus,
 @media (max-width: 400px) {
   /* Navbar ultra compatta */
   .navbar {
-    padding: 0.5rem 0;                          /* Padding verticale minimo */
+    padding: 0.5rem 0;                          /* Padding verticale aumentato per dare spazio al logo */
   }
 
   .navbar-brand {
@@ -2062,6 +2787,14 @@ select.form-select:focus,
 
   .navbar-title {
     font-size: 0.9rem;                           /* Titolo molto piccolo */
+  }
+
+  .navbar-title .logo-acronym {
+    font-size: 1.2rem;                           /* Acronimo molto piccolo aumentato di un altro punto */
+  }
+
+  .navbar-title .logo-text {
+    font-size: 0.7rem;                           /* Testo molto piccolo aumentato di un altro punto */
   }
 
   /* Badge BETA ultra piccolo */
@@ -2112,12 +2845,28 @@ select.form-select:focus,
   }
 
   .navbar-logo {
-    width: 24px;                                  /* Logo ultra piccolo */
-    height: 24px;                                 /* Logo ultra piccolo */
+    width: 40px;                                  /* Logo quadrato ridotto per navbar sottile */
+    height: 40px;                                 /* Logo quadrato ridotto per navbar sottile */
+    border-radius: 8px;                           /* Angoli molto smussati per contorno arrotondato */
+    border: 2px solid rgba(0, 123, 138, 0.7);    /* Contorno ciano che avvolge l'immagine */
+    box-shadow: 
+      0 2px 8px rgba(0, 123, 138, 0.3),         /* Ombra per profondità */
+      0 0 0 1px rgba(255, 255, 255, 0.1),      /* Bordo esterno sottile */
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),  /* Riflesso luce dall'alto */
+      inset 0 -1px 0 rgba(0, 0, 0, 0.1);       /* Ombra dal basso */
+    align-self: center;                           /* Centra verticalmente */
   }
 
   .navbar-title {
     font-size: 0.8rem;                            /* Titolo ultra piccolo */
+  }
+
+  .navbar-title .logo-acronym {
+    font-size: 1.1rem;                            /* Acronimo ultra piccolo aumentato di un altro punto */
+  }
+
+  .navbar-title .logo-text {
+    font-size: 0.65rem;                           /* Testo ultra piccolo aumentato di un altro punto */
   }
 
   /* Badge BETA nascosto */
@@ -2411,4 +3160,187 @@ select.form-select:focus,
     max-width: 1900px !important;               /* Larghezza massima container */
     padding: 0 1.5rem;                         /* Padding laterale maggiore */
   }
+}
+
+/* Modalità scura per sezione prezzo divisa con effetto vetro */
+.dark .price-card {
+  background: var(--glass-bg-dark);
+  border-color: var(--glass-border-dark);
+  box-shadow: 
+    var(--glass-shadow-dark),
+    0 0 0 1px rgba(255, 255, 255, 0.03),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+}
+
+.dark .price-card.inactive .price-section {
+  opacity: 0.6;
+}
+
+.dark .price-card.inactive .price-label {
+  color: #9ca3af;
+}
+
+.dark .price-card.inactive .price-code {
+  color: #9ca3af;
+}
+
+.dark .price-card.inactive .price-value {
+  color: #9ca3af;
+}
+
+/* Modalità scura per price-section */
+.dark .price-section::before {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.04) 30%,
+    transparent 60%,
+    transparent 100%
+  );
+}
+
+/* Modalità scura per divisore */
+.dark .price-divider {
+  background: rgba(255, 255, 255, 0.4);  /* Stesso colore del divisore nelle altre pagine */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.dark .code-label {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.dark .price-label {
+  color: #ffffff;
+}
+
+/* Modalità scura per navbar con effetto rifrazione */
+.dark .navbar {
+  box-shadow: 
+    0 8px 32px 0 rgba(0, 123, 138, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.03),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+}
+
+.dark .navbar::before {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.06) 0%,
+    rgba(255, 255, 255, 0.03) 30%,
+    transparent 60%,
+    transparent 100%
+  );
+}
+
+.dark .navbar-logo {
+  box-shadow: 
+    0 2px 8px rgba(0, 123, 138, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+}
+
+.dark .navbar-logo::before {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.06) 40%,
+    transparent 70%,
+    transparent 100%
+  );
+}
+
+/* Modalità scura per main-card con effetto rifrazione */
+.dark .main-card {
+  box-shadow: 
+    var(--glass-shadow-dark),
+    0 0 0 1px rgba(255, 255, 255, 0.03),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+}
+
+.dark .main-card::before {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(255, 255, 255, 0.02) 30%,
+    transparent 60%,
+    transparent 100%
+  );
+}
+
+/* Modalità scura per footer con effetto rifrazione */
+.dark .footer::before {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.03) 0%,
+    rgba(255, 255, 255, 0.01) 40%,
+    transparent 70%,
+    transparent 100%
+  );
+}
+
+/* Modalità scura per pulsanti navbar con effetto rifrazione */
+.dark .nav-link::before {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.06) 0%,
+    rgba(255, 255, 255, 0.03) 30%,
+    transparent 60%,
+    transparent 100%
+  );
+}
+
+.dark .dark-mode-toggle::before {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(255, 255, 255, 0.02) 30%,
+    transparent 60%,
+    transparent 100%
+  );
+}
+
+/* Modalità scura per caselle select con effetto rifrazione */
+.dark .form-select::before {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.06) 0%,
+    rgba(255, 255, 255, 0.03) 30%,
+    transparent 60%,
+    transparent 100%
+  );
+}
+
+.dark .route-select::before {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.06) 0%,
+    rgba(255, 255, 255, 0.03) 30%,
+    transparent 60%,
+    transparent 100%
+  );
+}
+
+/* Modalità scura per route-section con effetto rifrazione */
+.dark .route-section::before {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(255, 255, 255, 0.02) 30%,
+    transparent 60%,
+    transparent 100%
+  );
+}
+
+/* Modalità scura per pulsante swap con effetto rifrazione */
+.dark .swap-btn::before {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.06) 0%,
+    rgba(255, 255, 255, 0.03) 30%,
+    transparent 60%,
+    transparent 100%
+  );
 }
