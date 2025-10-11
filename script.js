@@ -162,7 +162,7 @@ function calcolaPrezzo() {
   } else {
     // Nessuna selezione valida
     summaryPrezzo.textContent = '-';
-    summaryCodice.textContent = '';
+    summaryCodice.textContent = '-';
     prezzoErrore.style.display = 'none';
   }
 
@@ -193,8 +193,154 @@ window.calculatePrice = function () {
   calcolaPrezzo();
 };
 
+// Funzione reset filtri (linea, partenza, arrivo e risultati)
+function resetFilters() {
+  // Reset tutto: linea, partenza e arrivo
+  lineaIdx = '';
+  partenzaIdx = '';
+  arrivoIdx = '';
+  hasCalculated = false;
+  
+  // Reset select linea
+  if (lineaSelect) {
+    lineaSelect.value = '';
+  }
+  
+  // Reset select partenza e arrivo usando la logica esistente
+  if (partenzaSelect) {
+    partenzaSelect.value = '';
+    partenzaSelect.innerHTML = '<option value="">Prima seleziona una linea</option>';
+    partenzaSelect.disabled = true;
+  }
+  
+  if (arrivoSelect) {
+    arrivoSelect.value = '';
+    arrivoSelect.innerHTML = '<option value="">Prima seleziona una linea</option>';
+    arrivoSelect.disabled = true;
+  }
+  
+  // Reset card prezzo
+  if (priceCard) {
+    priceCard.classList.add('inactive');
+  }
+  
+  // Reset summary e prezzo usando la logica esistente
+  updateSummary();
+  calcolaPrezzo();
+  
+  // Assicurati che il pulsante swap sia disabilitato
+  const swapBtn = document.getElementById('swap-btn');
+  if (swapBtn) {
+    swapBtn.disabled = true;
+    swapBtn.style.opacity = '0.5';
+    swapBtn.style.cursor = 'not-allowed';
+  }
+  
+  // Reset tutto nel LocalStorage
+  try {
+    localStorage.removeItem('tpl.lineaIdx');
+    localStorage.removeItem('tpl.partenzaIdx');
+    localStorage.removeItem('tpl.arrivoIdx');
+  } catch { }
+  
+  // Feedback visivo
+  const resetBtn = document.getElementById('reset-btn');
+  if (resetBtn) {
+    resetBtn.style.transform = 'scale(0.95)';
+    setTimeout(() => {
+      resetBtn.style.transform = 'scale(1)';
+    }, 150);
+  }
+}
+
+// Funzione reset cache
+function resetCache() {
+  // Mostra il modal di conferma
+  const modal = document.getElementById('cache-modal');
+  if (modal) {
+    modal.style.display = 'block';
+  }
+}
+
+// Funzione conferma reset cache
+function confirmResetCache() {
+  // Cancella la cache del Service Worker
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then(function(registrations) {
+      for(let registration of registrations) {
+        registration.unregister();
+      }
+    });
+  }
+  
+  // Cancella la cache del browser
+  if ('caches' in window) {
+    caches.keys().then(function(names) {
+      for (let name of names) {
+        caches.delete(name);
+      }
+    });
+  }
+  
+  // Cancella il LocalStorage
+  try {
+    localStorage.clear();
+  } catch { }
+  
+  // Torna alla pagina di benvenuto
+  setTimeout(() => {
+    window.location.href = 'benvenuto.html';
+  }, 500);
+}
+
+// Funzione annulla reset cache
+function cancelResetCache() {
+  const modal = document.getElementById('cache-modal');
+  if (modal) {
+    modal.style.display = 'none';
+  }
+}
+
 // Event listeners
 if (darkModeToggle) darkModeToggle.addEventListener('click', toggleDark);
+
+// Event listener per reset cache
+const cacheResetBtn = document.getElementById('cache-reset');
+if (cacheResetBtn) {
+  cacheResetBtn.addEventListener('click', resetCache);
+}
+
+// Event listeners per modal cache
+const cacheCancelBtn = document.getElementById('cache-cancel');
+const cacheConfirmBtn = document.getElementById('cache-confirm');
+const cacheModal = document.getElementById('cache-modal');
+
+if (cacheCancelBtn) {
+  cacheCancelBtn.addEventListener('click', cancelResetCache);
+}
+
+if (cacheConfirmBtn) {
+  cacheConfirmBtn.addEventListener('click', confirmResetCache);
+}
+
+// Chiudi modal cliccando fuori
+if (cacheModal) {
+  cacheModal.addEventListener('click', function(e) {
+    if (e.target === cacheModal) {
+      cancelResetCache();
+    }
+  });
+}
+
+// Chiudi modal con ESC
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    const modal = document.getElementById('cache-modal');
+    if (modal && modal.style.display === 'block') {
+      cancelResetCache();
+    }
+  }
+});
 if (lineaSelect) {
   lineaSelect.addEventListener('change', e => {
     lineaIdx = e.target.value;
@@ -395,8 +541,8 @@ function populateLineeTratte() {
       // Aggiorna titoli
       const firstStop = fermate[0];
       const lastStop = fermate[fermate.length - 1];
-      if (andataTitle) andataTitle.textContent = `Fermate (${firstStop} → ${lastStop})`;
-      if (ritornoTitle) ritornoTitle.textContent = `Fermate (${lastStop} → ${firstStop})`;
+      if (andataTitle) andataTitle.textContent = `(${firstStop} → ${lastStop})`;
+      if (ritornoTitle) ritornoTitle.textContent = `(${lastStop} → ${firstStop})`;
 
       // Mostra griglia e ricerca
       if (gridContainer) gridContainer.style.display = 'grid';
@@ -440,8 +586,8 @@ function populateLineeTariffe() {
       // Aggiorna titoli
       const firstStop = fermate[0];
       const lastStop = fermate[fermate.length - 1];
-      if (andataTitle) andataTitle.textContent = `Prezzi e codici (${firstStop} → ${lastStop})`;
-      if (ritornoTitle) ritornoTitle.textContent = `Prezzi e codici (${lastStop} → ${firstStop})`;
+      if (andataTitle) andataTitle.textContent = `(${firstStop} → ${lastStop})`;
+      if (ritornoTitle) ritornoTitle.textContent = `(${lastStop} → ${firstStop})`;
 
       // Mostra griglia e ricerca
       if (gridContainer) gridContainer.style.display = 'grid';
@@ -588,3 +734,13 @@ function toggleScrollToTopButton() {
 window.addEventListener('scroll', toggleScrollToTopButton);
 
 window.addEventListener('DOMContentLoaded', loadData);
+
+// Event listener per pulsante reset (solo su index.html)
+if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('/')) {
+  window.addEventListener('DOMContentLoaded', () => {
+    const resetBtn = document.getElementById('reset-btn');
+    if (resetBtn) {
+      resetBtn.addEventListener('click', resetFilters);
+    }
+  });
+}

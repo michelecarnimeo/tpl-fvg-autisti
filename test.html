@@ -199,6 +199,178 @@
         .console-log.warning {
             color: #ffc107;
         }
+
+        /* Stili per la griglia degli effetti */
+        .effects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .effect-card {
+            background: var(--grigio-medio);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 2px solid var(--bordo);
+            transition: all 0.3s ease;
+        }
+
+        .effect-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .effect-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .effect-icon {
+            font-size: 1.5rem;
+        }
+
+        .effect-title {
+            font-weight: bold;
+            color: var(--turchese);
+            font-size: 1.1rem;
+        }
+
+        .effect-status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-left: auto;
+        }
+
+        .effect-status.active {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .effect-status.inactive {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .effect-status.conditional {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .effect-details {
+            font-size: 0.9rem;
+            color: var(--testo-secondario);
+            line-height: 1.4;
+        }
+
+        .effect-details ul {
+            margin: 0.5rem 0;
+            padding-left: 1.2rem;
+        }
+
+        .effect-details li {
+            margin: 0.25rem 0;
+        }
+
+        /* Mobile: rimuovi card per layout flat */
+        @media (max-width: 768px) {
+            .test-section {
+                background: transparent !important;
+                border: none !important;
+                box-shadow: none !important;
+                backdrop-filter: none !important;
+                padding: 1rem 0 !important;
+                margin-bottom: 1rem !important;
+            }
+            
+            .test-section::before {
+                content: '';
+                display: block;
+                height: 1px;
+                background: rgba(0, 0, 0, 0.1);
+                margin-bottom: 1rem;
+            }
+            
+            .dark .test-section::before {
+                background: rgba(255, 255, 255, 0.1);
+            }
+            
+            .test-item {
+                background: transparent !important;
+                border: none !important;
+                box-shadow: none !important;
+                backdrop-filter: none !important;
+                padding: 0.75rem 0 !important;
+                margin: 0.5rem 0 !important;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+            }
+            
+            .dark .test-item {
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+            }
+            
+            .test-item:last-child {
+                border-bottom: none !important;
+            }
+            
+            .effect-card {
+                background: transparent !important;
+                border: none !important;
+                box-shadow: none !important;
+                backdrop-filter: none !important;
+                padding: 0.75rem 0 !important;
+                margin-bottom: 1rem !important;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+            }
+            
+            .dark .effect-card {
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+            }
+            
+            .effect-card:last-child {
+                border-bottom: none !important;
+            }
+            
+            .stat-card {
+                background: transparent !important;
+                border: none !important;
+                box-shadow: none !important;
+                backdrop-filter: none !important;
+                padding: 0.75rem 0 !important;
+                margin-bottom: 0.5rem !important;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+            }
+            
+            .dark .stat-card {
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+            }
+            
+            .stat-card:last-child {
+                border-bottom: none !important;
+            }
+            
+            /* Disabilita effetti hover su mobile */
+            .test-section:hover,
+            .test-item:hover,
+            .effect-card:hover,
+            .stat-card:hover {
+                transform: none !important;
+                box-shadow: none !important;
+            }
+            
+            /* Disabilita effetti rifrazione su mobile */
+            .test-section::before,
+            .test-item::before,
+            .effect-card::before,
+            .stat-card::before {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 
@@ -209,17 +381,27 @@
         <div class="container">
             <div class="navbar-content">
                 <div class="navbar-brand">
-                    <img src="src/logo.jpg" alt="TPL" class="navbar-logo" />
+                    <img src="src/logo.png" alt="TPL" class="navbar-logo" />
+                    <div class="navbar-title">
+                        <div class="navbar-title-main">tpl<br>fvg</div>
+                        <div class="navbar-title-sub">trasporto<br>pubblico<br>locale</div>
+                    </div>
                     <span class="beta-badge">BETA</span>
                 </div>
+                <button id="hamburger-toggle" class="hamburger-toggle" aria-label="Menu">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
                 <nav class="navbar-nav">
                     <a href="index.html" class="nav-link">Home</a>
                     <a href="tratte.html" class="nav-link">Tratte</a>
                     <a href="tariffe.html" class="nav-link">Tariffe</a>
-                    <a href="test.html" class="nav-link active">🧪 Test</a>
+                    <a href="test.html" class="nav-link active">Test</a>
                     <button id="darkmode-toggle" class="dark-mode-toggle" title="Darkmode">
                         <span>🌙</span>
                     </button>
+                    <button id="cache-reset" class="cache-reset-btn" title="Cancella cache e ricarica"><span>🗑️</span></button>
                 </nav>
             </div>
         </div>
@@ -249,6 +431,15 @@
                 </div>
             </div>
             <button class="run-all-btn" onclick="runAllTests()">▶️ Esegui tutti i test</button>
+        </div>
+
+        <!-- Effetti e Animazioni Attive -->
+        <div class="test-section">
+            <h2>🎭 Effetti e Animazioni Attive</h2>
+            <div class="effects-grid" id="effects-grid">
+                <!-- Gli effetti verranno popolati dinamicamente -->
+            </div>
+            <button class="test-button" onclick="updateEffectsStatus()">🔄 Aggiorna Status</button>
         </div>
 
         <!-- Test 1: Caricamento Database -->
@@ -388,6 +579,42 @@
         </div>
 
     </div>
+
+    <!-- Pulsante torna su -->
+    <button class="scroll-to-top" onclick="scrollToTop()" title="Torna su">
+        ↑
+    </button>
+
+    <!-- Modal conferma reset cache -->
+    <div id="cache-modal" class="cache-modal">
+        <div class="cache-modal-content">
+            <div class="cache-modal-header">
+                <h3>🗑️ Cancella Cache</h3>
+            </div>
+            <div class="cache-modal-body">
+                <p>Sei sicuro di voler cancellare la cache dell'app?</p>
+                <p class="cache-modal-warning">⚠️ L'app si ricaricherà automaticamente e tornerai alla pagina di benvenuto.</p>
+            </div>
+            <div class="cache-modal-footer">
+                <button id="cache-cancel" class="cache-modal-btn cache-modal-cancel">Annulla</button>
+                <button id="cache-confirm" class="cache-modal-btn cache-modal-confirm">Conferma</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© <span id="footer-year"></span> TPL FVG. Tutti i diritti riservati.<br>Creato da Michele Carnimeo · <a href="test.html" style="color: inherit; text-decoration: none; transition: text-decoration 0.3s ease;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">TPL Autisti 0.9 build 23</a></p>
+        <div class="footer-links">
+          <a href="https://t.me/+eoJ9nYFFrjphMzVk" target="_blank" class="telegram-link" title="Canale Telegram">
+            <span class="telegram-icon">📢</span> Avvisi & Aggiornamenti
+          </a>
+          <a href="https://t.me/+2yIF2NfPYt82MWI0" target="_blank" class="telegram-link" title="Gruppo Telegram">
+            <span class="telegram-icon">🐛</span> Segnala Errori
+          </a>
+        </div>
+        <p class="update-info">📅 Ultimo aggiornamento: <span id="last-update">12/10/2025 ore 00:34</span></p>
+    </footer>
 
     <!-- Script di test -->
     <script src="script.js"></script>
@@ -906,9 +1133,147 @@
             console.log('Tutti i test completati!');
         }
 
-        // Inizializza statistiche al caricamento
+        // Funzione per aggiornare lo status degli effetti
+        function updateEffectsStatus() {
+            const effectsGrid = document.getElementById('effects-grid');
+            if (!effectsGrid) return;
+
+            const isDarkMode = document.documentElement.classList.contains('dark');
+            const isMobile = window.innerWidth <= 768;
+            const hasAnimationSupport = 'animation' in document.documentElement.style;
+            const hasBackdropFilter = CSS.supports('backdrop-filter', 'blur(10px)');
+            const hasServiceWorker = 'serviceWorker' in navigator;
+
+            // Rileva gli effetti attivi
+            const effects = [
+                {
+                    id: 'background-animation',
+                    icon: '🌈',
+                    title: 'Animazione Background',
+                    status: !isMobile ? 'active' : 'inactive',
+                    details: isMobile ? 
+                        'Disabilitata su mobile per performance' : 
+                        'Gradiente animato (20s) per desktop'
+                },
+                {
+                    id: 'glassmorphism',
+                    icon: '🔮',
+                    title: 'Effetto Glassmorphism',
+                    status: 'active',
+                    details: 'Backdrop-filter e trasparenze su tutte le card'
+                },
+                {
+                    id: 'light-refraction',
+                    icon: '✨',
+                    title: 'Rifrazione Luce',
+                    status: !isMobile ? 'active' : 'inactive',
+                    details: isMobile ? 
+                        'Disabilitata su mobile per performance' : 
+                        'Effetti luce su navbar, card e pulsanti'
+                },
+                {
+                    id: 'smooth-animations',
+                    icon: '🎭',
+                    title: 'Animazioni Fluide',
+                    status: hasAnimationSupport ? 'active' : 'inactive',
+                    details: 'Transizioni cubic-bezier su elementi interattivi'
+                },
+                {
+                    id: 'dark-mode',
+                    icon: isDarkMode ? '🌙' : '☀️',
+                    title: 'Modalità Scura',
+                    status: isDarkMode ? 'active' : 'inactive',
+                    details: isDarkMode ? 
+                        'Tema scuro attivo' : 
+                        'Tema chiaro attivo'
+                },
+                {
+                    id: 'responsive-design',
+                    icon: '📱',
+                    title: 'Design Responsive',
+                    status: 'active',
+                    details: `Layout ottimizzato per ${isMobile ? 'mobile' : 'desktop'}`
+                },
+                {
+                    id: 'pwa-features',
+                    icon: '⚙️',
+                    title: 'Funzionalità PWA',
+                    status: hasServiceWorker ? 'conditional' : 'inactive',
+                    details: hasServiceWorker ? 
+                        'Service Worker supportato' : 
+                        'Service Worker non supportato'
+                },
+                {
+                    id: 'accessibility',
+                    icon: '♿',
+                    title: 'Accessibilità',
+                    status: 'active',
+                    details: 'Font size regolabile, hamburger menu, keyboard navigation'
+                }
+            ];
+
+            // Popola la griglia
+            effectsGrid.innerHTML = effects.map(effect => `
+                <div class="effect-card">
+                    <div class="effect-header">
+                        <span class="effect-icon">${effect.icon}</span>
+                        <span class="effect-title">${effect.title}</span>
+                        <span class="effect-status ${effect.status}">
+                            ${effect.status === 'active' ? '✅ Attivo' : 
+                              effect.status === 'inactive' ? '❌ Inattivo' : 
+                              '⚠️ Condizionale'}
+                        </span>
+                    </div>
+                    <div class="effect-details">
+                        ${effect.details}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Inizializza statistiche e effetti al caricamento
         window.addEventListener('DOMContentLoaded', () => {
             updateStats();
+            updateEffectsStatus();
+            
+            // Aggiorna l'anno nel footer
+            const footerYear = document.getElementById('footer-year');
+            if (footerYear) footerYear.textContent = new Date().getFullYear();
+        });
+
+        // Aggiorna effetti quando cambia la modalità
+        document.addEventListener('DOMContentLoaded', () => {
+            const darkModeToggle = document.getElementById('darkmode-toggle');
+            if (darkModeToggle) {
+                darkModeToggle.addEventListener('click', () => {
+                    setTimeout(updateEffectsStatus, 100); // Aspetta che il cambio modalità sia completato
+                });
+            }
+        });
+
+        // Aggiorna effetti quando cambia la dimensione schermo
+        window.addEventListener('resize', () => {
+            setTimeout(updateEffectsStatus, 100);
+        });
+
+        // Funzione scroll to top
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Mostra/nascondi pulsante scroll to top
+        window.addEventListener('scroll', function() {
+            const scrollButton = document.querySelector('.scroll-to-top');
+            if (scrollButton) {
+                if (window.pageYOffset > 300) {
+                    scrollButton.style.display = 'block';
+                } else {
+                    scrollButton.style.display = 'none';
+                }
+            }
         });
     </script>
 

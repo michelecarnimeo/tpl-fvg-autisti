@@ -77,7 +77,7 @@ body {
   /* SUBSECTION 5.2: Gradiente di sfondo bianco sfumato */
   background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 25%, #cbd5e1 50%, #94a3b8 75%, #64748b 100%);
   background-size: 400% 400%;        /* Dimensione del gradiente per animazione */
-  animation: gradientShift 8s ease infinite;  /* Animazione più veloce del gradiente */
+  animation: gradientShift 20s ease infinite;  /* Animazione lenta del gradiente */
   
   /* SUBSECTION 5.3: Testo e layout base */
   color: var(--testo-principale);    /* Colore del testo principale */
@@ -113,10 +113,10 @@ body {
 /* SUBSECTION 5.7: Background per modalità scura */
 /* Override del gradiente quando la classe .dark è attiva */
 .dark body {
-  background: linear-gradient(135deg, #1e3a8a 0%, #312e81 25%, #1e293b 50%, #0f172a 75%, #020617 100%);
-  /* Gradiente scuro: blu → viola → grigio scuro → nero */
+  background: linear-gradient(135deg, #1a202c 0%, #2d3748 25%, #4a5568 50%, #718096 75%, #a0aec0 100%);
+  /* Gradiente scuro: grigio scuro → grigio → grigio chiaro */
   background-size: 400% 400%;        /* Stessa dimensione per animazione */
-  animation: gradientShift 8s ease infinite;  /* Stessa animazione più veloce */
+  animation: gradientShift 20s ease infinite;  /* Stessa animazione lenta */
 }
 
 /* ========================================
@@ -258,36 +258,40 @@ body {
 
 /* Titolo TPL FVG nella navbar */
 .navbar-title {
-  color: rgba(255, 255, 255, 0.95);  /* Testo bianco con 95% opacità */
+  color: rgba(255, 255, 255, 1);                 /* Testo bianco pieno */
   font-size: 1.5rem;                              /* Dimensione font grande */
   font-weight: 700;                               /* Peso font bold */
   text-decoration: none;                          /* Nessuna sottolineatura */
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);    /* Ombra testo per leggibilità */
+  text-shadow: 0 2px 15px rgba(0, 0, 0, 0.6);    /* Ombra testo più forte per leggibilità */
   display: flex;                                 /* Layout flexbox orizzontale */
   align-items: center;                           /* Allineamento verticale centrale */
   gap: 0.5rem;                                   /* Spazio ridotto tra acronimo e testo */
 }
 
-.navbar-title .logo-acronym {
+.navbar-title .logo-acronym,
+.navbar-title .navbar-title-main {
   display: flex;                                 /* Layout flexbox per tpl/fvg */
   flex-direction: column;                        /* Disposizione verticale */
   font-family: 'Arial', sans-serif;             /* Font sans-serif spesso */
   font-weight: 700;                             /* Font molto audace */
   font-size: 1.4rem;                            /* Dimensione media aumentata di un altro punto */
-  color: rgba(255, 255, 255, 0.95);             /* Testo bianco */
+  color: rgba(255, 255, 255, 1);                /* Testo bianco pieno */
   letter-spacing: 0.5px;                        /* Spaziatura tra lettere */
   line-height: 1;                               /* Altezza riga compatta */
+  text-shadow: 0 2px 15px rgba(0, 0, 0, 0.6);   /* Ombra testo più forte */
 }
 
-.navbar-title .logo-text {
+.navbar-title .logo-text,
+.navbar-title .navbar-title-sub {
   display: flex;                                 /* Layout flexbox per trasporto/pubblico/locale */
   flex-direction: column;                        /* Disposizione verticale */
   font-family: 'Arial', sans-serif;             /* Font sans-serif leggero */
   font-weight: 300;                             /* Font leggero */
   font-size: 0.8rem;                            /* Dimensione piccola aumentata */
-  color: rgba(255, 255, 255, 0.8);              /* Testo bianco più trasparente */
+  color: rgba(255, 255, 255, 0.9);              /* Testo bianco più visibile */
   letter-spacing: 0.3px;                        /* Spaziatura tra lettere */
   line-height: 1;                               /* Altezza riga compatta */
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);   /* Ombra testo per leggibilità */
 }
 
 /* SUBSECTION 7.7: Badge BETA con glassmorphism */
@@ -2459,11 +2463,13 @@ select.form-select:focus,
     font-size: 1.2rem;                            /* Titolo navbar ridotto */
   }
 
-  .navbar-title .logo-acronym {
+  .navbar-title .logo-acronym,
+  .navbar-title .navbar-title-main {
     font-size: 1.4rem;                            /* Acronimo ridotto aumentato di un altro punto */
   }
 
-  .navbar-title .logo-text {
+  .navbar-title .logo-text,
+  .navbar-title .navbar-title-sub {
     font-size: 0.9rem;                            /* Testo ridotto aumentato di un altro punto */
   }
 
@@ -2573,11 +2579,13 @@ select.form-select:focus,
     font-size: 1.1rem;                           /* Titolo ridotto */
   }
 
-  .navbar-title .logo-acronym {
+  .navbar-title .logo-acronym,
+  .navbar-title .navbar-title-main {
     font-size: 1.3rem;                           /* Acronimo ridotto aumentato di un altro punto */
   }
 
-  .navbar-title .logo-text {
+  .navbar-title .logo-text,
+  .navbar-title .navbar-title-sub {
     font-size: 0.8rem;                           /* Testo ridotto aumentato di un altro punto */
   }
 
@@ -2636,6 +2644,231 @@ select.form-select:focus,
     gap: 0.25rem;                               /* Spazio ultra-ridotto tra elementi */
     padding-right: 4rem;                        /* Padding destro maggiore per il pulsante */
     padding-top: 0.05rem;                       /* Padding superiore ultra-ridotto per mobile */
+  }
+
+  /* Layout mobile flat - rimuove card per massimizzare spazio */
+  .main-card {
+    background: transparent !important;         /* Rimuove sfondo card */
+    backdrop-filter: none !important;          /* Rimuove effetto vetro */
+    -webkit-backdrop-filter: none !important;  /* Rimuove effetto vetro WebKit */
+    border: none !important;                   /* Rimuove bordi */
+    box-shadow: none !important;               /* Rimuove ombre */
+    padding: 0.5rem !important;                /* Padding minimo */
+    margin: 0 !important;                      /* Margine zero */
+  }
+
+  /* Route section mobile flat */
+  .route-section {
+    background: transparent !important;        /* Rimuove sfondo card */
+    backdrop-filter: none !important;          /* Rimuove effetto vetro */
+    -webkit-backdrop-filter: none !important;  /* Rimuove effetto vetro WebKit */
+    border: none !important;                   /* Rimuove bordi */
+    box-shadow: none !important;               /* Rimuove ombre */
+    padding: 0.5rem 0 !important;              /* Padding minimo verticale */
+    margin: 0 !important;                      /* Margine zero */
+  }
+
+  /* Price card mobile flat */
+  .price-card {
+    background: transparent !important;        /* Rimuove sfondo card */
+    backdrop-filter: none !important;          /* Rimuove effetto vetro */
+    -webkit-backdrop-filter: none !important;  /* Rimuove effetto vetro WebKit */
+    border: none !important;                   /* Rimuove bordi */
+    box-shadow: none !important;               /* Rimuove ombre */
+    padding: 0.5rem 0 !important;              /* Padding minimo */
+    margin: 0.5rem 0 !important;               /* Margine minimo verticale */
+    max-width: 100% !important;                /* Larghezza completa */
+  }
+
+  /* Separatori sottili per mobile */
+  .route-section::after {
+    content: '';
+    display: block;
+    height: 1px;
+    background: rgba(148, 163, 184, 0.2);
+    margin: 1rem 0;
+  }
+
+  .price-card::before {
+    content: '';
+    display: block;
+    height: 1px;
+    background: rgba(148, 163, 184, 0.2);
+    margin-bottom: 1rem;
+  }
+
+  /* Modalità scura per layout mobile flat */
+  .dark .route-section::after {
+    background: rgba(148, 163, 184, 0.3);
+  }
+
+  .dark .price-card::before {
+    background: rgba(148, 163, 184, 0.3);
+  }
+
+  /* Rimuove effetti di rifrazione della luce su mobile per performance */
+  .main-card::before,
+  .route-section::before,
+  .price-card::before {
+    display: none !important;                   /* Nasconde effetti di rifrazione */
+  }
+
+  /* Disabilita animazione background su mobile per performance */
+  body {
+    animation: none !important;                 /* Disabilita animazione gradiente */
+  }
+
+  /* Background statico su mobile */
+  body::before {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;  /* Gradiente statico */
+    animation: none !important;                 /* Nessuna animazione */
+  }
+
+  /* Modalità scura statica su mobile */
+  body.dark::before {
+    background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%) !important;  /* Gradiente scuro più neutro */
+    animation: none !important;                 /* Nessuna animazione */
+  }
+
+  /* Layout flat per tariffe su mobile */
+  .tratte-page .main-card {
+    background: transparent !important;         /* Rimuove sfondo card tariffe */
+    backdrop-filter: none !important;          /* Rimuove effetto vetro */
+    -webkit-backdrop-filter: none !important;  /* Rimuove effetto vetro WebKit */
+    border: none !important;                   /* Rimuove bordi */
+    box-shadow: none !important;               /* Rimuove ombre */
+    padding: 0.5rem 0 !important;              /* Padding minimo */
+    margin: 0 !important;                      /* Margine zero */
+  }
+
+  /* Separatori per tariffe mobile */
+  .tratte-page .main-card::before {
+    content: '';
+    display: block;
+    height: 1px;
+    background: rgba(148, 163, 184, 0.2);
+    margin-bottom: 1rem;
+  }
+
+  /* Prima card non ha separatore superiore */
+  .tratte-page .main-card:first-child::before {
+    display: none;
+  }
+
+  /* Modalità scura per separatori tariffe */
+  .dark .tratte-page .main-card::before {
+    background: rgba(148, 163, 184, 0.3);
+  }
+
+  /* Tabella tariffe più compatta su mobile */
+  .tratte-page .tariffe-table {
+    font-size: 0.9rem;                         /* Font più piccolo per mobile */
+  }
+
+  .tratte-page .tariffe-table th,
+  .tratte-page .tariffe-table td {
+    padding: 0.75rem 0.5rem;                   /* Padding ridotto per mobile */
+  }
+
+  /* Selettore linea tariffe mobile flat */
+  .tratte-page .line-selector-container {
+    background: transparent !important;        /* Rimuove sfondo selettore */
+    backdrop-filter: none !important;          /* Rimuove effetto vetro */
+    -webkit-backdrop-filter: none !important;  /* Rimuove effetto vetro WebKit */
+    border: none !important;                   /* Rimuove bordi */
+    box-shadow: none !important;               /* Rimuove ombre */
+    padding: 0.5rem 0 !important;              /* Padding minimo */
+    margin: 0 0 1rem 0 !important;            /* Margine minimo */
+  }
+
+  /* Barra di ricerca tariffe mobile flat */
+  .tratte-page .search-container {
+    background: transparent !important;        /* Rimuove sfondo ricerca */
+    backdrop-filter: none !important;          /* Rimuove effetto vetro */
+    -webkit-backdrop-filter: none !important;  /* Rimuove effetto vetro WebKit */
+    border: none !important;                   /* Rimuove bordi */
+    box-shadow: none !important;               /* Rimuove ombre */
+    padding: 0.5rem 0 !important;              /* Padding minimo */
+    margin: 0 !important;                      /* Margine zero */
+  }
+
+  /* Layout flat per tratte su mobile */
+  .tratte-page .tratte-card {
+    background: transparent !important;        /* Rimuove sfondo card tratte */
+    backdrop-filter: none !important;          /* Rimuove effetto vetro */
+    -webkit-backdrop-filter: none !important;  /* Rimuove effetto vetro WebKit */
+    border: none !important;                   /* Rimuove bordi */
+    box-shadow: none !important;               /* Rimuove ombre */
+    padding: 0.5rem 0 !important;              /* Padding minimo */
+    margin: 0 !important;                      /* Margine zero */
+  }
+
+  /* Separatori per tratte mobile */
+  .tratte-page .tratte-card::before {
+    content: '';
+    display: block;
+    height: 1px;
+    background: rgba(148, 163, 184, 0.2);
+    margin-bottom: 1rem;
+  }
+
+  /* Prima card non ha separatore superiore */
+  .tratte-page .tratte-card:first-child::before {
+    display: none;
+  }
+
+  /* Modalità scura per separatori tratte */
+  .dark .tratte-page .tratte-card::before {
+    background: rgba(148, 163, 184, 0.3);
+  }
+
+  /* Selettore linea tratte mobile flat */
+  .tratte-page .line-selector-container {
+    background: transparent !important;        /* Rimuove sfondo selettore */
+    backdrop-filter: none !important;          /* Rimuove effetto vetro */
+    -webkit-backdrop-filter: none !important;  /* Rimuove effetto vetro WebKit */
+    border: none !important;                   /* Rimuove bordi */
+    box-shadow: none !important;               /* Rimuove ombre */
+    padding: 0.5rem 0 !important;              /* Padding minimo */
+    margin: 0 0 1rem 0 !important;            /* Margine minimo */
+  }
+
+  /* Barra di ricerca tratte mobile flat */
+  .tratte-page .search-container {
+    background: transparent !important;        /* Rimuove sfondo ricerca */
+    backdrop-filter: none !important;          /* Rimuove effetto vetro */
+    -webkit-backdrop-filter: none !important;  /* Rimuove effetto vetro WebKit */
+    border: none !important;                   /* Rimuove bordi */
+    box-shadow: none !important;               /* Rimuove ombre */
+    padding: 0.5rem 0 !important;              /* Padding minimo */
+    margin: 0 !important;                      /* Margine zero */
+  }
+
+  /* Lista fermate più compatta su mobile */
+  .tratte-page .tratte-list {
+    padding: 0.5rem 0;                         /* Padding ridotto per mobile */
+  }
+
+  .tratte-page .tratte-list li {
+    padding: 0.75rem 0.5rem;                   /* Padding ridotto per mobile */
+    margin-bottom: 0.25rem;                    /* Margine ridotto tra fermate */
+  }
+
+  /* Pulsante reset mobile flat */
+  .reset-section {
+    background: transparent !important;        /* Rimuove sfondo sezione reset */
+    backdrop-filter: none !important;          /* Rimuove effetto vetro */
+    -webkit-backdrop-filter: none !important;  /* Rimuove effetto vetro WebKit */
+    border: none !important;                   /* Rimuove bordi */
+    box-shadow: none !important;               /* Rimuove ombre */
+    padding: 0.5rem 0 !important;              /* Padding minimo */
+    margin: 0 !important;                      /* Margine zero */
+    text-align: center;                        /* Centra il pulsante */
+  }
+
+  /* Nasconde icone fermate su mobile per massimizzare spazio */
+  .tratte-page .tratte-icon {
+    display: none !important;                   /* Nasconde icona fermate su mobile */
   }
 
   .route-label {
@@ -2750,9 +2983,33 @@ select.form-select:focus,
   }
 
   /* Immagine benvenuto mobile */
+  .welcome-image-container {
+    height: auto;                               /* Altezza automatica */
+    max-width: 90vw;                            /* Larghezza massima viewport */
+    margin: 0 auto;                             /* Centrato */
+    overflow: visible;                          /* Mostra tutto il contenuto */
+    background: none;                           /* Nessun sfondo su mobile */
+    border-radius: 0;                           /* Nessun border-radius su mobile */
+  }
+  
   .welcome-image {
-    height: 190px;                              /* Altezza ridotta */
-    max-width: 360px;                           /* Larghezza massima ridotta */
+    width: 100%;                                /* Larghezza completa del contenitore */
+    height: auto;                               /* Altezza automatica per mantenere proporzioni */
+    max-width: 350px;                           /* Larghezza massima ottimizzata */
+    object-fit: contain;                        /* Mostra l'immagine completa */
+    object-position: center;                    /* Centrata */
+    border: 2px solid rgba(255, 255, 255, 0.2); /* Bordo più sottile su mobile */
+  }
+  
+  /* Disabilita effetti hover su mobile */
+  .welcome-image-container:hover .welcome-image {
+    transform: none;                             /* Nessun zoom su mobile */
+    filter: none;                               /* Nessun filtro su mobile */
+  }
+  
+  /* Disabilita effetto rifrazione su mobile */
+  .welcome-image::before {
+    display: none;                              /* Nasconde l'effetto rifrazione */
   }
 }
 
@@ -2789,11 +3046,13 @@ select.form-select:focus,
     font-size: 0.9rem;                           /* Titolo molto piccolo */
   }
 
-  .navbar-title .logo-acronym {
+  .navbar-title .logo-acronym,
+  .navbar-title .navbar-title-main {
     font-size: 1.2rem;                           /* Acronimo molto piccolo aumentato di un altro punto */
   }
 
-  .navbar-title .logo-text {
+  .navbar-title .logo-text,
+  .navbar-title .navbar-title-sub {
     font-size: 0.7rem;                           /* Testo molto piccolo aumentato di un altro punto */
   }
 
@@ -2826,9 +3085,16 @@ select.form-select:focus,
   }
 
   /* Immagine benvenuto ultra piccola */
+  .welcome-image-container {
+    max-width: 95vw;                            /* Larghezza quasi completa viewport */
+    overflow: visible;                          /* Mostra tutto il contenuto */
+    background: none;                           /* Nessun sfondo */
+    border-radius: 0;                           /* Nessun border-radius */
+  }
+  
   .welcome-image {
-    height: 140px;                              /* Altezza molto ridotta */
-    max-width: 280px;                           /* Larghezza massima molto ridotta */
+    max-width: 280px;                           /* Larghezza massima ridotta */
+    border: 2px solid rgba(255, 255, 255, 0.2); /* Bordo più sottile */
   }
 }
 
@@ -2861,11 +3127,13 @@ select.form-select:focus,
     font-size: 0.8rem;                            /* Titolo ultra piccolo */
   }
 
-  .navbar-title .logo-acronym {
+  .navbar-title .logo-acronym,
+  .navbar-title .navbar-title-main {
     font-size: 1.1rem;                            /* Acronimo ultra piccolo aumentato di un altro punto */
   }
 
-  .navbar-title .logo-text {
+  .navbar-title .logo-text,
+  .navbar-title .navbar-title-sub {
     font-size: 0.65rem;                           /* Testo ultra piccolo aumentato di un altro punto */
   }
 
@@ -2891,9 +3159,16 @@ select.form-select:focus,
   }
 
   /* Immagine benvenuto ultra piccola */
+  .welcome-image-container {
+    max-width: 98vw;                            /* Larghezza quasi completa viewport */
+    overflow: visible;                          /* Mostra tutto il contenuto */
+    background: none;                           /* Nessun sfondo */
+    border-radius: 0;                           /* Nessun border-radius */
+  }
+  
   .welcome-image {
-    height: 120px;                               /* Altezza ultra ridotta */
-    max-width: 220px;                            /* Larghezza massima ultra ridotta */
+    max-width: 200px;                            /* Larghezza massima ultra ridotta */
+    border: 1px solid rgba(255, 255, 255, 0.2);  /* Bordo ultra sottile */
   }
 }
 
@@ -2990,16 +3265,523 @@ select.form-select:focus,
   text-align: center;                            /* Centra il contenuto */
   margin-bottom: 2rem;                          /* Margine inferiore */
   padding: 0;                                   /* Nessun padding */
+  position: relative;                           /* Posizione relativa per effetti */
+  overflow: visible;                            /* Mostra tutto il contenuto su mobile */
+  border-radius: 1rem;                          /* Bordi arrotondati container */
+  background: linear-gradient(135deg, var(--turchese) 0%, var(--turchese-scuro) 100%); /* Sfondo gradiente */
+}
+
+/* Desktop: overflow hidden per l'effetto */
+@media (min-width: 769px) {
+  .welcome-image-container {
+    overflow: hidden;                           /* Nasconde overflow solo su desktop */
+  }
 }
 
 .welcome-image {
   width: 100%;                                  /* Larghezza completa */
-  height: 240px;                                /* Altezza fissa */
-  max-width: 450px;                             /* Larghezza massima */
-  object-fit: cover;                            /* Adatta mantenendo proporzioni */
+  height: auto;                                 /* Altezza automatica per mobile */
+  max-width: 500px;                             /* Larghezza massima aumentata */
+  object-fit: contain;                          /* Mostra l'immagine completa */
   object-position: center;                      /* Posiziona al centro */
-  border-radius: 0.75rem;                       /* Bordi arrotondati */
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);   /* Ombra leggera */
+  border-radius: 1rem;                          /* Bordi arrotondati */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);  /* Ombra più elegante */
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); /* Transizione fluida */
+  filter: brightness(1.05) saturate(1.1);       /* Migliora luminosità e saturazione */
+  border: 3px solid rgba(255, 255, 255, 0.2);   /* Bordo sottile bianco */
+}
+
+/* Desktop: altezza fissa per l'effetto cover */
+@media (min-width: 769px) {
+  .welcome-image {
+    height: 280px;                              /* Altezza fissa solo su desktop */
+    object-fit: cover;                          /* Cover solo su desktop */
+  }
+}
+
+/* Effetto hover per l'immagine */
+.welcome-image-container:hover .welcome-image {
+  transform: scale(1.02);                       /* Leggero zoom */
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.2);  /* Ombra più profonda */
+  filter: brightness(1.1) saturate(1.2);        /* Aumenta luminosità e saturazione */
+}
+
+/* Effetto rifrazione luce per l'immagine */
+.welcome-image::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.1) 0%, 
+    rgba(255, 255, 255, 0.05) 25%, 
+    transparent 50%, 
+    rgba(255, 255, 255, 0.05) 75%, 
+    rgba(255, 255, 255, 0.1) 100%);
+  pointer-events: none;                         /* Non interferisce con i click */
+  border-radius: inherit;                       /* Eredita border-radius */
+}
+
+/* Modalità scura per l'immagine */
+.dark .welcome-image-container {
+  background: linear-gradient(135deg, var(--turchese-scuro) 0%, #0f172a 100%); /* Sfondo scuro */
+}
+
+.dark .welcome-image {
+  border: 3px solid rgba(255, 255, 255, 0.1);   /* Bordo più sottile in modalità scura */
+  filter: brightness(0.95) saturate(1.05);       /* Leggero darkening */
+}
+
+.dark .welcome-image-container:hover .welcome-image {
+  filter: brightness(1.0) saturate(1.15);        /* Hover più sottile in modalità scura */
+}
+
+/* ========================================
+   SEZIONE 16.7: PULSANTE RESET CACHE
+   ======================================== */
+/* Pulsante reset cache nella navbar */
+.cache-reset-btn {
+  background: none;                           /* Nessuno sfondo */
+  border: none;                               /* Nessun bordo */
+  color: var(--bianco);                       /* Colore bianco per l'icona */
+  cursor: pointer;                            /* Cursore pointer */
+  padding: 0.5rem;                            /* Padding interno */
+  border-radius: 6px;                         /* Bordi arrotondati */
+  transition: all 0.3s ease;                  /* Transizione fluida */
+  position: relative;                         /* Per posizionamento assoluto del ::before */
+  display: flex;                              /* Layout flexbox */
+  align-items: center;                        /* Allineamento verticale */
+  justify-content: center;                    /* Allineamento orizzontale */
+}
+
+/* Effetto rifrazione della luce per cache-reset-btn */
+.cache-reset-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.06) 0%,
+    rgba(255, 255, 255, 0.03) 30%,
+    transparent 60%,
+    transparent 100%
+  );
+  border-radius: 6px 6px 3px 3px;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.cache-reset-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);  /* Sfondo bianco trasparente al hover */
+}
+
+/* Rifrazione visibile al hover */
+.cache-reset-btn:hover::before {
+  opacity: 1;
+}
+
+/* Icona cache reset */
+.cache-reset-btn span {
+  font-size: 1rem;                            /* Dimensione icona */
+  transition: transform 0.3s ease;            /* Rotazione al hover */
+}
+
+/* Rotazione icona al hover */
+.cache-reset-btn:hover span {
+  transform: rotate(180deg);                   /* Rotazione completa */
+}
+
+/* Modalità scura per cache-reset-btn */
+.dark .cache-reset-btn {
+  color: var(--testo-principale);             /* Colore testo modalità scura */
+}
+
+.dark .cache-reset-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1); /* Sfondo hover scuro */
+}
+
+/* Cache reset mobile - nasconde etichetta, solo icona */
+@media (max-width: 768px) {
+  .cache-reset-btn {
+    padding: 0.4rem;                          /* Padding ridotto per mobile */
+  }
+  
+  .cache-reset-btn span {
+    font-size: 1.1rem;                        /* Icona leggermente più grande */
+  }
+  
+  /* Nasconde badge BETA su mobile per liberare spazio */
+  .beta-badge {
+    display: none !important;                 /* Nasconde badge BETA su mobile */
+  }
+}
+
+/* ========================================
+   SEZIONE 16.8: PULSANTE RESET
+   ======================================== */
+/* Sezione contenitore pulsante reset */
+.reset-section {
+  display: flex;                               /* Layout flexbox */
+  justify-content: center;                     /* Centra orizzontalmente */
+  margin: 2rem 0;                             /* Margine verticale */
+  padding: 0;                                 /* Nessun padding */
+}
+
+/* Pulsante reset */
+.reset-btn {
+  background: var(--glass-bg);                 /* Sfondo glassmorphism */
+  backdrop-filter: var(--backdrop-blur);      /* Effetto sfocatura */
+  -webkit-backdrop-filter: var(--backdrop-blur); /* Supporto WebKit */
+  border: 1px solid var(--glass-border);      /* Bordo glassmorphism */
+  border-radius: 12px;                        /* Bordi arrotondati */
+  color: var(--testo-principale);             /* Colore testo */
+  cursor: pointer;                            /* Cursore pointer */
+  padding: 0.75rem 1.5rem;                    /* Padding interno */
+  font-size: 0.9rem;                          /* Dimensione font */
+  font-weight: 500;                           /* Peso font */
+  transition: all 0.3s ease;                  /* Transizione fluida */
+  box-shadow: var(--glass-shadow);            /* Ombra glassmorphism */
+  position: relative;                         /* Per posizionamento assoluto del ::before */
+  min-width: 160px;                           /* Larghezza minima */
+}
+
+/* Effetto rifrazione della luce per reset-btn */
+.reset-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.04) 30%,
+    transparent 60%,
+    transparent 100%
+  );
+  border-radius: 12px 12px 6px 6px;
+  pointer-events: none;
+  z-index: 1;
+    opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Hover state per reset-btn */
+.reset-btn:hover {
+  background-color: rgba(255, 255, 255, 0.15); /* Sfondo più chiaro al hover */
+  border-color: var(--turchese);               /* Bordo turchese al hover */
+  box-shadow: 0 8px 32px rgba(23, 183, 177, 0.2); /* Ombra turchese */
+  transform: translateY(-2px);                 /* Leggero sollevamento */
+}
+
+/* Rifrazione visibile al hover */
+.reset-btn:hover::before {
+    opacity: 1;
+}
+
+
+/* Modalità scura per reset-btn */
+.dark .reset-btn {
+  background: var(--glass-bg-dark);            /* Sfondo scuro glassmorphism */
+  border-color: var(--glass-border-dark);     /* Bordo scuro */
+  color: var(--testo-principale);             /* Testo chiaro */
+}
+
+.dark .reset-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1); /* Sfondo hover scuro */
+  border-color: var(--turchese);               /* Bordo turchese */
+  box-shadow: 0 8px 32px rgba(23, 183, 177, 0.3); /* Ombra turchese scura */
+}
+
+/* Reset mobile - pulsante compatto */
+@media (max-width: 480px) {
+  .reset-btn {
+    min-width: auto;                           /* Larghezza automatica */
+    padding: 0.75rem;                          /* Padding ridotto */
+    font-size: 0.8rem;                         /* Font più piccolo */
+  }
+}
+
+/* ========================================
+   SEZIONE 16.8.5: MODAL RESET CACHE
+   ======================================== */
+/* Modal overlay */
+.cache-modal {
+  display: none;                              /* Nascosto di default */
+  position: fixed;                            /* Posizione fissa */
+  top: 0;                                     /* Inizio della pagina */
+  left: 0;                                    /* Inizio della pagina */
+  width: 100%;                                /* Larghezza completa */
+  height: 100%;                               /* Altezza completa */
+  background: rgba(0, 0, 0, 0.5);             /* Sfondo semi-trasparente */
+  z-index: 10000;                             /* Sopra tutti gli elementi */
+  backdrop-filter: blur(5px);                 /* Sfocatura sfondo */
+  -webkit-backdrop-filter: blur(5px);         /* Supporto WebKit */
+}
+
+/* Modal content */
+.cache-modal-content {
+  position: absolute;                          /* Posizione assoluta */
+  top: 50%;                                   /* Centrato verticalmente */
+  left: 50%;                                  /* Centrato orizzontalmente */
+  transform: translate(-50%, -50%);           /* Centrato perfetto */
+  background: var(--bianco);                  /* Sfondo bianco */
+  border-radius: 16px;                        /* Bordi arrotondati */
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); /* Ombra profonda */
+  max-width: 400px;                           /* Larghezza massima */
+  width: 90%;                                 /* Larghezza responsive */
+  overflow: hidden;                           /* Nasconde overflow */
+  animation: modalSlideIn 0.3s ease-out;      /* Animazione entrata */
+}
+
+/* Animazione entrata modal */
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -60%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+/* Header modal */
+.cache-modal-header {
+  background: var(--turchese);                 /* Sfondo turchese */
+  color: white;                               /* Testo bianco */
+  padding: 1.5rem;                            /* Padding interno */
+  text-align: center;                         /* Testo centrato */
+}
+
+.cache-modal-header h3 {
+  margin: 0;                                  /* Nessun margine */
+  font-size: 1.2rem;                          /* Dimensione font */
+  font-weight: 600;                           /* Peso font */
+}
+
+/* Body modal */
+.cache-modal-body {
+  padding: 2rem;                              /* Padding interno */
+  text-align: center;                         /* Testo centrato */
+}
+
+.cache-modal-body p {
+  margin: 0 0 1rem 0;                         /* Margine inferiore */
+  color: var(--testo-principale);             /* Colore testo */
+  line-height: 1.5;                           /* Altezza riga */
+}
+
+.cache-modal-warning {
+  color: #dc2626;                             /* Colore rosso per avviso */
+  font-weight: 500;                           /* Peso font medio */
+  font-size: 0.9rem;                          /* Font più piccolo */
+}
+
+/* Footer modal */
+.cache-modal-footer {
+  display: flex;                              /* Layout flexbox */
+  gap: 1rem;                                  /* Spazio tra pulsanti */
+  padding: 0 2rem 2rem 2rem;                 /* Padding interno */
+}
+
+/* Pulsanti modal */
+.cache-modal-btn {
+  flex: 1;                                    /* Larghezza uguale */
+  padding: 0.75rem 1.5rem;                    /* Padding interno */
+  border: none;                               /* Nessun bordo */
+  border-radius: 8px;                         /* Bordi arrotondati */
+  font-size: 1rem;                            /* Dimensione font */
+  font-weight: 500;                           /* Peso font */
+  cursor: pointer;                            /* Cursore pointer */
+  transition: all 0.3s ease;                  /* Transizione fluida */
+}
+
+.cache-modal-cancel {
+  background: #f3f4f6;                        /* Sfondo grigio chiaro */
+  color: var(--testo-principale);             /* Colore testo */
+}
+
+.cache-modal-cancel:hover {
+  background: #e5e7eb;                        /* Sfondo grigio più scuro */
+}
+
+.cache-modal-confirm {
+  background: #dc2626;                        /* Sfondo rosso */
+  color: white;                               /* Testo bianco */
+}
+
+.cache-modal-confirm:hover {
+  background: #b91c1c;                        /* Sfondo rosso più scuro */
+}
+
+/* Modalità scura per modal */
+.dark .cache-modal-content {
+  background: var(--card-scuro);              /* Sfondo scuro */
+}
+
+.dark .cache-modal-body p {
+  color: var(--testo-principale);             /* Colore testo scuro */
+}
+
+.dark .cache-modal-cancel {
+  background: #374151;                        /* Sfondo grigio scuro */
+  color: var(--testo-principale);             /* Colore testo scuro */
+}
+
+.dark .cache-modal-cancel:hover {
+  background: #4b5563;                        /* Sfondo grigio più scuro */
+}
+
+/* Modal mobile */
+@media (max-width: 480px) {
+  .cache-modal-content {
+    width: 95%;                               /* Larghezza quasi completa */
+    max-width: none;                          /* Nessuna larghezza massima */
+  }
+  
+  .cache-modal-header,
+  .cache-modal-body,
+  .cache-modal-footer {
+    padding: 1rem;                            /* Padding ridotto */
+  }
+  
+  .cache-modal-footer {
+    flex-direction: column;                   /* Layout verticale */
+  }
+  
+  .cache-modal-btn {
+    padding: 1rem;                            /* Padding maggiore */
+  }
+}
+
+/* ========================================
+   SEZIONE 16.9: LINK TELEGRAM FOOTER
+   ======================================== */
+/* Link Telegram nel footer */
+.footer-links {
+  display: flex;                             /* Layout flexbox */
+  justify-content: center;                   /* Centrato orizzontalmente */
+  align-items: center;                       /* Centrato verticalmente */
+  margin: 1rem 0;                            /* Margine verticale */
+  gap: 0.8rem;                               /* Spazio tra elementi */
+  flex-wrap: wrap;                           /* Wrap per mobile */
+}
+
+.telegram-link {
+  display: inline-flex;                      /* Layout flexbox inline */
+  align-items: center;                       /* Allineamento verticale */
+  gap: 0.4rem;                               /* Spazio tra icona e testo */
+  padding: 0.6rem 1rem;                      /* Padding interno */
+  background: var(--glass-bg);               /* Sfondo glassmorphism */
+  backdrop-filter: var(--backdrop-blur);     /* Sfocatura background */
+  -webkit-backdrop-filter: var(--backdrop-blur); /* Supporto WebKit */
+  border: 1px solid var(--glass-border);     /* Bordo sottile */
+  border-radius: 12px;                       /* Bordi arrotondati */
+  color: var(--testo-principale);            /* Colore testo */
+  text-decoration: none;                     /* Nessuna sottolineatura */
+  font-size: 0.85rem;                        /* Dimensione font */
+  font-weight: 500;                          /* Peso font medium */
+  transition: all 0.3s ease;                 /* Transizione fluida */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Ombra leggera */
+  min-width: 140px;                          /* Larghezza minima */
+  justify-content: center;                   /* Centrato contenuto */
+}
+
+.telegram-link:hover {
+  background: #0088cc;                       /* Sfondo blu Telegram */
+  color: white;                              /* Testo bianco */
+  transform: translateY(-2px);               /* Leggero sollevamento */
+  box-shadow: 0 4px 16px rgba(0, 136, 204, 0.3); /* Ombra blu */
+}
+
+.telegram-icon {
+  font-size: 1rem;                           /* Dimensione icona */
+  transition: transform 0.3s ease;           /* Transizione icona */
+}
+
+.telegram-link:hover .telegram-icon {
+  transform: scale(1.1);                     /* Leggero ingrandimento */
+}
+
+/* Modalità scura per link Telegram */
+.dark .telegram-link {
+  background: var(--glass-bg-dark);          /* Sfondo scuro */
+  border-color: var(--glass-border-dark);    /* Bordo scuro */
+  color: var(--testo-principale);            /* Colore testo scuro */
+}
+
+.dark .telegram-link:hover {
+  background: #0088cc;                       /* Sfondo blu Telegram */
+  color: white;                              /* Testo bianco */
+}
+
+/* Mobile ottimizzazione per due link Telegram */
+@media (max-width: 768px) {
+  .footer-links {
+    flex-direction: column;                   /* Stack verticale */
+    gap: 0.6rem;                             /* Gap ridotto */
+    margin: 0.75rem 0;                       /* Margine ridotto */
+  }
+  
+  .telegram-link {
+    padding: 0.5rem 0.8rem;                  /* Padding ridotto */
+    font-size: 0.8rem;                       /* Font più piccolo */
+    width: 100%;                             /* Larghezza completa */
+    max-width: 240px;                        /* Larghezza massima */
+    min-width: auto;                         /* Rimuove min-width */
+  }
+  
+  .telegram-icon {
+    font-size: 0.9rem;                       /* Icona più piccola */
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-links {
+    gap: 0.5rem;                             /* Gap ancora più piccolo */
+    margin: 0.5rem 0;                        /* Margine minimo */
+  }
+  
+  .telegram-link {
+    padding: 0.4rem 0.7rem;                  /* Padding minimo */
+    font-size: 0.75rem;                      /* Font minimo */
+    max-width: 220px;                        /* Larghezza massima ridotta */
+  }
+}
+
+/* ========================================
+   SEZIONE 16.10: INFORMAZIONI AGGIORNAMENTO
+   ======================================== */
+/* Informazioni data aggiornamento nel footer */
+.update-info {
+  font-size: 0.8rem;                         /* Font più piccolo */
+  color: var(--testo-secondario);            /* Colore testo secondario */
+  margin-top: 0.5rem;                        /* Margine superiore */
+  text-align: center;                        /* Centrato */
+  opacity: 0.8;                              /* Opacità ridotta */
+}
+
+.update-info span {
+  font-weight: 500;                          /* Peso font medio */
+  color: var(--testo-principale);            /* Colore principale */
+}
+
+/* Modalità scura per update-info */
+.dark .update-info {
+  color: var(--testo-secondario);            /* Colore modalità scura */
+}
+
+.dark .update-info span {
+  color: var(--testo-principale);            /* Colore principale modalità scura */
 }
 
 /* ========================================
