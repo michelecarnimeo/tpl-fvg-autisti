@@ -1,370 +1,474 @@
-/* Reset CSS */
+/* ========================================
+   SEZIONE 1: RESET CSS
+   ======================================== */
+/* Reset globale per rimuovere margini e padding di default */
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+  margin: 0;        /* Rimuove margini di default di tutti gli elementi */
+  padding: 0;       /* Rimuove padding di default di tutti gli elementi */
+  box-sizing: border-box;  /* Include padding e border nel calcolo delle dimensioni */
 }
 
-/* Font di sistema per funzionamento offline */
+/* ========================================
+   SEZIONE 2: FONT DI SISTEMA
+   ======================================== */
+/* Imposta font di sistema per funzionamento offline (non dipende da font esterni) */
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  /* Fallback: usa font di sistema nativi per compatibilità offline */
 }
 
-/* Variabili CSS - Glassmorphism Style */
+/* ========================================
+   SEZIONE 3: VARIABILI CSS - PALETTE COLORI
+   ======================================== */
 :root {
-  /* Colori principali */
-  --turchese: #007b8a;
-  --turchese-scuro: #005f6b;
-  --turchese-light: #0099aa;
-  --bianco: #ffffff;
-  --grigio-chiaro: #f0f4f8;
-  --grigio-medio: #e9ecef;
-  --grigio-scuro: #6c757d;
-  --testo-principale: #0f172a;
-  --testo-secondario: #4a5568;
-  --bordo: rgba(255, 255, 255, 0.18);
+  /* SUBSECTION 3.1: Colori principali dell'applicazione */
+  --turchese: #007b8a;           /* Colore principale ciano - navbar e elementi accent */
+  --turchese-scuro: #005f6b;     /* Versione più scura del ciano - hover e stati attivi */
+  --turchese-light: #0099aa;     /* Versione più chiara del ciano - elementi secondari */
+  --bianco: #ffffff;             /* Bianco puro per testi su sfondi scuri */
+  --grigio-chiaro: #f0f4f8;      /* Grigio molto chiaro per sfondi neutri */
+  --grigio-medio: #e9ecef;       /* Grigio medio per separatori e bordi */
+  --grigio-scuro: #6c757d;       /* Grigio scuro per testo secondario */
+  --testo-principale: #0f172a;   /* Colore principale del testo (blu scuro) */
+  --testo-secondario: #4a5568;   /* Colore secondario del testo (grigio scuro) */
+  --bordo: rgba(255, 255, 255, 0.18);  /* Bordo bianco semi-trasparente per glassmorphism */
 
-  /* Glassmorphism */
-  --glass-bg: rgba(255, 255, 255, 0.3);
-  --glass-border: rgba(0, 123, 138, 0.2);
-  --glass-shadow: 0 8px 32px 0 rgba(0, 123, 138, 0.2);
-  --backdrop-blur: blur(10px);
+  /* SUBSECTION 3.2: Variabili glassmorphism per effetti vetro */
+  --glass-bg: rgba(255, 255, 255, 0.3);  /* Sfondo semi-trasparente per card */
+  --glass-border: rgba(255, 255, 255, 0.1);  /* Bordo bianco sottile per card */
+  --glass-shadow: 0 8px 32px 0 rgba(255, 255, 255, 0.1);  /* Ombra bianca base per card */
+  --backdrop-blur: blur(10px);  /* Effetto sfocatura per glassmorphism */
 
-  /* Colori dark mode */
-  --bg-scuro: #0f172a;
-  --card-scuro: rgba(30, 41, 59, 0.4);
-  --testo-scuro: #f1f5f9;
-  --bordo-scuro: rgba(148, 163, 184, 0.1);
+  /* SUBSECTION 3.3: Colori per modalità scura */
+  --bg-scuro: #0f172a;                    /* Sfondo scuro principale per dark mode */
+  --card-scuro: rgba(30, 41, 59, 0.4);    /* Sfondo scuro per card in dark mode */
+  --testo-scuro: #f1f5f9;                 /* Testo chiaro per dark mode */
+  --bordo-scuro: rgba(148, 163, 184, 0.1); /* Bordo chiaro per dark mode */
 
-  /* Glassmorphism Dark */
-  --glass-bg-dark: rgba(30, 41, 59, 0.3);
-  --glass-border-dark: rgba(148, 163, 184, 0.1);
-  --glass-shadow-dark: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+  /* SUBSECTION 3.4: Glassmorphism per modalità scura */
+  --glass-bg-dark: rgba(30, 41, 59, 0.3);        /* Sfondo glassmorphism scuro */
+  --glass-border-dark: rgba(148, 163, 184, 0.1);  /* Bordo glassmorphism scuro */
+  --glass-shadow-dark: 0 8px 32px 0 rgba(0, 0, 0, 0.5);  /* Ombra glassmorphism scura */
 }
 
-/* Dark mode */
+/* ========================================
+   SEZIONE 4: MODALITÀ SCURA (DARK MODE)
+   ======================================== */
+/* Ridefinisce le variabili CSS quando la classe .dark è applicata al body */
 .dark {
-  --grigio-chiaro: var(--bg-scuro);
-  --bianco: var(--card-scuro);
-  --testo-principale: var(--testo-scuro);
-  --testo-secondario: #94a3b8;
-  --bordo: var(--bordo-scuro);
-  --glass-bg: var(--glass-bg-dark);
-  --glass-border: var(--glass-border-dark);
-  --glass-shadow: var(--glass-shadow-dark);
+  --grigio-chiaro: var(--bg-scuro);        /* Grigio chiaro diventa sfondo scuro */
+  --bianco: var(--card-scuro);             /* Bianco diventa card scura */
+  --testo-principale: var(--testo-scuro);  /* Testo principale diventa chiaro */
+  --testo-secondario: #94a3b8;             /* Testo secondario diventa grigio chiaro */
+  --bordo: var(--bordo-scuro);             /* Bordi diventano chiari */
+  --glass-bg: var(--glass-bg-dark);        /* Glassmorphism diventa scuro */
+  --glass-border: var(--glass-border-dark); /* Bordi glassmorphism diventano chiari */
+  --glass-shadow: var(--glass-shadow-dark); /* Ombre glassmorphism diventano scure */
 }
 
-/* Base - Glassmorphism Background */
+/* ========================================
+   SEZIONE 5: BACKGROUND DEL BODY - GRADIENTE ANIMATO
+   ======================================== */
+/* Configurazione principale del body con sfondo glassmorphism animato */
 body {
-  font-family: 'Inter', sans-serif;
+  /* SUBSECTION 5.1: Font principale */
+  font-family: 'Inter', sans-serif;  /* Font principale dell'applicazione */
+  
+  /* SUBSECTION 5.2: Gradiente di sfondo bianco sfumato */
   background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 25%, #cbd5e1 50%, #94a3b8 75%, #64748b 100%);
-  background-size: 400% 400%;
-  animation: gradientShift 15s ease infinite;
-  color: var(--testo-principale);
-  line-height: 1.6;
-  min-height: 100vh;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow-x: hidden;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
+  background-size: 400% 400%;        /* Dimensione del gradiente per animazione */
+  animation: gradientShift 15s ease infinite;  /* Animazione continua del gradiente */
+  
+  /* SUBSECTION 5.3: Testo e layout base */
+  color: var(--testo-principale);    /* Colore del testo principale */
+  line-height: 1.6;                 /* Altezza della riga per leggibilità */
+  min-height: 100vh;                /* Altezza minima viewport */
+  
+  /* SUBSECTION 5.4: Transizioni e posizionamento */
+  transition: all 0.3s ease;        /* Transizioni smooth per tutti gli elementi */
+  position: relative;               /* Posizionamento relativo per elementi assoluti */
+  overflow-x: hidden;              /* Nasconde scroll orizzontale */
+  
+  /* SUBSECTION 5.5: Layout flexbox */
+  margin: 0;                       /* Rimuove margini default */
+  padding: 0;                      /* Rimuove padding default */
+  display: flex;                   /* Layout flexbox per struttura verticale */
+  flex-direction: column;          /* Direzione verticale (header, main, footer) */
 }
 
-/* Sfondo animato */
+/* SUBSECTION 5.6: Animazione del gradiente di sfondo */
+/* Definisce l'animazione per far muovere il gradiente di sfondo */
 @keyframes gradientShift {
   0% {
-    background-position: 0% 50%;
+    background-position: 0% 50%;    /* Posizione iniziale del gradiente */
   }
   50% {
-    background-position: 100% 50%;
+    background-position: 100% 50%;  /* Posizione centrale - gradiente si sposta */
   }
   100% {
-    background-position: 0% 50%;
+    background-position: 0% 50%;    /* Ritorna alla posizione iniziale */
   }
 }
 
-/* Dark mode background */
+/* SUBSECTION 5.7: Background per modalità scura */
+/* Override del gradiente quando la classe .dark è attiva */
 .dark body {
   background: linear-gradient(135deg, #1e3a8a 0%, #312e81 25%, #1e293b 50%, #0f172a 75%, #020617 100%);
-  background-size: 400% 400%;
-  animation: gradientShift 15s ease infinite;
+  /* Gradiente scuro: blu → viola → grigio scuro → nero */
+  background-size: 400% 400%;        /* Stessa dimensione per animazione */
+  animation: gradientShift 15s ease infinite;  /* Stessa animazione */
 }
 
-/* Container principale */
+/* ========================================
+   SEZIONE 6: CONTAINER PRINCIPALE
+   ======================================== */
+/* Container wrapper per tutto il contenuto dell'applicazione */
 .container {
-  max-width: none;
-  margin: 0 auto;
-  padding: 0 0.25rem;
-  width: 100%;
-  box-sizing: border-box;
+  max-width: none;        /* Nessuna larghezza massima - usa tutto lo spazio */
+  margin: 0 auto;         /* Centra il container orizzontalmente */
+  padding: 0 0.25rem;     /* Padding laterale minimo per evitare attaccarsi ai bordi */
+  width: 100%;            /* Usa tutta la larghezza disponibile */
+  box-sizing: border-box; /* Include padding nel calcolo delle dimensioni */
 }
 
+/* SUBSECTION 6.1: Media query per schermi grandi (1200px+) */
 @media (min-width: 1200px) {
+  /* Container del main content con layout grid */
   .main-content>.container {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2rem;
+    display: grid;              /* Layout a griglia */
+    grid-template-columns: 1fr; /* Una colonna (layout verticale) */
+    gap: 2rem;                  /* Spazio tra gli elementi */
   }
 
+  /* Container speciale per la griglia delle tariffe */
   #tariffe-grid-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
-    width: 100%;
-    max-width: 1800px;
-    margin: 2rem auto;
+    display: grid;                    /* Layout a griglia */
+    grid-template-columns: 1fr 1fr;   /* Due colonne per layout orizzontale */
+    gap: 3rem;                       /* Spazio maggiore tra le colonne */
+    width: 100%;                     /* Larghezza completa */
+    max-width: 1800px;               /* Larghezza massima per schermi molto grandi */
+    margin: 2rem auto;               /* Margine verticale e centratura */
   }
 
+  /* Card principali dentro il container tariffe */
   #tariffe-grid-container .main-card {
-    width: 100%;
-    margin-bottom: 0;
-    max-width: none;
+    width: 100%;         /* Larghezza completa per adattarsi alla griglia */
+    margin-bottom: 0;    /* Nessun margine inferiore */
+    max-width: none;     /* Nessuna larghezza massima */
   }
 }
 
-/* Navbar - Glassmorphism */
+/* ========================================
+   SEZIONE 7: NAVBAR - GLASSMORPHISM
+   ======================================== */
+/* Barra di navigazione superiore con effetto vetro */
 .navbar {
+  /* SUBSECTION 7.1: Sfondo gradiente ciano */
   background: linear-gradient(135deg, rgba(0, 123, 138, 0.9) 0%, rgba(0, 123, 138, 0.7) 50%, rgba(0, 123, 138, 0.5) 100%);
-  backdrop-filter: var(--backdrop-blur);
-  -webkit-backdrop-filter: var(--backdrop-blur);
-  padding: 1rem 0;
-  box-shadow: 0 8px 32px 0 rgba(0, 123, 138, 0.3);
-  border-bottom: 1px solid rgba(0, 123, 138, 0.3);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+  /* Gradiente ciano: da 90% opacità a 50% opacità */
+  
+  /* SUBSECTION 7.2: Effetti glassmorphism */
+  backdrop-filter: var(--backdrop-blur);        /* Sfocatura del background */
+  -webkit-backdrop-filter: var(--backdrop-blur); /* Supporto WebKit per Safari */
+  
+  /* SUBSECTION 7.3: Spaziatura e bordi */
+  padding: 1rem 0;                              /* Padding verticale */
+  box-shadow: 0 8px 32px 0 rgba(0, 123, 138, 0.3);  /* Ombra ciano */
+  border-bottom: 1px solid rgba(0, 123, 138, 0.3);   /* Bordo inferiore ciano */
+  
+  /* SUBSECTION 7.4: Posizionamento sticky */
+  position: sticky;  /* Rimanere in cima durante lo scroll */
+  top: 0;           /* Posizione in cima */
+  z-index: 1000;    /* Sopra tutti gli altri elementi */
 }
 
+/* SUBSECTION 7.5: Layout del contenuto navbar */
 .navbar-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: nowrap;
+  display: flex;                    /* Layout flexbox orizzontale */
+  justify-content: space-between;   /* Logo a sinistra, menu a destra */
+  align-items: center;              /* Allineamento verticale centrale */
+  flex-wrap: nowrap;               /* Non andare a capo su schermi piccoli */
 }
 
+/* SUBSECTION 7.6: Brand/Logo della navbar */
 .navbar-brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+  display: flex;        /* Layout flexbox per logo + titolo */
+  align-items: center;  /* Allineamento verticale centrale */
+  gap: 12px;           /* Spazio tra logo e titolo */
 }
 
+/* Logo TPL nella navbar */
 .navbar-logo {
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
-  object-fit: cover;
+  width: 40px;         /* Larghezza logo */
+  height: 40px;        /* Altezza logo */
+  border-radius: 8px;  /* Bordi arrotondati */
+  object-fit: cover;   /* Adatta l'immagine mantenendo proporzioni */
 }
 
+/* Titolo TPL FVG nella navbar */
 .navbar-title {
-  color: rgba(255, 255, 255, 0.95);
-  font-size: 1.5rem;
-  font-weight: 700;
-  text-decoration: none;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  color: rgba(255, 255, 255, 0.95);  /* Testo bianco con 95% opacità */
+  font-size: 1.5rem;                              /* Dimensione font grande */
+  font-weight: 700;                               /* Peso font bold */
+  text-decoration: none;                          /* Nessuna sottolineatura */
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);    /* Ombra testo per leggibilità */
 }
 
-/* Badge BETA - Glassmorphism */
+/* SUBSECTION 7.7: Badge BETA con glassmorphism */
 .beta-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 193, 7, 0.3);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  color: #ffffff;
-  font-size: 0.65rem;
-  font-weight: 800;
-  letter-spacing: 1px;
-  padding: 0.25rem 0.6rem;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-  box-shadow: 0 2px 10px rgba(255, 193, 7, 0.3);
-  margin-left: 0.5rem;
+  display: inline-flex;                    /* Layout flexbox inline */
+  align-items: center;                     /* Allineamento verticale centrale */
+  justify-content: center;                 /* Allineamento orizzontale centrale */
+  
+  /* SUBSECTION 7.7.1: Stile glassmorphism giallo */
+  background: rgba(255, 193, 7, 0.3);      /* Sfondo giallo trasparente */
+  backdrop-filter: blur(10px);             /* Sfocatura del background */
+  -webkit-backdrop-filter: blur(10px);     /* Supporto WebKit */
+  
+  /* SUBSECTION 7.7.2: Testo e tipografia */
+  color: #ffffff;                          /* Testo bianco */
+  font-size: 0.65rem;                      /* Font piccolo */
+  font-weight: 800;                        /* Font extra bold */
+  letter-spacing: 1px;                     /* Spaziatura tra lettere */
+  
+  /* SUBSECTION 7.7.3: Dimensioni e bordi */
+  padding: 0.25rem 0.6rem;                 /* Padding interno */
+  border-radius: 8px;                      /* Bordi arrotondati */
+  border: 1px solid rgba(255, 255, 255, 0.4);  /* Bordo bianco trasparente */
+  /* SUBSECTION 7.7.4: Effetti visivi finali */
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);      /* Ombra testo */
+  box-shadow: 0 2px 10px rgba(255, 193, 7, 0.3);   /* Ombra gialla */
+  margin-left: 0.5rem;                              /* Margine sinistro dal titolo */
 }
 
 
 
+/* SUBSECTION 7.8: Menu di navigazione */
 .navbar-nav {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
+  display: flex;           /* Layout flexbox orizzontale */
+  align-items: center;     /* Allineamento verticale centrale */
+  gap: 2rem;              /* Spazio tra i link di navigazione */
 }
 
+/* SUBSECTION 7.9: Link di navigazione */
 .nav-link {
-  color: rgba(255, 255, 255, 0.95);
-  text-decoration: none;
-  font-weight: 600;
-  padding: 0.5rem 1rem;
-  border-radius: 12px;
-  transition: all 0.3s ease;
-  background: transparent;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  /* SUBSECTION 7.9.1: Stile base */
+  color: rgba(255, 255, 255, 0.95);        /* Testo bianco con 95% opacità */
+  text-decoration: none;                    /* Nessuna sottolineatura */
+  font-weight: 600;                         /* Peso font semi-bold */
+  
+  /* SUBSECTION 7.9.2: Dimensioni e bordi */
+  padding: 0.5rem 1rem;                     /* Padding interno */
+  border-radius: 12px;                      /* Bordi arrotondati */
+  
+  /* SUBSECTION 7.9.3: Transizioni e effetti */
+  transition: all 0.3s ease;                /* Transizione fluida per tutti i cambiamenti */
+  background: transparent;                  /* Sfondo trasparente */
+  backdrop-filter: none;                    /* Nessuna sfocatura */
+  -webkit-backdrop-filter: none;            /* Nessuna sfocatura WebKit */
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);  /* Ombra testo per leggibilità */
 }
 
+/* SUBSECTION 7.10: Effetto hover sui link */
 .nav-link:hover {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 1);
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+  /* SUBSECTION 7.10.1: Sfondo glassmorphism */
+  background: rgba(255, 255, 255, 0.1);      /* Sfondo bianco trasparente */
+  backdrop-filter: blur(5px);                /* Sfocatura leggera */
+  -webkit-backdrop-filter: blur(5px);        /* Supporto WebKit */
+  
+  /* SUBSECTION 7.10.2: Effetti di movimento */
+  transform: translateY(-2px);               /* Solleva leggermente il link */
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);  /* Ombra bianca */
+  
+  /* SUBSECTION 7.10.3: Testo migliorato */
+  color: rgba(255, 255, 255, 1);             /* Testo bianco al 100% */
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);  /* Ombra testo più forte */
 }
 
+/* SUBSECTION 7.11: Stato attivo dei link */
 .nav-link.active {
-  background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  font-weight: 700;
-  color: rgba(255, 255, 255, 1);
-  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
+  /* SUBSECTION 7.11.1: Sfondo glassmorphism attivo */
+  background: rgba(255, 255, 255, 0.25);      /* Sfondo bianco più opaco */
+  backdrop-filter: blur(10px);               /* Sfocatura più forte */
+  -webkit-backdrop-filter: blur(10px);       /* Supporto WebKit */
+  border: 1px solid rgba(255, 255, 255, 0.3); /* Bordo bianco trasparente */
+  
+  /* SUBSECTION 7.11.2: Tipografia attiva */
+  font-weight: 700;                          /* Peso font bold */
+  color: rgba(255, 255, 255, 1);            /* Testo bianco al 100% */
+  
+  /* SUBSECTION 7.11.3: Effetti visivi attivi */
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);  /* Ombra bianca più forte */
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);       /* Ombra testo molto forte */
 }
 
+/* SUBSECTION 7.12: Toggle modalità scura */
 .dark-mode-toggle {
-  background: none;
-  border: none;
-  color: var(--bianco);
-  cursor: pointer;
-  padding: 0.5rem;
-  border-radius: 6px;
-  transition: all 0.3s ease;
+  background: none;                    /* Nessuno sfondo */
+  border: none;                        /* Nessun bordo */
+  color: var(--bianco);                /* Colore bianco per la luna */
+  cursor: pointer;                     /* Cursore pointer */
+  padding: 0.5rem;                     /* Padding interno */
+  border-radius: 6px;                  /* Bordi arrotondati */
+  transition: all 0.3s ease;           /* Transizione fluida */
+}
+
+/* Icona del sole in dark mode */
+.dark .dark-mode-toggle {
+  color: #fbbf24;                      /* Colore giallo dorato per il sole */
 }
 
 .dark-mode-toggle:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.1);  /* Sfondo bianco trasparente al hover */
 }
 
-/* Main content */
+/* ========================================
+   SEZIONE 8: MAIN CONTENT E MAIN CARD
+   ======================================== */
+/* SUBSECTION 8.1: Area contenuto principale */
 .main-content {
-  padding: 0;
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: visible;
-  min-height: 0;
+  padding: 0;                    /* Nessun padding */
+  flex: 1;                      /* Occupa tutto lo spazio disponibile */
+  display: flex;                /* Layout flexbox */
+  align-items: center;          /* Allineamento verticale centrale */
+  justify-content: center;      /* Allineamento orizzontale centrale */
+  overflow: visible;            /* Contenuto visibile senza scroll */
+  min-height: 0;                /* Altezza minima zero */
 }
 
-/* Layout specifico per pagine tratte e tariffe */
+/* SUBSECTION 8.2: Layout specifico per pagine tratte e tariffe */
 .tratte-page {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+  display: flex;                /* Layout flexbox */
+  flex-direction: column;       /* Direzione verticale */
+  min-height: 100vh;           /* Altezza minima viewport */
 }
 
+/* Main content per pagine tratte */
 .tratte-page .main-content {
-  min-height: auto;
-  align-items: flex-start;
-  padding: 1rem 0;
-  flex: 1;
-  overflow: visible;
+  min-height: auto;            /* Altezza minima automatica */
+  align-items: flex-start;     /* Allineamento in alto */
+  padding: 1rem 0;            /* Padding verticale */
+  flex: 1;                    /* Occupa spazio disponibile */
+  overflow: visible;          /* Contenuto visibile */
 }
 
-/* Layout ottimizzato per pagina benvenuto */
+/* SUBSECTION 8.3: Layout ottimizzato per pagina benvenuto */
 body:not(.tratte-page) .main-content {
-  align-items: center;
-  padding: 1rem 0;
+  align-items: center;         /* Allineamento centrale */
+  padding: 1rem 0;           /* Padding verticale */
 }
 
+/* Card principale per pagine non-tratte */
 body:not(.tratte-page) .main-card {
-  max-width: 600px !important;
-  padding: 2rem;
-  margin: 1rem auto !important;
+  max-width: 600px !important;  /* Larghezza massima 600px */
+  padding: 2rem;               /* Padding interno */
+  margin: 1rem auto !important; /* Margine automatico e centrato */
 }
 
-/* Card principale - Glassmorphism */
+/* SUBSECTION 8.4: Card principale con glassmorphism */
 .main-card {
-  background: var(--glass-bg);
-  backdrop-filter: var(--backdrop-blur);
-  -webkit-backdrop-filter: var(--backdrop-blur);
-  border-radius: 24px;
-  padding: 1.25rem;
-  box-shadow: var(--glass-shadow);
-  width: 95% !important;
-  max-width: 600px !important;
-  margin: 0.25rem auto !important;
-  border: 1px solid var(--glass-border);
-  transition: box-shadow 0.3s ease;
-  box-sizing: border-box;
-  max-height: 100%;
-  overflow-y: auto;
+  /* SUBSECTION 8.4.1: Sfondo glassmorphism */
+  background: var(--glass-bg);                    /* Sfondo trasparente */
+  backdrop-filter: var(--backdrop-blur);         /* Sfocatura del background */
+  -webkit-backdrop-filter: var(--backdrop-blur); /* Supporto WebKit */
+  
+  /* SUBSECTION 8.4.2: Forma e dimensioni */
+  border-radius: 24px;                           /* Bordi molto arrotondati */
+  padding: 1.25rem;                              /* Padding interno */
+  width: 95% !important;                         /* Larghezza 95% */
+  max-width: 600px !important;                   /* Larghezza massima 600px */
+  margin: 0.25rem auto !important;               /* Margine minimo e centrato */
+  
+  /* SUBSECTION 8.4.3: Ombreggiatura base (SENZA HOVER) */
+  box-shadow: var(--glass-shadow);               /* Ombra glassmorphism */
+  
+  /* SUBSECTION 8.4.4: Bordi e layout */
+  border: 1px solid var(--glass-border);         /* Bordo trasparente */
+  box-sizing: border-box;                        /* Include bordi nel calcolo */
+  max-height: 100%;                              /* Altezza massima */
+  overflow-y: auto;                              /* Scroll verticale se necessario */
+  
+  /* SUBSECTION 8.4.5: Transizioni RIMOSSE per eliminare effetti hover */
+  /* transition: box-shadow 0.3s ease; - COMMENTATO */
 }
 
-.main-card:hover {
-  box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.45);
-}
+/* SUBSECTION 8.4.6: EFFETTO HOVER RIMOSSO - Nessun hover per .main-card */
+/* .main-card:hover { box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.45); } - RIMOSSO */
 
+
+/* SUBSECTION 8.5: Media query per schermi medi (600px+) */
 @media (min-width: 600px) {
   .main-card {
-    width: 94% !important;
-    max-width: 650px !important;
-    padding: 1.75rem;
-    margin: 0.25rem auto !important;
+    width: 94% !important;           /* Larghezza 94% */
+    max-width: 650px !important;     /* Larghezza massima 650px */
+    padding: 1.75rem;               /* Padding maggiore */
+    margin: 0.25rem auto !important; /* Margine centrato */
   }
   
+  /* Card per pagine non-tratte */
   body:not(.tratte-page) .main-card {
-    max-width: 650px !important;
-    padding: 2rem;
+    max-width: 650px !important;     /* Larghezza massima 650px */
+    padding: 2rem;                  /* Padding ancora maggiore */
   }
 }
 
+/* SUBSECTION 8.6: Media query per schermi grandi (900px+) */
 @media (min-width: 900px) {
   .main-card {
-    width: 92% !important;
-    max-width: 700px !important;
-    padding: 2rem;
-    margin: 0.25rem auto !important;
+    width: 92% !important;           /* Larghezza 92% */
+    max-width: 700px !important;     /* Larghezza massima 700px */
+    padding: 2rem;                  /* Padding standard */
+    margin: 0.25rem auto !important; /* Margine centrato */
   }
   
+  /* Card per pagine non-tratte */
   body:not(.tratte-page) .main-card {
-    max-width: 700px !important;
-    padding: 2.5rem;
+    max-width: 700px !important;     /* Larghezza massima 700px */
+    padding: 2.5rem;                /* Padding maggiore */
   }
 }
 
+/* SUBSECTION 8.7: Media query per schermi molto grandi (992px+) */
 @media (min-width: 992px) {
   .main-card {
-    width: 97% !important;
-    max-width: 750px !important;
-    padding: 2rem;
-    margin: 0.25rem auto !important;
+    width: 97% !important;           /* Larghezza 97% */
+    max-width: 750px !important;     /* Larghezza massima 750px */
+    padding: 2rem;                  /* Padding standard */
+    margin: 0.25rem auto !important; /* Margine centrato */
   }
   
+  /* Card per pagine non-tratte */
   body:not(.tratte-page) .main-card {
-    max-width: 750px !important;
-    padding: 3rem;
+    max-width: 750px !important;     /* Larghezza massima 750px */
+    padding: 3rem;                  /* Padding massimo */
   }
 
+  /* Container principale */
   .main-content>.container {
-    max-width: 1800px !important;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0 1rem;
+    max-width: 1800px !important;    /* Larghezza massima container */
+    display: flex;                    /* Layout flexbox */
+    justify-content: center;          /* Centra orizzontalmente */
+    align-items: center;              /* Centra verticalmente */
+    padding: 0 1rem;                 /* Padding laterale */
   }
 }
 
-/* Layout mobile - forza layout verticale */
+/* SUBSECTION 8.8: Layout mobile - forza layout verticale */
 @media (max-width: 991px) {
+  /* Main card in layout verticale */
   #main-app .main-card {
-    display: block !important;
+    display: block !important;        /* Layout a blocchi verticali */
   }
 
+  /* Reset griglia per elementi interni */
   #main-app .card-title,
   #main-app .form-group,
   #main-app .route-section,
   #main-app .calculate-section,
   #main-app .price-result,
   #main-app .history-section {
-    grid-column: unset !important;
-    grid-row: unset !important;
+    grid-column: unset !important;    /* Reset colonne griglia */
+    grid-row: unset !important;       /* Reset righe griglia */
   }
 
   #main-app .price-result {
@@ -379,1578 +483,1932 @@ body:not(.tratte-page) .main-card {
   }
 }
 
+/* SUBSECTION 8.9: Media query per schermi extra grandi (1600px+) */
 @media (min-width: 1600px) {
   .main-card {
-    width: 95% !important;
-    max-width: 900px !important;
-    padding: 2rem;
-    margin: 0.25rem auto !important;
+    width: 95% !important;           /* Larghezza 95% */
+    max-width: 900px !important;     /* Larghezza massima 900px */
+    padding: 2rem;                  /* Padding standard */
+    margin: 0.25rem auto !important; /* Margine centrato */
   }
   
+  /* Card per pagine non-tratte */
   body:not(.tratte-page) .main-card {
-    max-width: 850px !important;
-    padding: 2.5rem;
+    max-width: 850px !important;     /* Larghezza massima 850px */
+    padding: 2.5rem;                /* Padding maggiore */
   }
 }
 
-/* Eccezione per pagine tratte/tariffe - layout verticale normale */
+/* SUBSECTION 8.10: Eccezione per pagine tratte/tariffe - layout verticale normale */
 .tratte-page .main-content>.container {
-    display: block !important;
-    align-items: normal;
-    overflow: visible;
+    display: block !important;        /* Layout a blocchi */
+    align-items: normal;             /* Allineamento normale */
+    overflow: visible;               /* Contenuto visibile */
   }
 
-  /* Layout a due colonne per desktop */
+  /* SUBSECTION 8.11: Layout a due colonne per desktop */
   #main-app .main-card {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    align-items: start;
+    display: grid;                    /* Layout a griglia */
+    grid-template-columns: 1fr 1fr;   /* Due colonne uguali */
+    gap: 2rem;                       /* Spazio tra le colonne */
+    align-items: start;              /* Allineamento in alto */
   }
 
+  /* Titolo della card - occupa tutta la larghezza */
   #main-app .card-title {
-    grid-column: 1 / -1;
-    margin-bottom: 1.2rem;
+    grid-column: 1 / -1;            /* Dalla prima all'ultima colonna */
+    margin-bottom: 1.2rem;          /* Margine inferiore */
   }
 
+  /* Gruppo form - occupa tutta la larghezza */
   #main-app .form-group {
-    grid-column: 1 / -1;
-    margin-bottom: 1.5rem;
+    grid-column: 1 / -1;            /* Dalla prima all'ultima colonna */
+    margin-bottom: 1.5rem;          /* Margine inferiore */
   }
 
+  /* Sezione route - prima colonna */
   #main-app .route-section {
-    grid-column: 1 / 2;
+    grid-column: 1 / 2;             /* Prima colonna */
   }
 
+  /* Sezione calcolo - prima colonna */
   #main-app .calculate-section {
-    grid-column: 1 / 2;
-    margin-top: 1rem;
+    grid-column: 1 / 2;             /* Prima colonna */
+    margin-top: 1rem;               /* Margine superiore */
   }
 
+  /* Risultato prezzo - seconda colonna */
   #main-app .price-result {
-    grid-column: 2 / 3;
-    grid-row: 3 / 5;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border-radius: 20px;
-    padding: 2rem;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    min-height: 250px;
+    grid-column: 2 / 3;             /* Seconda colonna */
+    grid-row: 3 / 5;                /* Dalla terza alla quinta riga */
+    display: flex;                  /* Layout flexbox */
+    flex-direction: column;         /* Direzione verticale */
+    justify-content: center;        /* Centra verticalmente */
+    align-items: center;            /* Centra orizzontalmente */
+    background: rgba(255, 255, 255, 0.2);  /* Sfondo bianco trasparente */
+    backdrop-filter: blur(15px);    /* Sfocatura del background */
+    -webkit-backdrop-filter: blur(15px);  /* Supporto WebKit */
+    border-radius: 20px;            /* Bordi arrotondati */
+    padding: 2rem;                  /* Padding interno */
+    border: 1px solid rgba(255, 255, 255, 0.3);  /* Bordo bianco trasparente */
+    min-height: 250px;              /* Altezza minima */
   }
 
+  /* Sezione cronologia - occupa tutta la larghezza */
   #main-app .history-section {
-    grid-column: 1 / -1;
+    grid-column: 1 / -1;            /* Dalla prima all'ultima colonna */
   }
 
 
+/* ========================================
+   SEZIONE 9: FORM ELEMENTS
+   ======================================== */
+/* SUBSECTION 9.1: Titolo della card */
 .card-title {
-  text-align: center;
-  margin-bottom: 1.5rem;
+  text-align: center;              /* Testo centrato */
+  margin-bottom: 1.5rem;           /* Margine inferiore */
 }
 
+/* Titolo principale H1 */
 .card-title h1 {
-  font-size: 2rem;
-  font-weight: 800;
-  color: rgba(15, 23, 42, 0.95);
-  text-shadow: 0 2px 15px rgba(255, 255, 255, 0.3);
-  margin-bottom: 0.5rem;
+  font-size: 2rem;                 /* Dimensione font grande */
+  font-weight: 800;                /* Peso font extra bold */
+  color: rgba(15, 23, 42, 0.95);   /* Colore scuro con 95% opacità */
+  text-shadow: 0 2px 15px rgba(255, 255, 255, 0.3);  /* Ombra testo bianca */
+  margin-bottom: 0.5rem;           /* Margine inferiore */
 }
 
+/* Sottotitolo/descrizione */
 .card-title p {
-  font-size: 1.05rem;
-  color: rgba(51, 65, 85, 0.8);
-  max-width: 90%;
-  margin: 0 auto;
-  text-shadow: 0 1px 5px rgba(255, 255, 255, 0.2);
+  font-size: 1.05rem;              /* Dimensione font media */
+  color: rgba(51, 65, 85, 0.8);    /* Colore grigio con 80% opacità */
+  max-width: 90%;                  /* Larghezza massima 90% */
+  margin: 0 auto;                  /* Centra orizzontalmente */
+  text-shadow: 0 1px 5px rgba(255, 255, 255, 0.2);  /* Ombra testo leggera */
 }
 
-/* Form elements */
+/* SUBSECTION 9.2: Elementi del form */
 .form-group {
-  margin-bottom: 1.2rem;
+  margin-bottom: 1.2rem;           /* Margine inferiore tra i gruppi */
 }
 
+/* Etichette del form */
 .form-label {
-  display: block;
-  font-weight: 600;
-  color: rgba(30, 41, 59, 0.9);
-  margin-bottom: 0.3rem;
-  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.2);
+  display: block;                   /* Display a blocchi */
+  font-weight: 600;                 /* Peso font semi-bold */
+  color: rgba(30, 41, 59, 0.9);    /* Colore scuro con 90% opacità */
+  margin-bottom: 0.3rem;            /* Margine inferiore */
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.2);  /* Ombra testo leggera */
 }
 
+/* Selettori del form con glassmorphism */
 .form-select {
-  width: 100%;
-  padding: 0.6rem 0.8rem;
-  border: 1px solid var(--glass-border);
-  border-radius: 12px;
-  background: var(--glass-bg);
-  backdrop-filter: var(--backdrop-blur);
-  -webkit-backdrop-filter: var(--backdrop-blur);
-  color: rgba(15, 23, 42, 0.95);
-  font-size: 1rem;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  font-weight: 500;
+  width: 100%;                      /* Larghezza completa */
+  padding: 0.6rem 0.8rem;           /* Padding interno */
+  border: 1px solid var(--glass-border);  /* Bordo trasparente */
+  border-radius: 12px;              /* Bordi arrotondati */
+  background: var(--glass-bg);      /* Sfondo trasparente */
+  backdrop-filter: var(--backdrop-blur);  /* Sfocatura del background */
+  -webkit-backdrop-filter: var(--backdrop-blur);  /* Supporto WebKit */
+  color: rgba(15, 23, 42, 0.95);   /* Colore testo scuro */
+  font-size: 1rem;                  /* Dimensione font standard */
+  transition: all 0.3s ease;        /* Transizione fluida */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);  /* Ombra leggera per visibilità */
+  font-weight: 500;                  /* Peso font medium */
 }
 
+/* Opzioni del selettore */
 .form-select option {
-  background: rgba(30, 41, 59, 0.95);
-  color: #ffffff;
+  background: rgba(30, 41, 59, 0.95);  /* Sfondo scuro per le opzioni */
+  color: #ffffff;                    /* Testo bianco */
 }
 
+/* Stato focus del selettore */
 .form-select:focus {
-  outline: none;
-  border-color: rgba(23, 183, 177, 0.5);
-  box-shadow: 0 0 0 3px rgba(23, 183, 177, 0.2);
-  background: rgba(255, 255, 255, 0.35);
+  outline: none;                     /* Rimuove il bordo di default */
+  /* border-color: rgba(23, 183, 177, 0.5);  /* Bordo turchese RIMOSSO */
+  border-color: rgba(255, 255, 255, 0.3);  /* Bordo bianco trasparente */
+  /* box-shadow: 0 0 0 3px rgba(23, 183, 177, 0.2);  /* Ombra turchese RIMOSSA */
+  background: rgba(255, 255, 255, 0.35);  /* Sfondo più opaco */
 }
 
+/* Stato disabilitato del selettore */
 .form-select:disabled {
-  background: rgba(233, 236, 239, 0.3);
-  cursor: not-allowed;
-  opacity: 0.6;
+  background: rgba(233, 236, 239, 0.3);  /* Sfondo grigio trasparente */
+  cursor: not-allowed;                   /* Cursore non consentito */
+  opacity: 0.6;                         /* Opacità ridotta */
 }
 
-/* Sezione partenza/arrivo */
+/* SUBSECTION 9.3: Sezione partenza/arrivo */
 .route-section {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-radius: 20px;
-  padding: 1.5rem;
-  margin: 1rem 0;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.15);  /* Sfondo bianco trasparente */
+  backdrop-filter: blur(10px);            /* Sfocatura del background */
+  -webkit-backdrop-filter: blur(10px);    /* Supporto WebKit */
+  border-radius: 20px;                    /* Bordi arrotondati */
+  padding: 1.5rem;                       /* Padding interno */
+  margin: 1rem 0;                        /* Margine verticale */
+  border: 1px solid rgba(255, 255, 255, 0.2);  /* Bordo bianco trasparente */
 }
 
+/* Riga della route */
 .route-row {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.2rem;
+  display: flex;                   /* Layout flexbox orizzontale */
+  align-items: center;             /* Allineamento verticale centrale */
+  gap: 1rem;                      /* Spazio tra gli elementi */
+  margin-bottom: 1.2rem;          /* Margine inferiore */
 }
 
+/* Ultima riga senza margine */
 .route-row:last-child {
-  margin-bottom: 0;
+  margin-bottom: 0;               /* Nessun margine inferiore */
 }
 
+/* Icona della route */
 .route-icon {
-  display: flex;
-  align-items: center;
-  font-size: 1.2rem;
-  flex-shrink: 0;
-  gap: 0.5rem;
-  min-width: 120px;
+  display: flex;                   /* Layout flexbox */
+  align-items: center;             /* Allineamento verticale centrale */
+  font-size: 1.2rem;              /* Dimensione font grande */
+  flex-shrink: 0;                   /* Non si rimpicciolisce */
+  gap: 0.5rem;                     /* Spazio tra icona e testo */
+  min-width: 120px;                /* Larghezza minima */
 }
 
+/* Prima icona (emoji) */
 .route-icon span:first-child {
-  font-size: 1.5rem;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  font-size: 1.5rem;              /* Dimensione font grande */
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));  /* Ombra dell'icona */
 }
 
+/* Testo dell'icona */
 .route-icon span:last-child {
-  font-weight: 600;
-  min-width: 80px;
-  color: rgba(30, 41, 59, 0.9);
-  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.2);
+  font-weight: 600;               /* Peso font semi-bold */
+  min-width: 80px;                /* Larghezza minima */
+  color: rgba(30, 41, 59, 0.9);   /* Colore scuro con 90% opacità */
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.2);  /* Ombra testo leggera */
 }
 
+/* Selettore della route */
 .route-select {
-  flex: 1;
+  flex: 1;                        /* Occupa tutto lo spazio rimanente */
 }
 
+/* ========================================
+   SEZIONE 10: BOTTONI E PULSANTI
+   ======================================== */
+/* SEZIONE 10.1: Container pulsante swap */
 .swap-button {
-  display: flex;
-  justify-content: center;
-  margin: 1rem 0;
+  display: flex;                   /* Layout flexbox */
+  justify-content: center;         /* Centra orizzontalmente */
+  margin: 1rem 0;                 /* Margine verticale */
 }
 
+/* SEZIONE 10.2: Pulsante swap (inverti percorso) */
 .swap-btn {
-  background: var(--glass-bg);
-  backdrop-filter: var(--backdrop-blur);
-  -webkit-backdrop-filter: var(--backdrop-blur);
-  border: 1px solid var(--glass-border);
-  border-radius: 50px;
-  padding: 0.7rem 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  font-size: 1.1rem;
-  color: var(--testo-principale);
-  font-weight: 600;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  box-shadow: var(--glass-shadow);
-  position: relative;
-  overflow: hidden;
-  min-width: 50px;
+  /* SEZIONE 10.2.1: Stile glassmorphism */
+  background: var(--glass-bg);                    /* Sfondo trasparente */
+  backdrop-filter: var(--backdrop-blur);         /* Sfocatura del background */
+  -webkit-backdrop-filter: var(--backdrop-blur); /* Supporto WebKit */
+  border: 1px solid var(--glass-border);         /* Bordo trasparente */
+  border-radius: 50px;                           /* Bordi completamente arrotondati */
+  
+  /* SEZIONE 10.2.2: Dimensioni e layout */
+  padding: 0.7rem 1rem;                          /* Padding interno */
+  display: flex;                                 /* Layout flexbox */
+  align-items: center;                          /* Allineamento verticale centrale */
+  justify-content: center;                      /* Allineamento orizzontale centrale */
+  min-width: 50px;                              /* Larghezza minima */
+  
+  /* SEZIONE 10.2.3: Interattività */
+  cursor: pointer;                               /* Cursore pointer */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);  /* Transizione fluida */
+  
+  /* SEZIONE 10.2.4: Tipografia */
+  font-size: 1.1rem;                            /* Dimensione font grande */
+  color: var(--testo-principale);               /* Colore testo principale */
+  font-weight: 600;                             /* Peso font semi-bold */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);   /* Ombra testo leggera */
+  
+  /* SEZIONE 10.2.5: Effetti visivi */
+  box-shadow: var(--glass-shadow);              /* Ombra glassmorphism */
+  position: relative;                           /* Posizione relativa */
+  overflow: hidden;                             /* Nasconde contenuto che esce */
 }
 
+/* SEZIONE 10.2.6: Effetto shimmer del pulsante swap */
 .swap-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  transition: left 0.5s ease;
+  content: '';                     /* Contenuto vuoto */
+  position: absolute;              /* Posizione assoluta */
+  top: 0;                         /* Posizione in alto */
+  left: -100%;                    /* Posizione iniziale fuori dal pulsante */
+  width: 100%;                    /* Larghezza completa */
+  height: 100%;                   /* Altezza completa */
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);  /* Gradiente shimmer */
+  transition: left 0.5s ease;     /* Transizione della posizione */
 }
 
+/* Effetto shimmer al hover */
 .swap-btn:hover::before {
-  left: 100%;
+  left: 100%;                     /* Muove il gradiente attraverso il pulsante */
 }
 
+/* SEZIONE 10.2.7: Effetto hover del pulsante swap */
 .swap-btn:hover {
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15),
-    0 5px 15px rgba(23, 183, 177, 0.3);
-  border-color: rgba(23, 183, 177, 0.5);
-  background: rgba(255, 255, 255, 0.35);
+  transform: translateY(-3px) scale(1.05);  /* Solleva e ingrandisce leggermente */
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15),  /* Ombra più forte */
+    0 5px 15px rgba(255, 255, 255, 0.2);      /* Ombra bianca */
+  /* border-color: rgba(23, 183, 177, 0.5);     /* Bordo turchese RIMOSSO */
+  border-color: rgba(255, 255, 255, 0.4);     /* Bordo bianco trasparente */
+  background: rgba(255, 255, 255, 0.35);     /* Sfondo più opaco */
 }
 
+/* SEZIONE 10.2.8: Effetto active del pulsante swap */
 .swap-btn:active {
-  transform: translateY(-1px) scale(0.98);
-  transition: all 0.1s ease;
+  transform: translateY(-1px) scale(0.98);  /* Leggero abbassamento e rimpicciolimento */
+  transition: all 0.1s ease;                /* Transizione veloce */
 }
 
+/* SEZIONE 10.2.9: Stato disabilitato del pulsante swap */
 .swap-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none;
+  opacity: 0.5;                            /* Opacità ridotta */
+  cursor: not-allowed;                     /* Cursore non consentito */
+  transform: none;                         /* Nessuna trasformazione */
 }
 
+/* SEZIONE 10.2.10: Span del pulsante swap */
 .swap-btn span {
-  transition: transform 0.3s ease;
-  position: relative;
-  z-index: 1;
+  transition: transform 0.3s ease;  /* Transizione della rotazione */
+  position: relative;               /* Posizione relativa */
+  z-index: 1;                       /* Sopra l'effetto shimmer */
 }
 
+/* Rotazione dell'icona al click */
 .swap-btn:active span {
-  transform: rotate(180deg);
+  transform: rotate(180deg);        /* Ruota l'icona di 180 gradi */
 }
 
 
 
-/* Pulsante calcola */
+/* SEZIONE 10.3: Sezione pulsante calcola */
 .calculate-section {
-  text-align: center;
-  margin: 1.2rem 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.8rem;
+  text-align: center;              /* Testo centrato */
+  margin: 1.2rem 0;               /* Margine verticale */
+  display: flex;                  /* Layout flexbox */
+  flex-direction: column;         /* Direzione verticale */
+  align-items: center;            /* Allineamento centrale */
+  gap: 0.8rem;                   /* Spazio tra gli elementi */
 }
 
+/* SEZIONE 10.4: Pulsante calcola */
 .calculate-btn {
-  background: rgba(23, 183, 177, 0.6);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  padding: 1rem 2rem;
-  border-radius: 16px;
-  font-size: 1.1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  width: 100%;
-  max-width: 300px;
-  box-shadow: 0 4px 15px rgba(23, 183, 177, 0.3);
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  /* SEZIONE 10.4.1: Stile glassmorphism bianco */
+  /* background: rgba(23, 183, 177, 0.6);    /* Sfondo turchese trasparente RIMOSSO */
+  background: rgba(255, 255, 255, 0.6);    /* Sfondo bianco trasparente */
+  backdrop-filter: blur(10px);            /* Sfocatura del background */
+  -webkit-backdrop-filter: blur(10px);   /* Supporto WebKit */
+  color: #1e293b;                        /* Testo scuro */
+  border: 1px solid rgba(255, 255, 255, 0.3);  /* Bordo bianco trasparente */
+  
+  /* SEZIONE 10.4.2: Dimensioni e layout */
+  padding: 1rem 2rem;                   /* Padding interno */
+  border-radius: 16px;                  /* Bordi arrotondati */
+  width: 100%;                          /* Larghezza completa */
+  max-width: 300px;                     /* Larghezza massima */
+  
+  /* SEZIONE 10.4.3: Tipografia */
+  font-size: 1.1rem;                   /* Dimensione font grande */
+  font-weight: 600;                    /* Peso font semi-bold */
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);  /* Ombra testo leggera */
+  
+  /* SEZIONE 10.4.4: Interattività */
+  cursor: pointer;                     /* Cursore pointer */
+  transition: all 0.3s ease;          /* Transizione fluida */
+  
+  /* SEZIONE 10.4.5: Effetti visivi */
+  /* box-shadow: 0 4px 15px rgba(23, 183, 177, 0.3);  /* Ombra turchese RIMOSSA */
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);  /* Ombra bianca */
 }
 
+/* SEZIONE 10.4.6: Effetto hover del pulsante calcola */
 .calculate-btn:hover {
-  background: rgba(23, 183, 177, 0.8);
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(23, 183, 177, 0.5);
-  border-color: rgba(255, 255, 255, 0.5);
+  /* background: rgba(23, 183, 177, 0.8);    /* Sfondo turchese più opaco RIMOSSO */
+  background: rgba(255, 255, 255, 0.8);    /* Sfondo bianco più opaco */
+  transform: translateY(-3px);            /* Solleva il pulsante */
+  /* box-shadow: 0 8px 25px rgba(23, 183, 177, 0.5);  /* Ombra turchese più forte RIMOSSA */
+  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.5);  /* Ombra bianca più forte */
+  border-color: rgba(255, 255, 255, 0.5); /* Bordo bianco più opaco */
 }
 
+/* SEZIONE 10.4.7: Stato disabilitato del pulsante calcola */
 .calculate-btn:disabled {
-  background: rgba(108, 117, 125, 0.3);
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(108, 117, 125, 0.3);   /* Sfondo grigio trasparente */
+  cursor: not-allowed;                    /* Cursore non consentito */
+  transform: none;                        /* Nessuna trasformazione */
+  box-shadow: none;                       /* Nessuna ombra */
+  border-color: rgba(255, 255, 255, 0.1); /* Bordo bianco molto trasparente */
 }
 
-/* Pulsante modalità scura */
+/* SEZIONE 10.5: Pulsante modalità scura */
 .dark-mode-btn {
-  background-color: transparent;
-  color: var(--testo-principale);
-  border: 2px solid var(--grigio-scuro);
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  width: 100%;
-  max-width: 300px;
+  background-color: transparent;     /* Sfondo trasparente */
+  color: var(--testo-principale);    /* Colore testo principale */
+  border: 2px solid var(--grigio-scuro);  /* Bordo grigio scuro */
+  padding: 0.75rem 1.5rem;          /* Padding interno */
+  border-radius: 8px;               /* Bordi arrotondati */
+  font-size: 1rem;                  /* Dimensione font standard */
+  font-weight: 500;                 /* Peso font medium */
+  cursor: pointer;                  /* Cursore pointer */
+  transition: all 0.3s ease;       /* Transizione fluida */
+  display: flex;                    /* Layout flexbox */
+  align-items: center;              /* Allineamento verticale centrale */
+  justify-content: center;          /* Allineamento orizzontale centrale */
+  gap: 0.5rem;                     /* Spazio tra icona e testo */
+  width: 100%;                     /* Larghezza completa */
+  max-width: 300px;                /* Larghezza massima */
 }
 
 .dark-mode-btn:hover {
-  background-color: var(--grigio-scuro);
-  color: var(--bianco);
-  transform: translateY(-1px);
+  background-color: var(--grigio-scuro);  /* Sfondo grigio scuro al hover */
+  color: var(--bianco);                   /* Testo bianco al hover */
+  transform: translateY(-1px);            /* Leggero sollevamento */
 }
 
 .dark-mode-btn.dark-mode-active {
-  background-color: var(--testo-principale);
-  color: var(--bianco);
-  border-color: var(--testo-principale);
+  background-color: var(--testo-principale);  /* Sfondo scuro quando attivo */
+  color: var(--bianco);                       /* Testo bianco quando attivo */
+  border-color: var(--testo-principale);      /* Bordo scuro quando attivo */
 }
 
 .dark-mode-btn.dark-mode-active:hover {
-  background-color: var(--grigio-scuro);
-  border-color: var(--grigio-scuro);
+  background-color: var(--grigio-scuro);    /* Sfondo grigio scuro al hover quando attivo */
+  border-color: var(--grigio-scuro);        /* Bordo grigio scuro al hover quando attivo */
 }
 
 .dark-mode-btn span:first-child {
-  font-size: 1.25rem;
+  font-size: 1.25rem;                      /* Dimensione font grande per l'icona */
 }
 
-/* Dark mode styles for dark mode button */
+/* SEZIONE 10.6: Dark mode per pulsante modalità scura */
 .dark .dark-mode-btn {
-  color: var(--testo-principale);
-  border-color: var(--bordo);
+  color: var(--testo-principale);        /* Colore testo principale in dark mode */
+  border-color: var(--bordo);            /* Colore bordo in dark mode */
 }
 
 .dark .dark-mode-btn:hover {
-  background-color: var(--bordo);
-  color: var(--testo-principale);
+  background-color: var(--bordo);        /* Sfondo bordo al hover in dark mode */
+  color: var(--testo-principale);        /* Colore testo principale al hover in dark mode */
 }
 
 .dark .dark-mode-btn.dark-mode-active {
-  background-color: var(--testo-principale);
-  color: var(--bianco);
-  border-color: var(--testo-principale);
+  background-color: var(--testo-principale);  /* Sfondo scuro quando attivo in dark mode */
+  color: var(--bianco);                       /* Testo bianco quando attivo in dark mode */
+  border-color: var(--testo-principale);      /* Bordo scuro quando attivo in dark mode */
 }
 
 .dark .dark-mode-btn.dark-mode-active:hover {
-  background-color: var(--grigio-scuro);
-  border-color: var(--grigio-scuro);
+  background-color: var(--grigio-scuro);    /* Sfondo grigio scuro al hover attivo in dark mode */
+  border-color: var(--grigio-scuro);        /* Bordo grigio scuro al hover attivo in dark mode */
 }
 
-/* Dark mode styles for navbar */
+/* SEZIONE 10.7: Dark mode per navbar */
 .dark .nav-link {
-  color: rgba(255, 255, 255, 0.95);
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  color: rgba(255, 255, 255, 0.95);        /* Testo bianco con 95% opacità in dark mode */
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);  /* Ombra testo più forte in dark mode */
 }
 
 .dark .nav-link:hover {
-  color: rgba(255, 255, 255, 1);
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+  color: rgba(255, 255, 255, 1);           /* Testo bianco al 100% al hover in dark mode */
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);  /* Ombra testo ancora più forte al hover in dark mode */
 }
 
 .dark .nav-link.active {
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: rgba(255, 255, 255, 1);
+  background: rgba(255, 255, 255, 0.15);    /* Sfondo bianco trasparente quando attivo in dark mode */
+  border: 1px solid rgba(255, 255, 255, 0.2);  /* Bordo bianco trasparente quando attivo in dark mode */
+  color: rgba(255, 255, 255, 1);           /* Testo bianco al 100% quando attivo in dark mode */
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9);
 }
 
-/* Pulsante swap in dark mode */
+/* SEZIONE 10.8: Pulsante swap in dark mode */
 .dark .swap-btn {
-  background: var(--glass-bg-dark);
-  color: rgba(255, 255, 255, 0.95);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-  border-color: var(--glass-border-dark);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3),
-    0 2px 4px rgba(0, 0, 0, 0.2);
+  background: var(--glass-bg-dark);        /* Sfondo glassmorphism scuro */
+  color: rgba(255, 255, 255, 0.95);       /* Testo bianco con 95% opacità */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);  /* Ombra testo per leggibilità */
+  border-color: var(--glass-border-dark);  /* Bordo glassmorphism scuro */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3),  /* Ombra più forte in dark mode */
+    0 2px 4px rgba(0, 0, 0, 0.2);         /* Ombra aggiuntiva */
 }
 
 .dark .swap-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(23, 183, 177, 0.6);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4),
-    0 5px 15px rgba(23, 183, 177, 0.5);
+  background: rgba(255, 255, 255, 0.2);   /* Sfondo bianco trasparente al hover */
+  /* border-color: rgba(23, 183, 177, 0.6);  /* Bordo turchese al hover RIMOSSO */
+  border-color: rgba(255, 255, 255, 0.4);  /* Bordo bianco trasparente al hover */
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4),  /* Ombra molto forte al hover */
+    0 5px 15px rgba(255, 255, 255, 0.2);   /* Ombra bianca al hover */
 }
 
 
 
-/* Tratte e tariffe in dark mode - Glassmorphism */
+/* ========================================
+   SEZIONE 11: RISULTATI E PREZZI
+   ======================================== */
+/* SEZIONE 11.1: Tratte e tariffe in dark mode - Glassmorphism */
 .dark .tratte-card {
-  background: rgba(30, 41, 59, 0.5);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border-color: rgba(148, 163, 184, 0.2);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
+  background: rgba(30, 41, 59, 0.5);      /* Sfondo scuro trasparente */
+  backdrop-filter: blur(15px);            /* Sfocatura del background */
+  -webkit-backdrop-filter: blur(15px);    /* Supporto WebKit */
+  border-color: rgba(148, 163, 184, 0.2); /* Bordo grigio chiaro trasparente */
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);  /* Ombra ultra leggera in dark mode */
 }
 
 
-/* Form select in dark mode */
+/* SEZIONE 11.2: Form select in dark mode */
 .dark .form-select {
-  color: rgba(248, 250, 252, 0.95);
+  color: rgba(248, 250, 252, 0.95);      /* Testo chiaro con 95% opacità in dark mode */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); /* Ombra scura per visibilità */
 }
 
-/* Tratte card title in dark mode */
+/* SEZIONE 11.3: Titoli delle card tratte in dark mode */
 .dark .tratte-card h3 {
-  color: rgba(255, 255, 255, 0.95);
-  border-bottom-color: rgba(255, 255, 255, 0.3);
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+  color: rgba(255, 255, 255, 0.95);      /* Testo bianco con 95% opacità */
+  border-bottom-color: rgba(255, 255, 255, 0.6);  /* Bordo inferiore bianco più marcato */
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);     /* Ombra testo molto forte */
 }
 
-/* Card titles, labels and other text in dark mode */
+/* SEZIONE 11.4: Titoli, etichette e testo in dark mode */
 .dark .card-title h1 {
-  color: rgba(241, 245, 249, 0.95);
-  text-shadow: 0 2px 15px rgba(0, 0, 0, 0.5);
+  color: rgba(241, 245, 249, 0.95);      /* Testo chiaro con 95% opacità */
+  text-shadow: 0 2px 15px rgba(0, 0, 0, 0.5);  /* Ombra testo forte */
 }
 
 .dark .card-title p {
-  color: rgba(203, 213, 225, 0.85);
-  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+  color: rgba(203, 213, 225, 0.85);      /* Testo grigio chiaro con 85% opacità */
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);   /* Ombra testo leggera */
 }
 
 .dark .form-label {
-  color: rgba(226, 232, 240, 0.9);
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  color: rgba(226, 232, 240, 0.9);       /* Testo grigio molto chiaro con 90% opacità */
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);   /* Ombra testo leggera */
 }
 
 .dark .route-icon span:last-child {
-  color: rgba(226, 232, 240, 0.9);
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  color: rgba(226, 232, 240, 0.9);       /* Testo grigio molto chiaro con 90% opacità */
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);  /* Ombra testo leggera */
 }
 
+/* SEZIONE 11.5: Etichetta prezzo in dark mode */
 .dark .price-label {
-  color: rgba(203, 213, 225, 0.8);
+  color: rgba(203, 213, 225, 0.8);       /* Testo grigio chiaro con 80% opacità */
 }
 
+/* SEZIONE 11.6: Codice prezzo in dark mode */
 .dark .price-code {
-  color: rgba(248, 250, 252, 0.95);
-  background: rgba(255, 255, 255, 0.05);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  color: rgba(248, 250, 252, 0.95);      /* Testo chiaro con 95% opacità */
+  background: rgba(255, 255, 255, 0.05); /* Sfondo bianco molto trasparente */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);  /* Ombra testo leggera */
 }
 
+/* SEZIONE 11.7: Elemento tratte in dark mode */
 .dark .tratte-item {
-  background: rgba(30, 41, 59, 0.6);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border-color: rgba(148, 163, 184, 0.3);
-  color: rgba(248, 250, 252, 0.95);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  background: rgba(30, 41, 59, 0.6);      /* Sfondo scuro trasparente */
+  backdrop-filter: blur(8px);            /* Sfocatura del background */
+  -webkit-backdrop-filter: blur(8px);    /* Supporto WebKit */
+  border-color: rgba(148, 163, 184, 0.3); /* Bordo grigio chiaro trasparente */
+  color: rgba(248, 250, 252, 0.95);      /* Testo chiaro con 95% opacità */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);  /* Ombra testo per leggibilità */
 }
 
+/* SEZIONE 11.8: Effetto hover elemento tratte in dark mode */
 .dark .tratte-item:hover {
-  background: rgba(23, 183, 177, 0.4);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  color: #ffffff;
-  border-color: rgba(78, 205, 196, 0.5);
+  /* background: rgba(23, 183, 177, 0.4);    /* Sfondo turchese trasparente al hover RIMOSSO */
+  background: rgba(255, 255, 255, 0.1);    /* Sfondo bianco trasparente al hover */
+  backdrop-filter: blur(15px);            /* Sfocatura più forte al hover */
+  -webkit-backdrop-filter: blur(15px);    /* Supporto WebKit */
+  color: #ffffff;                         /* Testo bianco al hover */
+  /* border-color: rgba(78, 205, 196, 0.5); /* Bordo turchese più chiaro al hover RIMOSSO */
+  border-color: rgba(255, 255, 255, 0.3); /* Bordo bianco trasparente al hover */
 }
 
+/* SEZIONE 11.9: Scrollbar in dark mode */
 .dark .tratte-list::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.3);
+  background: rgba(15, 23, 42, 0.3);      /* Sfondo scuro trasparente per la track */
 }
 
 .dark .tratte-list::-webkit-scrollbar-thumb {
-  background: rgba(23, 183, 177, 0.6);
+  background: rgba(23, 183, 177, 0.6);    /* Sfondo turchese trasparente per il thumb */
 }
 
-/* Barra di ricerca in dark mode */
+/* SEZIONE 11.10: Barra di ricerca in dark mode */
 .dark .search-input {
-  background-color: var(--grigio-scuro);
-  border-color: var(--bordo);
-  color: var(--testo-principale);
+  background-color: var(--grigio-scuro);    /* Sfondo grigio scuro */
+  border-color: var(--bordo);               /* Colore bordo */
+  color: var(--testo-principale);           /* Colore testo principale */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); /* Ombra scura per visibilità */
 }
 
 .dark .search-input:focus {
-  border-color: var(--turchese);
-  box-shadow: 0 0 0 4px rgba(23, 183, 177, 0.2);
+  /* border-color: var(--turchese);            /* Bordo turchese al focus RIMOSSO */
+  border-color: rgba(255, 255, 255, 0.4);   /* Bordo bianco trasparente al focus */
+  /* box-shadow: 0 0 0 4px rgba(23, 183, 177, 0.2);  /* Ombra turchese al focus RIMOSSA */
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1);  /* Ombra bianca al focus */
 }
 
 .dark .clear-btn:hover {
-  background-color: var(--bordo);
+  background-color: var(--bordo);           /* Sfondo bordo al hover */
 }
 
-/* Risultato prezzo */
+/* Icona ricerca in modalità scura */
+.dark .search-icon {
+  color: #ffffff;                           /* Colore bianco in modalità scura */
+  opacity: 0.8;                            /* Maggiore opacità in dark mode */
+}
+
+/* SEZIONE 11.11: Risultato prezzo */
 .price-result {
-  text-align: center;
-  margin: 1.5rem 0;
+  text-align: center;              /* Testo centrato */
+  margin: 1.5rem 0;               /* Margine verticale */
 }
 
+/* Etichetta del prezzo */
 .price-label {
-  color: rgba(71, 85, 105, 0.8);
-  font-size: 1rem;
-  margin-bottom: 0.8rem;
-  font-weight: 500;
-  letter-spacing: 1px;
-  text-transform: uppercase;
+  color: rgba(71, 85, 105, 0.8);  /* Colore grigio scuro con 80% opacità */
+  font-size: 1rem;                /* Dimensione font standard */
+  margin-bottom: 0.8rem;          /* Margine inferiore */
+  font-weight: 500;               /* Peso font medium */
+  letter-spacing: 1px;            /* Spaziatura tra lettere */
+  text-transform: uppercase;      /* Testo maiuscolo */
 }
 
+/* Valore del prezzo */
 .price-value {
-  font-size: 4rem;
-  font-weight: 900;
-  color: #ffffff;
-  margin-bottom: 1rem;
-  text-shadow: 0 6px 20px rgba(23, 183, 177, 0.8), 0 2px 8px rgba(0, 0, 0, 0.6);
-  line-height: 1;
-  letter-spacing: -0.02em;
+  font-size: 4rem;                /* Dimensione font molto grande */
+  font-weight: 900;               /* Peso font extra bold */
+  color: #ffffff;                 /* Testo bianco */
+  margin-bottom: 1rem;            /* Margine inferiore */
+  /* text-shadow: 0 6px 20px rgba(23, 183, 177, 0.8), 0 2px 8px rgba(0, 0, 0, 0.6);  /* Ombra turchese + ombra scura RIMOSSA */
+  text-shadow: 0 6px 20px rgba(255, 255, 255, 0.3), 0 2px 8px rgba(0, 0, 0, 0.6);  /* Ombra bianca + ombra scura */
+  line-height: 1;                    /* Altezza riga compatta */
+  letter-spacing: -0.02em;          /* Spaziatura lettere negativa per compattezza */
 }
 
+/* Codice prezzo */
 .price-code {
-  color: rgba(15, 23, 42, 0.85);
-  font-size: 0.95rem;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 0.5rem 1rem;
-  border-radius: 12px;
-  display: inline-block;
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  font-weight: 600;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  color: rgba(15, 23, 42, 0.85);      /* Colore scuro con 85% opacità */
+  font-size: 0.95rem;                 /* Dimensione font leggermente piccola */
+  background: rgba(255, 255, 255, 0.1);  /* Sfondo bianco trasparente */
+  padding: 0.5rem 1rem;               /* Padding interno */
+  border-radius: 12px;                /* Bordi arrotondati */
+  display: inline-block;              /* Display inline-block */
+  backdrop-filter: blur(5px);         /* Sfocatura del background */
+  -webkit-backdrop-filter: blur(5px); /* Supporto WebKit */
+  font-weight: 600;                   /* Peso font semi-bold */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);  /* Ombra testo leggera */
 }
 
-/* Cronologia */
+/* ========================================
+   SEZIONE 12: CRONOLOGIA E ALTRI ELEMENTI
+   ======================================== */
+/* SEZIONE 12.1: Cronologia */
 .history-section {
-  margin-top: 2rem;
+  margin-top: 2rem;                    /* Margine superiore */
 }
 
+/* Titolo cronologia */
 .history-title {
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: var(--testo-principale);
-  margin-bottom: 1rem;
+  font-size: 1.2rem;                   /* Dimensione font grande */
+  font-weight: 600;                    /* Peso font semi-bold */
+  color: var(--testo-principale);      /* Colore testo principale */
+  margin-bottom: 1rem;                 /* Margine inferiore */
 }
 
+/* Elemento cronologia */
 .history-item {
-  background-color: var(--grigio-chiaro);
-  border: 1px solid var(--bordo);
-  border-radius: 8px;
-  padding: 1rem;
-  margin-bottom: 0.5rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  background-color: var(--grigio-chiaro);  /* Sfondo grigio chiaro */
+  border: 1px solid var(--bordo);      /* Bordo */
+  border-radius: 8px;                  /* Bordi arrotondati */
+  padding: 1rem;                       /* Padding interno */
+  margin-bottom: 0.5rem;               /* Margine inferiore */
+  cursor: pointer;                     /* Cursore pointer */
+  transition: all 0.3s ease;          /* Transizione fluida */
 }
 
+/* Effetto hover elemento cronologia */
 .history-item:hover {
-  background-color: var(--grigio-medio);
-  border-color: var(--turchese);
+  background-color: var(--grigio-medio);  /* Sfondo grigio medio al hover */
+  /* border-color: var(--turchese);       /* Bordo turchese al hover RIMOSSO */
+  border-color: rgba(255, 255, 255, 0.3); /* Bordo bianco trasparente al hover */
 }
 
-/* Pagine tratte e tariffe */
+/* SEZIONE 12.2: Titoli delle pagine */
 .page-title {
-  text-align: center;
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--testo-principale);
-  margin: 1rem auto 1rem;
-  padding: 0;
-  letter-spacing: 0.5px;
-  width: 100%;
-  display: block;
-  max-width: 100%;
+  text-align: center;              /* Testo centrato */
+  font-size: 2rem;                 /* Dimensione font grande */
+  font-weight: 700;                /* Peso font bold */
+  color: var(--testo-principale);  /* Colore testo principale */
+  margin: 1rem auto 1rem;         /* Margine verticale e centratura */
+  padding: 0;                      /* Nessun padding */
+  letter-spacing: 0.5px;           /* Spaziatura tra lettere */
+  width: 100%;                     /* Larghezza completa */
+  display: block;                  /* Display a blocchi */
+  max-width: 100%;                 /* Larghezza massima */
 }
 
-/* Titolo specifico per pagine tratte/tariffe */
+/* SEZIONE 12.3: Titolo specifico per pagine tratte/tariffe */
 .tratte-page .page-title {
-  text-align: center !important;
-  margin: 1rem auto 1rem auto !important;
-  width: 100% !important;
-  display: block !important;
-  position: relative;
-  left: 0;
-  transform: none;
+  text-align: center !important;        /* Centratura forzata */
+  margin: 1rem auto 1rem auto !important;  /* Margine centrato forzato */
+  width: 100% !important;              /* Larghezza completa forzata */
+  display: block !important;           /* Display a blocchi forzato */
+  position: relative;                  /* Posizione relativa */
+  left: 0;                            /* Posizione sinistra zero */
+  transform: none;                     /* Nessuna trasformazione */
 }
 
-/* Selettore linea */
+/* SEZIONE 12.4: Selettore linea */
 .line-selector-container {
-  max-width: 600px;
-  margin: 0 auto 1.5rem;
-  padding-top: 1rem;
-  border-top: 2px solid var(--bordo);
+  max-width: 600px;                /* Larghezza massima */
+  margin: 0 auto 1.5rem;          /* Margine centrato */
+  padding-top: 1rem;              /* Padding superiore */
+  border-top: 2px solid rgba(15, 23, 42, 0.4);  /* Bordo superiore più chiaro */
+}
+
+/* Bordo superiore selettore linea in dark mode */
+.dark .line-selector-container {
+  border-top-color: rgba(255, 255, 255, 0.4);  /* Bordo superiore bianco trasparente */
 }
 
 /* Barra di ricerca dentro il selettore linea */
 .line-selector-container .search-container {
-  margin-top: 1rem;
-  margin-bottom: 0;
+  margin-top: 1rem;               /* Margine superiore */
+  margin-bottom: 0;               /* Nessun margine inferiore */
 }
 
-/* FORZA il design glassmorphism per tutti i selettori */
+/* SEZIONE 12.5: FORZA il design glassmorphism per tutti i selettori */
 select.form-select,
 #linea-tratte,
 #linea-tariffe,
 .line-selector-container select,
 .line-search-container select {
-  background: rgba(255, 255, 255, 0.25) !important;
-  backdrop-filter: blur(10px) !important;
-  -webkit-backdrop-filter: blur(10px) !important;
-  border: 1px solid rgba(255, 255, 255, 0.18) !important;
-  border-radius: 12px !important;
-  color: rgba(15, 23, 42, 0.95) !important;
-  padding: 0.6rem 0.8rem !important;
-  font-size: 1rem !important;
-  transition: all 0.3s ease !important;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37) !important;
+  background: rgba(255, 255, 255, 0.25) !important;  /* Sfondo bianco trasparente forzato */
+  backdrop-filter: blur(10px) !important;            /* Sfocatura forzata */
+  -webkit-backdrop-filter: blur(10px) !important;    /* Supporto WebKit forzato */
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;  /* Bordo bianco trasparente forzato */
+  border-radius: 12px !important;                    /* Bordi arrotondati forzati */
+  color: rgba(15, 23, 42, 0.95) !important;         /* Colore testo scuro forzato */
+  padding: 0.6rem 0.8rem !important;                 /* Padding interno forzato */
+  font-size: 1rem !important;                        /* Dimensione font forzata */
+  transition: all 0.3s ease !important;              /* Transizione forzata */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02) !important;  /* Ombra ultra leggera forzata */
 }
 
+/* SEZIONE 12.5.1: Ombra ultra leggera per selettori homepage */
+#linea,
+#partenza,
+#arrivo {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02) !important;  /* Ombra ultra leggera per homepage */
+}
+
+/* Stato focus forzato per selettori */
 select.form-select:focus,
 #linea-tratte:focus,
 #linea-tariffe:focus {
-  outline: none !important;
-  border-color: rgba(23, 183, 177, 0.5) !important;
-  box-shadow: 0 0 0 3px rgba(23, 183, 177, 0.2) !important;
-  background: rgba(255, 255, 255, 0.35) !important;
+  outline: none !important;                            /* Nessun outline forzato */
+  /* border-color: rgba(23, 183, 177, 0.5) !important;    /* Bordo turchese forzato RIMOSSO */
+  /* border-color: rgba(255, 255, 255, 0.3) !important;   /* Bordo bianco trasparente forzato RIMOSSO */
+  /* box-shadow: 0 0 0 3px rgba(23, 183, 177, 0.2) !important;  /* Ombra turchese forzata RIMOSSA */
+  background: rgba(255, 255, 255, 0.35) !important;   /* Sfondo più opaco forzato */
 }
 
-/* Modalità scura */
+/* SEZIONE 12.6: Modalità scura per selettori */
 .dark select.form-select,
 .dark #linea-tratte,
 .dark #linea-tariffe,
 .dark .line-selector-container select,
 .dark .line-search-container select {
-  background: rgba(30, 41, 59, 0.3) !important;
-  border: 1px solid rgba(148, 163, 184, 0.1) !important;
-  color: rgba(248, 250, 252, 0.95) !important;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5) !important;
+  background: rgba(30, 41, 59, 0.3) !important;      /* Sfondo scuro trasparente forzato */
+  border: 1px solid rgba(148, 163, 184, 0.1) !important;  /* Bordo grigio chiaro forzato */
+  color: rgba(248, 250, 252, 0.95) !important;       /* Testo chiaro forzato */
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;  /* Ombra scura ultra leggera */
 }
 
+/* Focus in modalità scura */
 .dark select.form-select:focus,
 .dark #linea-tratte:focus,
 .dark #linea-tariffe:focus {
-  border-color: rgba(23, 183, 177, 0.5) !important;
-  background: rgba(30, 41, 59, 0.4) !important;
+  /* border-color: rgba(23, 183, 177, 0.5) !important;    /* Bordo turchese forzato RIMOSSO */
+  /* border-color: rgba(255, 255, 255, 0.3) !important;    /* Bordo bianco trasparente forzato RIMOSSO */
+  background: rgba(30, 41, 59, 0.4) !important;        /* Sfondo scuro più opaco forzato */
 }
 
+/* SEZIONE 12.7: Container di ricerca linea */
 .line-search-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  margin-bottom: 2rem;
+  display: flex;                   /* Layout flexbox */
+  flex-direction: column;          /* Direzione verticale */
+  gap: 1.5rem;                    /* Spazio tra gli elementi */
+  margin-bottom: 2rem;            /* Margine inferiore */
 }
 
-/* Barra di ricerca */
+/* SEZIONE 12.8: Barra di ricerca */
 .search-container {
-  margin-bottom: 2rem;
-  display: flex;
-  justify-content: center;
+  margin-bottom: 2rem;            /* Margine inferiore */
+  display: flex;                  /* Layout flexbox */
+  justify-content: center;        /* Centra orizzontalmente */
 }
 
+/* SEZIONE 12.8.1: Box contenitore ricerca */
 .search-box {
-  position: relative;
-  width: 100%;
-  max-width: 600px;
-  display: flex;
-  align-items: center;
+  position: relative;                             /* Posizione relativa per elementi assoluti */
+  width: 100%;                                   /* Larghezza completa */
+  max-width: 600px;                              /* Larghezza massima */
+  display: flex;                                 /* Layout flexbox */
+  align-items: center;                           /* Allineamento verticale centrale */
 }
 
+/* SEZIONE 12.8.2: Icona ricerca */
 .search-icon {
-  position: absolute;
-  left: 1.25rem;
-  font-size: 1.25rem;
-  color: var(--testo-secondario);
-  pointer-events: none;
+  position: absolute;                            /* Posizione assoluta */
+  left: 1.25rem;                               /* Posizione sinistra */
+  font-size: 1.5rem;                           /* Dimensione font grande */
+  color: #1e293b;                              /* Colore scuro per migliore visibilità */
+  pointer-events: none;                         /* Non intercetta eventi mouse */
+  opacity: 0.7;                                /* Leggera trasparenza */
+  z-index: 2;                                  /* Livello sopra l'input */
+  display: flex;                                /* Layout flexbox */
+  align-items: center;                          /* Allineamento verticale */
+  justify-content: center;                      /* Allineamento orizzontale */
+  width: 1.5rem;                               /* Larghezza fissa */
+  height: 1.5rem;                              /* Altezza fissa */
 }
 
+/* SEZIONE 12.8.3: Input di ricerca */
 .search-input {
-  width: 100%;
-  padding: 1rem 3.5rem 1rem 3.5rem;
-  border: 1px solid var(--glass-border);
-  border-radius: 50px;
-  font-size: 1rem;
-  background: var(--glass-bg);
-  backdrop-filter: var(--backdrop-blur);
-  -webkit-backdrop-filter: var(--backdrop-blur);
-  color: var(--testo-principale);
-  transition: all 0.3s ease;
-  outline: none;
+  width: 100%;                                  /* Larghezza completa */
+  padding: 1rem 3.5rem 1rem 3.5rem;            /* Padding con spazio per icone */
+  border: 1px solid var(--glass-border);        /* Bordo glassmorphism */
+  border-radius: 50px;                          /* Bordi completamente arrotondati */
+  font-size: 1rem;                              /* Dimensione font standard */
+  background: var(--glass-bg);                  /* Sfondo glassmorphism */
+  backdrop-filter: var(--backdrop-blur);        /* Sfocatura del background */
+  -webkit-backdrop-filter: var(--backdrop-blur); /* Supporto WebKit */
+  color: var(--testo-principale);               /* Colore testo principale */
+  transition: all 0.3s ease;                    /* Transizione fluida */
+  outline: none;                                /* Rimuove outline di default */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);    /* Ombra leggera per visibilità */
 }
 
+/* SEZIONE 12.8.4: Stato focus input ricerca */
 .search-input:focus {
-  border-color: rgba(23, 183, 177, 0.5);
-  box-shadow: 0 0 0 4px rgba(23, 183, 177, 0.2);
-  background: rgba(255, 255, 255, 0.35);
+  /* border-color: rgba(23, 183, 177, 0.5);        /* Bordo turchese al focus RIMOSSO */
+  border-color: rgba(255, 255, 255, 0.4);        /* Bordo bianco trasparente al focus */
+  /* box-shadow: 0 0 0 4px rgba(23, 183, 177, 0.2); /* Ombra turchese al focus RIMOSSA */
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1); /* Ombra bianca al focus */
+  background: rgba(255, 255, 255, 0.35);        /* Sfondo più opaco al focus */
 }
 
+/* SEZIONE 12.8.5: Placeholder input ricerca */
 .search-input::placeholder {
-  color: var(--testo-secondario);
+  color: var(--testo-secondario);               /* Colore testo secondario per placeholder */
 }
 
+/* SEZIONE 12.8.6: Pulsante cancella ricerca */
 .clear-btn {
-  position: absolute;
-  right: 1rem;
-  background: none;
-  border: none;
-  color: var(--testo-secondario);
-  font-size: 1.5rem;
-  cursor: pointer;
-  padding: 0.5rem;
-  border-radius: 50%;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2rem;
-  height: 2rem;
+  position: absolute;                            /* Posizione assoluta */
+  right: 1rem;                                 /* Posizione destra */
+  background: none;                             /* Nessuno sfondo */
+  border: none;                                 /* Nessun bordo */
+  color: var(--testo-secondario);               /* Colore testo secondario */
+  font-size: 1.5rem;                           /* Dimensione font grande */
+  cursor: pointer;                              /* Cursore pointer */
+  padding: 0.5rem;                             /* Padding interno */
+  border-radius: 50%;                          /* Bordi completamente arrotondati */
+  transition: all 0.3s ease;                   /* Transizione fluida */
+  display: flex;                                /* Layout flexbox */
+  align-items: center;                         /* Allineamento verticale centrale */
+  justify-content: center;                     /* Allineamento orizzontale centrale */
+  width: 2rem;                                 /* Larghezza fissa */
+  height: 2rem;                                /* Altezza fissa */
 }
 
+/* SEZIONE 12.8.7: Effetto hover pulsante cancella */
 .clear-btn:hover {
-  background-color: var(--grigio-chiaro);
-  color: var(--testo-principale);
+  background-color: var(--grigio-chiaro);       /* Sfondo grigio chiaro al hover */
+  color: var(--testo-principale);               /* Testo principale al hover */
 }
 
+/* SEZIONE 12.9: Griglia delle tratte */
 .tratte-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-  gap: 2rem;
-  margin-top: 2rem;
-  padding: 0 1rem;
+  display: grid;                                    /* Layout a griglia */
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));  /* Colonne responsive con larghezza minima */
+  gap: 2rem;                                       /* Spazio tra le card */
+  margin-top: 2rem;                               /* Margine superiore */
+  padding: 0 1rem;                                /* Padding laterale */
 }
 
+/* SEZIONE 12.10: Card delle tratte con glassmorphism */
 .tratte-card {
-  background: var(--glass-bg);
-  backdrop-filter: var(--backdrop-blur);
-  -webkit-backdrop-filter: var(--backdrop-blur);
-  border-radius: 24px;
-  padding: 2rem;
-  box-shadow: var(--glass-shadow);
-  border: 1px solid var(--glass-border);
-  position: relative;
-  overflow: hidden;
+  /* SEZIONE 12.10.1: Sfondo glassmorphism */
+  background: var(--glass-bg);                     /* Sfondo trasparente */
+  backdrop-filter: var(--backdrop-blur);          /* Sfocatura del background */
+  -webkit-backdrop-filter: var(--backdrop-blur);  /* Supporto WebKit */
+  
+  /* SEZIONE 12.10.2: Forma e dimensioni */
+  border-radius: 24px;                            /* Bordi molto arrotondati */
+  padding: 2rem;                                  /* Padding interno */
+  
+  /* SEZIONE 12.10.3: Effetti visivi */
+  box-shadow: var(--glass-shadow);                /* Ombra glassmorphism */
+  border: 1px solid var(--glass-border);          /* Bordo trasparente */
+  
+  /* SEZIONE 12.10.4: Layout e posizionamento */
+  position: relative;                             /* Posizione relativa */
+  overflow: hidden;                               /* Nasconde contenuto che esce */
 }
 
 
 
+/* SEZIONE 12.11: Titolo delle card tratte */
 .tratte-card h3 {
-  color: rgba(15, 23, 42, 0.95);
-  font-size: 1.75rem;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
-  text-align: center;
-  padding-bottom: 1rem;
-  border-bottom: 2px solid rgba(15, 23, 42, 0.2);
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  text-shadow: 0 2px 10px rgba(255, 255, 255, 0.3);
+  /* SEZIONE 12.11.1: Tipografia */
+  color: rgba(15, 23, 42, 0.95);                   /* Colore scuro con 95% opacità */
+  font-size: 1.75rem;                              /* Dimensione font grande */
+  font-weight: 700;                                /* Peso font bold */
+  text-shadow: 0 2px 10px rgba(255, 255, 255, 0.3);  /* Ombra testo bianca */
+  
+  /* SEZIONE 12.11.2: Layout e spaziatura */
+  margin-bottom: 1.5rem;                           /* Margine inferiore */
+  text-align: center;                              /* Testo centrato */
+  padding-bottom: 1rem;                           /* Padding inferiore */
+  
+  /* SEZIONE 12.11.3: Bordi e separatori */
+  border-bottom: 3px solid rgba(15, 23, 42, 0.4);  /* Bordo inferiore più marcato */
+  
+  /* SEZIONE 12.11.4: Layout flexbox per icona */
+  position: relative;                              /* Posizione relativa */
+  display: flex;                                   /* Layout flexbox */
+  align-items: center;                            /* Allineamento verticale centrale */
+  justify-content: center;                        /* Allineamento orizzontale centrale */
+  gap: 0.5rem;                                   /* Spazio tra testo e icona */
 }
 
+/* SEZIONE 12.12: Icona emoji del bus nel titolo */
 .tratte-card h3::before {
-  content: '🚌';
-  font-size: 1.5rem;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  content: '🚌';                                  /* Emoji del bus */
+  font-size: 1.5rem;                              /* Dimensione font grande */
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));  /* Ombra dell'icona */
 }
 
+/* SEZIONE 12.13: Lista delle tratte */
 .tratte-list {
-  list-style: none;
-  max-height: 600px;
-  overflow-y: auto !important;
-  padding-right: 0.5rem;
-  min-height: 200px;
+  /* SEZIONE 12.13.1: Reset e layout */
+  list-style: none;                               /* Rimuove stili lista di default */
+  min-height: 200px;                              /* Altezza minima */
+  
+  /* SEZIONE 12.13.2: Scroll e dimensioni */
+  max-height: 600px;                              /* Altezza massima per scroll */
+  overflow-y: auto !important;                    /* Scroll verticale forzato */
+  padding-right: 0.5rem;                          /* Padding destro per scrollbar */
 }
 
+/* SEZIONE 12.14: Scrollbar personalizzata - Larghezza */
 .tratte-list::-webkit-scrollbar {
-  width: 8px;
+  width: 8px;                                     /* Larghezza scrollbar sottile */
 }
 
+/* SEZIONE 12.15: Scrollbar personalizzata - Track (binario) */
 .tratte-list::-webkit-scrollbar-track {
-  background: var(--grigio-chiaro);
-  border-radius: 10px;
+  background: var(--grigio-chiaro);               /* Sfondo grigio chiaro per il binario */
+  border-radius: 10px;                           /* Bordi arrotondati */
 }
 
+/* SEZIONE 12.16: Scrollbar personalizzata - Thumb (cursore) */
 .tratte-list::-webkit-scrollbar-thumb {
-  background: var(--turchese);
-  border-radius: 10px;
+  background: var(--turchese);                    /* Sfondo turchese per il cursore */
+  border-radius: 10px;                           /* Bordi arrotondati */
 }
 
+/* SEZIONE 12.17: Scrollbar personalizzata - Hover del thumb */
 .tratte-list::-webkit-scrollbar-thumb:hover {
-  background: var(--turchese-scuro);
+  background: var(--turchese-scuro);              /* Sfondo turchese scuro al hover */
 }
 
+/* SEZIONE 12.18: Elemento singolo della tratta */
 .tratte-item {
-  padding: 1.2rem 1.5rem;
-  margin-bottom: 0.75rem;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  font-size: 1.05rem;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  cursor: pointer;
-  position: relative;
-  color: rgba(15, 23, 42, 0.95);
+  /* SEZIONE 12.18.1: Spaziatura e dimensioni */
+  padding: 1.2rem 1.5rem 1.2rem 2rem;              /* Padding interno con più spazio a sinistra */
+  margin-bottom: 0.75rem;                          /* Margine inferiore */
+  
+  /* SEZIONE 12.18.2: Sfondo glassmorphism */
+  background: rgba(255, 255, 255, 0.15);           /* Sfondo bianco trasparente */
+  backdrop-filter: blur(5px);                      /* Sfocatura del background */
+  -webkit-backdrop-filter: blur(5px);              /* Supporto WebKit */
+  
+  /* SEZIONE 12.18.3: Forma e bordi */
+  border-radius: 16px;                             /* Bordi arrotondati */
+  border: 1px solid rgba(255, 255, 255, 0.2);     /* Bordo bianco trasparente */
+  
+  /* SEZIONE 12.18.4: Transizioni e animazioni */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);  /* Transizione fluida con easing */
+  
+  /* SEZIONE 12.18.5: Tipografia */
+  font-size: 1.05rem;                              /* Dimensione font media */
+  font-weight: 500;                                /* Peso font medium */
+  color: rgba(15, 23, 42, 0.95);                  /* Colore scuro con 95% opacità */
+  
+  /* SEZIONE 12.18.6: Layout flexbox */
+  display: flex;                                   /* Layout flexbox */
+  align-items: center;                            /* Allineamento verticale centrale */
+  gap: 1rem;                                      /* Spazio tra gli elementi */
+  
+  /* SEZIONE 12.18.7: Interattività */
+  cursor: pointer;                                 /* Cursore pointer */
+  position: relative;                             /* Posizione relativa */
 }
 
-.tratte-item::before {
-  content: '📍';
-  font-size: 1.2rem;
-  transition: transform 0.3s ease;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+/* SEZIONE 12.19: Icona emoji della fermata */
+.tratte-icon {
+  font-size: 1.2rem;                              /* Dimensione font grande */
+  transition: transform 0.3s ease;                /* Transizione della trasformazione */
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));  /* Ombra dell'icona */
+  margin-right: 0.5rem;                           /* Spazio tra icona e numero */
+  margin-left: 0.5rem;                            /* Spazio a sinistra per spostare l'icona */
+  display: inline-block;                          /* Layout inline per controllo margini */
 }
 
-.tratte-item:hover::before {
-  transform: scale(1.3) rotate(10deg);
+/* SEZIONE 12.20: Animazione hover dell'icona */
+.tratte-item:hover .tratte-icon {
+  transform: scale(1.3) rotate(10deg);            /* Ingrandisce e ruota l'icona al hover */
+  color: inherit;                                  /* Mantiene il colore originale dell'icona */
+  text-shadow: none;                              /* Nessun contorno per l'icona */
 }
 
+/* SEZIONE 12.21: Effetto hover dell'elemento tratta */
 .tratte-item:hover {
-  background: rgba(23, 183, 177, 0.4);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  color: #ffffff;
-  transform: translateX(12px);
-  box-shadow: 0 8px 25px rgba(23, 183, 177, 0.5);
-  border-color: rgba(78, 205, 196, 0.6);
+  /* SEZIONE 12.21.1: Sfondo hover */
+  /* background: rgba(23, 183, 177, 0.4);             /* Sfondo turchese trasparente RIMOSSO */
+  background: rgba(248, 250, 252, 0.4);             /* Sfondo grigio chiaro elegante */
+  backdrop-filter: blur(15px);                     /* Sfocatura più forte */
+  -webkit-backdrop-filter: blur(15px);             /* Supporto WebKit */
+  
+  /* SEZIONE 12.21.2: Testo e colori */
+  color: #ffffff;                                  /* Testo bianco elegante */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8),      /* Contorno nero per leggibilità */
+               0 0 4px rgba(0, 0, 0, 0.6);        /* Contorno nero aggiuntivo */
+  
+  /* SEZIONE 12.21.3: Animazione e movimento */
+  /* transform: translateX(12px);                     /* Sposta a destra RIMOSSO */
+  
+  /* SEZIONE 12.21.4: Ombreggiatura */
+  /* box-shadow: 0 8px 25px rgba(23, 183, 177, 0.5); /* Ombra turchese RIMOSSA */
+  /* box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3); /* Ombra bianca RIMOSSA */
+  
+  /* SEZIONE 12.21.5: Bordi */
+  /* border-color: rgba(78, 205, 196, 0.6);          /* Bordo turchese più chiaro RIMOSSO */
+  border-color: rgba(255, 255, 255, 0.4);          /* Bordo bianco trasparente */
 }
 
+/* SEZIONE 12.22: Numero della fermata */
 .tratte-number {
-  background: rgba(23, 183, 177, 0.6);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  color: #ffffff;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 0.95rem;
-  flex-shrink: 0;
-  box-shadow: 0 4px 15px rgba(23, 183, 177, 0.4);
-  transition: all 0.3s ease;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  /* SEZIONE 12.22.1: Sfondo glassmorphism */
+  background: rgba(23, 183, 177, 0.6);             /* Sfondo turchese trasparente */
+  backdrop-filter: blur(10px);                     /* Sfocatura del background */
+  -webkit-backdrop-filter: blur(10px);             /* Supporto WebKit */
+  
+  /* SEZIONE 12.22.2: Tipografia */
+  color: #ffffff;                                  /* Testo bianco */
+  font-weight: 700;                                /* Peso font bold */
+  font-size: 0.95rem;                              /* Dimensione font media */
+  
+  /* SEZIONE 12.22.3: Forma circolare */
+  border-radius: 50%;                              /* Bordi completamente arrotondati */
+  width: 36px;                                     /* Larghezza */
+  height: 36px;                                    /* Altezza */
+  
+  /* SEZIONE 12.22.4: Layout flexbox */
+  display: inline-flex;                            /* Layout flexbox inline */
+  align-items: center;                            /* Allineamento verticale centrale */
+  justify-content: center;                        /* Allineamento orizzontale centrale */
+  flex-shrink: 0;                                  /* Non si rimpicciolisce */
+  
+  /* SEZIONE 12.22.5: Effetti visivi */
+  box-shadow: 0 4px 15px rgba(23, 183, 177, 0.4); /* Ombra turchese */
+  border: 1px solid rgba(255, 255, 255, 0.3);     /* Bordo bianco trasparente */
+  
+  /* SEZIONE 12.22.6: Transizioni */
+  transition: all 0.3s ease;                      /* Transizione fluida */
 }
 
+/* SEZIONE 12.23: Effetto hover del numero fermata */
 .tratte-item:hover .tratte-number {
-  background: rgba(255, 255, 255, 0.9);
-  color: var(--turchese);
-  transform: rotate(360deg);
-  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.9);           /* Sfondo bianco più opaco */
+  color: var(--turchese);                         /* Testo turchese */
+  text-shadow: none;                              /* Nessun contorno per il numero */
+  /* transform: rotate(360deg);                      /* Rotazione completa RIMOSSA */
+  /* box-shadow: 0 6px 20px rgba(255, 255, 255, 0.5); /* Ombra bianca RIMOSSA */
 }
 
+/* SEZIONE 12.23.1: Effetto hover del nome fermata */
+.tratte-item:hover .tratte-stop {
+  color: #ffffff;                                 /* Testo bianco elegante */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8),      /* Contorno nero per leggibilità */
+               0 0 4px rgba(0, 0, 0, 0.6);        /* Contorno nero aggiuntivo */
+}
+
+/* SEZIONE 12.24: Nome della fermata */
 .tratte-stop {
-  flex: 1;
-  font-size: 1.05rem;
-  font-weight: 500;
-  letter-spacing: 0.3px;
+  flex: 1;                                        /* Occupa tutto lo spazio rimanente */
+  font-size: 1.05rem;                            /* Dimensione font media */
+  font-weight: 500;                              /* Peso font medium */
+  letter-spacing: 0.3px;                        /* Spaziatura tra lettere */
 }
 
+/* SEZIONE 12.25: Elementi della lista tratte */
 .tratte-list li {
-  padding: 0.5rem 0;
-  border-bottom: 1px solid var(--bordo);
-  color: var(--testo-principale);
+  padding: 0.5rem 0;                             /* Padding verticale */
+  border-bottom: 1px solid var(--bordo);          /* Bordo inferiore */
+  color: var(--testo-principale);                /* Colore testo principale */
 }
 
+/* SEZIONE 12.26: Ultimo elemento lista - rimuove bordo */
 .tratte-list li:last-child {
-  border-bottom: none;
+  border-bottom: none;                           /* Nessun bordo inferiore */
 }
 
-/* Stato vuoto per tratte */
+/* SEZIONE 12.27: Stato vuoto per tratte */
 .tratte-list:empty::before {
-  content: 'Nessuna fermata disponibile';
-  display: block;
-  text-align: center;
-  padding: 2rem;
-  color: var(--testo-secondario);
-  font-style: italic;
+  content: 'Nessuna fermata disponibile';         /* Testo di stato vuoto */
+  display: block;                                /* Display a blocchi */
+  text-align: center;                            /* Testo centrato */
+  padding: 2rem;                                /* Padding interno */
+  color: var(--testo-secondario);                /* Colore testo secondario */
+  font-style: italic;                           /* Stile corsivo */
 }
 
+/* SEZIONE 12.28: Span del titolo card tratte */
 .tratte-card h3 span {
-  font-weight: 400;
-  font-size: 0.9rem;
-  color: var(--testo-secondario);
-  margin-left: 0.5rem;
+  font-weight: 400;                               /* Peso font normale */
+  font-size: 0.9rem;                              /* Dimensione font piccola */
+  color: var(--testo-secondario);                 /* Colore testo secondario */
+  margin-left: 0.5rem;                           /* Margine sinistro */
 }
 
-/* Indicatore caricamento per tratte */
+/* SEZIONE 12.29: Indicatore caricamento per tratte */
 .tratte-loading {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 3rem;
-  color: var(--turchese);
-  font-size: 1.1rem;
+  /* SEZIONE 12.29.1: Layout flexbox */
+  display: flex;                                  /* Layout flexbox */
+  justify-content: center;                        /* Centra orizzontalmente */
+  align-items: center;                           /* Centra verticalmente */
+  
+  /* SEZIONE 12.29.2: Spaziatura e tipografia */
+  padding: 3rem;                                 /* Padding interno */
+  color: var(--turchese);                        /* Colore turchese */
+  font-size: 1.1rem;                             /* Dimensione font grande */
 }
 
+/* SEZIONE 12.30: Icona caricamento animata */
 .tratte-loading::before {
-  content: '⏳';
-  font-size: 2rem;
-  margin-right: 1rem;
-  animation: spin 2s linear infinite;
+  content: '⏳';                                 /* Emoji clessidra */
+  font-size: 2rem;                               /* Dimensione font molto grande */
+  margin-right: 1rem;                           /* Margine destro */
+  animation: spin 2s linear infinite;            /* Animazione rotazione continua */
 }
 
+/* SEZIONE 12.31: Animazione rotazione */
 @keyframes spin {
   from {
-    transform: rotate(0deg);
+    transform: rotate(0deg);                     /* Rotazione iniziale */
   }
-
   to {
-    transform: rotate(360deg);
+    transform: rotate(360deg);                   /* Rotazione completa */
   }
 }
 
-/* Tabelle tariffe */
+/* SEZIONE 12.32: Tabelle tariffe */
 .tariffe-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
+  width: 100%;                                    /* Larghezza completa */
+  border-collapse: separate;                      /* Bordi delle celle separati per glassmorphism */
+  border-spacing: 0;                              /* Nessuno spazio tra celle */
+  margin-top: 1rem;                              /* Margine superiore */
+  border-radius: 12px;                           /* Bordi arrotondati */
+  overflow: hidden;                              /* Nasconde bordi interni */
+  background: var(--glass-bg);                   /* Sfondo glassmorphism */
+  backdrop-filter: var(--backdrop-blur);         /* Sfocatura del background */
+  -webkit-backdrop-filter: var(--backdrop-blur); /* Supporto WebKit */
+  border: 1px solid var(--glass-border);         /* Bordo glassmorphism */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);    /* Ombra per profondità */
 }
 
+/* SEZIONE 12.33: Celle delle tabelle tariffe */
 .tariffe-table th,
 .tariffe-table td {
-  padding: 0.75rem;
-  text-align: left;
-  border-bottom: 1px solid var(--bordo);
+  padding: 1rem;                                 /* Padding interno maggiore */
+  text-align: left;                              /* Testo allineato a sinistra */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);  /* Bordo inferiore sottile */
+  background: rgba(255, 255, 255, 0.05);         /* Sfondo trasparente per glassmorphism */
+  transition: all 0.3s ease;                     /* Transizione fluida */
 }
 
+/* SEZIONE 12.34: Intestazioni tabelle tariffe */
 .tariffe-table th {
-  background-color: var(--grigio-chiaro);
-  font-weight: 600;
-  color: var(--testo-principale);
+  background: rgba(23, 183, 177, 0.6);           /* Sfondo turchese trasparente */
+  backdrop-filter: blur(10px);                   /* Sfocatura del background */
+  -webkit-backdrop-filter: blur(10px);           /* Supporto WebKit */
+  font-weight: 700;                              /* Peso font bold */
+  color: #ffffff;                                /* Testo bianco */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);   /* Ombra testo per leggibilità */
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);  /* Bordo inferiore più marcato */
 }
 
+/* SEZIONE 12.35: Effetto hover righe tabelle */
 .tariffe-table tr:hover {
-  background-color: var(--grigio-chiaro);
+  background: rgba(248, 250, 252, 0.4);          /* Sfondo grigio chiaro elegante al hover */
+  backdrop-filter: blur(15px);                   /* Sfocatura più forte al hover */
+  -webkit-backdrop-filter: blur(15px);           /* Supporto WebKit */
+  transform: translateY(-1px);                   /* Leggero sollevamento */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);   /* Ombra al hover */
 }
 
-/* Footer - Glassmorphism */
+/* SEZIONE 12.35.1: Effetto hover celle */
+.tariffe-table tr:hover td {
+  color: #1e293b;                                /* Testo scuro al hover per leggibilità */
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);  /* Ombra bianca per contrasto */
+}
+
+/* SEZIONE 12.36: Tabelle tariffe in dark mode */
+.dark .tariffe-table {
+  background: rgba(30, 41, 59, 0.6);             /* Sfondo scuro trasparente */
+  border-color: rgba(148, 163, 184, 0.2);        /* Bordo grigio chiaro trasparente */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);   /* Ombra scura */
+}
+
+.dark .tariffe-table th,
+.dark .tariffe-table td {
+  background: rgba(30, 41, 59, 0.3);             /* Sfondo scuro trasparente */
+  color: rgba(248, 250, 252, 0.95);              /* Testo chiaro */
+  border-bottom-color: rgba(255, 255, 255, 0.1); /* Bordo inferiore bianco trasparente */
+}
+
+.dark .tariffe-table th {
+  background: rgba(23, 183, 177, 0.7);           /* Sfondo turchese più opaco */
+  color: #ffffff;                                /* Testo bianco */
+}
+
+.dark .tariffe-table tr:hover {
+  background: rgba(255, 255, 255, 0.1);          /* Sfondo bianco trasparente al hover */
+}
+
+.dark .tariffe-table tr:hover td {
+  color: #ffffff;                                /* Testo bianco al hover */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);   /* Ombra scura per contrasto */
+}
+
+/* ========================================
+   SEZIONE 13: FOOTER - GLASSMORPHISM
+   ======================================== */
+/* SEZIONE 13.1: Footer principale */
 .footer {
-  text-align: center;
-  padding: 0.5rem 0;
-  color: rgba(15, 23, 42, 0.85);
-  font-size: 0.85rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  margin-top: 0;
-  position: relative;
-  z-index: 10;
-  font-weight: 500;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  /* SEZIONE 13.1.1: Layout e tipografia */
+  text-align: center;                             /* Testo centrato */
+  padding: 0.5rem 0;                             /* Padding verticale */
+  color: rgba(15, 23, 42, 0.85);                /* Colore scuro con 85% opacità */
+  font-size: 0.85rem;                            /* Dimensione font piccola */
+  font-weight: 500;                              /* Peso font medium */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);    /* Ombra testo leggera */
+  
+  /* SEZIONE 13.1.2: Sfondo glassmorphism */
+  background: rgba(248, 250, 252, 0.1);          /* Sfondo grigio chiaro trasparente più a tema */
+  backdrop-filter: blur(10px);                   /* Sfocatura del background */
+  -webkit-backdrop-filter: blur(10px);           /* Supporto WebKit */
+  
+  /* SEZIONE 13.1.3: Bordi e separatori */
+  border-top: 1px solid rgba(15, 23, 42, 0.15);  /* Bordo superiore in linea con il tema */
+  
+  /* SEZIONE 13.1.4: Posizionamento */
+  margin-top: 0;                                 /* Nessun margine superiore */
+  position: relative;                            /* Posizione relativa */
+  z-index: 10;                                   /* Sopra altri elementi */
 }
 
-/* Footer sticky solo per pagine tratte */
+/* SEZIONE 13.2: Footer sticky solo per pagine tratte */
 .tratte-page .footer {
-  margin-top: auto;
+  margin-top: auto;                              /* Spinge il footer in basso */
 }
 
-/* Footer in dark mode */
+/* SEZIONE 13.3: Footer in modalità scura */
 .dark .footer {
-  color: rgba(248, 250, 252, 0.95);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-  border-top-color: rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.03);
+  color: rgba(248, 250, 252, 0.95);             /* Testo chiaro con 95% opacità */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);    /* Ombra testo più forte */
+  border-top-color: rgba(255, 255, 255, 0.1);    /* Bordo superiore chiaro */
+  background: rgba(255, 255, 255, 0.03);         /* Sfondo ancora più trasparente */
 }
 
-/* Animazioni aggiuntive per le card tratte */
+/* ========================================
+   SEZIONE 14: ANIMAZIONI AGGIUNTIVE
+   ======================================== */
+/* SEZIONE 14.1: Animazione slideInUp - Entrata dal basso */
 @keyframes slideInUp {
   from {
-    opacity: 0;
-    transform: translateY(30px);
+    opacity: 0;                                   /* Inizia trasparente */
+    transform: translateY(30px);                  /* Inizia 30px più in basso */
   }
-
   to {
-    opacity: 1;
-    transform: translateY(0);
+    opacity: 1;                                   /* Diventa opaco */
+    transform: translateY(0);                     /* Ritorna alla posizione normale */
   }
 }
 
+/* SEZIONE 14.2: Animazione fadeInScale - Entrata con scala */
 @keyframes fadeInScale {
   from {
-    opacity: 0;
-    transform: scale(0.95);
+    opacity: 0;                                   /* Inizia trasparente */
+    transform: scale(0.95);                       /* Inizia leggermente più piccolo */
   }
-
   to {
-    opacity: 1;
-    transform: scale(1);
+    opacity: 1;                                   /* Diventa opaco */
+    transform: scale(1);                          /* Ritorna alla scala normale */
   }
 }
 
+/* SEZIONE 14.3: Animazione prima card tratta */
 .tratte-card:nth-child(1) {
-  animation: slideInUp 0.6s ease-out;
+  animation: slideInUp 0.6s ease-out;            /* Animazione slideInUp senza delay */
 }
 
+/* SEZIONE 14.4: Animazione seconda card tratta */
 .tratte-card:nth-child(2) {
-  animation: slideInUp 0.6s ease-out 0.1s backwards;
+  animation: slideInUp 0.6s ease-out 0.1s backwards;  /* Animazione con delay 0.1s */
 }
 
+/* SEZIONE 14.5: Animazione base elementi tratta */
 .tratte-item {
-  animation: fadeInScale 0.4s ease-out backwards;
+  animation: fadeInScale 0.4s ease-out backwards;  /* Animazione fadeInScale per tutti */
 }
 
-.tratte-item:nth-child(1) {
-  animation-delay: 0.05s;
-}
+/* SEZIONE 14.6: Delay progressivi per elementi tratta (effetto cascata) */
+.tratte-item:nth-child(1) { animation-delay: 0.05s; }  /* Primo elemento */
+.tratte-item:nth-child(2) { animation-delay: 0.1s; }   /* Secondo elemento */
+.tratte-item:nth-child(3) { animation-delay: 0.15s; }  /* Terzo elemento */
+.tratte-item:nth-child(4) { animation-delay: 0.2s; }   /* Quarto elemento */
+.tratte-item:nth-child(5) { animation-delay: 0.25s; }  /* Quinto elemento */
+.tratte-item:nth-child(6) { animation-delay: 0.3s; }   /* Sesto elemento */
+.tratte-item:nth-child(7) { animation-delay: 0.35s; }  /* Settimo elemento */
+.tratte-item:nth-child(8) { animation-delay: 0.4s; }   /* Ottavo elemento */
 
-.tratte-item:nth-child(2) {
-  animation-delay: 0.1s;
-}
+/* ========================================
+   SEZIONE 15: RESPONSIVE DESIGN - MEDIA QUERIES
+   ======================================== */
 
-.tratte-item:nth-child(3) {
-  animation-delay: 0.15s;
-}
-
-.tratte-item:nth-child(4) {
-  animation-delay: 0.2s;
-}
-
-.tratte-item:nth-child(5) {
-  animation-delay: 0.25s;
-}
-
-.tratte-item:nth-child(6) {
-  animation-delay: 0.3s;
-}
-
-.tratte-item:nth-child(7) {
-  animation-delay: 0.35s;
-}
-
-.tratte-item:nth-child(8) {
-  animation-delay: 0.4s;
-}
-
-/* Responsive */
-
-/* Tablet */
+/* SEZIONE 15.1: Tablet (max-width: 1024px) */
 @media (max-width: 1024px) {
+  /* Container principale */
   .container {
-    padding: 0 1rem;
+    padding: 0 1rem;                              /* Padding laterale ridotto */
   }
 
+  /* Card principale */
   .main-card {
-    max-width: 100%;
+    max-width: 100%;                              /* Larghezza massima completa */
   }
 
+  /* Valore prezzo ridotto */
   .price-value {
-    font-size: 2.5rem;
+    font-size: 2.5rem;                            /* Dimensione font ridotta */
+  }
+
+  /* Card prezzo più stretta per tablet */
+  .price-result {
+    max-width: 400px;                             /* Larghezza massima ridotta */
+    margin-left: auto;                            /* Centra orizzontalmente */
+    margin-right: auto;                           /* Centra orizzontalmente */
   }
 }
 
-/* Tablet Portrait */
+/* SEZIONE 15.2: Tablet Portrait (max-width: 768px) */
 @media (max-width: 768px) {
+  /* Navigazione navbar */
   .navbar-nav {
-    gap: 1rem;
+    gap: 1rem;                                    /* Spazio tra link ridotto */
   }
 
   .navbar-title {
-    font-size: 1.2rem;
+    font-size: 1.2rem;                            /* Titolo navbar ridotto */
   }
 
+  /* Card principale */
   .main-card {
-    margin: 0.5rem;
-    padding: 1.25rem;
+    margin: 0.5rem;                              /* Margine ridotto */
+    padding: 1.25rem;                            /* Padding ridotto */
   }
 
+  /* Titolo card */
   .card-title h1 {
-    font-size: 1.5rem;
+    font-size: 1.5rem;                           /* Titolo ridotto */
   }
 
+  /* Riga route - layout verticale */
   .route-row {
-    flex-direction: column;
-    gap: 0.5rem;
+    flex-direction: column;                      /* Layout verticale */
+    gap: 0.5rem;                                /* Spazio ridotto */
   }
 
   .route-icon {
-    align-self: center;
+    align-self: center;                          /* Centra l'icona */
   }
 
+  /* Griglia tratte - una colonna */
   .tratte-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-    padding: 0 0.5rem;
+    grid-template-columns: 1fr;                  /* Una sola colonna */
+    gap: 1.5rem;                                /* Spazio ridotto */
+    padding: 0 0.5rem;                          /* Padding ridotto */
   }
 
+  /* Card tratte */
   .tratte-card {
-    padding: 1.75rem;
-    border-radius: 16px;
+    padding: 1.75rem;                            /* Padding ridotto */
+    border-radius: 16px;                         /* Bordi meno arrotondati */
   }
 
   .tratte-card h3 {
-    font-size: 1.5rem;
+    font-size: 1.5rem;                           /* Titolo card ridotto */
   }
 
+  /* Elementi tratta */
   .tratte-item {
-    padding: 1rem 1.25rem;
-    font-size: 1rem;
+    padding: 1rem 1.25rem 1rem 1.75rem;         /* Padding ridotto con più spazio a sinistra */
+    font-size: 1rem;                             /* Font ridotto */
   }
 
   .tratte-number {
-    width: 34px;
-    height: 34px;
-    font-size: 0.9rem;
+    width: 34px;                                 /* Dimensione ridotta */
+    height: 34px;                                /* Dimensione ridotta */
+    font-size: 0.9rem;                           /* Font ridotto */
   }
 
   .tratte-list {
-    max-height: 500px;
+    max-height: 500px;                           /* Altezza ridotta */
   }
 
+  /* Valore prezzo */
   .price-value {
-    font-size: 2rem;
+    font-size: 2rem;                             /* Font ridotto */
   }
 
+  /* Pulsante calcola */
   .calculate-btn {
-    padding: 0.875rem 1.5rem;
-    font-size: 1rem;
+    padding: 0.875rem 1.5rem;                   /* Padding ridotto */
+    font-size: 1rem;                             /* Font ridotto */
   }
 }
 
-/* Mobile */
+/* SEZIONE 15.3: Mobile (max-width: 480px) */
 @media (max-width: 480px) {
+  /* Container principale */
   .container {
-    padding: 0 15px;
+    padding: 0 15px;                              /* Padding laterale minimo */
   }
 
+  /* Navbar mobile */
   .navbar {
-    padding: 0.75rem 0;
+    padding: 0.75rem 0;                          /* Padding verticale ridotto */
   }
 
   .navbar-brand {
-    gap: 8px;
+    gap: 8px;                                    /* Spazio tra logo e titolo ridotto */
   }
 
+  /* Badge BETA ridotto */
   .beta-badge {
-    font-size: 0.55rem;
-    padding: 0.2rem 0.5rem;
-    margin-left: 0.3rem;
+    font-size: 0.55rem;                          /* Font molto piccolo */
+    padding: 0.2rem 0.5rem;                     /* Padding ridotto */
+    margin-left: 0.3rem;                        /* Margine ridotto */
   }
 
   .navbar-logo {
-    width: 32px;
-    height: 32px;
+    width: 32px;                                 /* Logo più piccolo */
+    height: 32px;                                /* Logo più piccolo */
   }
 
   .navbar-title {
-    font-size: 1.1rem;
+    font-size: 1.1rem;                           /* Titolo ridotto */
   }
 
+  /* Card principale mobile */
   .main-card {
-    margin: 0.25rem;
-    padding: 1rem;
+    margin: 0.25rem;                            /* Margine minimo */
+    padding: 1rem;                              /* Padding ridotto */
   }
 
+  /* Titoli mobile */
   .card-title h1 {
-    font-size: 1.25rem;
+    font-size: 1.25rem;                         /* Titolo ridotto */
   }
 
   .card-title p {
-    font-size: 0.9rem;
+    font-size: 0.9rem;                          /* Sottotitolo ridotto */
   }
 
+  /* Valore prezzo mobile */
   .price-value {
-    font-size: 1.75rem;
+    font-size: 1.75rem;                         /* Font molto ridotto */
   }
 
+  /* Card prezzo più stretta per mobile */
+  .price-result {
+    max-width: 320px;                           /* Larghezza massima ancora più ridotta per mobile */
+    margin-left: auto;                          /* Centra orizzontalmente */
+    margin-right: auto;                         /* Centra orizzontalmente */
+  }
+
+  /* Pulsante calcola mobile */
   .calculate-btn {
-    padding: 0.75rem 1rem;
-    font-size: 0.95rem;
+    padding: 0.75rem 1rem;                      /* Padding ridotto */
+    font-size: 0.95rem;                         /* Font ridotto */
   }
 
+  /* Form select mobile */
   .form-select {
-    padding: 0.625rem 0.875rem;
-    font-size: 0.9rem;
+    padding: 0.625rem 0.875rem;                 /* Padding ridotto */
+    font-size: 0.9rem;                          /* Font ridotto */
   }
 
+  /* Icona route mobile */
   .route-icon {
-    width: 35px;
-    height: 35px;
-    font-size: 1rem;
+    width: 35px;                                /* Dimensione ridotta */
+    height: 35px;                               /* Dimensione ridotta */
+    font-size: 1rem;                            /* Font ridotto */
   }
 
+  /* Titolo pagina mobile */
   .page-title {
-    font-size: 1.5rem;
+    font-size: 1.5rem;                          /* Font ridotto */
   }
 
+  /* Griglia tratte mobile */
   .tratte-grid {
-    gap: 1rem;
-    padding: 0;
+    gap: 1rem;                                  /* Spazio ridotto */
+    padding: 0;                                 /* Nessun padding */
   }
 
+  /* Card tratte mobile */
   .tratte-card {
-    padding: 1.25rem;
-    border-radius: 12px;
+    padding: 1.25rem;                           /* Padding ridotto */
+    border-radius: 12px;                        /* Bordi meno arrotondati */
   }
 
   .tratte-card h3 {
-    font-size: 1.3rem;
-    padding-bottom: 0.75rem;
+    font-size: 1.3rem;                          /* Titolo ridotto */
+    padding-bottom: 0.75rem;                    /* Padding inferiore ridotto */
   }
 
+  /* Elementi tratta mobile */
   .tratte-item {
-    padding: 0.875rem 1rem;
-    font-size: 0.95rem;
-    margin-bottom: 0.5rem;
+    padding: 0.875rem 1rem 0.875rem 1.5rem;     /* Padding ridotto con più spazio a sinistra */
+    font-size: 0.95rem;                         /* Font ridotto */
+    margin-bottom: 0.5rem;                      /* Margine ridotto */
   }
 
   .tratte-number {
-    width: 30px;
-    height: 30px;
-    font-size: 0.85rem;
+    width: 30px;                                /* Dimensione molto ridotta */
+    height: 30px;                               /* Dimensione molto ridotta */
+    font-size: 0.85rem;                         /* Font ridotto */
   }
 
   .tratte-stop {
-    font-size: 0.95rem;
+    font-size: 0.95rem;                         /* Font ridotto */
   }
 
   .tratte-list {
-    max-height: 400px;
+    max-height: 400px;                          /* Altezza ridotta */
   }
 
+  /* Utility classes mobile */
   .h-64 {
-    height: 12rem;
+    height: 12rem;                              /* Altezza ridotta */
   }
 
+  /* Immagine benvenuto mobile */
   .welcome-image {
-    height: 190px;
-    max-width: 360px;
+    height: 190px;                              /* Altezza ridotta */
+    max-width: 360px;                           /* Larghezza massima ridotta */
   }
 }
 
-/* Extra Small Mobile */
+/* SEZIONE 15.4: Extra Small Mobile (max-width: 360px) */
 @media (max-width: 360px) {
+  /* Container extra piccolo */
   .container {
-    padding: 0 10px;
+    padding: 0 10px;                              /* Padding laterale minimo */
   }
 
+  /* Navigazione navbar extra piccola */
   .navbar-nav {
-    gap: 0.5rem;
+    gap: 0.5rem;                                 /* Spazio tra link molto ridotto */
   }
 
   .nav-link {
-    padding: 0.375rem 0.75rem;
-    font-size: 0.9rem;
+    padding: 0.375rem 0.75rem;                   /* Padding link ridotto */
+    font-size: 0.9rem;                           /* Font link ridotto */
   }
-
 }
 
-/* Extra Small Mobile - Navbar ultra compatta */
+/* SEZIONE 15.5: Extra Small Mobile - Navbar ultra compatta (max-width: 400px) */
 @media (max-width: 400px) {
+  /* Navbar ultra compatta */
   .navbar {
-    padding: 0.5rem 0;
+    padding: 0.5rem 0;                          /* Padding verticale minimo */
   }
 
   .navbar-brand {
-    gap: 6px;
+    gap: 6px;                                    /* Spazio tra logo e titolo minimo */
   }
 
   .navbar-title {
-    font-size: 0.9rem;
+    font-size: 0.9rem;                           /* Titolo molto piccolo */
   }
 
+  /* Badge BETA ultra piccolo */
   .beta-badge {
-    font-size: 0.45rem;
-    padding: 0.1rem 0.3rem;
-    margin-left: 0.2rem;
+    font-size: 0.45rem;                          /* Font ultra piccolo */
+    padding: 0.1rem 0.3rem;                     /* Padding minimo */
+    margin-left: 0.2rem;                        /* Margine minimo */
   }
 
+  /* Navigazione ultra compatta */
   .navbar-nav {
-    gap: 0.2rem;
+    gap: 0.2rem;                                /* Spazio tra link minimo */
   }
 
   .nav-link {
-    padding: 0.2rem 0.4rem;
-    font-size: 0.7rem;
-    font-weight: 500;
+    padding: 0.2rem 0.4rem;                     /* Padding link minimo */
+    font-size: 0.7rem;                          /* Font link molto piccolo */
+    font-weight: 500;                           /* Peso font ridotto */
   }
 
+  /* Toggle modalità scura ultra piccolo */
   .dark-mode-toggle {
-    padding: 0.2rem;
-    font-size: 0.7rem;
+    padding: 0.2rem;                            /* Padding minimo */
+    font-size: 0.7rem;                          /* Font molto piccolo */
   }
 
   .dark-mode-toggle span {
-    font-size: 0.8rem;
+    font-size: 0.8rem;                          /* Font icona piccolo */
   }
 
+  /* Immagine benvenuto ultra piccola */
   .welcome-image {
-    height: 140px;
-    max-width: 280px;
+    height: 140px;                              /* Altezza molto ridotta */
+    max-width: 280px;                           /* Larghezza massima molto ridotta */
   }
 }
 
-/* Schermi estremamente piccoli - Navbar minima */
+/* SEZIONE 15.6: Schermi estremamente piccoli - Navbar minima (max-width: 320px) */
 @media (max-width: 320px) {
+  /* Container estremamente piccolo */
   .container {
-    padding: 0 5px;
+    padding: 0 5px;                               /* Padding laterale ultra minimo */
   }
 
+  /* Brand navbar minima */
   .navbar-brand {
-    gap: 4px;
+    gap: 4px;                                     /* Spazio tra logo e titolo ultra minimo */
   }
 
   .navbar-logo {
-    width: 24px;
-    height: 24px;
+    width: 24px;                                  /* Logo ultra piccolo */
+    height: 24px;                                 /* Logo ultra piccolo */
   }
 
   .navbar-title {
-    font-size: 0.8rem;
+    font-size: 0.8rem;                            /* Titolo ultra piccolo */
   }
 
+  /* Badge BETA nascosto */
   .beta-badge {
-    display: none; /* Nascondi su schermi molto piccoli */
+    display: none;                                /* Nascondi su schermi molto piccoli */
   }
 
+  /* Navigazione ultra minima */
   .navbar-nav {
-    gap: 0.1rem;
+    gap: 0.1rem;                                 /* Spazio tra link ultra minimo */
   }
 
   .nav-link {
-    padding: 0.15rem 0.3rem;
-    font-size: 0.65rem;
+    padding: 0.15rem 0.3rem;                     /* Padding link ultra minimo */
+    font-size: 0.65rem;                          /* Font link ultra piccolo */
   }
 
+  /* Toggle modalità scura ultra piccolo */
   .dark-mode-toggle {
-    padding: 0.15rem;
-    font-size: 0.65rem;
+    padding: 0.15rem;                            /* Padding ultra minimo */
+    font-size: 0.65rem;                          /* Font ultra piccolo */
   }
 
+  /* Immagine benvenuto ultra piccola */
   .welcome-image {
-    height: 120px;
-    max-width: 220px;
+    height: 120px;                               /* Altezza ultra ridotta */
+    max-width: 220px;                            /* Larghezza massima ultra ridotta */
   }
 }
 
-/* Utility classes */
+/* ========================================
+   SEZIONE 16: UTILITY CLASSES
+   ======================================== */
 
-/* Utility classes */
+/* SEZIONE 16.1: Utility classes di testo */
 .text-center {
-  text-align: center;
+  text-align: center;                            /* Allineamento testo centrale */
 }
 
+/* SEZIONE 16.2: Utility classes di dimensioni */
 .w-full {
-  width: 100%;
+  width: 100%;                                   /* Larghezza completa */
 }
 
 .h-64 {
-  height: 16rem;
+  height: 16rem;                                 /* Altezza fissa 16rem */
 }
 
+/* SEZIONE 16.3: Utility classes di oggetti */
 .object-cover {
-  object-fit: cover;
+  object-fit: cover;                             /* Adatta oggetto mantenendo proporzioni */
 }
 
 .rounded-xl {
-  border-radius: 0.75rem;
+  border-radius: 0.75rem;                        /* Bordi arrotondati grandi */
 }
 
+/* SEZIONE 16.4: Utility classes di margini bottom */
 .mb-1 {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.5rem;                         /* Margine inferiore piccolo */
 }
 
 .mb-2 {
-  margin-bottom: 1rem;
+  margin-bottom: 1rem;                           /* Margine inferiore medio */
 }
 
 .mb-3 {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.5rem;                         /* Margine inferiore grande */
 }
 
 .mb-4 {
-  margin-bottom: 2rem;
+  margin-bottom: 2rem;                           /* Margine inferiore molto grande */
 }
 
+/* SEZIONE 16.5: Utility classes di margini top */
 .mt-1 {
-  margin-top: 0.5rem;
+  margin-top: 0.5rem;                            /* Margine superiore piccolo */
 }
 
 .mt-2 {
-  margin-top: 1rem;
+  margin-top: 1rem;                              /* Margine superiore medio */
 }
 
 .mt-3 {
-  margin-top: 1.5rem;
+  margin-top: 1.5rem;                            /* Margine superiore grande */
 }
 
 .mt-4 {
-  margin-top: 2rem;
+  margin-top: 2rem;                              /* Margine superiore molto grande */
 }
 
+/* SEZIONE 16.6: Utility classes di display */
 .hidden {
-  display: none;
+  display: none;                                 /* Nasconde elemento */
 }
 
 .flex {
-  display: flex;
+  display: flex;                                 /* Display flexbox */
 }
 
+/* SEZIONE 16.7: Utility classes di allineamento flexbox */
 .items-center {
-  align-items: center;
+  align-items: center;                           /* Allineamento verticale centrale */
 }
 
 .justify-center {
-  justify-content: center;
+  justify-content: center;                       /* Allineamento orizzontale centrale */
 }
 
+/* SEZIONE 16.8: Utility classes di gap */
 .gap-2 {
-  gap: 0.5rem;
+  gap: 0.5rem;                                   /* Spazio tra elementi piccolo */
 }
 
 .gap-4 {
-  gap: 1rem;
+  gap: 1rem;                                     /* Spazio tra elementi grande */
 }
 
-/* Immagine di benvenuto ottimizzata */
+/* SEZIONE 16.9: Immagine di benvenuto ottimizzata */
 .welcome-image-container {
-  text-align: center;
-  margin-bottom: 2rem;
-  padding: 0;
+  text-align: center;                            /* Centra il contenuto */
+  margin-bottom: 2rem;                          /* Margine inferiore */
+  padding: 0;                                   /* Nessun padding */
 }
 
 .welcome-image {
-  width: 100%;
-  height: 240px;
-  max-width: 450px;
-  object-fit: cover;
-  object-position: center;
-  border-radius: 0.75rem;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  width: 100%;                                  /* Larghezza completa */
+  height: 240px;                                /* Altezza fissa */
+  max-width: 450px;                             /* Larghezza massima */
+  object-fit: cover;                            /* Adatta mantenendo proporzioni */
+  object-position: center;                      /* Posiziona al centro */
+  border-radius: 0.75rem;                       /* Bordi arrotondati */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);   /* Ombra leggera */
 }
 
-/* Animazioni */
+/* ========================================
+   SEZIONE 17: ANIMAZIONI FINALI
+   ======================================== */
+/* SEZIONE 17.1: Animazione fadeIn */
 @keyframes fadeIn {
   from {
-    opacity: 0;
-    transform: translateY(20px);
+    opacity: 0;                                 /* Inizia trasparente */
+    transform: translateY(20px);                 /* Inizia 20px più in basso */
   }
-
   to {
-    opacity: 1;
-    transform: translateY(0);
+    opacity: 1;                                 /* Diventa opaco */
+    transform: translateY(0);                   /* Ritorna alla posizione normale */
   }
 }
 
+/* SEZIONE 17.2: Classe fade-in */
 .fade-in {
-  animation: fadeIn 0.5s ease-out;
+  animation: fadeIn 0.5s ease-out;              /* Applica animazione fadeIn */
 }
 
-/* Contenitore selettore linea e ricerca */
+/* SEZIONE 17.3: Contenitore selettore linea e ricerca */
 .line-search-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  width: 100%;
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
+  display: flex;                                 /* Layout flexbox */
+  flex-direction: column;                       /* Direzione verticale */
+  align-items: center;                          /* Centra verticalmente */
+  gap: 1rem;                                   /* Spazio tra elementi */
+  margin-bottom: 2rem;                         /* Margine inferiore */
+  width: 100%;                                 /* Larghezza completa */
+  max-width: 1200px;                           /* Larghezza massima */
+  margin-left: auto;                           /* Margine sinistro automatico */
+  margin-right: auto;                          /* Margine destro automatico */
 }
 
+/* SEZIONE 17.4: Media query per schermi grandi - layout orizzontale */
 @media (min-width: 1200px) {
   .line-search-container {
-    flex-direction: row;
-    justify-content: center;
-    gap: 2rem;
+    flex-direction: row;                        /* Direzione orizzontale */
+    justify-content: center;                    /* Centra orizzontalmente */
+    gap: 2rem;                                 /* Spazio maggiore */
   }
 
   .line-selector-container,
   .search-container {
-    flex: 1;
-    max-width: 450px;
+    flex: 1;                                   /* Occupa spazio disponibile */
+    max-width: 450px;                          /* Larghezza massima */
   }
 }
 
+/* SEZIONE 17.5: Dimensioni contenitori selettore e ricerca */
 .line-selector-container,
 .search-container {
-  width: 100%;
-  max-width: 600px;
+  width: 100%;                                 /* Larghezza completa */
+  max-width: 600px;                            /* Larghezza massima */
 }
 
+/* SEZIONE 17.6: Media query per schermi grandi - container tratte */
 @media (min-width: 1200px) {
+  /* Container griglia tratte */
   #tratte-grid-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
-    max-width: 1800px;
-    margin: 2rem auto;
-    width: 100%;
+    display: grid;                               /* Layout a griglia */
+    grid-template-columns: 1fr 1fr;             /* Due colonne uguali */
+    gap: 3rem;                                  /* Spazio tra le colonne */
+    max-width: 1800px;                          /* Larghezza massima */
+    margin: 2rem auto;                          /* Margine verticale e centratura */
+    width: 100%;                                /* Larghezza completa */
   }
 
+  /* Card tratte dentro il container */
   #tratte-grid-container .tratte-card {
-    width: 100%;
-
-    margin-bottom: 0;
-    max-width: none;
+    width: 100%;                                /* Larghezza completa */
+    margin-bottom: 0;                           /* Nessun margine inferiore */
+    max-width: none;                            /* Nessuna larghezza massima */
   }
 
+  /* Elementi tratta ottimizzati per desktop */
   .tratte-item {
-    padding: 1.2rem 1.5rem;
-    margin-bottom: 1rem;
-    border-radius: 12px;
-    background-color: var(--bianco);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    font-size: 1.1rem;
-    font-weight: 500;
+    padding: 1.2rem 1.5rem 1.2rem 2rem;         /* Padding interno con più spazio a sinistra */
+    margin-bottom: 1rem;                        /* Margine inferiore */
+    border-radius: 12px;                        /* Bordi arrotondati */
+    background-color: var(--bianco);            /* Sfondo bianco */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* Ombra leggera */
+    transition: all 0.3s ease;                 /* Transizione fluida */
+    display: flex;                              /* Layout flexbox */
+    align-items: center;                        /* Allineamento verticale centrale */
+    font-size: 1.1rem;                          /* Dimensione font grande */
+    font-weight: 500;                           /* Peso font medium */
   }
 
+  /* Effetto hover elementi tratta desktop */
   .tratte-item:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-    background-color: var(--turchese);
-    color: var(--bianco);
+    /* transform: translateY(-3px);                /* Solleva l'elemento RIMOSSO */
+    /* box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* Ombra più forte RIMOSSA */
+    /* background-color: var(--turchese);          /* Sfondo turchese RIMOSSO */
+    background-color: rgba(248, 250, 252, 0.4); /* Sfondo grigio chiaro elegante */
+    color: #ffffff;                             /* Testo bianco elegante */
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8),  /* Contorno nero per leggibilità */
+                 0 0 4px rgba(0, 0, 0, 0.6);    /* Contorno nero aggiuntivo */
   }
 
+  /* Elementi tratta in modalità scura */
   .dark .tratte-item {
-    background: rgba(30, 41, 59, 0.6);
-    color: rgba(248, 250, 252, 0.95);
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    background: rgba(30, 41, 59, 0.6);         /* Sfondo scuro trasparente */
+    color: rgba(248, 250, 252, 0.95);          /* Testo chiaro */
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5); /* Ombra testo per leggibilità */
   }
 
+  /* Effetto hover elementi tratta in modalità scura */
   .dark .tratte-item:hover {
-    background: rgba(23, 183, 177, 0.4);
-    color: #ffffff;
+    /* background: rgba(23, 183, 177, 0.4);       /* Sfondo turchese trasparente RIMOSSO */
+    background: rgba(255, 255, 255, 0.1);       /* Sfondo bianco trasparente */
+    color: #ffffff;                             /* Testo bianco */
   }
 }
 
-/* Media query per schermi molto grandi */
+/* SEZIONE 17.7: Media query per schermi molto grandi (min-width: 1400px) */
 @media (min-width: 1400px) {
+  /* Card principale per schermi molto grandi */
   .main-card {
-    width: 90% !important;
-    max-width: 950px !important;
-    padding: 2.5rem;
-    margin: 0.25rem auto !important;
+    width: 90% !important;                      /* Larghezza 90% */
+    max-width: 950px !important;                /* Larghezza massima 950px */
+    padding: 2.5rem;                           /* Padding maggiore */
+    margin: 0.25rem auto !important;           /* Margine centrato */
   }
   
+  /* Card per pagine non-tratte */
   body:not(.tratte-page) .main-card {
-    max-width: 900px !important;
-    padding: 3rem;
+    max-width: 900px !important;                /* Larghezza massima 900px */
+    padding: 3rem;                             /* Padding massimo */
   }
 
+  /* Container principale */
   .main-content>.container {
-    max-width: 1800px !important;
-    padding: 0 1rem;
+    max-width: 1800px !important;               /* Larghezza massima container */
+    padding: 0 1rem;                           /* Padding laterale */
   }
 }
 
+/* SEZIONE 17.8: Media query per schermi ultra grandi (min-width: 1920px) */
 @media (min-width: 1920px) {
+  /* Card principale per schermi ultra grandi */
   .main-card {
-    width: 75% !important;
-    max-width: 1000px !important;
-    padding: 2.5rem;
-    margin: 0.25rem auto !important;
+    width: 75% !important;                      /* Larghezza 75% */
+    max-width: 1000px !important;               /* Larghezza massima 1000px */
+    padding: 2.5rem;                           /* Padding standard */
+    margin: 0.25rem auto !important;           /* Margine centrato */
   }
   
+  /* Card per pagine non-tratte */
   body:not(.tratte-page) .main-card {
-    max-width: 950px !important;
-    padding: 3.5rem;
+    max-width: 950px !important;                /* Larghezza massima 950px */
+    padding: 3.5rem;                           /* Padding massimo */
   }
 
+  /* Container principale */
   .main-content>.container {
-    max-width: 1900px !important;
-    padding: 0 1.5rem;
+    max-width: 1900px !important;               /* Larghezza massima container */
+    padding: 0 1.5rem;                         /* Padding laterale maggiore */
   }
 }

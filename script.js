@@ -46,6 +46,17 @@ function updateBodyColors(isDark) {
 function toggleDark() {
   const isDark = !document.documentElement.classList.contains('dark');
   setDarkMode(isDark);
+  
+  // Aggiorna l'icona del toggle
+  updateToggleIcon(isDark);
+}
+
+// Funzione per aggiornare l'icona del toggle
+function updateToggleIcon(isDark) {
+  const toggleIcon = darkModeToggle.querySelector('span');
+  if (toggleIcon) {
+    toggleIcon.textContent = isDark ? '☀️' : '🌙';
+  }
 }
 
 
@@ -214,7 +225,9 @@ async function loadData() {
   // Ripristina selezioni da localStorage
   try {
     const storedDark = localStorage.getItem('tpl.isDark');
-    setDarkMode(storedDark === '1');
+    const isDark = storedDark === '1';
+    setDarkMode(isDark);
+    updateToggleIcon(isDark); // Aggiorna l'icona del toggle
     const sLinea = localStorage.getItem('tpl.lineaIdx');
     const sPart = localStorage.getItem('tpl.partenzaIdx');
     const sArr = localStorage.getItem('tpl.arrivoIdx');
@@ -253,19 +266,19 @@ function renderTratte(lineaIndex = 0) {
   andataList.innerHTML = '';
   ritornoList.innerHTML = '';
 
-  // Popola lista andata (0 → fine)
-  for (let i = 0; i < fermate.length - 1; i++) {
+  // Popola lista andata (0 → fine) - INCLUDE TUTTE LE FERMATE
+  for (let i = 0; i < fermate.length; i++) {
     const li = document.createElement('li');
     li.classList.add('tratte-item');
-    li.innerHTML = `<span class="tratte-number">${i + 1}</span><span class="tratte-stop">${fermate[i]}</span>`;
+    li.innerHTML = `<span class="tratte-icon">📍</span><span class="tratte-number">${i + 1}</span><span class="tratte-stop">${fermate[i]}</span>`;
     andataList.appendChild(li);
   }
 
-  // Popola lista ritorno (fine → 0)
-  for (let i = fermate.length - 1; i > 0; i--) {
+  // Popola lista ritorno (fine → 0) - INCLUDE TUTTE LE FERMATE
+  for (let i = fermate.length - 1; i >= 0; i--) {
     const li = document.createElement('li');
     li.classList.add('tratte-item');
-    li.innerHTML = `<span class="tratte-number">${fermate.length - i}</span><span class="tratte-stop">${fermate[i]}</span>`;
+    li.innerHTML = `<span class="tratte-icon">📍</span><span class="tratte-number">${fermate.length - i}</span><span class="tratte-stop">${fermate[i]}</span>`;
     ritornoList.appendChild(li);
   }
 
