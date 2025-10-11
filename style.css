@@ -77,7 +77,7 @@ body {
   /* SUBSECTION 5.2: Gradiente di sfondo bianco sfumato */
   background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 25%, #cbd5e1 50%, #94a3b8 75%, #64748b 100%);
   background-size: 400% 400%;        /* Dimensione del gradiente per animazione */
-  animation: gradientShift 15s ease infinite;  /* Animazione continua del gradiente */
+  animation: gradientShift 8s ease infinite;  /* Animazione più veloce del gradiente */
   
   /* SUBSECTION 5.3: Testo e layout base */
   color: var(--testo-principale);    /* Colore del testo principale */
@@ -116,7 +116,7 @@ body {
   background: linear-gradient(135deg, #1e3a8a 0%, #312e81 25%, #1e293b 50%, #0f172a 75%, #020617 100%);
   /* Gradiente scuro: blu → viola → grigio scuro → nero */
   background-size: 400% 400%;        /* Stessa dimensione per animazione */
-  animation: gradientShift 15s ease infinite;  /* Stessa animazione */
+  animation: gradientShift 8s ease infinite;  /* Stessa animazione più veloce */
 }
 
 /* ========================================
@@ -737,7 +737,7 @@ body:not(.tratte-page) .main-card {
   font-weight: 800;                /* Peso font extra bold */
   color: rgba(15, 23, 42, 0.95);   /* Colore scuro con 95% opacità */
   text-shadow: 0 2px 15px rgba(255, 255, 255, 0.3);  /* Ombra testo bianca */
-  margin-bottom: 0.5rem;           /* Margine inferiore */
+  margin-bottom: 0.3rem;           /* Margine inferiore ridotto */
 }
 
 /* Sottotitolo/descrizione */
