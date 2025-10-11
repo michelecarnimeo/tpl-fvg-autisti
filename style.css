@@ -13,21 +13,21 @@ body {
 /* Variabili CSS - Glassmorphism Style */
 :root {
   /* Colori principali */
-  --turchese: #17b7b1;
-  --turchese-scuro: #129b96;
-  --turchese-light: #4ecdc4;
+  --turchese: #007b8a;
+  --turchese-scuro: #005f6b;
+  --turchese-light: #0099aa;
   --bianco: #ffffff;
   --grigio-chiaro: #f0f4f8;
   --grigio-medio: #e9ecef;
   --grigio-scuro: #6c757d;
-  --testo-principale: #1a202c;
+  --testo-principale: #0f172a;
   --testo-secondario: #4a5568;
   --bordo: rgba(255, 255, 255, 0.18);
 
   /* Glassmorphism */
-  --glass-bg: rgba(255, 255, 255, 0.25);
-  --glass-border: rgba(255, 255, 255, 0.18);
-  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  --glass-bg: rgba(255, 255, 255, 0.3);
+  --glass-border: rgba(0, 123, 138, 0.2);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 123, 138, 0.2);
   --backdrop-blur: blur(10px);
 
   /* Colori dark mode */
@@ -57,7 +57,7 @@ body {
 /* Base - Glassmorphism Background */
 body {
   font-family: 'Inter', sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%);
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 25%, #cbd5e1 50%, #94a3b8 75%, #64748b 100%);
   background-size: 400% 400%;
   animation: gradientShift 15s ease infinite;
   color: var(--testo-principale);
@@ -126,12 +126,12 @@ body {
 
 /* Navbar - Glassmorphism */
 .navbar {
-  background: var(--glass-bg);
+  background: linear-gradient(135deg, rgba(0, 123, 138, 0.9) 0%, rgba(0, 123, 138, 0.7) 50%, rgba(0, 123, 138, 0.5) 100%);
   backdrop-filter: var(--backdrop-blur);
   -webkit-backdrop-filter: var(--backdrop-blur);
   padding: 1rem 0;
-  box-shadow: var(--glass-shadow);
-  border-bottom: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px 0 rgba(0, 123, 138, 0.3);
+  border-bottom: 1px solid rgba(0, 123, 138, 0.3);
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -162,7 +162,7 @@ body {
   font-size: 1.5rem;
   font-weight: 700;
   text-decoration: none;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
 }
 
 /* Badge BETA - Glassmorphism */
@@ -182,29 +182,10 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.4);
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
   box-shadow: 0 2px 10px rgba(255, 193, 7, 0.3);
-  animation: pulse-glow 2s ease-in-out infinite;
   margin-left: 0.5rem;
 }
 
-@keyframes pulse-glow {
 
-  0%,
-  100% {
-    box-shadow: 0 2px 10px rgba(255, 193, 7, 0.3);
-    transform: scale(1);
-  }
-
-  50% {
-    box-shadow: 0 4px 20px rgba(255, 193, 7, 0.6);
-    transform: scale(1.05);
-  }
-}
-
-.beta-badge:hover {
-  background: rgba(255, 193, 7, 0.5);
-  transform: rotate(-5deg) scale(1.1);
-  box-shadow: 0 6px 25px rgba(255, 193, 7, 0.7);
-}
 
 .navbar-nav {
   display: flex;
@@ -653,28 +634,7 @@ body:not(.tratte-page) .main-card {
   transform: rotate(180deg);
 }
 
-/* Animazione di pulsazione glassmorphism per attirare l'attenzione */
-@keyframes glass-pulse {
-  0% {
-    box-shadow: var(--glass-shadow);
-    border-color: var(--glass-border);
-  }
 
-  50% {
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15),
-      0 5px 15px rgba(23, 183, 177, 0.4);
-    border-color: rgba(23, 183, 177, 0.4);
-  }
-
-  100% {
-    box-shadow: var(--glass-shadow);
-    border-color: var(--glass-border);
-  }
-}
-
-.swap-btn:not(:disabled) {
-  animation: glass-pulse 2s infinite;
-}
 
 /* Pulsante calcola */
 .calculate-section {
@@ -817,29 +777,7 @@ body:not(.tratte-page) .main-card {
     0 5px 15px rgba(23, 183, 177, 0.5);
 }
 
-.dark .swap-btn:not(:disabled) {
-  animation: glass-pulse-dark 2s infinite;
-}
 
-@keyframes glass-pulse-dark {
-  0% {
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3),
-      0 2px 4px rgba(0, 0, 0, 0.2);
-    border-color: var(--glass-border-dark);
-  }
-
-  50% {
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4),
-      0 5px 15px rgba(23, 183, 177, 0.5);
-    border-color: rgba(23, 183, 177, 0.5);
-  }
-
-  100% {
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3),
-      0 2px 4px rgba(0, 0, 0, 0.2);
-    border-color: var(--glass-border-dark);
-  }
-}
 
 /* Tratte e tariffe in dark mode - Glassmorphism */
 .dark .tratte-card {
@@ -886,6 +824,12 @@ body:not(.tratte-page) .main-card {
 
 .dark .price-label {
   color: rgba(203, 213, 225, 0.8);
+}
+
+.dark .price-code {
+  color: rgba(248, 250, 252, 0.95);
+  background: rgba(255, 255, 255, 0.05);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .dark .tratte-item {
@@ -955,7 +899,7 @@ body:not(.tratte-page) .main-card {
 }
 
 .price-code {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(15, 23, 42, 0.85);
   font-size: 0.95rem;
   background: rgba(255, 255, 255, 0.1);
   padding: 0.5rem 1rem;
@@ -963,6 +907,8 @@ body:not(.tratte-page) .main-card {
   display: inline-block;
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 /* Cronologia */
@@ -1379,7 +1325,7 @@ select.form-select:focus,
 .footer {
   text-align: center;
   padding: 0.5rem 0;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(15, 23, 42, 0.85);
   font-size: 0.85rem;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(255, 255, 255, 0.05);
@@ -1388,11 +1334,21 @@ select.form-select:focus,
   margin-top: 0;
   position: relative;
   z-index: 10;
+  font-weight: 500;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 /* Footer sticky solo per pagine tratte */
 .tratte-page .footer {
   margin-top: auto;
+}
+
+/* Footer in dark mode */
+.dark .footer {
+  color: rgba(248, 250, 252, 0.95);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  border-top-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
 }
 
 /* Animazioni aggiuntive per le card tratte */
