@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TPL FVG - Calcolo Biglietto</title>
+  <!-- Font locali per PWA offline -->
+  <!-- CSS personalizzati -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="src/tpl.jpg" type="image/jpeg">
+  <style>
+    body {
+      font-family: 'Roboto', Arial, sans-serif;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="container">
+      <div class="navbar-content">
+        <div class="navbar-brand">
+          <img src="src/logo.png" alt="TPL" class="navbar-logo" />
+          <div class="navbar-title">
+            <div class="logo-acronym">
+              <div>tpl</div>
+              <div>fvg</div>
+            </div>
+            <div class="logo-text">
+              <div>trasporto</div>
+              <div>pubblico</div>
+              <div>locale</div>
+            </div>
+          </div>
+          <span class="beta-badge">BETA</span>
+        </div>
+        <nav class="navbar-nav">
+          <a href="index.html" class="nav-link active">Home</a>
+          <a href="tratte.html" class="nav-link">Tratte</a>
+          <a href="tariffe.html" class="nav-link">Tariffe</a>
+          <button id="darkmode-toggle" class="dark-mode-toggle" title="Darkmode">
+            <span>🌙</span>
+          </button>
+          <button id="cache-reset" class="cache-reset-btn" title="Cancella cache e ricarica">
+            <span>🗑️</span>
+          </button>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+
+  <!-- Main App -->
+  <main id="main-app" class="main-content">
+    <div class="container">
+      <div class="main-card fade-in">
+        <div class="card-title">
+          <h1>Guida Tariffe Autisti</h1>
+          <p class="subtitle">Seleziona una linea per iniziare</p>
+        </div>
+
+        <div class="form-group">
+          <select id="linea" name="linea" class="form-select">
+            <option value="">Seleziona una linea</option>
+            <!-- Opzioni generate da JS -->
+          </select>
+        </div>
+        <div class="route-section">
+          <div class="route-label">
+            <div class="route-icon"><span>Partenza da</span></div>
+            <select id="partenza" class="route-select" disabled>
+              <option value="">Seleziona la partenza</option>
+            </select>
+          </div>
+
+          <div class="route-label">
+            <div class="route-icon"><span>Arrivo a</span></div>
+            <select id="arrivo" class="route-select" disabled>
+              <option value="">Seleziona l'arrivo</option>
+            </select>
+          </div>
+
+          <button id="swap-btn" class="swap-btn" type="button" title="Inverte partenza e arrivo" onclick="swapRoutes()">
+            <span>⇅</span>
+          </button>
+        </div>
+
+        <!-- Pulsante reset -->
+        <div class="reset-section">
+          <button id="reset-btn" class="reset-btn" type="button" title="Resetta tutto e riparti da capo">
+            Riparti da capo
+          </button>
+        </div>
+
+        <!-- Sezione prezzo divisa in due parti con colori distinti -->
+        <div class="price-card inactive" id="price-card">
+          <!-- Codice biglietto -->
+          <div class="price-section">
+            <div class="price-label">Codice biglietto</div>
+            <div id="summary-codice" class="price-code">-</div>
+          </div>
+          
+          <!-- Divisore -->
+          <div class="price-divider"></div>
+          
+          <!-- Costo biglietto -->
+          <div class="price-section">
+            <div class="price-label">Costo del biglietto</div>
+            <div id="summary-prezzo" class="price-value">-</div>
+          </div>
+          
+          <div id="prezzo-errore" class="price-error" style="display: none;">
+            ⚠️ Prezzo non disponibile per questa tratta
+          </div>
+        </div>
+
+        <!-- Banner installazione PWA posizionato sotto la card prezzi -->
+        <div id="pwa-install-banner" class="pwa-install-banner" style="display: none;">
+          <div class="pwa-install-content">
+            <div class="pwa-install-text">
+              <span class="pwa-install-title">Installa l'app</span>
+              <span class="pwa-install-subtitle">Accedi più velocemente e offline</span>
+            </div>
+            <div class="pwa-install-actions">
+              <button id="pwa-install-later" class="pwa-btn pwa-btn-secondary" type="button">Più tardi</button>
+              <button id="pwa-install-button" class="pwa-btn pwa-btn-primary" type="button">Installa</button>
+            </div>
+          </div>
+          <div id="pwa-ios-hint" class="pwa-ios-hint" style="display: none;">
+            Per installare su iPhone/iPad: apri il menu Condividi e scegli "Aggiungi a Home".
+          </div>
+        </div>
+
+        <div id="history-section" class="history-section hidden">
+          <h2 class="history-title">Cronologia recente</h2>
+          <div id="history-list"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© <span id="footer-year"></span> TPL FVG. Tutti i diritti riservati.<br>Creato da Michele Carnimeo · <a href="test.html" style="color: inherit; text-decoration: none; transition: text-decoration 0.3s ease;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">TPL Autisti 1.0 build 24</a></p>
+    <div class="footer-links">
+      <a href="https://t.me/+eoJ9nYFFrjphMzVk" target="_blank" class="telegram-link" title="Canale Telegram">
+        <span class="telegram-icon">📢</span> Avvisi & Aggiornamenti
+      </a>
+      <a href="https://t.me/+2yIF2NfPYt82MWI0" target="_blank" class="telegram-link" title="Gruppo Telegram">
+        <span class="telegram-icon">🐛</span> Segnala Errori
+      </a>
+    </div>
+    <p class="update-info">📅 Ultimo aggiornamento: <span id="last-update">14/10/2025 ore 16:30</span></p>
+  </footer>
+
+  <!-- Modal conferma reset cache -->
+  <div id="cache-modal" class="cache-modal">
+    <div class="cache-modal-content">
+      <div class="cache-modal-header">
+        <h3>🗑️ Cancella Cache</h3>
+      </div>
+      <div class="cache-modal-body">
+        <p>Sei sicuro di voler cancellare la cache dell'app?</p>
+        <p class="cache-modal-warning">⚠️ L'app si ricaricherà automaticamente e tornerai alla pagina di benvenuto.</p>
+      </div>
+      <div class="cache-modal-footer">
+        <button id="cache-cancel" class="cache-modal-btn cache-modal-cancel">Annulla</button>
+        <button id="cache-confirm" class="cache-modal-btn cache-modal-confirm">Conferma</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Script principale -->
+  <script src="script.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(err => console.error('SW registration failed', err));
+      });
+    }
+  </script>
+</body>
+
+</html>

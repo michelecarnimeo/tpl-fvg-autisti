@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TPL FVG - Tratte</title>
+  <!-- Font locali per PWA offline -->
+  <!-- CSS personalizzati -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="src/tpl.jpg" type="image/jpeg">
+  <style>
+    body {
+      font-family: 'Roboto', Arial, sans-serif;
+    }
+  </style>
+</head>
+
+<body class="tratte-page">
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="container">
+      <div class="navbar-content">
+        <div class="navbar-brand">
+          <img src="src/logo.png" alt="TPL" class="navbar-logo" />
+          <div class="navbar-title">
+            <div class="logo-acronym">
+              <div>tpl</div>
+              <div>fvg</div>
+            </div>
+            <div class="logo-text">
+              <div>trasporto</div>
+              <div>pubblico</div>
+              <div>locale</div>
+            </div>
+          </div>
+          <span class="beta-badge">BETA</span>
+        </div>
+        <nav class="navbar-nav">
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="tratte.html" class="nav-link active">Tratte</a>
+          <a href="tariffe.html" class="nav-link">Tariffe</a>
+          <button id="darkmode-toggle" class="dark-mode-toggle" title="Darkmode">
+            <span>🌙</span>
+          </button>
+          <button id="cache-reset" class="cache-reset-btn" title="Cancella cache e ricarica">
+            <span>🗑️</span>
+          </button>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Tratte -->
+  <main class="main-content">
+    <div class="container">
+      <!-- Titolo -->
+      <h1 class="page-title">Elenco fermate per linea</h1>
+      
+      <!-- Selettore linea -->
+      <div class="line-selector-container">
+        <div class="form-group">
+          <select id="linea-tratte" class="form-select">
+            <option value="">Seleziona una linea</option>
+            <!-- Opzioni generate da JS -->
+          </select>
+        </div>
+        
+        <!-- Barra di ricerca (nascosta inizialmente) -->
+        <div id="search-container-tratte" class="search-container" style="display: none;">
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="search-input" class="search-input" placeholder="Cerca Fermata" />
+            <button id="clear-search" class="clear-btn" style="display: none;">✕</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Griglia fermate (nascosta inizialmente) -->
+      <div id="tratte-grid-container" class="tratte-grid" style="display: none;">
+        <div class="tratte-card fade-in">
+          <h3 id="andata-title">Andata</h3>
+          <ul id="tratte-andata" class="tratte-list">
+            <!-- Fermate generate da JS -->
+          </ul>
+        </div>
+        <div class="tratte-card fade-in">
+          <h3 id="ritorno-title">Ritorno</h3>
+          <ul id="tratte-ritorno" class="tratte-list">
+            <!-- Fermate generate da JS -->
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© <span id="footer-year"></span> TPL FVG. Tutti i diritti riservati. · Creato da Michele Carnimeo · <a href="test.html" style="color: inherit; text-decoration: none; transition: text-decoration 0.3s ease;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">TPL Autisti 0.9 build 23</a></p>
+    <div class="footer-links">
+      <a href="https://t.me/+eoJ9nYFFrjphMzVk" target="_blank" class="telegram-link" title="Canale Telegram">
+        <span class="telegram-icon">📢</span> Avvisi & Aggiornamenti
+      </a>
+      <a href="https://t.me/+2yIF2NfPYt82MWI0" target="_blank" class="telegram-link" title="Gruppo Telegram">
+        <span class="telegram-icon">🐛</span> Segnala Errori
+      </a>
+    </div>
+    <p class="update-info">📅 Ultimo aggiornamento: <span id="last-update">12/10/2025 ore 00:34</span></p>
+  </footer>
+
+  <!-- Pulsante torna su -->
+  <button class="scroll-to-top" onclick="scrollToTop()" title="Torna su">
+    ↑
+  </button>
+
+  <!-- Modal conferma reset cache -->
+  <div id="cache-modal" class="cache-modal">
+    <div class="cache-modal-content">
+      <div class="cache-modal-header">
+        <h3>🗑️ Cancella Cache</h3>
+      </div>
+      <div class="cache-modal-body">
+        <p>Sei sicuro di voler cancellare la cache dell'app?</p>
+        <p class="cache-modal-warning">⚠️ L'app si ricaricherà automaticamente e tornerai alla pagina di benvenuto.</p>
+      </div>
+      <div class="cache-modal-footer">
+        <button id="cache-cancel" class="cache-modal-btn cache-modal-cancel">Annulla</button>
+        <button id="cache-confirm" class="cache-modal-btn cache-modal-confirm">Conferma</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Script principale -->
+  <script src="script.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(err => console.error('SW registration failed', err));
+      });
+    }
+  </script>
+</body>
+
+</html>
