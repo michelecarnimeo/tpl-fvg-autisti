@@ -4193,7 +4193,11 @@ select.form-select:focus,
   display: flex; 
   gap: 10px;
   flex-shrink: 0;
+  justify-content: flex-end;
+  align-items: center;
 }
+
+/* Responsive per mobile */
 
 .pwa-btn { 
   border: none; 
@@ -4250,13 +4254,73 @@ select.form-select:focus,
 }
 
 .pwa-ios-hint { 
-  padding: 0 20px 20px 20px; 
-  font-size: 0.9rem; 
-  opacity: 0.85;
-  color: var(--testo-secondario);
-  line-height: 1.5;
+  padding: 16px 20px 20px 20px; 
+  font-size: 0.9rem;
+  color: var(--testo-principale);
+  line-height: 1.6;
   position: relative;
   z-index: 1;
+  border-top: 1px solid var(--glass-border);
+  background: rgba(23, 183, 177, 0.03);
+  animation: slideDown 0.3s ease-out;
+  overflow: hidden;
+}
+
+@keyframes slideDown {
+  from {
+    max-height: 0;
+    opacity: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  to {
+    max-height: 500px;
+    opacity: 1;
+    padding-top: 16px;
+    padding-bottom: 20px;
+  }
+}
+
+.ios-hint-title {
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 12px;
+  color: var(--testo-principale);
+}
+
+.ios-hint-steps {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 12px 0;
+}
+
+.ios-hint-steps li {
+  padding: 8px 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  line-height: 1.5;
+}
+
+.step-number {
+  font-weight: 700;
+  color: #17b7b1;
+  min-width: 20px;
+}
+
+.ios-share-icon,
+.ios-plus-icon {
+  font-size: 1.1rem;
+  vertical-align: middle;
+}
+
+.ios-hint-note {
+  padding: 10px;
+  background: rgba(23, 183, 177, 0.08);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: var(--testo-secondario);
 }
 
 /* Responsive per mobile */
@@ -4283,8 +4347,12 @@ select.form-select:focus,
   }
   
   .pwa-ios-hint {
-    padding: 0 16px 16px 16px;
-    text-align: center;
+    padding: 16px;
+  }
+  
+  .ios-hint-steps li {
+    flex-direction: row;
+    text-align: left;
   }
 }
 
@@ -4313,4 +4381,13 @@ select.form-select:focus,
 
 .dark .pwa-btn-secondary:hover {
   background: rgba(255,255,255,0.12);
+}
+
+.dark .pwa-ios-hint {
+  border-top-color: var(--glass-border-dark);
+  background: rgba(23, 183, 177, 0.08);
+}
+
+.dark .ios-hint-note {
+  background: rgba(23, 183, 177, 0.12);
 }

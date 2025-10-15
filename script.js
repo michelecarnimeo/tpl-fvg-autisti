@@ -783,10 +783,11 @@ if (window.location.pathname.endsWith('index.html') || window.location.pathname 
       showBanner();
     });
 
-    // Click su Installa (Android/Chrome)
+    // Click su Installa (Android/Chrome/iOS)
     if (pwaBtnInstall) {
       pwaBtnInstall.addEventListener('click', async () => {
         if (deferredInstallPrompt) {
+          // Android/Chrome: usa prompt nativo
           deferredInstallPrompt.prompt();
           const { outcome } = await deferredInstallPrompt.userChoice;
           deferredInstallPrompt = null;
@@ -795,8 +796,19 @@ if (window.location.pathname.endsWith('index.html') || window.location.pathname 
             try { localStorage.setItem('tpl.pwa.dismissTs', String(Date.now())); } catch {}
           }
         } else {
-          // iOS o browser senza evento: mostra hint
-          if (pwaIosHint) pwaIosHint.style.display = 'block';
+          // iOS o browser senza evento: toggle hint con animazione
+          if (pwaIosHint) {
+            const isVisible = pwaIosHint.style.display === 'block';
+            if (isVisible) {
+              pwaIosHint.style.display = 'none';
+            } else {
+              pwaIosHint.style.display = 'block';
+              // Scroll smooth verso hint
+              setTimeout(() => {
+                pwaIosHint.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+              }, 100);
+            }
+          }
         }
       });
     }
@@ -815,13 +827,28 @@ if (window.location.pathname.endsWith('index.html') || window.location.pathname 
       try { localStorage.removeItem('tpl.pwa.dismissTs'); } catch {}
     });
 
-    // iOS detection e hint
-    const isIOS = /iphone|ipad|ipod/i.test(window.navigator.userAgent);
+    // iOS detection e hint (include anche iPadOS 13+)
+    function isIOSDevice() {
+      const userAgent = window.navigator.userAgent.toLowerCase();
+      const isIPhone = /iphone|ipod/.test(userAgent);
+      const isIPad = /ipad/.test(userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      return isIPhone || isIPad;
+    }
+    
     const isSafari = /^((?!chrome|android).)*safari/i.test(window.navigator.userAgent);
-    if (isIOS && isSafari && !isStandalone() && canShowAgain()) {
-      // Non c'è beforeinstallprompt: proponi banner con hint iOS
+    
+    if (isIOSDevice() && isSafari && !isStandalone() && canShowAgain()) {
+      // iOS: mostra banner con hint visibile e nascondi pulsante "Installa"
       if (pwaIosHint) pwaIosHint.style.display = 'block';
+      if (pwaBtnInstall) pwaBtnInstall.style.display = 'none';
       showBanner();
     }
+    
+    // Listener per visibilità pagina (nasconde banner quando app va in background)
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden && isStandalone()) {
+        hideBanner();
+      }
+    });
   });
 }
