@@ -22,21 +22,31 @@
   <header class="navbar">
     <div class="container">
       <div class="navbar-content">
-        <div class="navbar-brand">
-          <img src="src/logo.png" alt="TPL" class="navbar-logo" />
-          <div class="navbar-title">
-            <div class="logo-acronym">
-              <div>tpl</div>
-              <div>fvg</div>
+        <a href="index.html" class="navbar-brand-link">
+          <div class="navbar-brand">
+            <div class="navbar-logo-wrapper">
+              <img src="src/logo.png" alt="TPL" class="navbar-logo navbar-logo-default" />
+              <img src="src/logo1.png" alt="TPL" class="navbar-logo navbar-logo-hover" />
             </div>
-            <div class="logo-text">
-              <div>trasporto</div>
-              <div>pubblico</div>
-              <div>locale</div>
+            <div class="navbar-title">
+              <div class="logo-acronym">
+                <div>tpl</div>
+                <div>fvg</div>
+              </div>
+              <div class="logo-text">
+                <div>trasporto</div>
+                <div>pubblico</div>
+                <div>locale</div>
+              </div>
             </div>
+            <span class="beta-badge">BETA</span>
           </div>
-          <span class="beta-badge">BETA</span>
-        </div>
+        </a>
+        <!-- Hamburger button (mobile only) -->
+        <button id="hamburger-toggle" class="hamburger-toggle" aria-label="Menu">
+          <span class="hamburger-icon"></span>
+        </button>
+        
         <nav class="navbar-nav">
           <a href="index.html" class="nav-link">Home</a>
           <a href="tratte.html" class="nav-link active">Tratte</a>
@@ -49,6 +59,40 @@
           </button>
         </nav>
       </div>
+    </div>
+    
+    <!-- Mobile menu overlay -->
+    <div id="mobile-menu-overlay" class="mobile-menu-overlay"></div>
+    
+    <!-- Mobile menu drawer -->
+    <div id="mobile-menu" class="mobile-menu">
+      <div class="mobile-menu-header">
+        <span class="mobile-menu-title">Menu</span>
+        <button id="mobile-menu-close" class="mobile-menu-close" aria-label="Chiudi menu">×</button>
+      </div>
+      <nav class="mobile-menu-nav">
+        <a href="index.html" class="mobile-nav-link">
+          <span class="mobile-nav-icon">🏠</span>
+          <span>Home</span>
+        </a>
+        <a href="tratte.html" class="mobile-nav-link">
+          <span class="mobile-nav-icon">🚌</span>
+          <span>Tratte</span>
+        </a>
+        <a href="tariffe.html" class="mobile-nav-link">
+          <span class="mobile-nav-icon">💰</span>
+          <span>Tariffe</span>
+        </a>
+        <div class="mobile-menu-divider"></div>
+        <button id="mobile-darkmode-toggle" class="mobile-nav-button">
+          <span class="mobile-nav-icon">🌙</span>
+          <span>Modalità scura</span>
+        </button>
+        <button id="mobile-cache-reset" class="mobile-nav-button">
+          <span class="mobile-nav-icon">🗑️</span>
+          <span>Cancella cache</span>
+        </button>
+      </nav>
     </div>
   </header>
 

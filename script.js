@@ -741,6 +741,84 @@ window.addEventListener('scroll', toggleScrollToTopButton);
 
 window.addEventListener('DOMContentLoaded', loadData);
 
+// --- HAMBURGER MENU LOGIC ---
+(function() {
+  const hamburgerToggle = document.getElementById('hamburger-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+  const mobileMenuClose = document.getElementById('mobile-menu-close');
+  const mobileDarkmodeToggle = document.getElementById('mobile-darkmode-toggle');
+  const mobileCacheReset = document.getElementById('mobile-cache-reset');
+
+  if (!hamburgerToggle || !mobileMenu || !mobileMenuOverlay) return;
+
+  // Apri menu
+  function openMenu() {
+    hamburgerToggle.classList.add('active');
+    mobileMenu.classList.add('active');
+    mobileMenuOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden'; // Blocca scroll
+  }
+
+  // Chiudi menu
+  function closeMenu() {
+    hamburgerToggle.classList.remove('active');
+    mobileMenu.classList.remove('active');
+    mobileMenuOverlay.classList.remove('active');
+    document.body.style.overflow = ''; // Ripristina scroll
+  }
+
+  // Click su hamburger
+  if (hamburgerToggle) {
+    hamburgerToggle.addEventListener('click', () => {
+      if (mobileMenu.classList.contains('active')) {
+        closeMenu();
+      } else {
+        openMenu();
+      }
+    });
+  }
+
+  // Click su X per chiudere
+  if (mobileMenuClose) {
+    mobileMenuClose.addEventListener('click', closeMenu);
+  }
+
+  // Click su overlay per chiudere
+  if (mobileMenuOverlay) {
+    mobileMenuOverlay.addEventListener('click', closeMenu);
+  }
+
+  // Chiudi menu quando si clicca su un link
+  const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+  mobileNavLinks.forEach(link => {
+    link.addEventListener('click', closeMenu);
+  });
+
+  // Dark mode toggle da menu mobile
+  if (mobileDarkmodeToggle) {
+    mobileDarkmodeToggle.addEventListener('click', () => {
+      toggleDark();
+      closeMenu();
+    });
+  }
+
+  // Cache reset da menu mobile
+  if (mobileCacheReset) {
+    mobileCacheReset.addEventListener('click', () => {
+      resetCache();
+      closeMenu();
+    });
+  }
+
+  // Chiudi menu con ESC
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+      closeMenu();
+    }
+  });
+})();
+
 // Event listener per pulsante reset (solo su index.html)
 if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('/')) {
   window.addEventListener('DOMContentLoaded', () => {

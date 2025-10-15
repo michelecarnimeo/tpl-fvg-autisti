@@ -214,6 +214,48 @@ body {
 }
 
 /* SUBSECTION 7.6: Brand/Logo della navbar */
+/* Link wrapper per logo cliccabile */
+.navbar-brand-link {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  display: inline-block;
+}
+
+/* Wrapper per effetto flip 3D */
+.navbar-logo-wrapper {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  display: block;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+/* Logo default: stato iniziale frontale */
+.navbar-logo-default {
+  transform: rotateY(0deg);
+  backface-visibility: hidden;
+}
+
+/* Logo hover: inizia girato dietro */
+.navbar-logo-hover {
+  transform: rotateY(180deg);
+  backface-visibility: hidden;
+}
+
+/* Al hover: logo default ruota via */
+.navbar-brand-link:hover .navbar-logo-default {
+  transform: rotateY(-180deg);
+  opacity: 0;
+}
+
+/* Al hover: logo hover ruota e appare */
+.navbar-brand-link:hover .navbar-logo-hover {
+  transform: rotateY(0deg);
+  opacity: 1;
+}
+
 .navbar-brand {
   display: flex;        /* Layout flexbox per logo + titolo */
   align-items: center;  /* Allineamento verticale centrale */
@@ -222,18 +264,32 @@ body {
 
 /* Logo TPL nella navbar */
 .navbar-logo {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 50px;         /* Logo quadrato ridotto per navbar sottile */
   height: 50px;        /* Logo quadrato ridotto per navbar sottile */
+  transition: transform 0.6s ease-in-out, opacity 0.6s ease-in-out, box-shadow 0.3s ease;
   border-radius: 12px; /* Angoli molto smussati per contorno arrotondato */
   border: 2px solid rgba(0, 123, 138, 0.7); /* Contorno ciano che avvolge l'immagine */
   object-fit: contain; /* Adatta l'immagine mantenendo proporzioni e contenuto visibile */
-  align-self: center;  /* Centra verticalmente senza aumentare l'altezza della navbar */
   box-shadow: 
     0 2px 8px rgba(0, 123, 138, 0.3),      /* Ombra per profondità */
     0 0 0 1px rgba(255, 255, 255, 0.1),   /* Bordo esterno sottile */
     inset 0 1px 0 rgba(255, 255, 255, 0.2), /* Riflesso luce dall'alto */
     inset 0 -1px 0 rgba(0, 0, 0, 0.1);    /* Ombra dal basso */
-  position: relative;
+}
+
+/* Logo default visibile di default */
+.navbar-logo-default {
+  opacity: 1;
+  z-index: 1;
+}
+
+/* Logo hover nascosto di default */
+.navbar-logo-hover {
+  opacity: 0;
+  z-index: 2;
 }
 
 /* Effetto rifrazione della luce per logo navbar */
@@ -2562,6 +2618,11 @@ select.form-select:focus,
     margin-left: 0.3rem;                        /* Margine ridotto */
   }
 
+  .navbar-logo-wrapper {
+    width: 45px;
+    height: 45px;
+  }
+  
   .navbar-logo {
     width: 45px;                                 /* Logo quadrato ridotto per navbar sottile */
     height: 45px;                                /* Logo quadrato ridotto per navbar sottile */
@@ -2572,7 +2633,6 @@ select.form-select:focus,
       0 0 0 1px rgba(255, 255, 255, 0.1),      /* Bordo esterno sottile */
       inset 0 1px 0 rgba(255, 255, 255, 0.2),  /* Riflesso luce dall'alto */
       inset 0 -1px 0 rgba(0, 0, 0, 0.1);       /* Ombra dal basso */
-    align-self: center;                          /* Centra verticalmente */
   }
 
   .navbar-title {
@@ -3110,6 +3170,11 @@ select.form-select:focus,
     gap: 4px;                                     /* Spazio tra logo e titolo ultra minimo */
   }
 
+  .navbar-logo-wrapper {
+    width: 40px;
+    height: 40px;
+  }
+  
   .navbar-logo {
     width: 40px;                                  /* Logo quadrato ridotto per navbar sottile */
     height: 40px;                                 /* Logo quadrato ridotto per navbar sottile */
@@ -3120,7 +3185,6 @@ select.form-select:focus,
       0 0 0 1px rgba(255, 255, 255, 0.1),      /* Bordo esterno sottile */
       inset 0 1px 0 rgba(255, 255, 255, 0.2),  /* Riflesso luce dall'alto */
       inset 0 -1px 0 rgba(0, 0, 0, 0.1);       /* Ombra dal basso */
-    align-self: center;                           /* Centra verticalmente */
   }
 
   .navbar-title {
@@ -4390,4 +4454,220 @@ select.form-select:focus,
 
 .dark .ios-hint-note {
   background: rgba(23, 183, 177, 0.12);
+}
+
+/* ========================================
+   HAMBURGER MENU (MOBILE)
+   ======================================== */
+
+/* Hamburger toggle button - visibile solo su mobile */
+.hamburger-toggle {
+  display: none; /* Nascosto su desktop */
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  z-index: 1001;
+  position: relative;
+}
+
+.hamburger-icon {
+  display: block;
+  width: 28px;
+  height: 2px;
+  background: var(--bianco);
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.hamburger-icon::before,
+.hamburger-icon::after {
+  content: '';
+  display: block;
+  width: 28px;
+  height: 2px;
+  background: var(--bianco);
+  position: absolute;
+  transition: all 0.3s ease;
+}
+
+.hamburger-icon::before {
+  top: -8px;
+}
+
+.hamburger-icon::after {
+  top: 8px;
+}
+
+/* Animazione hamburger quando menu aperto */
+.hamburger-toggle.active .hamburger-icon {
+  background: transparent;
+}
+
+.hamburger-toggle.active .hamburger-icon::before {
+  top: 0;
+  transform: rotate(45deg);
+}
+
+.hamburger-toggle.active .hamburger-icon::after {
+  top: 0;
+  transform: rotate(-45deg);
+}
+
+/* Overlay scuro dietro il menu */
+.mobile-menu-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 1100;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.mobile-menu-overlay.active {
+  display: block;
+  opacity: 1;
+}
+
+/* Menu mobile drawer */
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 240px;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: -8px 0 32px rgba(0, 0, 0, 0.3);
+  z-index: 1101;
+  transition: right 0.3s ease;
+  overflow-y: auto;
+}
+
+.mobile-menu.active {
+  right: 0;
+}
+
+/* Header del menu mobile */
+.mobile-menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  border-bottom: 1px solid var(--glass-border);
+  background: rgba(23, 183, 177, 0.1);
+}
+
+.mobile-menu-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--testo-principale);
+}
+
+.mobile-menu-close {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--testo-principale);
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.mobile-menu-close:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+/* Navigazione menu mobile */
+.mobile-menu-nav {
+  padding: 12px 0;
+}
+
+.mobile-nav-link,
+.mobile-nav-button {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  color: var(--testo-principale);
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
+.mobile-nav-link:hover,
+.mobile-nav-button:hover {
+  background: rgba(23, 183, 177, 0.1);
+  padding-left: 24px;
+}
+
+.mobile-nav-icon {
+  font-size: 1.3rem;
+  width: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile-menu-divider {
+  height: 1px;
+  background: var(--glass-border);
+  margin: 12px 20px;
+}
+
+/* Media query: mostra hamburger su mobile, nascondi navbar-nav */
+@media (max-width: 768px) {
+  .hamburger-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .navbar-nav {
+    display: none !important;
+  }
+}
+
+/* Dark mode per menu mobile */
+.dark .mobile-menu {
+  background: rgba(30, 41, 59, 0.95);
+  border-left-color: rgba(148, 163, 184, 0.2);
+  box-shadow: -8px 0 32px rgba(0, 0, 0, 0.7);
+}
+
+.dark .mobile-menu-header {
+  border-bottom-color: var(--glass-border-dark);
+  background: rgba(23, 183, 177, 0.15);
+}
+
+.dark .mobile-menu-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.dark .mobile-nav-link:hover,
+.dark .mobile-nav-button:hover {
+  background: rgba(23, 183, 177, 0.2);
+}
+
+.dark .mobile-menu-divider {
+  background: var(--glass-border-dark);
 }
