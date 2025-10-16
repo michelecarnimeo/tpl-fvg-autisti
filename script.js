@@ -467,8 +467,8 @@ function renderTratte(lineaIndex = 0) {
 // --- TARIFFE LOGIC ---
 function renderTariffe(lineaIndex = 0) {
   console.log('renderTariffe chiamata con lineaIndex:', lineaIndex);
-  const andataTable = document.getElementById('tariffe-andata');
-  const ritornoTable = document.getElementById('tariffe-ritorno');
+  const andataTable = document.getElementById('prezzi-andata');
+  const ritornoTable = document.getElementById('prezzi-ritorno');
   console.log('andataTable:', !!andataTable, 'ritornoTable:', !!ritornoTable, 'tariffario[lineaIndex]:', !!tariffario[lineaIndex]);
 
   if (!andataTable || !ritornoTable || !tariffario[lineaIndex]) {
@@ -580,8 +580,8 @@ function populateLineeTariffe() {
   // Event listener per cambio linea
   lineaSelect.addEventListener('change', (e) => {
     const selectedIndex = e.target.value;
-    const gridContainer = document.getElementById('tariffe-grid-container');
-    const searchContainer = document.getElementById('search-container-tariffe');
+    const gridContainer = document.getElementById('prezzi-grid-container');
+    const searchContainer = document.getElementById('search-container-prezzi');
     const andataTitle = document.getElementById('andata-title');
     const ritornoTitle = document.getElementById('ritorno-title');
 
@@ -617,7 +617,7 @@ function setupRicercaTariffe() {
   if (searchInput && clearBtn) {
     searchInput.addEventListener('input', (e) => {
       const searchTerm = e.target.value.toLowerCase();
-      const tables = document.querySelectorAll('.tariffe-table');
+      const tables = document.querySelectorAll('.prezzi-table');
 
       // Mostra/nascondi pulsante clear
       clearBtn.style.display = searchTerm ? 'flex' : 'none';
@@ -640,7 +640,7 @@ function setupRicercaTariffe() {
     clearBtn.addEventListener('click', () => {
       searchInput.value = '';
       clearBtn.style.display = 'none';
-      const tables = document.querySelectorAll('.tariffe-table');
+      const tables = document.querySelectorAll('.prezzi-table');
       tables.forEach(table => {
         const rows = table.querySelectorAll('tbody tr');
         rows.forEach(row => {
@@ -661,14 +661,14 @@ function initTratteTariffe() {
     populateLineeTratte();
   }
   // Per pagina tariffe, popola il selettore tariffe
-  else if (window.location.pathname.endsWith('tariffe.html')) {
+  else if (window.location.pathname.endsWith('prezzi.html')) {
     populateLineeTariffe();
     setupRicercaTariffe();
   }
 }
 
 // Avvia logica tratte/tariffe solo se siamo su tratte.html o tariffe.html
-if (window.location.pathname.endsWith('fermate.html') || window.location.pathname.endsWith('tariffe.html')) {
+if (window.location.pathname.endsWith('fermate.html') || window.location.pathname.endsWith('prezzi.html')) {
   console.log('Su pagina tratte/tariffe, pathname:', window.location.pathname);
 
   // Ascolta l'evento di caricamento dati

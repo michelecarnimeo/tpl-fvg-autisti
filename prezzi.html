@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TPL FVG - Tariffe</title>
+  <title>TPL FVG - Prezzi</title>
   <!-- Font locali per PWA offline -->
   <!-- CSS personalizzati -->
   <link rel="stylesheet" href="style.css">
@@ -50,7 +50,7 @@
         <nav class="navbar-nav">
           <a href="index.html" class="nav-link">Home</a>
           <a href="fermate.html" class="nav-link">Fermate</a>
-          <a href="tariffe.html" class="nav-link active">Tariffe</a>
+          <a href="prezzi.html" class="nav-link active">Prezzi</a>
           <button id="darkmode-toggle" class="dark-mode-toggle" title="Darkmode">
             <span>🌙</span>
           </button>
@@ -79,9 +79,9 @@
           <span class="mobile-nav-icon">🚌</span>
           <span>Fermate</span>
         </a>
-        <a href="tariffe.html" class="mobile-nav-link">
+        <a href="prezzi.html" class="mobile-nav-link">
           <span class="mobile-nav-icon">💰</span>
-          <span>Tariffe</span>
+          <span>Prezzi</span>
         </a>
         <div class="mobile-menu-divider"></div>
         <button id="mobile-darkmode-toggle" class="mobile-nav-button">
@@ -99,7 +99,7 @@
   <!-- Main Tariffe -->
   <main class="main-content">
     <div class="container">
-      <h1 class="page-title">Tariffe per linea</h1>
+      <h1 class="page-title">Prezzi per linea</h1>
 
       <!-- Selettore linea -->
       <div class="line-selector-container">
@@ -111,21 +111,21 @@
         </div>
         
         <!-- Barra di ricerca (nascosta inizialmente) -->
-        <div id="search-container-tariffe" class="search-container" style="display: none;">
+        <div id="search-container-prezzi" class="search-container" style="display: none;">
           <div class="search-box">
             <span class="search-icon">🔍</span>
-            <input type="text" id="search-input-tariffe" class="search-input" placeholder="Cerca tratta o codice..." />
-            <button id="clear-search-tariffe" class="clear-btn" style="display: none;">✕</button>
+            <input type="text" id="search-input-prezzi" class="search-input" placeholder="Cerca tratta o codice..." />
+            <button id="clear-search-prezzi" class="clear-btn" style="display: none;">✕</button>
           </div>
         </div>
       </div>
 
       <!-- Griglia tariffe (nascosta inizialmente) -->
-      <div id="tariffe-grid-container" style="display: none;">
+      <div id="prezzi-grid-container" style="display: none;">
         <div class="main-card fade-in">
           <h2 id="andata-title" class="page-title">Prezzi e codici biglietto (Andata)</h2>
           <div class="overflow-x-auto">
-            <table id="tariffe-andata" class="tariffe-table">
+            <table id="prezzi-andata" class="prezzi-table">
               <!-- Tabella generata da JS -->
             </table>
           </div>
@@ -134,7 +134,7 @@
         <div class="main-card fade-in" style="animation-delay: 0.2s;">
           <h2 id="ritorno-title" class="page-title">Prezzi e codici biglietto (Ritorno)</h2>
           <div class="overflow-x-auto">
-            <table id="tariffe-ritorno" class="tariffe-table">
+            <table id="prezzi-ritorno" class="prezzi-table">
               <!-- Tabella generata da JS -->
             </table>
           </div>

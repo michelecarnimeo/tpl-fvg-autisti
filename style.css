@@ -141,7 +141,7 @@ body {
   }
 
   /* Container speciale per la griglia delle tariffe */
-  #tariffe-grid-container {
+  #prezzi-grid-container {
     display: grid;                    /* Layout a griglia */
     grid-template-columns: 1fr 1fr;   /* Due colonne per layout orizzontale */
     gap: 3rem;                       /* Spazio maggiore tra le colonne */
@@ -151,7 +151,7 @@ body {
   }
 
   /* Card principali dentro il container tariffe */
-  #tariffe-grid-container .main-card {
+  #prezzi-grid-container .main-card {
     width: 100%;         /* Larghezza completa per adattarsi alla griglia */
     margin-bottom: 0;    /* Nessun margine inferiore */
     max-width: none;     /* Nessuna larghezza massima */
@@ -2113,7 +2113,7 @@ select.form-select:focus,
 }
 
 /* SEZIONE 12.32: Tabelle tariffe */
-.tariffe-table {
+.prezzi-table {
   width: 100%;                                    /* Larghezza completa */
   border-collapse: separate;                      /* Bordi delle celle separati per glassmorphism */
   border-spacing: 0;                              /* Nessuno spazio tra celle */
@@ -2128,8 +2128,8 @@ select.form-select:focus,
 }
 
 /* SEZIONE 12.33: Celle delle tabelle tariffe */
-.tariffe-table th,
-.tariffe-table td {
+.prezzi-table th,
+.prezzi-table td {
   padding: 1rem;                                 /* Padding interno maggiore */
   text-align: left;                              /* Testo allineato a sinistra */
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);  /* Bordo inferiore sottile */
@@ -2138,7 +2138,7 @@ select.form-select:focus,
 }
 
 /* SEZIONE 12.34: Intestazioni tabelle tariffe */
-.tariffe-table th {
+.prezzi-table th {
   background: rgba(23, 183, 177, 0.6);           /* Sfondo turchese trasparente */
   /* backdrop-filter rimosso per performance */
   /* -webkit-backdrop-filter rimosso per performance */
@@ -2149,7 +2149,7 @@ select.form-select:focus,
 }
 
 /* SEZIONE 12.35: Effetto hover righe tabelle */
-.tariffe-table tr:hover {
+.prezzi-table tr:hover {
   background: rgba(248, 250, 252, 0.4);          /* Sfondo grigio chiaro elegante al hover */
   /* backdrop-filter rimosso per performance */
   /* -webkit-backdrop-filter rimosso per performance */
@@ -2158,35 +2158,35 @@ select.form-select:focus,
 }
 
 /* SEZIONE 12.35.1: Effetto hover celle */
-.tariffe-table tr:hover td {
+.prezzi-table tr:hover td {
   color: #1e293b;                                /* Testo scuro al hover per leggibilità */
   text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);  /* Ombra bianca per contrasto */
 }
 
 /* SEZIONE 12.36: Tabelle tariffe in dark mode */
-.dark .tariffe-table {
+.dark .prezzi-table {
   background: rgba(30, 41, 59, 0.6);             /* Sfondo scuro trasparente */
   border-color: rgba(148, 163, 184, 0.2);        /* Bordo grigio chiaro trasparente */
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);   /* Ombra scura */
 }
 
-.dark .tariffe-table th,
-.dark .tariffe-table td {
+.dark .prezzi-table th,
+.dark .prezzi-table td {
   background: rgba(30, 41, 59, 0.3);             /* Sfondo scuro trasparente */
   color: rgba(248, 250, 252, 0.95);              /* Testo chiaro */
   border-bottom-color: rgba(255, 255, 255, 0.1); /* Bordo inferiore bianco trasparente */
 }
 
-.dark .tariffe-table th {
+.dark .prezzi-table th {
   background: rgba(23, 183, 177, 0.7);           /* Sfondo turchese più opaco */
   color: #ffffff;                                /* Testo bianco */
 }
 
-.dark .tariffe-table tr:hover {
+.dark .prezzi-table tr:hover {
   background: rgba(255, 255, 255, 0.1);          /* Sfondo bianco trasparente al hover */
 }
 
-.dark .tariffe-table tr:hover td {
+.dark .prezzi-table tr:hover td {
   color: #ffffff;                                /* Testo bianco al hover */
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);   /* Ombra scura per contrasto */
 }
@@ -2747,12 +2747,12 @@ select.form-select:focus,
   }
 
   /* Tabella tariffe più compatta su mobile */
-  .tratte-page .tariffe-table {
+  .tratte-page .prezzi-table {
     font-size: 0.9rem;                         /* Font più piccolo per mobile */
   }
 
-  .tratte-page .tariffe-table th,
-  .tratte-page .tariffe-table td {
+  .tratte-page .prezzi-table th,
+  .tratte-page .prezzi-table td {
     padding: 0.75rem 0.5rem;                   /* Padding ridotto per mobile */
   }
 
