@@ -1,7 +1,7 @@
 {
   "name": "TPL FVG",
   "short_name": "TPL FVG",
-  "description": "Calcola tariffe e visualizza tratte TPL FVG anche offline.",
+  "description": "Calcola prezzi e visualizza fermate TPL FVG anche offline.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
