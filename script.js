@@ -930,3 +930,120 @@ if (window.location.pathname.endsWith('index.html') || window.location.pathname 
     });
   });
 }
+
+// ================================
+// SISTEMA NOTIFICHE OFFLINE
+// ================================
+
+// Stato connessione
+let isOnline = navigator.onLine;
+let offlineNotificationShown = false;
+
+// Elementi per notifiche offline
+let offlineBanner = null;
+
+// Funzione per creare banner offline
+function createOfflineBanner() {
+  if (offlineBanner) return;
+  
+  offlineBanner = document.createElement('div');
+  offlineBanner.id = 'offline-banner';
+  offlineBanner.className = 'offline-banner';
+  offlineBanner.innerHTML = `
+    <div class="offline-content">
+      <span class="offline-icon">📡</span>
+      <span class="offline-text">Modalità offline - App funzionante</span>
+      <button class="offline-close" onclick="hideOfflineBanner()">×</button>
+    </div>
+  `;
+  
+  document.body.appendChild(offlineBanner);
+  
+  // Animazione di entrata
+  setTimeout(() => {
+    offlineBanner.classList.add('show');
+  }, 100);
+}
+
+// Funzione per nascondere banner offline
+function hideOfflineBanner() {
+  if (offlineBanner) {
+    offlineBanner.classList.remove('show');
+    setTimeout(() => {
+      if (offlineBanner && offlineBanner.parentNode) {
+        offlineBanner.parentNode.removeChild(offlineBanner);
+        offlineBanner = null;
+      }
+    }, 300);
+  }
+  offlineNotificationShown = false;
+}
+
+// Funzione per mostrare notifica offline
+function showOfflineNotification() {
+  if (offlineNotificationShown) return;
+  
+  createOfflineBanner();
+  offlineNotificationShown = true;
+  
+  // Auto-hide dopo 5 secondi se online
+  if (isOnline) {
+    setTimeout(() => {
+      if (isOnline) {
+        hideOfflineBanner();
+      }
+    }, 5000);
+  }
+}
+
+// Listener per eventi online/offline del browser
+window.addEventListener('online', () => {
+  console.log('🌐 Connessione ripristinata');
+  isOnline = true;
+  
+  if (offlineBanner) {
+    // Aggiorna testo quando torna online
+    const textElement = offlineBanner.querySelector('.offline-text');
+    if (textElement) {
+      textElement.textContent = 'Connessione ripristinata';
+      textElement.style.color = '#10b981';
+    }
+    
+    // Nasconde automaticamente dopo 2 secondi
+    setTimeout(() => {
+      hideOfflineBanner();
+    }, 2000);
+  }
+});
+
+window.addEventListener('offline', () => {
+  console.log('📡 Connessione persa');
+  isOnline = false;
+  
+  if (!offlineNotificationShown) {
+    showOfflineNotification();
+  }
+});
+
+// Listener per messaggi dal Service Worker
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.addEventListener('message', (event) => {
+    if (event.data && event.data.type === 'OFFLINE_MODE') {
+      console.log('📡 Service Worker: Modalità offline attivata');
+      isOnline = false;
+      
+      if (!offlineNotificationShown) {
+        showOfflineNotification();
+      }
+    }
+  });
+}
+
+// Verifica stato iniziale
+if (!navigator.onLine) {
+  console.log('📡 App avviata in modalità offline');
+  isOnline = false;
+  setTimeout(() => {
+    showOfflineNotification();
+  }, 1000); // Delay per permettere caricamento app
+}
