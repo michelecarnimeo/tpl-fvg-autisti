@@ -423,10 +423,10 @@ async function loadData() {
 // --- TRATTE LOGIC ---
 function renderTratte(lineaIndex = 0) {
   console.log('renderTratte chiamata con lineaIndex:', lineaIndex);
-  const andataList = document.getElementById('tratte-andata');
-  const ritornoList = document.getElementById('tratte-ritorno');
+  const andataList = document.getElementById('fermate-andata');
+  const ritornoList = document.getElementById('fermate-ritorno');
   const gridContainer = document.getElementById('tratte-grid-container');
-  const searchContainer = document.getElementById('search-container-tratte');
+  const searchContainer = document.getElementById('search-container-fermate');
 
   console.log('andataList:', !!andataList, 'ritornoList:', !!ritornoList, 'tariffario[lineaIndex]:', !!tariffario[lineaIndex]);
 
@@ -446,8 +446,8 @@ function renderTratte(lineaIndex = 0) {
   // Popola lista andata (0 → fine) - INCLUDE TUTTE LE FERMATE
   for (let i = 0; i < fermate.length; i++) {
     const li = document.createElement('li');
-    li.classList.add('tratte-item');
-    li.innerHTML = `<span class="tratte-icon">📍</span><span class="tratte-number">${i + 1}</span><span class="tratte-stop">${fermate[i]}</span>`;
+    li.classList.add('fermate-item');
+    li.innerHTML = `<span class="fermate-icon">📍</span><span class="fermate-number">${i + 1}</span><span class="fermate-stop">${fermate[i]}</span>`;
     andataList.appendChild(li);
   }
 
@@ -521,7 +521,7 @@ function renderTariffe(lineaIndex = 0) {
 
 // Popola select linee per pagina tratte
 function populateLineeTratte() {
-  const lineaSelect = document.getElementById('linea-tratte');
+  const lineaSelect = document.getElementById('linea-fermate');
   if (!lineaSelect) return;
 
   lineaSelect.innerHTML = '<option value="">Seleziona una linea</option>';
@@ -535,8 +535,8 @@ function populateLineeTratte() {
   // Event listener per cambio linea
   lineaSelect.addEventListener('change', (e) => {
     const selectedIndex = e.target.value;
-    const gridContainer = document.getElementById('tratte-grid-container');
-    const searchContainer = document.getElementById('search-container-tratte');
+    const gridContainer = document.getElementById('fermate-grid-container');
+    const searchContainer = document.getElementById('search-container-fermate');
     const andataTitle = document.getElementById('andata-title');
     const ritornoTitle = document.getElementById('ritorno-title');
 
@@ -657,7 +657,7 @@ function initTratteTariffe() {
   console.log('initTratteTariffe chiamata');
 
   // Per pagina tratte, popola il selettore tratte
-  if (window.location.pathname.endsWith('tratte.html')) {
+  if (window.location.pathname.endsWith('fermate.html')) {
     populateLineeTratte();
   }
   // Per pagina tariffe, popola il selettore tariffe
@@ -668,7 +668,7 @@ function initTratteTariffe() {
 }
 
 // Avvia logica tratte/tariffe solo se siamo su tratte.html o tariffe.html
-if (window.location.pathname.endsWith('tratte.html') || window.location.pathname.endsWith('tariffe.html')) {
+if (window.location.pathname.endsWith('fermate.html') || window.location.pathname.endsWith('tariffe.html')) {
   console.log('Su pagina tratte/tariffe, pathname:', window.location.pathname);
 
   // Ascolta l'evento di caricamento dati
@@ -687,7 +687,7 @@ if (window.location.pathname.endsWith('tratte.html')) {
     if (searchInput && clearBtn) {
       searchInput.addEventListener('input', (e) => {
         const searchTerm = e.target.value.toLowerCase();
-        const tratteItems = document.querySelectorAll('.tratte-item');
+        const fermateItems = document.querySelectorAll('.fermate-item');
 
         // Mostra/nascondi pulsante clear
         clearBtn.style.display = searchTerm ? 'flex' : 'none';
@@ -707,7 +707,7 @@ if (window.location.pathname.endsWith('tratte.html')) {
       clearBtn.addEventListener('click', () => {
         searchInput.value = '';
         clearBtn.style.display = 'none';
-        document.querySelectorAll('.tratte-item').forEach(item => {
+        document.querySelectorAll('.fermate-item').forEach(item => {
           item.style.display = '';
         });
         searchInput.focus();

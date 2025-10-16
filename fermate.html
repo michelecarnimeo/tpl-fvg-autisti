@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TPL FVG - Tratte</title>
+  <title>TPL FVG - Fermate</title>
   <!-- Font locali per PWA offline -->
   <!-- CSS personalizzati -->
   <link rel="stylesheet" href="style.css">
@@ -17,7 +17,7 @@
   </style>
 </head>
 
-<body class="tratte-page">
+<body class="fermate-page">
   <!-- Navbar -->
   <header class="navbar">
     <div class="container">
@@ -49,7 +49,7 @@
         
         <nav class="navbar-nav">
           <a href="index.html" class="nav-link">Home</a>
-          <a href="tratte.html" class="nav-link active">Tratte</a>
+          <a href="fermate.html" class="nav-link active">Fermate</a>
           <a href="tariffe.html" class="nav-link">Tariffe</a>
           <button id="darkmode-toggle" class="dark-mode-toggle" title="Darkmode">
             <span>🌙</span>
@@ -75,9 +75,9 @@
           <span class="mobile-nav-icon">🏠</span>
           <span>Home</span>
         </a>
-        <a href="tratte.html" class="mobile-nav-link">
+        <a href="fermate.html" class="mobile-nav-link">
           <span class="mobile-nav-icon">🚌</span>
-          <span>Tratte</span>
+          <span>Fermate</span>
         </a>
         <a href="tariffe.html" class="mobile-nav-link">
           <span class="mobile-nav-icon">💰</span>
@@ -96,23 +96,23 @@
     </div>
   </header>
 
-  <!-- Main Tratte -->
+  <!-- Main Fermate -->
   <main class="main-content">
     <div class="container">
       <!-- Titolo -->
-      <h1 class="page-title">Elenco fermate per linea</h1>
+      <h1 class="page-title">Fermate per linea</h1>
       
       <!-- Selettore linea -->
       <div class="line-selector-container">
         <div class="form-group">
-          <select id="linea-tratte" class="form-select">
+          <select id="linea-fermate" class="form-select">
             <option value="">Seleziona una linea</option>
             <!-- Opzioni generate da JS -->
           </select>
         </div>
         
         <!-- Barra di ricerca (nascosta inizialmente) -->
-        <div id="search-container-tratte" class="search-container" style="display: none;">
+        <div id="search-container-fermate" class="search-container" style="display: none;">
           <div class="search-box">
             <span class="search-icon">🔍</span>
             <input type="text" id="search-input" class="search-input" placeholder="Cerca Fermata" />
@@ -122,16 +122,16 @@
       </div>
 
       <!-- Griglia fermate (nascosta inizialmente) -->
-      <div id="tratte-grid-container" class="tratte-grid" style="display: none;">
-        <div class="tratte-card fade-in">
+      <div id="fermate-grid-container" class="fermate-grid" style="display: none;">
+        <div class="fermate-card fade-in">
           <h3 id="andata-title">Andata</h3>
-          <ul id="tratte-andata" class="tratte-list">
+          <ul id="fermate-andata" class="fermate-list">
             <!-- Fermate generate da JS -->
           </ul>
         </div>
-        <div class="tratte-card fade-in">
+        <div class="fermate-card fade-in">
           <h3 id="ritorno-title">Ritorno</h3>
-          <ul id="tratte-ritorno" class="tratte-list">
+          <ul id="fermate-ritorno" class="fermate-list">
             <!-- Fermate generate da JS -->
           </ul>
         </div>

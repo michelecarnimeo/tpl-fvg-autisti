@@ -508,14 +508,14 @@ body {
 }
 
 /* SUBSECTION 8.2: Layout specifico per pagine tratte e tariffe */
-.tratte-page {
+.fermate-page {
   display: flex;                /* Layout flexbox */
   flex-direction: column;       /* Direzione verticale */
   min-height: 100vh;           /* Altezza minima viewport */
 }
 
 /* Main content per pagine tratte */
-.tratte-page .main-content {
+.fermate-page .main-content {
   min-height: auto;            /* Altezza minima automatica */
   align-items: flex-start;     /* Allineamento in alto */
   padding: 1rem 0;            /* Padding verticale */
@@ -524,13 +524,13 @@ body {
 }
 
 /* SUBSECTION 8.3: Layout ottimizzato per pagina benvenuto */
-body:not(.tratte-page) .main-content {
+body:not(.fermate-page) .main-content {
   align-items: center;         /* Allineamento centrale */
   padding: 1rem 0;           /* Padding verticale */
 }
 
 /* Card principale per pagine non-tratte */
-body:not(.tratte-page) .main-card {
+body:not(.fermate-page) .main-card {
   max-width: 600px !important;  /* Larghezza massima 600px */
   padding: 2rem;               /* Padding interno */
   margin: 1rem auto !important; /* Margine automatico e centrato */
@@ -592,7 +592,7 @@ body:not(.tratte-page) .main-card {
   }
   
   /* Card per pagine non-tratte */
-  body:not(.tratte-page) .main-card {
+  body:not(.fermate-page) .main-card {
     max-width: 650px !important;     /* Larghezza massima 650px */
     padding: 2rem;                  /* Padding ancora maggiore */
   }
@@ -608,7 +608,7 @@ body:not(.tratte-page) .main-card {
   }
   
   /* Card per pagine non-tratte */
-  body:not(.tratte-page) .main-card {
+  body:not(.fermate-page) .main-card {
     max-width: 700px !important;     /* Larghezza massima 700px */
     padding: 2.5rem;                /* Padding maggiore */
   }
@@ -624,7 +624,7 @@ body:not(.tratte-page) .main-card {
   }
   
   /* Card per pagine non-tratte */
-  body:not(.tratte-page) .main-card {
+  body:not(.fermate-page) .main-card {
     max-width: 750px !important;     /* Larghezza massima 750px */
     padding: 3rem;                  /* Padding massimo */
   }
@@ -679,14 +679,14 @@ body:not(.tratte-page) .main-card {
   }
   
   /* Card per pagine non-tratte */
-  body:not(.tratte-page) .main-card {
+  body:not(.fermate-page) .main-card {
     max-width: 850px !important;     /* Larghezza massima 850px */
     padding: 2.5rem;                /* Padding maggiore */
   }
 }
 
 /* SUBSECTION 8.10: Eccezione per pagine tratte/tariffe - layout verticale normale */
-.tratte-page .main-content>.container {
+.fermate-page .main-content>.container {
     display: block !important;        /* Layout a blocchi */
     align-items: normal;             /* Allineamento normale */
     overflow: visible;               /* Contenuto visibile */
@@ -1354,7 +1354,7 @@ body:not(.tratte-page) .main-card {
    SEZIONE 11: RISULTATI E PREZZI
    ======================================== */
 /* SEZIONE 11.1: Tratte e tariffe in dark mode - Glassmorphism */
-.dark .tratte-card {
+.dark .fermate-card {
   background: rgba(30, 41, 59, 0.5);      /* Sfondo scuro trasparente */
   /* backdrop-filter rimosso per performance */
   /* -webkit-backdrop-filter rimosso per performance */
@@ -1409,7 +1409,7 @@ body:not(.tratte-page) .main-card {
 }
 
 /* SEZIONE 11.7: Elemento tratte in dark mode */
-.dark .tratte-item {
+.dark .fermate-item {
   background: rgba(30, 41, 59, 0.6);      /* Sfondo scuro trasparente */
   /* backdrop-filter rimosso per performance */
   /* -webkit-backdrop-filter rimosso per performance */
@@ -1434,7 +1434,7 @@ body:not(.tratte-page) .main-card {
   background: rgba(15, 23, 42, 0.3);      /* Sfondo scuro trasparente per la track */
 }
 
-.dark .tratte-list::-webkit-scrollbar-thumb {
+.dark .fermate-list::-webkit-scrollbar-thumb {
   background: rgba(23, 183, 177, 0.6);    /* Sfondo turchese trasparente per il thumb */
 }
 
@@ -1645,7 +1645,7 @@ body:not(.tratte-page) .main-card {
 }
 
 /* SEZIONE 12.3: Titolo specifico per pagine tratte/tariffe */
-.tratte-page .page-title {
+.fermate-page .page-title {
   text-align: center !important;        /* Centratura forzata */
   margin: 1rem auto 1rem auto !important;  /* Margine centrato forzato */
   width: 100% !important;              /* Larghezza completa forzata */
@@ -1826,7 +1826,7 @@ select.form-select:focus,
 }
 
 /* SEZIONE 12.9: Griglia delle tratte */
-.tratte-grid {
+.fermate-grid {
   display: grid;                                    /* Layout a griglia */
   grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));  /* Colonne responsive con larghezza minima */
   gap: 2rem;                                       /* Spazio tra le card */
@@ -1835,7 +1835,7 @@ select.form-select:focus,
 }
 
 /* SEZIONE 12.10: Card delle tratte con glassmorphism */
-.tratte-card {
+.fermate-card {
   /* SEZIONE 12.10.1: Sfondo glassmorphism */
   background: var(--glass-bg);                     /* Sfondo trasparente */
   backdrop-filter: var(--backdrop-blur);          /* Sfocatura del background */
@@ -1888,7 +1888,7 @@ select.form-select:focus,
 }
 
 /* SEZIONE 12.13: Lista delle tratte */
-.tratte-list {
+.fermate-list {
   /* SEZIONE 12.13.1: Reset e layout */
   list-style: none;                               /* Rimuove stili lista di default */
   min-height: 200px;                              /* Altezza minima */
@@ -1922,7 +1922,7 @@ select.form-select:focus,
 }
 
 /* SEZIONE 12.18: Elemento singolo della tratta */
-.tratte-item {
+.fermate-item {
   /* SEZIONE 12.18.1: Spaziatura e dimensioni */
   padding: 1.2rem 1.5rem 1.2rem 2rem;              /* Padding interno con più spazio a sinistra */
   margin-bottom: 0.75rem;                          /* Margine inferiore */
@@ -1955,7 +1955,7 @@ select.form-select:focus,
 }
 
 /* SEZIONE 12.19: Icona emoji della fermata */
-.tratte-icon {
+.fermate-icon {
   font-size: 1.2rem;                              /* Dimensione font grande */
   transition: transform 0.3s ease;                /* Transizione della trasformazione */
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));  /* Ombra dell'icona */
@@ -1965,7 +1965,7 @@ select.form-select:focus,
 }
 
 /* SEZIONE 12.20: Animazione hover dell'icona */
-.tratte-item:hover .tratte-icon {
+.tratte-item:hover .fermate-icon {
   transform: scale(1.3) rotate(10deg);            /* Ingrandisce e ruota l'icona al hover */
   color: inherit;                                  /* Mantiene il colore originale dell'icona */
   text-shadow: none;                              /* Nessun contorno per l'icona */
@@ -1997,7 +1997,7 @@ select.form-select:focus,
 }
 
 /* SEZIONE 12.22: Numero della fermata */
-.tratte-number {
+.fermate-number {
   /* SEZIONE 12.22.1: Sfondo glassmorphism */
   background: rgba(23, 183, 177, 0.6);             /* Sfondo turchese trasparente */
   /* backdrop-filter rimosso per performance */
@@ -2028,7 +2028,7 @@ select.form-select:focus,
 }
 
 /* SEZIONE 12.23: Effetto hover del numero fermata */
-.tratte-item:hover .tratte-number {
+.tratte-item:hover .fermate-number {
   background: rgba(255, 255, 255, 0.9);           /* Sfondo bianco più opaco */
   color: var(--turchese);                         /* Testo turchese */
   text-shadow: none;                              /* Nessun contorno per il numero */
@@ -2037,14 +2037,14 @@ select.form-select:focus,
 }
 
 /* SEZIONE 12.23.1: Effetto hover del nome fermata */
-.tratte-item:hover .tratte-stop {
+.tratte-item:hover .fermate-stop {
   color: #ffffff;                                 /* Testo bianco elegante */
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8),      /* Contorno nero per leggibilità */
                0 0 4px rgba(0, 0, 0, 0.6);        /* Contorno nero aggiuntivo */
 }
 
 /* SEZIONE 12.24: Nome della fermata */
-.tratte-stop {
+.fermate-stop {
   flex: 1;                                        /* Occupa tutto lo spazio rimanente */
   font-size: 1.05rem;                            /* Dimensione font media */
   font-weight: 500;                              /* Peso font medium */
@@ -2082,7 +2082,7 @@ select.form-select:focus,
 }
 
 /* SEZIONE 12.29: Indicatore caricamento per tratte */
-.tratte-loading {
+.fermate-loading {
   /* SEZIONE 12.29.1: Layout flexbox */
   display: flex;                                  /* Layout flexbox */
   justify-content: center;                        /* Centra orizzontalmente */
@@ -2284,7 +2284,7 @@ select.form-select:focus,
 }
 
 /* SEZIONE 13.2: Footer sticky solo per pagine tratte */
-.tratte-page .footer {
+.fermate-page .footer {
   margin-top: auto;                              /* Spinge il footer in basso */
 }
 
@@ -2324,28 +2324,28 @@ select.form-select:focus,
 }
 
 /* SEZIONE 14.3: Animazione prima card tratta */
-.tratte-card:nth-child(1) {
+.fermate-card:nth-child(1) {
   animation: slideInUp 0.6s ease-out;            /* Animazione slideInUp senza delay */
 }
 
 /* SEZIONE 14.4: Animazione seconda card tratta */
-.tratte-card:nth-child(2) {
+.fermate-card:nth-child(2) {
   animation: slideInUp 0.6s ease-out 0.1s backwards;  /* Animazione con delay 0.1s */
 }
 
 /* SEZIONE 14.5: Animazione base elementi tratta */
-.tratte-item {
+.fermate-item {
   animation: fadeInScale 0.4s ease-out backwards;  /* Animazione fadeInScale per tutti */
 }
 
 /* SEZIONE 14.6: Delay progressivi per elementi tratta (effetto cascata) */
-.tratte-item:nth-child(1) { animation-delay: 0.05s; }  /* Primo elemento */
-.tratte-item:nth-child(2) { animation-delay: 0.1s; }   /* Secondo elemento */
-.tratte-item:nth-child(3) { animation-delay: 0.15s; }  /* Terzo elemento */
-.tratte-item:nth-child(4) { animation-delay: 0.2s; }   /* Quarto elemento */
-.tratte-item:nth-child(5) { animation-delay: 0.25s; }  /* Quinto elemento */
-.tratte-item:nth-child(6) { animation-delay: 0.3s; }   /* Sesto elemento */
-.tratte-item:nth-child(7) { animation-delay: 0.35s; }  /* Settimo elemento */
+.fermate-item:nth-child(1) { animation-delay: 0.05s; }  /* Primo elemento */
+.fermate-item:nth-child(2) { animation-delay: 0.1s; }   /* Secondo elemento */
+.fermate-item:nth-child(3) { animation-delay: 0.15s; }  /* Terzo elemento */
+.fermate-item:nth-child(4) { animation-delay: 0.2s; }   /* Quarto elemento */
+.fermate-item:nth-child(5) { animation-delay: 0.25s; }  /* Quinto elemento */
+.fermate-item:nth-child(6) { animation-delay: 0.3s; }   /* Sesto elemento */
+.fermate-item:nth-child(7) { animation-delay: 0.35s; }  /* Settimo elemento */
 .tratte-item:nth-child(8) { animation-delay: 0.4s; }   /* Ottavo elemento */
 
 /* ========================================
@@ -2481,14 +2481,14 @@ select.form-select:focus,
   }
 
   /* Griglia tratte - una colonna */
-  .tratte-grid {
+  .fermate-grid {
     grid-template-columns: 1fr;                  /* Una sola colonna */
     gap: 1.5rem;                                /* Spazio ridotto */
     padding: 0 0.5rem;                          /* Padding ridotto */
   }
 
   /* Card tratte */
-  .tratte-card {
+  .fermate-card {
     padding: 1.75rem;                            /* Padding ridotto */
     border-radius: 16px;                         /* Bordi meno arrotondati */
   }
@@ -2498,18 +2498,18 @@ select.form-select:focus,
   }
 
   /* Elementi tratta */
-  .tratte-item {
+  .fermate-item {
     padding: 1rem 1.25rem 1rem 1.75rem;         /* Padding ridotto con più spazio a sinistra */
     font-size: 1rem;                             /* Font ridotto */
   }
 
-  .tratte-number {
+  .fermate-number {
     width: 34px;                                 /* Dimensione ridotta */
     height: 34px;                                /* Dimensione ridotta */
     font-size: 0.9rem;                           /* Font ridotto */
   }
 
-  .tratte-list {
+  .fermate-list {
     max-height: 500px;                           /* Altezza ridotta */
   }
 
@@ -2779,7 +2779,7 @@ select.form-select:focus,
   }
 
   /* Layout flat per tratte su mobile */
-  .tratte-page .tratte-card {
+  .tratte-page .fermate-card {
     background: transparent !important;        /* Rimuove sfondo card tratte */
     backdrop-filter: none !important;          /* Rimuove effetto vetro */
     -webkit-backdrop-filter: none !important;  /* Rimuove effetto vetro WebKit */
@@ -2831,7 +2831,7 @@ select.form-select:focus,
   }
 
   /* Lista fermate più compatta su mobile */
-  .tratte-page .tratte-list {
+  .tratte-page .fermate-list {
     padding: 0.5rem 0;                         /* Padding ridotto per mobile */
   }
 
@@ -2853,7 +2853,7 @@ select.form-select:focus,
   }
 
   /* Nasconde icone fermate su mobile per massimizzare spazio */
-  .tratte-page .tratte-icon {
+  .tratte-page .fermate-icon {
     display: none !important;                   /* Nasconde icona fermate su mobile */
   }
 
@@ -2926,13 +2926,13 @@ select.form-select:focus,
   }
 
   /* Griglia tratte mobile */
-  .tratte-grid {
+  .fermate-grid {
     gap: 1rem;                                  /* Spazio ridotto */
     padding: 0;                                 /* Nessun padding */
   }
 
   /* Card tratte mobile */
-  .tratte-card {
+  .fermate-card {
     padding: 1.25rem;                           /* Padding ridotto */
     border-radius: 12px;                        /* Bordi meno arrotondati */
   }
@@ -2943,23 +2943,23 @@ select.form-select:focus,
   }
 
   /* Elementi tratta mobile */
-  .tratte-item {
+  .fermate-item {
     padding: 0.875rem 1rem 0.875rem 1.5rem;     /* Padding ridotto con più spazio a sinistra */
     font-size: 0.95rem;                         /* Font ridotto */
     margin-bottom: 0.5rem;                      /* Margine ridotto */
   }
 
-  .tratte-number {
+  .fermate-number {
     width: 30px;                                /* Dimensione molto ridotta */
     height: 30px;                               /* Dimensione molto ridotta */
     font-size: 0.85rem;                         /* Font ridotto */
   }
 
-  .tratte-stop {
+  .fermate-stop {
     font-size: 0.95rem;                         /* Font ridotto */
   }
 
-  .tratte-list {
+  .fermate-list {
     max-height: 400px;                          /* Altezza ridotta */
   }
 
@@ -3826,14 +3826,14 @@ select.form-select:focus,
   }
 
   /* Card tratte dentro il container */
-  #tratte-grid-container .tratte-card {
+  #tratte-grid-container .fermate-card {
     width: 100%;                                /* Larghezza completa */
     margin-bottom: 0;                           /* Nessun margine inferiore */
     max-width: none;                            /* Nessuna larghezza massima */
   }
 
   /* Elementi tratta ottimizzati per desktop */
-  .tratte-item {
+  .fermate-item {
     padding: 1.2rem 1.5rem 1.2rem 2rem;         /* Padding interno con più spazio a sinistra */
     margin-bottom: 1rem;                        /* Margine inferiore */
     border-radius: 12px;                        /* Bordi arrotondati */
@@ -3858,7 +3858,7 @@ select.form-select:focus,
   }
 
   /* Elementi tratta in modalità scura */
-  .dark .tratte-item {
+  .dark .fermate-item {
     background: rgba(30, 41, 59, 0.6);         /* Sfondo scuro trasparente */
     color: rgba(248, 250, 252, 0.95);          /* Testo chiaro */
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5); /* Ombra testo per leggibilità */
@@ -3883,7 +3883,7 @@ select.form-select:focus,
   }
   
   /* Card per pagine non-tratte */
-  body:not(.tratte-page) .main-card {
+  body:not(.fermate-page) .main-card {
     max-width: 900px !important;                /* Larghezza massima 900px */
     padding: 3rem;                             /* Padding massimo */
   }
@@ -3906,7 +3906,7 @@ select.form-select:focus,
   }
   
   /* Card per pagine non-tratte */
-  body:not(.tratte-page) .main-card {
+  body:not(.fermate-page) .main-card {
     max-width: 950px !important;                /* Larghezza massima 950px */
     padding: 3.5rem;                           /* Padding massimo */
   }
