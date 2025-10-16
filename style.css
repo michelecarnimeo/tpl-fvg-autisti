@@ -1370,7 +1370,7 @@ body:not(.fermate-page) .main-card {
 }
 
 /* SEZIONE 11.3: Titoli delle card tratte in dark mode */
-.dark .tratte-card h3 {
+.dark .fermate-card h3 {
   color: rgba(255, 255, 255, 0.95);      /* Testo bianco con 95% opacità */
   border-bottom-color: rgba(255, 255, 255, 0.6);  /* Bordo inferiore bianco più marcato */
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);     /* Ombra testo molto forte */
@@ -1419,7 +1419,7 @@ body:not(.fermate-page) .main-card {
 }
 
 /* SEZIONE 11.8: Effetto hover elemento tratte in dark mode */
-.dark .tratte-item:hover {
+.dark .fermate-item:hover {
   /* background: rgba(23, 183, 177, 0.4);    /* Sfondo turchese trasparente al hover RIMOSSO */
   background: rgba(255, 255, 255, 0.1);    /* Sfondo bianco trasparente al hover */
   /* backdrop-filter rimosso per performance */
@@ -1430,7 +1430,7 @@ body:not(.fermate-page) .main-card {
 }
 
 /* SEZIONE 11.9: Scrollbar in dark mode */
-.dark .tratte-list::-webkit-scrollbar-track {
+.dark .fermate-list::-webkit-scrollbar-track {
   background: rgba(15, 23, 42, 0.3);      /* Sfondo scuro trasparente per la track */
 }
 
@@ -1676,8 +1676,8 @@ body:not(.fermate-page) .main-card {
 
 /* SEZIONE 12.5: FORZA il design glassmorphism per tutti i selettori */
 select.form-select,
-#linea-tratte,
-#linea-tariffe,
+#linea-fermate,
+#linea-prezzi,
 .line-selector-container select,
 .line-search-container select {
   background: rgba(255, 255, 255, 0.25) !important;  /* Sfondo bianco trasparente forzato */
@@ -1701,8 +1701,8 @@ select.form-select,
 
 /* Stato focus forzato per selettori */
 select.form-select:focus,
-#linea-tratte:focus,
-#linea-tariffe:focus {
+#linea-fermate:focus,
+#linea-prezzi:focus {
   outline: none !important;                            /* Nessun outline forzato */
   border-color: var(--turchese) !important;            /* Bordo turchese forzato */
   box-shadow: 0 0 0 3px rgba(23, 183, 177, 0.1) !important;  /* Ombra turchese forzata */
@@ -1711,8 +1711,8 @@ select.form-select:focus,
 
 /* SEZIONE 12.6: Modalità scura per selettori */
 .dark select.form-select,
-.dark #linea-tratte,
-.dark #linea-tariffe,
+.dark #linea-fermate,
+.dark #linea-prezzi,
 .dark .line-selector-container select,
 .dark .line-search-container select {
   background: rgba(30, 41, 59, 0.3) !important;      /* Sfondo scuro trasparente forzato */
@@ -1723,8 +1723,8 @@ select.form-select:focus,
 
 /* Focus in modalità scura */
 .dark select.form-select:focus,
-.dark #linea-tratte:focus,
-.dark #linea-tariffe:focus {
+.dark #linea-fermate:focus,
+.dark #linea-prezzi:focus {
   border-color: var(--turchese) !important;            /* Bordo turchese forzato */
   box-shadow: 0 0 0 3px rgba(23, 183, 177, 0.2) !important;  /* Ombra turchese forzata */
   background: rgba(30, 41, 59, 0.4) !important;        /* Sfondo scuro più opaco forzato */
@@ -1857,7 +1857,7 @@ select.form-select:focus,
 
 
 /* SEZIONE 12.11: Titolo delle card tratte */
-.tratte-card h3 {
+.fermate-card h3 {
   /* SEZIONE 12.11.1: Tipografia */
   color: rgba(15, 23, 42, 0.95);                   /* Colore scuro con 95% opacità */
   font-size: 1.75rem;                              /* Dimensione font grande */
@@ -1881,7 +1881,7 @@ select.form-select:focus,
 }
 
 /* SEZIONE 12.12: Icona emoji del bus nel titolo */
-.tratte-card h3::before {
+.fermate-card h3::before {
   content: '🚌';                                  /* Emoji del bus */
   font-size: 1.5rem;                              /* Dimensione font grande */
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));  /* Ombra dell'icona */
@@ -1900,24 +1900,24 @@ select.form-select:focus,
 }
 
 /* SEZIONE 12.14: Scrollbar personalizzata - Larghezza */
-.tratte-list::-webkit-scrollbar {
+.fermate-list::-webkit-scrollbar {
   width: 8px;                                     /* Larghezza scrollbar sottile */
 }
 
 /* SEZIONE 12.15: Scrollbar personalizzata - Track (binario) */
-.tratte-list::-webkit-scrollbar-track {
+.fermate-list::-webkit-scrollbar-track {
   background: var(--grigio-chiaro);               /* Sfondo grigio chiaro per il binario */
   border-radius: 10px;                           /* Bordi arrotondati */
 }
 
 /* SEZIONE 12.16: Scrollbar personalizzata - Thumb (cursore) */
-.tratte-list::-webkit-scrollbar-thumb {
+.fermate-list::-webkit-scrollbar-thumb {
   background: var(--turchese);                    /* Sfondo turchese per il cursore */
   border-radius: 10px;                           /* Bordi arrotondati */
 }
 
 /* SEZIONE 12.17: Scrollbar personalizzata - Hover del thumb */
-.tratte-list::-webkit-scrollbar-thumb:hover {
+.fermate-list::-webkit-scrollbar-thumb:hover {
   background: var(--turchese-scuro);              /* Sfondo turchese scuro al hover */
 }
 
@@ -1972,7 +1972,7 @@ select.form-select:focus,
 }
 
 /* SEZIONE 12.21: Effetto hover dell'elemento tratta */
-.tratte-item:hover {
+.fermate-item:hover {
   /* SEZIONE 12.21.1: Sfondo hover */
   /* background: rgba(23, 183, 177, 0.4);             /* Sfondo turchese trasparente RIMOSSO */
   background: rgba(248, 250, 252, 0.4);             /* Sfondo grigio chiaro elegante */
@@ -2028,7 +2028,7 @@ select.form-select:focus,
 }
 
 /* SEZIONE 12.23: Effetto hover del numero fermata */
-.tratte-item:hover .fermate-number {
+.fermate-item:hover .fermate-number {
   background: rgba(255, 255, 255, 0.9);           /* Sfondo bianco più opaco */
   color: var(--turchese);                         /* Testo turchese */
   text-shadow: none;                              /* Nessun contorno per il numero */
@@ -2037,7 +2037,7 @@ select.form-select:focus,
 }
 
 /* SEZIONE 12.23.1: Effetto hover del nome fermata */
-.tratte-item:hover .fermate-stop {
+.fermate-item:hover .fermate-stop {
   color: #ffffff;                                 /* Testo bianco elegante */
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8),      /* Contorno nero per leggibilità */
                0 0 4px rgba(0, 0, 0, 0.6);        /* Contorno nero aggiuntivo */
@@ -2052,19 +2052,19 @@ select.form-select:focus,
 }
 
 /* SEZIONE 12.25: Elementi della lista tratte */
-.tratte-list li {
+.fermate-list li {
   padding: 0.5rem 0;                             /* Padding verticale */
   border-bottom: 1px solid var(--bordo);          /* Bordo inferiore */
   color: var(--testo-principale);                /* Colore testo principale */
 }
 
 /* SEZIONE 12.26: Ultimo elemento lista - rimuove bordo */
-.tratte-list li:last-child {
+.fermate-list li:last-child {
   border-bottom: none;                           /* Nessun bordo inferiore */
 }
 
 /* SEZIONE 12.27: Stato vuoto per tratte */
-.tratte-list:empty::before {
+.fermate-list:empty::before {
   content: 'Nessuna fermata disponibile';         /* Testo di stato vuoto */
   display: block;                                /* Display a blocchi */
   text-align: center;                            /* Testo centrato */
@@ -2074,7 +2074,7 @@ select.form-select:focus,
 }
 
 /* SEZIONE 12.28: Span del titolo card tratte */
-.tratte-card h3 span {
+.fermate-card h3 span {
   font-weight: 400;                               /* Peso font normale */
   font-size: 0.9rem;                              /* Dimensione font piccola */
   color: var(--testo-secondario);                 /* Colore testo secondario */
@@ -2095,7 +2095,7 @@ select.form-select:focus,
 }
 
 /* SEZIONE 12.30: Icona caricamento animata */
-.tratte-loading::before {
+.fermate-loading::before {
   content: '⏳';                                 /* Emoji clessidra */
   font-size: 2rem;                               /* Dimensione font molto grande */
   margin-right: 1rem;                           /* Margine destro */
@@ -2493,7 +2493,7 @@ select.form-select:focus,
     border-radius: 16px;                         /* Bordi meno arrotondati */
   }
 
-  .tratte-card h3 {
+  .fermate-card h3 {
     font-size: 1.5rem;                           /* Titolo card ridotto */
   }
 
@@ -2717,7 +2717,7 @@ select.form-select:focus,
   }
 
   /* Layout flat per tariffe su mobile */
-  .tratte-page .main-card {
+  .prezzi-page .main-card {
     background: transparent !important;         /* Rimuove sfondo card tariffe */
     backdrop-filter: none !important;          /* Rimuove effetto vetro */
     -webkit-backdrop-filter: none !important;  /* Rimuove effetto vetro WebKit */
@@ -2728,7 +2728,7 @@ select.form-select:focus,
   }
 
   /* Separatori per tariffe mobile */
-  .tratte-page .main-card::before {
+  .prezzi-page .main-card::before {
     content: '';
     display: block;
     height: 1px;
@@ -2737,27 +2737,27 @@ select.form-select:focus,
   }
 
   /* Prima card non ha separatore superiore */
-  .tratte-page .main-card:first-child::before {
+  .prezzi-page .main-card:first-child::before {
     display: none;
   }
 
   /* Modalità scura per separatori tariffe */
-  .dark .tratte-page .main-card::before {
+  .dark .prezzi-page .main-card::before {
     background: rgba(148, 163, 184, 0.3);
   }
 
   /* Tabella tariffe più compatta su mobile */
-  .tratte-page .prezzi-table {
+  .prezzi-page .prezzi-table {
     font-size: 0.9rem;                         /* Font più piccolo per mobile */
   }
 
-  .tratte-page .prezzi-table th,
-  .tratte-page .prezzi-table td {
+  .prezzi-page .prezzi-table th,
+  .prezzi-page .prezzi-table td {
     padding: 0.75rem 0.5rem;                   /* Padding ridotto per mobile */
   }
 
   /* Selettore linea tariffe mobile flat */
-  .tratte-page .line-selector-container {
+  .prezzi-page .line-selector-container {
     background: transparent !important;        /* Rimuove sfondo selettore */
     backdrop-filter: none !important;          /* Rimuove effetto vetro */
     -webkit-backdrop-filter: none !important;  /* Rimuove effetto vetro WebKit */
@@ -2768,7 +2768,7 @@ select.form-select:focus,
   }
 
   /* Barra di ricerca tariffe mobile flat */
-  .tratte-page .search-container {
+  .prezzi-page .search-container {
     background: transparent !important;        /* Rimuove sfondo ricerca */
     backdrop-filter: none !important;          /* Rimuove effetto vetro */
     -webkit-backdrop-filter: none !important;  /* Rimuove effetto vetro WebKit */
@@ -2809,7 +2809,7 @@ select.form-select:focus,
   }
 
   /* Selettore linea tratte mobile flat */
-  .tratte-page .line-selector-container {
+  .prezzi-page .line-selector-container {
     background: transparent !important;        /* Rimuove sfondo selettore */
     backdrop-filter: none !important;          /* Rimuove effetto vetro */
     -webkit-backdrop-filter: none !important;  /* Rimuove effetto vetro WebKit */
@@ -2820,7 +2820,7 @@ select.form-select:focus,
   }
 
   /* Barra di ricerca tratte mobile flat */
-  .tratte-page .search-container {
+  .prezzi-page .search-container {
     background: transparent !important;        /* Rimuove sfondo ricerca */
     backdrop-filter: none !important;          /* Rimuove effetto vetro */
     -webkit-backdrop-filter: none !important;  /* Rimuove effetto vetro WebKit */
@@ -2835,7 +2835,7 @@ select.form-select:focus,
     padding: 0.5rem 0;                         /* Padding ridotto per mobile */
   }
 
-  .tratte-page .tratte-list li {
+  .tratte-page .fermate-list li {
     padding: 0.75rem 0.5rem;                   /* Padding ridotto per mobile */
     margin-bottom: 0.25rem;                    /* Margine ridotto tra fermate */
   }
@@ -2937,7 +2937,7 @@ select.form-select:focus,
     border-radius: 12px;                        /* Bordi meno arrotondati */
   }
 
-  .tratte-card h3 {
+  .fermate-card h3 {
     font-size: 1.3rem;                          /* Titolo ridotto */
     padding-bottom: 0.75rem;                    /* Padding inferiore ridotto */
   }
@@ -3847,7 +3847,7 @@ select.form-select:focus,
   }
 
   /* Effetto hover elementi tratta desktop */
-  .tratte-item:hover {
+  .fermate-item:hover {
     /* transform: translateY(-3px);                /* Solleva l'elemento RIMOSSO */
     /* box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* Ombra più forte RIMOSSA */
     /* background-color: var(--turchese);          /* Sfondo turchese RIMOSSO */
@@ -3865,7 +3865,7 @@ select.form-select:focus,
   }
 
   /* Effetto hover elementi tratta in modalità scura */
-  .dark .tratte-item:hover {
+  .dark .fermate-item:hover {
     /* background: rgba(23, 183, 177, 0.4);       /* Sfondo turchese trasparente RIMOSSO */
     background: rgba(255, 255, 255, 0.1);       /* Sfondo bianco trasparente */
     color: #ffffff;                             /* Testo bianco */
