@@ -2,6 +2,7 @@
   "name": "TPL FVG",
   "short_name": "TPL FVG",
   "description": "Calcola prezzi e visualizza fermate TPL FVG anche offline.",
+  "version": "1.2.31",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

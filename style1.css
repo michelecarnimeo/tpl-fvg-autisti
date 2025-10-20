@@ -1,0 +1,2487 @@
+/* ========================================
+   BASE: RESET, VARIABILI, DARK MODE, BODY, CONTAINER
+   Estratto da style.css per riorganizzazione sicura
+   ======================================== */
+
+/* ========================================
+   SEZIONE 1: RESET CSS
+   ======================================== */
+/* Reset globale per rimuovere margini e padding di default */
+* {
+    margin: 0;        /* Rimuove margini di default di tutti gli elementi */
+    padding: 0;       /* Rimuove padding di default di tutti gli elementi */
+    box-sizing: border-box;  /* Include padding e border nel calcolo delle dimensioni */
+  }
+  
+  /* ========================================
+     SEZIONE 2: FONT DI SISTEMA
+     ======================================== */
+  /* Imposta font di sistema per funzionamento offline (non dipende da font esterni) */
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    /* Fallback: usa font di sistema nativi per compatibilità offline */
+  }
+  
+  /* ========================================
+     SEZIONE 3: VARIABILI CSS - PALETTE COLORI
+     ======================================== */
+  :root {
+    /* SOTTOSEZIONE 3.1: Colori principali dell'applicazione */
+    --turchese: #007b8a;           /* Colore principale ciano - navbar e elementi accent */
+    --turchese-scuro: #005f6b;     /* Versione più scura del ciano - hover e stati attivi */
+    --turchese-light: #0099aa;     /* Versione più chiara del ciano - elementi secondari */
+    --bianco: #ffffff;             /* Bianco puro per testi su sfondi scuri */
+    --grigio-chiaro: #f0f4f8;      /* Grigio molto chiaro per sfondi neutri */
+    --grigio-medio: #e9ecef;       /* Grigio medio per separatori e bordi */
+    --grigio-scuro: #6c757d;       /* Grigio scuro per testo secondario */
+    --testo-principale: #0f172a;   /* Colore principale del testo (blu scuro) */
+    --testo-secondario: #4a5568;   /* Colore secondario del testo (grigio scuro) */
+    --bordo: rgba(255, 255, 255, 0.18);  /* Bordo bianco semi-trasparente per glassmorphism */
+  
+    /* SOTTOSEZIONE 3.2: Variabili ottimizzate per performance */
+    --glass-bg: rgba(255, 255, 255, 0.95);  /* Sfondo semi-opaco per card */
+    --glass-border: rgba(255, 255, 255, 0.5);  /* Bordo bianco più visibile per card */
+    --glass-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.15);  /* Ombra semplificata per card */
+    --backdrop-blur: none;  /* Rimosso per migliorare performance */
+  
+    /* SOTTOSEZIONE 3.3: Colori per modalità scura */
+    --bg-scuro: #0f172a;                    /* Sfondo scuro principale per dark mode */
+    --card-scuro: rgba(30, 41, 59, 0.4);    /* Sfondo scuro per card in dark mode */
+    --testo-scuro: #f1f5f9;                 /* Testo chiaro per dark mode */
+    --bordo-scuro: rgba(148, 163, 184, 0.1); /* Bordo chiaro per dark mode */
+  
+    /* SOTTOSEZIONE 3.4: Ottimizzazioni per modalità scura */
+    --glass-bg-dark: rgba(30, 41, 59, 0.95);        /* Sfondo scuro semi-opaco */
+    --glass-border-dark: rgba(148, 163, 184, 0.5);  /* Bordo glassmorphism scuro più visibile */
+    --glass-shadow-dark: 0 4px 12px 0 rgba(0, 0, 0, 0.3);  /* Ombra scura semplificata */
+  }
+  
+  /* ========================================
+     SEZIONE 4: MODALITÀ SCURA (DARK MODE)
+     ======================================== */
+  /* Ridefinisce le variabili CSS quando la classe .dark è applicata al body */
+  .dark {
+    --grigio-chiaro: var(--bg-scuro);        /* Grigio chiaro diventa sfondo scuro */
+    --bianco: var(--card-scuro);             /* Bianco diventa card scura */
+    --testo-principale: var(--testo-scuro);  /* Testo principale diventa chiaro */
+    --testo-secondario: #94a3b8;             /* Testo secondario diventa grigio chiaro */
+    --bordo: var(--bordo-scuro);             /* Bordi diventano chiari */
+    --glass-bg: var(--glass-bg-dark);        /* Glassmorphism diventa scuro */
+    --glass-border: var(--glass-border-dark); /* Bordi glassmorphism diventano chiari */
+    --glass-shadow: var(--glass-shadow-dark); /* Ombre glassmorphism diventano scure */
+  }
+  
+  /* ========================================
+     SEZIONE 5: BACKGROUND DEL BODY - GRADIENTE ANIMATO
+     ======================================== */
+  /* Configurazione principale del body con sfondo glassmorphism animato */
+  body {
+    /* SOTTOSEZIONE 5.1: Font principale */
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;  /* Font di sistema per compatibilità offline */
+    
+    /* SOTTOSEZIONE 5.2: Gradiente di sfondo bianco sfumato */
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 25%, #cbd5e1 50%, #94a3b8 75%, #64748b 100%);
+    background-size: 400% 400%;        /* Dimensione del gradiente per animazione */
+    /* Animazione rimossa - controllata da JavaScript */
+    
+    /* SOTTOSEZIONE 5.3: Testo e layout base */
+    color: var(--testo-principale);    /* Colore del testo principale */
+    line-height: 1.6;                 /* Altezza della riga per leggibilità */
+    min-height: 100vh;                /* Altezza minima viewport */
+    
+    /* SOTTOSEZIONE 5.4: Transizioni e posizionamento */
+    transition: all 0.3s ease;        /* Transizioni smooth per tutti gli elementi */
+    position: relative;               /* Posizionamento relativo per elementi assoluti */
+    overflow-x: hidden;              /* Nasconde scroll orizzontale */
+    
+    /* SOTTOSEZIONE 5.5: Layout flexbox */
+    margin: 0;                       /* Rimuove margini default */
+    padding: 0;                      /* Rimuove padding default */
+    display: flex;                   /* Layout flexbox per struttura verticale */
+    flex-direction: column;          /* Direzione verticale (header, main, footer) */
+  }
+  
+  /* SOTTOSEZIONE 5.6: Animazione del gradiente di sfondo */
+  /* Definisce l'animazione per far muovere il gradiente di sfondo */
+  @keyframes gradientShift {
+    0% {
+      background-position: 0% 50%;    /* Posizione iniziale del gradiente */
+    }
+    50% {
+      background-position: 100% 50%;  /* Posizione centrale - gradiente si sposta */
+    }
+    100% {
+      background-position: 0% 50%;    /* Ritorna alla posizione iniziale */
+    }
+  }
+  
+  /* SOTTOSEZIONE 5.6.1: Animazione controllata da JavaScript */
+  /* L'animazione è disabilitata di default per migliorare le performance */
+  
+  /* SOTTOSEZIONE 5.6.2: Abilita animazione quando richiesta */
+  body.animation-enabled {
+    animation: gradientShift 20s ease infinite !important;
+  }
+  
+  .dark body.animation-enabled {
+    animation: gradientShift 20s ease infinite !important;
+  }
+  
+  /* SOTTOSEZIONE 5.7: Background per modalità scura */
+  /* Override del gradiente quando la classe .dark è attiva */
+  .dark body {
+    background: linear-gradient(135deg, #1a202c 0%, #2d3748 25%, #4a5568 50%, #718096 75%, #a0aec0 100%);
+    /* Gradiente scuro: grigio scuro → grigio → grigio chiaro */
+    background-size: 400% 400%;        /* Stessa dimensione per animazione */
+    /* Animazione rimossa - controllata da JavaScript */
+  }
+  
+  /* ========================================
+     SEZIONE 6: CONTAINER PRINCIPALE
+     ======================================== */
+  /* Container wrapper per tutto il contenuto dell'applicazione */
+  .container {
+    max-width: none;        /* Nessuna larghezza massima - usa tutto lo spazio */
+    margin: 0 auto;         /* Centra il container orizzontalmente */
+    padding: 0 0.25rem;     /* Padding laterale minimo per evitare attaccarsi ai bordi */
+    width: 100%;            /* Usa tutta la larghezza disponibile */
+    box-sizing: border-box; /* Include padding nel calcolo delle dimensioni */
+  }
+  
+  /* SOTTOSEZIONE 6.1: Media query per schermi grandi (1200px+) */
+  @media (min-width: 1200px) {
+    /* Container del main content con layout grid */
+    .main-content>.container {
+      display: grid;              /* Layout a griglia */
+      grid-template-columns: 1fr; /* Una colonna (layout verticale) */
+      gap: 2rem;                  /* Spazio tra gli elementi */
+    }
+  }
+  
+/* ========================================
+   COMPONENTI: NAVBAR, BOTTONI, MODALI, FORM, CARD, FOOTER
+   Estratto da style.css per riorganizzazione sicura
+   ======================================== */
+
+/* ========================================
+   SEZIONE 7: NAVBAR - GLASSMORPHISM
+   ======================================== */
+/* Barra di navigazione superiore con effetto vetro */
+.navbar {
+    /* SOTTOSEZIONE 7.1: Sfondo gradiente ciano */
+    background: linear-gradient(135deg, rgba(0, 123, 138, 0.9) 0%, rgba(0, 123, 138, 0.7) 50%, rgba(0, 123, 138, 0.5) 100%);
+    /* Gradiente ciano: da 90% opacità a 50% opacità */
+    
+    /* SOTTOSEZIONE 7.2: Effetti ottimizzati */
+    /* backdrop-filter rimosso per migliorare performance */
+    /* -webkit-backdrop-filter rimosso per migliorare performance */
+    
+    /* SOTTOSEZIONE 7.3: Spaziatura e bordi */
+    padding: 0.8rem 0;                            /* Padding verticale aumentato per dare spazio al logo */
+    box-shadow: 0 4px 12px 0 rgba(0, 123, 138, 0.4); /* Ombra ciano semplificata */
+    border-bottom: 1px solid rgba(0, 123, 138, 0.3);   /* Bordo inferiore ciano */
+    
+    /* SOTTOSEZIONE 7.4: Posizionamento sticky */
+    position: sticky;  /* Rimanere in cima durante lo scroll */
+    top: 0;           /* Posizione in cima */
+    z-index: 1000;    /* Sopra tutti gli altri elementi */
+  }
+  
+  /* Effetto rifrazione della luce per navbar */
+  .navbar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60%;
+    background: transparent; /* Gradiente rimosso per performance */
+    pointer-events: none;
+    z-index: 1;
+  }
+  
+  /* SOTTOSEZIONE 7.5: Layout del contenuto navbar */
+  .navbar-content {
+    display: flex;                    /* Layout flexbox orizzontale */
+    justify-content: space-between;   /* Logo a sinistra, menu a destra */
+    align-items: center;              /* Allineamento verticale centrale */
+    flex-wrap: nowrap;               /* Non andare a capo su schermi piccoli */
+  }
+  
+  /* SOTTOSEZIONE 7.6: Brand/Logo della navbar */
+  /* Link wrapper per logo cliccabile */
+  .navbar-brand-link {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    display: inline-block;
+  }
+  
+  /* Wrapper per effetto flip 3D */
+  .navbar-logo-wrapper {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    display: block;
+    perspective: 1000px;
+    transform-style: preserve-3d;
+  }
+  
+  /* Logo default: stato iniziale frontale */
+  .navbar-logo-default {
+    transform: rotateY(0deg);
+    backface-visibility: hidden;
+  }
+  
+  /* Logo hover: inizia girato dietro */
+  .navbar-logo-hover {
+    transform: rotateY(180deg);
+    backface-visibility: hidden;
+  }
+  
+  /* Al hover: logo default ruota via */
+  .navbar-brand-link:hover .navbar-logo-default {
+    transform: rotateY(-180deg);
+    opacity: 0;
+  }
+  
+  /* Al hover: logo hover ruota e appare */
+  .navbar-brand-link:hover .navbar-logo-hover {
+    transform: rotateY(0deg);
+    opacity: 1;
+  }
+  
+  .navbar-brand {
+    display: flex;        /* Layout flexbox per logo + titolo */
+    align-items: center;  /* Allineamento verticale centrale */
+    gap: 12px;           /* Spazio tra logo e titolo */
+  }
+  
+  /* Logo TPL nella navbar */
+  .navbar-logo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50px;         /* Logo quadrato ridotto per navbar sottile */
+    height: 50px;        /* Logo quadrato ridotto per navbar sottile */
+    transition: transform 0.6s ease-in-out, opacity 0.6s ease-in-out, box-shadow 0.3s ease;
+    border-radius: 12px; /* Angoli molto smussati per contorno arrotondato */
+    border: 2px solid rgba(0, 123, 138, 0.7); /* Contorno ciano che avvolge l'immagine */
+    object-fit: contain; /* Adatta l'immagine mantenendo proporzioni e contenuto visibile */
+    box-shadow: 0 2px 8px rgba(0, 123, 138, 0.4); /* Ombra semplificata per profondità */
+  }
+  
+  /* Logo default visibile di default */
+  .navbar-logo-default {
+    opacity: 1;
+    z-index: 1;
+  }
+  
+  /* Logo hover nascosto di default */
+  .navbar-logo-hover {
+    opacity: 0;
+    z-index: 2;
+  }
+  
+  /* Effetto rifrazione della luce per logo navbar */
+  .navbar-logo::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.15) 0%,
+      rgba(255, 255, 255, 0.08) 40%,
+      transparent 70%,
+      transparent 100%
+    );
+    border-radius: 12px 12px 6px 6px;
+    pointer-events: none;
+    z-index: 1;
+  }
+  
+  /* Titolo TPL FVG nella navbar */
+  .navbar-title {
+    color: rgba(255, 255, 255, 1);                 /* Testo bianco pieno */
+    font-size: 1.5rem;                              /* Dimensione font grande */
+    font-weight: 700;                               /* Peso font bold */
+    text-decoration: none;                          /* Nessuna sottolineatura */
+    text-shadow: 0 2px 15px rgba(0, 0, 0, 0.6);    /* Ombra testo più forte per leggibilità */
+    display: flex;                                 /* Layout flexbox orizzontale */
+    align-items: center;                           /* Allineamento verticale centrale */
+    gap: 0.5rem;                                   /* Spazio ridotto tra acronimo e testo */
+  }
+  
+  .navbar-title .logo-acronym,
+  .navbar-title .navbar-title-main {
+    display: flex;                                 /* Layout flexbox per tpl/fvg */
+    flex-direction: column;                        /* Disposizione verticale */
+    font-family: 'Arial', sans-serif;             /* Font sans-serif spesso */
+    font-weight: 700;                             /* Font molto audace */
+    font-size: 1.4rem;                            /* Dimensione media aumentata di un altro punto */
+    color: rgba(255, 255, 255, 1);                /* Testo bianco pieno */
+    letter-spacing: 0.5px;                        /* Spaziatura tra lettere */
+    line-height: 1;                               /* Altezza riga compatta */
+    text-shadow: 0 2px 15px rgba(0, 0, 0, 0.6);   /* Ombra testo più forte */
+  }
+  
+  .navbar-title .logo-text,
+  .navbar-title .navbar-title-sub {
+    display: flex;                                 /* Layout flexbox per trasporto/pubblico/locale */
+    flex-direction: column;                        /* Disposizione verticale */
+    font-family: 'Arial', sans-serif;             /* Font sans-serif leggero */
+    font-weight: 300;                             /* Font leggero */
+    font-size: 0.8rem;                            /* Dimensione piccola aumentata */
+    color: rgba(255, 255, 255, 0.9);              /* Testo bianco più visibile */
+    letter-spacing: 0.3px;                        /* Spaziatura tra lettere */
+    line-height: 1;                               /* Altezza riga compatta */
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);   /* Ombra testo per leggibilità */
+  }
+  
+  
+  /* SOTTOSEZIONE 7.8: Navigazione navbar */
+  .navbar-nav {
+    display: flex;           /* Layout flexbox orizzontale */
+    align-items: center;     /* Allineamento verticale centrale */
+    gap: 1rem;              /* Spazio tra i link */
+  }
+  
+  .nav-link {
+    /* SOTTOSEZIONE 7.9.1: Stile base */
+    color: rgba(255, 255, 255, 0.95);        /* Testo bianco con 95% opacità */
+    text-decoration: none;                   /* Nessuna sottolineatura */
+    font-weight: 500;                        /* Peso font medium */
+    font-size: 1rem;                         /* Dimensione font standard */
+    padding: 0.5rem 1rem;                    /* Padding interno */
+    border-radius: 8px;                      /* Bordi arrotondati */
+    transition: all 0.3s ease;               /* Transizione fluida */
+    position: relative;                      /* Per posizionamento assoluto del ::before */
+    white-space: nowrap;                     /* Testo su una riga */
+    
+    /* SOTTOSEZIONE 7.9.2: Stile minimale per stato normale */
+    background: transparent;                 /* Nessun sfondo di default */
+    border: none;                            /* Nessun bordo di default */
+    box-shadow: none;                        /* Nessuna ombra di default */
+  }
+  
+  /* Effetto rifrazione della luce per nav-link */
+  .nav-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: transparent; /* Gradiente rimosso per performance */
+    border-radius: 8px 8px 4px 4px;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .nav-link:hover {
+    /* SOTTOSEZIONE 7.10.1: Sfondo ottimizzato */
+    background: rgba(255, 255, 255, 0.1);      /* Sfondo bianco trasparente */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Bordo bianco trasparente */
+    
+    /* SOTTOSEZIONE 7.10.2: Testo e bordi */
+    color: rgba(255, 255, 255, 1);             /* Testo bianco pieno */
+    
+    /* SOTTOSEZIONE 7.10.3: Ombra e trasformazioni */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Ombra leggera */
+    transform: translateY(-1px);                /* Solleva leggermente */
+  }
+  
+  /* Rifrazione visibile al hover */
+  .nav-link:hover::before {
+    opacity: 1;
+  }
+  
+  .nav-link.active {
+    /* SOTTOSEZIONE 7.11.1: Sfondo ottimizzato attivo */
+    background: rgba(255, 255, 255, 0.4);      /* Sfondo bianco più opaco */
+    /* backdrop-filter rimosso per performance */
+    /* -webkit-backdrop-filter rimosso per performance */
+    
+    /* SOTTOSEZIONE 7.11.2: Testo e bordi attivi */
+    color: rgba(255, 255, 255, 1);             /* Testo bianco pieno */
+    border-color: rgba(255, 255, 255, 0.6);    /* Bordo bianco più opaco */
+    font-weight: 600;                          /* Peso font semi-bold */
+    
+    /* SOTTOSEZIONE 7.11.3: Ombra e trasformazioni attive */
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25); /* Ombra più profonda */
+    transform: translateY(-2px);                /* Solleva di più */
+  }
+  
+  /* Rifrazione visibile per stato attivo */
+  .nav-link.active::before {
+    opacity: 1;
+  }
+  
+  /* SOTTOSEZIONE 7.12: Toggle dark mode */
+  .dark-mode-toggle {
+    background: transparent;                   /* Nessun sfondo di default */
+    border: none;                             /* Nessun bordo di default */
+    color: rgba(255, 255, 255, 0.95);        /* Testo bianco con 95% opacità */
+    border-radius: 8px;                       /* Bordi arrotondati */
+    padding: 0.5rem;                          /* Padding interno */
+    cursor: pointer;                          /* Cursore pointer */
+    transition: all 0.3s ease;               /* Transizione fluida */
+    font-size: 1.2rem;                       /* Dimensione font grande */
+    display: flex;                            /* Layout flexbox */
+    align-items: center;                      /* Allineamento verticale centrale */
+    justify-content: center;                  /* Allineamento orizzontale centrale */
+    min-width: 40px;                         /* Larghezza minima */
+    height: 40px;                            /* Altezza fissa */
+    box-shadow: none;                        /* Nessuna ombra di default */
+  }
+  
+  .dark-mode-toggle:hover {
+    background: rgba(255, 255, 255, 0.1);      /* Sfondo bianco trasparente */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Bordo bianco trasparente */
+    color: rgba(255, 255, 255, 1);             /* Testo bianco pieno */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Ombra leggera */
+    transform: translateY(-1px);                /* Solleva leggermente */
+  }
+  
+  /* SOTTOSEZIONE 7.13: Stili dark mode per navbar */
+  .dark .dark-mode-toggle {
+    background: transparent;                   /* Nessun sfondo di default */
+    color: rgba(248, 250, 252, 0.95);        /* Testo chiaro */
+    border: none;                             /* Nessun bordo di default */
+    box-shadow: none;                         /* Nessuna ombra di default */
+  }
+  
+  .dark .dark-mode-toggle:hover {
+    background: rgba(255, 255, 255, 0.1);     /* Sfondo bianco trasparente al hover */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Bordo bianco trasparente */
+    color: rgba(255, 255, 255, 1);            /* Testo bianco pieno */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Ombra leggera */
+  }
+  
+  .dark .nav-link {
+    background: transparent;                   /* Nessun sfondo di default */
+    color: rgba(248, 250, 252, 0.95);        /* Testo chiaro */
+    border: none;                             /* Nessun bordo di default */
+    box-shadow: none;                         /* Nessuna ombra di default */
+  }
+  
+  .dark .nav-link:hover {
+    background: rgba(255, 255, 255, 0.1);     /* Sfondo bianco trasparente al hover */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Bordo bianco trasparente */
+    color: rgba(255, 255, 255, 1);            /* Testo bianco pieno */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Ombra leggera */
+  }
+  
+  /* SOTTOSEZIONE 7.14: Pulsante controllo animazione */
+  .animation-toggle {
+    background: transparent;                   /* Nessun sfondo di default */
+    border: none;                             /* Nessun bordo di default */
+    color: rgba(255, 255, 255, 0.95);        /* Testo bianco con 95% opacità */
+    border-radius: 8px;                       /* Bordi arrotondati */
+    padding: 0.5rem;                          /* Padding interno */
+    cursor: pointer;                          /* Cursore pointer */
+    transition: all 0.3s ease;               /* Transizione fluida */
+    font-size: 1.1rem;                       /* Dimensione font */
+    display: flex;                            /* Layout flexbox */
+    align-items: center;                      /* Allineamento verticale centrale */
+    justify-content: center;                  /* Allineamento orizzontale centrale */
+    min-width: 40px;                         /* Larghezza minima */
+    height: 40px;                            /* Altezza fissa */
+    box-shadow: none;                        /* Nessuna ombra di default */
+    margin-left: 0.5rem;                     /* Margine sinistro per separare dal dark mode */
+  }
+  
+  .animation-toggle:hover {
+    background: rgba(255, 255, 255, 0.1);      /* Sfondo bianco trasparente */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Bordo bianco trasparente */
+    color: rgba(255, 255, 255, 1);             /* Testo bianco pieno */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Ombra leggera */
+    transform: translateY(-1px);                /* Solleva leggermente */
+  }
+  
+  /* Stato attivo - animazione abilitata */
+  .animation-toggle.active {
+    background: rgba(34, 197, 94, 0.2);        /* Sfondo verde trasparente */
+    border: 1px solid rgba(34, 197, 94, 0.4);  /* Bordo verde */
+    color: #22c55e;                            /* Testo verde */
+    box-shadow: 0 2px 8px rgba(34, 197, 94, 0.2); /* Ombra verde */
+  }
+  
+  .animation-toggle.active:hover {
+    background: rgba(34, 197, 94, 0.3);        /* Sfondo verde più intenso */
+    border: 1px solid rgba(34, 197, 94, 0.5);  /* Bordo verde più intenso */
+    box-shadow: 0 2px 12px rgba(34, 197, 94, 0.3); /* Ombra verde più intensa */
+  }
+  
+  /* Stili per modalità scura */
+  .dark .animation-toggle {
+    background: transparent;                   /* Nessun sfondo di default */
+    color: rgba(248, 250, 252, 0.95);        /* Testo chiaro */
+    border: none;                             /* Nessun bordo di default */
+    box-shadow: none;                         /* Nessuna ombra di default */
+  }
+  
+  .dark .animation-toggle:hover {
+    background: rgba(255, 255, 255, 0.1);     /* Sfondo bianco trasparente al hover */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Bordo bianco trasparente */
+    color: rgba(255, 255, 255, 1);            /* Testo bianco pieno */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Ombra leggera */
+  }
+  
+  .dark .animation-toggle.active {
+    background: rgba(34, 197, 94, 0.2);        /* Sfondo verde trasparente */
+    border: 1px solid rgba(34, 197, 94, 0.4);  /* Bordo verde */
+    color: #22c55e;                            /* Testo verde */
+    box-shadow: 0 2px 8px rgba(34, 197, 94, 0.2); /* Ombra verde */
+  }
+  
+  .dark .animation-toggle.active:hover {
+    background: rgba(34, 197, 94, 0.3);        /* Sfondo verde più intenso */
+    border: 1px solid rgba(34, 197, 94, 0.5);  /* Bordo verde più intenso */
+    box-shadow: 0 2px 12px rgba(34, 197, 94, 0.3); /* Ombra verde più intensa */
+  }
+  
+  .dark .nav-link.active {
+    background: rgba(255, 255, 255, 0.2);     /* Sfondo bianco più opaco per stato attivo */
+    border-color: rgba(255, 255, 255, 0.5);   /* Bordo bianco più opaco */
+    color: rgba(255, 255, 255, 1);            /* Testo bianco pieno */
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5); /* Ombra scura più profonda */
+  }
+  
+  /* ========================================
+     SEZIONE 8: MAIN CONTENT - LAYOUT E CARD
+     ======================================== */
+  /* Contenitore principale dell'applicazione */
+  .main-content {
+    flex: 1;                                /* Occupa lo spazio rimanente */
+    display: flex;                          /* Layout flexbox */
+    flex-direction: column;                 /* Direzione verticale */
+    align-items: center;                    /* Centra orizzontalmente */
+    padding: 2rem 0;                        /* Padding verticale */
+    position: relative;                     /* Per posizionamento assoluto */
+    overflow: hidden;                       /* Nasconde overflow */
+  }
+  
+  /* Card principale con glassmorphism */
+  .main-card {
+    /* SOTTOSEZIONE 8.1: Sfondo glassmorphism */
+    background: var(--glass-bg);                     /* Sfondo trasparente */
+    backdrop-filter: var(--backdrop-blur);          /* Sfocatura del background */
+    -webkit-backdrop-filter: var(--backdrop-blur);  /* Supporto WebKit */
+    
+    /* SOTTOSEZIONE 8.2: Bordi e ombre */
+    border: 1px solid var(--glass-border);           /* Bordo trasparente */
+    border-radius: 16px;                             /* Bordi arrotondati */
+    box-shadow: var(--glass-shadow);                 /* Ombra leggera */
+    
+    /* SOTTOSEZIONE 8.3: Spaziatura e dimensioni */
+    padding: 2rem;                                   /* Padding interno */
+    margin: 1.5rem auto;                             /* Margine verticale e centratura */
+    max-width: 500px;                                /* Larghezza massima */
+    width: 90%;                                      /* Larghezza responsiva */
+    
+    /* SOTTOSEZIONE 8.4: Layout e animazioni */
+    display: flex;                                   /* Layout flexbox */
+    flex-direction: column;                          /* Direzione verticale */
+    gap: 1.5rem;                                     /* Spazio tra gli elementi */
+    transition: all 0.3s ease;                       /* Transizione fluida */
+    position: relative;                              /* Per posizionamento assoluto */
+    z-index: 1;                                      /* Sopra il background */
+  }
+  
+  /* Dark mode per card principale */
+  .dark .main-card {
+    background: var(--glass-bg-dark);                /* Sfondo scuro */
+    border-color: var(--glass-border-dark);          /* Bordo scuro */
+    box-shadow: var(--glass-shadow-dark);            /* Ombra scura */
+  }
+  
+  /* SOTTOSEZIONE 8.5: Titolo della card */
+  .card-title {
+    text-align: center;              /* Testo centrato */
+    margin-bottom: 1.5rem;           /* Margine inferiore */
+  }
+  
+  .card-title h1 {
+    font-size: 2rem;                 /* Dimensione font grande */
+    font-weight: 800;                /* Peso font extra bold */
+    color: var(--testo-principale);  /* Colore testo principale */
+    text-shadow: 0 2px 10px rgba(255, 255, 255, 0.3);  /* Ombra testo leggera */
+  }
+  
+  .card-title p {
+    font-size: 1.05rem;              /* Dimensione font media */
+    color: rgba(51, 65, 85, 0.8);    /* Colore grigio con 80% opacità */
+    max-width: 90%;                  /* Larghezza massima 90% */
+    margin: 0 auto;                  /* Centra orizzontalmente */
+    text-shadow: 0 1px 5px rgba(255, 255, 255, 0.2);  /* Ombra testo leggera */
+  }
+  
+  /* ========================================
+     SEZIONE 9: FORM ELEMENTI
+     ======================================== */
+  
+  /* SOTTOSEZIONE 9.1: Elementi del form */
+  .form-group {
+    margin-bottom: 1.2rem;           /* Margine inferiore tra i gruppi */
+  }
+  
+  /* SOTTOSEZIONE 9.2: Selettori del form con glassmorphism */
+  .form-select {
+    width: 100%;                      /* Larghezza completa */
+    padding: 0.6rem 0.8rem;           /* Padding interno */
+    border: 1px solid var(--glass-border);  /* Bordo trasparente */
+    border-radius: 12px;              /* Bordi arrotondati */
+    background: var(--glass-bg);      /* Sfondo semi-opaco */
+    /* backdrop-filter rimosso per performance */
+    /* -webkit-backdrop-filter rimosso per performance */
+    color: rgba(15, 23, 42, 0.95);   /* Colore testo scuro */
+    font-size: 1rem;                  /* Dimensione font standard */
+    transition: all 0.3s ease;        /* Transizione fluida */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);  /* Ombra leggera per visibilità */
+    font-weight: 500;                  /* Peso font medium */
+    position: relative;               /* Per posizionamento assoluto del ::before */
+    appearance: none;                 /* Rimuove lo stile di default del browser */
+    -webkit-appearance: none;         /* Supporto WebKit */
+    -moz-appearance: none;            /* Supporto Firefox */
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23374151' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");  /* Freccia custom */
+    background-repeat: no-repeat;     /* Non ripete l'immagine */
+    background-position: right 0.75rem center;  /* Posizione freccia */
+    background-size: 1rem;            /* Dimensione freccia */
+    padding-right: 2.5rem;            /* Spazio per la freccia */
+  }
+  
+  /* Effetto rifrazione della luce per form-select */
+  .form-select::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: transparent; /* Gradiente rimosso per performance */
+    border-radius: 12px 12px 6px 6px;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  /* Stile per le opzioni della select */
+  .form-select option {
+    background: rgba(30, 41, 59, 0.95);  /* Sfondo scuro per le opzioni */
+    color: #ffffff;                    /* Testo bianco */
+    padding: 0.5rem 0.8rem;            /* Padding per le opzioni */
+  }
+  
+  /* Focus del selettore */
+  .form-select:focus {
+    outline: none;                     /* Rimuove il bordo di default */
+    border-color: var(--turchese);     /* Bordo turchese al focus */
+    box-shadow: 0 0 0 3px rgba(23, 183, 177, 0.1);  /* Ombra turchese */
+  }
+  
+  /* Rifrazione visibile al focus */
+  .form-select:focus::before {
+    opacity: 1;
+  }
+  
+  /* Selettore disabilitato */
+  .form-select:disabled {
+    background: rgba(233, 236, 239, 0.3);  /* Sfondo grigio trasparente */
+    color: var(--grigio-scuro);          /* Testo grigio scuro */
+    cursor: not-allowed;                   /* Cursore non consentito */
+    /* backdrop-filter rimosso per performance */
+    /* -webkit-backdrop-filter rimosso per performance */
+    background-image: none;              /* Rimuove la freccia dropdown */
+  }
+  
+  /* Dark mode per form-select */
+  .dark .form-select {
+    background: var(--glass-bg-dark);      /* Sfondo glassmorphism scuro */
+    color: rgba(248, 250, 252, 0.95);     /* Testo chiaro */
+    border-color: var(--glass-border-dark);  /* Bordo glassmorphism scuro */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);  /* Ombra scura */
+  }
+  
+  .dark .form-select:focus {
+    border-color: var(--turchese);        /* Bordo turchese al focus */
+    box-shadow: 0 0 0 3px rgba(23, 183, 177, 0.2);  /* Ombra turchese più forte */
+  }
+  
+  .dark .form-select:disabled {
+    background: rgba(30, 41, 59, 0.3);   /* Sfondo scuro trasparente */
+    color: rgba(148, 163, 184, 0.7);    /* Testo grigio */
+    background-image: none;              /* Rimuove la freccia dropdown */
+  }
+  
+  /* ========================================
+     SEZIONE 10: BOTTONI E PULSANTI
+     ======================================== */
+  /* SEZIONE 10.1: Container pulsante swap rimosso - ora posizionato assoluto */
+  
+  /* SEZIONE 10.2: Pulsante swap (inverti percorso) */
+  .swap-btn {
+    /* SEZIONE 10.2.1: Stile glassmorphism */
+    background: var(--glass-bg);                    /* Sfondo trasparente */
+    /* backdrop-filter rimosso per performance */
+    /* -webkit-backdrop-filter rimosso per performance */
+    border: 1px solid var(--glass-border);         /* Bordo trasparente */
+    border-radius: 50px;                           /* Bordi completamente arrotondati */
+    position: relative;                            /* Per posizionamento assoluto del ::before */
+    
+    /* SEZIONE 10.2.2: Dimensioni e layout */
+    padding: 0.7rem 1rem;                          /* Padding interno */
+    display: flex;                                 /* Layout flexbox */
+    align-items: center;                          /* Allineamento verticale centrale */
+    justify-content: center;                      /* Allineamento orizzontale centrale */
+    min-width: 50px;                              /* Larghezza minima */
+    
+    /* SEZIONE 10.2.3: Interattività */
+    cursor: pointer;                               /* Cursore pointer */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);  /* Transizione fluida */
+    
+    /* SEZIONE 10.2.4: Tipografia */
+    font-size: 1.1rem;                            /* Dimensione font grande */
+    color: var(--testo-principale);               /* Colore testo principale */
+    font-weight: 600;                             /* Peso font semi-bold */
+    
+    /* SEZIONE 10.2.5: Ombra e profondità */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(255, 255, 255, 0.1);  /* Ombra glassmorphism */
+    
+    /* SEZIONE 10.2.6: Effetti hover */
+    transform: translateY(0);                      /* Posizione iniziale */
+  }
+  
+  /* Effetto hover per swap-btn */
+  .swap-btn:hover {
+    /* SEZIONE 10.2.7: Trasformazioni hover */
+    transform: translateY(-2px);                   /* Solleva leggermente */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(255, 255, 255, 0.2);  /* Ombra più profonda */
+    
+    /* SEZIONE 10.2.8: Sfondo hover */
+    background: rgba(255, 255, 255, 0.4);         /* Sfondo bianco più opaco */
+    border-color: rgba(255, 255, 255, 0.6);       /* Bordo bianco più opaco */
+  }
+  
+  /* Effetto attivo per swap-btn */
+  .swap-btn:active {
+    transform: translateY(0);                      /* Ritorna alla posizione originale */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(255, 255, 255, 0.1);  /* Ombra ridotta */
+  }
+  
+  /* SEZIONE 10.3: Pulsante calcola */
+  .calculate-btn {
+    background: var(--turchese);                   /* Sfondo turchese */
+    color: white;                                 /* Testo bianco */
+    border: none;                                 /* Nessun bordo */
+    border-radius: 12px;                          /* Bordi arrotondati */
+    padding: 0.8rem 2rem;                         /* Padding interno */
+    font-size: 1.1rem;                            /* Dimensione font grande */
+    font-weight: 600;                             /* Peso font semi-bold */
+    cursor: pointer;                              /* Cursore pointer */
+    transition: all 0.3s ease;                    /* Transizione fluida */
+    box-shadow: 0 4px 12px rgba(0, 123, 138, 0.3);  /* Ombra turchese */
+    width: 100%;                                  /* Larghezza completa */
+    margin-top: 1rem;                             /* Margine superiore */
+  }
+  
+  .calculate-btn:hover {
+    background: var(--turchese-scuro);            /* Sfondo turchese scuro */
+    transform: translateY(-2px);                  /* Solleva leggermente */
+    box-shadow: 0 6px 20px rgba(0, 123, 138, 0.4);  /* Ombra più profonda */
+  }
+  
+  .calculate-btn:active {
+    transform: translateY(0);                     /* Ritorna alla posizione originale */
+    box-shadow: 0 2px 8px rgba(0, 123, 138, 0.2);  /* Ombra ridotta */
+  }
+  
+  .calculate-btn:disabled {
+    background: var(--grigio-scuro);              /* Sfondo grigio scuro */
+    cursor: not-allowed;                         /* Cursore non consentito */
+    transform: none;                             /* Nessuna trasformazione */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);   /* Ombra leggera */
+  }
+  
+  /* SEZIONE 10.4: Pulsante dark mode (versione standalone) */
+  .dark-mode-btn {
+    background: var(--glass-bg);                  /* Sfondo glassmorphism */
+    /* backdrop-filter rimosso per performance */
+    /* -webkit-backdrop-filter rimosso per performance */
+    border: 1px solid var(--glass-border);       /* Bordo glassmorphism */
+    color: var(--testo-principale);              /* Colore testo principale */
+    border-radius: 12px;                         /* Bordi arrotondati */
+    padding: 0.6rem 1rem;                        /* Padding interno */
+    font-size: 1rem;                             /* Dimensione font standard */
+    font-weight: 500;                            /* Peso font medium */
+    cursor: pointer;                             /* Cursore pointer */
+    transition: all 0.3s ease;                   /* Transizione fluida */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);   /* Ombra leggera */
+    display: flex;                               /* Layout flexbox */
+    align-items: center;                         /* Allineamento verticale centrale */
+    gap: 0.5rem;                                 /* Spazio tra icona e testo */
+  }
+  
+  .dark-mode-btn:hover {
+    background: rgba(255, 255, 255, 0.4);        /* Sfondo bianco più opaco */
+    border-color: rgba(255, 255, 255, 0.6);      /* Bordo bianco più opaco */
+    transform: translateY(-1px);                  /* Solleva leggermente */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);  /* Ombra più profonda */
+  }
+  
+  .dark-mode-btn.dark-mode-active {
+    background: var(--turchese);                  /* Sfondo turchese quando attivo */
+    color: white;                                /* Testo bianco quando attivo */
+    border-color: var(--turchese-scuro);         /* Bordo turchese scuro */
+    box-shadow: 0 4px 12px rgba(0, 123, 138, 0.3);  /* Ombra turchese */
+  }
+  
+  /* SEZIONE 10.5: Stili dark mode per bottoni */
+  .dark .dark-mode-btn {
+    background: var(--glass-bg-dark);             /* Sfondo glassmorphism scuro */
+    color: rgba(248, 250, 252, 0.95);            /* Testo chiaro */
+    border-color: var(--glass-border-dark);       /* Bordo glassmorphism scuro */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);    /* Ombra scura */
+  }
+  
+  .dark .dark-mode-btn:hover {
+    background: rgba(255, 255, 255, 0.1);        /* Sfondo bianco trasparente al hover */
+    border-color: rgba(255, 255, 255, 0.3);      /* Bordo bianco trasparente */
+    color: rgba(255, 255, 255, 1);               /* Testo bianco pieno */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);   /* Ombra scura più profonda */
+  }
+  
+  .dark .dark-mode-btn.dark-mode-active {
+    background: var(--turchese);                  /* Sfondo turchese quando attivo */
+    color: white;                                /* Testo bianco quando attivo */
+    border-color: var(--turchese-scuro);         /* Bordo turchese scuro */
+    box-shadow: 0 4px 12px rgba(0, 123, 138, 0.4);  /* Ombra turchese più forte */
+  }
+  
+  /* SEZIONE 10.6: Stili dark mode per altri bottoni */
+  .dark .swap-btn {
+    background: var(--glass-bg-dark);             /* Sfondo glassmorphism scuro */
+    color: rgba(248, 250, 252, 0.95);            /* Testo chiaro */
+    border-color: var(--glass-border-dark);       /* Bordo glassmorphism scuro */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(255, 255, 255, 0.05);  /* Ombra scura */
+  }
+  
+  .dark .swap-btn:hover {
+    background: rgba(255, 255, 255, 0.1);        /* Sfondo bianco trasparente al hover */
+    border-color: rgba(255, 255, 255, 0.3);      /* Bordo bianco trasparente */
+    color: rgba(255, 255, 255, 1);               /* Testo bianco pieno */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4), 0 4px 8px rgba(255, 255, 255, 0.1);  /* Ombra scura più profonda */
+  }
+  
+  /* ========================================
+     SEZIONE 11: FOOTER
+     ======================================== */
+  .footer {
+    background: var(--glass-bg);                  /* Sfondo glassmorphism */
+    /* backdrop-filter rimosso per performance */
+    /* -webkit-backdrop-filter rimosso per performance */
+    border-top: 1px solid var(--glass-border);   /* Bordo superiore glassmorphism */
+    padding: 2rem 0;                             /* Padding verticale */
+    text-align: center;                          /* Testo centrato */
+    color: var(--testo-secondario);              /* Colore testo secondario */
+    font-size: 0.9rem;                           /* Dimensione font piccola */
+    line-height: 1.6;                            /* Altezza riga per leggibilità */
+    margin-top: auto;                            /* Spinge il footer in basso */
+  }
+  
+  .footer-links {
+    display: flex;                               /* Layout flexbox orizzontale */
+    justify-content: center;                     /* Centra i link */
+    gap: 2rem;                                  /* Spazio tra i link */
+    margin: 1rem 0;                             /* Margine verticale */
+    flex-wrap: wrap;                            /* Va a capo su schermi piccoli */
+  }
+  
+  .telegram-link {
+    color: var(--testo-secondario);              /* Colore testo secondario */
+    text-decoration: none;                      /* Nessuna sottolineatura */
+    transition: color 0.3s ease;                /* Transizione colore */
+    display: flex;                              /* Layout flexbox */
+    align-items: center;                        /* Allineamento verticale centrale */
+    gap: 0.5rem;                                /* Spazio tra icona e testo */
+  }
+  
+  .telegram-link:hover {
+    color: var(--turchese);                     /* Colore turchese al hover */
+  }
+  
+  .telegram-icon {
+    font-size: 1.2rem;                          /* Dimensione icona */
+  }
+  
+  .update-info {
+    margin-top: 1rem;                           /* Margine superiore */
+    font-size: 0.8rem;                          /* Dimensione font molto piccola */
+    color: var(--testo-secondario);             /* Colore testo secondario */
+    opacity: 0.8;                               /* Opacità ridotta */
+  }
+  
+  /* SOTTOSEZIONE 11.1: Stili dark mode per footer */
+  .dark .footer {
+    background: var(--glass-bg-dark);            /* Sfondo glassmorphism scuro */
+    border-color: var(--glass-border-dark);      /* Bordo glassmorphism scuro */
+    color: rgba(248, 250, 252, 0.8);            /* Testo chiaro con opacità */
+  }
+  
+  .dark .telegram-link {
+    color: rgba(248, 250, 252, 0.8);            /* Testo chiaro con opacità */
+  }
+  
+  .dark .telegram-link:hover {
+    color: var(--turchese);                     /* Colore turchese al hover */
+  }
+  
+  .dark .update-info {
+    color: rgba(248, 250, 252, 0.6);            /* Testo chiaro con opacità ridotta */
+  }
+  /* ========================================
+   PAGINE: SEZIONI SPECIFICHE PER PAGINA
+   Estratto da style.css per riorganizzazione sicura
+   ======================================== */
+
+/* ========================================
+   SEZIONE 12: LAYOUT PAGINE
+   ======================================== */
+/* SOTTOSEZIONE 12.1: Layout specifico per pagine tratte e tariffe */
+.fermate-page {
+    display: flex;                /* Layout flexbox */
+    flex-direction: column;       /* Direzione verticale */
+    min-height: 100vh;           /* Altezza minima viewport */
+  }
+  
+  /* Main content per pagine tratte */
+  .fermate-page .main-content {
+    min-height: auto;            /* Altezza minima automatica */
+    align-items: flex-start;     /* Allineamento in alto */
+    padding: 1rem 0;            /* Padding verticale */
+    flex: 1;                    /* Occupa spazio disponibile */
+    overflow: visible;          /* Contenuto visibile */
+  }
+  
+  /* SOTTOSEZIONE 12.2: Layout ottimizzato per pagina benvenuto */
+  body:not(.fermate-page) .main-content {
+    align-items: center;         /* Allineamento centrale */
+    padding: 1rem 0;           /* Padding verticale */
+  }
+  
+  /* Card principale per pagine non-tratte */
+  body:not(.fermate-page) .main-card {
+    max-width: 600px !important;  /* Larghezza massima 600px */
+    padding: 2rem;               /* Padding interno */
+    margin: 1rem auto !important; /* Margine automatico e centrato */
+  }
+  
+  /* SOTTOSEZIONE 12.3: Media queries per layout pagine */
+  @media (min-width: 768px) {
+    /* Card per pagine non-tratte */
+    body:not(.fermate-page) .main-card {
+      max-width: 650px !important;     /* Larghezza massima 650px */
+      padding: 2rem;                  /* Padding ancora maggiore */
+    }
+  }
+  
+  @media (min-width: 992px) {
+    /* Card per pagine non-tratte */
+    body:not(.fermate-page) .main-card {
+      max-width: 700px !important;     /* Larghezza massima 700px */
+      padding: 2.5rem;                /* Padding maggiore */
+    }
+  }
+  
+  @media (min-width: 1200px) {
+    /* Card per pagine non-tratte */
+    body:not(.fermate-page) .main-card {
+      max-width: 750px !important;     /* Larghezza massima 750px */
+      padding: 3rem;                  /* Padding massimo */
+    }
+  }
+  
+  @media (min-width: 1400px) {
+    /* Card per pagine non-tratte */
+    body:not(.fermate-page) .main-card {
+      max-width: 850px !important;     /* Larghezza massima 850px */
+      padding: 2.5rem;                /* Padding maggiore */
+    }
+  }
+  
+  /* SOTTOSEZIONE 12.4: Eccezione per pagine tratte/tariffe - layout verticale normale */
+  .fermate-page .main-content>.container {
+      display: block !important;        /* Layout a blocchi */
+      align-items: normal;             /* Allineamento normale */
+      overflow: visible;               /* Contenuto visibile */
+    }
+  
+  /* ========================================
+     SEZIONE 13: TITOLI PAGINE
+     ======================================== */
+  /* SOTTOSEZIONE 13.1: Titoli delle pagine */
+  .page-title {
+    text-align: center;              /* Testo centrato */
+    font-size: 2rem;                 /* Dimensione font grande */
+    font-weight: 700;                /* Peso font bold */
+    color: var(--testo-principale);  /* Colore testo principale */
+    margin: 1rem auto 1rem;         /* Margine verticale e centratura */
+    padding: 0 1rem;                 /* Padding laterale */
+    line-height: 1.2;                /* Altezza riga compatta */
+    text-shadow: 0 2px 10px rgba(255, 255, 255, 0.3);  /* Ombra testo leggera */
+  }
+  
+  /* SOTTOSEZIONE 13.2: Titolo specifico per pagine tratte/tariffe */
+  .fermate-page .page-title {
+    text-align: center !important;        /* Centratura forzata */
+    margin: 1rem auto 1rem auto !important;  /* Margine centrato forzato */
+    width: 100% !important;              /* Larghezza completa forzata */
+    display: block !important;           /* Display a blocchi forzato */
+    position: relative;                  /* Posizione relativa */
+  }
+  
+  /* ========================================
+     SEZIONE 14: CARD FERMATE
+     ======================================== */
+  /* SOTTOSEZIONE 14.1: Card delle tratte con glassmorphism */
+  .fermate-card {
+    /* SOTTOSEZIONE 14.1.1: Sfondo glassmorphism */
+    background: var(--glass-bg);                     /* Sfondo trasparente */
+    backdrop-filter: var(--backdrop-blur);          /* Sfocatura del background */
+    -webkit-backdrop-filter: var(--backdrop-blur);  /* Supporto WebKit */
+    
+    /* SOTTOSEZIONE 14.1.2: Bordi e ombre */
+    border: 1px solid var(--glass-border);          /* Bordo trasparente */
+    border-radius: 20px;                            /* Bordi arrotondati */
+    box-shadow: var(--glass-shadow);                /* Ombra glassmorphism */
+    
+    /* SOTTOSEZIONE 14.1.3: Spaziatura e dimensioni */
+    padding: 2rem;                                  /* Padding interno */
+    margin: 1rem 0;                                 /* Margine verticale */
+    max-width: 100%;                                /* Larghezza massima */
+    width: 100%;                                    /* Larghezza completa */
+    
+    /* SOTTOSEZIONE 14.1.4: Layout e posizionamento */
+    position: relative;                             /* Posizione relativa */
+    overflow: hidden;                               /* Nasconde overflow */
+  }
+  
+  /* SOTTOSEZIONE 14.2: Titolo delle card tratte */
+  .fermate-card h3 {
+    /* SOTTOSEZIONE 14.2.1: Tipografia */
+    color: rgba(15, 23, 42, 0.95);                   /* Colore scuro con 95% opacità */
+    font-size: 1.75rem;                              /* Dimensione font grande */
+    font-weight: 700;                                /* Peso font bold */
+    text-shadow: 0 2px 10px rgba(255, 255, 255, 0.3);  /* Ombra testo bianca */
+    
+    /* SOTTOSEZIONE 14.2.2: Layout e spaziatura */
+    margin: 0 0 1.5rem 0;                            /* Margine inferiore */
+    padding: 0 0 1rem 0;                             /* Padding inferiore */
+    text-align: center;                              /* Testo centrato */
+    border-bottom: 2px solid rgba(0, 123, 138, 0.3); /* Bordo inferiore ciano */
+    line-height: 1.3;                                /* Altezza riga compatta */
+    
+    /* SOTTOSEZIONE 14.2.3: Posizionamento */
+    position: relative;                              /* Posizione relativa */
+    display: flex;                                   /* Layout flexbox */
+    align-items: center;                             /* Allineamento verticale centrale */
+    justify-content: center;                         /* Allineamento orizzontale centrale */
+    gap: 0.5rem;                                    /* Spazio tra icona e testo */
+  }
+  
+  /* SOTTOSEZIONE 14.3: Icona emoji del bus nel titolo */
+  .fermate-card h3::before {
+    content: '🚌';                                  /* Emoji del bus */
+    font-size: 1.5rem;                              /* Dimensione font grande */
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));  /* Ombra dell'icona */
+  }
+  
+  /* SOTTOSEZIONE 14.4: Lista delle tratte */
+  .fermate-list {
+    /* SOTTOSEZIONE 14.4.1: Reset e layout */
+    list-style: none;                               /* Rimuove stili lista di default */
+    min-height: 200px;                              /* Altezza minima */
+    
+    /* SOTTOSEZIONE 14.4.2: Scroll e dimensioni */
+    max-height: 400px;                              /* Altezza massima */
+    overflow-y: auto;                               /* Scroll verticale */
+    padding: 0;                                     /* Padding zero */
+    margin: 0;                                      /* Margine zero */
+  }
+  
+  /* SOTTOSEZIONE 14.5: Scrollbar personalizzata - Larghezza */
+  .fermate-list::-webkit-scrollbar {
+    width: 8px;                                     /* Larghezza scrollbar sottile */
+  }
+  
+  /* SOTTOSEZIONE 14.6: Scrollbar personalizzata - Track (binario) */
+  .fermate-list::-webkit-scrollbar-track {
+    background: var(--grigio-chiaro);               /* Sfondo grigio chiaro per il binario */
+    border-radius: 10px;                           /* Bordi arrotondati */
+  }
+  
+  /* SOTTOSEZIONE 14.7: Scrollbar personalizzata - Thumb (cursore) */
+  .fermate-list::-webkit-scrollbar-thumb {
+    background: var(--turchese);                    /* Sfondo turchese per il cursore */
+    border-radius: 10px;                           /* Bordi arrotondati */
+  }
+  
+  /* SOTTOSEZIONE 14.8: Scrollbar personalizzata - Hover del thumb */
+  .fermate-list::-webkit-scrollbar-thumb:hover {
+    background: var(--turchese-scuro);              /* Sfondo turchese scuro al hover */
+  }
+  
+  /* SOTTOSEZIONE 14.9: Elemento singolo della tratta */
+  .fermate-item {
+    /* SOTTOSEZIONE 14.9.1: Spaziatura e dimensioni */
+    padding: 1.2rem 1.5rem 1.2rem 2rem;              /* Padding interno con più spazio a sinistra */
+    margin-bottom: 0.75rem;                          /* Margine inferiore */
+    
+    /* SOTTOSEZIONE 14.9.2: Sfondo glassmorphism */
+    background: rgba(255, 255, 255, 0.3);            /* Sfondo bianco trasparente */
+    /* backdrop-filter rimosso per performance */
+    /* -webkit-backdrop-filter rimosso per performance */
+    
+    /* SOTTOSEZIONE 14.9.3: Bordi e ombre */
+    border: 1px solid rgba(255, 255, 255, 0.4);      /* Bordo bianco trasparente */
+    border-radius: 12px;                             /* Bordi arrotondati */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);       /* Ombra leggera */
+    
+    /* SOTTOSEZIONE 14.9.4: Layout e posizionamento */
+    display: flex;                                   /* Layout flexbox */
+    align-items: center;                             /* Allineamento verticale centrale */
+    cursor: pointer;                                 /* Cursore pointer */
+    transition: all 0.3s ease;                      /* Transizione fluida */
+    position: relative;                              /* Posizione relativa */
+    
+    /* SOTTOSEZIONE 14.9.5: Tipografia */
+    color: var(--testo-principale);                  /* Colore testo principale */
+    font-size: 1rem;                                /* Dimensione font standard */
+    font-weight: 500;                                /* Peso font medium */
+    line-height: 1.4;                                /* Altezza riga per leggibilità */
+  }
+  
+  /* SOTTOSEZIONE 14.10: Icona emoji della fermata */
+  .fermate-icon {
+    font-size: 1.2rem;                              /* Dimensione font grande */
+    transition: transform 0.3s ease;                /* Transizione della trasformazione */
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));  /* Ombra dell'icona */
+    margin-right: 0.5rem;                           /* Spazio tra icona e numero */
+    margin-left: 0.5rem;                            /* Spazio a sinistra per spostare l'icona */
+    display: inline-block;                          /* Layout inline per controllo margini */
+  }
+  
+  /* SOTTOSEZIONE 14.11: Animazione hover dell'icona */
+  .fermate-item:hover .fermate-icon {
+    transform: scale(1.3) rotate(10deg);            /* Ingrandisce e ruota l'icona al hover */
+    color: inherit;                                  /* Mantiene il colore originale dell'icona */
+    text-shadow: none;                              /* Nessun contorno per l'icona */
+  }
+  
+  /* SOTTOSEZIONE 14.12: Effetto hover dell'elemento tratta */
+  .fermate-item:hover {
+    /* SOTTOSEZIONE 14.12.1: Sfondo hover */
+    /* background: rgba(23, 183, 177, 0.4);             /* Sfondo turchese trasparente RIMOSSO */
+    background: rgba(248, 250, 252, 0.4);             /* Sfondo grigio chiaro elegante */
+    /* backdrop-filter rimosso per performance */
+    /* -webkit-backdrop-filter rimosso per performance */
+    
+    /* SOTTOSEZIONE 14.12.2: Bordi e ombre hover */
+    border-color: rgba(255, 255, 255, 0.6);          /* Bordo bianco più opaco */
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);      /* Ombra più profonda */
+    
+    /* SOTTOSEZIONE 14.12.3: Trasformazioni hover */
+    transform: translateY(-2px);                      /* Solleva leggermente */
+  }
+  
+  /* SOTTOSEZIONE 14.13: Effetto attivo dell'elemento tratta */
+  .fermate-item:active {
+    transform: translateY(0);                         /* Ritorna alla posizione originale */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);       /* Ombra ridotta */
+  }
+  
+  /* SOTTOSEZIONE 14.14: Animazioni di entrata per elementi tratte */
+  .fermate-item:nth-child(1) { animation-delay: 0.05s; }  /* Primo elemento */
+  .fermate-item:nth-child(2) { animation-delay: 0.1s; }   /* Secondo elemento */
+  .fermate-item:nth-child(3) { animation-delay: 0.15s; }  /* Terzo elemento */
+  .fermate-item:nth-child(4) { animation-delay: 0.2s; }   /* Quarto elemento */
+  .fermate-item:nth-child(5) { animation-delay: 0.25s; }  /* Quinto elemento */
+  .fermate-item:nth-child(6) { animation-delay: 0.3s; }   /* Sesto elemento */
+  .fermate-item:nth-child(7) { animation-delay: 0.35s; }  /* Settimo elemento */
+  .fermate-item:nth-child(8) { animation-delay: 0.4s; }   /* Ottavo elemento */
+  
+  /* ========================================
+     SEZIONE 15: DARK MODE PAGINE
+     ======================================== */
+  /* SOTTOSEZIONE 15.1: Tratte e tariffe in dark mode - Glassmorphism */
+  .dark .fermate-card {
+    background: rgba(30, 41, 59, 0.5);      /* Sfondo scuro trasparente */
+    /* backdrop-filter rimosso per performance */
+    /* -webkit-backdrop-filter rimosso per performance */
+    border-color: rgba(148, 163, 184, 0.2); /* Bordo grigio chiaro trasparente */
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);  /* Ombra ultra leggera in dark mode */
+  }
+  
+  /* SOTTOSEZIONE 15.2: Titoli delle card tratte in dark mode */
+  .dark .fermate-card h3 {
+    color: rgba(255, 255, 255, 0.95);      /* Testo bianco con 95% opacità */
+    border-bottom-color: rgba(255, 255, 255, 0.6);  /* Bordo inferiore bianco più marcato */
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);     /* Ombra testo molto forte */
+  }
+  
+  /* SOTTOSEZIONE 15.3: Elemento tratte in dark mode */
+  .dark .fermate-item {
+    background: rgba(30, 41, 59, 0.6);      /* Sfondo scuro trasparente */
+    /* backdrop-filter rimosso per performance */
+    /* -webkit-backdrop-filter rimosso per performance */
+    border-color: rgba(148, 163, 184, 0.3); /* Bordo grigio chiaro trasparente */
+    color: rgba(248, 250, 252, 0.95);      /* Testo chiaro con 95% opacità */
+  }
+  
+  /* SOTTOSEZIONE 15.4: Effetto hover elemento tratte in dark mode */
+  .dark .fermate-item:hover {
+    /* background: rgba(23, 183, 177, 0.4);    /* Sfondo turchese trasparente al hover RIMOSSO */
+    background: rgba(255, 255, 255, 0.1);    /* Sfondo bianco trasparente al hover */
+    /* backdrop-filter rimosso per performance */
+    /* -webkit-backdrop-filter rimosso per performance */
+    color: #ffffff;                         /* Testo bianco al hover */
+    border-color: rgba(255, 255, 255, 0.4); /* Bordo bianco più opaco */
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);  /* Ombra scura più profonda */
+  }
+  
+  /* SOTTOSEZIONE 15.5: Scrollbar in dark mode */
+  .dark .fermate-list::-webkit-scrollbar-track {
+    background: rgba(15, 23, 42, 0.3);      /* Sfondo scuro trasparente per la track */
+  }
+  
+  .dark .fermate-list::-webkit-scrollbar-thumb {
+    background: rgba(23, 183, 177, 0.6);    /* Sfondo turchese trasparente per il thumb */
+  }
+  
+  /* SOTTOSEZIONE 15.10: Barra di ricerca in dark mode */
+  .dark .search-input {
+    background: var(--glass-bg-dark);        /* Sfondo glassmorphism scuro */
+    color: rgba(248, 250, 252, 0.95);       /* Testo chiaro */
+    border-color: var(--glass-border-dark);  /* Bordo glassmorphism scuro */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);  /* Ombra scura */
+  }
+  
+  .dark .search-input::placeholder {
+    color: rgba(148, 163, 184, 0.7);        /* Placeholder grigio chiaro */
+  }
+  
+  .dark .search-icon {
+    color: rgba(148, 163, 184, 0.7);        /* Icona grigio chiaro */
+  }
+
+  /* ========================================
+   MODALI: MODAL, OVERLAY, MOBILE MENU
+   Estratto da style.css per riorganizzazione sicura
+   ======================================== */
+
+/* ========================================
+   SEZIONE 16: MODAL CACHE
+   ======================================== */
+/* SOTTOSEZIONE 16.1: Modal overlay */
+.cache-modal {
+    display: none;                              /* Nascosto di default */
+    position: fixed;                            /* Posizione fissa */
+    top: 0;                                     /* Inizio della pagina */
+    left: 0;                                    /* Inizio della pagina */
+    width: 100%;                                /* Larghezza completa */
+    height: 100%;                               /* Altezza completa */
+    background: rgba(0, 0, 0, 0.5);             /* Sfondo scuro trasparente */
+    z-index: 10000;                             /* Sopra tutti gli elementi */
+  }
+  
+  /* SOTTOSEZIONE 16.2: Modal content */
+  .cache-modal-content {
+    position: absolute;                          /* Posizione assoluta */
+    top: 50%;                                   /* Centrato verticalmente */
+    left: 50%;                                  /* Centrato orizzontalmente */
+    transform: translate(-50%, -50%);           /* Centrato perfetto */
+    background: var(--bianco);                  /* Sfondo bianco */
+    border-radius: 12px;                        /* Bordi arrotondati */
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3); /* Ombra profonda */
+    width: 90%;                                 /* Larghezza 90% */
+    max-width: 500px;                           /* Larghezza massima */
+    overflow: hidden;                           /* Nasconde overflow */
+    animation: modalSlideIn 0.3s ease-out;      /* Animazione di entrata */
+  }
+  
+  @keyframes modalSlideIn {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -60%);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%);
+    }
+  }
+  
+  /* SOTTOSEZIONE 16.3: Header modal */
+  .cache-modal-header {
+    background: var(--turchese);                 /* Sfondo turchese */
+    color: white;                               /* Testo bianco */
+    padding: 1.5rem;                            /* Padding interno */
+    text-align: center;                         /* Testo centrato */
+  }
+  
+  .cache-modal-header h3 {
+    margin: 0;                                  /* Nessun margine */
+    font-size: 1.2rem;                          /* Dimensione font */
+    font-weight: 600;                           /* Peso font */
+  }
+  
+  /* SOTTOSEZIONE 16.4: Body modal */
+  .cache-modal-body {
+    padding: 2rem;                              /* Padding interno */
+    text-align: center;                         /* Testo centrato */
+  }
+  
+  .cache-modal-body p {
+    margin: 0 0 1rem 0;                         /* Margine inferiore */
+    color: var(--testo-principale);             /* Colore testo */
+    line-height: 1.5;                           /* Altezza riga */
+  }
+  
+  .cache-modal-warning {
+    color: #dc2626;                             /* Colore rosso per avviso */
+    font-weight: 500;                           /* Peso font medio */
+    font-size: 0.9rem;                          /* Font più piccolo */
+  }
+  
+  /* SOTTOSEZIONE 16.5: Footer modal */
+  .cache-modal-footer {
+    display: flex;                              /* Layout flexbox */
+    gap: 1rem;                                  /* Spazio tra pulsanti */
+    padding: 0 2rem 2rem 2rem;                 /* Padding interno */
+  }
+  
+  /* SOTTOSEZIONE 16.6: Pulsanti modal */
+  .cache-modal-btn {
+    flex: 1;                                    /* Larghezza uguale */
+    padding: 0.75rem 1.5rem;                    /* Padding interno */
+    border: none;                               /* Nessun bordo */
+    border-radius: 8px;                         /* Bordi arrotondati */
+    font-size: 1rem;                            /* Dimensione font */
+    font-weight: 500;                           /* Peso font */
+    cursor: pointer;                            /* Cursore pointer */
+    transition: all 0.3s ease;                  /* Transizione fluida */
+  }
+  
+  .cache-modal-cancel {
+    background: #f3f4f6;                        /* Sfondo grigio chiaro */
+    color: var(--testo-principale);             /* Colore testo */
+  }
+  
+  .cache-modal-cancel:hover {
+    background: #e5e7eb;                        /* Sfondo grigio più scuro */
+  }
+  
+  .cache-modal-confirm {
+    background: #dc2626;                        /* Sfondo rosso */
+    color: white;                               /* Testo bianco */
+  }
+  
+  .cache-modal-confirm:hover {
+    background: #b91c1c;                        /* Sfondo rosso più scuro */
+  }
+  
+  /* SOTTOSEZIONE 16.7: Modalità scura per modal */
+  .dark .cache-modal-content {
+    background: var(--card-scuro);              /* Sfondo scuro */
+  }
+  
+  .dark .cache-modal-body p {
+    color: var(--testo-principale);             /* Colore testo scuro */
+  }
+  
+  .dark .cache-modal-cancel {
+    background: #374151;                        /* Sfondo grigio scuro */
+    color: var(--testo-principale);             /* Colore testo scuro */
+  }
+  
+  .dark .cache-modal-cancel:hover {
+    background: #4b5563;                        /* Sfondo grigio più scuro */
+  }
+  
+  /* SOTTOSEZIONE 16.8: Modal mobile */
+  @media (max-width: 480px) {
+    .cache-modal-content {
+      width: 95%;                               /* Larghezza quasi completa */
+      max-width: none;                          /* Nessuna larghezza massima */
+    }
+    
+    .cache-modal-header,
+    .cache-modal-body,
+    .cache-modal-footer {
+      padding: 1rem;                            /* Padding ridotto */
+    }
+    
+    .cache-modal-footer {
+      flex-direction: column;                   /* Layout verticale */
+    }
+    
+    .cache-modal-btn {
+      padding: 1rem;                            /* Padding maggiore */
+    }
+  }
+  
+  /* ========================================
+     SEZIONE 17: MOBILE MENU
+     ======================================== */
+  /* SOTTOSEZIONE 17.1: Hamburger toggle button - visibile solo su mobile */
+  .hamburger-toggle {
+    display: none; /* Nascosto su desktop */
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 4px;
+  }
+  
+  .hamburger-icon {
+    display: block;
+    width: 28px;
+    height: 2px;
+    background: var(--bianco);
+    position: relative;
+    transition: all 0.3s ease;
+  }
+  
+  .hamburger-icon::before,
+  .hamburger-icon::after {
+    content: '';
+    display: block;
+    width: 28px;
+    height: 2px;
+    background: var(--bianco);
+    position: absolute;
+    transition: all 0.3s ease;
+  }
+  
+  .hamburger-icon::before {
+    top: -8px;
+  }
+  
+  .hamburger-icon::after {
+    top: 8px;
+  }
+  
+  /* Animazione hamburger quando menu aperto */
+  .hamburger-toggle.active .hamburger-icon {
+    background: transparent;
+  }
+  
+  .hamburger-toggle.active .hamburger-icon::before {
+    top: 0;
+    transform: rotate(45deg);
+  }
+  
+  .hamburger-toggle.active .hamburger-icon::after {
+    top: 0;
+    transform: rotate(-45deg);
+  }
+  
+  /* SOTTOSEZIONE 17.2: Overlay scuro dietro il menu */
+  .mobile-menu-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .mobile-menu-overlay.active {
+    display: block;
+    opacity: 1;
+  }
+  
+  /* SOTTOSEZIONE 17.3: Menu mobile drawer */
+  .mobile-menu {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 240px;
+    height: 100vh;
+    background: var(--glass-bg);
+    border-left: 1px solid var(--glass-border);
+    box-shadow: -8px 0 32px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    transition: right 0.3s ease;
+    overflow-y: auto;
+  }
+  
+  .mobile-menu.active {
+    right: 0;
+  }
+  
+  /* SOTTOSEZIONE 17.4: Header del menu mobile */
+  .mobile-menu-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    border-bottom: 1px solid var(--glass-border);
+    background: rgba(0, 123, 138, 0.1);
+  }
+  
+  .mobile-menu-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--testo-principale);
+  }
+  
+  .mobile-menu-close {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    line-height: 1;
+    color: var(--testo-principale);
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+  }
+  
+  .mobile-menu-close:hover {
+    background: rgba(0, 0, 0, 0.1);
+  }
+  
+  /* SOTTOSEZIONE 17.5: Navigazione menu mobile */
+  .mobile-menu-nav {
+    padding: 12px 0;
+  }
+  
+  .mobile-nav-link,
+  .mobile-nav-button {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    color: var(--testo-principale);
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: none;
+    background: none;
+    width: 100%;
+    cursor: pointer;
+    text-align: left;
+  }
+  
+  .mobile-nav-link:hover,
+  .mobile-nav-button:hover {
+    background: rgba(0, 123, 138, 0.1);
+    color: var(--turchese);
+  }
+  
+  .mobile-nav-icon {
+    font-size: 1.2rem;
+    width: 24px;
+    text-align: center;
+  }
+  
+  .mobile-menu-divider {
+    height: 1px;
+    background: var(--glass-border);
+    margin: 12px 20px;
+  }
+  
+  /* SOTTOSEZIONE 17.6: Media query - mostra hamburger su mobile, nascondi navbar-nav */
+  @media (max-width: 768px) {
+    .hamburger-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .navbar-nav {
+      display: none; /* Nasconde menu desktop su mobile */
+    }
+  }
+  
+  /* SOTTOSEZIONE 17.7: Dark mode per menu mobile */
+  .dark .mobile-menu {
+    background: rgba(30, 41, 59, 0.95);
+    border-left-color: rgba(148, 163, 184, 0.2);
+    box-shadow: -8px 0 32px rgba(0, 0, 0, 0.7);
+  }
+  
+  .dark .mobile-menu-header {
+    border-bottom-color: var(--glass-border-dark);
+    background: rgba(23, 183, 177, 0.15);
+  }
+  
+  .dark .mobile-menu-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+  
+  .dark .mobile-nav-link:hover,
+  .dark .mobile-nav-button:hover {
+    background: rgba(23, 183, 177, 0.2);
+  }
+  
+  .dark .mobile-menu-divider {
+    background: var(--glass-border-dark);
+  }
+  
+  /* ========================================
+     SEZIONE 18: MODAL FERMATE
+     ======================================== */
+  /* SOTTOSEZIONE 18.1: Modal fermate */
+  .fermate-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .fermate-modal.show {
+    display: flex;
+    opacity: 1;
+  }
+  
+  .fermate-modal-content {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    box-shadow: var(--glass-shadow);
+    width: 100%;
+    max-width: 500px;
+    max-height: 80vh;
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+  }
+  
+  .fermate-modal.show .fermate-modal-content {
+    transform: scale(1);
+  }
+  
+  .fermate-modal-header {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid var(--glass-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  
+  .fermate-modal-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--testo-principale);
+    margin: 0;
+  }
+  
+  .fermate-modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--testo-secondario);
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+  }
+  
+  .fermate-modal-close:hover {
+    background: rgba(0, 0, 0, 0.1);
+    color: var(--testo-principale);
+  }
+  
+  .fermate-modal-body {
+    padding: 20px 24px 24px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  
+  /* SOTTOSEZIONE 18.2: Container ricerca fermate */
+  .fermate-search-container {
+    margin-bottom: 20px;
+    flex-shrink: 0;
+  }
+  
+  .fermate-search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 12px 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .fermate-search-box:focus-within {
+    border-color: var(--turchese);
+    box-shadow: 0 0 0 3px rgba(23, 183, 177, 0.1);
+  }
+  
+  .fermate-search-icon {
+    font-size: 1.2rem;
+    color: var(--testo-secondario);
+    margin-right: 12px;
+    flex-shrink: 0;
+  }
+  
+  .fermate-search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: var(--testo-principale);
+    font-size: 1rem;
+    font-weight: 500;
+  }
+  
+  .fermate-search-input::placeholder {
+    color: var(--testo-secondario);
+    font-weight: 400;
+  }
+  
+  .fermate-clear-btn {
+    background: none;
+    border: none;
+    color: var(--testo-secondario);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    margin-left: 8px;
+    flex-shrink: 0;
+  }
+  
+  .fermate-clear-btn:hover {
+    background: rgba(0, 0, 0, 0.1);
+    color: var(--testo-principale);
+  }
+  
+  /* SOTTOSEZIONE 18.3: Container lista fermate */
+  .fermate-list-container {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .fermate-modal-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex: 1;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--turchese) var(--grigio-chiaro);
+  }
+  
+  .fermate-modal-list::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .fermate-modal-list::-webkit-scrollbar-track {
+    background: var(--grigio-chiaro);
+    border-radius: 3px;
+  }
+  
+  .fermate-modal-list::-webkit-scrollbar-thumb {
+    background: var(--turchese);
+    border-radius: 3px;
+  }
+  
+  .fermate-modal-list::-webkit-scrollbar-thumb:hover {
+    background: var(--turchese-scuro);
+  }
+  
+  .fermate-modal-list li {
+    padding: 12px 16px;
+    cursor: pointer;
+    border-radius: 8px;
+    margin-bottom: 4px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--testo-principale);
+    font-weight: 500;
+  }
+  
+  .fermate-modal-list li:hover {
+    background: rgba(0, 123, 138, 0.1);
+    color: var(--turchese);
+  }
+  
+  .fermate-modal-list li.selected {
+    background: var(--turchese);
+    color: white;
+  }
+  
+  .fermate-modal-list li.selected:hover {
+    background: var(--turchese-scuro);
+    color: white;
+  }
+  
+  /* SOTTOSEZIONE 18.4: Dark mode per modal fermate */
+  .dark .fermate-modal-content {
+    background: var(--glass-bg-dark);
+    border-color: var(--glass-border-dark);
+    box-shadow: var(--glass-shadow-dark);
+  }
+  
+  .dark .fermate-modal-header {
+    border-bottom-color: var(--glass-border-dark);
+  }
+  
+  .dark .fermate-modal-title {
+    color: rgba(248, 250, 252, 0.95);
+  }
+  
+  .dark .fermate-modal-close {
+    color: rgba(148, 163, 184, 0.7);
+  }
+  
+  .dark .fermate-modal-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(248, 250, 252, 0.95);
+  }
+  
+  .dark .fermate-search-box {
+    background: var(--glass-bg-dark);
+    border-color: var(--glass-border-dark);
+  }
+  
+  .dark .fermate-search-input {
+    color: rgba(248, 250, 252, 0.95);
+  }
+  
+  .dark .fermate-search-input::placeholder {
+    color: rgba(148, 163, 184, 0.7);
+  }
+  
+  .dark .fermate-search-icon {
+    color: rgba(148, 163, 184, 0.7);
+  }
+  
+  .dark .fermate-clear-btn {
+    color: rgba(148, 163, 184, 0.7);
+  }
+  
+  .dark .fermate-clear-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(248, 250, 252, 0.95);
+  }
+  
+  .dark .fermate-modal-list li {
+    color: rgba(248, 250, 252, 0.95);
+  }
+  
+  .dark .fermate-modal-list li:hover {
+    background: rgba(23, 183, 177, 0.2);
+    color: var(--turchese);
+  }
+  
+  .dark .fermate-modal-list li.selected {
+    background: var(--turchese);
+    color: white;
+  }
+  
+  .dark .fermate-modal-list li.selected:hover {
+    background: var(--turchese-scuro);
+    color: white;
+  }
+  
+  /* SOTTOSEZIONE 18.5: Responsive modal fermate */
+  @media (max-width: 480px) {
+    .fermate-modal-content {
+      margin: 10px;
+      max-height: 90vh;
+    }
+    
+    .fermate-modal-header,
+    .fermate-modal-body {
+      padding: 16px;
+    }
+    
+    .fermate-search-box {
+      padding: 10px 12px;
+    }
+    
+    .fermate-modal-list li {
+      padding: 10px 12px;
+    }
+  }
+  
+  /* ========================================
+   UTILITY: HELPER, ANIMAZIONI, COMPONENTI AUSILIARI
+   Estratto da style.css per riorganizzazione sicura
+   ======================================== */
+
+/* ========================================
+   SEZIONE 19: ANIMAZIONI E TRANSIZIONI
+   ======================================== */
+/* SOTTOSEZIONE 19.1: Animazione fade-in */
+.fade-in {
+    animation: fadeIn 0.6s ease-in-out;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* SOTTOSEZIONE 19.2: Classe per nascondere elementi */
+  .hidden {
+    display: none !important;
+  }
+  
+  /* SOTTOSEZIONE 19.3: Classe per elementi inattivi */
+  .inactive {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+  
+  
+  /* ========================================
+     SEZIONE 20: SEZIONI LAYOUT
+     ======================================== */
+  /* SOTTOSEZIONE 20.1: Sezione calcolo */
+  .calculate-section {
+    text-align: center;              /* Testo centrato */
+    margin: 1.2rem 0;               /* Margine verticale */
+    display: flex;                  /* Layout flexbox */
+    flex-direction: column;         /* Direzione verticale */
+    align-items: center;            /* Allineamento centrale */
+    gap: 0.5rem;                    /* Spazio tra elementi */
+  }
+  
+  /* SOTTOSEZIONE 20.2: Sezione reset */
+  .reset-section {
+    text-align: center;              /* Testo centrato */
+    margin: 1.5rem 0;               /* Margine verticale */
+    padding: 1rem 0;                /* Padding verticale */
+  }
+  
+  /* ========================================
+     SEZIONE 21: BOTTONI UTILITY
+     ======================================== */
+  /* SOTTOSEZIONE 21.1: Pulsante calcola */
+  .calculate-btn {
+    /* Stile glassmorphism bianco */
+    background: rgba(255, 255, 255, 0.6);    /* Sfondo bianco trasparente */
+    /* backdrop-filter rimosso per performance */
+    /* -webkit-backdrop-filter rimosso per performance */
+    border: 1px solid rgba(255, 255, 255, 0.3);  /* Bordo bianco trasparente */
+    border-radius: 12px;                      /* Bordi arrotondati */
+    color: var(--testo-principale);           /* Colore testo principale */
+    font-size: 1.1rem;                        /* Dimensione font grande */
+    font-weight: 600;                         /* Peso font semi-bold */
+    padding: 0.8rem 2rem;                     /* Padding interno */
+    cursor: pointer;                          /* Cursore pointer */
+    transition: all 0.3s ease;                /* Transizione fluida */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);  /* Ombra leggera */
+    width: 100%;                              /* Larghezza completa */
+    margin-top: 1rem;                         /* Margine superiore */
+  }
+  
+  /* Effetto hover del pulsante calcola */
+  .calculate-btn:hover {
+    background: rgba(255, 255, 255, 0.8);    /* Sfondo bianco più opaco */
+    transform: translateY(-3px);            /* Solleva il pulsante */
+    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.5);  /* Ombra bianca più forte */
+    border-color: rgba(255, 255, 255, 0.5);  /* Bordo bianco più opaco */
+  }
+  
+  /* Stato disabilitato del pulsante calcola */
+  .calculate-btn:disabled {
+    background: rgba(108, 117, 125, 0.3);   /* Sfondo grigio trasparente */
+    cursor: not-allowed;                    /* Cursore non consentito */
+    transform: none;                        /* Nessuna trasformazione */
+    box-shadow: none;                       /* Nessuna ombra */
+    border-color: rgba(255, 255, 255, 0.1); /* Bordo bianco molto trasparente */
+  }
+  
+  /* SOTTOSEZIONE 21.2: Pulsante reset */
+  .reset-btn {
+    background: var(--glass-bg);                  /* Sfondo glassmorphism */
+    /* backdrop-filter rimosso per performance */
+    /* -webkit-backdrop-filter rimosso per performance */
+    border: 1px solid var(--glass-border);       /* Bordo glassmorphism */
+    color: var(--testo-principale);              /* Colore testo principale */
+    border-radius: 12px;                         /* Bordi arrotondati */
+    padding: 0.6rem 1.5rem;                      /* Padding interno */
+    font-size: 1rem;                             /* Dimensione font standard */
+    font-weight: 500;                            /* Peso font medium */
+    cursor: pointer;                             /* Cursore pointer */
+    transition: all 0.3s ease;                   /* Transizione fluida */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);   /* Ombra leggera */
+  }
+  
+  .reset-btn:hover {
+    background: rgba(255, 255, 255, 0.4);        /* Sfondo bianco più opaco */
+    border-color: rgba(255, 255, 255, 0.6);      /* Bordo bianco più opaco */
+    transform: translateY(-1px);                  /* Solleva leggermente */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);  /* Ombra più profonda */
+  }
+  
+  /* SOTTOSEZIONE 21.3: Pulsante route */
+  .route-button {
+    background: var(--glass-bg);                  /* Sfondo glassmorphism */
+    /* backdrop-filter rimosso per performance */
+    /* -webkit-backdrop-filter rimosso per performance */
+    border: 1px solid var(--glass-border);       /* Bordo glassmorphism */
+    color: var(--testo-principale);              /* Colore testo principale */
+    border-radius: 12px;                         /* Bordi arrotondati */
+    padding: 0.75rem 1rem;                       /* Padding interno */
+    font-size: 1rem;                             /* Dimensione font standard */
+    font-weight: 500;                            /* Peso font medium */
+    cursor: pointer;                             /* Cursore pointer */
+    transition: all 0.3s ease;                   /* Transizione fluida */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);   /* Ombra leggera */
+    width: 100%;                                 /* Larghezza completa */
+    display: flex;                               /* Layout flexbox */
+    align-items: center;                         /* Allineamento verticale centrale */
+    justify-content: space-between;              /* Spazio tra testo e freccia */
+    text-align: left;                            /* Testo allineato a sinistra */
+  }
+  
+  .route-button:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.4);        /* Sfondo bianco più opaco */
+    border-color: rgba(255, 255, 255, 0.6);      /* Bordo bianco più opaco */
+    transform: translateY(-1px);                  /* Solleva leggermente */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);  /* Ombra più profonda */
+  }
+  
+  .route-button:disabled {
+    background: rgba(108, 117, 125, 0.3);        /* Sfondo grigio trasparente */
+    cursor: not-allowed;                        /* Cursore non consentito */
+    transform: none;                            /* Nessuna trasformazione */
+    box-shadow: none;                           /* Nessuna ombra */
+    border-color: rgba(255, 255, 255, 0.1);     /* Bordo bianco molto trasparente */
+    opacity: 0.6;                               /* Opacità ridotta */
+  }
+  
+  /* SOTTOSEZIONE 21.4: Freccia route */
+  .route-arrow {
+    font-size: 0.8rem;                           /* Dimensione font piccola */
+    color: var(--testo-secondario);              /* Colore testo secondario */
+    transition: transform 0.3s ease;             /* Transizione rotazione */
+  }
+  
+  .route-button:hover:not(:disabled) .route-arrow {
+    transform: translateY(-1px);                 /* Solleva leggermente */
+  }
+  
+  /* ========================================
+     SEZIONE 22: CARD PREZZI
+     ======================================== */
+  /* SOTTOSEZIONE 22.1: Card prezzo con glassmorphism */
+  .price-card {
+    border-radius: 1rem;
+    overflow: hidden;
+    margin: 1rem 0;
+    background: rgba(255, 255, 255, 0.15);
+    /* backdrop-filter rimosso per performance */
+    /* -webkit-backdrop-filter rimosso per performance */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    position: relative;
+    transition: all 0.3s ease;
+  }
+  
+  /* Effetto rifrazione della luce - overlay gradiente */
+  .price-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0.05) 50%,
+      transparent 100%
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+  
+  /* Stato inattivo - quando i campi non sono selezionati */
+  .price-card.inactive {
+    opacity: 0.6;
+  }
+  
+  .price-card.inactive .price-section {
+    opacity: 0.6;
+  }
+  
+  .price-card.inactive .price-label {
+    color: #64748b;
+  }
+  
+  .price-card.inactive .price-code {
+    color: #64748b;
+  }
+  
+  .price-card.inactive .price-value {
+    color: #64748b;
+    text-shadow: none;
+  }
+  
+  /* SOTTOSEZIONE 22.2: Sezione prezzo semplificata */
+  .price-section {
+    padding: 1rem 1.5rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+  
+  /* Effetto rifrazione della luce per price-section */
+  .price-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0.05) 50%,
+      transparent 100%
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+  
+  /* SOTTOSEZIONE 22.3: Etichetta del prezzo */
+  .price-label {
+    color: var(--testo-principale);  /* Colore principale per coerenza */
+    font-size: 1rem;                /* Dimensione font standard */
+    margin-bottom: 0.8rem;          /* Margine inferiore */
+    font-weight: 500;               /* Peso font medium */
+    letter-spacing: 1px;            /* Spaziatura tra lettere */
+    text-transform: uppercase;      /* Testo maiuscolo */
+    opacity: 0.8;                   /* Opacità ridotta */
+  }
+  
+  /* SOTTOSEZIONE 22.4: Valore del prezzo */
+  .price-value {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;  /* Font di sistema per compatibilità offline */
+    font-size: 3rem;                /* Dimensione font ridotta per compattezza */
+    font-weight: 700;               /* Peso font bold (ridotto da 900 per coerenza) */
+    color: var(--testo-principale);  /* Colore principale per coerenza */
+    margin-bottom: 0.5rem;            /* Margine inferiore ridotto */
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);  /* Ombra leggera per coerenza */
+    line-height: 1;                  /* Altezza riga compatta */
+  }
+  
+  /* SOTTOSEZIONE 22.5: Codice prezzo - solo testo con dimensione appropriata */
+  .price-code {
+    color: var(--testo-principale);       /* Colore principale per coerenza */
+    font-size: 1.8rem;                   /* Dimensione ridotta per compattezza */
+    font-weight: 700;                    /* Peso font bold */
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);  /* Ombra leggera per coerenza */
+    margin-bottom: 0;                    /* Rimuovo margine inferiore */
+    line-height: 1;                      /* Altezza riga compatta */
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;    /* Font di sistema per compatibilità offline */
+  }
+  
+  /* SOTTOSEZIONE 22.6: Divisore tra codice e prezzo */
+  .price-divider {
+    height: 2px;
+    background: rgba(15, 23, 42, 0.4);  /* Stesso colore del divisore nelle altre pagine */
+    margin: 1rem 1.5rem;
+    border-radius: 2px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* ========================================
+     SEZIONE 23: RICERCA E SELEZTORI
+     ======================================== */
+  /* SOTTOSEZIONE 23.1: Container selettore linea */
+  .line-selector-container {
+    max-width: 600px;                /* Larghezza massima */
+    margin: 0 auto 1.5rem;          /* Margine centrato */
+    padding-top: 1rem;              /* Padding superiore */
+    border-top: 2px solid rgba(15, 23, 42, 0.4);  /* Bordo superiore più chiaro */
+  }
+  
+  /* SOTTOSEZIONE 23.2: Barra di ricerca */
+  .search-container {
+    margin-bottom: 2rem;            /* Margine inferiore */
+    display: flex;                  /* Layout flexbox */
+    justify-content: center;        /* Centra orizzontalmente */
+  }
+  
+  /* SOTTOSEZIONE 23.3: Box contenitore ricerca */
+  .search-box {
+    position: relative;                             /* Posizione relativa per elementi assoluti */
+    width: 100%;                                   /* Larghezza completa */
+    max-width: 600px;                              /* Larghezza massima */
+    display: flex;                                 /* Layout flexbox */
+    align-items: center;                           /* Allineamento verticale centrale */
+    background: var(--glass-bg);                   /* Sfondo glassmorphism */
+    /* backdrop-filter rimosso per performance */
+    /* -webkit-backdrop-filter rimosso per performance */
+    border: 1px solid var(--glass-border);         /* Bordo glassmorphism */
+    border-radius: 12px;                           /* Bordi arrotondati */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);    /* Ombra leggera */
+    transition: all 0.3s ease;                     /* Transizione fluida */
+    overflow: hidden;                              /* Nasconde overflow */
+  }
+  
+  /* SOTTOSEZIONE 23.4: Icona ricerca */
+  .search-icon {
+    position: absolute;                            /* Posizione assoluta */
+    left: 16px;                                   /* Posizione sinistra */
+    top: 50%;                                     /* Posizione verticale centrale */
+    transform: translateY(-50%);                  /* Centra verticalmente */
+    color: var(--testo-secondario);               /* Colore testo secondario */
+    font-size: 1.2rem;                            /* Dimensione font grande */
+    pointer-events: none;                         /* Non intercetta click */
+    z-index: 2;                                   /* Sopra l'input */
+    transition: color 0.3s ease;                  /* Transizione colore */
+  }
+  
+  /* SOTTOSEZIONE 23.5: Input ricerca */
+  .search-input {
+    width: 100%;                                  /* Larghezza completa */
+    padding: 12px 16px 12px 48px;                /* Padding con spazio per icona */
+    border: none;                                 /* Nessun bordo */
+    outline: none;                                /* Nessun outline */
+    background: transparent;                      /* Sfondo trasparente */
+    color: var(--testo-principale);               /* Colore testo principale */
+    font-size: 1rem;                              /* Dimensione font standard */
+    font-weight: 500;                             /* Peso font medium */
+    transition: all 0.3s ease;                    /* Transizione fluida */
+  }
+  
+  .search-input::placeholder {
+    color: var(--testo-secondario);               /* Colore placeholder */
+    font-weight: 400;                             /* Peso font normale */
+    opacity: 0.8;                                 /* Opacità ridotta */
+  }
+  
+  .search-input:focus {
+    outline: none;                                /* Rimuove outline di default */
+  }
+  
+  /* Focus del search-box */
+  .search-box:focus-within {
+    border-color: var(--turchese);                /* Bordo turchese al focus */
+    box-shadow: 0 0 0 3px rgba(23, 183, 177, 0.1);  /* Ombra turchese */
+  }
+  
+  .search-box:focus-within .search-icon {
+    color: var(--turchese);                       /* Icona turchese al focus */
+  }
+  
+  /* ========================================
+     SEZIONE 24: FOOTER E LINK
+     ======================================== */
+  /* SOTTOSEZIONE 24.1: Link footer */
+  .footer-links {
+    display: flex;                               /* Layout flexbox orizzontale */
+    justify-content: center;                     /* Centra i link */
+    gap: 2rem;                                  /* Spazio tra i link */
+    margin: 1rem 0;                             /* Margine verticale */
+    flex-wrap: wrap;                            /* Va a capo su schermi piccoli */
+  }
+  
+  /* SOTTOSEZIONE 24.2: Link Telegram */
+  .telegram-link {
+    color: var(--testo-secondario);              /* Colore testo secondario */
+    text-decoration: none;                      /* Nessuna sottolineatura */
+    transition: color 0.3s ease;                /* Transizione colore */
+    display: flex;                              /* Layout flexbox */
+    align-items: center;                        /* Allineamento verticale centrale */
+    gap: 0.5rem;                                /* Spazio tra icona e testo */
+  }
+  
+  .telegram-link:hover {
+    color: var(--turchese);                     /* Colore turchese al hover */
+  }
+  
+  /* SOTTOSEZIONE 24.3: Icona Telegram */
+  .telegram-icon {
+    font-size: 1.2rem;                          /* Dimensione icona */
+  }
+  
+  /* SOTTOSEZIONE 24.4: Informazioni aggiornamento */
+  .update-info {
+    margin-top: 1rem;                           /* Margine superiore */
+    font-size: 0.8rem;                          /* Dimensione font molto piccola */
+    color: var(--testo-secondario);             /* Colore testo secondario */
+    opacity: 0.8;                               /* Opacità ridotta */
+  }
+  
+  /* ========================================
+     SEZIONE 25: DARK MODE UTILITY
+     ======================================== */
+  
+  /* SOTTOSEZIONE 25.2: Dark mode per bottoni */
+  .dark .calculate-btn {
+    background: var(--glass-bg-dark);            /* Sfondo glassmorphism scuro */
+    color: rgba(248, 250, 252, 0.95);           /* Testo chiaro */
+    border-color: var(--glass-border-dark);      /* Bordo glassmorphism scuro */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);  /* Ombra scura */
+  }
+  
+  .dark .calculate-btn:hover {
+    background: rgba(255, 255, 255, 0.1);       /* Sfondo bianco trasparente al hover */
+    border-color: rgba(255, 255, 255, 0.3);     /* Bordo bianco trasparente */
+    color: rgba(255, 255, 255, 1);              /* Testo bianco pieno */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);  /* Ombra scura più profonda */
+  }
+  
+  .dark .reset-btn {
+    background: var(--glass-bg-dark);            /* Sfondo glassmorphism scuro */
+    color: rgba(248, 250, 252, 0.95);           /* Testo chiaro */
+    border-color: var(--glass-border-dark);      /* Bordo glassmorphism scuro */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);   /* Ombra scura */
+  }
+  
+  .dark .reset-btn:hover {
+    background: rgba(255, 255, 255, 0.1);       /* Sfondo bianco trasparente al hover */
+    border-color: rgba(255, 255, 255, 0.3);     /* Bordo bianco trasparente */
+    color: rgba(255, 255, 255, 1);              /* Testo bianco pieno */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);  /* Ombra scura più profonda */
+  }
+  
+  .dark .route-button {
+    background: var(--glass-bg-dark);            /* Sfondo glassmorphism scuro */
+    color: rgba(248, 250, 252, 0.95);           /* Testo chiaro */
+    border-color: var(--glass-border-dark);      /* Bordo glassmorphism scuro */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);   /* Ombra scura */
+  }
+  
+  .dark .route-button:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.1);       /* Sfondo bianco trasparente al hover */
+    border-color: rgba(255, 255, 255, 0.3);     /* Bordo bianco trasparente */
+    color: rgba(255, 255, 255, 1);              /* Testo bianco pieno */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);  /* Ombra scura più profonda */
+  }
+  
+  .dark .route-button:disabled {
+    background: rgba(30, 41, 59, 0.3);          /* Sfondo scuro trasparente */
+    border-color: rgba(148, 163, 184, 0.1);     /* Bordo grigio chiaro trasparente */
+    color: rgba(148, 163, 184, 0.5);            /* Testo grigio chiaro */
+  }
+  
+  /* SOTTOSEZIONE 25.3: Dark mode per card prezzi */
+  .dark .price-card {
+    background: rgba(30, 41, 59, 0.3);          /* Sfondo scuro trasparente */
+    border-color: rgba(148, 163, 184, 0.2);     /* Bordo grigio chiaro trasparente */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);  /* Ombra scura */
+  }
+  
+  .dark .price-label {
+    color: rgba(203, 213, 225, 0.8);            /* Testo grigio chiaro con 80% opacità */
+  }
+  
+  .dark .price-code {
+    color: rgba(248, 250, 252, 0.95);           /* Testo chiaro con 95% opacità */
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);  /* Ombra testo leggera */
+  }
+  
+  .dark .price-value {
+    color: rgba(248, 250, 252, 0.95);           /* Testo chiaro con 95% opacità */
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);  /* Ombra testo leggera */
+  }
+  
+  .dark .price-divider {
+    background: rgba(255, 255, 255, 0.2);        /* Bordo bianco trasparente */
+  }
+  
+  /* SOTTOSEZIONE 25.4: Dark mode per ricerca */
+  .dark .search-box {
+    background: var(--glass-bg-dark);            /* Sfondo glassmorphism scuro */
+    border-color: var(--glass-border-dark);      /* Bordo glassmorphism scuro */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);  /* Ombra scura */
+  }
+  
+  .dark .search-input {
+    color: rgba(248, 250, 252, 0.95);           /* Testo chiaro */
+  }
+  
+  .dark .search-input::placeholder {
+    color: rgba(148, 163, 184, 0.7);            /* Placeholder grigio chiaro */
+  }
+  
+  .dark .search-icon {
+    color: rgba(148, 163, 184, 0.7);            /* Icona grigio chiaro */
+  }
+  
+  .dark .search-box:focus-within {
+    border-color: var(--turchese);               /* Bordo turchese al focus */
+    box-shadow: 0 0 0 3px rgba(23, 183, 177, 0.2);  /* Ombra turchese */
+  }
+  
+  .dark .search-box:focus-within .search-icon {
+    color: var(--turchese);                      /* Icona turchese al focus */
+  }
+  
+  /* SOTTOSEZIONE 25.5: Dark mode per selettori linea */
+  .dark .line-selector-container {
+    border-top-color: rgba(255, 255, 255, 0.4);  /* Bordo superiore bianco trasparente */
+  }
+  
+  /* SOTTOSEZIONE 25.6: Dark mode per footer */
+  .dark .telegram-link {
+    color: rgba(248, 250, 252, 0.8);            /* Testo chiaro con opacità */
+  }
+  
+  .dark .telegram-link:hover {
+    color: var(--turchese);                     /* Colore turchese al hover */
+  }
+  
+  .dark .update-info {
+    color: rgba(248, 250, 252, 0.6);            /* Testo chiaro con opacità ridotta */
+  }
+  

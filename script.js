@@ -1,11 +1,57 @@
 // script.js - Gestione logica TPL FVG
 
+// ========================================
+// SEZIONE 0: ANIMAZIONE SFONDO
+// ========================================
+// Controllo dell'animazione del gradiente di sfondo
+let animationEnabled = false;
+
+// Funzione per abilitare/disabilitare l'animazione
+function toggleAnimation() {
+  console.log('Toggle animation clicked, current state:', animationEnabled);
+  animationEnabled = !animationEnabled;
+  
+  if (animationEnabled) {
+    document.body.classList.add('animation-enabled');
+    console.log('Animation enabled, class added to body');
+    // Aggiorna tutti i pulsanti
+    document.querySelectorAll('.animation-toggle, #mobile-animation-toggle').forEach(btn => {
+      btn.classList.add('active');
+    });
+  } else {
+    document.body.classList.remove('animation-enabled');
+    console.log('Animation disabled, class removed from body');
+    // Aggiorna tutti i pulsanti
+    document.querySelectorAll('.animation-toggle, #mobile-animation-toggle').forEach(btn => {
+      btn.classList.remove('active');
+    });
+  }
+  
+  // Salva la preferenza
+  localStorage.setItem('animationEnabled', animationEnabled);
+  console.log('Animation state saved:', animationEnabled);
+}
+
+// Carica la preferenza salvata
+function loadAnimationPreference() {
+  const saved = localStorage.getItem('animationEnabled');
+  if (saved === 'true') {
+    animationEnabled = true;
+    document.body.classList.add('animation-enabled');
+    document.querySelectorAll('.animation-toggle, #mobile-animation-toggle').forEach(btn => {
+      btn.classList.add('active');
+    });
+  }
+}
+
 // Elementi DOM
 const mainApp = document.getElementById('main-app');
 const darkModeToggle = document.getElementById('darkmode-toggle');
 const lineaSelect = document.getElementById('linea');
-const partenzaSelect = document.getElementById('partenza');
-const arrivoSelect = document.getElementById('arrivo');
+const partenzaBtn = document.getElementById('partenza-btn');
+const arrivoBtn = document.getElementById('arrivo-btn');
+const partenzaText = document.getElementById('partenza-text');
+const arrivoText = document.getElementById('arrivo-text');
 const swapBtn = document.getElementById('swap-btn');
 const prezzoErrore = document.getElementById('prezzo-errore');
 const summaryPrezzo = document.getElementById('summary-prezzo');
@@ -18,6 +64,13 @@ const pwaBanner = document.getElementById('pwa-install-banner');
 const pwaBtnInstall = document.getElementById('pwa-install-button');
 const pwaBtnLater = document.getElementById('pwa-install-later');
 const pwaIosHint = document.getElementById('pwa-ios-hint');
+// Modal fermate elements
+const fermateModal = document.getElementById('fermate-modal');
+const fermateModalTitle = document.getElementById('fermate-modal-title');
+const fermateModalClose = document.getElementById('fermate-modal-close');
+const fermateSearchInput = document.getElementById('fermate-search-input');
+const fermateClearSearch = document.getElementById('fermate-clear-search');
+const fermateModalList = document.getElementById('fermate-modal-list');
 
 // DOM Elements loaded successfully
 
@@ -29,6 +82,9 @@ let partenzaIdx = '';
 let arrivoIdx = '';
 let hasCalculated = false;
 let deferredInstallPrompt = null; // beforeinstallprompt event
+// Modal fermate state
+let currentModalType = ''; // 'partenza' o 'arrivo'
+let filteredFermate = [];
 
 // Utility dark mode
 function setDarkMode(isDark) {
@@ -78,34 +134,130 @@ function populateLinee() {
   });
 }
 
-// Popola select partenza/arrivo
-function populateFermate() {
-  if (!partenzaSelect || !arrivoSelect) return; // Non siamo su index.html
+// Abilita/disabilita pulsanti partenza/arrivo
+function updateFermateButtons() {
+  if (!partenzaBtn || !arrivoBtn) return; // Non siamo su index.html
   
   if (lineaIdx === '' || !tariffario[lineaIdx]) {
-    partenzaSelect.innerHTML = '<option value="">Prima seleziona una linea</option>';
-    arrivoSelect.innerHTML = '<option value="">Prima seleziona una linea</option>';
-    partenzaSelect.disabled = true;
-    arrivoSelect.disabled = true;
+    partenzaText.textContent = 'Prima seleziona una linea';
+    arrivoText.textContent = 'Prima seleziona una linea';
+    partenzaBtn.disabled = true;
+    arrivoBtn.disabled = true;
     return;
   }
   
-  partenzaSelect.innerHTML = '<option value="">Seleziona la partenza</option>';
-  arrivoSelect.innerHTML = '<option value="">Seleziona l\'arrivo</option>';
+  partenzaText.textContent = 'Seleziona la partenza';
+  arrivoText.textContent = 'Seleziona l\'arrivo';
+  partenzaBtn.disabled = false;
+  arrivoBtn.disabled = false;
+}
+
+// Funzioni per gestire il modale delle fermate
+function openFermateModal(type) {
+  if (!fermateModal || lineaIdx === '' || !tariffario[lineaIdx]) return;
+  
+  currentModalType = type;
+  fermateModalTitle.textContent = type === 'partenza' ? 'Seleziona fermata di partenza' : 'Seleziona fermata di arrivo';
+  
+  // Popola la lista delle fermate
+  populateFermateList();
+  
+  // Mostra il modale
+  fermateModal.classList.add('show');
+  fermateModal.style.display = 'flex';
+  
+  // Focus sulla ricerca
+  setTimeout(() => {
+    if (fermateSearchInput) fermateSearchInput.focus();
+  }, 100);
+}
+
+function closeFermateModal() {
+  if (!fermateModal) return;
+  
+  fermateModal.classList.remove('show');
+  setTimeout(() => {
+    fermateModal.style.display = 'none';
+  }, 300);
+  
+  // Reset ricerca
+  if (fermateSearchInput) {
+    fermateSearchInput.value = '';
+    fermateSearchInput.dispatchEvent(new Event('input'));
+  }
+}
+
+function populateFermateList() {
+  if (!fermateModalList || !tariffario[lineaIdx]) return;
   
   const fermate = tariffario[lineaIdx].fermate;
-  fermate.forEach((f, i) => {
-    const opt1 = document.createElement('option');
-    opt1.value = i;
-    opt1.textContent = f;
-    partenzaSelect.appendChild(opt1);
-    const opt2 = document.createElement('option');
-    opt2.value = i;
-    opt2.textContent = f;
-    arrivoSelect.appendChild(opt2);
+  filteredFermate = fermate.map((fermata, index) => ({ name: fermata, index }));
+  
+  renderFermateList();
+}
+
+function renderFermateList() {
+  if (!fermateModalList) return;
+  
+  fermateModalList.innerHTML = '';
+  
+  filteredFermate.forEach(({ name, index }) => {
+    const li = document.createElement('li');
+    li.textContent = name;
+    li.dataset.index = index;
+    
+    // Evidenzia la fermata selezionata
+    if (currentModalType === 'partenza' && index == partenzaIdx) {
+      li.classList.add('selected');
+    } else if (currentModalType === 'arrivo' && index == arrivoIdx) {
+      li.classList.add('selected');
+    }
+    
+    li.addEventListener('click', () => selectFermata(index));
+    fermateModalList.appendChild(li);
   });
-  partenzaSelect.disabled = false;
-  arrivoSelect.disabled = false;
+}
+
+function selectFermata(index) {
+  if (currentModalType === 'partenza') {
+    partenzaIdx = index;
+    partenzaText.textContent = tariffario[lineaIdx].fermate[index];
+  } else if (currentModalType === 'arrivo') {
+    arrivoIdx = index;
+    arrivoText.textContent = tariffario[lineaIdx].fermate[index];
+  }
+  
+  hasCalculated = false;
+  updateSummary();
+  calcolaPrezzo();
+  
+  // Salva nello storage
+  try {
+    if (currentModalType === 'partenza') {
+      localStorage.setItem('tpl.partenzaIdx', partenzaIdx);
+    } else {
+      localStorage.setItem('tpl.arrivoIdx', arrivoIdx);
+    }
+  } catch { }
+  
+  closeFermateModal();
+}
+
+function filterFermate(searchTerm) {
+  if (!tariffario[lineaIdx]) return;
+  
+  const fermate = tariffario[lineaIdx].fermate;
+  const term = searchTerm.toLowerCase().trim();
+  
+  if (term === '') {
+    filteredFermate = fermate.map((fermata, index) => ({ name: fermata, index }));
+  } else {
+    filteredFermate = fermate
+      .map((fermata, index) => ({ name: fermata, index }))
+      .filter(({ name }) => name.toLowerCase().includes(term));
+  }
+  
+  renderFermateList();
 }
 
 // Controlla e aggiorna lo stato della card prezzo
@@ -186,8 +338,13 @@ window.swapRoutes = function () {
     partenzaIdx = arrivoIdx;
     arrivoIdx = tmp;
     hasCalculated = false;
-    partenzaSelect.value = partenzaIdx;
-    arrivoSelect.value = arrivoIdx;
+    
+    // Aggiorna i testi dei pulsanti
+    if (tariffario[lineaIdx]) {
+      partenzaText.textContent = tariffario[lineaIdx].fermate[partenzaIdx];
+      arrivoText.textContent = tariffario[lineaIdx].fermate[arrivoIdx];
+    }
+    
     updateSummary();
     calcolaPrezzo();
   }
@@ -212,17 +369,18 @@ function resetFilters() {
     lineaSelect.value = '';
   }
   
-  // Reset select partenza e arrivo usando la logica esistente
-  if (partenzaSelect) {
-    partenzaSelect.value = '';
-    partenzaSelect.innerHTML = '<option value="">Prima seleziona una linea</option>';
-    partenzaSelect.disabled = true;
+  // Reset pulsanti partenza e arrivo
+  if (partenzaText) {
+    partenzaText.textContent = 'Prima seleziona una linea';
   }
-  
-  if (arrivoSelect) {
-    arrivoSelect.value = '';
-    arrivoSelect.innerHTML = '<option value="">Prima seleziona una linea</option>';
-    arrivoSelect.disabled = true;
+  if (arrivoText) {
+    arrivoText.textContent = 'Prima seleziona una linea';
+  }
+  if (partenzaBtn) {
+    partenzaBtn.disabled = true;
+  }
+  if (arrivoBtn) {
+    arrivoBtn.disabled = true;
   }
   
   // Reset card prezzo
@@ -260,12 +418,62 @@ function resetFilters() {
 }
 
 // Funzione reset cache
-function resetCache() {
-  // Mostra il modal di conferma
+// Versione corrente dell'app
+const CURRENT_VERSION = '1.2.31';
+
+async function checkForUpdates() {
+  // Mostra il modal di verifica
   const modal = document.getElementById('cache-modal');
-  if (modal) {
-    modal.style.display = 'block';
+  const modalTitle = document.getElementById('modal-title');
+  const modalMessage = document.getElementById('modal-message');
+  const modalWarning = document.getElementById('modal-warning');
+  const confirmBtn = document.getElementById('cache-confirm');
+  
+  if (!modal) return;
+  
+  modal.style.display = 'block';
+  modalTitle.textContent = '🔄 Verifica Aggiornamenti';
+  modalMessage.textContent = 'Verifico se ci sono aggiornamenti disponibili...';
+  modalWarning.style.display = 'none';
+  confirmBtn.style.display = 'none';
+  
+  try {
+    // Carica il manifest.json dal server per verificare la versione
+    const response = await fetch('manifest.json?' + Date.now());
+    const manifest = await response.json();
+    const serverVersion = manifest.version || '1.0.0';
+    
+    // Simula un piccolo delay per l'effetto di caricamento
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    if (serverVersion !== CURRENT_VERSION) {
+      // Ci sono aggiornamenti disponibili
+      modalTitle.textContent = '🔄 Aggiornamenti Disponibili';
+      modalMessage.textContent = `Versione attuale: ${CURRENT_VERSION}\nVersione disponibile: ${serverVersion}`;
+      modalWarning.style.display = 'block';
+      confirmBtn.textContent = `Riavvia e Aggiorna (v${serverVersion})`;
+      confirmBtn.style.display = 'block';
+    } else {
+      // App aggiornata
+      modalTitle.textContent = '✅ App Aggiornata';
+      modalMessage.textContent = `La tua app è già aggiornata alla versione ${CURRENT_VERSION}`;
+      modalWarning.style.display = 'none';
+      confirmBtn.textContent = 'Riavvia App';
+      confirmBtn.style.display = 'block';
+    }
+  } catch (error) {
+    // Errore nella verifica, mostra opzione di riavvio
+    console.error('Errore verifica aggiornamenti:', error);
+    modalTitle.textContent = '⚠️ Errore Verifica';
+    modalMessage.textContent = 'Non riesco a verificare gli aggiornamenti. Vuoi riavviare l\'app comunque?';
+    modalWarning.style.display = 'block';
+    confirmBtn.textContent = 'Riavvia App (v1.2)';
+    confirmBtn.style.display = 'block';
   }
+}
+
+function resetCache() {
+  checkForUpdates();
 }
 
 // Funzione conferma reset cache
@@ -353,30 +561,52 @@ if (lineaSelect) {
     partenzaIdx = '';
     arrivoIdx = '';
     hasCalculated = false;
-    populateFermate();
+    updateFermateButtons();
     updateSummary();
     calcolaPrezzo();
     try { localStorage.setItem('tpl.lineaIdx', lineaIdx); } catch { }
   });
 }
-if (partenzaSelect) {
-  partenzaSelect.addEventListener('change', e => {
-    partenzaIdx = e.target.value;
-    hasCalculated = false;
-    updateSummary();
-    updatePriceCardState();
-    calcolaPrezzo();
-    try { localStorage.setItem('tpl.partenzaIdx', partenzaIdx); } catch { }
+// Event listeners per pulsanti partenza/arrivo
+if (partenzaBtn) {
+  partenzaBtn.addEventListener('click', () => openFermateModal('partenza'));
+}
+if (arrivoBtn) {
+  arrivoBtn.addEventListener('click', () => openFermateModal('arrivo'));
+}
+
+// Event listeners per modale fermate
+if (fermateModalClose) {
+  fermateModalClose.addEventListener('click', closeFermateModal);
+}
+
+if (fermateModal) {
+  fermateModal.addEventListener('click', (e) => {
+    if (e.target === fermateModal) {
+      closeFermateModal();
+    }
   });
 }
-if (arrivoSelect) {
-  arrivoSelect.addEventListener('change', e => {
-    arrivoIdx = e.target.value;
-    hasCalculated = false;
-    updateSummary();
-    updatePriceCardState();
-    calcolaPrezzo();
-    try { localStorage.setItem('tpl.arrivoIdx', arrivoIdx); } catch { }
+
+if (fermateSearchInput) {
+  fermateSearchInput.addEventListener('input', (e) => {
+    const searchTerm = e.target.value;
+    filterFermate(searchTerm);
+    
+    // Mostra/nascondi pulsante clear
+    if (fermateClearSearch) {
+      fermateClearSearch.style.display = searchTerm ? 'block' : 'none';
+    }
+  });
+}
+
+if (fermateClearSearch) {
+  fermateClearSearch.addEventListener('click', () => {
+    if (fermateSearchInput) {
+      fermateSearchInput.value = '';
+      fermateSearchInput.dispatchEvent(new Event('input'));
+      fermateSearchInput.focus();
+    }
   });
 }
 // I pulsanti swap e calcola usano onclick nell'HTML, non servono listener qui
@@ -412,10 +642,17 @@ async function loadData() {
     if (sPart !== null) partenzaIdx = sPart;
     if (sArr !== null) arrivoIdx = sArr;
   } catch { }
-  populateFermate();
+  updateFermateButtons();
   if (lineaIdx && lineaSelect) lineaSelect.value = lineaIdx;
-  if (partenzaIdx && partenzaSelect) partenzaSelect.value = partenzaIdx;
-  if (arrivoIdx && arrivoSelect) arrivoSelect.value = arrivoIdx;
+  
+  // Aggiorna i testi dei pulsanti se ci sono valori salvati
+  if (partenzaIdx !== '' && tariffario[lineaIdx] && partenzaText) {
+    partenzaText.textContent = tariffario[lineaIdx].fermate[partenzaIdx];
+  }
+  if (arrivoIdx !== '' && tariffario[lineaIdx] && arrivoText) {
+    arrivoText.textContent = tariffario[lineaIdx].fermate[arrivoIdx];
+  }
+  
   updateSummary();
   calcolaPrezzo();
 }
@@ -740,6 +977,26 @@ function toggleScrollToTopButton() {
 window.addEventListener('scroll', toggleScrollToTopButton);
 
 window.addEventListener('DOMContentLoaded', loadData);
+
+// Event listeners per controllo animazione
+window.addEventListener('DOMContentLoaded', function() {
+  // Carica preferenza all'avvio
+  loadAnimationPreference();
+  
+  // Pulsanti desktop - usa event delegation per gestire tutti i pulsanti
+  document.addEventListener('click', function(e) {
+    if (e.target.closest('#animationToggle')) {
+      toggleAnimation();
+    }
+    if (e.target.closest('#mobile-animation-toggle')) {
+      toggleAnimation();
+      // Chiudi il menu mobile se esiste
+      if (typeof closeMenu === 'function') {
+        closeMenu();
+      }
+    }
+  });
+});
 
 // --- HAMBURGER MENU LOGIC ---
 (function() {

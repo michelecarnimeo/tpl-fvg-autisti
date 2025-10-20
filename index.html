@@ -7,12 +7,26 @@
   <title>TPL FVG - Calcolo Biglietto</title>
   <!-- Font locali per PWA offline -->
   <!-- CSS personalizzati -->
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style1.css">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="src/tpl.jpg" type="image/jpeg">
   <style>
     body {
       font-family: 'Roboto', Arial, sans-serif;
+    }
+
+    /* Nascondi card su mobile e aggiungi padding */
+    @media (max-width: 768px) {
+      .main-card {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        padding: 1rem !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+      }
     }
   </style>
 </head>
@@ -39,7 +53,6 @@
                 <div>locale</div>
               </div>
             </div>
-            <span class="beta-badge">BETA</span>
           </div>
         </a>
         <!-- Hamburger button (mobile only) -->
@@ -54,8 +67,11 @@
           <button id="darkmode-toggle" class="dark-mode-toggle" title="Darkmode">
             <span>🌙</span>
           </button>
-          <button id="cache-reset" class="cache-reset-btn" title="Cancella cache e ricarica">
-            <span>🗑️</span>
+          <button class="animation-toggle" id="animationToggle" title="Toggle animazione sfondo">
+            🎬
+          </button>
+          <button id="cache-reset" class="cache-reset-btn" title="Verifica aggiornamenti e riavvia app">
+            <span id="cache-icon">🔄</span>
           </button>
         </nav>
       </div>
@@ -88,9 +104,13 @@
           <span class="mobile-nav-icon">🌙</span>
           <span>Modalità scura</span>
         </button>
+        <button id="mobile-animation-toggle" class="mobile-nav-button">
+          <span class="mobile-nav-icon">🎬</span>
+          <span>Animazione sfondo</span>
+        </button>
         <button id="mobile-cache-reset" class="mobile-nav-button">
-          <span class="mobile-nav-icon">🗑️</span>
-          <span>Cancella cache</span>
+          <span class="mobile-nav-icon" id="mobile-cache-icon">🔄</span>
+          <span id="mobile-cache-text">Verifica aggiornamenti</span>
         </button>
       </nav>
     </div>
@@ -100,93 +120,90 @@
   <!-- Main App -->
   <main id="main-app" class="main-content">
     <div class="container">
-      <div class="main-card fade-in">
+      <div class="main-card">
         <div class="card-title">
           <p class="subtitle">Seleziona una linea per iniziare</p>
         </div>
 
-        <div class="form-group">
-          <select id="linea" name="linea" class="form-select">
-            <option value="">Seleziona una linea</option>
-            <!-- Opzioni generate da JS -->
-          </select>
-        </div>
-        <div class="route-section">
-          <div class="route-label">
-            <div class="route-icon"><span>Partenza da</span></div>
-            <select id="partenza" class="route-select" disabled>
-              <option value="">Seleziona la partenza</option>
-            </select>
-          </div>
-
-          <div class="route-label">
-            <div class="route-icon"><span>Arrivo a</span></div>
-            <select id="arrivo" class="route-select" disabled>
-              <option value="">Seleziona l'arrivo</option>
-            </select>
-          </div>
-
-          <button id="swap-btn" class="swap-btn" type="button" title="Inverte partenza e arrivo" onclick="swapRoutes()">
-            <span>⇅</span>
+      <div class="form-group">
+        <select id="linea" name="linea" class="form-select">
+          <option value="">Seleziona una linea</option>
+          <!-- Opzioni generate da JS -->
+        </select>
+      </div>
+      <div class="route-section">
+        <div class="route-label">
+          <div class="route-icon"><span>Partenza da</span></div>
+          <button id="partenza-btn" class="route-button" disabled>
+            <span id="partenza-text">Seleziona la partenza</span>
+            <span class="route-arrow">▼</span>
           </button>
         </div>
 
-        <!-- Pulsante reset -->
-        <div class="reset-section">
-          <button id="reset-btn" class="reset-btn" type="button" title="Resetta tutto e riparti da capo">
-            Riparti da capo
+        <div class="route-label">
+          <div class="route-icon"><span>Arrivo a</span></div>
+          <button id="arrivo-btn" class="route-button" disabled>
+            <span id="arrivo-text">Seleziona l'arrivo</span>
+            <span class="route-arrow">▼</span>
           </button>
         </div>
 
-        <!-- Sezione prezzo divisa in due parti con colori distinti -->
-        <div class="price-card inactive" id="price-card">
-          <!-- Codice biglietto -->
-          <div class="price-section">
-            <div class="price-label">Codice biglietto</div>
-            <div id="summary-codice" class="price-code">-</div>
-          </div>
-          
-          <!-- Divisore -->
-          <div class="price-divider"></div>
-          
-          <!-- Costo biglietto -->
-          <div class="price-section">
-            <div class="price-label">Costo del biglietto</div>
-            <div id="summary-prezzo" class="price-value">-</div>
-          </div>
-          
-          <div id="prezzo-errore" class="price-error" style="display: none;">
-            ⚠️ Prezzo non disponibile per questa tratta
-          </div>
-        </div>
+        <button id="swap-btn" class="swap-btn" type="button" title="Inverte partenza e arrivo" onclick="swapRoutes()">
+          <span>⇅</span>
+        </button>
+      </div>
 
-        <!-- Banner installazione PWA posizionato sotto la card prezzi -->
-        <div id="pwa-install-banner" class="pwa-install-banner" style="display: none;">
-          <div class="pwa-install-content">
-            <div class="pwa-install-text">
-              <span class="pwa-install-title">📱 Installa l'app</span>
-              <span class="pwa-install-subtitle">Accedi più velocemente e offline</span>
-            </div>
-            <div class="pwa-install-actions">
-              <button id="pwa-install-later" class="pwa-btn pwa-btn-secondary" type="button">Più tardi</button>
-              <button id="pwa-install-button" class="pwa-btn pwa-btn-primary" type="button">Installa</button>
-            </div>
-          </div>
-          <div id="pwa-ios-hint" class="pwa-ios-hint" style="display: none;">
-            <div class="ios-hint-title">📲 Come installare su iPhone/iPad:</div>
-            <ol class="ios-hint-steps">
-              <li><span class="step-number">1.</span> Tocca il pulsante <strong>Condividi</strong> <span class="ios-share-icon">📤</span> in basso (Safari)</li>
-              <li><span class="step-number">2.</span> Scorri e seleziona <strong>"Aggiungi a Home"</strong> <span class="ios-plus-icon">➕</span></li>
-              <li><span class="step-number">3.</span> Tocca <strong>"Aggiungi"</strong> in alto a destra ✅</li>
-            </ol>
-            <div class="ios-hint-note">💡 L'app apparirà sulla tua schermata Home come un'app nativa</div>
-          </div>
-        </div>
+      <!-- Pulsante reset -->
+      <div class="reset-section">
+        <button id="reset-btn" class="reset-btn" type="button" title="Resetta tutto e riparti da capo">
+          Riparti da capo
+        </button>
+      </div>
 
-        <div id="history-section" class="history-section hidden">
-          <h2 class="history-title">Cronologia recente</h2>
-          <div id="history-list"></div>
+      <!-- Sezione prezzo divisa in due parti con colori distinti -->
+      <div class="price-card inactive" id="price-card">
+        <!-- Codice biglietto -->
+        <div class="price-section">
+          <div class="price-label">Codice biglietto</div>
+          <div id="summary-codice" class="price-code">-</div>
         </div>
+        
+        <!-- Divisore -->
+        <div class="price-divider"></div>
+        
+        <!-- Costo biglietto -->
+        <div class="price-section">
+          <div class="price-label">Costo del biglietto</div>
+          <div id="summary-prezzo" class="price-value">-</div>
+        </div>
+        
+        <div id="prezzo-errore" class="price-error" style="display: none;">
+          ⚠️ Prezzo non disponibile per questa tratta
+        </div>
+      </div>
+
+      <!-- Banner installazione PWA posizionato sotto la card prezzi -->
+      <div id="pwa-install-banner" class="pwa-install-banner" style="display: none;">
+        <div class="pwa-install-content">
+          <div class="pwa-install-text">
+            <span class="pwa-install-title">📱 Installa l'app</span>
+            <span class="pwa-install-subtitle">Accedi più velocemente e offline</span>
+          </div>
+          <div class="pwa-install-actions">
+            <button id="pwa-install-later" class="pwa-btn pwa-btn-secondary" type="button">Più tardi</button>
+            <button id="pwa-install-button" class="pwa-btn pwa-btn-primary" type="button">Installa</button>
+          </div>
+        </div>
+        <div id="pwa-ios-hint" class="pwa-ios-hint" style="display: none;">
+          <div class="ios-hint-title">📲 Come installare su iPhone/iPad:</div>
+          <ol class="ios-hint-steps">
+            <li><span class="step-number">1.</span> Tocca il pulsante <strong>Condividi</strong> <span class="ios-share-icon">📤</span> in basso (Safari)</li>
+            <li><span class="step-number">2.</span> Scorri e seleziona <strong>"Aggiungi a Home"</strong> <span class="ios-plus-icon">➕</span></li>
+            <li><span class="step-number">3.</span> Tocca <strong>"Aggiungi"</strong> in alto a destra ✅</li>
+          </ol>
+          <div class="ios-hint-note">💡 L'app apparirà sulla tua schermata Home come un'app nativa</div>
+        </div>
+      </div>
       </div>
     </div>
   </main>
@@ -205,19 +222,46 @@
     <p class="update-info">📅 Ultimo aggiornamento: <span id="last-update">15/10/2025 ore 20:20</span></p>
   </footer>
 
-  <!-- Modal conferma reset cache -->
+  <!-- Modal selezione fermate -->
+  <div id="fermate-modal" class="fermate-modal">
+    <div class="fermate-modal-content">
+      <div class="fermate-modal-header">
+        <h3 id="fermate-modal-title">Seleziona fermata</h3>
+        <button id="fermate-modal-close" class="fermate-modal-close" aria-label="Chiudi">×</button>
+      </div>
+      <div class="fermate-modal-body">
+        <!-- Barra di ricerca -->
+        <div class="fermate-search-container">
+          <div class="fermate-search-box">
+            <span class="fermate-search-icon">🔍</span>
+            <input type="text" id="fermate-search-input" class="fermate-search-input" placeholder="Cerca fermata..." />
+            <button id="fermate-clear-search" class="fermate-clear-btn" style="display: none;">✕</button>
+          </div>
+        </div>
+        
+        <!-- Lista fermate -->
+        <div class="fermate-list-container">
+          <ul id="fermate-modal-list" class="fermate-modal-list">
+            <!-- Fermate generate dinamicamente -->
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal conferma riavvio app -->
   <div id="cache-modal" class="cache-modal">
     <div class="cache-modal-content">
       <div class="cache-modal-header">
-        <h3>🗑️ Cancella Cache</h3>
+        <h3 id="modal-title">🔄 Verifica Aggiornamenti</h3>
       </div>
       <div class="cache-modal-body">
-        <p>Sei sicuro di voler cancellare la cache dell'app?</p>
-        <p class="cache-modal-warning">⚠️ L'app si ricaricherà automaticamente e tornerai alla pagina di benvenuto.</p>
+        <p id="modal-message">Verifico se ci sono aggiornamenti disponibili...</p>
+        <p class="cache-modal-warning" id="modal-warning" style="display: none;">⚠️ L'app si ricaricherà automaticamente e tornerai alla pagina di benvenuto.</p>
       </div>
       <div class="cache-modal-footer">
         <button id="cache-cancel" class="cache-modal-btn cache-modal-cancel">Annulla</button>
-        <button id="cache-confirm" class="cache-modal-btn cache-modal-confirm">Conferma</button>
+        <button id="cache-confirm" class="cache-modal-btn cache-modal-confirm" style="display: none;">Riavvia e Aggiorna (v1.2)</button>
       </div>
     </div>
   </div>

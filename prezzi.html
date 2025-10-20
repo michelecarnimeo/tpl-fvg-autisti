@@ -7,7 +7,7 @@
   <title>TPL FVG - Prezzi</title>
   <!-- Font locali per PWA offline -->
   <!-- CSS personalizzati -->
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style1.css">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="src/tpl.jpg" type="image/jpeg">
   <style>
@@ -39,7 +39,6 @@
                 <div>locale</div>
               </div>
             </div>
-            <span class="beta-badge">BETA</span>
           </div>
         </a>
         <!-- Hamburger button (mobile only) -->
@@ -54,8 +53,11 @@
           <button id="darkmode-toggle" class="dark-mode-toggle" title="Darkmode">
             <span>🌙</span>
           </button>
-          <button id="cache-reset" class="cache-reset-btn" title="Cancella cache e ricarica">
-            <span>🗑️</span>
+          <button class="animation-toggle" id="animationToggle" title="Toggle animazione sfondo">
+            🎬
+          </button>
+          <button id="cache-reset" class="cache-reset-btn" title="Verifica aggiornamenti e riavvia app">
+            <span id="cache-icon">🔄</span>
           </button>
         </nav>
       </div>
@@ -88,9 +90,13 @@
           <span class="mobile-nav-icon">🌙</span>
           <span>Modalità scura</span>
         </button>
+        <button id="mobile-animation-toggle" class="mobile-nav-button">
+          <span class="mobile-nav-icon">🎬</span>
+          <span>Animazione sfondo</span>
+        </button>
         <button id="mobile-cache-reset" class="mobile-nav-button">
-          <span class="mobile-nav-icon">🗑️</span>
-          <span>Cancella cache</span>
+          <span class="mobile-nav-icon" id="mobile-cache-icon">🔄</span>
+          <span id="mobile-cache-text">Verifica aggiornamenti</span>
         </button>
       </nav>
     </div>
@@ -162,19 +168,19 @@
     ↑
   </button>
 
-  <!-- Modal conferma reset cache -->
+  <!-- Modal conferma riavvio app -->
   <div id="cache-modal" class="cache-modal">
     <div class="cache-modal-content">
       <div class="cache-modal-header">
-        <h3>🗑️ Cancella Cache</h3>
+        <h3 id="modal-title">🔄 Verifica Aggiornamenti</h3>
       </div>
       <div class="cache-modal-body">
-        <p>Sei sicuro di voler cancellare la cache dell'app?</p>
-        <p class="cache-modal-warning">⚠️ L'app si ricaricherà automaticamente e tornerai alla pagina di benvenuto.</p>
+        <p id="modal-message">Verifico se ci sono aggiornamenti disponibili...</p>
+        <p class="cache-modal-warning" id="modal-warning" style="display: none;">⚠️ L'app si ricaricherà automaticamente e tornerai alla pagina di benvenuto.</p>
       </div>
       <div class="cache-modal-footer">
         <button id="cache-cancel" class="cache-modal-btn cache-modal-cancel">Annulla</button>
-        <button id="cache-confirm" class="cache-modal-btn cache-modal-confirm">Conferma</button>
+        <button id="cache-confirm" class="cache-modal-btn cache-modal-confirm" style="display: none;">Riavvia e Aggiorna (v1.2)</button>
       </div>
     </div>
   </div>
