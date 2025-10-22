@@ -432,42 +432,59 @@
     <!-- Mobile Menu -->
     <div id="mobile-menu" class="mobile-menu">
         <div class="mobile-menu-header">
-            <div class="mobile-menu-logo">
-                <img src="src/logo.png" alt="TPL" class="mobile-menu-logo-img" />
-                <span class="mobile-menu-title">TPL FVG</span>
-            </div>
-            <button id="mobile-menu-close" class="mobile-menu-close" aria-label="Chiudi menu">
-                <span>×</span>
-            </button>
+            <span class="mobile-menu-title">Menu</span>
+            <button id="mobile-menu-close" class="mobile-menu-close" aria-label="Chiudi menu">×</button>
         </div>
         <nav class="mobile-menu-nav">
-            <a href="index.html" class="mobile-menu-link">
-                <span class="mobile-menu-icon">🏠</span>
+            <a href="index.html" class="mobile-nav-link">
+                <span class="mobile-nav-icon">🏠</span>
                 <span>Home</span>
             </a>
-            <a href="fermate.html" class="mobile-menu-link">
-                <span class="mobile-menu-icon">🚏</span>
+            <a href="fermate.html" class="mobile-nav-link">
+                <span class="mobile-nav-icon">🚏</span>
                 <span>Fermate</span>
             </a>
-            <a href="prezzi.html" class="mobile-menu-link">
-                <span class="mobile-menu-icon">💰</span>
+            <a href="prezzi.html" class="mobile-nav-link">
+                <span class="mobile-nav-icon">💰</span>
                 <span>Prezzi</span>
             </a>
-            <a href="test.html" class="mobile-menu-link active">
-                <span class="mobile-menu-icon">🧪</span>
+            <a href="test.html" class="mobile-nav-link active">
+                <span class="mobile-nav-icon">🧪</span>
                 <span>Test</span>
             </a>
+            <div class="mobile-menu-divider"></div>
+            <button id="mobile-darkmode-toggle" class="mobile-nav-button">
+                <span class="mobile-nav-icon">🌙</span>
+                <span>Modalità scura</span>
+            </button>
+            <div class="mobile-menu-divider"></div>
+            <div class="mobile-font-size-section">
+                <span class="mobile-section-title">Dimensione testo</span>
+                <div class="mobile-font-size-buttons">
+                    <button id="mobile-font-size-small" class="mobile-font-btn" data-size="normal" title="Testo normale">
+                        <span class="font-btn-letter">A</span>
+                        <span class="font-btn-label">Normale</span>
+                    </button>
+                    <button id="mobile-font-size-medium" class="mobile-font-btn" data-size="large" title="Testo grande">
+                        <span class="font-btn-letter">A</span>
+                        <span class="font-btn-label">Grande</span>
+                    </button>
+                    <button id="mobile-font-size-large" class="mobile-font-btn" data-size="xlarge" title="Testo molto grande">
+                        <span class="font-btn-letter">A</span>
+                        <span class="font-btn-label">Molto Grande</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mini card versione -->
+            <button class="mobile-version-card" id="mobile-version-card" title="Info o Riavvia">
+                <div class="version-info">
+                    <div class="version-title">🔄 Info o Riavvia</div>
+                    <div class="version-number" id="mobile-version-number">Versione 1.3.3</div>
+                    <div class="version-date" id="mobile-version-date">22 Ottobre 2025 21:30</div>
+                </div>
+            </button>
         </nav>
-        <div class="mobile-menu-footer">
-            <button id="mobile-darkmode-toggle" class="mobile-menu-btn">
-                <span class="mobile-menu-icon">🌙</span>
-                <span>Dark Mode</span>
-            </button>
-            <button id="mobile-cache-reset" class="mobile-menu-btn">
-                <span class="mobile-menu-icon">🗑️</span>
-                <span>Reset Cache</span>
-            </button>
-        </div>
     </div>
 
     <!-- Mobile Menu Overlay -->
@@ -692,7 +709,7 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <p>© <span id="footer-year"></span> TPL FVG. Tutti i diritti riservati.<br>Creato da Michele Carnimeo · <a href="test.html" style="color: inherit; text-decoration: none; transition: text-decoration 0.3s ease;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">TPL Autisti 0.9 build 23</a></p>
+        <p>© <span id="footer-year"></span> Michele Carnimeo. Tutti i diritti riservati.<br>TPL FVG è un marchio di TPL FVG S.C. a R.L. · <a href="test.html" style="color: inherit; text-decoration: none; transition: text-decoration 0.3s ease;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">TPL Autisti 1.3.3</a></p>
         <div class="footer-links">
           <a href="https://t.me/+eoJ9nYFFrjphMzVk" target="_blank" class="telegram-link" title="Canale Telegram">
             <span class="telegram-icon">📢</span> Avvisi & Aggiornamenti
@@ -701,8 +718,7 @@
             <span class="telegram-icon">🐛</span> Segnala Errori
           </a>
         </div>
-        <p class="update-info">📅 Ultimo aggiornamento: <span id="last-update">12/10/2025 ore 00:34</span></p>
-    </footer>
+      </footer>
 
     <!-- Script di test -->
     <script src="script.js"></script>
@@ -1434,8 +1450,9 @@
             `).join('');
         }
 
-        // Inizializza statistiche e effetti al caricamento
+        // ===== LISTENER DOM CONTENT LOADED =====
         window.addEventListener('DOMContentLoaded', () => {
+            // Inizializza statistiche e effetti
             updateStats();
             updateEffectsStatus();
             
@@ -1448,95 +1465,8 @@
             // Aggiorna l'anno nel footer
             const footerYear = document.getElementById('footer-year');
             if (footerYear) footerYear.textContent = new Date().getFullYear();
-            
-            // Inizializza menu mobile
-            initMobileMenu();
-        });
 
-        // Funzione per inizializzare il menu mobile
-        function initMobileMenu() {
-            const hamburgerToggle = document.getElementById('hamburger-toggle');
-            const mobileMenu = document.getElementById('mobile-menu');
-            const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
-            const mobileMenuClose = document.getElementById('mobile-menu-close');
-            const mobileDarkmodeToggle = document.getElementById('mobile-darkmode-toggle');
-            const mobileCacheReset = document.getElementById('mobile-cache-reset');
-
-            if (!hamburgerToggle || !mobileMenu || !mobileMenuOverlay) return;
-
-            // Apri menu
-            function openMenu() {
-                hamburgerToggle.classList.add('active');
-                mobileMenu.classList.add('active');
-                mobileMenuOverlay.classList.add('active');
-                document.body.style.overflow = 'hidden'; // Blocca scroll
-            }
-
-            // Chiudi menu
-            function closeMenu() {
-                hamburgerToggle.classList.remove('active');
-                mobileMenu.classList.remove('active');
-                mobileMenuOverlay.classList.remove('active');
-                document.body.style.overflow = ''; // Ripristina scroll
-            }
-
-            // Click su hamburger
-            if (hamburgerToggle) {
-                hamburgerToggle.addEventListener('click', () => {
-                    if (mobileMenu.classList.contains('active')) {
-                        closeMenu();
-                    } else {
-                        openMenu();
-                    }
-                });
-            }
-
-            // Click su overlay o pulsante chiudi
-            if (mobileMenuOverlay) {
-                mobileMenuOverlay.addEventListener('click', closeMenu);
-            }
-            if (mobileMenuClose) {
-                mobileMenuClose.addEventListener('click', closeMenu);
-            }
-
-            // Click su link del menu (chiude automaticamente)
-            const mobileMenuLinks = mobileMenu.querySelectorAll('.mobile-menu-link');
-            mobileMenuLinks.forEach(link => {
-                link.addEventListener('click', closeMenu);
-            });
-
-            // Gestione dark mode mobile
-            if (mobileDarkmodeToggle) {
-                mobileDarkmodeToggle.addEventListener('click', () => {
-                    const darkModeToggle = document.getElementById('darkmode-toggle');
-                    if (darkModeToggle) {
-                        darkModeToggle.click();
-                    }
-                    closeMenu();
-                });
-            }
-
-            // Gestione cache reset mobile
-            if (mobileCacheReset) {
-                mobileCacheReset.addEventListener('click', () => {
-                    const cacheReset = document.getElementById('cache-reset');
-                    if (cacheReset) {
-                        cacheReset.click();
-                    }
-                    closeMenu();
-                });
-            }
-
-            // Chiudi menu con ESC
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
-                    closeMenu();
-                }
-            });
-        }
-
-        // Aggiorna effetti quando cambia la modalità
-        document.addEventListener('DOMContentLoaded', () => {
+            // Aggiorna effetti quando cambia la modalità
             const darkModeToggle = document.getElementById('darkmode-toggle');
             if (darkModeToggle) {
                 darkModeToggle.addEventListener('click', () => {

@@ -14,6 +14,114 @@
     body {
       font-family: 'Roboto', Arial, sans-serif;
     }
+
+    /* Nascondi card su mobile e aggiungi padding */
+    @media (max-width: 768px) {
+      .main-card {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        padding: 1rem !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+      }
+      
+      /* Nascondi griglia fermate e barra di ricerca su mobile nella pagina Fermate */
+      .fermate-page #fermate-grid-container.show-on-mobile {
+        display: none !important;
+      }
+      
+      .fermate-page #search-container-fermate.show-on-mobile {
+        display: none !important;
+      }
+    }
+    
+    /* Stili per messaggio mobile */
+    .mobile-only-message {
+      display: none;
+      width: 100%;
+      padding: 1rem;
+    }
+    
+    @media (max-width: 768px) {
+      .mobile-only-message {
+        display: block !important;
+      }
+    }
+    
+    @media (min-width: 769px) {
+      .mobile-only-message {
+        display: none !important;
+      }
+    }
+    
+    .message-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 16px;
+      padding: 2rem;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+      animation: fadeIn 0.5s ease-in;
+    }
+    
+    .message-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      animation: bounce 2s infinite;
+    }
+    
+    .message-title {
+      color: white;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    
+    .message-text {
+      color: rgba(255, 255, 255, 0.95);
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+    
+    .message-button {
+      display: inline-block;
+      background: white;
+      color: #667eea;
+      padding: 0.875rem 2rem;
+      border-radius: 50px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .message-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+    
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
   </style>
 </head>
 
@@ -105,10 +213,6 @@
           <span class="mobile-nav-icon">🎬</span>
           <span>Animazione sfondo</span>
         </button>
-        <button id="mobile-cache-reset" class="mobile-nav-button">
-          <span class="mobile-nav-icon" id="mobile-cache-icon">🔄</span>
-          <span id="mobile-cache-text">Verifica aggiornamenti</span>
-        </button>
         <div class="mobile-menu-divider"></div>
         <div class="mobile-font-size-section">
           <span class="mobile-section-title">Dimensione testo</span>
@@ -127,6 +231,15 @@
             </button>
           </div>
         </div>
+        
+        <!-- Mini card versione -->
+        <button class="mobile-version-card" id="mobile-version-card" title="Info o Riavvia">
+          <div class="version-info">
+            <div class="version-title">🔄 Info o Riavvia</div>
+            <div class="version-number" id="mobile-version-number">Versione 1.3.3</div>
+            <div class="version-date" id="mobile-version-date">22 Ottobre 2025 21:30</div>
+          </div>
+        </button>
       </nav>
     </div>
   </header>
@@ -137,19 +250,13 @@
       <!-- Titolo -->
       <h1 class="page-title">Fermate per linea</h1>
       
-      <!-- Selettore linea -->
+      <!-- Pulsante selezione linea -->
       <div class="line-selector-container">
         <div class="form-group">
-          <select id="linea-fermate" class="form-select">
-            <option value="">Seleziona una linea</option>
-            <!-- Opzioni generate da JS -->
-          </select>
-        </div>
-        
-        <!-- Pulsante geolocalizzazione (nascosto inizialmente) -->
-        <div id="location-btn" class="location-btn" style="display: none;">
-          <span id="location-icon">📍</span>
-          <span id="location-text">Rileva posizione</span>
+          <button id="linea-fermate-btn" class="route-button linea-select-btn">
+            <span id="linea-fermate-text">Seleziona una linea</span>
+            <span class="route-arrow">▼</span>
+          </button>
         </div>
         
         <!-- Barra di ricerca (nascosta inizialmente) -->
@@ -159,6 +266,19 @@
             <input type="text" id="search-input" class="search-input" placeholder="Cerca Fermata" />
             <button id="clear-search" class="clear-btn" style="display: none;">✕</button>
           </div>
+        </div>
+      </div>
+
+      <!-- Messaggio mobile (visibile solo su mobile) -->
+      <div id="mobile-fermate-message" class="mobile-only-message" style="display: none;">
+        <div class="message-card">
+          <div class="message-icon">📱</div>
+          <h3 class="message-title">Visualizzazione mobile</h3>
+          <p class="message-text">
+            L'elenco dettagliato delle fermate è disponibile su desktop.<br>
+            Su mobile puoi utilizzare la pagina <strong>Home</strong> per calcolare il prezzo del biglietto selezionando partenza e destinazione.
+          </p>
+          <a href="index.html" class="message-button">Vai alla Home</a>
         </div>
       </div>
 
@@ -177,12 +297,34 @@
           </ul>
         </div>
       </div>
+      <!-- Banner installazione PWA -->
+      <div id="pwa-install-banner" class="pwa-install-banner" style="display: none;">
+        <div class="pwa-install-content">
+          <div class="pwa-install-text">
+            <span class="pwa-install-title">📱 Installa l'app</span>
+            <span class="pwa-install-subtitle">Accedi più velocemente e offline</span>
+          </div>
+          <div class="pwa-install-actions">
+            <button id="pwa-install-later" class="pwa-btn pwa-btn-secondary" type="button">Più tardi</button>
+            <button id="pwa-install-button" class="pwa-btn pwa-btn-primary" type="button">Installa</button>
+          </div>
+        </div>
+        <div id="pwa-ios-hint" class="pwa-ios-hint" style="display: none;">
+          <div class="ios-hint-title">📲 Come installare su iPhone/iPad:</div>
+          <ol class="ios-hint-steps">
+            <li><span class="step-number">1.</span> Tocca il pulsante <strong>Condividi</strong> <span class="ios-share-icon">📤</span> in basso (Safari)</li>
+            <li><span class="step-number">2.</span> Scorri e seleziona <strong>"Aggiungi a Home"</strong> <span class="ios-plus-icon">➕</span></li>
+            <li><span class="step-number">3.</span> Tocca <strong>"Aggiungi"</strong> in alto a destra ✅</li>
+          </ol>
+          <div class="ios-hint-note">💡 L'app apparirà sulla tua schermata Home come un'app nativa</div>
+        </div>
+      </div>
     </div>
   </main>
 
   <!-- Footer -->
   <footer class="footer">
-    <p>© <span id="footer-year"></span> TPL FVG. Tutti i diritti riservati. · Creato da Michele Carnimeo · <a href="test.html" style="color: inherit; text-decoration: none; transition: text-decoration 0.3s ease;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">TPL Autisti 1.3</a></p>
+    <p>© <span id="footer-year"></span> Michele Carnimeo. Tutti i diritti riservati.<br>TPL FVG è un marchio di TPL FVG S.C. a R.L. · <a href="test.html" style="color: inherit; text-decoration: none; transition: text-decoration 0.3s ease;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">TPL Autisti 1.3.3</a></p>
     <div class="footer-links">
       <a href="https://t.me/+eoJ9nYFFrjphMzVk" target="_blank" class="telegram-link" title="Canale Telegram">
         <span class="telegram-icon">📢</span> Avvisi & Aggiornamenti
@@ -191,13 +333,32 @@
         <span class="telegram-icon">🐛</span> Segnala Errori
       </a>
     </div>
-    <p class="update-info">📅 Ultimo aggiornamento: <span id="last-update">15/10/2025 ore 20:20</span></p>
   </footer>
 
   <!-- Pulsante torna su -->
   <button class="scroll-to-top" onclick="scrollToTop()" title="Torna su">
     ↑
   </button>
+
+  <!-- Modal selezione linee -->
+  <div id="linee-fermate-modal" class="fermate-modal">
+    <div class="fermate-modal-content">
+      <div class="fermate-modal-header">
+        <h3 id="linee-fermate-modal-title">Seleziona linea</h3>
+        <div class="fermate-modal-actions">
+          <button id="linee-fermate-modal-close" class="fermate-modal-close" aria-label="Chiudi">×</button>
+        </div>
+      </div>
+      <div class="fermate-modal-body">
+        <!-- Lista linee -->
+        <div class="fermate-list-container">
+          <ul id="linee-fermate-modal-list" class="fermate-modal-list">
+            <!-- Linee generate dinamicamente -->
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Modal conferma riavvio app -->
   <div id="cache-modal" class="cache-modal">
