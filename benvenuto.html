@@ -68,6 +68,23 @@
           <span id="toggle-mode-icon">🌙</span>
           <span id="toggle-mode-label">Modalità Scura</span>
         </button>
+        <div class="benvenuto-font-size-section">
+          <span style="font-size: 0.9rem; color: var(--testo-secondario); display: block; margin-bottom: 0.5rem;">Dimensione testo</span>
+          <div class="benvenuto-font-size-buttons">
+            <button id="benvenuto-font-size-small" class="dark-mode-btn benvenuto-font-btn" data-size="normal" title="Testo normale">
+              <span style="font-weight: 700; font-size: 0.9rem;">A</span>
+              <span>Normale</span>
+            </button>
+            <button id="benvenuto-font-size-medium" class="dark-mode-btn benvenuto-font-btn" data-size="large" title="Testo grande">
+              <span style="font-weight: 700; font-size: 1.1rem;">A</span>
+              <span>Grande</span>
+            </button>
+            <button id="benvenuto-font-size-large" class="dark-mode-btn benvenuto-font-btn" data-size="xlarge" title="Testo molto grande">
+              <span style="font-weight: 700; font-size: 1.3rem;">A</span>
+              <span>Molto Grande</span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -116,6 +133,56 @@
     }
   } catch {}
   updateToggleModeBtn();
+  
+  // === SISTEMA DIMENSIONE TESTO ===
+  const fontSizeLevels = ['normal', 'large', 'xlarge'];
+  let currentFontSizeIndex = 0;
+  
+  function setFontSize(level) {
+    document.body.classList.remove('font-size-normal', 'font-size-large', 'font-size-xlarge');
+    document.body.classList.add(`font-size-${level}`);
+    try {
+      localStorage.setItem('tpl.fontSize', level);
+    } catch { }
+    updateFontSizeBtn(level);
+  }
+  
+  function updateFontSizeBtn(level) {
+    // Aggiorna stato attivo dei pulsanti
+    const benvenutoButtons = document.querySelectorAll('.benvenuto-font-btn');
+    benvenutoButtons.forEach(btn => {
+      if (btn.dataset.size === level) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+  }
+  
+  // Ripristina dimensione salvata
+  try {
+    const savedFontSize = localStorage.getItem('tpl.fontSize');
+    if (savedFontSize && fontSizeLevels.includes(savedFontSize)) {
+      currentFontSizeIndex = fontSizeLevels.indexOf(savedFontSize);
+      setFontSize(savedFontSize);
+    } else {
+      setFontSize('normal');
+    }
+  } catch {
+    setFontSize('normal');
+  }
+  
+  // Event listeners per pulsanti font size
+  document.querySelectorAll('.benvenuto-font-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const size = this.dataset.size;
+      if (size) {
+        setFontSize(size);
+        currentFontSizeIndex = fontSizeLevels.indexOf(size);
+      }
+    });
+  });
+  // === FINE SISTEMA DIMENSIONE TESTO ===
   
   // Aggiorna l'anno nel footer
   const footerYear = document.getElementById('footer-year');

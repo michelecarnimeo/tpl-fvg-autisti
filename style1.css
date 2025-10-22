@@ -44,10 +44,13 @@
     --glass-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.15);  /* Ombra semplificata per card */
     --backdrop-blur: none;  /* Rimosso per migliorare performance */
   
-    /* SOTTOSEZIONE 3.3: Colori per modalità scura */
-    --bg-scuro: #0f172a;                    /* Sfondo scuro principale per dark mode */
-    --card-scuro: rgba(30, 41, 59, 0.4);    /* Sfondo scuro per card in dark mode */
-    --testo-scuro: #f1f5f9;                 /* Testo chiaro per dark mode */
+  /* SOTTOSEZIONE 3.3: Colori per modalità scura */
+  --bg-scuro: #0f172a;                    /* Sfondo scuro principale per dark mode */
+  --card-scuro: rgba(30, 41, 59, 0.4);    /* Sfondo scuro per card in dark mode */
+  --testo-scuro: #f1f5f9;                 /* Testo chiaro per dark mode */
+
+  /* SOTTOSEZIONE 3.4: Variabili per dimensioni testo accessibilità */
+  --font-size-multiplier: 1;              /* Moltiplicatore per dimensione testo (1 = normale, 1.15 = grande, 1.3 = molto grande) */
     --bordo-scuro: rgba(148, 163, 184, 0.1); /* Bordo chiaro per dark mode */
   
     /* SOTTOSEZIONE 3.4: Ottimizzazioni per modalità scura */
@@ -67,13 +70,58 @@
     --testo-secondario: #94a3b8;             /* Testo secondario diventa grigio chiaro */
     --bordo: var(--bordo-scuro);             /* Bordi diventano chiari */
     --glass-bg: var(--glass-bg-dark);        /* Glassmorphism diventa scuro */
-    --glass-border: var(--glass-border-dark); /* Bordi glassmorphism diventano chiari */
-    --glass-shadow: var(--glass-shadow-dark); /* Ombre glassmorphism diventano scure */
-  }
-  
-  /* ========================================
-     SEZIONE 5: BACKGROUND DEL BODY - GRADIENTE ANIMATO
-     ======================================== */
+  --glass-border: var(--glass-border-dark); /* Bordi glassmorphism diventano chiari */
+  --glass-shadow: var(--glass-shadow-dark); /* Ombre glassmorphism diventano scure */
+}
+
+/* ========================================
+   SEZIONE 4.5: ACCESSIBILITÀ - DIMENSIONI TESTO
+   ======================================== */
+/* Classi per regolare la dimensione del testo per accessibilità */
+
+/* SOTTOSEZIONE 4.5.1: Dimensione normale (default) */
+body.font-size-normal {
+  --font-size-multiplier: 1;
+}
+
+/* SOTTOSEZIONE 4.5.2: Dimensione grande (+15%) */
+body.font-size-large {
+  --font-size-multiplier: 1.15;
+}
+
+/* SOTTOSEZIONE 4.5.3: Dimensione molto grande (+30%) */
+body.font-size-xlarge {
+  --font-size-multiplier: 1.3;
+}
+
+/* SOTTOSEZIONE 4.5.4: Applicazione del moltiplicatore a tutti gli elementi di testo */
+body {
+  font-size: calc(16px * var(--font-size-multiplier));
+}
+
+h1 {
+  font-size: calc(2rem * var(--font-size-multiplier));
+}
+
+h2 {
+  font-size: calc(1.5rem * var(--font-size-multiplier));
+}
+
+h3 {
+  font-size: calc(1.25rem * var(--font-size-multiplier));
+}
+
+h4, h5, h6 {
+  font-size: calc(1rem * var(--font-size-multiplier));
+}
+
+p, span, div, a, button, input, select, textarea, label, li {
+  font-size: calc(1em * var(--font-size-multiplier));
+}
+
+/* ========================================
+   SEZIONE 5: BACKGROUND DEL BODY - GRADIENTE ANIMATO
+   ======================================== */
   /* Configurazione principale del body con sfondo glassmorphism animato */
   body {
     /* SOTTOSEZIONE 5.1: Font principale */
@@ -551,6 +599,83 @@
     border-color: rgba(255, 255, 255, 0.5);   /* Bordo bianco più opaco */
     color: rgba(255, 255, 255, 1);            /* Testo bianco pieno */
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5); /* Ombra scura più profonda */
+  }
+
+  /* SOTTOSEZIONE 7.15: Gruppo pulsanti dimensione testo */
+  .font-size-group {
+    display: flex;                            /* Layout flexbox */
+    align-items: center;                      /* Allineamento verticale centrale */
+    gap: 0.25rem;                            /* Spazio tra i pulsanti */
+    margin-left: 0.5rem;                     /* Margine sinistro per separare */
+    padding: 0.25rem;                        /* Padding interno */
+    background: rgba(255, 255, 255, 0.05);   /* Sfondo leggermente trasparente */
+    border-radius: 8px;                      /* Bordi arrotondati */
+  }
+  
+  .font-size-btn {
+    background: transparent;                   /* Nessun sfondo di default */
+    border: 1px solid transparent;            /* Bordo trasparente di default */
+    color: rgba(255, 255, 255, 0.8);         /* Testo bianco con 80% opacità */
+    border-radius: 6px;                       /* Bordi arrotondati */
+    padding: 0.4rem;                          /* Padding interno */
+    cursor: pointer;                          /* Cursore pointer */
+    transition: all 0.3s ease;               /* Transizione fluida */
+    font-weight: 700;                        /* Peso font bold per la lettera A */
+    display: flex;                            /* Layout flexbox */
+    align-items: center;                      /* Allineamento verticale centrale */
+    justify-content: center;                  /* Allineamento orizzontale centrale */
+    min-width: 32px;                         /* Larghezza minima */
+    height: 32px;                            /* Altezza fissa */
+    box-shadow: none;                        /* Nessuna ombra di default */
+  }
+  
+  /* Dimensioni diverse per ogni pulsante */
+  #font-size-small span {
+    font-size: 0.85rem;                      /* Piccolo */
+  }
+  
+  #font-size-medium span {
+    font-size: 1.05rem;                      /* Medio */
+  }
+  
+  #font-size-large span {
+    font-size: 1.25rem;                      /* Grande */
+  }
+  
+  .font-size-btn:hover {
+    background: rgba(255, 255, 255, 0.15);    /* Sfondo bianco trasparente */
+    border-color: rgba(255, 255, 255, 0.3);  /* Bordo bianco trasparente */
+    color: rgba(255, 255, 255, 1);           /* Testo bianco pieno */
+    transform: translateY(-1px);              /* Solleva leggermente */
+  }
+  
+  /* Stato attivo - pulsante selezionato */
+  .font-size-btn.active {
+    background: rgba(255, 255, 255, 0.25);    /* Sfondo bianco più opaco */
+    border-color: rgba(255, 255, 255, 0.5);  /* Bordo bianco più opaco */
+    color: rgba(255, 255, 255, 1);           /* Testo bianco pieno */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); /* Ombra leggera */
+  }
+  
+  /* Stili per modalità scura */
+  .dark .font-size-group {
+    background: rgba(255, 255, 255, 0.03);   /* Sfondo leggermente trasparente */
+  }
+  
+  .dark .font-size-btn {
+    color: rgba(248, 250, 252, 0.8);        /* Testo chiaro */
+  }
+  
+  .dark .font-size-btn:hover {
+    background: rgba(255, 255, 255, 0.15);   /* Sfondo bianco trasparente al hover */
+    border-color: rgba(255, 255, 255, 0.3); /* Bordo bianco trasparente */
+    color: rgba(255, 255, 255, 1);          /* Testo bianco pieno */
+  }
+  
+  .dark .font-size-btn.active {
+    background: rgba(255, 255, 255, 0.25);   /* Sfondo bianco più opaco */
+    border-color: rgba(255, 255, 255, 0.5); /* Bordo bianco più opaco */
+    color: rgba(255, 255, 255, 1);          /* Testo bianco pieno */
   }
   
   /* ========================================
@@ -1664,6 +1789,78 @@
     margin: 12px 20px;
   }
   
+  /* SOTTOSEZIONE 17.5.1: Sezione dimensione testo menu mobile */
+  .mobile-font-size-section {
+    padding: 12px 20px;
+  }
+  
+  .mobile-section-title {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--testo-secondario);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+  }
+  
+  .mobile-font-size-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  
+  .mobile-font-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 12px 8px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.75rem;
+    color: var(--testo-principale);
+  }
+  
+  .font-btn-letter {
+    font-weight: 700;
+  }
+  
+  /* Dimensioni diverse per ogni pulsante mobile */
+  #mobile-font-size-small .font-btn-letter {
+    font-size: 0.9rem;
+  }
+  
+  #mobile-font-size-medium .font-btn-letter {
+    font-size: 1.1rem;
+  }
+  
+  #mobile-font-size-large .font-btn-letter {
+    font-size: 1.3rem;
+  }
+  
+  .mobile-font-btn:hover {
+    background: rgba(0, 123, 138, 0.1);
+    border-color: var(--turchese);
+    color: var(--turchese);
+  }
+  
+  .mobile-font-btn.active {
+    background: rgba(0, 123, 138, 0.15);
+    border-color: var(--turchese);
+    color: var(--turchese);
+    box-shadow: 0 2px 8px rgba(0, 123, 138, 0.2);
+  }
+  
+  .font-btn-label {
+    font-size: 0.7rem;
+    font-weight: 500;
+  }
+  
   /* SOTTOSEZIONE 17.6: Media query - mostra hamburger su mobile, nascondi navbar-nav */
   @media (max-width: 768px) {
     .hamburger-toggle {
@@ -1700,6 +1897,54 @@
   
   .dark .mobile-menu-divider {
     background: var(--glass-border-dark);
+  }
+  
+  .dark .mobile-section-title {
+    color: rgba(248, 250, 252, 0.7);
+  }
+  
+  .dark .mobile-font-btn {
+    background: var(--glass-bg-dark);
+    border-color: var(--glass-border-dark);
+    color: var(--testo-scuro);
+  }
+  
+  .dark .mobile-font-btn:hover {
+    background: rgba(23, 183, 177, 0.15);
+    border-color: var(--turchese);
+    color: var(--turchese);
+  }
+  
+  .dark .mobile-font-btn.active {
+    background: rgba(23, 183, 177, 0.2);
+    border-color: var(--turchese);
+    color: var(--turchese);
+  }
+  
+  /* SOTTOSEZIONE 17.7.1: Stili per pagina benvenuto */
+  .benvenuto-font-size-section {
+    margin-top: 1rem;
+  }
+  
+  .benvenuto-font-size-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+  }
+  
+  .benvenuto-font-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.6rem 0.5rem !important;
+  }
+  
+  .benvenuto-font-btn.active {
+    background: var(--turchese) !important;
+    color: white !important;
+    border-color: var(--turchese-scuro) !important;
+    box-shadow: 0 4px 12px rgba(0, 123, 138, 0.3) !important;
   }
   
   /* ========================================

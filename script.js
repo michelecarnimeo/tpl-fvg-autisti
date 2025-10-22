@@ -288,6 +288,87 @@ function updateToggleIcon(isDark) {
   }
 }
 
+// ================================
+// SISTEMA ACCESSIBILITÀ - DIMENSIONE TESTO
+// ================================
+
+// Livelli di dimensione testo
+const fontSizeLevels = ['normal', 'large', 'xlarge'];
+let currentFontSizeIndex = 0;
+
+// Funzione per impostare la dimensione del testo
+function setFontSize(level) {
+  // Rimuovi tutte le classi di dimensione testo
+  document.body.classList.remove('font-size-normal', 'font-size-large', 'font-size-xlarge');
+  
+  // Aggiungi la nuova classe
+  document.body.classList.add(`font-size-${level}`);
+  
+  // Salva preferenza in localStorage
+  try {
+    localStorage.setItem('tpl.fontSize', level);
+  } catch { }
+  
+  // Aggiorna il pulsante
+  updateFontSizeButton(level);
+  
+  // Aggiorna il testo nel menu mobile
+  updateMobileFontSizeText(level);
+}
+
+// Funzione per aggiornare i pulsanti (stato attivo)
+function updateFontSizeButton(level) {
+  // Aggiorna pulsanti desktop
+  const desktopButtons = document.querySelectorAll('.font-size-btn');
+  desktopButtons.forEach(btn => {
+    if (btn.dataset.size === level) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+  
+  // Aggiorna pulsanti mobile
+  const mobileButtons = document.querySelectorAll('.mobile-font-btn');
+  mobileButtons.forEach(btn => {
+    if (btn.dataset.size === level) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+  
+  // Aggiorna pulsanti benvenuto
+  const benvenutoButtons = document.querySelectorAll('.benvenuto-font-btn');
+  benvenutoButtons.forEach(btn => {
+    if (btn.dataset.size === level) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+}
+
+// Funzione per aggiornare il testo nel menu mobile (deprecata, mantenuta per compatibilità)
+function updateMobileFontSizeText(level) {
+  // Non più necessaria con i nuovi pulsanti separati
+}
+
+// Inizializza dimensione testo dal localStorage
+function initFontSize() {
+  try {
+    const savedFontSize = localStorage.getItem('tpl.fontSize');
+    if (savedFontSize && fontSizeLevels.includes(savedFontSize)) {
+      currentFontSizeIndex = fontSizeLevels.indexOf(savedFontSize);
+      setFontSize(savedFontSize);
+    } else {
+      setFontSize('normal');
+    }
+  } catch {
+    setFontSize('normal');
+  }
+}
+
 
 // Popola modale linee con stile avanzato
 function populateLinee() {
@@ -763,6 +844,17 @@ function cancelResetCache() {
 // Event listeners
 if (darkModeToggle) darkModeToggle.addEventListener('click', toggleDark);
 
+// Event listeners per font size - pulsanti desktop e mobile
+document.querySelectorAll('.font-size-btn, .mobile-font-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const size = this.dataset.size;
+    if (size) {
+      setFontSize(size);
+      currentFontSizeIndex = fontSizeLevels.indexOf(size);
+    }
+  });
+});
+
 // Event listener per reset cache
 const cacheResetBtn = document.getElementById('cache-reset');
 if (cacheResetBtn) {
@@ -904,6 +996,10 @@ async function loadData() {
     const isDark = storedDark === '1';
     setDarkMode(isDark);
     updateToggleIcon(isDark); // Aggiorna l'icona del toggle
+    
+    // Ripristina dimensione testo
+    initFontSize();
+    
     const sLinea = localStorage.getItem('tpl.lineaIdx');
     const sPart = localStorage.getItem('tpl.partenzaIdx');
     const sArr = localStorage.getItem('tpl.arrivoIdx');
