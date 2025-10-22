@@ -588,7 +588,7 @@
     /* SOTTOSEZIONE 8.4: Layout e animazioni */
     display: flex;                                   /* Layout flexbox */
     flex-direction: column;                          /* Direzione verticale */
-    gap: 1.5rem;                                     /* Spazio tra gli elementi */
+    gap: 0rem;                                       /* Spazio ridotto tra gli elementi */
     transition: all 0.3s ease;                       /* Transizione fluida */
     position: relative;                              /* Per posizionamento assoluto */
     z-index: 1;                                      /* Sopra il background */
@@ -618,7 +618,7 @@
     font-size: 1.05rem;              /* Dimensione font media */
     color: rgba(51, 65, 85, 0.8);    /* Colore grigio con 80% opacità */
     max-width: 90%;                  /* Larghezza massima 90% */
-    margin: 0 auto;                  /* Centra orizzontalmente */
+    margin: -1rem auto 0 auto;     /* Margine superiore negativo per spostare su */
     text-shadow: 0 1px 5px rgba(255, 255, 255, 0.2);  /* Ombra testo leggera */
   }
   
@@ -629,6 +629,48 @@
   /* SOTTOSEZIONE 9.1: Elementi del form */
   .form-group {
     margin-bottom: 1.2rem;           /* Margine inferiore tra i gruppi */
+  }
+
+  /* SOTTOSEZIONE 9.1.1: Divisore tra select e route */
+  .route-divider {
+    width: 100%;                      /* Larghezza completa */
+    height: 1px;                      /* Altezza sottile */
+    background: rgba(15, 23, 42, 0.2); /* Colore uniforme e sottile */
+    margin: 1.5rem 0;                 /* Margine verticale */
+    border: none;                     /* Nessun bordo */
+  }
+
+  /* SOTTOSEZIONE 9.1.1.1: Divisore tra reset e price card */
+  .reset-divider {
+    width: 100%;                      /* Larghezza completa */
+    height: 1px;                      /* Altezza sottile */
+    background: rgba(15, 23, 42, 0.2); /* Colore uniforme e sottile */
+    margin: -0.5rem 0 1rem 0;        /* Margine ridotto sopra, normale sotto */
+    border: none;                     /* Nessun bordo */
+  }
+
+  /* SOTTOSEZIONE 9.1.2: Sezione route */
+  .route-section {
+    margin-top: 0;                    /* Rimosso margine superiore (ora gestito dal divisore) */
+    display: flex;                    /* Layout flexbox */
+    flex-direction: column;           /* Direzione verticale */
+    gap: 1rem;                       /* Spazio tra i pulsanti route */
+  }
+
+  /* SOTTOSEZIONE 9.1.2: Etichetta route */
+  .route-label {
+    display: flex;                    /* Layout flexbox */
+    flex-direction: column;           /* Direzione verticale */
+    gap: 0.5rem;                     /* Spazio tra icona e pulsante */
+  }
+
+  /* SOTTOSEZIONE 9.1.3: Icona route */
+  .route-icon {
+    font-size: 0.9rem;                /* Dimensione font piccola */
+    font-weight: 600;                 /* Peso font semi-bold */
+    color: var(--testo-secondario);   /* Colore testo secondario */
+    text-transform: uppercase;        /* Testo maiuscolo */
+    letter-spacing: 0.5px;            /* Spaziatura lettere */
   }
   
   /* SOTTOSEZIONE 9.2: Selettori del form con glassmorphism */
@@ -718,6 +760,21 @@
     background: rgba(30, 41, 59, 0.3);   /* Sfondo scuro trasparente */
     color: rgba(148, 163, 184, 0.7);    /* Testo grigio */
     background-image: none;              /* Rimuove la freccia dropdown */
+  }
+
+  /* Dark mode per divisore route */
+  .dark .route-divider {
+    background: rgba(255, 255, 255, 0.15); /* Colore uniforme bianco sottile per dark mode */
+  }
+
+  /* Dark mode per divisore reset */
+  .dark .reset-divider {
+    background: rgba(255, 255, 255, 0.15); /* Colore uniforme bianco sottile per dark mode */
+  }
+
+  /* Dark mode per sezione route */
+  .dark .route-icon {
+    color: rgba(248, 250, 252, 0.7);    /* Colore testo chiaro in dark mode */
   }
   
   /* ========================================
@@ -1689,40 +1746,90 @@
   }
   
   .fermate-modal-header {
-    padding: 20px 24px 16px;
-    border-bottom: 1px solid var(--glass-border);
+    /* Stile navbar con gradient turchese */
+    background: linear-gradient(135deg, 
+      rgba(0, 123, 138, 0.9) 0%, 
+      rgba(0, 123, 138, 0.7) 50%, 
+      rgba(0, 123, 138, 0.5) 100%);
+    border-bottom: 1px solid rgba(0, 123, 138, 0.3);
+    box-shadow: 0 4px 12px 0 rgba(0, 123, 138, 0.4);
+    border-radius: 16px 16px 0 0;
+    padding: 10px 20px;
+    min-height: 52px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-shrink: 0;
   }
+
+  /* SOTTOSEZIONE 18.1.1: Azioni modal fermate */
+  .fermate-modal-actions {
+    display: flex;                    /* Layout flexbox */
+    align-items: center;              /* Allineamento verticale */
+    gap: 0.75rem;                    /* Spazio tra pulsanti */
+  }
+
+  /* SOTTOSEZIONE 18.1.2: Pulsante geolocalizzazione modal */
+  .fermate-location-btn {
+    display: none;                    /* Nascosto inizialmente */
+    align-items: center;              /* Allineamento verticale */
+    gap: 0.5rem;                     /* Spazio tra icona e testo */
+    padding: 0.5rem 0.75rem;         /* Padding interno */
+    background: var(--turchese);      /* Sfondo turchese */
+    color: white;                     /* Testo bianco */
+    border: none;                     /* Nessun bordo */
+    border-radius: 8px;               /* Bordi arrotondati */
+    cursor: pointer;                  /* Cursore pointer */
+    font-size: 0.9rem;                /* Dimensione font */
+    font-weight: 500;                 /* Peso font */
+    transition: all 0.3s ease;        /* Transizione fluida */
+    box-shadow: 0 2px 6px rgba(0, 123, 138, 0.3);  /* Ombra */
+  }
+
+  .fermate-location-btn:hover {
+    background: var(--turchese-scuro);  /* Sfondo più scuro al hover */
+    transform: translateY(-1px);        /* Leggero sollevamento */
+    box-shadow: 0 4px 10px rgba(0, 123, 138, 0.4);  /* Ombra più pronunciata */
+  }
+
+  .fermate-location-btn:disabled {
+    opacity: 0.6;                     /* Opacità ridotta quando disabilitato */
+    cursor: not-allowed;              /* Cursore non consentito */
+    transform: none;                  /* Nessuna trasformazione */
+  }
   
-  .fermate-modal-title {
-    font-size: 1.25rem;
+  .fermate-modal-title,
+  #fermate-modal-title {
+    font-size: 1rem;
     font-weight: 600;
-    color: var(--testo-principale);
+    color: white !important;
+    line-height: 32px;
     margin: 0;
   }
   
   .fermate-modal-close {
     background: none;
-    border: none;
-    font-size: 1.5rem;
-    color: var(--testo-secondario);
-    cursor: pointer;
-    padding: 8px;
-    border-radius: 8px;
-    transition: all 0.3s ease;
+    color: white;
+    opacity: 0.95;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    border-radius: 6px;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+    line-height: 1;
   }
   
   .fermate-modal-close:hover {
-    background: rgba(0, 0, 0, 0.1);
-    color: var(--testo-principale);
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 1);
+    transform: scale(1.1);
   }
   
   .fermate-modal-body {
@@ -1796,6 +1903,45 @@
     color: var(--testo-principale);
   }
   
+  /* SOTTOSEZIONE 18.2.5: Pulsante geolocalizzazione inline */
+  .fermate-location-btn-inline {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 14px 20px;
+    margin: 12px 0;
+    background: linear-gradient(135deg, var(--turchese) 0%, var(--turchese-scuro) 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 10px rgba(0, 123, 138, 0.3);
+  }
+  
+  .fermate-location-btn-inline:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 123, 138, 0.4);
+    background: linear-gradient(135deg, var(--turchese-scuro) 0%, var(--turchese) 100%);
+  }
+  
+  .fermate-location-btn-inline:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(0, 123, 138, 0.3);
+  }
+  
+  #fermate-location-icon {
+    font-size: 1.2rem;
+  }
+  
+  #fermate-location-text {
+    letter-spacing: 0.3px;
+  }
+  
   /* SOTTOSEZIONE 18.3: Container lista fermate */
   .fermate-list-container {
     flex: 1;
@@ -1807,7 +1953,7 @@
   .fermate-modal-list {
     list-style: none;
     margin: 0;
-    padding: 0;
+    padding: 0 8px 0 0; /* Padding destro per scrollbar */
     flex: 1;
     overflow-y: auto;
     scrollbar-width: thin;
@@ -1833,7 +1979,7 @@
   }
   
   .fermate-modal-list li {
-    padding: 12px 16px;
+    padding: 14px 24px; /* Padding aumentato per touch migliore */
     cursor: pointer;
     border-radius: 8px;
     margin-bottom: 4px;
@@ -1870,18 +2016,40 @@
   .dark .fermate-modal-header {
     border-bottom-color: var(--glass-border-dark);
   }
+
+  /* Dark mode per pulsante geolocalizzazione modal */
+  .dark .fermate-location-btn {
+    background: var(--turchese);      /* Sfondo turchese anche in dark mode */
+    box-shadow: 0 2px 6px rgba(0, 153, 170, 0.4);  /* Ombra turchese */
+  }
+
+  .dark .fermate-location-btn:hover {
+    background: var(--turchese-scuro);  /* Sfondo turchese scuro al hover */
+    box-shadow: 0 4px 10px rgba(0, 153, 170, 0.5);  /* Ombra turchese più pronunciata */
+  }
   
-  .dark .fermate-modal-title {
-    color: rgba(248, 250, 252, 0.95);
+  .dark .fermate-modal-header {
+    background: linear-gradient(135deg, 
+      rgba(0, 123, 138, 0.95) 0%, 
+      rgba(0, 123, 138, 0.8) 50%, 
+      rgba(0, 123, 138, 0.6) 100%);
+    border-bottom-color: rgba(0, 123, 138, 0.5);
+    box-shadow: 0 4px 12px 0 rgba(0, 123, 138, 0.6);
+  }
+  
+  .dark .fermate-modal-title,
+  .dark #fermate-modal-title {
+    color: white !important;
   }
   
   .dark .fermate-modal-close {
-    color: rgba(148, 163, 184, 0.7);
+    color: white;
+    border-color: rgba(255, 255, 255, 0.6);
   }
   
   .dark .fermate-modal-close:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: rgba(248, 250, 252, 0.95);
+    border-color: rgba(255, 255, 255, 1);
+    background: rgba(255, 255, 255, 0.2);
   }
   
   .dark .fermate-search-box {
@@ -1908,6 +2076,17 @@
   .dark .fermate-clear-btn:hover {
     background: rgba(255, 255, 255, 0.1);
     color: rgba(248, 250, 252, 0.95);
+  }
+  
+  /* Dark mode per pulsante geolocalizzazione inline */
+  .dark .fermate-location-btn-inline {
+    background: linear-gradient(135deg, rgba(0, 153, 170, 0.9) 0%, rgba(0, 123, 138, 0.9) 100%);
+    box-shadow: 0 3px 10px rgba(0, 153, 170, 0.4);
+  }
+  
+  .dark .fermate-location-btn-inline:hover {
+    background: linear-gradient(135deg, rgba(0, 123, 138, 0.9) 0%, rgba(0, 153, 170, 0.9) 100%);
+    box-shadow: 0 5px 15px rgba(0, 153, 170, 0.5);
   }
   
   .dark .fermate-modal-list li {
@@ -1946,7 +2125,219 @@
     }
     
     .fermate-modal-list li {
-      padding: 10px 12px;
+      padding: 16px 20px; /* Ancora più padding su mobile per area touch maggiore */
+    }
+  }
+  
+  /* ========================================
+   SEZIONE 18B: MODAL LINEE (STILE AVANZATO)
+   ======================================== */
+  
+  /* SOTTOSEZIONE 18B.0: Header modale linee con stile navbar */
+  #linee-modal .fermate-modal-header {
+    /* Stesso gradient della navbar */
+    background: linear-gradient(135deg, 
+      rgba(0, 123, 138, 0.9) 0%, 
+      rgba(0, 123, 138, 0.7) 50%, 
+      rgba(0, 123, 138, 0.5) 100%);
+    border-bottom: 1px solid rgba(0, 123, 138, 0.3);
+    box-shadow: 0 4px 12px 0 rgba(0, 123, 138, 0.4);
+    border-radius: 16px 16px 0 0; /* Arrotonda solo gli angoli superiori */
+    padding: 10px 20px; /* Padding simmetrico per allineamento */
+    min-height: 52px; /* Altezza minima per garantire allineamento */
+  }
+  
+  /* Testo bianco per contrasto pulito */
+  #linee-modal .fermate-modal-title,
+  #linee-modal-title {
+    color: white !important;
+    font-weight: 600;
+    font-size: 1rem; /* Dimensione standard */
+    line-height: 32px; /* Allineamento perfetto con bottone chiusura (32px) */
+  }
+  
+  /* Bottone chiusura con bordo */
+  #linee-modal .fermate-modal-close {
+    color: white;
+    opacity: 0.95;
+    border: 2px solid rgba(255, 255, 255, 0.6); /* Bordo bianco */
+    border-radius: 6px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+  }
+  
+  #linee-modal .fermate-modal-close:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 1); /* Bordo bianco pieno */
+    transform: scale(1.1);
+  }
+  
+  /* Dark mode per header modale linee */
+  .dark #linee-modal .fermate-modal-header {
+    background: linear-gradient(135deg, 
+      rgba(0, 123, 138, 0.95) 0%, 
+      rgba(0, 123, 138, 0.8) 50%, 
+      rgba(0, 123, 138, 0.6) 100%);
+    border-bottom-color: rgba(0, 123, 138, 0.5);
+    box-shadow: 0 4px 12px 0 rgba(0, 123, 138, 0.6);
+  }
+  
+  /* SOTTOSEZIONE 18B.1: Item linea con badge e dettagli */
+  .linea-modal-item {
+    padding: 16px;
+    cursor: pointer;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+  
+  .linea-modal-item:hover {
+    background: linear-gradient(135deg, rgba(0, 123, 138, 0.1) 0%, rgba(23, 183, 177, 0.05) 100%);
+    border-color: var(--turchese);
+    transform: translateX(4px);
+    box-shadow: 0 4px 12px rgba(0, 123, 138, 0.15);
+  }
+  
+  .linea-modal-item:active {
+    transform: translateX(4px) scale(0.98);
+  }
+  
+  /* Badge con icona bus e numero linea */
+  .linea-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, var(--turchese) 0%, var(--turchese-scuro) 100%);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 123, 138, 0.3);
+    transition: all 0.3s ease;
+  }
+  
+  .linea-modal-item:hover .linea-badge {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(0, 123, 138, 0.4);
+  }
+  
+  .linea-icon {
+    font-size: 24px;
+    margin-bottom: 2px;
+  }
+  
+  .linea-number {
+    font-size: 14px;
+    font-weight: 700;
+    color: white;
+    letter-spacing: 0.5px;
+  }
+  
+  /* Dettagli linea (percorso e numero fermate) */
+  .linea-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  
+  .linea-route {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--testo-principale);
+    line-height: 1.3;
+  }
+  
+  .linea-stops {
+    font-size: 13px;
+    color: var(--testo-secondario);
+    font-weight: 500;
+  }
+  
+  /* Freccia di selezione */
+  .linea-arrow {
+    font-size: 28px;
+    color: var(--testo-secondario);
+    transition: all 0.3s ease;
+    opacity: 0.5;
+  }
+  
+  .linea-modal-item:hover .linea-arrow {
+    color: var(--turchese);
+    transform: translateX(4px);
+    opacity: 1;
+  }
+  
+  /* SOTTOSEZIONE 18B.2: Dark mode per modal linee */
+  .dark .linea-modal-item {
+    background: var(--glass-bg-dark);
+    border-color: var(--glass-border-dark);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .dark .linea-modal-item:hover {
+    background: linear-gradient(135deg, rgba(23, 183, 177, 0.15) 0%, rgba(0, 123, 138, 0.1) 100%);
+    border-color: var(--turchese);
+    box-shadow: 0 4px 12px rgba(23, 183, 177, 0.25);
+  }
+  
+  .dark .linea-route {
+    color: rgba(248, 250, 252, 0.95);
+  }
+  
+  .dark .linea-stops {
+    color: rgba(148, 163, 184, 0.8);
+  }
+  
+  .dark .linea-arrow {
+    color: rgba(148, 163, 184, 0.6);
+  }
+  
+  .dark .linea-modal-item:hover .linea-arrow {
+    color: var(--turchese);
+  }
+  
+  /* SOTTOSEZIONE 18B.3: Responsive modal linee */
+  @media (max-width: 480px) {
+    .linea-modal-item {
+      padding: 12px;
+      gap: 12px;
+    }
+    
+    .linea-badge {
+      min-width: 60px;
+      height: 60px;
+    }
+    
+    .linea-icon {
+      font-size: 20px;
+    }
+    
+    .linea-number {
+      font-size: 12px;
+    }
+    
+    .linea-route {
+      font-size: 14px;
+    }
+    
+    .linea-stops {
+      font-size: 12px;
+    }
+    
+    .linea-arrow {
+      font-size: 24px;
     }
   }
   
@@ -2257,6 +2648,163 @@
     margin-bottom: 2rem;            /* Margine inferiore */
     display: flex;                  /* Layout flexbox */
     justify-content: center;        /* Centra orizzontalmente */
+  }
+
+  /* SOTTOSEZIONE 23.2.5: Contenitore pulsanti route */
+  .route-button-container {
+    display: flex;                  /* Layout flexbox */
+    align-items: center;            /* Allineamento verticale */
+    gap: 0.5rem;                   /* Spazio tra pulsanti */
+    width: 100%;                   /* Larghezza completa */
+  }
+
+  /* SOTTOSEZIONE 23.2.6: Pulsante geolocalizzazione piccolo */
+  .location-btn-small {
+    display: flex;                  /* Layout flexbox */
+    align-items: center;            /* Allineamento verticale */
+    justify-content: center;        /* Centra contenuto */
+    width: 40px;                   /* Larghezza fissa */
+    height: 40px;                  /* Altezza fissa */
+    background: var(--turchese);    /* Sfondo turchese */
+    color: white;                   /* Testo bianco */
+    border: none;                   /* Nessun bordo */
+    border-radius: 8px;             /* Bordi arrotondati */
+    cursor: pointer;                /* Cursore pointer */
+    font-size: 1.1rem;              /* Dimensione font */
+    transition: all 0.3s ease;      /* Transizione fluida */
+    box-shadow: 0 2px 6px rgba(0, 123, 138, 0.3);  /* Ombra */
+    flex-shrink: 0;                 /* Non si restringe */
+  }
+
+  .location-btn-small:hover {
+    background: var(--turchese-scuro);  /* Sfondo più scuro al hover */
+    transform: translateY(-1px);        /* Leggero sollevamento */
+    box-shadow: 0 4px 10px rgba(0, 123, 138, 0.4);  /* Ombra più pronunciata */
+  }
+
+  .location-btn-small.active {
+    background: var(--turchese-scuro);  /* Sfondo scuro quando attivo */
+    box-shadow: 0 0 0 2px rgba(0, 123, 138, 0.3);  /* Bordo evidenziato */
+  }
+
+  .location-btn-small:disabled {
+    opacity: 0.6;                   /* Opacità ridotta quando disabilitato */
+    cursor: not-allowed;            /* Cursore non consentito */
+    transform: none;                /* Nessuna trasformazione */
+  }
+
+  /* Stili per pulsante geolocalizzazione piccolo in dark mode */
+  .dark .location-btn-small {
+    background: var(--turchese);    /* Sfondo turchese in dark mode */
+    box-shadow: 0 2px 6px rgba(0, 153, 170, 0.4);  /* Ombra diversa */
+  }
+
+  .dark .location-btn-small:hover {
+    background: var(--turchese-scuro);  /* Sfondo più scuro al hover */
+    box-shadow: 0 4px 10px rgba(0, 153, 170, 0.5);  /* Ombra più pronunciata */
+  }
+
+  .dark .location-btn-small.active {
+    background: var(--turchese-scuro);  /* Sfondo scuro quando attivo */
+    box-shadow: 0 0 0 2px rgba(0, 153, 170, 0.4);  /* Bordo evidenziato */
+  }
+
+  /* SOTTOSEZIONE 23.2.7: Pulsante inversione piccolo */
+  .swap-btn-small {
+    display: flex;                  /* Layout flexbox */
+    align-items: center;            /* Allineamento verticale */
+    justify-content: center;        /* Centra contenuto */
+    width: 40px;                   /* Larghezza fissa */
+    height: 40px;                  /* Altezza fissa */
+    background: var(--turchese);    /* Sfondo turchese per maggiore visibilità */
+    color: white;                   /* Testo bianco */
+    border: none;                   /* Nessun bordo */
+    border-radius: 8px;             /* Bordi arrotondati */
+    cursor: pointer;                /* Cursore pointer */
+    font-size: 1.1rem;              /* Dimensione font */
+    transition: all 0.3s ease;      /* Transizione fluida */
+    box-shadow: 0 2px 6px rgba(0, 123, 138, 0.3);  /* Ombra turchese */
+    flex-shrink: 0;                 /* Non si restringe */
+  }
+
+  .swap-btn-small:hover {
+    background: var(--turchese-scuro);  /* Sfondo turchese scuro al hover */
+    transform: translateY(-1px);        /* Leggero sollevamento */
+    box-shadow: 0 4px 10px rgba(0, 123, 138, 0.4);  /* Ombra turchese più pronunciata */
+  }
+
+  .swap-btn-small:active {
+    transform: translateY(0);           /* Ritorna alla posizione originale al click */
+    box-shadow: 0 2px 6px rgba(0, 123, 138, 0.3);  /* Ombra turchese normale */
+  }
+
+  .swap-btn-small:disabled {
+    opacity: 0.6;                   /* Opacità ridotta quando disabilitato */
+    cursor: not-allowed;            /* Cursore non consentito */
+    transform: none;                /* Nessuna trasformazione */
+  }
+
+  /* Stili per pulsante inversione piccolo in dark mode */
+  .dark .swap-btn-small {
+    background: var(--turchese);    /* Sfondo turchese anche in dark mode */
+    box-shadow: 0 2px 6px rgba(0, 153, 170, 0.4);  /* Ombra turchese */
+  }
+
+  .dark .swap-btn-small:hover {
+    background: var(--turchese-scuro);  /* Sfondo turchese scuro al hover */
+    box-shadow: 0 4px 10px rgba(0, 153, 170, 0.5);  /* Ombra turchese più pronunciata */
+  }
+
+  /* SOTTOSEZIONE 23.2.8: Pulsante geolocalizzazione grande */
+  .location-btn {
+    display: flex;                  /* Layout flexbox */
+    align-items: center;            /* Allineamento verticale */
+    justify-content: center;        /* Centra contenuto */
+    gap: 0.5rem;                   /* Spazio tra icona e testo */
+    padding: 0.75rem 1.5rem;       /* Padding interno */
+    background: var(--turchese);    /* Sfondo turchese */
+    color: white;                   /* Testo bianco */
+    border: none;                   /* Nessun bordo */
+    border-radius: 12px;            /* Bordi arrotondati */
+    cursor: pointer;                /* Cursore pointer */
+    font-size: 1rem;                /* Dimensione font */
+    font-weight: 500;               /* Peso del font */
+    transition: all 0.3s ease;      /* Transizione fluida */
+    box-shadow: 0 3px 8px rgba(0, 123, 138, 0.3);  /* Ombra */
+    min-width: 180px;               /* Larghezza minima */
+  }
+
+  .location-btn:hover {
+    background: var(--turchese-scuro);  /* Sfondo più scuro al hover */
+    transform: translateY(-2px);        /* Sollevamento al hover */
+    box-shadow: 0 6px 15px rgba(0, 123, 138, 0.4);  /* Ombra più pronunciata */
+  }
+
+  .location-btn.active {
+    background: var(--turchese-scuro);  /* Sfondo scuro quando attivo */
+    box-shadow: 0 0 0 3px rgba(0, 123, 138, 0.3);  /* Bordo evidenziato */
+  }
+
+  .location-btn:disabled {
+    opacity: 0.6;                   /* Opacità ridotta quando disabilitato */
+    cursor: not-allowed;            /* Cursore non consentito */
+    transform: none;                /* Nessuna trasformazione */
+  }
+
+  /* Stili per pulsante geolocalizzazione grande in dark mode */
+  .dark .location-btn {
+    background: var(--turchese);    /* Sfondo turchese in dark mode */
+    box-shadow: 0 3px 8px rgba(0, 153, 170, 0.4);  /* Ombra diversa */
+  }
+
+  .dark .location-btn:hover {
+    background: var(--turchese-scuro);  /* Sfondo più scuro al hover */
+    box-shadow: 0 6px 15px rgba(0, 153, 170, 0.5);  /* Ombra più pronunciata */
+  }
+
+  .dark .location-btn.active {
+    background: var(--turchese-scuro);  /* Sfondo scuro quando attivo */
+    box-shadow: 0 0 0 3px rgba(0, 153, 170, 0.4);  /* Bordo evidenziato */
   }
   
   /* SOTTOSEZIONE 23.3: Box contenitore ricerca */

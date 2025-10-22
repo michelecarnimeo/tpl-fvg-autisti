@@ -1,7 +1,164 @@
 // script.js - Gestione logica TPL FVG
 
 // ========================================
-// SEZIONE 0: ANIMAZIONE SFONDO
+// SEZIONE 0: RILEVAMENTO POSIZIONE
+// ========================================
+// Sistema di rilevamento posizione per ordinare fermate per distanza
+let userPosition = null;
+let locationPermissionGranted = false;
+
+// Funzione per calcolare la distanza tra due coordinate (formula di Haversine)
+function calculateDistance(lat1, lon1, lat2, lon2) {
+  const R = 6371; // Raggio della Terra in km
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLon/2) * Math.sin(dLon/2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return R * c; // Distanza in km
+}
+
+// Funzione per richiedere la posizione dell'utente
+function requestUserLocation() {
+  return new Promise((resolve, reject) => {
+    if (!isGeolocationSupported()) {
+      const error = new Error('Geolocalizzazione non supportata dal browser');
+      error.code = 0;
+      reject(error);
+      return;
+    }
+
+    const options = {
+      enableHighAccuracy: true,
+      timeout: 15000, // Aumentato a 15 secondi
+      maximumAge: 300000 // 5 minuti
+    };
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        // Verifica che la posizione sia valida
+        if (!position.coords.latitude || !position.coords.longitude) {
+          const error = new Error('Coordinate non valide');
+          error.code = 2;
+          reject(error);
+          return;
+        }
+
+        userPosition = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          accuracy: position.coords.accuracy
+        };
+        locationPermissionGranted = true;
+        console.log('Posizione rilevata:', userPosition);
+        resolve(userPosition);
+      },
+      (error) => {
+        console.error('Errore geolocalizzazione:', error);
+        locationPermissionGranted = false;
+        
+        // Aggiungi codice errore se non presente
+        if (!error.code) {
+          error.code = 0; // Errore sconosciuto
+        }
+        
+        reject(error);
+      },
+      options
+    );
+  });
+}
+
+// Funzione per ordinare fermate per distanza dalla posizione utente
+function sortFermateByDistance(fermate, userPos) {
+  if (!userPos) return fermate;
+
+  // Coordinate approssimative delle fermate (da aggiornare con dati reali)
+  const fermateCoordinates = {
+    "Udine": { lat: 46.0625, lon: 13.2354 },
+    "Lauzacco": { lat: 45.9833, lon: 13.2833 },
+    "S. Stefano Udinese": { lat: 45.9667, lon: 13.3000 },
+    "S. Maria La Longa": { lat: 45.9333, lon: 13.3167 },
+    "Mereto Di Capitolo": { lat: 45.9167, lon: 13.3333 },
+    "Palmanova": { lat: 45.9000, lon: 13.3500 },
+    "Sevegliano": { lat: 45.8833, lon: 13.3667 },
+    "Strassoldo": { lat: 45.8667, lon: 13.3833 },
+    "Muscoli": { lat: 45.8500, lon: 13.4000 },
+    "Cervignano SS14": { lat: 45.8333, lon: 13.4167 },
+    "Cervignano FS": { lat: 45.8300, lon: 13.4200 },
+    "Cervignano AUT": { lat: 45.8275, lon: 13.4225 },
+    "Terzo Di Aquileia": { lat: 45.8167, lon: 13.4333 },
+    "Aquileia": { lat: 45.8000, lon: 13.4500 },
+    "Belvedere": { lat: 45.7833, lon: 13.4667 },
+    "Grado": { lat: 45.7667, lon: 13.4833 }
+  };
+
+  return fermate.map((fermata, index) => {
+    const coords = fermateCoordinates[fermata];
+    let distance = null;
+    
+    if (coords) {
+      distance = calculateDistance(
+        userPos.latitude, 
+        userPos.longitude, 
+        coords.lat, 
+        coords.lon
+      );
+    }
+
+    return {
+      name: fermata,
+      index: index,
+      distance: distance,
+      coordinates: coords
+    };
+  }).sort((a, b) => {
+    if (a.distance === null && b.distance === null) return 0;
+    if (a.distance === null) return 1;
+    if (b.distance === null) return -1;
+    return a.distance - b.distance;
+  });
+}
+
+// Funzione per verificare se la geolocalizzazione è supportata
+function isGeolocationSupported() {
+  return 'geolocation' in navigator;
+}
+
+// Funzione per mostrare/nascondere il pulsante di geolocalizzazione
+function toggleLocationButton(show) {
+  const locationBtn = document.getElementById('location-btn');
+  if (locationBtn) {
+    // Mostra solo se la geolocalizzazione è supportata
+    const shouldShow = show && isGeolocationSupported();
+    locationBtn.style.display = shouldShow ? 'flex' : 'none';
+    
+    // Se è il pulsante piccolo (index.html), usa display: flex
+    if (locationBtn.classList.contains('location-btn-small')) {
+      locationBtn.style.display = shouldShow ? 'flex' : 'none';
+    }
+  }
+}
+
+// Funzione per mostrare/nascondere il pulsante di inversione
+function toggleSwapButton(show) {
+  const swapBtn = document.getElementById('swap-btn');
+  if (swapBtn) {
+    swapBtn.style.display = show ? 'flex' : 'none';
+  }
+}
+
+// Funzione per aggiornare l'icona del pulsante geolocalizzazione
+function updateLocationButtonIcon(hasLocation) {
+  const locationIcon = document.getElementById('location-icon');
+  if (locationIcon) {
+    locationIcon.textContent = hasLocation ? '📍' : '📍';
+  }
+}
+
+// ========================================
+// SEZIONE 1: ANIMAZIONE SFONDO
 // ========================================
 // Controllo dell'animazione del gradiente di sfondo
 let animationEnabled = false;
@@ -47,7 +204,8 @@ function loadAnimationPreference() {
 // Elementi DOM
 const mainApp = document.getElementById('main-app');
 const darkModeToggle = document.getElementById('darkmode-toggle');
-const lineaSelect = document.getElementById('linea');
+const lineaBtn = document.getElementById('linea-btn');
+const lineaText = document.getElementById('linea-text');
 const partenzaBtn = document.getElementById('partenza-btn');
 const arrivoBtn = document.getElementById('arrivo-btn');
 const partenzaText = document.getElementById('partenza-text');
@@ -71,6 +229,15 @@ const fermateModalClose = document.getElementById('fermate-modal-close');
 const fermateSearchInput = document.getElementById('fermate-search-input');
 const fermateClearSearch = document.getElementById('fermate-clear-search');
 const fermateModalList = document.getElementById('fermate-modal-list');
+const fermateLocationBtn = document.getElementById('fermate-location-btn');
+const fermateLocationIcon = document.getElementById('fermate-location-icon');
+const fermateLocationText = document.getElementById('fermate-location-text');
+
+// Modal linee elements
+const lineeModal = document.getElementById('linee-modal');
+const lineeModalTitle = document.getElementById('linee-modal-title');
+const lineeModalClose = document.getElementById('linee-modal-close');
+const lineeModalList = document.getElementById('linee-modal-list');
 
 // DOM Elements loaded successfully
 
@@ -122,15 +289,37 @@ function updateToggleIcon(isDark) {
 }
 
 
-// Popola select linea
+// Popola modale linee con stile avanzato
 function populateLinee() {
-  if (!lineaSelect) return; // Non siamo su index.html
-  lineaSelect.innerHTML = '<option value="">Seleziona una linea</option>';
+  if (!lineeModalList) return; // Non siamo su index.html
+  lineeModalList.innerHTML = '';
   tariffario.forEach((l, i) => {
-    const opt = document.createElement('option');
-    opt.value = i;
-    opt.textContent = l.nome;
-    lineaSelect.appendChild(opt);
+    const li = document.createElement('li');
+    li.className = 'linea-modal-item';
+    li.dataset.lineaIdx = i;
+    
+    // Estrai numero linea dal nome (es: "Linea 400 Udine-Grado" -> "400")
+    const lineaNumMatch = l.nome.match(/\d+/);
+    const lineaNum = lineaNumMatch ? lineaNumMatch[0] : (i + 1);
+    
+    // Estrai percorso (es: "Udine-Grado")
+    const percorso = l.nome.replace(/Linea\s+\d+\s*/i, '');
+    
+    // Crea struttura HTML con icona e dettagli
+    li.innerHTML = `
+      <div class="linea-badge">
+        <span class="linea-icon">🚌</span>
+        <span class="linea-number">${lineaNum}</span>
+      </div>
+      <div class="linea-details">
+        <span class="linea-route">${percorso}</span>
+        <span class="linea-stops">${l.fermate.length} fermate</span>
+      </div>
+      <span class="linea-arrow">›</span>
+    `;
+    
+    li.addEventListener('click', () => selectLinea(i, l.nome));
+    lineeModalList.appendChild(li);
   });
 }
 
@@ -143,13 +332,21 @@ function updateFermateButtons() {
     arrivoText.textContent = 'Prima seleziona una linea';
     partenzaBtn.disabled = true;
     arrivoBtn.disabled = true;
+    
+    // Nascondi pulsanti geolocalizzazione e swap
+    toggleLocationButton(false);
+    toggleSwapButton(false);
     return;
   }
   
   partenzaText.textContent = 'Seleziona la partenza';
-  arrivoText.textContent = 'Seleziona l\'arrivo';
+  arrivoText.textContent = 'Seleziona la destinazione';
   partenzaBtn.disabled = false;
   arrivoBtn.disabled = false;
+  
+  // Mostra pulsanti geolocalizzazione e swap
+  toggleLocationButton(true);
+  toggleSwapButton(true);
 }
 
 // Funzioni per gestire il modale delle fermate
@@ -159,17 +356,21 @@ function openFermateModal(type) {
   currentModalType = type;
   fermateModalTitle.textContent = type === 'partenza' ? 'Seleziona fermata di partenza' : 'Seleziona fermata di arrivo';
   
+  // Mostra/nascondi pulsante geolocalizzazione solo per la partenza
+  if (fermateLocationBtn) {
+    if (type === 'partenza') {
+      fermateLocationBtn.style.display = 'flex'; // Pulsante inline full-width
+    } else {
+      fermateLocationBtn.style.display = 'none';
+    }
+  }
+  
   // Popola la lista delle fermate
   populateFermateList();
   
   // Mostra il modale
   fermateModal.classList.add('show');
   fermateModal.style.display = 'flex';
-  
-  // Focus sulla ricerca
-  setTimeout(() => {
-    if (fermateSearchInput) fermateSearchInput.focus();
-  }, 100);
 }
 
 function closeFermateModal() {
@@ -185,6 +386,46 @@ function closeFermateModal() {
     fermateSearchInput.value = '';
     fermateSearchInput.dispatchEvent(new Event('input'));
   }
+}
+
+// === FUNZIONI MODALE LINEE ===
+function openLineeModal() {
+  if (!lineeModal) return;
+  
+  lineeModal.style.display = 'flex';
+  setTimeout(() => lineeModal.classList.add('show'), 10);
+}
+
+function closeLineeModal() {
+  if (!lineeModal) return;
+  
+  lineeModal.classList.remove('show');
+  setTimeout(() => {
+    lineeModal.style.display = 'none';
+  }, 300);
+}
+
+function selectLinea(idx, nome) {
+  lineaIdx = idx;
+  partenzaIdx = '';
+  arrivoIdx = '';
+  hasCalculated = false;
+  
+  // Aggiorna il testo del bottone
+  if (lineaText) {
+    lineaText.textContent = nome;
+  }
+  
+  updateFermateButtons();
+  updateSummary();
+  calcolaPrezzo();
+  
+  // Salva in localStorage
+  try { 
+    localStorage.setItem('tpl.lineaIdx', lineaIdx); 
+  } catch { }
+  
+  closeLineeModal();
 }
 
 function populateFermateList() {
@@ -364,9 +605,9 @@ function resetFilters() {
   arrivoIdx = '';
   hasCalculated = false;
   
-  // Reset select linea
-  if (lineaSelect) {
-    lineaSelect.value = '';
+  // Reset bottone linea
+  if (lineaText) {
+    lineaText.textContent = 'Seleziona una linea';
   }
   
   // Reset pulsanti partenza e arrivo
@@ -391,6 +632,10 @@ function resetFilters() {
   // Reset summary e prezzo usando la logica esistente
   updateSummary();
   calcolaPrezzo();
+  
+  // Nascondi pulsanti geolocalizzazione e swap
+  toggleLocationButton(false);
+  toggleSwapButton(false);
   
   // Assicurati che il pulsante swap sia disabilitato
   const swapBtn = document.getElementById('swap-btn');
@@ -555,18 +800,11 @@ document.addEventListener('keydown', function(e) {
     }
   }
 });
-if (lineaSelect) {
-  lineaSelect.addEventListener('change', e => {
-    lineaIdx = e.target.value;
-    partenzaIdx = '';
-    arrivoIdx = '';
-    hasCalculated = false;
-    updateFermateButtons();
-    updateSummary();
-    calcolaPrezzo();
-    try { localStorage.setItem('tpl.lineaIdx', lineaIdx); } catch { }
-  });
+// Event listener per apertura modale linee
+if (lineaBtn) {
+  lineaBtn.addEventListener('click', openLineeModal);
 }
+
 // Event listeners per pulsanti partenza/arrivo
 if (partenzaBtn) {
   partenzaBtn.addEventListener('click', () => openFermateModal('partenza'));
@@ -575,9 +813,25 @@ if (arrivoBtn) {
   arrivoBtn.addEventListener('click', () => openFermateModal('arrivo'));
 }
 
+// Event listener per pulsante geolocalizzazione (sia per index.html che fermate.html)
+const locationBtn = document.getElementById('location-btn');
+if (locationBtn) {
+  locationBtn.addEventListener('click', () => {
+    if (locationBtn.classList.contains('active')) {
+      disableLocationSorting();
+    } else {
+      handleLocationClick();
+    }
+  });
+}
+
 // Event listeners per modale fermate
 if (fermateModalClose) {
   fermateModalClose.addEventListener('click', closeFermateModal);
+}
+
+if (fermateLocationBtn) {
+  fermateLocationBtn.addEventListener('click', handleFermateLocationClick);
 }
 
 if (fermateModal) {
@@ -609,6 +863,21 @@ if (fermateClearSearch) {
     }
   });
 }
+
+// Event listeners per modale linee
+if (lineeModalClose) {
+  lineeModalClose.addEventListener('click', closeLineeModal);
+}
+
+// Chiudi modale linee cliccando fuori
+if (lineeModal) {
+  lineeModal.addEventListener('click', (e) => {
+    if (e.target === lineeModal) {
+      closeLineeModal();
+    }
+  });
+}
+
 // I pulsanti swap e calcola usano onclick nell'HTML, non servono listener qui
 
 // Footer year
@@ -638,9 +907,34 @@ async function loadData() {
     const sLinea = localStorage.getItem('tpl.lineaIdx');
     const sPart = localStorage.getItem('tpl.partenzaIdx');
     const sArr = localStorage.getItem('tpl.arrivoIdx');
-    if (sLinea !== null) lineaIdx = sLinea;
+    if (sLinea !== null) {
+      lineaIdx = sLinea;
+      // Ripristina il testo del bottone linea
+      if (lineaText && tariffario[lineaIdx]) {
+        lineaText.textContent = tariffario[lineaIdx].nome;
+      }
+    }
     if (sPart !== null) partenzaIdx = sPart;
     if (sArr !== null) arrivoIdx = sArr;
+    
+    // Ripristina preferenza geolocalizzazione
+    const locationEnabled = localStorage.getItem('tpl.locationEnabled') === 'true';
+    if (locationEnabled && window.location.pathname.endsWith('fermate.html')) {
+      // Prova a rilevare la posizione automaticamente
+      requestUserLocation().then(() => {
+        const locationBtn = document.getElementById('location-btn');
+        if (locationBtn) {
+          locationBtn.classList.add('active');
+          const locationIcon = document.getElementById('location-icon');
+          const locationText = document.getElementById('location-text');
+          if (locationIcon) locationIcon.textContent = '📍';
+          if (locationText) locationText.textContent = 'Ordina per distanza';
+        }
+      }).catch(() => {
+        // Se fallisce, rimuovi la preferenza
+        localStorage.removeItem('tpl.locationEnabled');
+      });
+    }
   } catch { }
   updateFermateButtons();
   if (lineaIdx && lineaSelect) lineaSelect.value = lineaIdx;
@@ -658,8 +952,8 @@ async function loadData() {
 }
 
 // --- TRATTE LOGIC ---
-function renderFermate(lineaIndex = 0) {
-  console.log('renderFermate chiamata con lineaIndex:', lineaIndex);
+function renderFermate(lineaIndex = 0, sortByDistance = false) {
+  console.log('renderFermate chiamata con lineaIndex:', lineaIndex, 'sortByDistance:', sortByDistance);
   const andataList = document.getElementById('fermate-andata');
   const ritornoList = document.getElementById('fermate-ritorno');
   const gridContainer = document.getElementById('fermate-grid-container');
@@ -673,26 +967,64 @@ function renderFermate(lineaIndex = 0) {
   }
 
   const linea = tariffario[lineaIndex];
-  const fermate = linea.fermate;
+  let fermate = linea.fermate;
   console.log('Rendering liste tratte per linea:', linea.nome, 'con', fermate.length, 'fermate');
 
   // Pulisce le liste precedenti
   andataList.innerHTML = '';
   ritornoList.innerHTML = '';
 
+  // Se richiesto, ordina per distanza
+  let sortedFermate = fermate;
+  if (sortByDistance && userPosition) {
+    const sorted = sortFermateByDistance(fermate, userPosition);
+    sortedFermate = sorted.map(item => item.name);
+    console.log('Fermate ordinate per distanza:', sorted);
+  }
+
   // Popola lista andata (0 → fine) - INCLUDE TUTTE LE FERMATE
-  for (let i = 0; i < fermate.length; i++) {
+  for (let i = 0; i < sortedFermate.length; i++) {
     const li = document.createElement('li');
     li.classList.add('fermate-item');
-    li.innerHTML = `<span class="fermate-icon">📍</span><span class="fermate-number">${i + 1}</span><span class="fermate-stop">${fermate[i]}</span>`;
+    
+    // Trova l'indice originale della fermata
+    const originalIndex = fermate.indexOf(sortedFermate[i]);
+    const distance = userPosition ? sortFermateByDistance(fermate, userPosition).find(f => f.name === sortedFermate[i])?.distance : null;
+    
+    let distanceText = '';
+    if (distance !== null) {
+      distanceText = `<span class="fermate-distance">${distance.toFixed(1)} km</span>`;
+    }
+    
+    li.innerHTML = `
+      <span class="fermate-icon">📍</span>
+      <span class="fermate-number">${originalIndex + 1}</span>
+      <span class="fermate-stop">${sortedFermate[i]}</span>
+      ${distanceText}
+    `;
     andataList.appendChild(li);
   }
 
   // Popola lista ritorno (fine → 0) - INCLUDE TUTTE LE FERMATE
-  for (let i = fermate.length - 1; i >= 0; i--) {
+  for (let i = sortedFermate.length - 1; i >= 0; i--) {
     const li = document.createElement('li');
     li.classList.add('tratte-item');
-    li.innerHTML = `<span class="tratte-icon">📍</span><span class="tratte-number">${fermate.length - i}</span><span class="tratte-stop">${fermate[i]}</span>`;
+    
+    // Trova l'indice originale della fermata
+    const originalIndex = fermate.indexOf(sortedFermate[i]);
+    const distance = userPosition ? sortFermateByDistance(fermate, userPosition).find(f => f.name === sortedFermate[i])?.distance : null;
+    
+    let distanceText = '';
+    if (distance !== null) {
+      distanceText = `<span class="fermate-distance">${distance.toFixed(1)} km</span>`;
+    }
+    
+    li.innerHTML = `
+      <span class="tratte-icon">📍</span>
+      <span class="tratte-number">${fermate.length - originalIndex}</span>
+      <span class="tratte-stop">${sortedFermate[i]}</span>
+      ${distanceText}
+    `;
     ritornoList.appendChild(li);
   }
 
@@ -791,12 +1123,18 @@ function populateLineeTratte() {
       if (gridContainer) gridContainer.style.display = 'grid';
       if (searchContainer) searchContainer.style.display = 'flex';
 
+      // Mostra pulsante geolocalizzazione
+      toggleLocationButton(true);
+
       // Renderizza tratte con l'indice selezionato
       renderFermate(parseInt(selectedIndex));
     } else {
       // Nascondi griglia e ricerca se deseleziona
       if (gridContainer) gridContainer.style.display = 'none';
       if (searchContainer) searchContainer.style.display = 'none';
+      
+      // Nascondi pulsante geolocalizzazione
+      toggleLocationButton(false);
     }
   });
 }
@@ -902,6 +1240,198 @@ function initFermatePrezzi() {
     populateLineePrezzi();
     setupRicercaPrezzi();
   }
+}
+
+// Funzione per mostrare notifiche all'utente
+function showLocationNotification(message, type = 'info') {
+  // Crea elemento notifica se non esiste
+  let notification = document.getElementById('location-notification');
+  if (!notification) {
+    notification = document.createElement('div');
+    notification.id = 'location-notification';
+    notification.className = 'location-notification';
+    document.body.appendChild(notification);
+  }
+
+  // Aggiorna contenuto e stile
+  notification.textContent = message;
+  notification.className = `location-notification ${type}`;
+  notification.style.display = 'block';
+
+  // Auto-hide dopo 3 secondi
+  setTimeout(() => {
+    if (notification) {
+      notification.style.display = 'none';
+    }
+  }, 3000);
+}
+
+// Funzione per gestire il click del pulsante geolocalizzazione
+async function handleLocationClick() {
+  const locationBtn = document.getElementById('location-btn');
+  const locationIcon = document.getElementById('location-icon');
+  const locationText = document.getElementById('location-text');
+  
+  if (!locationBtn) return;
+
+  // Mostra stato di caricamento
+  if (locationIcon) locationIcon.textContent = '⏳';
+  if (locationText) locationText.textContent = 'Rilevamento...';
+  locationBtn.disabled = true;
+
+  try {
+    await requestUserLocation();
+    
+    // Aggiorna UI
+    if (locationIcon) locationIcon.textContent = '📍';
+    if (locationText) locationText.textContent = 'Ordina per distanza';
+    locationBtn.classList.add('active');
+    
+    // Salva preferenza
+    try {
+      localStorage.setItem('tpl.locationEnabled', 'true');
+    } catch {}
+    
+    // Mostra notifica di successo
+    showLocationNotification('Posizione rilevata! Le fermate saranno ordinate per distanza.', 'success');
+    
+    // Se siamo su fermate.html, ri-renderizza con ordinamento per distanza
+    if (window.location.pathname.endsWith('fermate.html')) {
+      const lineaSelect = document.getElementById('linea-fermate');
+      if (lineaSelect && lineaSelect.value !== '') {
+        renderFermate(parseInt(lineaSelect.value), true);
+      }
+    }
+    
+  } catch (error) {
+    console.error('Errore geolocalizzazione:', error);
+    
+    // Determina il tipo di errore
+    let errorMessage = 'Errore nel rilevamento della posizione';
+    if (error.code === 1) {
+      errorMessage = 'Permesso di geolocalizzazione negato. Abilita la posizione nelle impostazioni del browser.';
+    } else if (error.code === 2) {
+      errorMessage = 'Posizione non disponibile. Verifica la connessione GPS.';
+    } else if (error.code === 3) {
+      errorMessage = 'Timeout nel rilevamento. Riprova più tardi.';
+    }
+    
+    // Mostra errore
+    if (locationIcon) locationIcon.textContent = '❌';
+    if (locationText) locationText.textContent = 'Errore rilevamento';
+    
+    // Mostra notifica di errore
+    showLocationNotification(errorMessage, 'error');
+    
+    // Reset dopo 3 secondi
+    setTimeout(() => {
+      if (locationIcon) locationIcon.textContent = '📍';
+      if (locationText) locationText.textContent = 'Rileva posizione';
+      locationBtn.disabled = false;
+      locationBtn.classList.remove('active');
+    }, 3000);
+  }
+}
+
+// Funzione per gestire il click del pulsante geolocalizzazione nel modal fermate
+async function handleFermateLocationClick() {
+  if (!fermateLocationBtn) return;
+
+  if (!isGeolocationSupported()) {
+    showLocationNotification('Geolocalizzazione non supportata dal browser', 'error');
+    return;
+  }
+
+  try {
+    // Mostra stato di caricamento
+    if (fermateLocationIcon) fermateLocationIcon.textContent = '⏳';
+    if (fermateLocationText) fermateLocationText.textContent = 'Rilevamento...';
+    fermateLocationBtn.disabled = true;
+
+    // Richiedi posizione
+    const position = await requestUserLocation();
+    userPosition = position;
+    locationPermissionGranted = true;
+
+    // Aggiorna UI
+    if (fermateLocationIcon) fermateLocationIcon.textContent = '📍';
+    if (fermateLocationText) fermateLocationText.textContent = 'Rilevata';
+    showLocationNotification('Posizione rilevata! Ordinando fermate per distanza...', 'success');
+
+    // Salva preferenza
+    try {
+      localStorage.setItem('tpl.locationEnabled', 'true');
+    } catch {}
+
+    // Ri-ordina le fermate per distanza
+    if (fermateModalList && fermateModalList.children.length > 0) {
+      const fermate = Array.from(fermateModalList.children).map(li => li.textContent.trim());
+      const sortedFermate = sortFermateByDistance(fermate, userPosition);
+      
+      // Re-renderizza la lista ordinata
+      fermateModalList.innerHTML = '';
+      sortedFermate.forEach((fermata, index) => {
+        const li = document.createElement('li');
+        li.textContent = fermata;
+        li.addEventListener('click', () => selectFermata(fermata));
+        fermateModalList.appendChild(li);
+      });
+    }
+
+  } catch (error) {
+    console.error('Errore geolocalizzazione modal:', error);
+    
+    // Reset UI
+    if (fermateLocationIcon) fermateLocationIcon.textContent = '❌';
+    if (fermateLocationText) fermateLocationText.textContent = 'Errore';
+    
+    // Gestisci errori specifici
+    let errorMessage = 'Errore durante il rilevamento della posizione';
+    if (error.code === 1) {
+      errorMessage = 'Permesso di geolocalizzazione negato';
+    } else if (error.code === 2) {
+      errorMessage = 'Posizione non disponibile';
+    } else if (error.code === 3) {
+      errorMessage = 'Timeout durante il rilevamento';
+    }
+
+    showLocationNotification(errorMessage, 'error');
+    
+    // Reset dopo 3 secondi
+    setTimeout(() => {
+      if (fermateLocationIcon) fermateLocationIcon.textContent = '📍';
+      if (fermateLocationText) fermateLocationText.textContent = 'Rileva';
+      fermateLocationBtn.disabled = false;
+    }, 3000);
+  }
+}
+
+// Funzione per disabilitare l'ordinamento per distanza
+function disableLocationSorting() {
+  const locationBtn = document.getElementById('location-btn');
+  const locationIcon = document.getElementById('location-icon');
+  const locationText = document.getElementById('location-text');
+  
+  if (locationBtn) {
+    locationBtn.classList.remove('active');
+    locationBtn.disabled = false;
+  }
+  
+  if (locationIcon) locationIcon.textContent = '📍';
+  if (locationText) locationText.textContent = 'Rileva posizione';
+  
+  // Se siamo su fermate.html, ri-renderizza senza ordinamento
+  if (window.location.pathname.endsWith('fermate.html')) {
+    const lineaSelect = document.getElementById('linea-fermate');
+    if (lineaSelect && lineaSelect.value !== '') {
+      renderFermate(parseInt(lineaSelect.value), false);
+    }
+  }
+  
+  // Rimuovi preferenza
+  try {
+    localStorage.removeItem('tpl.locationEnabled');
+  } catch {}
 }
 
 // Avvia logica tratte/tariffe solo se siamo su tratte.html o tariffe.html

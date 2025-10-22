@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TPL FVG - Test Suite Refactorizzata</title>
+    <link rel="stylesheet" href="style1.css">
+    <link rel="icon" href="src/tpl.jpg" type="image/jpeg">
+    <style>
+        .test-container {
+            max-width: 1400px;
+            width: 95%;
+            margin: 1.5rem auto;
+            padding: 1rem;
+        }
+
+        .test-category {
+            background: var(--bianco);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            border: 2px solid var(--bordo);
+            width: 100%;
+        }
+
+        .test-category h2 {
+            color: var(--turchese);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 2px solid var(--turchese);
+            padding-bottom: 0.5rem;
+        }
+
+        .test-item {
+            padding: 1.5rem;
+            margin: 0.75rem 0;
+            border-radius: 8px;
+            border: 1px solid var(--bordo);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .test-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        .test-status.pass {
+            background: var(--verde-chiaro);
+            color: var(--verde);
+        }
+
+        .test-status.fail {
+            background: var(--rosso-chiaro);
+            color: var(--rosso);
+        }
+
+        .test-status.pending {
+            background: var(--giallo-chiaro);
+            color: var(--giallo);
+        }
+
+        .test-btn {
+            background: var(--turchese);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .test-btn:hover {
+            background: var(--turchese-scuro);
+            transform: translateY(-1px);
+        }
+
+        .test-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .test-result {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--turchese);
+            background: var(--grigio-chiaro);
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .test-result.success {
+            border-left-color: var(--verde);
+            background: rgba(34, 197, 94, 0.1);
+        }
+
+        .test-result.error {
+            border-left-color: var(--rosso);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .test-result.warning {
+            border-left-color: var(--giallo);
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        .run-all-btn {
+            background: var(--turchese);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .run-all-btn:hover {
+            background: var(--turchese-scuro);
+            transform: translateY(-2px);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+            background: var(--grigio-chiaro);
+            border-radius: 8px;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--grigio-scuro);
+        }
+    </style>
+</head>
+
+<body class="bg-background-light text-foreground-light">
+
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="container">
+            <div class="navbar-content">
+                <a href="index.html" class="navbar-brand-link">
+                    <div class="navbar-brand">
+                        <div class="navbar-logo-wrapper">
+                            <img src="src/logo.png" alt="TPL" class="navbar-logo navbar-logo-default" />
+                            <img src="src/logo1.png" alt="TPL" class="navbar-logo navbar-logo-hover" />
+                        </div>
+                        <div class="navbar-title">
+                            <div class="logo-acronym">
+                                <div>tpl</div>
+                                <div>fvg</div>
+                            </div>
+                            <div class="logo-text">
+                                <div>trasporto</div>
+                                <div>pubblico</div>
+                                <div>locale</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <!-- Hamburger button (mobile only) -->
+                <button id="hamburger-toggle" class="hamburger-toggle" aria-label="Menu">
+                    <span class="hamburger-icon"></span>
+                </button>
+                
+                <nav class="navbar-nav">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="fermate.html" class="nav-link">Fermate</a>
+                    <a href="prezzi.html" class="nav-link">Prezzi</a>
+                    <a href="test-new.html" class="nav-link active">Test</a>
+                    <button id="darkmode-toggle" class="dark-mode-toggle" title="Darkmode">
+                        <span>🌙</span>
+                    </button>
+                    <button id="cache-reset" class="cache-reset-btn" title="Cancella cache e ricarica"><span>🗑️</span></button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="mobile-menu">
+        <div class="mobile-menu-header">
+            <div class="mobile-menu-logo">
+                <img src="src/logo.png" alt="TPL" class="mobile-menu-logo-img" />
+                <span class="mobile-menu-title">TPL FVG</span>
+            </div>
+            <button id="mobile-menu-close" class="mobile-menu-close" aria-label="Chiudi menu">
+                <span>×</span>
+            </button>
+        </div>
+        <nav class="mobile-menu-nav">
+            <a href="index.html" class="mobile-menu-link">
+                <span class="mobile-menu-icon">🏠</span>
+                <span>Home</span>
+            </a>
+            <a href="fermate.html" class="mobile-menu-link">
+                <span class="mobile-menu-icon">🚏</span>
+                <span>Fermate</span>
+            </a>
+            <a href="prezzi.html" class="mobile-menu-link">
+                <span class="mobile-menu-icon">💰</span>
+                <span>Prezzi</span>
+            </a>
+            <a href="test-new.html" class="mobile-menu-link active">
+                <span class="mobile-menu-icon">🧪</span>
+                <span>Test</span>
+            </a>
+        </nav>
+        <div class="mobile-menu-footer">
+            <button id="mobile-darkmode-toggle" class="mobile-menu-btn">
+                <span class="mobile-menu-icon">🌙</span>
+                <span>Dark Mode</span>
+            </button>
+            <button id="mobile-cache-reset" class="mobile-menu-btn">
+                <span class="mobile-menu-icon">🗑️</span>
+                <span>Reset Cache</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu-overlay" class="mobile-menu-overlay"></div>
+
+    <div class="test-container">
+        <h1>🧪 Test Suite Refactorizzata - TPL FVG</h1>
+        <p style="margin-bottom: 2rem; color: var(--grigio-scuro);">
+            Questa versione testa le <strong>funzioni reali</strong> di <code>script.js</code> invece di duplicare la logica.
+        </p>
+
+        <!-- Statistiche -->
+        <div class="test-category">
+            <h2>📊 Statistiche Test</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number" id="stat-passed" style="color: #22c55e;">0</div>
+                    <div class="stat-label">Passati</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="stat-failed" style="color: #ef4444;">0</div>
+                    <div class="stat-label">Falliti</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="stat-pending" style="color: #ffc107;">0</div>
+                    <div class="stat-label">In attesa</div>
+                </div>
+            </div>
+            <button class="run-all-btn" onclick="runAllTests()">▶️ Esegui tutti i test</button>
+        </div>
+
+        <!-- Test Geolocalizzazione -->
+        <div class="test-category">
+            <h2>📍 Test Geolocalizzazione</h2>
+            <div class="test-item">
+                <div>
+                    <strong>Rilevamento Posizione GPS</strong>
+                    <br>
+                    <small>Testa il rilevamento della posizione attuale per verificare la funzionalità GPS</small>
+                </div>
+                <div>
+                    <button id="test-location-btn" class="test-btn">
+                        <span id="test-location-icon">📍</span>
+                        <span id="test-location-text">Rileva Posizione</span>
+                    </button>
+                </div>
+            </div>
+            <div id="test-location-result" class="test-result" style="display: none;">
+                <h4>Risultato Rilevamento:</h4>
+                <div id="test-location-info"></div>
+            </div>
+        </div>
+
+        <!-- Test Core Functions -->
+        <div class="test-category">
+            <h2>🔧 Test Funzioni Core (script.js)</h2>
+            
+            <div class="test-item">
+                <div>
+                    <strong>Test populateLineeTratte()</strong>
+                    <br>
+                    <small>Verifica che la funzione di popolamento linee funzioni correttamente</small>
+                </div>
+                <div>
+                    <button id="test-populate-btn" class="test-btn">Test Populate</button>
+                </div>
+            </div>
+            <div id="test-populate-result" class="test-result" style="display: none;"></div>
+
+            <div class="test-item">
+                <div>
+                    <strong>Test calculateDistance()</strong>
+                    <br>
+                    <small>Verifica il calcolo della distanza tra due coordinate</small>
+                </div>
+                <div>
+                    <button id="test-distance-btn" class="test-btn">Test Distance</button>
+                </div>
+            </div>
+            <div id="test-distance-result" class="test-result" style="display: none;"></div>
+
+            <div class="test-item">
+                <div>
+                    <strong>Test sortFermateByDistance()</strong>
+                    <br>
+                    <small>Verifica l'ordinamento delle fermate per distanza</small>
+                </div>
+                <div>
+                    <button id="test-sort-btn" class="test-btn">Test Sort</button>
+                </div>
+            </div>
+            <div id="test-sort-result" class="test-result" style="display: none;"></div>
+        </div>
+
+        <!-- Test Database -->
+        <div class="test-category">
+            <h2>📦 Test Caricamento Database</h2>
+            <div class="test-item">
+                <div>
+                    <strong>Caricamento database.json</strong>
+                    <br>
+                    <small>Verifica il caricamento e la validazione del database</small>
+                </div>
+                <div>
+                    <button id="test-database-btn" class="test-btn">Test Database</button>
+                </div>
+            </div>
+            <div id="test-database-result" class="test-result" style="display: none;"></div>
+        </div>
+
+        <!-- Test LocalStorage -->
+        <div class="test-category">
+            <h2>💾 Test LocalStorage</h2>
+            <div class="test-item">
+                <div>
+                    <strong>Salvataggio e recupero dati</strong>
+                    <br>
+                    <small>Verifica il funzionamento del localStorage</small>
+                </div>
+                <div>
+                    <button id="test-storage-btn" class="test-btn">Test Storage</button>
+                </div>
+            </div>
+            <div id="test-storage-result" class="test-result" style="display: none;"></div>
+        </div>
+
+        <!-- Test Dark Mode -->
+        <div class="test-category">
+            <h2>🌙 Test Dark Mode</h2>
+            <div class="test-item">
+                <div>
+                    <strong>Toggle modalità scura</strong>
+                    <br>
+                    <small>Verifica il funzionamento del dark mode</small>
+                </div>
+                <div>
+                    <button id="test-darkmode-btn" class="test-btn">Test Dark Mode</button>
+                </div>
+            </div>
+            <div id="test-darkmode-result" class="test-result" style="display: none;"></div>
+        </div>
+
+        <!-- Test PWA -->
+        <div class="test-category">
+            <h2>📱 Test PWA Features</h2>
+            <div class="test-item">
+                <div>
+                    <strong>Service Worker</strong>
+                    <br>
+                    <small>Verifica la registrazione e funzionamento del SW</small>
+                </div>
+                <div>
+                    <button id="test-sw-btn" class="test-btn">Test SW</button>
+                </div>
+            </div>
+            <div id="test-sw-result" class="test-result" style="display: none;"></div>
+
+            <div class="test-item">
+                <div>
+                    <strong>Manifest PWA</strong>
+                    <br>
+                    <small>Verifica la validità del manifest.json</small>
+                </div>
+                <div>
+                    <button id="test-manifest-btn" class="test-btn">Test Manifest</button>
+                </div>
+            </div>
+            <div id="test-manifest-result" class="test-result" style="display: none;"></div>
+        </div>
+
+        <!-- Test Performance -->
+        <div class="test-category">
+            <h2>⚡ Test Performance</h2>
+            <div class="test-item">
+                <div>
+                    <strong>Metriche di performance</strong>
+                    <br>
+                    <small>Verifica i tempi di caricamento e calcolo</small>
+                </div>
+                <div>
+                    <button id="test-performance-btn" class="test-btn">Test Performance</button>
+                </div>
+            </div>
+            <div id="test-performance-result" class="test-result" style="display: none;"></div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>TPL FVG</h3>
+                    <p>Trasporto Pubblico Locale del Friuli Venezia Giulia</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Navigazione</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="fermate.html">Fermate</a></li>
+                        <li><a href="prezzi.html">Prezzi</a></li>
+                        <li><a href="test-new.html">Test</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Test Suite</h4>
+                    <p>Versione refactorizzata che testa le funzioni reali di script.js</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; <span id="footer-year">2024</span> TPL FVG. Tutti i diritti riservati.</p>
+            </div>
+        </div>
+        <p class="update-info">📅 Ultimo aggiornamento: <span id="last-update">15/10/2025 ore 20:20</span></p>
+    </footer>
+
+    <!-- Import script.js per testare funzioni reali -->
+    <script src="script.js"></script>
+    
+    <script>
+        // Test Suite Refactorizzata - Testa funzioni reali di script.js
+        
+        // Variabili globali per i test
+        let testStats = {
+            passed: 0,
+            failed: 0,
+            pending: 0
+        };
+
+        // Utility per aggiornare le statistiche
+        function updateStats() {
+            document.getElementById('stat-passed').textContent = testStats.passed;
+            document.getElementById('stat-failed').textContent = testStats.failed;
+            document.getElementById('stat-pending').textContent = testStats.pending;
+        }
+
+        // Utility per log nei risultati
+        function log(outputId, message, type = 'info') {
+            const output = document.getElementById(outputId);
+            if (!output) return;
+            
+            const timestamp = new Date().toLocaleTimeString('it-IT');
+            const logEntry = document.createElement('div');
+            logEntry.style.marginBottom = '0.5rem';
+            logEntry.style.padding = '0.25rem 0';
+            
+            let color = '#6b7280'; // grigio di default
+            if (type === 'success') color = '#22c55e';
+            else if (type === 'error') color = '#ef4444';
+            else if (type === 'warning') color = '#f59e0b';
+            else if (type === 'info') color = '#3b82f6';
+            
+            logEntry.innerHTML = `<span style="color: ${color}; font-weight: bold;">[${timestamp}]</span> ${message}`;
+            output.appendChild(logEntry);
+            output.scrollTop = output.scrollHeight;
+        }
+
+        // Utility per mostrare risultati
+        function showResult(resultId, type = 'info') {
+            const result = document.getElementById(resultId);
+            if (!result) return;
+            
+            result.style.display = 'block';
+            result.className = `test-result ${type}`;
+        }
+
+        // Test 1: Geolocalizzazione (mantenuto dal vecchio test)
+        async function testGeolocation() {
+            const btn = document.getElementById('test-location-btn');
+            const icon = document.getElementById('test-location-icon');
+            const text = document.getElementById('test-location-text');
+            const result = document.getElementById('test-location-result');
+            const info = document.getElementById('test-location-info');
+
+            if (!btn || !icon || !text || !result || !info) return;
+
+            // Stato di caricamento
+            icon.textContent = '⏳';
+            text.textContent = 'Rilevamento...';
+            btn.disabled = true;
+            result.style.display = 'none';
+
+            try {
+                // Verifica supporto geolocalizzazione
+                if (!navigator.geolocation) {
+                    throw new Error('Geolocalizzazione non supportata dal browser');
+                }
+
+                // Richiedi posizione con timeout
+                const position = await new Promise((resolve, reject) => {
+                    navigator.geolocation.getCurrentPosition(
+                        resolve,
+                        reject,
+                        {
+                            enableHighAccuracy: true,
+                            timeout: 10000,
+                            maximumAge: 300000 // 5 minuti
+                        }
+                    );
+                });
+
+                // Successo
+                icon.textContent = '✅';
+                text.textContent = 'Posizione Rilevata';
+                testStats.passed++;
+                
+                // Mostra informazioni dettagliate
+                const coords = position.coords;
+                const timestamp = new Date(position.timestamp).toLocaleString('it-IT');
+                
+                info.innerHTML = `
+                    <div style="margin-bottom: 0.5rem;">
+                        <strong>📍 Coordinate:</strong><br>
+                        Latitudine: <code>${coords.latitude.toFixed(6)}</code><br>
+                        Longitudine: <code>${coords.longitude.toFixed(6)}</code>
+                    </div>
+                    <div style="margin-bottom: 0.5rem;">
+                        <strong>🎯 Precisione:</strong><br>
+                        Accuratezza: <code>${Math.round(coords.accuracy)} metri</code><br>
+                        Altitudine: <code>${coords.altitude ? Math.round(coords.altitude) + ' metri' : 'Non disponibile'}</code>
+                    </div>
+                    <div style="margin-bottom: 0.5rem;">
+                        <strong>⏰ Timestamp:</strong><br>
+                        <code>${timestamp}</code>
+                    </div>
+                    <div style="margin-bottom: 0.5rem;">
+                        <strong>🔗 Link Mappe:</strong><br>
+                        <a href="https://www.google.com/maps?q=${coords.latitude},${coords.longitude}" target="_blank" style="color: var(--turchese); text-decoration: none;">
+                            📍 Apri su Google Maps
+                        </a><br>
+                        <a href="https://www.openstreetmap.org/?mlat=${coords.latitude}&mlon=${coords.longitude}&zoom=15" target="_blank" style="color: var(--turchese); text-decoration: none;">
+                            🗺️ Apri su OpenStreetMap
+                        </a>
+                    </div>
+                `;
+                
+                showResult('test-location-result', 'success');
+
+            } catch (error) {
+                // Errore
+                icon.textContent = '❌';
+                text.textContent = 'Errore Rilevamento';
+                testStats.failed++;
+                
+                let errorMessage = 'Errore sconosciuto';
+                if (error.code === 1) {
+                    errorMessage = 'Permesso di geolocalizzazione negato';
+                } else if (error.code === 2) {
+                    errorMessage = 'Posizione non disponibile';
+                } else if (error.code === 3) {
+                    errorMessage = 'Timeout durante il rilevamento';
+                } else {
+                    errorMessage = error.message;
+                }
+                
+                info.innerHTML = `
+                    <div style="color: var(--rosso);">
+                        <strong>❌ Errore:</strong><br>
+                        <code>${errorMessage}</code>
+                    </div>
+                    <div style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--grigio-scuro);">
+                        <strong>Suggerimenti:</strong><br>
+                        • Assicurati di aver concesso il permesso di geolocalizzazione<br>
+                        • Verifica che il GPS sia attivo<br>
+                        • Prova in un'area con buona copertura di rete
+                    </div>
+                `;
+                
+                showResult('test-location-result', 'error');
+            }
+
+            updateStats();
+
+            // Reset dopo 5 secondi
+            setTimeout(() => {
+                icon.textContent = '📍';
+                text.textContent = 'Rileva Posizione';
+                btn.disabled = false;
+            }, 5000);
+        }
+
+        // Test 2: Funzioni Core - populateLineeTratte
+        async function testPopulateLineeTratte() {
+            const result = document.getElementById('test-populate-result');
+            result.innerHTML = '';
+            showResult('test-populate-result', 'info');
+            
+            log('test-populate-result', '=== Test populateLineeTratte() ===', 'info');
+
+            try {
+                // Verifica che la funzione esista
+                if (typeof populateLineeTratte !== 'function') {
+                    throw new Error('Funzione populateLineeTratte non trovata in script.js');
+                }
+
+                log('test-populate-result', '✓ Funzione populateLineeTratte trovata', 'success');
+
+                // Verifica che tariffario sia caricato
+                if (!window.tariffario || !Array.isArray(window.tariffario)) {
+                    log('test-populate-result', 'Caricamento tariffario...', 'info');
+                    await loadData();
+                }
+
+                if (!window.tariffario || window.tariffario.length === 0) {
+                    throw new Error('Tariffario non caricato o vuoto');
+                }
+
+                log('test-populate-result', `✓ Tariffario caricato: ${window.tariffario.length} linee`, 'success');
+
+                // Test della funzione
+                const lineaSelect = document.getElementById('linea');
+                if (lineaSelect) {
+                    const initialOptions = lineaSelect.options.length;
+                    populateLineeTratte();
+                    const finalOptions = lineaSelect.options.length;
+                    
+                    if (finalOptions > initialOptions) {
+                        log('test-populate-result', `✓ Opzioni popolate: ${finalOptions - initialOptions} nuove opzioni`, 'success');
+                        testStats.passed++;
+                        showResult('test-populate-result', 'success');
+                    } else {
+                        throw new Error('Nessuna opzione aggiunta al select');
+                    }
+                } else {
+                    log('test-populate-result', '⚠️ Select linea non trovato, test simulato', 'warning');
+                    testStats.passed++;
+                    showResult('test-populate-result', 'success');
+                }
+
+            } catch (error) {
+                log('test-populate-result', `✗ Errore: ${error.message}`, 'error');
+                testStats.failed++;
+                showResult('test-populate-result', 'error');
+            }
+
+            updateStats();
+        }
+
+        // Test 3: Funzioni Core - calculateDistance
+        function testCalculateDistance() {
+            const result = document.getElementById('test-distance-result');
+            result.innerHTML = '';
+            showResult('test-distance-result', 'info');
+            
+            log('test-distance-result', '=== Test calculateDistance() ===', 'info');
+
+            try {
+                // Verifica che la funzione esista
+                if (typeof calculateDistance !== 'function') {
+                    throw new Error('Funzione calculateDistance non trovata in script.js');
+                }
+
+                log('test-distance-result', '✓ Funzione calculateDistance trovata', 'success');
+
+                // Test con coordinate note (Trieste - Udine)
+                const lat1 = 45.6495; // Trieste
+                const lon1 = 13.7768;
+                const lat2 = 46.0716; // Udine
+                const lon2 = 13.2347;
+                
+                const expectedDistance = 82.5; // km approssimativi
+                const calculatedDistance = calculateDistance(lat1, lon1, lat2, lon2);
+                const tolerance = 5; // 5km di tolleranza
+
+                log('test-distance-result', `Coordinate test: Trieste (${lat1}, ${lon1}) -> Udine (${lat2}, ${lon2})`, 'info');
+                log('test-distance-result', `Distanza calcolata: ${calculatedDistance.toFixed(2)} km`, 'info');
+                log('test-distance-result', `Distanza attesa: ~${expectedDistance} km`, 'info');
+
+                if (Math.abs(calculatedDistance - expectedDistance) <= tolerance) {
+                    log('test-distance-result', '✓ Calcolo distanza corretto', 'success');
+                    testStats.passed++;
+                    showResult('test-distance-result', 'success');
+                } else {
+                    throw new Error(`Distanza calcolata (${calculatedDistance.toFixed(2)} km) non corrisponde a quella attesa (~${expectedDistance} km)`);
+                }
+
+            } catch (error) {
+                log('test-distance-result', `✗ Errore: ${error.message}`, 'error');
+                testStats.failed++;
+                showResult('test-distance-result', 'error');
+            }
+
+            updateStats();
+        }
+
+        // Test 4: Funzioni Core - sortFermateByDistance
+        function testSortFermateByDistance() {
+            const result = document.getElementById('test-sort-result');
+            result.innerHTML = '';
+            showResult('test-sort-result', 'info');
+            
+            log('test-sort-result', '=== Test sortFermateByDistance() ===', 'info');
+
+            try {
+                // Verifica che la funzione esista
+                if (typeof sortFermateByDistance !== 'function') {
+                    throw new Error('Funzione sortFermateByDistance non trovata in script.js');
+                }
+
+                log('test-sort-result', '✓ Funzione sortFermateByDistance trovata', 'success');
+
+                // Test con fermate simulate
+                const testFermate = ['Trieste', 'Udine', 'Pordenone', 'Gorizia'];
+                const testPosition = { latitude: 45.6495, longitude: 13.7768 }; // Trieste
+
+                const sortedFermate = sortFermateByDistance(testFermate, testPosition);
+                
+                log('test-sort-result', `Fermate originali: ${testFermate.join(', ')}`, 'info');
+                log('test-sort-result', `Fermate ordinate: ${sortedFermate.join(', ')}`, 'info');
+
+                if (Array.isArray(sortedFermate) && sortedFermate.length === testFermate.length) {
+                    log('test-sort-result', '✓ Ordinamento completato correttamente', 'success');
+                    testStats.passed++;
+                    showResult('test-sort-result', 'success');
+                } else {
+                    throw new Error('Ordinamento non ha restituito un array valido');
+                }
+
+            } catch (error) {
+                log('test-sort-result', `✗ Errore: ${error.message}`, 'error');
+                testStats.failed++;
+                showResult('test-sort-result', 'error');
+            }
+
+            updateStats();
+        }
+
+        // Test 5: Database
+        async function testDatabase() {
+            const result = document.getElementById('test-database-result');
+            result.innerHTML = '';
+            showResult('test-database-result', 'info');
+            
+            log('test-database-result', '=== Test Caricamento Database ===', 'info');
+
+            try {
+                log('test-database-result', 'Caricamento database.json...', 'info');
+                const res = await fetch('database.json');
+                if (!res.ok) throw new Error('Errore caricamento database');
+                const data = await res.json();
+                
+                log('test-database-result', '✓ Database caricato con successo', 'success');
+
+                // Validazione struttura
+                if (!Array.isArray(data)) throw new Error('Database non è un array');
+                if (data.length === 0) throw new Error('Database vuoto');
+                
+                log('test-database-result', `✓ Struttura valida: ${data.length} elementi`, 'success');
+
+                // Test prima linea
+                const firstLine = data[0];
+                if (!firstLine.nome || !firstLine.fermate || !firstLine.prezzi) {
+                    throw new Error('Struttura linea non valida');
+                }
+                
+                log('test-database-result', `✓ Prima linea: ${firstLine.nome} con ${firstLine.fermate.length} fermate`, 'success');
+                log('test-database-result', `Fermate: ${firstLine.fermate.slice(0, 5).join(', ')}${firstLine.fermate.length > 5 ? '...' : ''}`, 'info');
+
+                testStats.passed++;
+                showResult('test-database-result', 'success');
+
+            } catch (error) {
+                log('test-database-result', `✗ Errore: ${error.message}`, 'error');
+                testStats.failed++;
+                showResult('test-database-result', 'error');
+            }
+
+            updateStats();
+        }
+
+        // Test 6: LocalStorage
+        function testLocalStorage() {
+            const result = document.getElementById('test-storage-result');
+            result.innerHTML = '';
+            showResult('test-storage-result', 'info');
+            
+            log('test-storage-result', '=== Test LocalStorage ===', 'info');
+
+            try {
+                // Test salvataggio
+                const testKey = 'tpl-test-key';
+                const testValue = { test: 'data', timestamp: Date.now() };
+                
+                localStorage.setItem(testKey, JSON.stringify(testValue));
+                log('test-storage-result', '✓ Dati salvati in localStorage', 'success');
+
+                // Test recupero
+                const retrieved = localStorage.getItem(testKey);
+                if (!retrieved) throw new Error('Impossibile recuperare dati da localStorage');
+                
+                const parsed = JSON.parse(retrieved);
+                if (parsed.test !== testValue.test) throw new Error('Dati recuperati non corrispondono');
+                
+                log('test-storage-result', '✓ Dati recuperati correttamente', 'success');
+
+                // Test rimozione
+                localStorage.removeItem(testKey);
+                const afterRemoval = localStorage.getItem(testKey);
+                if (afterRemoval !== null) throw new Error('Dati non rimossi correttamente');
+                
+                log('test-storage-result', '✓ Dati rimossi correttamente', 'success');
+
+                testStats.passed++;
+                showResult('test-storage-result', 'success');
+
+            } catch (error) {
+                log('test-storage-result', `✗ Errore: ${error.message}`, 'error');
+                testStats.failed++;
+                showResult('test-storage-result', 'error');
+            }
+
+            updateStats();
+        }
+
+        // Test 7: Dark Mode
+        function testDarkMode() {
+            const result = document.getElementById('test-darkmode-result');
+            result.innerHTML = '';
+            showResult('test-darkmode-result', 'info');
+            
+            log('test-darkmode-result', '=== Test Dark Mode ===', 'info');
+
+            try {
+                const body = document.body;
+                const initialClass = body.className;
+                
+                // Test toggle dark mode
+                const darkModeToggle = document.getElementById('darkmode-toggle');
+                if (!darkModeToggle) throw new Error('Pulsante dark mode non trovato');
+                
+                log('test-darkmode-result', '✓ Pulsante dark mode trovato', 'success');
+
+                // Simula click
+                darkModeToggle.click();
+                const afterToggle = body.className;
+                
+                if (afterToggle !== initialClass) {
+                    log('test-darkmode-result', '✓ Dark mode toggle funziona', 'success');
+                    
+                    // Ripristina stato originale
+                    darkModeToggle.click();
+                    log('test-darkmode-result', '✓ Stato originale ripristinato', 'success');
+                    
+                    testStats.passed++;
+                    showResult('test-darkmode-result', 'success');
+                } else {
+                    throw new Error('Dark mode toggle non ha effetto');
+                }
+
+            } catch (error) {
+                log('test-darkmode-result', `✗ Errore: ${error.message}`, 'error');
+                testStats.failed++;
+                showResult('test-darkmode-result', 'error');
+            }
+
+            updateStats();
+        }
+
+        // Test 8: Service Worker
+        async function testServiceWorker() {
+            const result = document.getElementById('test-sw-result');
+            result.innerHTML = '';
+            showResult('test-sw-result', 'info');
+            
+            log('test-sw-result', '=== Test Service Worker ===', 'info');
+
+            try {
+                if (!('serviceWorker' in navigator)) {
+                    throw new Error('Service Worker non supportato');
+                }
+
+                log('test-sw-result', '✓ Service Worker supportato', 'success');
+
+                // Verifica registrazione
+                const registration = await navigator.serviceWorker.getRegistration();
+                if (registration) {
+                    log('test-sw-result', '✓ Service Worker registrato', 'success');
+                    log('test-sw-result', `Stato: ${registration.active ? 'Attivo' : 'Inattivo'}`, 'info');
+                    testStats.passed++;
+                    showResult('test-sw-result', 'success');
+                } else {
+                    log('test-sw-result', '⚠️ Service Worker non registrato', 'warning');
+                    testStats.passed++;
+                    showResult('test-sw-result', 'warning');
+                }
+
+            } catch (error) {
+                log('test-sw-result', `✗ Errore: ${error.message}`, 'error');
+                testStats.failed++;
+                showResult('test-sw-result', 'error');
+            }
+
+            updateStats();
+        }
+
+        // Test 9: Manifest
+        async function testManifest() {
+            const result = document.getElementById('test-manifest-result');
+            result.innerHTML = '';
+            showResult('test-manifest-result', 'info');
+            
+            log('test-manifest-result', '=== Test Manifest PWA ===', 'info');
+
+            try {
+                const res = await fetch('manifest.json');
+                if (!res.ok) throw new Error('Manifest non trovato');
+                
+                const manifest = await res.json();
+                log('test-manifest-result', '✓ Manifest caricato', 'success');
+
+                // Validazione campi essenziali
+                const requiredFields = ['name', 'short_name', 'start_url', 'display', 'icons'];
+                for (const field of requiredFields) {
+                    if (!manifest[field]) {
+                        throw new Error(`Campo obbligatorio mancante: ${field}`);
+                    }
+                }
+
+                log('test-manifest-result', '✓ Tutti i campi obbligatori presenti', 'success');
+                log('test-manifest-result', `Nome: ${manifest.name}`, 'info');
+                log('test-manifest-result', `Icone: ${manifest.icons.length}`, 'info');
+
+                testStats.passed++;
+                showResult('test-manifest-result', 'success');
+
+            } catch (error) {
+                log('test-manifest-result', `✗ Errore: ${error.message}`, 'error');
+                testStats.failed++;
+                showResult('test-manifest-result', 'error');
+            }
+
+            updateStats();
+        }
+
+        // Test 10: Performance
+        async function testPerformance() {
+            const result = document.getElementById('test-performance-result');
+            result.innerHTML = '';
+            showResult('test-performance-result', 'info');
+            
+            log('test-performance-result', '=== Test Performance ===', 'info');
+
+            try {
+                // Test tempo caricamento database
+                const startLoad = performance.now();
+                const res = await fetch('database.json');
+                const data = await res.json();
+                const endLoad = performance.now();
+                const loadTime = (endLoad - startLoad).toFixed(2);
+
+                log('test-performance-result', `Tempo caricamento database: ${loadTime}ms`, 'info');
+
+                if (loadTime < 1000) {
+                    log('test-performance-result', '✓ Performance ottima', 'success');
+                } else if (loadTime < 3000) {
+                    log('test-performance-result', '✓ Performance accettabile', 'success');
+                } else {
+                    log('test-performance-result', '⚠️ Performance lenta', 'warning');
+                }
+
+                // Test tempo calcolo
+                const startCalc = performance.now();
+                for (let i = 0; i < 1000; i++) {
+                    if (typeof calculateDistance === 'function') {
+                        calculateDistance(45.6495, 13.7768, 46.0716, 13.2347);
+                    }
+                }
+                const endCalc = performance.now();
+                const calcTime = (endCalc - startCalc).toFixed(2);
+
+                log('test-performance-result', `Tempo calcolo (1000 iterazioni): ${calcTime}ms`, 'info');
+
+                // Info aggiuntive
+                log('test-performance-result', `Dimensione JSON: ${JSON.stringify(data).length} bytes`, 'info');
+                log('test-performance-result', `Linee: ${data.length}`, 'info');
+
+                testStats.passed++;
+                showResult('test-performance-result', 'success');
+
+            } catch (error) {
+                log('test-performance-result', `✗ Errore: ${error.message}`, 'error');
+                testStats.failed++;
+                showResult('test-performance-result', 'error');
+            }
+
+            updateStats();
+        }
+
+        // Esegui tutti i test
+        async function runAllTests() {
+            console.log('Esecuzione di tutti i test...');
+            testStats = { passed: 0, failed: 0, pending: 0 };
+            updateStats();
+
+            await testGeolocation();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            await testPopulateLineeTratte();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            testCalculateDistance();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            testSortFermateByDistance();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await testDatabase();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            testLocalStorage();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            testDarkMode();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await testServiceWorker();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await testManifest();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await testPerformance();
+            
+            console.log('Tutti i test completati!');
+            console.log(`Risultati: ${testStats.passed} passati, ${testStats.failed} falliti`);
+        }
+
+        // Inizializza menu mobile
+        function initMobileMenu() {
+            const hamburgerToggle = document.getElementById('hamburger-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+            const mobileMenuClose = document.getElementById('mobile-menu-close');
+            const mobileDarkmodeToggle = document.getElementById('mobile-darkmode-toggle');
+            const mobileCacheReset = document.getElementById('mobile-cache-reset');
+
+            if (!hamburgerToggle || !mobileMenu || !mobileMenuOverlay) return;
+
+            function openMenu() {
+                hamburgerToggle.classList.add('active');
+                mobileMenu.classList.add('active');
+                mobileMenuOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeMenu() {
+                hamburgerToggle.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                mobileMenuOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            if (hamburgerToggle) {
+                hamburgerToggle.addEventListener('click', () => {
+                    if (mobileMenu.classList.contains('active')) {
+                        closeMenu();
+                    } else {
+                        openMenu();
+                    }
+                });
+            }
+
+            if (mobileMenuOverlay) {
+                mobileMenuOverlay.addEventListener('click', closeMenu);
+            }
+            if (mobileMenuClose) {
+                mobileMenuClose.addEventListener('click', closeMenu);
+            }
+
+            const mobileMenuLinks = mobileMenu.querySelectorAll('.mobile-menu-link');
+            mobileMenuLinks.forEach(link => {
+                link.addEventListener('click', closeMenu);
+            });
+
+            if (mobileDarkmodeToggle) {
+                mobileDarkmodeToggle.addEventListener('click', () => {
+                    const darkModeToggle = document.getElementById('darkmode-toggle');
+                    if (darkModeToggle) {
+                        darkModeToggle.click();
+                    }
+                    closeMenu();
+                });
+            }
+
+            if (mobileCacheReset) {
+                mobileCacheReset.addEventListener('click', () => {
+                    const cacheReset = document.getElementById('cache-reset');
+                    if (cacheReset) {
+                        cacheReset.click();
+                    }
+                    closeMenu();
+                });
+            }
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+                    closeMenu();
+                }
+            });
+        }
+
+        // Inizializzazione
+        window.addEventListener('DOMContentLoaded', () => {
+            updateStats();
+            initMobileMenu();
+            
+            // Event listeners per i test
+            document.getElementById('test-location-btn')?.addEventListener('click', testGeolocation);
+            document.getElementById('test-populate-btn')?.addEventListener('click', testPopulateLineeTratte);
+            document.getElementById('test-distance-btn')?.addEventListener('click', testCalculateDistance);
+            document.getElementById('test-sort-btn')?.addEventListener('click', testSortFermateByDistance);
+            document.getElementById('test-database-btn')?.addEventListener('click', testDatabase);
+            document.getElementById('test-storage-btn')?.addEventListener('click', testLocalStorage);
+            document.getElementById('test-darkmode-btn')?.addEventListener('click', testDarkMode);
+            document.getElementById('test-sw-btn')?.addEventListener('click', testServiceWorker);
+            document.getElementById('test-manifest-btn')?.addEventListener('click', testManifest);
+            document.getElementById('test-performance-btn')?.addEventListener('click', testPerformance);
+            
+            // Aggiorna l'anno nel footer
+            const footerYear = document.getElementById('footer-year');
+            if (footerYear) footerYear.textContent = new Date().getFullYear();
+        });
+
+        // Aggiorna effetti quando cambia la modalità
+        document.addEventListener('DOMContentLoaded', () => {
+            const darkModeToggle = document.getElementById('darkmode-toggle');
+            if (darkModeToggle) {
+                darkModeToggle.addEventListener('click', () => {
+                    setTimeout(() => {
+                        // Aggiorna effetti se necessario
+                    }, 100);
+                });
+            }
+        });
+
+        // Aggiorna effetti quando cambia la dimensione schermo
+        window.addEventListener('resize', () => {
+            setTimeout(() => {
+                // Aggiorna effetti se necessario
+            }, 100);
+        });
+
+        // Scroll to top
+        window.addEventListener('scroll', function() {
+            const scrollButton = document.querySelector('.scroll-to-top');
+            if (scrollButton) {
+                if (window.pageYOffset > 300) {
+                    scrollButton.style.display = 'block';
+                } else {
+                    scrollButton.style.display = 'none';
+                }
+            }
+        });
+
+    </script>
+
+</body>
+
+</html>
