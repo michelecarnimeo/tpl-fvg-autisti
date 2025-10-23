@@ -47,7 +47,7 @@
   /* SOTTOSEZIONE 3.3: Colori per modalità scura */
   --bg-scuro: #0f172a;                    /* Sfondo scuro principale per dark mode */
   --card-scuro: rgba(30, 41, 59, 0.4);    /* Sfondo scuro per card in dark mode */
-  --testo-scuro: #f1f5f9;                 /* Testo chiaro per dark mode */
+  --testo-scuro: #ffffff;                 /* Testo bianco puro per dark mode (miglior contrasto) */
 
   /* SOTTOSEZIONE 3.4: Variabili per dimensioni testo accessibilità */
   --font-size-multiplier: 1;              /* Moltiplicatore per dimensione testo (1 = normale, 1.15 = grande, 1.3 = molto grande) */
@@ -67,7 +67,7 @@
     --grigio-chiaro: var(--bg-scuro);        /* Grigio chiaro diventa sfondo scuro */
     --bianco: var(--card-scuro);             /* Bianco diventa card scura */
     --testo-principale: var(--testo-scuro);  /* Testo principale diventa chiaro */
-    --testo-secondario: #94a3b8;             /* Testo secondario diventa grigio chiaro */
+    --testo-secondario: #cbd5e1;             /* Testo secondario più chiaro per miglior contrasto */
     --bordo: var(--bordo-scuro);             /* Bordi diventano chiari */
     --glass-bg: var(--glass-bg-dark);        /* Glassmorphism diventa scuro */
   --glass-border: var(--glass-border-dark); /* Bordi glassmorphism diventano chiari */
@@ -99,6 +99,20 @@ body {
   font-size: calc(16px * var(--font-size-multiplier));
 }
 
+/* Riduzione font-size base per dispositivi mobile */
+@media (max-width: 768px) {
+  body {
+    font-size: calc(15px * var(--font-size-multiplier));
+  }
+}
+
+/* Ulteriore riduzione per schermi molto piccoli (es. iPhone 12 Mini, iPhone SE) */
+@media (max-width: 390px) {
+  body {
+    font-size: calc(14px * var(--font-size-multiplier));
+  }
+}
+
 h1 {
   font-size: calc(2rem * var(--font-size-multiplier));
 }
@@ -117,6 +131,21 @@ h4, h5, h6 {
 
 p, span, div, a, button, input, select, textarea, label, li {
   font-size: calc(1em * var(--font-size-multiplier));
+}
+
+/* Ottimizzazione titoli per mobile */
+@media (max-width: 768px) {
+  h1 {
+    font-size: calc(1.75rem * var(--font-size-multiplier));
+  }
+  
+  h2 {
+    font-size: calc(1.35rem * var(--font-size-multiplier));
+  }
+  
+  h3 {
+    font-size: calc(1.15rem * var(--font-size-multiplier));
+  }
 }
 
 /* ========================================
@@ -246,6 +275,19 @@ p, span, div, a, button, input, select, textarea, label, li {
     position: sticky;  /* Rimanere in cima durante lo scroll */
     top: 0;           /* Posizione in cima */
     z-index: 1000;    /* Sopra tutti gli altri elementi */
+  }
+  
+  /* Ottimizzazione navbar per schermi piccoli */
+  @media (max-width: 768px) {
+    .navbar {
+      padding: 0.6rem 0;                            /* Padding ridotto per mobile */
+    }
+  }
+  
+  @media (max-width: 390px) {
+    .navbar {
+      padding: 0.5rem 0;                            /* Padding ulteriormente ridotto */
+    }
   }
   
   /* Effetto rifrazione della luce per navbar */
@@ -512,7 +554,7 @@ p, span, div, a, button, input, select, textarea, label, li {
   /* SOTTOSEZIONE 7.13: Stili dark mode per navbar */
   .dark .dark-mode-toggle {
     background: transparent;                   /* Nessun sfondo di default */
-    color: rgba(248, 250, 252, 0.95);        /* Testo chiaro */
+    color: rgba(255, 255, 255, 1);            /* Testo bianco pieno (100% opaco) */
     border: none;                             /* Nessun bordo di default */
     box-shadow: none;                         /* Nessuna ombra di default */
   }
@@ -526,7 +568,7 @@ p, span, div, a, button, input, select, textarea, label, li {
   
   .dark .nav-link {
     background: transparent;                   /* Nessun sfondo di default */
-    color: rgba(248, 250, 252, 0.95);        /* Testo chiaro */
+    color: rgba(255, 255, 255, 1);            /* Testo bianco pieno (100% opaco) */
     border: none;                             /* Nessun bordo di default */
     box-shadow: none;                         /* Nessuna ombra di default */
   }
@@ -585,7 +627,7 @@ p, span, div, a, button, input, select, textarea, label, li {
   /* Stili per modalità scura */
   .dark .animation-toggle {
     background: transparent;                   /* Nessun sfondo di default */
-    color: rgba(248, 250, 252, 0.95);        /* Testo chiaro */
+    color: rgba(255, 255, 255, 1);            /* Testo bianco pieno (100% opaco) */
     border: none;                             /* Nessun bordo di default */
     box-shadow: none;                         /* Nessuna ombra di default */
   }
@@ -1010,6 +1052,21 @@ p, span, div, a, button, input, select, textarea, label, li {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);   /* Ombra leggera */
   }
   
+  /* Ottimizzazione pulsanti calculate per schermi piccoli */
+  @media (max-width: 768px) {
+    .calculate-btn {
+      padding: 0.7rem 1.5rem;                     /* Padding ridotto per mobile */
+      font-size: 1rem;                            /* Font-size ridotto per mobile */
+    }
+  }
+  
+  @media (max-width: 390px) {
+    .calculate-btn {
+      padding: 0.65rem 1.25rem;                   /* Padding ulteriormente ridotto */
+      font-size: 0.95rem;                         /* Font-size ridotto per schermi molto piccoli */
+    }
+  }
+  
   /* SEZIONE 10.4: Pulsante dark mode (versione standalone) */
   .dark-mode-btn {
     background: var(--glass-bg);                  /* Sfondo glassmorphism */
@@ -1046,7 +1103,7 @@ p, span, div, a, button, input, select, textarea, label, li {
   /* SEZIONE 10.5: Stili dark mode per bottoni */
   .dark .dark-mode-btn {
     background: var(--glass-bg-dark);             /* Sfondo glassmorphism scuro */
-    color: rgba(248, 250, 252, 0.95);            /* Testo chiaro */
+    color: rgba(255, 255, 255, 1);               /* Testo bianco pieno (100% opaco) */
     border-color: var(--glass-border-dark);       /* Bordo glassmorphism scuro */
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);    /* Ombra scura */
   }
@@ -1063,6 +1120,21 @@ p, span, div, a, button, input, select, textarea, label, li {
     color: white;                                /* Testo bianco quando attivo */
     border-color: var(--turchese-scuro);         /* Bordo turchese scuro */
     box-shadow: 0 4px 12px rgba(0, 123, 138, 0.4);  /* Ombra turchese più forte */
+  }
+  
+  /* Ottimizzazione pulsanti dark-mode per schermi piccoli */
+  @media (max-width: 768px) {
+    .dark-mode-btn {
+      padding: 0.55rem 0.85rem;                   /* Padding ridotto per mobile */
+      font-size: 0.95rem;                         /* Font-size ridotto per mobile */
+    }
+  }
+  
+  @media (max-width: 390px) {
+    .dark-mode-btn {
+      padding: 0.5rem 0.75rem;                    /* Padding ulteriormente ridotto */
+      font-size: 0.9rem;                          /* Font-size ridotto per schermi molto piccoli */
+    }
   }
   
   /* SEZIONE 10.6: Stili dark mode per altri bottoni */
@@ -1497,7 +1569,7 @@ p, span, div, a, button, input, select, textarea, label, li {
     left: 0;                                    /* Inizio della pagina */
     width: 100%;                                /* Larghezza completa */
     height: 100%;                               /* Altezza completa */
-    background: rgba(0, 0, 0, 0.5);             /* Sfondo scuro trasparente */
+    background: rgba(0, 0, 0, 0.75);            /* Sfondo scuro più opaco (75%) */
     z-index: 10000;                             /* Sopra tutti gli elementi */
   }
   
@@ -1507,9 +1579,9 @@ p, span, div, a, button, input, select, textarea, label, li {
     top: 50%;                                   /* Centrato verticalmente */
     left: 50%;                                  /* Centrato orizzontalmente */
     transform: translate(-50%, -50%);           /* Centrato perfetto */
-    background: var(--bianco);                  /* Sfondo bianco */
+    background: #ffffff;                        /* Sfondo bianco puro */
     border-radius: 12px;                        /* Bordi arrotondati */
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3); /* Ombra profonda */
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5); /* Ombra più profonda */
     width: 90%;                                 /* Larghezza 90% */
     max-width: 500px;                           /* Larghezza massima */
     overflow: hidden;                           /* Nasconde overflow */
@@ -1622,7 +1694,8 @@ p, span, div, a, button, input, select, textarea, label, li {
   
   /* SOTTOSEZIONE 16.7: Modalità scura per modal */
   .dark .cache-modal-content {
-    background: var(--card-scuro);              /* Sfondo scuro */
+    background: rgba(30, 41, 59, 0.98);         /* Sfondo scuro quasi opaco (98%) */
+    border: 1px solid rgba(148, 163, 184, 0.2); /* Bordo sottile per definizione */
   }
   
   .dark .cache-modal-body p {
@@ -2940,6 +3013,21 @@ p, span, div, a, button, input, select, textarea, label, li {
     opacity: 0.6;                               /* Opacità ridotta */
   }
   
+  /* Ottimizzazione pulsanti route per schermi piccoli */
+  @media (max-width: 768px) {
+    .route-button {
+      padding: 0.65rem 0.85rem;                   /* Padding ridotto per mobile */
+      font-size: 0.95rem;                         /* Font-size leggermente ridotto */
+    }
+  }
+  
+  @media (max-width: 390px) {
+    .route-button {
+      padding: 0.6rem 0.75rem;                    /* Padding ulteriormente ridotto */
+      font-size: 0.9rem;                          /* Font-size ridotto per schermi molto piccoli */
+    }
+  }
+  
   /* SOTTOSEZIONE 21.4: Freccia route */
   .route-arrow {
     font-size: 0.8rem;                           /* Dimensione font piccola */
@@ -3789,7 +3877,7 @@ p, span, div, a, button, input, select, textarea, label, li {
   /* SOTTOSEZIONE 25.2: Dark mode per bottoni */
   .dark .calculate-btn {
     background: var(--glass-bg-dark);            /* Sfondo glassmorphism scuro */
-    color: rgba(248, 250, 252, 0.95);           /* Testo chiaro */
+    color: rgba(255, 255, 255, 1);              /* Testo bianco pieno (100% opaco) */
     border-color: var(--glass-border-dark);      /* Bordo glassmorphism scuro */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);  /* Ombra scura */
   }
@@ -3803,7 +3891,7 @@ p, span, div, a, button, input, select, textarea, label, li {
   
   .dark .reset-btn {
     background: var(--glass-bg-dark);            /* Sfondo glassmorphism scuro */
-    color: rgba(248, 250, 252, 0.95);           /* Testo chiaro */
+    color: rgba(255, 255, 255, 1);              /* Testo bianco pieno (100% opaco) */
     border-color: var(--glass-border-dark);      /* Bordo glassmorphism scuro */
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);   /* Ombra scura */
   }
@@ -3817,7 +3905,7 @@ p, span, div, a, button, input, select, textarea, label, li {
   
   .dark .route-button {
     background: var(--glass-bg-dark);            /* Sfondo glassmorphism scuro */
-    color: rgba(248, 250, 252, 0.95);           /* Testo chiaro */
+    color: rgba(255, 255, 255, 1);              /* Testo bianco pieno (100% opaco) */
     border-color: var(--glass-border-dark);      /* Bordo glassmorphism scuro */
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);   /* Ombra scura */
   }

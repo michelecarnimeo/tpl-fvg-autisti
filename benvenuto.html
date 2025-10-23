@@ -3,13 +3,17 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
-<title>Benvenuto</title>
+<title>Benvenuto - TPL FVG Autisti</title>
 <!-- Font locali per PWA offline -->
 <!-- CSS personalizzato -->
 <link rel="stylesheet" href="style1.css">
 <link rel="manifest" href="manifest.json"/>
 <link rel="icon" href="src/tpl.jpg" type="image/jpeg"/>
 <style>
+  body {
+    font-family: 'Roboto', Arial, sans-serif;
+  }
+
   /* Stili per l'immagine di benvenuto */
   .welcome-image-container {
     text-align: center;
@@ -19,7 +23,7 @@
   .welcome-image {
     max-width: 100%;
     height: auto;
-    max-height: 200px;
+    max-height: 420px;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     object-fit: cover;
@@ -28,7 +32,7 @@
   /* Responsive per mobile */
   @media (max-width: 768px) {
     .welcome-image {
-      max-height: 150px;
+      max-height: 320px;
     }
     
     /* Nascondi card su mobile e aggiungi padding */
@@ -43,9 +47,88 @@
       border-radius: 0 !important;
     }
   }
+  
+  /* Spaziatura pulsanti benvenuto */
+  .calculate-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  
+  /* Titoli benvenuto con testo opaco */
+  .card-title h1 {
+    color: var(--testo-principale);
+    font-weight: 700;
+  }
+  
+  .card-title p {
+    color: var(--testo-principale);
+  }
+  
+  /* Dark mode per titoli */
+  .dark .card-title h1,
+  .dark .card-title p {
+    color: rgba(255, 255, 255, 1) !important;
+  }
+  
+  /* Pulsante Impostazioni in alto a destra */
+  .settings-btn-corner {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1000;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--testo-principale);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    font-size: 1.5rem;
+  }
+  
+  .settings-btn-corner:hover {
+    transform: scale(1.1) rotate(90deg);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  }
+  
+  .dark .settings-btn-corner {
+    background: var(--glass-bg-dark);
+    border-color: var(--glass-border-dark);
+    color: rgba(255, 255, 255, 1);
+  }
+  
+  @media (max-width: 768px) {
+    .settings-btn-corner {
+      width: 45px;
+      height: 45px;
+      font-size: 1.3rem;
+      top: 0.75rem;
+      right: 0.75rem;
+    }
+  }
+  
+  /* Mostra il modal quando è attivo */
+  .settings-modal.active {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+  }
 </style>
 </head>
 <body>
+
+<!-- Pulsante Impostazioni fisso in alto a destra -->
+<button id="open-settings" class="settings-btn-corner" aria-label="Apri Impostazioni" title="Impostazioni">
+  ⚙️
+</button>
+
 <div class="main-content">
   <div class="container">
     <div class="main-card fade-in">
@@ -64,129 +147,191 @@
         <button id="start-btn" class="calculate-btn">
           Inizia
         </button>
-        <button id="toggle-mode-btn" class="dark-mode-btn" aria-label="Cambia modalità" title="Cambia modalità chiara/scura">
-          <span id="toggle-mode-icon">🌙</span>
-          <span id="toggle-mode-label">Modalità Scura</span>
-        </button>
-        <div class="benvenuto-font-size-section">
-          <span style="font-size: 0.9rem; color: var(--testo-secondario); display: block; margin-bottom: 0.5rem;">Dimensione testo</span>
-          <div class="benvenuto-font-size-buttons">
-            <button id="benvenuto-font-size-small" class="dark-mode-btn benvenuto-font-btn" data-size="normal" title="Testo normale">
-              <span style="font-weight: 700; font-size: 0.9rem;">A</span>
-              <span>Normale</span>
-            </button>
-            <button id="benvenuto-font-size-medium" class="dark-mode-btn benvenuto-font-btn" data-size="large" title="Testo grande">
-              <span style="font-weight: 700; font-size: 1.1rem;">A</span>
-              <span>Grande</span>
-            </button>
-            <button id="benvenuto-font-size-large" class="dark-mode-btn benvenuto-font-btn" data-size="xlarge" title="Testo molto grande">
-              <span style="font-weight: 700; font-size: 1.3rem;">A</span>
-              <span>Molto Grande</span>
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   </div>
 </div>
 
+  <!-- Modal Impostazioni -->
+  <div id="settings-modal" class="settings-modal">
+    <div class="settings-modal-content">
+      <!-- Header -->
+      <div class="settings-modal-header">
+        <h3>⚙️ Impostazioni</h3>
+        <button id="settings-modal-close" class="settings-modal-close" aria-label="Chiudi">×</button>
+      </div>
+      
+      <!-- Tabs -->
+      <div class="settings-tabs">
+        <button class="settings-tab active" data-tab="appearance">
+          <span class="tab-icon">👁️</span>
+          <span>Aspetto</span>
+        </button>
+        <button class="settings-tab" data-tab="accessibility">
+          <span class="tab-icon">♿</span>
+          <span>Accessibilità</span>
+        </button>
+      </div>
+      
+      <!-- Tab Content -->
+      <div class="settings-content">
+        
+        <!-- Tab Aspetto -->
+        <div class="settings-tab-content active" data-content="appearance">
+          <div class="settings-section">
+            <h4 class="settings-section-title">👁️ Aspetto</h4>
+            
+            <!-- Theme Mode -->
+            <div class="settings-item settings-item-vertical">
+              <div class="settings-item-info">
+                <span class="settings-item-icon">🌓</span>
+                <div class="settings-item-text">
+                  <div class="settings-item-label">Tema</div>
+                  <div class="settings-item-description">Scegli l'aspetto dell'app</div>
+                </div>
+              </div>
+              <div class="settings-theme-options">
+                <label class="settings-theme-option">
+                  <input type="radio" name="theme-mode" value="system" id="theme-system">
+                  <span class="theme-option-card">
+                    <span class="theme-option-icon">⚙️</span>
+                    <span class="theme-option-label">Sistema</span>
+                    <span class="theme-option-description">Segue il dispositivo</span>
+                  </span>
+                </label>
+                <label class="settings-theme-option">
+                  <input type="radio" name="theme-mode" value="light" id="theme-light">
+                  <span class="theme-option-card">
+                    <span class="theme-option-icon">☀️</span>
+                    <span class="theme-option-label">Chiara</span>
+                    <span class="theme-option-description">Sempre chiara</span>
+                  </span>
+                </label>
+                <label class="settings-theme-option">
+                  <input type="radio" name="theme-mode" value="dark" id="theme-dark">
+                  <span class="theme-option-card">
+                    <span class="theme-option-icon">🌙</span>
+                    <span class="theme-option-label">Scura</span>
+                    <span class="theme-option-description">Sempre scura</span>
+                  </span>
+                </label>
+              </div>
+            </div>
+            
+            <!-- Animazione Sfondo -->
+            <div class="settings-item">
+              <div class="settings-item-info">
+                <span class="settings-item-icon">🎬</span>
+                <div class="settings-item-text">
+                  <div class="settings-item-label">Animazione sfondo</div>
+                  <div class="settings-item-description">Gradiente animato nello sfondo</div>
+                </div>
+              </div>
+              <label class="settings-toggle">
+                <input type="checkbox" id="settings-animation">
+                <span class="settings-toggle-slider"></span>
+              </label>
+            </div>
+            
+            <!-- Contrasto Alto -->
+            <div class="settings-item">
+              <div class="settings-item-info">
+                <span class="settings-item-icon">👁️</span>
+                <div class="settings-item-text">
+                  <div class="settings-item-label">Contrasto elevato</div>
+                  <div class="settings-item-description">Migliora leggibilità in pieno sole</div>
+                </div>
+              </div>
+              <label class="settings-toggle">
+                <input type="checkbox" id="settings-high-contrast">
+                <span class="settings-toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Tab Accessibilità -->
+        <div class="settings-tab-content" data-content="accessibility">
+          <div class="settings-section">
+            <h4 class="settings-section-title">♿ Accessibilità</h4>
+            
+            <!-- Dimensione Testo -->
+            <div class="settings-item settings-item-vertical">
+              <div class="settings-item-info">
+                <span class="settings-item-icon">A</span>
+                <div class="settings-item-text">
+                  <div class="settings-item-label">Dimensione testo</div>
+                  <div class="settings-item-description">Scegli la dimensione più comoda</div>
+                </div>
+              </div>
+              <div class="settings-font-buttons">
+                <button class="settings-font-btn" data-size="normal">
+                  <span class="font-sample">A</span>
+                  <span class="font-label">Normale</span>
+                </button>
+                <button class="settings-font-btn" data-size="large">
+                  <span class="font-sample">A</span>
+                  <span class="font-label">Grande</span>
+                </button>
+                <button class="settings-font-btn" data-size="xlarge">
+                  <span class="font-sample">A</span>
+                  <span class="font-label">Molto Grande</span>
+                </button>
+              </div>
+            </div>
+            
+            <!-- Pulsanti Grandi -->
+            <div class="settings-item">
+              <div class="settings-item-info">
+                <span class="settings-item-icon">👆</span>
+                <div class="settings-item-text">
+                  <div class="settings-item-label">Modalità touch</div>
+                  <div class="settings-item-description">Pulsanti più grandi e spaziati</div>
+                </div>
+              </div>
+              <label class="settings-toggle">
+                <input type="checkbox" id="settings-touch-friendly">
+                <span class="settings-toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
   <!-- Footer -->
   <footer class="footer">
-    <p>© <span id="footer-year"></span> Michele Carnimeo. Tutti i diritti riservati.<br>TPL FVG è un marchio di TPL FVG S.C. a R.L. · <a href="test.html" style="color: inherit; text-decoration: none; transition: text-decoration 0.3s ease;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">TPL Autisti 1.3.3</a></p>
+    <p>© <span id="footer-year"></span> Michele Carnimeo. Tutti i diritti riservati.<br>TPL FVG è un marchio di TPL FVG S.C. a R.L. · <a href="test.html" style="color: inherit; text-decoration: none; transition: text-decoration 0.3s ease;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">TPL Autisti 1.4.1</a></p>
   </footer>
 
+<!-- Script principale -->
+<script src="script.js"></script>
 <script>
-  document.getElementById('start-btn').addEventListener('click', function() {
-    window.location.href = 'index.html';
-  });
-  function updateToggleModeBtn() {
-    const isDark = document.documentElement.classList.contains('dark');
-    const btn = document.getElementById('toggle-mode-btn');
-    const icon = document.getElementById('toggle-mode-icon');
-    const label = document.getElementById('toggle-mode-label');
+  // Aspetta che il DOM sia completamente caricato
+  document.addEventListener('DOMContentLoaded', function() {
+    // Pulsante Inizia
+    const startBtn = document.getElementById('start-btn');
+    if (startBtn) {
+      startBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        console.log('Pulsante Inizia cliccato!');
+        window.location.href = 'index.html';
+      });
+    } else {
+      console.error('Pulsante start-btn non trovato!');
+    }
     
-    if (isDark) {
-      btn.className = 'dark-mode-btn dark-mode-active';
-      icon.textContent = '☀️';
-      label.textContent = 'Modalità Chiara';
-    } else {
-      btn.className = 'dark-mode-btn';
-      icon.textContent = '🌙';
-      label.textContent = 'Modalità Scura';
-    }
-  }
-  document.getElementById('toggle-mode-btn').addEventListener('click', function() {
-    const isDark = document.documentElement.classList.toggle('dark');
-    try { localStorage.setItem('tpl.isDark', isDark ? '1' : '0'); } catch {}
-    updateToggleModeBtn();
+    // Il pulsante Impostazioni è gestito da script.js
+    // che cerca automaticamente #open-settings
+    
+    // Aggiorna l'anno nel footer
+    const footerYear = document.getElementById('footer-year');
+    if (footerYear) footerYear.textContent = new Date().getFullYear();
   });
-  // Applica la modalità salvata se presente
-  try {
-    const storedDark = localStorage.getItem('tpl.isDark');
-    if (storedDark === '1') {
-      document.documentElement.classList.add('dark');
-      document.body.className = 'font-display bg-background-dark text-foreground-dark';
-    } else {
-      document.documentElement.classList.remove('dark');
-      document.body.className = 'font-display bg-background-light text-foreground-light';
-    }
-  } catch {}
-  updateToggleModeBtn();
   
-  // === SISTEMA DIMENSIONE TESTO ===
-  const fontSizeLevels = ['normal', 'large', 'xlarge'];
-  let currentFontSizeIndex = 0;
-  
-  function setFontSize(level) {
-    document.body.classList.remove('font-size-normal', 'font-size-large', 'font-size-xlarge');
-    document.body.classList.add(`font-size-${level}`);
-    try {
-      localStorage.setItem('tpl.fontSize', level);
-    } catch { }
-    updateFontSizeBtn(level);
-  }
-  
-  function updateFontSizeBtn(level) {
-    // Aggiorna stato attivo dei pulsanti
-    const benvenutoButtons = document.querySelectorAll('.benvenuto-font-btn');
-    benvenutoButtons.forEach(btn => {
-      if (btn.dataset.size === level) {
-        btn.classList.add('active');
-      } else {
-        btn.classList.remove('active');
-      }
-    });
-  }
-  
-  // Ripristina dimensione salvata
-  try {
-    const savedFontSize = localStorage.getItem('tpl.fontSize');
-    if (savedFontSize && fontSizeLevels.includes(savedFontSize)) {
-      currentFontSizeIndex = fontSizeLevels.indexOf(savedFontSize);
-      setFontSize(savedFontSize);
-    } else {
-      setFontSize('normal');
-    }
-  } catch {
-    setFontSize('normal');
-  }
-  
-  // Event listeners per pulsanti font size
-  document.querySelectorAll('.benvenuto-font-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-      const size = this.dataset.size;
-      if (size) {
-        setFontSize(size);
-        currentFontSizeIndex = fontSizeLevels.indexOf(size);
-      }
-    });
-  });
-  // === FINE SISTEMA DIMENSIONE TESTO ===
-  
-  // Aggiorna l'anno nel footer
-  const footerYear = document.getElementById('footer-year');
-  if (footerYear) footerYear.textContent = new Date().getFullYear();
-  
+  // Service Worker
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('sw.js').catch(err => console.error('SW registration failed', err));
