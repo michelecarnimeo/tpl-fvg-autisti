@@ -1855,24 +1855,106 @@ p, span, div, a, button, input, select, textarea, label, li {
     text-decoration: none;
     font-size: 1rem;
     font-weight: 500;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     border: none;
     background: none;
     width: 100%;
     cursor: pointer;
     text-align: left;
+    position: relative;
+    border-radius: 8px;
+  }
+  
+  /* Padding extra per pulsanti con badge ON/OFF */
+  .mobile-toggle-with-badge {
+    padding-right: 60px;
   }
   
   .mobile-nav-link:hover,
   .mobile-nav-button:hover {
     background: rgba(0, 123, 138, 0.1);
     color: var(--turchese);
+    transform: translateX(4px);
+  }
+  
+  /* Stato attivo per pulsante animazione mobile */
+  .mobile-toggle-with-badge.active {
+    background: rgba(34, 197, 94, 0.15);
+    color: #15803d;
+    font-weight: 600;
+    border-left: 4px solid #22c55e;
+    padding-left: 16px;
+    padding-right: 60px;
+  }
+  
+  .mobile-toggle-with-badge.active:hover {
+    background: rgba(34, 197, 94, 0.25);
+    color: #16a34a;
+    transform: translateX(6px);
+  }
+  
+  /* Indicatore ON/OFF per animazione */
+  .mobile-toggle-with-badge.active::after {
+    content: 'ON';
+    position: absolute;
+    right: 20px;
+    background: #22c55e;
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 12px;
+    animation: pulse-active 2s ease-in-out infinite;
+  }
+  
+  .mobile-toggle-with-badge:not(.active)::after {
+    content: 'OFF';
+    position: absolute;
+    right: 20px;
+    background: rgba(148, 163, 184, 0.3);
+    color: rgba(71, 85, 105, 0.8);
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 12px;
+  }
+  
+  /* Animazione pulse per stato attivo */
+  @keyframes pulse-active {
+    0%, 100% {
+      box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+    }
+    50% {
+      box-shadow: 0 0 0 6px rgba(34, 197, 94, 0);
+    }
+  }
+  
+  /* Animazione click */
+  .mobile-nav-button:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
   }
   
   .mobile-nav-icon {
     font-size: 1.2rem;
     width: 24px;
     text-align: center;
+    transition: transform 0.3s ease;
+  }
+  
+  /* Icona animata quando pulsante animazione è attivo */
+  .mobile-toggle-with-badge.active .mobile-nav-icon {
+    animation: rotate-icon 3s linear infinite;
+  }
+  
+  /* Animazione rotazione icona */
+  @keyframes rotate-icon {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
   
   .mobile-menu-divider {
@@ -1985,6 +2067,31 @@ p, span, div, a, button, input, select, textarea, label, li {
   .dark .mobile-nav-link:hover,
   .dark .mobile-nav-button:hover {
     background: rgba(23, 183, 177, 0.2);
+  }
+  
+  /* Stato attivo per pulsante animazione mobile - dark mode */
+  .dark .mobile-toggle-with-badge.active {
+    background: rgba(34, 197, 94, 0.2);
+    color: #86efac;
+    font-weight: 600;
+    border-left: 4px solid #22c55e;
+  }
+  
+  .dark .mobile-toggle-with-badge.active:hover {
+    background: rgba(34, 197, 94, 0.3);
+    color: #bbf7d0;
+  }
+  
+  /* Indicatore ON/OFF per animazione - dark mode */
+  .dark .mobile-toggle-with-badge.active::after {
+    background: #22c55e;
+    color: white;
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+  }
+  
+  .dark .mobile-toggle-with-badge:not(.active)::after {
+    background: rgba(71, 85, 105, 0.4);
+    color: rgba(148, 163, 184, 0.9);
   }
   
   .dark .mobile-menu-divider {
@@ -3871,4 +3978,688 @@ p, span, div, a, button, input, select, textarea, label, li {
 
 .dark .version-date {
   color: #94a3b8;
+}
+
+/* =====================================
+   SEZIONE 18: MODAL IMPOSTAZIONI
+   ===================================== */
+
+/* Modal Overlay */
+.settings-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 10000;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.settings-modal.show {
+  opacity: 1;
+}
+
+/* Modal Content */
+.settings-modal-content {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  box-shadow: var(--glass-shadow);
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+  overflow: hidden;
+}
+
+.settings-modal.show .settings-modal-content {
+  transform: scale(1);
+}
+
+/* Header - Stile navbar con gradient turchese (come modal fermate) */
+.settings-modal-header {
+  background: linear-gradient(135deg, 
+    rgba(0, 123, 138, 0.9) 0%, 
+    rgba(0, 123, 138, 0.7) 50%, 
+    rgba(0, 123, 138, 0.5) 100%);
+  border-bottom: 1px solid rgba(0, 123, 138, 0.3);
+  box-shadow: 0 4px 12px 0 rgba(0, 123, 138, 0.4);
+  border-radius: 16px 16px 0 0;
+  padding: 10px 20px;
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.settings-modal-header h3 {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.settings-modal-close {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  font-size: 1.5rem;
+  color: white;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.settings-modal-close:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: rotate(90deg);
+}
+
+/* Tabs */
+.settings-tabs {
+  display: flex;
+  border-bottom: 2px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.settings-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 1rem;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: var(--testo-secondario);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.settings-tab:hover {
+  background: rgba(0, 123, 138, 0.1);
+  color: var(--turchese);
+}
+
+.settings-tab.active {
+  color: var(--turchese);
+  border-bottom-color: var(--turchese);
+  background: rgba(0, 123, 138, 0.05);
+  font-weight: 600;
+}
+
+.tab-icon {
+  font-size: 1.2rem;
+}
+
+/* Content */
+.settings-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+}
+
+.settings-tab-content {
+  display: none;
+}
+
+.settings-tab-content.active {
+  display: block;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Section */
+.settings-section {
+  margin-bottom: 1.5rem;
+}
+
+.settings-section-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--testo-principale);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+/* Settings Item */
+.settings-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  margin-bottom: 0.75rem;
+  transition: all 0.2s ease;
+}
+
+.settings-item:hover {
+  background: rgba(0, 123, 138, 0.05);
+  border-color: var(--turchese);
+  transform: translateX(4px);
+}
+
+.settings-item-vertical {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1rem;
+}
+
+.settings-item-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.settings-item-icon {
+  font-size: 1.5rem;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 123, 138, 0.1);
+  border-radius: 10px;
+}
+
+.settings-item-text {
+  flex: 1;
+}
+
+.settings-item-label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--testo-principale);
+  margin-bottom: 0.25rem;
+}
+
+.settings-item-description {
+  font-size: 0.85rem;
+  color: var(--testo-secondario);
+  line-height: 1.4;
+}
+
+/* Toggle Switch */
+.settings-toggle {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 28px;
+  flex-shrink: 0;
+}
+
+.settings-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.settings-toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #cbd5e1;
+  transition: all 0.3s ease;
+  border-radius: 28px;
+}
+
+.settings-toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: all 0.3s ease;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.settings-toggle input:checked + .settings-toggle-slider {
+  background-color: #22c55e;
+}
+
+.settings-toggle input:checked + .settings-toggle-slider:before {
+  transform: translateX(22px);
+}
+
+.settings-toggle input:focus + .settings-toggle-slider {
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.2);
+}
+
+/* Theme Options */
+.settings-theme-options {
+  display: flex;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.settings-theme-option {
+  flex: 1;
+  cursor: pointer;
+}
+
+.settings-theme-option input[type="radio"] {
+  display: none;
+}
+
+.theme-option-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 0.75rem;
+  background: var(--glass-bg);
+  border: 2px solid var(--glass-border);
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.settings-theme-option:hover .theme-option-card {
+  background: rgba(0, 123, 138, 0.1);
+  border-color: var(--turchese);
+  transform: translateY(-2px);
+}
+
+.settings-theme-option input:checked + .theme-option-card {
+  background: rgba(34, 197, 94, 0.15);
+  border-color: #22c55e;
+  border-width: 3px;
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+}
+
+.theme-option-icon {
+  font-size: 2rem;
+}
+
+.theme-option-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--testo-principale);
+}
+
+.theme-option-description {
+  font-size: 0.75rem;
+  color: var(--testo-secondario);
+  text-align: center;
+}
+
+/* Dark mode styles for theme options */
+.dark .theme-option-card {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: var(--glass-border-dark);
+}
+
+.dark .settings-theme-option:hover .theme-option-card {
+  background: rgba(23, 183, 177, 0.1);
+}
+
+.dark .settings-theme-option input:checked + .theme-option-card {
+  background: rgba(34, 197, 94, 0.2);
+  border-color: #22c55e;
+}
+
+/* Mobile responsive for theme options */
+@media (max-width: 600px) {
+  .settings-theme-options {
+    flex-direction: column;
+  }
+  
+  .theme-option-card {
+    flex-direction: row;
+    justify-content: flex-start;
+    padding: 1rem;
+    gap: 1rem;
+  }
+  
+  .theme-option-icon {
+    font-size: 1.5rem;
+  }
+  
+  .theme-option-description {
+    text-align: left;
+  }
+}
+
+/* Font Size Buttons */
+.settings-font-buttons {
+  display: flex;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.settings-font-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 0.5rem;
+  background: var(--glass-bg);
+  border: 2px solid var(--glass-border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--testo-principale);
+}
+
+.settings-font-btn:hover {
+  background: rgba(0, 123, 138, 0.1);
+  border-color: var(--turchese);
+  transform: translateY(-2px);
+}
+
+.settings-font-btn.active {
+  background: rgba(34, 197, 94, 0.15);
+  border-color: #22c55e;
+  color: #15803d;
+  font-weight: 600;
+}
+
+.settings-font-btn .font-sample {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.settings-font-btn[data-size="normal"] .font-sample {
+  font-size: 1.2rem;
+}
+
+.settings-font-btn[data-size="large"] .font-sample {
+  font-size: 1.5rem;
+}
+
+.settings-font-btn[data-size="xlarge"] .font-sample {
+  font-size: 1.8rem;
+}
+
+.settings-font-btn .font-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* Dark Mode Styles */
+.dark .settings-modal-content {
+  background: var(--glass-bg-dark);
+  border-color: var(--glass-border-dark);
+  box-shadow: var(--glass-shadow-dark);
+}
+
+.dark .settings-modal-header {
+  /* Mantieni lo stesso gradient turchese anche in dark mode */
+  border-bottom-color: var(--glass-border-dark);
+}
+
+.dark .settings-tabs {
+  border-color: var(--glass-border-dark);
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.dark .settings-tab:hover {
+  background: rgba(23, 183, 177, 0.1);
+}
+
+.dark .settings-tab.active {
+  background: rgba(23, 183, 177, 0.05);
+}
+
+.dark .settings-item {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: var(--glass-border-dark);
+}
+
+.dark .settings-item:hover {
+  background: rgba(23, 183, 177, 0.1);
+}
+
+.dark .settings-item-icon {
+  background: rgba(23, 183, 177, 0.15);
+}
+
+.dark .settings-font-btn {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: var(--glass-border-dark);
+}
+
+.dark .settings-font-btn:hover {
+  background: rgba(23, 183, 177, 0.1);
+}
+
+.dark .settings-font-btn.active {
+  background: rgba(34, 197, 94, 0.2);
+  color: #86efac;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .settings-modal-content {
+    width: 95%;
+    max-height: 90vh;
+    margin: 10px;
+  }
+  
+  .settings-modal-header {
+    padding: 10px 16px;
+  }
+  
+  .settings-modal-header h3 {
+    font-size: 1.1rem;
+  }
+  
+  .settings-content {
+    padding: 1rem;
+  }
+  
+  .settings-tab {
+    font-size: 0.9rem;
+    padding: 0.75rem 0.5rem;
+  }
+  
+  .tab-icon {
+    font-size: 1rem;
+  }
+  
+  .settings-item {
+    padding: 0.75rem;
+  }
+  
+  .settings-item-icon {
+    font-size: 1.2rem;
+    width: 35px;
+    height: 35px;
+  }
+  
+  .settings-item-label {
+    font-size: 0.95rem;
+  }
+  
+  .settings-item-description {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .settings-modal-content {
+    margin: 10px;
+    max-height: 90vh;
+  }
+  
+  .settings-modal-header {
+    padding: 10px 16px;
+  }
+  
+  .settings-content {
+    padding: 16px;
+  }
+}
+
+/* =====================================
+   SEZIONE 19: MODALITÀ CONTRASTO ALTO
+   ===================================== */
+
+.high-contrast {
+  /* Aumenta contrasto testi */
+  --testo-principale: #000000 !important;
+  --testo-secondario: #1f2937 !important;
+}
+
+.high-contrast button,
+.high-contrast .route-button,
+.high-contrast .linea-select-btn {
+  border-width: 2px !important;
+  font-weight: 600 !important;
+}
+
+.high-contrast .main-card,
+.high-contrast .price-card {
+  border-width: 3px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+}
+
+.high-contrast .price-code,
+.high-contrast .price-value {
+  font-weight: 700 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.high-contrast .navbar {
+  border-bottom: 3px solid var(--turchese) !important;
+}
+
+/* Dark mode + Contrasto Alto */
+.dark.high-contrast {
+  --testo-principale: #ffffff !important;
+  --testo-secondario: #e2e8f0 !important;
+}
+
+.dark.high-contrast .main-card,
+.dark.high-contrast .price-card {
+  border-color: #17b7b1 !important;
+  border-width: 3px !important;
+}
+
+/* =====================================
+   SEZIONE 20: MODALITÀ TOUCH FRIENDLY
+   ===================================== */
+
+.touch-friendly button,
+.touch-friendly .route-button,
+.touch-friendly .linea-select-btn,
+.touch-friendly .reset-btn {
+  min-height: 56px !important;
+  padding: 1rem 1.5rem !important;
+  font-size: 1.1rem !important;
+}
+
+.touch-friendly .mobile-nav-link,
+.touch-friendly .mobile-nav-button {
+  min-height: 60px !important;
+  padding: 1.25rem 1.5rem !important;
+}
+
+.touch-friendly .settings-item {
+  padding: 1.25rem !important;
+  margin-bottom: 1rem !important;
+}
+
+.touch-friendly .settings-toggle {
+  width: 60px;
+  height: 34px;
+}
+
+.touch-friendly .settings-toggle-slider:before {
+  height: 26px;
+  width: 26px;
+}
+
+.touch-friendly .settings-toggle input:checked + .settings-toggle-slider:before {
+  transform: translateX(26px);
+}
+
+.touch-friendly .settings-font-btn,
+.touch-friendly .font-size-btn,
+.touch-friendly .mobile-font-btn {
+  padding: 1.25rem !important;
+  min-height: 70px !important;
+}
+
+.touch-friendly .fermate-modal-list li,
+.touch-friendly .linea-modal-item {
+  min-height: 60px !important;
+  padding: 1.25rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.touch-friendly .settings-tab {
+  padding: 1.25rem !important;
+  font-size: 1.1rem !important;
+}
+
+/* Spaziatura aumentata */
+.touch-friendly .route-section {
+  gap: 1.5rem !important;
+}
+
+.touch-friendly .form-group {
+  margin-bottom: 2rem !important;
+}
+
+.touch-friendly .settings-modal-content {
+  max-width: 700px !important;
+}
+
+/* Pulsanti più grandi su mobile */
+@media (max-width: 768px) {
+  .touch-friendly button,
+  .touch-friendly .route-button {
+    min-height: 64px !important;
+    font-size: 1.15rem !important;
+  }
+  
+  .touch-friendly .mobile-nav-link,
+  .touch-friendly .mobile-nav-button {
+    min-height: 68px !important;
+    font-size: 1.1rem !important;
+  }
 }

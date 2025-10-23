@@ -110,38 +110,16 @@
           <span class="mobile-nav-icon">💰</span>
           <span>Prezzi</span>
         </a>
-        <div class="mobile-menu-divider"></div>
-        <button id="mobile-darkmode-toggle" class="mobile-nav-button">
-          <span class="mobile-nav-icon">🌙</span>
-          <span>Modalità scura</span>
-        </button>
-        <button id="mobile-animation-toggle" class="mobile-nav-button">
-          <span class="mobile-nav-icon">🎬</span>
-          <span>Animazione sfondo</span>
+        <button id="open-settings" class="mobile-nav-link">
+          <span class="mobile-nav-icon">⚙️</span>
+          <span>Impostazioni</span>
         </button>
         <div class="mobile-menu-divider"></div>
-        <div class="mobile-font-size-section">
-          <span class="mobile-section-title">Dimensione testo</span>
-          <div class="mobile-font-size-buttons">
-            <button id="mobile-font-size-small" class="mobile-font-btn" data-size="normal" title="Testo normale">
-              <span class="font-btn-letter">A</span>
-              <span class="font-btn-label">Normale</span>
-            </button>
-            <button id="mobile-font-size-medium" class="mobile-font-btn" data-size="large" title="Testo grande">
-              <span class="font-btn-letter">A</span>
-              <span class="font-btn-label">Grande</span>
-            </button>
-            <button id="mobile-font-size-large" class="mobile-font-btn" data-size="xlarge" title="Testo molto grande">
-              <span class="font-btn-letter">A</span>
-              <span class="font-btn-label">Molto Grande</span>
-            </button>
-          </div>
-        </div>
         
         <!-- Mini card versione -->
-        <button class="mobile-version-card" id="mobile-version-card" title="Info o Riavvia">
+        <button class="mobile-version-card" id="mobile-version-card" title="Verifica Aggiornamenti">
           <div class="version-info">
-            <div class="version-title">🔄 Info o Riavvia</div>
+            <div class="version-title">🔄 Verifica Aggiornamenti</div>
             <div class="version-number" id="mobile-version-number">Versione 1.3.3</div>
             <div class="version-date" id="mobile-version-date">22 Ottobre 2025 21:30</div>
           </div>
@@ -338,6 +316,155 @@
       <div class="cache-modal-footer">
         <button id="cache-cancel" class="cache-modal-btn cache-modal-cancel">Annulla</button>
         <button id="cache-confirm" class="cache-modal-btn cache-modal-confirm" style="display: none;">Riavvia e Aggiorna (v1.2)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Impostazioni -->
+  <div id="settings-modal" class="settings-modal">
+    <div class="settings-modal-content">
+      <!-- Header -->
+      <div class="settings-modal-header">
+        <h3>⚙️ Impostazioni</h3>
+        <button id="settings-modal-close" class="settings-modal-close" aria-label="Chiudi">×</button>
+      </div>
+      
+      <!-- Tabs -->
+      <div class="settings-tabs">
+        <button class="settings-tab active" data-tab="appearance">
+          <span class="tab-icon">👁️</span>
+          <span>Aspetto</span>
+        </button>
+        <button class="settings-tab" data-tab="accessibility">
+          <span class="tab-icon">♿</span>
+          <span>Accessibilità</span>
+        </button>
+      </div>
+      
+      <!-- Tab Content -->
+      <div class="settings-content">
+        
+        <!-- Tab Aspetto -->
+        <div class="settings-tab-content active" data-content="appearance">
+          <div class="settings-section">
+            <h4 class="settings-section-title">👁️ Aspetto</h4>
+            
+            <!-- Theme Mode -->
+            <div class="settings-item settings-item-vertical">
+              <div class="settings-item-info">
+                <span class="settings-item-icon">🌓</span>
+                <div class="settings-item-text">
+                  <div class="settings-item-label">Tema</div>
+                  <div class="settings-item-description">Scegli l'aspetto dell'app</div>
+                </div>
+              </div>
+              <div class="settings-theme-options">
+                <label class="settings-theme-option">
+                  <input type="radio" name="theme-mode" value="system" id="theme-system">
+                  <span class="theme-option-card">
+                    <span class="theme-option-icon">⚙️</span>
+                    <span class="theme-option-label">Sistema</span>
+                    <span class="theme-option-description">Segue il dispositivo</span>
+                  </span>
+                </label>
+                <label class="settings-theme-option">
+                  <input type="radio" name="theme-mode" value="light" id="theme-light">
+                  <span class="theme-option-card">
+                    <span class="theme-option-icon">☀️</span>
+                    <span class="theme-option-label">Chiara</span>
+                    <span class="theme-option-description">Sempre chiara</span>
+                  </span>
+                </label>
+                <label class="settings-theme-option">
+                  <input type="radio" name="theme-mode" value="dark" id="theme-dark">
+                  <span class="theme-option-card">
+                    <span class="theme-option-icon">🌙</span>
+                    <span class="theme-option-label">Scura</span>
+                    <span class="theme-option-description">Sempre scura</span>
+                  </span>
+                </label>
+              </div>
+            </div>
+            
+            <!-- Animazione Sfondo -->
+            <div class="settings-item">
+              <div class="settings-item-info">
+                <span class="settings-item-icon">🎬</span>
+                <div class="settings-item-text">
+                  <div class="settings-item-label">Animazione sfondo</div>
+                  <div class="settings-item-description">Gradiente animato nello sfondo</div>
+                </div>
+              </div>
+              <label class="settings-toggle">
+                <input type="checkbox" id="settings-animation">
+                <span class="settings-toggle-slider"></span>
+              </label>
+            </div>
+            
+            <!-- Contrasto Alto -->
+            <div class="settings-item">
+              <div class="settings-item-info">
+                <span class="settings-item-icon">👁️</span>
+                <div class="settings-item-text">
+                  <div class="settings-item-label">Contrasto elevato</div>
+                  <div class="settings-item-description">Migliora leggibilità in pieno sole</div>
+                </div>
+              </div>
+              <label class="settings-toggle">
+                <input type="checkbox" id="settings-high-contrast">
+                <span class="settings-toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Tab Accessibilità -->
+        <div class="settings-tab-content" data-content="accessibility">
+          <div class="settings-section">
+            <h4 class="settings-section-title">♿ Accessibilità</h4>
+            
+            <!-- Dimensione Testo -->
+            <div class="settings-item settings-item-vertical">
+              <div class="settings-item-info">
+                <span class="settings-item-icon">A</span>
+                <div class="settings-item-text">
+                  <div class="settings-item-label">Dimensione testo</div>
+                  <div class="settings-item-description">Scegli la dimensione più comoda</div>
+                </div>
+              </div>
+              <div class="settings-font-buttons">
+                <button class="settings-font-btn" data-size="normal">
+                  <span class="font-sample">A</span>
+                  <span class="font-label">Normale</span>
+                </button>
+                <button class="settings-font-btn" data-size="large">
+                  <span class="font-sample">A</span>
+                  <span class="font-label">Grande</span>
+                </button>
+                <button class="settings-font-btn" data-size="xlarge">
+                  <span class="font-sample">A</span>
+                  <span class="font-label">Molto Grande</span>
+                </button>
+              </div>
+            </div>
+            
+            <!-- Pulsanti Grandi -->
+            <div class="settings-item">
+              <div class="settings-item-info">
+                <span class="settings-item-icon">👆</span>
+                <div class="settings-item-text">
+                  <div class="settings-item-label">Modalità touch</div>
+                  <div class="settings-item-description">Pulsanti più grandi e spaziati</div>
+                </div>
+              </div>
+              <label class="settings-toggle">
+                <input type="checkbox" id="settings-touch-friendly">
+                <span class="settings-toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+        
       </div>
     </div>
   </div>

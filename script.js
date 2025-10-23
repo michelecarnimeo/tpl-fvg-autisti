@@ -273,11 +273,17 @@ function updateBodyColors(isDark) {
 }
 
 function toggleDark() {
+  // Nuovo sistema: cicla tra light/dark (non usa più system per il toggle manuale)
   const isDark = !document.documentElement.classList.contains('dark');
-  setDarkMode(isDark);
+  const newMode = isDark ? 'dark' : 'light';
   
-  // Aggiorna l'icona del toggle
+  localStorage.setItem('tpl.themeMode', newMode);
+  document.documentElement.classList.toggle('dark', isDark);
+  updateBodyColors(isDark);
   updateToggleIcon(isDark);
+  updateMobileDarkModeButton(isDark);
+  
+  console.log('Tema cambiato manualmente a:', newMode);
 }
 
 // Funzione per aggiornare l'icona del toggle
@@ -285,6 +291,23 @@ function updateToggleIcon(isDark) {
   const toggleIcon = darkModeToggle.querySelector('span');
   if (toggleIcon) {
     toggleIcon.textContent = isDark ? '☀️' : '🌙';
+  }
+}
+
+// Funzione per aggiornare il pulsante mobile dark mode
+function updateMobileDarkModeButton(isDark) {
+  const mobileBtn = document.getElementById('mobile-darkmode-toggle');
+  if (!mobileBtn) return;
+  
+  const icon = mobileBtn.querySelector('.mobile-nav-icon');
+  const text = mobileBtn.querySelector('span:not(.mobile-nav-icon)');
+  
+  if (icon) {
+    icon.textContent = isDark ? '☀️' : '🌙';
+  }
+  
+  if (text) {
+    text.textContent = isDark ? 'Modalità chiara' : 'Modalità scura';
   }
 }
 
@@ -745,9 +768,9 @@ function resetFilters() {
 
 // Funzione reset cache
 // Versione corrente dell'app
-const CURRENT_VERSION = '1.3.3';
-const VERSION_DATE = '22 Ottobre 2025';
-const VERSION_TIME = '21:30';
+const CURRENT_VERSION = '1.4.0';
+const VERSION_DATE = '23 Ottobre 2025';
+const VERSION_TIME = '14:20';
 
 // Funzione helper per aggiornare versione, data e ora
 function updateVersion(version, date, time) {
@@ -1170,10 +1193,19 @@ async function loadData() {
   window.dispatchEvent(new Event('tariffarioLoaded'));
   // Ripristina selezioni da localStorage
   try {
-    const storedDark = localStorage.getItem('tpl.isDark');
-    const isDark = storedDark === '1';
-    setDarkMode(isDark);
-    updateToggleIcon(isDark); // Aggiorna l'icona del toggle
+    // Retrocompatibilità: converti vecchio sistema isDark a themeMode
+    const oldDarkMode = localStorage.getItem('tpl.isDark');
+    const existingThemeMode = localStorage.getItem('tpl.themeMode');
+    
+    if (!existingThemeMode && oldDarkMode !== null) {
+      // Migrazione da vecchio sistema
+      const newMode = oldDarkMode === '1' ? 'dark' : 'light';
+      localStorage.setItem('tpl.themeMode', newMode);
+      localStorage.removeItem('tpl.isDark'); // Rimuovi vecchia impostazione
+    }
+    
+    // Il tema verrà caricato dal modal impostazioni con loadTheme()
+    // Non caricare qui per evitare conflitti
     
     // Ripristina dimensione testo
     initFontSize();
@@ -1981,7 +2013,7 @@ function handleQuickUpdate() {
     });
   }
 
-  // Mini card versione (apre modale Info o Riavvia)
+  // Mini card versione (apre modale Verifica Aggiornamenti)
   if (mobileVersionCard) {
     mobileVersionCard.addEventListener('click', () => {
       if (typeof checkForUpdates === 'function') {
@@ -2252,3 +2284,288 @@ if (!navigator.onLine) {
     showOfflineNotification();
   }, 1000); // Delay per permettere caricamento app
 }
+
+// =====================================
+// MODAL IMPOSTAZIONI
+// =====================================
+
+(function() {
+  const settingsModal = document.getElementById('settings-modal');
+  const openSettingsBtn = document.getElementById('open-settings');
+  const closeSettingsBtn = document.getElementById('settings-modal-close');
+  
+  // Toggle controls
+  const themeSystem = document.getElementById('theme-system');
+  const themeLight = document.getElementById('theme-light');
+  const themeDark = document.getElementById('theme-dark');
+  const animationToggle = document.getElementById('settings-animation');
+  const highContrastToggle = document.getElementById('settings-high-contrast');
+  const touchFriendlyToggle = document.getElementById('settings-touch-friendly');
+  
+  // Font size buttons
+  const fontButtons = document.querySelectorAll('.settings-font-btn');
+  
+  // Tabs
+  const tabs = document.querySelectorAll('.settings-tab');
+  const tabContents = document.querySelectorAll('.settings-tab-content');
+  
+  if (!settingsModal) return;
+  
+  // ===== APERTURA/CHIUSURA MODAL =====
+  
+  function openSettings() {
+    settingsModal.style.display = 'flex';
+    setTimeout(() => {
+      settingsModal.classList.add('show');
+    }, 10);
+    
+    // Sincronizza valori con stato attuale
+    syncSettingsWithState();
+  }
+  
+  function closeSettings() {
+    settingsModal.classList.remove('show');
+    setTimeout(() => {
+      settingsModal.style.display = 'none';
+    }, 300);
+  }
+  
+  if (openSettingsBtn) {
+    openSettingsBtn.addEventListener('click', () => {
+      openSettings();
+      // Chiudi menu mobile se aperto
+      const mobileMenu = document.getElementById('mobile-menu');
+      const overlay = document.getElementById('mobile-menu-overlay');
+      if (mobileMenu && overlay) {
+        mobileMenu.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+  }
+  
+  if (closeSettingsBtn) {
+    closeSettingsBtn.addEventListener('click', closeSettings);
+  }
+  
+  // Chiudi cliccando fuori
+  if (settingsModal) {
+    settingsModal.addEventListener('click', (e) => {
+      if (e.target === settingsModal) {
+        closeSettings();
+      }
+    });
+  }
+  
+  // Chiudi con ESC
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && settingsModal.classList.contains('show')) {
+      closeSettings();
+    }
+  });
+  
+  // ===== GESTIONE TAB =====
+  
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const targetTab = tab.dataset.tab;
+      
+      // Rimuovi active da tutti
+      tabs.forEach(t => t.classList.remove('active'));
+      tabContents.forEach(tc => tc.classList.remove('active'));
+      
+      // Aggiungi active al selezionato
+      tab.classList.add('active');
+      const targetContent = document.querySelector(`[data-content="${targetTab}"]`);
+      if (targetContent) {
+        targetContent.classList.add('active');
+      }
+    });
+  });
+  
+  // ===== SINCRONIZZAZIONE IMPOSTAZIONI =====
+  
+  function syncSettingsWithState() {
+    // Theme Mode
+    const themeMode = localStorage.getItem('tpl.themeMode') || 'system';
+    if (themeSystem) themeSystem.checked = (themeMode === 'system');
+    if (themeLight) themeLight.checked = (themeMode === 'light');
+    if (themeDark) themeDark.checked = (themeMode === 'dark');
+    
+    // Animazione
+    if (animationToggle) {
+      animationToggle.checked = document.body.classList.contains('animation-enabled');
+    }
+    
+    // Contrasto Alto
+    if (highContrastToggle) {
+      const isHighContrast = localStorage.getItem('tpl.highContrast') === 'true';
+      highContrastToggle.checked = isHighContrast;
+    }
+    
+    // Touch Friendly
+    if (touchFriendlyToggle) {
+      const isTouchFriendly = localStorage.getItem('tpl.touchFriendly') === 'true';
+      touchFriendlyToggle.checked = isTouchFriendly;
+    }
+    
+    // Font Size
+    const currentFontSize = localStorage.getItem('tpl.fontSize') || 'normal';
+    fontButtons.forEach(btn => {
+      if (btn.dataset.size === currentFontSize) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+  }
+  
+  // ===== GESTIONE TOGGLE =====
+  
+  // Theme Mode
+  if (themeSystem) {
+    themeSystem.addEventListener('change', () => {
+      if (themeSystem.checked) setThemeMode('system');
+    });
+  }
+  if (themeLight) {
+    themeLight.addEventListener('change', () => {
+      if (themeLight.checked) setThemeMode('light');
+    });
+  }
+  if (themeDark) {
+    themeDark.addEventListener('change', () => {
+      if (themeDark.checked) setThemeMode('dark');
+    });
+  }
+  
+  // Animazione
+  if (animationToggle) {
+    animationToggle.addEventListener('change', () => {
+      toggleAnimation();
+    });
+  }
+  
+  // Contrasto Alto
+  if (highContrastToggle) {
+    highContrastToggle.addEventListener('change', (e) => {
+      setHighContrast(e.target.checked);
+    });
+  }
+  
+  // Touch Friendly
+  if (touchFriendlyToggle) {
+    touchFriendlyToggle.addEventListener('change', (e) => {
+      setTouchFriendly(e.target.checked);
+    });
+  }
+  
+  // Font Size
+  fontButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const size = btn.dataset.size;
+      setFontSize(size);
+      
+      // Aggiorna UI
+      fontButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+  
+  // ===== FUNZIONI CONTRASTO ALTO =====
+  
+  function setHighContrast(enabled) {
+    if (enabled) {
+      document.body.classList.add('high-contrast');
+    } else {
+      document.body.classList.remove('high-contrast');
+    }
+    
+    try {
+      localStorage.setItem('tpl.highContrast', enabled);
+    } catch {}
+    
+    console.log('Contrasto alto:', enabled ? 'attivato' : 'disattivato');
+  }
+  
+  function loadHighContrast() {
+    const saved = localStorage.getItem('tpl.highContrast');
+    if (saved === 'true') {
+      setHighContrast(true);
+    }
+  }
+  
+  // ===== FUNZIONI TOUCH FRIENDLY =====
+  
+  function setTouchFriendly(enabled) {
+    if (enabled) {
+      document.body.classList.add('touch-friendly');
+    } else {
+      document.body.classList.remove('touch-friendly');
+    }
+    
+    try {
+      localStorage.setItem('tpl.touchFriendly', enabled);
+    } catch {}
+    
+    console.log('Touch friendly:', enabled ? 'attivato' : 'disattivato');
+  }
+  
+  function loadTouchFriendly() {
+    const saved = localStorage.getItem('tpl.touchFriendly');
+    if (saved === 'true') {
+      setTouchFriendly(true);
+    }
+  }
+  
+  // ===== FUNZIONI TEMA =====
+  
+  // Media query per rilevare tema sistema
+  const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+  
+  function setThemeMode(mode) {
+    localStorage.setItem('tpl.themeMode', mode);
+    applyTheme();
+    console.log('Tema impostato su:', mode);
+  }
+  
+  function applyTheme() {
+    const mode = localStorage.getItem('tpl.themeMode') || 'system';
+    let shouldBeDark = false;
+    
+    if (mode === 'system') {
+      shouldBeDark = prefersDarkScheme.matches;
+    } else if (mode === 'dark') {
+      shouldBeDark = true;
+    } else {
+      shouldBeDark = false;
+    }
+    
+    // Applica il tema
+    document.documentElement.classList.toggle('dark', shouldBeDark);
+    updateBodyColors(shouldBeDark);
+    updateToggleIcon(shouldBeDark);
+    updateMobileDarkModeButton(shouldBeDark);
+  }
+  
+  function loadTheme() {
+    applyTheme();
+    
+    // Listener per cambio tema sistema
+    prefersDarkScheme.addEventListener('change', () => {
+      const mode = localStorage.getItem('tpl.themeMode') || 'system';
+      if (mode === 'system') {
+        applyTheme();
+      }
+    });
+  }
+  
+  // ===== CARICA IMPOSTAZIONI ALL'AVVIO =====
+  
+  window.addEventListener('DOMContentLoaded', () => {
+    loadTheme();
+    loadHighContrast();
+    loadTouchFriendly();
+  });
+  
+})();

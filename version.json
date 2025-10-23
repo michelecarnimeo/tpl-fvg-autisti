@@ -1,7 +1,6 @@
 {
-  "version": "1.3.4",
-  "versionDate": "22 Ottobre 2025",
-  "versionTime": "21:30",
-  "updateNotes": "Sistema di verifica aggiornamenti implementato"
+  "version": "1.4.0",
+  "versionDate": "23 Ottobre 2025",
+  "versionTime": "14:20",
+  "updateNotes": "Modal Impostazioni con sistema tema avanzato e modalità accessibilità (Contrasto Alto e Touch Friendly)"
 }
-

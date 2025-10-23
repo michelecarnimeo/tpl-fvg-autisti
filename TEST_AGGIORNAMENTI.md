@@ -379,6 +379,6 @@ Il sistema funziona correttamente se:
 ---
 
 **Data Test**: **/**/\_**\_  
-**Tester**: ******\_********  
+**Tester**: \*\*\*\***\_**\*\*\*\***  
 **Esito**: ⬜ PASS | ⬜ FAIL  
-**Note**: ********\_\_\_********
+**Note**: **\*\*\*\***\_\_\_**\*\*\*\***
