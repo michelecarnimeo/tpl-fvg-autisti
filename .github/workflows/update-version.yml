@@ -1,0 +1,72 @@
+name: Aggiorna Versione App
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Nuova versione (es: 1.3.4)'
+        required: true
+        type: string
+      update_notes:
+        description: 'Note aggiornamento'
+        required: false
+        type: string
+        default: 'Aggiornamenti e miglioramenti'
+
+jobs:
+  update-version:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Configura Git
+        run: |
+          git config --global user.name 'GitHub Actions Bot'
+          git config --global user.email 'actions@github.com'
+      
+      - name: Ottieni data e ora corrente
+        id: datetime
+        run: |
+          echo "date=$(TZ='Europe/Rome' date +'%-d %B %Y' | sed 's/January/Gennaio/; s/February/Febbraio/; s/March/Marzo/; s/April/Aprile/; s/May/Maggio/; s/June/Giugno/; s/July/Luglio/; s/August/Agosto/; s/September/Settembre/; s/October/Ottobre/; s/November/Novembre/; s/December/Dicembre/')" >> $GITHUB_OUTPUT
+          echo "time=$(TZ='Europe/Rome' date +'%H:%M')" >> $GITHUB_OUTPUT
+      
+      - name: Aggiorna version.json
+        run: |
+          cat > version.json << EOF
+          {
+            "version": "${{ github.event.inputs.version }}",
+            "versionDate": "${{ steps.datetime.outputs.date }}",
+            "versionTime": "${{ steps.datetime.outputs.time }}",
+            "updateNotes": "${{ github.event.inputs.update_notes }}"
+          }
+          EOF
+      
+      - name: Aggiorna manifest.json
+        run: |
+          jq '.version = "${{ github.event.inputs.version }}" | .version_date = "${{ steps.datetime.outputs.date }}" | .version_time = "${{ steps.datetime.outputs.time }}"' manifest.json > manifest.tmp.json
+          mv manifest.tmp.json manifest.json
+      
+      - name: Aggiorna script.js
+        run: |
+          sed -i "s/const CURRENT_VERSION = '.*';/const CURRENT_VERSION = '${{ github.event.inputs.version }}';/" script.js
+          sed -i "s/const VERSION_DATE = '.*';/const VERSION_DATE = '${{ steps.datetime.outputs.date }}';/" script.js
+          sed -i "s/const VERSION_TIME = '.*';/const VERSION_TIME = '${{ steps.datetime.outputs.time }}';/" script.js
+      
+      - name: Aggiorna index.html (versione nel footer)
+        run: |
+          sed -i "s/TPL Autisti [0-9.]\+/TPL Autisti ${{ github.event.inputs.version }}/" index.html
+          sed -i "s/Versione [0-9.]\+/Versione ${{ github.event.inputs.version }}/" index.html
+      
+      - name: Commit e push modifiche
+        run: |
+          git add version.json manifest.json script.js index.html
+          git commit -m "🚀 Release v${{ github.event.inputs.version }} - ${{ github.event.inputs.update_notes }}"
+          git push
+      
+      - name: Crea tag release
+        run: |
+          git tag -a "v${{ github.event.inputs.version }}" -m "Release v${{ github.event.inputs.version }}: ${{ github.event.inputs.update_notes }}"
+          git push origin "v${{ github.event.inputs.version }}"
+

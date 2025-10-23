@@ -19,7 +19,7 @@ const STATIC_ASSETS = [
   './benvenuto.html', // Pagina benvenuto
   './fermate.html', // Fermate (offline critico)
   './prezzi.html', // Prezzi (offline critico)
-  './style.css', // Stili essenziali
+  './style1.css', // Stili essenziali
   './script.js', // Funzionalità app
   './database.json', // DATI CRITICI per offline
   './manifest.json', // PWA
@@ -28,6 +28,7 @@ const STATIC_ASSETS = [
   './src/benvenuto.jpg', // Immagine benvenuto
   './test.html', // Pagina test (utile offline)
   './test-config.js' // Config test
+  // NOTA: version.json NON è in cache per permettere verifica aggiornamenti
 ];
 
 // Assets opzionali (cache dinamico)
@@ -142,6 +143,28 @@ self.addEventListener('fetch', event => {
     return;
   }
 
+  // Non cachare version.json per permettere verifica aggiornamenti
+  if (request.url.includes('version.json')) {
+    event.respondWith(
+      fetch(request, {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache'
+        }
+      }).catch(() => {
+        // Se offline, ritorna una versione fallback
+        return new Response(JSON.stringify({
+          version: 'unknown',
+          offline: true
+        }), {
+          headers: { 'Content-Type': 'application/json' }
+        });
+      })
+    );
+    return;
+  }
+
   event.respondWith(
     caches.match(request)
       .then(cached => {
@@ -192,7 +215,7 @@ self.addEventListener('fetch', event => {
             if (request.destination === 'document') {
               return caches.match('./index.html');
             } else if (request.url.includes('.css')) {
-              return caches.match('./style.css');
+              return caches.match('./style1.css');
             } else if (request.url.includes('.js')) {
               return caches.match('./script.js');
             } else if (request.url.includes('database.json')) {
