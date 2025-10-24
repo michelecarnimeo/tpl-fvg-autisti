@@ -1,6 +1,6 @@
 {
-  "version": "1.4.0",
-  "versionDate": "23 Ottobre 2025",
-  "versionTime": "14:20",
-  "updateNotes": "Modal Impostazioni con sistema tema avanzato e modalità accessibilità (Contrasto Alto e Touch Friendly)"
+  "version": "1.4.2",
+  "versionDate": "24 Ottobre 2025",
+  "versionTime": "12:08",
+  "updateNotes": "PWA Bottom Navigation: barra di navigazione moderna e sospesa in modalità PWA con glassmorphism, tab Info e Aggiornamenti nel modal Impostazioni"
 }

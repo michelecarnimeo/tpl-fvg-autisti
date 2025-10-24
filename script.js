@@ -2568,4 +2568,123 @@ if (!navigator.onLine) {
     loadTouchFriendly();
   });
   
+  // ========================================
+  // PWA BOTTOM NAVIGATION
+  // Gestione della barra di navigazione inferiore in modalità PWA
+  // ========================================
+  
+  (function initPWABottomNav() {
+    const bottomNav = document.getElementById('pwa-bottom-nav');
+    if (!bottomNav) return; // Pagina senza bottom nav
+    
+    // Verifica se siamo in modalità PWA
+    function isStandalone() {
+      // Controlla se è attiva la modalità test
+      const isTestMode = localStorage.getItem('tpl.pwaTestMode') === 'true';
+      if (isTestMode) {
+        return true; // Forza modalità PWA per testing
+      }
+      
+      // Controlla la modalità reale PWA
+      return (
+        window.matchMedia('(display-mode: standalone)').matches ||
+        window.navigator.standalone === true
+      );
+    }
+    
+    // Mostra/nasconde la bottom nav
+    function toggleBottomNav() {
+      const isPWA = isStandalone();
+      
+      if (isPWA) {
+        bottomNav.style.display = 'flex';
+        bottomNav.classList.add('show');
+        document.body.classList.add('pwa-mode');
+        console.log('📱 PWA Bottom Navigation: ATTIVA');
+      } else {
+        bottomNav.style.display = 'none';
+        bottomNav.classList.remove('show');
+        document.body.classList.remove('pwa-mode');
+        console.log('🌐 PWA Bottom Navigation: nascosta (modalità browser)');
+      }
+    }
+    
+    // Evidenzia la tab attiva in base alla pagina corrente
+    function highlightActiveTab() {
+      const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+      const items = bottomNav.querySelectorAll('.pwa-nav-item');
+      
+      items.forEach(item => {
+        item.classList.remove('active');
+        
+        const page = item.getAttribute('data-page');
+        if (
+          (page === 'home' && (currentPage === 'index.html' || currentPage === '')) ||
+          (page === 'fermate' && currentPage === 'fermate.html') ||
+          (page === 'prezzi' && currentPage === 'prezzi.html')
+        ) {
+          item.classList.add('active');
+        }
+      });
+    }
+    
+    // Gestisce il click sul pulsante impostazioni
+    function setupSettingsButton() {
+      const settingsBtn = document.getElementById('pwa-settings-btn');
+      const settingsModal = document.getElementById('settings-modal');
+      
+      console.log('🔧 Setup pulsante impostazioni:', {
+        btn: !!settingsBtn,
+        modal: !!settingsModal
+      });
+      
+      if (settingsBtn && settingsModal) {
+        settingsBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          console.log('⚙️ Click su pulsante impostazioni!');
+          
+          // Apri il modal con animazione
+          settingsModal.style.display = 'flex';
+          setTimeout(() => {
+            settingsModal.classList.add('show');
+          }, 10);
+          
+          console.log('✅ Modal impostazioni aperto', {
+            display: settingsModal.style.display,
+            classList: settingsModal.classList.toString()
+          });
+        });
+        console.log('✅ Event listener aggiunto al pulsante impostazioni');
+      } else {
+        console.warn('⚠️ Pulsante o modal impostazioni non trovato!');
+      }
+    }
+    
+    // Inizializza al caricamento
+    toggleBottomNav();
+    highlightActiveTab();
+    setupSettingsButton();
+    
+    // Listener per cambio modalità test (da localStorage)
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'tpl.pwaTestMode') {
+        console.log('🧪 Modalità test PWA cambiata:', e.newValue);
+        toggleBottomNav();
+      }
+    });
+    
+    // Listener per aggiornamenti forzati (da test.html)
+    window.addEventListener('pwaTestModeChanged', () => {
+      console.log('🧪 Evento pwaTestModeChanged ricevuto');
+      toggleBottomNav();
+    });
+    
+    // Espone funzione refresh globale per la pagina test
+    window.refreshPWABottomNav = function() {
+      toggleBottomNav();
+      highlightActiveTab();
+    };
+  })();
+  
 })();

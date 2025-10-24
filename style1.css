@@ -4751,3 +4751,612 @@ p, span, div, a, button, input, select, textarea, label, li {
     font-size: 1.1rem !important;
   }
 }
+
+/* ========================================
+   TAB INFO E AGGIORNAMENTI
+   Stili per la tab informazioni nel modal impostazioni
+   ======================================== */
+
+/* Card Info */
+.info-card {
+  background: var(--bianco);
+  border: 1px solid var(--bordo);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.info-card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--testo);
+  margin: 0 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Header Info App */
+.info-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--bordo);
+}
+
+.info-logo {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  border: 2px solid var(--turchese);
+  object-fit: contain;
+}
+
+.info-title h3 {
+  margin: 0;
+  font-size: 1.3rem;
+  color: var(--testo);
+}
+
+.info-version {
+  margin: 0.25rem 0 0 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--turchese);
+}
+
+.info-date {
+  margin: 0.25rem 0 0 0;
+  font-size: 0.8rem;
+  color: var(--testo-secondario);
+}
+
+/* Descrizione */
+.info-description {
+  margin: 1rem 0;
+  color: var(--testo-secondario);
+  line-height: 1.6;
+}
+
+.info-description p {
+  margin: 0;
+}
+
+/* Features Grid */
+.info-features {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.info-feature {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: var(--grigio-chiaro);
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.info-feature-icon {
+  font-size: 1.2rem;
+}
+
+/* Update Items */
+.update-item {
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--bordo);
+}
+
+.update-item:last-of-type {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.update-version {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.update-badge {
+  background: var(--turchese);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.update-date {
+  font-size: 0.85rem;
+  color: var(--testo-secondario);
+}
+
+.update-title {
+  font-weight: 600;
+  color: var(--testo);
+  margin: 0.5rem 0;
+}
+
+.update-list {
+  margin: 0.5rem 0 0 0;
+  padding-left: 1.5rem;
+  color: var(--testo-secondario);
+  line-height: 1.6;
+}
+
+.update-list li {
+  margin: 0.25rem 0;
+}
+
+/* Link Info */
+.info-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  margin-top: 1rem;
+  background: var(--grigio-chiaro);
+  border: 1px solid var(--bordo);
+  border-radius: 8px;
+  color: var(--testo);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.info-link:hover {
+  background: var(--turchese);
+  color: white;
+  border-color: var(--turchese);
+  transform: translateX(4px);
+}
+
+.info-link-icon {
+  margin-right: 0.5rem;
+}
+
+/* Footer Info */
+.info-footer {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--bordo);
+  text-align: center;
+  color: var(--testo-secondario);
+  font-size: 0.85rem;
+}
+
+.info-footer p {
+  margin: 0.25rem 0;
+}
+
+.info-disclaimer {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+/* Dark Mode */
+.dark .info-card {
+  background: var(--grigio-scuro);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .info-header {
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .info-logo {
+  border-color: var(--turchese-light);
+}
+
+.dark .info-feature {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.dark .info-link {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .info-link:hover {
+  background: var(--turchese);
+  color: white;
+}
+
+.dark .update-item {
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .info-footer {
+  border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .info-features {
+    grid-template-columns: 1fr;
+  }
+  
+  .info-header {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .info-card {
+    padding: 1rem;
+  }
+}
+
+/* ========================================
+   PWA BOTTOM NAVIGATION
+   Barra di navigazione inferiore moderna e sospesa
+   Visibile SOLO in modalità PWA (standalone)
+   ======================================== */
+
+.pwa-bottom-nav {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  
+  /* Colore navbar turchese con glassmorphism */
+  background: linear-gradient(135deg, rgba(0, 123, 138, 0.95), rgba(0, 153, 170, 0.95));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  
+  /* Bordi e ombre */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    0 2px 12px rgba(0, 123, 138, 0.4);
+  
+  /* Layout */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  
+  /* Dimensioni */
+  padding: 0.75rem 2rem;
+  padding-bottom: max(0.75rem, calc(env(safe-area-inset-bottom) + 0.75rem));
+  max-width: calc(100% - 32px);
+  width: auto;
+  min-width: 450px;
+  
+  /* Animazioni */
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+  z-index: 999;
+}
+
+/* Nascosta di default */
+.pwa-bottom-nav[style*="display: none"] {
+  transform: translateX(-50%) translateY(150%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Visibile quando attiva */
+.pwa-bottom-nav:not([style*="display: none"]) {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* Singola tab/icona */
+.pwa-nav-item {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  
+  padding: 0.625rem 1.25rem;
+  border-radius: 12px;
+  background: transparent;
+  border: none;
+  
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  cursor: pointer;
+  
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Icona SVG - sottile e moderna */
+.pwa-nav-icon {
+  width: 26px;
+  height: 26px;
+  stroke-width: 1.5;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Label con nomi sotto le icone */
+.pwa-nav-label {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Logo TPL al centro - solo decorativo */
+.pwa-nav-logo {
+  padding: 0.5rem 1.5rem;
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  position: relative;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* Assicura che i pulsanti (settings) siano cliccabili */
+button.pwa-nav-item,
+.pwa-nav-item button {
+  pointer-events: all !important;
+  cursor: pointer !important;
+  background: transparent;
+  border: none;
+  outline: none;
+}
+
+button.pwa-nav-item:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+}
+
+/* Wrapper per il logo con effetto */
+.pwa-logo-wrapper {
+  position: relative;
+  width: 60px;
+  height: 60px;
+}
+
+.pwa-logo-img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  border-radius: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.3);
+  display: block;
+}
+
+/* Effetto rifrazione della luce per logo TPL */
+.pwa-logo-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  height: calc(50% - 2px);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.25) 0%,
+    rgba(255, 255, 255, 0.15) 40%,
+    transparent 70%,
+    transparent 100%
+  );
+  border-radius: 10px 10px 6px 6px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Hover (solo desktop) */
+@media (hover: hover) {
+  .pwa-nav-item:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    transform: scale(1.05);
+  }
+  
+  .pwa-nav-item:hover .pwa-nav-icon {
+    transform: scale(1.15);
+  }
+  
+}
+
+/* Tab attiva */
+.pwa-nav-item.active {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+.pwa-nav-item.active .pwa-nav-icon {
+  stroke-width: 2;
+  transform: scale(1.1);
+}
+
+/* Effetto tap */
+.pwa-nav-item:active {
+  transform: scale(0.92);
+}
+
+/* Indicatore tab attiva (pallino animato) */
+.pwa-nav-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #ffffff;
+  animation: dotPulse 2s ease-in-out infinite;
+}
+
+/* Logo non ha indicatore */
+.pwa-nav-logo.active::after {
+  display: none;
+}
+
+@keyframes dotPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.3);
+  }
+}
+
+/* Dark mode - stesso colore turchese ma più scuro */
+.dark .pwa-bottom-nav {
+  background: linear-gradient(135deg, rgba(0, 100, 110, 0.95), rgba(0, 123, 138, 0.95));
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 
+    0 8px 40px rgba(0, 0, 0, 0.5),
+    0 4px 16px rgba(0, 123, 138, 0.3);
+}
+
+.dark .pwa-nav-item {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.dark .pwa-nav-item.active {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.dark .pwa-nav-item.active::after {
+  background: #ffffff;
+}
+
+@media (hover: hover) {
+  .dark .pwa-nav-item:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+  }
+}
+
+/* Padding per contenuto quando nav è visibile */
+body.pwa-mode .main-content {
+  padding-bottom: calc(90px + env(safe-area-inset-bottom));
+}
+
+body.pwa-mode footer {
+  padding-bottom: calc(90px + env(safe-area-inset-bottom));
+}
+
+/* Nasconde navbar superiore in modalità PWA */
+body.pwa-mode .navbar {
+  display: none;
+}
+
+body.pwa-mode .main-content {
+  padding-top: 1rem;
+}
+
+/* Animazione entrata */
+@keyframes slideUpNav {
+  from {
+    transform: translateX(-50%) translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+}
+
+.pwa-bottom-nav.show {
+  animation: slideUpNav 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Responsive - Mobile */
+@media (max-width: 480px) {
+  .pwa-bottom-nav {
+    padding: 0.625rem 1rem;
+    max-width: calc(100% - 24px);
+    bottom: 12px;
+    min-width: 0;
+  }
+  
+  .pwa-nav-item {
+    padding: 0.5rem 0.75rem;
+    gap: 0.25rem;
+  }
+  
+  .pwa-nav-icon {
+    width: 22px;
+    height: 22px;
+  }
+  
+  .pwa-nav-label {
+    font-size: 0.65rem;
+  }
+  
+  .pwa-logo-wrapper {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .pwa-logo-wrapper::before {
+    height: calc(50% - 1px);
+    border-radius: 10px 10px 5px 5px;
+  }
+  
+  .pwa-logo-img {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .pwa-nav-logo {
+    padding: 0.5rem 1rem;
+  }
+}
+
+/* Responsive - Schermi molto piccoli */
+@media (max-width: 360px) {
+  .pwa-bottom-nav {
+    padding: 0.5rem 0.5rem;
+    gap: 0.25rem;
+    max-width: calc(100% - 20px);
+  }
+  
+  .pwa-nav-item {
+    padding: 0.5rem 0.5rem;
+    gap: 0.2rem;
+  }
+  
+  .pwa-nav-icon {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .pwa-nav-label {
+    font-size: 0.6rem;
+  }
+  
+  .pwa-logo-wrapper {
+    width: 42px;
+    height: 42px;
+  }
+  
+  .pwa-logo-wrapper::before {
+    height: calc(50% - 1px);
+    border-radius: 9px 9px 4px 4px;
+  }
+  
+  .pwa-logo-img {
+    width: 42px;
+    height: 42px;
+  }
+  
+  .pwa-nav-logo {
+    padding: 0.5rem 0.75rem;
+  }
+}

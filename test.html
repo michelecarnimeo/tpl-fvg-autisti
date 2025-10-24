@@ -498,6 +498,28 @@
             <button class="run-all-btn" onclick="runAllTests()">▶️ Esegui tutti i test</button>
         </div>
 
+        <!-- Test Modalità PWA -->
+        <div class="test-section" style="border: 3px solid var(--turchese); background: linear-gradient(135deg, rgba(23, 183, 177, 0.05), rgba(0, 153, 170, 0.05));">
+            <h2>📱 Test Modalità PWA</h2>
+            <div class="test-item">
+                <div>
+                    <strong>Simulazione Bottom Navigation</strong>
+                    <br>
+                    <small>Attiva/disattiva la bottom navigation senza installare la PWA</small>
+                </div>
+                <div>
+                    <button id="toggle-pwa-mode" class="test-btn" style="background: var(--turchese); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer; font-weight: 500; transition: all 0.3s;">
+                        <span id="pwa-mode-icon">📱</span>
+                        <span id="pwa-mode-text">Attiva Modalità PWA</span>
+                    </button>
+                </div>
+            </div>
+            <div id="pwa-mode-status" style="display: none; margin-top: 1rem; padding: 1.5rem; background: var(--grigio-chiaro); border-radius: 12px; border-left: 5px solid var(--turchese);">
+                <h4 style="margin-top: 0; color: var(--turchese);">Status Modalità PWA:</h4>
+                <div id="pwa-mode-info"></div>
+            </div>
+        </div>
+
         <!-- Test Geolocalizzazione -->
         <div class="test-section">
             <h2>📍 Test Geolocalizzazione</h2>
@@ -892,6 +914,118 @@
             document.getElementById('stat-fail').textContent = fail;
             document.getElementById('stat-pending').textContent = pending;
         }
+
+        // ===== GESTIONE MODALITÀ PWA TEST =====
+        function togglePWATestMode() {
+            const btn = document.getElementById('toggle-pwa-mode');
+            const icon = document.getElementById('pwa-mode-icon');
+            const text = document.getElementById('pwa-mode-text');
+            const statusDiv = document.getElementById('pwa-mode-status');
+            const infoDiv = document.getElementById('pwa-mode-info');
+            
+            if (!btn || !icon || !text || !statusDiv || !infoDiv) return;
+            
+            // Leggi lo stato corrente
+            const isTestMode = localStorage.getItem('tpl.pwaTestMode') === 'true';
+            const newState = !isTestMode;
+            
+            // Salva il nuovo stato
+            localStorage.setItem('tpl.pwaTestMode', newState);
+            
+            // Aggiorna l'UI del pulsante
+            if (newState) {
+                icon.textContent = '✅';
+                text.textContent = 'Disattiva Modalità PWA';
+                btn.style.background = '#dc3545';
+                
+                infoDiv.innerHTML = `
+                    <div style="margin-bottom: 1rem; padding: 1rem; background: rgba(34, 197, 94, 0.1); border-radius: 8px;">
+                        <strong style="color: #22c55e; font-size: 1.1rem;">✅ Modalità PWA Test: ATTIVA</strong><br>
+                        <p style="margin: 0.5rem 0; color: var(--testo);">La bottom navigation è ora visibile in tutte le pagine dell'app.</p>
+                    </div>
+                    <div style="margin-bottom: 1rem; padding: 1rem; background: var(--bianco); border-radius: 8px; border: 1px solid var(--bordo);">
+                        <strong style="color: var(--turchese);">📱 Cosa puoi fare ora:</strong>
+                        <ul style="margin: 0.5rem 0; padding-left: 1.5rem; line-height: 1.8;">
+                            <li>Visita <a href="index.html" style="color: var(--turchese); font-weight: 600;">Home</a>, 
+                            <a href="fermate.html" style="color: var(--turchese); font-weight: 600;">Fermate</a> o 
+                            <a href="prezzi.html" style="color: var(--turchese); font-weight: 600;">Prezzi</a></li>
+                            <li>La bottom navigation sarà visibile in basso</li>
+                            <li>La navbar superiore sarà nascosta (solo PWA)</li>
+                            <li>Il footer avrà padding extra per non sovrapporsi</li>
+                        </ul>
+                    </div>
+                    <div style="font-size: 0.9rem; color: var(--testo-secondario); font-style: italic;">
+                        <strong>💡 Nota:</strong> Questa è una simulazione a scopo di test. In produzione, la bottom nav appare solo quando l'app è installata come PWA.
+                    </div>
+                `;
+                statusDiv.style.display = 'block';
+                statusDiv.style.borderLeftColor = '#22c55e';
+                statusDiv.style.background = 'rgba(34, 197, 94, 0.05)';
+            } else {
+                icon.textContent = '📱';
+                text.textContent = 'Attiva Modalità PWA';
+                btn.style.background = 'var(--turchese)';
+                
+                infoDiv.innerHTML = `
+                    <div style="margin-bottom: 1rem; padding: 1rem; background: rgba(239, 68, 68, 0.1); border-radius: 8px;">
+                        <strong style="color: #ef4444; font-size: 1.1rem;">❌ Modalità PWA Test: DISATTIVA</strong><br>
+                        <p style="margin: 0.5rem 0; color: var(--testo);">La bottom navigation è nascosta (comportamento normale del browser).</p>
+                    </div>
+                    <div style="margin-bottom: 1rem; padding: 1rem; background: var(--bianco); border-radius: 8px; border: 1px solid var(--bordo);">
+                        <strong style="color: var(--turchese);">🌐 Stato Browser Normale:</strong>
+                        <ul style="margin: 0.5rem 0; padding-left: 1.5rem; line-height: 1.8;">
+                            <li>La bottom navigation NON è visibile</li>
+                            <li>La navbar superiore è visibile normalmente</li>
+                            <li>Il layout è quello standard del browser</li>
+                            <li>Per vederla veramente, installa l'app come PWA</li>
+                        </ul>
+                    </div>
+                    <div style="font-size: 0.9rem; color: var(--testo-secondario); font-style: italic;">
+                        <strong>💡 Suggerimento:</strong> Clicca sul pulsante sopra per simulare l'esperienza PWA senza dover installare l'app.
+                    </div>
+                `;
+                statusDiv.style.display = 'block';
+                statusDiv.style.borderLeftColor = '#ef4444';
+                statusDiv.style.background = 'rgba(239, 68, 68, 0.05)';
+            }
+            
+            // Trigger refresh della bottom navigation
+            setTimeout(() => {
+                // Dispatch evento custom per aggiornare altre finestre
+                window.dispatchEvent(new Event('pwaTestModeChanged'));
+                
+                // Log per debug
+                console.log('🔄 Modalità PWA test aggiornata a:', newState);
+            }, 100);
+        }
+        
+        // Inizializza lo stato del pulsante PWA al caricamento
+        window.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('toggle-pwa-mode');
+            if (btn) {
+                // Imposta lo stato iniziale del pulsante
+                const isTestMode = localStorage.getItem('tpl.pwaTestMode') === 'true';
+                const icon = document.getElementById('pwa-mode-icon');
+                const text = document.getElementById('pwa-mode-text');
+                const statusDiv = document.getElementById('pwa-mode-status');
+                
+                if (isTestMode) {
+                    icon.textContent = '✅';
+                    text.textContent = 'Disattiva Modalità PWA';
+                    btn.style.background = '#dc3545';
+                    // Mostra lo status se già attivo
+                    togglePWATestMode();
+                    togglePWATestMode(); // Doppio toggle per mostrare lo status
+                } else {
+                    icon.textContent = '📱';
+                    text.textContent = 'Attiva Modalità PWA';
+                    btn.style.background = 'var(--turchese)';
+                }
+                
+                // Aggiungi event listener
+                btn.addEventListener('click', togglePWATestMode);
+            }
+        });
 
         // Test 1: Database
         async function testDatabaseLoad() {
