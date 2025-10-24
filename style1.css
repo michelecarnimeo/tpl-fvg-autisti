@@ -267,7 +267,7 @@ p, span, div, a, button, input, select, textarea, label, li {
     /* -webkit-backdrop-filter rimosso per migliorare performance */
     
     /* SOTTOSEZIONE 7.3: Spaziatura e bordi */
-    padding: 0.8rem 0;                            /* Padding verticale aumentato per dare spazio al logo */
+    padding: 9px 0;                               /* Padding verticale ridotto a 9px */
     box-shadow: 0 4px 12px 0 rgba(0, 123, 138, 0.4); /* Ombra ciano semplificata */
     border-bottom: 1px solid rgba(0, 123, 138, 0.3);   /* Bordo inferiore ciano */
     
@@ -520,6 +520,63 @@ p, span, div, a, button, input, select, textarea, label, li {
     transform: translateY(-2px);                /* Solleva di più */
   }
   
+  /* SOTTOSEZIONE 7.11.4: Pulsante Impostazioni Desktop */
+  .nav-settings-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.15));
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 10px;
+    color: rgba(255, 255, 255, 0.95);
+    font-weight: 500;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    margin-left: 0.5rem;
+  }
+  
+  .nav-settings-btn:hover {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.25));
+    border-color: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    transform: translateY(-2px);
+  }
+  
+  .nav-settings-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  }
+  
+  .nav-settings-btn .settings-icon {
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+  }
+  
+  .nav-settings-btn .settings-text {
+    font-size: 0.95rem;
+  }
+  
+  /* Nascondi testo su schermi piccoli, mostra solo icona */
+  @media (max-width: 1024px) {
+    .nav-settings-btn .settings-text {
+      display: none;
+    }
+    .nav-settings-btn {
+      padding: 0.6rem;
+    }
+  }
+  
+  /* Nascondi completamente su mobile (dove c'è il menu hamburger) */
+  @media (max-width: 768px) {
+    .nav-settings-btn {
+      display: none !important;
+    }
+  }
+  
   /* Rifrazione visibile per stato attivo */
   .nav-link.active::before {
     opacity: 1;
@@ -660,6 +717,18 @@ p, span, div, a, button, input, select, textarea, label, li {
     border-color: rgba(255, 255, 255, 0.5);   /* Bordo bianco più opaco */
     color: rgba(255, 255, 255, 1);            /* Testo bianco pieno */
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5); /* Ombra scura più profonda */
+  }
+  
+  .dark .nav-settings-btn {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  .dark .nav-settings-btn:hover {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.15));
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
   }
 
   /* SOTTOSEZIONE 7.15: Gruppo pulsanti dimensione testo */
@@ -4262,6 +4331,12 @@ p, span, div, a, button, input, select, textarea, label, li {
   transform: translateX(4px);
 }
 
+.settings-item.active {
+  background: rgba(34, 197, 94, 0.1);
+  border-color: #22c55e;
+  border-width: 2px;
+}
+
 .settings-item-vertical {
   flex-direction: column;
   align-items: stretch;
@@ -4557,6 +4632,11 @@ p, span, div, a, button, input, select, textarea, label, li {
 .dark .settings-font-btn.active {
   background: rgba(34, 197, 94, 0.2);
   color: #86efac;
+}
+
+.dark .settings-item.active {
+  background: rgba(34, 197, 94, 0.15);
+  border-color: #86efac;
 }
 
 /* Mobile Responsive */
@@ -4994,21 +5074,734 @@ p, span, div, a, button, input, select, textarea, label, li {
 }
 
 /* ========================================
+   OTTIMIZZAZIONE DISPLAY - PRO
+   Sezione avanzata per rilevamento e ottimizzazione DPR
+   ======================================== */
+
+.display-optimization-card {
+  background: linear-gradient(135deg, rgba(23, 183, 177, 0.03), rgba(0, 153, 170, 0.03));
+  border: 1px solid rgba(23, 183, 177, 0.15);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+}
+
+.display-detection {
+  margin-bottom: 1rem;
+}
+
+.display-detection-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.display-detection-icon {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.display-detection-title {
+  font-size: 0.85rem;
+  color: var(--testo-secondario);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.display-detection-type {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+#display-type-text {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--testo);
+}
+
+#display-type-text.retina {
+  color: var(--turchese);
+}
+
+#display-type-text.super-retina {
+  color: #22c55e;
+}
+
+.display-dpr-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: monospace;
+  background: var(--grigio-chiaro);
+  color: var(--testo-secondario);
+}
+
+.display-dpr-badge.retina {
+  background: var(--turchese);
+  color: white;
+}
+
+.display-dpr-badge.super-retina {
+  background: #22c55e;
+  color: white;
+}
+
+.display-specs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.display-spec-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.75rem;
+  background: var(--bianco);
+  border: 1px solid var(--bordo);
+  border-radius: 8px;
+}
+
+.display-spec-label {
+  font-size: 0.75rem;
+  color: var(--testo-secondario);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  font-weight: 600;
+}
+
+.display-spec-value {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--testo);
+  font-family: monospace;
+}
+
+/* Scale Preset Selector */
+.scale-preset-selector {
+  margin-top: 1rem;
+}
+
+.scale-preset-description {
+  font-size: 0.85rem;
+  color: var(--testo-secondario);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.scale-preset-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.scale-preset-option {
+  position: relative;
+  cursor: pointer;
+}
+
+.scale-preset-option input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.scale-preset-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.875rem 1.25rem;
+  background: var(--bianco);
+  border: 2px solid var(--bordo);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.scale-preset-card:hover {
+  border-color: rgba(23, 183, 177, 0.4);
+  background: rgba(23, 183, 177, 0.02);
+  transform: translateX(4px);
+}
+
+.scale-preset-option input[type="radio"]:checked + .scale-preset-card {
+  border-color: var(--turchese);
+  background: linear-gradient(135deg, rgba(23, 183, 177, 0.08), rgba(0, 153, 170, 0.08));
+  box-shadow: 
+    0 0 0 3px rgba(23, 183, 177, 0.1),
+    0 2px 8px rgba(23, 183, 177, 0.15);
+}
+
+.scale-preset-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 1rem;
+}
+
+.scale-preset-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--testo);
+}
+
+.scale-preset-percent {
+  font-size: 0.9rem;
+  font-weight: 700;
+  font-family: monospace;
+  color: var(--turchese);
+  padding: 0.25rem 0.75rem;
+  background: rgba(23, 183, 177, 0.1);
+  border-radius: 8px;
+}
+
+.scale-preset-option input[type="radio"]:checked + .scale-preset-card .scale-preset-percent {
+  background: var(--turchese);
+  color: white;
+}
+
+/* Preset Selector */
+.display-preset-selector {
+  margin-top: 1rem;
+}
+
+.preset-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.preset-header-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.preset-header-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--testo);
+  margin-bottom: 0.25rem;
+}
+
+.preset-header-description {
+  font-size: 0.8rem;
+  color: var(--testo-secondario);
+}
+
+.preset-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.preset-option {
+  position: relative;
+  cursor: pointer;
+}
+
+.preset-option input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.preset-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: var(--bianco);
+  border: 2px solid var(--bordo);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.preset-card:hover {
+  border-color: rgba(23, 183, 177, 0.4);
+  background: rgba(23, 183, 177, 0.02);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.preset-option input[type="radio"]:checked + .preset-card {
+  border-color: var(--turchese);
+  background: linear-gradient(135deg, rgba(23, 183, 177, 0.08), rgba(0, 153, 170, 0.08));
+  box-shadow: 
+    0 0 0 3px rgba(23, 183, 177, 0.1),
+    0 4px 12px rgba(23, 183, 177, 0.15);
+}
+
+.preset-icon {
+  font-size: 2rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.preset-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.preset-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--testo);
+  margin-bottom: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.preset-description {
+  font-size: 0.75rem;
+  color: var(--testo-secondario);
+  line-height: 1.4;
+}
+
+/* Badge Consigliato */
+.recommended-badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  margin-left: 0;
+  border-radius: 12px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(34, 197, 94, 0);
+  }
+}
+
+/* Suggerimenti Display */
+.display-recommendations {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: var(--bianco);
+  border: 1px solid var(--bordo);
+  border-left: 4px solid var(--turchese);
+  border-radius: 8px;
+}
+
+.recommendation-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  color: var(--testo);
+}
+
+.recommendation-icon {
+  font-size: 1.3rem;
+}
+
+.recommendation-title {
+  font-size: 0.95rem;
+}
+
+.recommendation-list {
+  margin: 0;
+  padding-left: 1.5rem;
+  color: var(--testo-secondario);
+  line-height: 1.8;
+}
+
+.recommendation-list li {
+  margin: 0.5rem 0;
+}
+
+.recommendation-list strong {
+  color: var(--turchese);
+  font-weight: 600;
+}
+
+/* Interface Scale Classes */
+html {
+  font-size: 16px; /* Base size - 100% */
+}
+
+html.scale-75 {
+  font-size: 12px; /* 75% */
+}
+
+html.scale-85 {
+  font-size: 13.6px; /* 85% */
+}
+
+html.scale-100 {
+  font-size: 16px; /* 100% - default */
+}
+
+html.scale-115 {
+  font-size: 18.4px; /* 115% */
+}
+
+html.scale-125 {
+  font-size: 20px; /* 125% */
+}
+
+/* Dark Mode */
+.dark .scale-preset-card {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .scale-preset-card:hover {
+  border-color: rgba(0, 153, 170, 0.4);
+  background: rgba(0, 153, 170, 0.08);
+}
+
+.dark .scale-preset-option input[type="radio"]:checked + .scale-preset-card {
+  border-color: var(--turchese-light);
+  background: linear-gradient(135deg, rgba(0, 153, 170, 0.15), rgba(23, 183, 177, 0.15));
+  box-shadow: 
+    0 0 0 3px rgba(0, 153, 170, 0.15),
+    0 2px 8px rgba(0, 153, 170, 0.2);
+}
+
+.dark .scale-preset-percent {
+  background: rgba(0, 153, 170, 0.2);
+  color: var(--turchese-light);
+}
+
+.dark .scale-preset-option input[type="radio"]:checked + .scale-preset-card .scale-preset-percent {
+  background: var(--turchese-light);
+  color: var(--grigio-scuro);
+}
+
+.dark .display-optimization-card {
+  background: linear-gradient(135deg, rgba(0, 153, 170, 0.08), rgba(23, 183, 177, 0.08));
+  border-color: rgba(0, 153, 170, 0.25);
+}
+
+.dark .display-spec-item {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .display-dpr-badge {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.dark .preset-card {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .preset-card:hover {
+  border-color: rgba(0, 153, 170, 0.4);
+  background: rgba(0, 153, 170, 0.08);
+}
+
+.dark .preset-option input[type="radio"]:checked + .preset-card {
+  border-color: var(--turchese-light);
+  background: linear-gradient(135deg, rgba(0, 153, 170, 0.15), rgba(23, 183, 177, 0.15));
+  box-shadow: 
+    0 0 0 3px rgba(0, 153, 170, 0.15),
+    0 4px 12px rgba(0, 153, 170, 0.2);
+}
+
+.dark .display-recommendations {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.1);
+  border-left-color: var(--turchese-light);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .display-specs {
+    grid-template-columns: 1fr;
+  }
+  
+  .display-detection-header {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+  
+  .display-optimization-card {
+    padding: 1rem;
+  }
+  
+  .preset-options {
+    grid-template-columns: 1fr;
+  }
+  
+  .preset-card {
+    padding: 0.875rem;
+  }
+  
+  .preset-icon {
+    font-size: 1.75rem;
+  }
+}
+
+/* Media Queries per Ottimizzazioni HiDPI */
+@media (-webkit-min-device-pixel-ratio: 2), 
+       (min-resolution: 192dpi),
+       (min-resolution: 2dppx) {
+  
+  body.display-optimized {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  body.display-optimized .info-card,
+  body.display-optimized .settings-item,
+  body.display-optimized .pwa-bottom-nav {
+    border-width: 0.5px;
+  }
+  
+  body.display-optimized .card,
+  body.display-optimized .info-card {
+    box-shadow: 
+      0 1px 3px rgba(0, 0, 0, 0.08),
+      0 1px 2px rgba(0, 0, 0, 0.06);
+  }
+  
+  body.display-optimized .pwa-logo-img,
+  body.display-optimized .info-logo,
+  body.display-optimized .navbar-logo {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+@media (-webkit-min-device-pixel-ratio: 3),
+       (min-resolution: 288dpi),
+       (min-resolution: 3dppx) {
+  
+  body.display-optimized .info-card,
+  body.display-optimized .settings-item {
+    border-width: 0.33px;
+  }
+  
+  body.display-optimized {
+    text-rendering: optimizeLegibility;
+  }
+}
+
+/* ========================================
+   PULSANTE VERIFICA AGGIORNAMENTI PWA
+   Pulsante nella tab Info per verificare aggiornamenti
+   ======================================== */
+
+.update-check-card {
+  background: linear-gradient(135deg, rgba(23, 183, 177, 0.05), rgba(0, 153, 170, 0.05));
+  border: 1px solid rgba(23, 183, 177, 0.3);
+}
+
+.update-check-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.update-check-icon {
+  font-size: 2.5rem;
+  animation: rotate-slow 3s linear infinite;
+}
+
+@keyframes rotate-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.update-check-text {
+  flex: 1;
+}
+
+.update-check-title {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--testo-principale);
+}
+
+.update-check-description {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--testo-secondario);
+}
+
+.update-check-btn {
+  width: 100%;
+  padding: 1rem;
+  background: var(--turchese);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(23, 183, 177, 0.3);
+}
+
+.update-check-btn:hover {
+  background: var(--turchese-scuro);
+  box-shadow: 0 6px 16px rgba(23, 183, 177, 0.4);
+  transform: translateY(-2px);
+}
+
+.update-check-btn:active {
+  transform: translateY(0);
+}
+
+.update-check-btn-icon {
+  font-size: 1.2rem;
+}
+
+.update-check-btn-text {
+  font-size: 1rem;
+}
+
+/* ========================================
    PWA BOTTOM NAVIGATION
    Barra di navigazione inferiore moderna e sospesa
    Visibile SOLO in modalità PWA (standalone)
    ======================================== */
 
+/* Brand Header TPL (stile navbar in alto) */
+.pwa-brand-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  
+  /* Trasparenza glassmorphism come navbar originale */
+  background: linear-gradient(135deg, 
+    rgba(0, 123, 138, 0.9) 0%, 
+    rgba(0, 123, 138, 0.7) 50%, 
+    rgba(0, 123, 138, 0.5) 100%
+  );
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  
+  /* Bordi e ombre */
+  border-bottom: 1px solid rgba(0, 123, 138, 0.3);
+  box-shadow: 0 4px 12px 0 rgba(0, 123, 138, 0.4);
+  
+  /* Layout */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  
+  /* Dimensioni */
+  padding: 9px 2rem !important;
+  padding-top: max(9px, env(safe-area-inset-top)) !important;
+  padding-bottom: 9px !important;
+  
+  /* Animazioni */
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+  z-index: 999;
+}
+
+/* Effetto rifrazione della luce per brand header */
+.pwa-brand-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60%;
+  background: linear-gradient(180deg, 
+    rgba(255, 255, 255, 0.15) 0%, 
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+  border-radius: inherit;
+}
+
+/* Contenuto brand header sopra rifrazione */
+.pwa-brand-header > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Barra di progresso scroll sotto brand header */
+.pwa-brand-header {
+  --scroll-progress: 0%;
+}
+
+.pwa-brand-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  width: var(--scroll-progress);
+  background: linear-gradient(90deg, 
+    rgba(255, 255, 255, 0.9),
+    rgba(255, 255, 255, 0.7)
+  );
+  transition: width 0.1s ease-out;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+  border-radius: 0 3px 3px 0;
+  z-index: 3;
+}
+
+/* Nascosta di default */
+.pwa-brand-header[style*="display: none"] {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Visibile quando attiva */
+.pwa-brand-header:not([style*="display: none"]) {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* Barra di navigazione (fisso in basso) */
 .pwa-bottom-nav {
   position: fixed;
   bottom: 16px;
   left: 50%;
   transform: translateX(-50%);
   
-  /* Colore navbar turchese con glassmorphism */
-  background: linear-gradient(135deg, rgba(0, 123, 138, 0.95), rgba(0, 153, 170, 0.95));
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  /* Trasparenza glassmorphism come navbar originale */
+  background: linear-gradient(135deg, 
+    rgba(0, 123, 138, 0.9) 0%, 
+    rgba(0, 123, 138, 0.7) 50%, 
+    rgba(0, 123, 138, 0.5) 100%
+  );
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
   
   /* Bordi e ombre */
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -5033,6 +5826,65 @@ p, span, div, a, button, input, select, textarea, label, li {
   /* Animazioni */
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
   z-index: 999;
+}
+
+/* Effetto rifrazione della luce per bottom nav */
+.pwa-bottom-nav::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60%;
+  background: linear-gradient(180deg, 
+    rgba(255, 255, 255, 0.15) 0%, 
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+  border-radius: inherit;
+}
+
+/* Contenuto bottom nav sopra rifrazione */
+.pwa-bottom-nav > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Dark Mode per PWA Brand Header e Bottom Nav */
+body.dark-mode .pwa-brand-header,
+body.dark-mode .pwa-bottom-nav {
+  background: linear-gradient(135deg, 
+    rgba(13, 94, 102, 0.9) 0%, 
+    rgba(10, 77, 84, 0.7) 50%, 
+    rgba(8, 60, 66, 0.5) 100%
+  );
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.5),
+    0 4px 16px rgba(13, 94, 102, 0.4);
+}
+
+body.dark-mode .pwa-brand-header::before,
+body.dark-mode .pwa-bottom-nav::before {
+  background: linear-gradient(180deg, 
+    rgba(255, 255, 255, 0.08) 0%, 
+    transparent 100%
+  );
+}
+
+body.dark-mode .pwa-nav-item {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+body.dark-mode .pwa-nav-item.active {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+
+body.dark-mode .pwa-nav-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
 }
 
 /* Nascosta di default */
@@ -5089,20 +5941,6 @@ p, span, div, a, button, input, select, textarea, label, li {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Logo TPL al centro - solo decorativo */
-.pwa-nav-logo {
-  padding: 0.5rem 1.5rem;
-  flex: 0 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0;
-  position: relative;
-  cursor: default;
-  pointer-events: none;
-}
-
 /* Assicura che i pulsanti (settings) siano cliccabili */
 button.pwa-nav-item,
 .pwa-nav-item button {
@@ -5118,31 +5956,78 @@ button.pwa-nav-item:focus {
   outline-offset: 2px;
 }
 
-/* Wrapper per il logo con effetto */
+/* Logo Wrapper - Ingrandito */
 .pwa-logo-wrapper {
   position: relative;
-  width: 60px;
-  height: 60px;
+  width: 65px;
+  height: 65px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);
 }
 
+/* Logo Images con effetto flip 3D (solo desktop) */
 .pwa-logo-img {
-  width: 60px;
-  height: 60px;
+  position: absolute;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
-  border-radius: 12px;
-  border: 2px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.3);
-  display: block;
+  border-radius: 14px;
+  transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55), opacity 0.6s;
+  backface-visibility: hidden;
+  z-index: 1;
 }
 
-/* Effetto rifrazione della luce per logo TPL */
+.pwa-logo-default {
+  transform: rotateY(0deg);
+  opacity: 1;
+}
+
+.pwa-logo-hover {
+  transform: rotateY(180deg);
+  opacity: 0;
+}
+
+/* Flip 3D solo su desktop (hover) */
+@media (hover: hover) and (pointer: fine) {
+  .pwa-logo-wrapper:hover .pwa-logo-default {
+    transform: rotateY(180deg);
+    opacity: 0;
+  }
+  
+  .pwa-logo-wrapper:hover .pwa-logo-hover {
+    transform: rotateY(360deg);
+    opacity: 1;
+  }
+}
+
+/* Mobile/Touch: nessun flip, logo fisso */
+@media (hover: none) or (pointer: coarse) {
+  .pwa-logo-hover {
+    display: none;
+  }
+  
+  .pwa-logo-default {
+    opacity: 1 !important;
+    transform: rotateY(0deg) !important;
+  }
+}
+
+/* Effetto rifrazione della luce interno (come navbar) */
 .pwa-logo-wrapper::before {
   content: '';
   position: absolute;
-  top: 2px;
-  left: 2px;
-  right: 2px;
-  height: calc(50% - 2px);
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60%;
   background: linear-gradient(
     135deg,
     rgba(255, 255, 255, 0.25) 0%,
@@ -5150,9 +6035,47 @@ button.pwa-nav-item:focus {
     transparent 70%,
     transparent 100%
   );
-  border-radius: 10px 10px 6px 6px;
+  border-radius: 14px 14px 8px 8px;
   pointer-events: none;
   z-index: 1;
+}
+
+/* Brand Title Container */
+.pwa-brand-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+/* Logo Acronym (TPL FVG) - Minuscolo */
+.pwa-logo-acronym {
+  display: flex;
+  flex-direction: column;
+  text-transform: lowercase;
+  font-family: 'Arial', sans-serif;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 15px rgba(0, 0, 0, 0.6);
+}
+
+.pwa-logo-acronym div {
+  font-size: 1.4rem;
+}
+
+/* Logo Text (trasporto pubblico locale) - Identico alla navbar */
+.pwa-logo-text {
+  display: flex;
+  flex-direction: column;
+  text-transform: lowercase;
+  font-family: 'Arial', sans-serif;
+  font-weight: 300;
+  line-height: 1.15;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.9);
+  letter-spacing: 0.3px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
 /* Hover (solo desktop) */
@@ -5197,11 +6120,6 @@ button.pwa-nav-item:focus {
   animation: dotPulse 2s ease-in-out infinite;
 }
 
-/* Logo non ha indicatore */
-.pwa-nav-logo.active::after {
-  display: none;
-}
-
 @keyframes dotPulse {
   0%, 100% {
     opacity: 1;
@@ -5214,6 +6132,7 @@ button.pwa-nav-item:focus {
 }
 
 /* Dark mode - stesso colore turchese ma più scuro */
+.dark .pwa-brand-header,
 .dark .pwa-bottom-nav {
   background: linear-gradient(135deg, rgba(0, 100, 110, 0.95), rgba(0, 123, 138, 0.95));
   border-color: rgba(255, 255, 255, 0.15);
@@ -5242,9 +6161,10 @@ button.pwa-nav-item:focus {
   }
 }
 
-/* Padding per contenuto quando nav è visibile */
+/* Padding per contenuto quando PWA è attiva */
 body.pwa-mode .main-content {
-  padding-bottom: calc(90px + env(safe-area-inset-bottom));
+  padding-top: 85px; /* Spazio per brand header in alto */
+  padding-bottom: calc(90px + env(safe-area-inset-bottom)); /* Spazio per bottom nav */
 }
 
 body.pwa-mode footer {
@@ -5254,10 +6174,6 @@ body.pwa-mode footer {
 /* Nasconde navbar superiore in modalità PWA */
 body.pwa-mode .navbar {
   display: none;
-}
-
-body.pwa-mode .main-content {
-  padding-top: 1rem;
 }
 
 /* Animazione entrata */
@@ -5278,6 +6194,15 @@ body.pwa-mode .main-content {
 
 /* Responsive - Mobile */
 @media (max-width: 480px) {
+  .pwa-brand-header {
+    padding: 0.75rem 1rem;
+    gap: 0.5rem;
+  }
+  
+  body.pwa-mode .main-content {
+    padding-top: 80px; /* Altezza ridotta brand header mobile */
+  }
+  
   .pwa-bottom-nav {
     padding: 0.625rem 1rem;
     max-width: calc(100% - 24px);
@@ -5300,31 +6225,31 @@ body.pwa-mode .main-content {
   }
   
   .pwa-logo-wrapper {
-    width: 48px;
-    height: 48px;
+    width: 50px;
+    height: 50px;
   }
   
-  .pwa-logo-wrapper::before {
-    height: calc(50% - 1px);
-    border-radius: 10px 10px 5px 5px;
+  .pwa-logo-acronym div {
+    font-size: 1.4rem;
   }
   
-  .pwa-logo-img {
-    width: 48px;
-    height: 48px;
-  }
-  
-  .pwa-nav-logo {
-    padding: 0.5rem 1rem;
+  .pwa-logo-text {
+    font-size: 0.8rem;
+    line-height: 1.1;
   }
 }
 
 /* Responsive - Schermi molto piccoli */
 @media (max-width: 360px) {
+  .pwa-brand-header {
+    padding: 0.625rem 0.75rem;
+    gap: 0.4rem;
+  }
+  
   .pwa-bottom-nav {
     padding: 0.5rem 0.5rem;
-    gap: 0.25rem;
     max-width: calc(100% - 20px);
+    gap: 0.25rem;
   }
   
   .pwa-nav-item {
@@ -5342,21 +6267,20 @@ body.pwa-mode .main-content {
   }
   
   .pwa-logo-wrapper {
-    width: 42px;
-    height: 42px;
+    width: 45px;
+    height: 45px;
   }
   
-  .pwa-logo-wrapper::before {
-    height: calc(50% - 1px);
-    border-radius: 9px 9px 4px 4px;
+  .pwa-logo-acronym div {
+    font-size: 1.2rem;
   }
   
-  .pwa-logo-img {
-    width: 42px;
-    height: 42px;
+  .pwa-logo-text {
+    font-size: 0.7rem;
+    line-height: 1;
   }
   
-  .pwa-nav-logo {
-    padding: 0.5rem 0.75rem;
+  .pwa-brand-title {
+    gap: 0.4rem;
   }
 }

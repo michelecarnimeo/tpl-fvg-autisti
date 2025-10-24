@@ -2292,6 +2292,7 @@ if (!navigator.onLine) {
 (function() {
   const settingsModal = document.getElementById('settings-modal');
   const openSettingsBtn = document.getElementById('open-settings');
+  const desktopSettingsBtn = document.getElementById('desktop-settings-btn');
   const closeSettingsBtn = document.getElementById('settings-modal-close');
   
   // Toggle controls
@@ -2341,6 +2342,13 @@ if (!navigator.onLine) {
         overlay.classList.remove('active');
         document.body.style.overflow = '';
       }
+    });
+  }
+  
+  // Desktop settings button
+  if (desktopSettingsBtn) {
+    desktopSettingsBtn.addEventListener('click', () => {
+      openSettings();
     });
   }
   
@@ -2575,7 +2583,8 @@ if (!navigator.onLine) {
   
   (function initPWABottomNav() {
     const bottomNav = document.getElementById('pwa-bottom-nav');
-    if (!bottomNav) return; // Pagina senza bottom nav
+    const brandHeader = document.getElementById('pwa-brand-header');
+    if (!bottomNav && !brandHeader) return; // Pagina senza PWA elements
     
     // Verifica se siamo in modalità PWA
     function isStandalone() {
@@ -2592,20 +2601,32 @@ if (!navigator.onLine) {
       );
     }
     
-    // Mostra/nasconde la bottom nav
+    // Mostra/nasconde PWA elements (brand header + bottom nav)
     function toggleBottomNav() {
       const isPWA = isStandalone();
       
       if (isPWA) {
-        bottomNav.style.display = 'flex';
-        bottomNav.classList.add('show');
+        if (brandHeader) {
+          brandHeader.style.display = 'flex';
+          brandHeader.classList.add('show');
+        }
+        if (bottomNav) {
+          bottomNav.style.display = 'flex';
+          bottomNav.classList.add('show');
+        }
         document.body.classList.add('pwa-mode');
-        console.log('📱 PWA Bottom Navigation: ATTIVA');
+        console.log('📱 PWA Mode: ATTIVA (Brand Header + Bottom Nav)');
       } else {
-        bottomNav.style.display = 'none';
-        bottomNav.classList.remove('show');
+        if (brandHeader) {
+          brandHeader.style.display = 'none';
+          brandHeader.classList.remove('show');
+        }
+        if (bottomNav) {
+          bottomNav.style.display = 'none';
+          bottomNav.classList.remove('show');
+        }
         document.body.classList.remove('pwa-mode');
-        console.log('🌐 PWA Bottom Navigation: nascosta (modalità browser)');
+        console.log('🌐 PWA Mode: nascosta (modalità browser)');
       }
     }
     
@@ -2685,6 +2706,65 @@ if (!navigator.onLine) {
       toggleBottomNav();
       highlightActiveTab();
     };
+  })();
+  
+  // ========================================
+  // PWA SCROLL PROGRESS BAR
+  // Barra di progresso che indica quanto si è scrollato
+  // ========================================
+  
+  (function initScrollProgress() {
+    const brandHeader = document.getElementById('pwa-brand-header');
+    if (!brandHeader) return;
+    
+    function updateScrollProgress() {
+      // Calcola la percentuale di scroll
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrollPercentage = (scrollTop / scrollHeight) * 100;
+      
+      // Aggiorna la larghezza della barra ::after tramite CSS custom property
+      brandHeader.style.setProperty('--scroll-progress', scrollPercentage + '%');
+    }
+    
+    // Listener per lo scroll
+    window.addEventListener('scroll', updateScrollProgress, { passive: true });
+    
+    // Inizializza al caricamento
+    updateScrollProgress();
+  })();
+  
+  // ========================================
+  // PWA UPDATE CHECK BUTTON
+  // Pulsante per verificare aggiornamenti nel modal Impostazioni
+  // ========================================
+  
+  (function initPWAUpdateButton() {
+    const updateBtn = document.getElementById('pwa-cache-reset');
+    if (!updateBtn) return;
+    
+    updateBtn.addEventListener('click', function() {
+      console.log('🔄 Pulsante PWA Update cliccato');
+      
+      // Chiudi il modal Impostazioni prima
+      const settingsModal = document.getElementById('settings-modal');
+      if (settingsModal) {
+        settingsModal.classList.remove('show');
+        setTimeout(() => {
+          settingsModal.style.display = 'none';
+        }, 300);
+      }
+      
+      // Aspetta un attimo e poi verifica aggiornamenti
+      setTimeout(() => {
+        if (typeof checkForUpdates === 'function') {
+          console.log('✅ Chiamata a checkForUpdates()');
+          checkForUpdates();
+        } else {
+          console.error('❌ checkForUpdates non è una funzione');
+        }
+      }, 400);
+    });
   })();
   
 })();

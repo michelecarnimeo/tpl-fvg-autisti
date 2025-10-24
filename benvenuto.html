@@ -171,6 +171,10 @@
           <span class="tab-icon">♿</span>
           <span>Accessibilità</span>
         </button>
+        <button class="settings-tab" data-tab="info">
+          <span class="tab-icon">ℹ️</span>
+          <span>Info</span>
+        </button>
       </div>
       
       <!-- Tab Content -->
@@ -192,7 +196,7 @@
               </div>
               <div class="settings-theme-options">
                 <label class="settings-theme-option">
-                  <input type="radio" name="theme-mode" value="system" id="theme-system">
+                  <input type="radio" name="theme-mode" value="system" id="theme-system" checked>
                   <span class="theme-option-card">
                     <span class="theme-option-icon">⚙️</span>
                     <span class="theme-option-label">Sistema</span>
@@ -265,7 +269,7 @@
                 </div>
               </div>
               <div class="settings-font-buttons">
-                <button class="settings-font-btn" data-size="normal">
+                <button class="settings-font-btn active" data-size="normal">
                   <span class="font-sample">A</span>
                   <span class="font-label">Normale</span>
                 </button>
@@ -295,6 +299,301 @@
               </label>
             </div>
           </div>
+          
+          <!-- Sezione Dimensione Interfaccia -->
+          <div class="settings-section">
+            <h4 class="settings-section-title">🔍 Dimensione Interfaccia</h4>
+            
+            <div class="scale-preset-selector">
+              <div class="scale-preset-description">
+                Scala l'intera interfaccia della web app
+              </div>
+              
+              <div class="scale-preset-options">
+                <label class="scale-preset-option">
+                  <input type="radio" name="interface-scale" value="75" id="scale-75">
+                  <div class="scale-preset-card">
+                    <div class="scale-preset-info">
+                      <div class="scale-preset-name">Molto Compatta</div>
+                      <div class="scale-preset-percent">75%</div>
+                    </div>
+                  </div>
+                </label>
+                
+                <label class="scale-preset-option">
+                  <input type="radio" name="interface-scale" value="85" id="scale-85">
+                  <div class="scale-preset-card">
+                    <div class="scale-preset-info">
+                      <div class="scale-preset-name">Compatta</div>
+                      <div class="scale-preset-percent">85%</div>
+                    </div>
+                  </div>
+                </label>
+                
+                <label class="scale-preset-option">
+                  <input type="radio" name="interface-scale" value="100" id="scale-100" checked>
+                  <div class="scale-preset-card">
+                    <div class="scale-preset-info">
+                      <div class="scale-preset-name">Normale</div>
+                      <div class="scale-preset-percent">100%</div>
+                    </div>
+                  </div>
+                </label>
+                
+                <label class="scale-preset-option">
+                  <input type="radio" name="interface-scale" value="115" id="scale-115">
+                  <div class="scale-preset-card">
+                    <div class="scale-preset-info">
+                      <div class="scale-preset-name">Grande</div>
+                      <div class="scale-preset-percent">115%</div>
+                    </div>
+                  </div>
+                </label>
+                
+                <label class="scale-preset-option">
+                  <input type="radio" name="interface-scale" value="125" id="scale-125">
+                  <div class="scale-preset-card">
+                    <div class="scale-preset-info">
+                      <div class="scale-preset-name">Molto Grande</div>
+                      <div class="scale-preset-percent">125%</div>
+                    </div>
+                  </div>
+                </label>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Sezione Ottimizzazione Display -->
+          <div class="settings-section">
+            <h4 class="settings-section-title">🖥️ Ottimizzazione Display</h4>
+            
+            <!-- Info Display Rilevato -->
+            <div class="display-optimization-card">
+              <div class="display-detection">
+                <div class="display-detection-header">
+                  <span class="display-detection-icon">📱</span>
+                  <div class="display-detection-info">
+                    <div class="display-detection-title">Display rilevato</div>
+                    <div class="display-detection-type" id="display-type-indicator">
+                      <span id="display-type-text">Rilevamento...</span>
+                      <span class="display-dpr-badge" id="display-dpr-badge">-</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="display-specs">
+                  <div class="display-spec-item">
+                    <span class="display-spec-label">Device Pixel Ratio</span>
+                    <span class="display-spec-value" id="dpr-value">-</span>
+                  </div>
+                  <div class="display-spec-item">
+                    <span class="display-spec-label">Risoluzione fisica</span>
+                    <span class="display-spec-value" id="resolution-value">-</span>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Preset Ottimizzazione -->
+              <div class="display-preset-selector" style="margin-top: 1rem; border-top: 1px solid var(--bordo); padding-top: 1rem;">
+                <div class="preset-header">
+                  <span class="preset-header-icon">🎨</span>
+                  <div class="preset-header-text">
+                    <div class="preset-header-title">Livello di ottimizzazione</div>
+                    <div class="preset-header-description">Scegli il preset più adatto al tuo display</div>
+                  </div>
+                </div>
+                
+                <div class="preset-options">
+                  <label class="preset-option" data-preset="auto">
+                    <input type="radio" name="display-preset" value="auto" id="preset-auto">
+                    <div class="preset-card">
+                      <div class="preset-icon">⚡</div>
+                      <div class="preset-info">
+                        <div class="preset-name">
+                          Automatico
+                          <span class="recommended-badge" id="auto-badge" style="display: none;">Consigliato</span>
+                        </div>
+                        <div class="preset-description">Rileva e ottimizza automaticamente</div>
+                      </div>
+                    </div>
+                  </label>
+                  
+                  <label class="preset-option" data-preset="standard">
+                    <input type="radio" name="display-preset" value="standard" id="preset-standard">
+                    <div class="preset-card">
+                      <div class="preset-icon">📺</div>
+                      <div class="preset-info">
+                        <div class="preset-name">Standard</div>
+                        <div class="preset-description">Nessuna ottimizzazione (DPR 1.0x)</div>
+                      </div>
+                    </div>
+                  </label>
+                  
+                  <label class="preset-option" data-preset="retina">
+                    <input type="radio" name="display-preset" value="retina" id="preset-retina">
+                    <div class="preset-card">
+                      <div class="preset-icon">💎</div>
+                      <div class="preset-info">
+                        <div class="preset-name">Retina</div>
+                        <div class="preset-description">Ottimizzato per DPR 2.0x (HiDPI)</div>
+                      </div>
+                    </div>
+                  </label>
+                  
+                  <label class="preset-option" data-preset="ultra">
+                    <input type="radio" name="display-preset" value="ultra" id="preset-ultra">
+                    <div class="preset-card">
+                      <div class="preset-icon">✨</div>
+                      <div class="preset-info">
+                        <div class="preset-name">Ultra HD</div>
+                        <div class="preset-description">Massima qualità per DPR 3.0x+</div>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+              </div>
+              
+              <!-- Suggerimenti -->
+              <div class="display-recommendations" id="display-recommendations" style="display: none;">
+                <div class="recommendation-header">
+                  <span class="recommendation-icon">💡</span>
+                  <span class="recommendation-title">Suggerimenti per il tuo display</span>
+                </div>
+                <ul class="recommendation-list" id="recommendation-list">
+                  <!-- Popolato dinamicamente -->
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Tab Info e Aggiornamenti -->
+        <div class="settings-tab-content" data-content="info">
+          <div class="settings-section">
+            <h4 class="settings-section-title">ℹ️ Informazioni</h4>
+            
+            <!-- Informazioni App -->
+            <div class="info-card">
+              <div class="info-header">
+                <img src="src/logo.png" alt="TPL FVG" class="info-logo">
+                <div class="info-title">
+                  <h3>TPL FVG Autisti</h3>
+                  <p class="info-version">Versione 1.4.3</p>
+                  <p class="info-date">24 Ottobre 2025 - 20:15</p>
+                </div>
+              </div>
+              
+              <div class="info-description">
+                <p>App per calcolare i prezzi dei biglietti e visualizzare le fermate del trasporto pubblico locale del Friuli Venezia Giulia.</p>
+              </div>
+              
+              <div class="info-features">
+                <div class="info-feature">
+                  <span class="info-feature-icon">💰</span>
+                  <span>Calcolo prezzi biglietti</span>
+                </div>
+                <div class="info-feature">
+                  <span class="info-feature-icon">🚌</span>
+                  <span>Elenco fermate per linea</span>
+                </div>
+                <div class="info-feature">
+                  <span class="info-feature-icon">📱</span>
+                  <span>Installabile come PWA</span>
+                </div>
+                <div class="info-feature">
+                  <span class="info-feature-icon">🌙</span>
+                  <span>Modalità scura</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Verifica Aggiornamenti -->
+            <div class="info-card update-check-card">
+              <div class="update-check-header">
+                <div class="update-check-icon">🔄</div>
+                <div class="update-check-text">
+                  <h4 class="update-check-title">Verifica Aggiornamenti</h4>
+                  <p class="update-check-description">Controlla se è disponibile una nuova versione dell'app</p>
+                </div>
+              </div>
+              <button id="pwa-cache-reset" class="update-check-btn">
+                Verifica Aggiornamenti
+              </button>
+            </div>
+            
+            <!-- Aggiornamenti Recenti -->
+            <div class="info-card">
+              <h4 class="info-card-title">📋 Aggiornamenti Recenti</h4>
+              
+              <div class="update-item">
+                <div class="update-version">
+                  <span class="update-badge">v1.4.3</span>
+                  <span class="update-date">24 Ottobre 2025</span>
+                </div>
+                <div class="update-content">
+                  <p class="update-title">Verifica Aggiornamenti PWA e Miglioramenti UI</p>
+                  <ul class="update-list">
+                    <li>Aggiunto pulsante "Verifica Aggiornamenti" in modalità PWA</li>
+                    <li>Contorni attivi per sezioni impostazioni personalizzate</li>
+                    <li>Tema "Sistema" selezionato di default</li>
+                    <li>Dimensione testo "Normale" evidenziato di default</li>
+                    <li>Rimosso link ridondante "Vedi tutti gli aggiornamenti"</li>
+                    <li>Ottimizzazioni UI e UX generali</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div class="update-item">
+                <div class="update-version">
+                  <span class="update-badge">v1.4.2</span>
+                  <span class="update-date">24 Ottobre 2025</span>
+                </div>
+                <div class="update-content">
+                  <p class="update-title">PWA Bottom Navigation e Tab Info</p>
+                  <ul class="update-list">
+                    <li>Barra di navigazione moderna e sospesa in modalità PWA</li>
+                    <li>Design con glassmorphism e bordi arrotondati</li>
+                    <li>Logo TPL centrale (60px) con effetto rifrazione luce</li>
+                    <li>Accesso rapido: Home, Fermate, Prezzi, Impostazioni</li>
+                    <li>Nuova tab "Info e Aggiornamenti" nel modal Impostazioni</li>
+                    <li>Navbar superiore nascosta in modalità PWA</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div class="update-item">
+                <div class="update-version">
+                  <span class="update-badge">v1.4.0</span>
+                  <span class="update-date">Ottobre 2025</span>
+                </div>
+                <div class="update-content">
+                  <p class="update-title">Miglioramenti Generali</p>
+                  <ul class="update-list">
+                    <li>Ottimizzazioni performance</li>
+                    <li>Miglioramenti UI/UX</li>
+                    <li>Bug fix vari</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Link Utili -->
+            <div class="info-card">
+              <h4 class="info-card-title">🔗 Link Utili</h4>
+              
+              <a href="https://t.me/+eoJ9nYFFrjphMzVk" target="_blank" class="info-link external-link">
+                <span class="info-link-icon">📢</span>
+                <span>Canale Telegram - Avvisi & Aggiornamenti</span>
+                <span>↗</span>
+              </a>
+              
+              <a href="test.html" class="info-link">
+                <span class="info-link-icon">🧪</span>
+                <span>Pagina Test</span>
+                <span>→</span>
+              </a>
+            </div>
+          </div>
         </div>
         
       </div>
@@ -303,7 +602,7 @@
 
   <!-- Footer -->
   <footer class="footer">
-    <p>© <span id="footer-year"></span> Michele Carnimeo. Tutti i diritti riservati.<br>TPL FVG è un marchio di TPL FVG S.C. a R.L. · <a href="test.html" style="color: inherit; text-decoration: none; transition: text-decoration 0.3s ease;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">TPL Autisti 1.4.1</a></p>
+    <p>© <span id="footer-year"></span> Michele Carnimeo. Tutti i diritti riservati.<br>TPL FVG è un marchio di TPL FVG S.C. a R.L. · <a href="test.html" style="color: inherit; text-decoration: none; transition: text-decoration 0.3s ease;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">TPL Autisti 1.4.3</a></p>
   </footer>
 
 <!-- Script principale -->

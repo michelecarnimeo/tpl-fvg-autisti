@@ -1,6 +1,6 @@
 {
-  "version": "1.4.2",
+  "version": "1.4.3",
   "versionDate": "24 Ottobre 2025",
-  "versionTime": "12:08",
-  "updateNotes": "PWA Bottom Navigation: barra di navigazione moderna e sospesa in modalità PWA con glassmorphism, tab Info e Aggiornamenti nel modal Impostazioni"
+  "versionTime": "20:15",
+  "updateNotes": "Aggiunta verifica aggiornamenti in PWA, miglioramenti UI sezioni impostazioni con contorni attivi, ottimizzazioni varie"
 }

@@ -64,17 +64,23 @@
           <a href="index.html" class="nav-link active">Home</a>
           <a href="fermate.html" class="nav-link">Fermate</a>
           <a href="prezzi.html" class="nav-link">Prezzi</a>
-          <button id="darkmode-toggle" class="dark-mode-toggle" title="Darkmode">
+          <button id="desktop-settings-btn" class="nav-settings-btn" title="Impostazioni">
+            <span class="settings-icon">⚙️</span>
+            <span class="settings-text">Impostazioni</span>
+          </button>
+          
+          <!-- Pulsanti individuali (nascosti su desktop, usati solo via JS per compatibilità) -->
+          <button id="darkmode-toggle" class="dark-mode-toggle navbar-legacy-btn" title="Darkmode" style="display: none;">
             <span>🌙</span>
           </button>
-          <button class="animation-toggle" id="animationToggle" title="Toggle animazione sfondo">
+          <button class="animation-toggle navbar-legacy-btn" id="animationToggle" title="Toggle animazione sfondo" style="display: none;">
             🎬
           </button>
-          <button id="cache-reset" class="cache-reset-btn" title="Aggiorna o Riavvia">
+          <button id="cache-reset" class="cache-reset-btn navbar-legacy-btn" title="Aggiorna o Riavvia" style="display: none;">
             <span id="cache-icon">🔄</span>
           </button>
-          <div class="font-size-group">
-            <button id="font-size-small" class="font-size-btn" data-size="normal" title="Testo normale">
+          <div class="font-size-group navbar-legacy-btn" style="display: none;">
+            <button id="font-size-small" class="font-size-btn active" data-size="normal" title="Testo normale">
               <span>A</span>
             </button>
             <button id="font-size-medium" class="font-size-btn" data-size="large" title="Testo grande">
@@ -113,16 +119,6 @@
         <button id="open-settings" class="mobile-nav-link">
           <span class="mobile-nav-icon">⚙️</span>
           <span>Impostazioni</span>
-        </button>
-        <div class="mobile-menu-divider"></div>
-        
-        <!-- Mini card versione -->
-        <button class="mobile-version-card" id="mobile-version-card" title="Verifica Aggiornamenti">
-          <div class="version-info">
-            <div class="version-title">🔄 Verifica Aggiornamenti</div>
-            <div class="version-number" id="mobile-version-number">Versione 1.4.1</div>
-            <div class="version-date" id="mobile-version-date">23 Ottobre 2025</div>
-          </div>
         </button>
       </nav>
     </div>
@@ -235,7 +231,26 @@
     </div>
   </main>
 
-  <!-- PWA Bottom Navigation -->
+  <!-- PWA Brand Header (in alto) -->
+  <div id="pwa-brand-header" class="pwa-brand-header" style="display: none;">
+    <div class="pwa-logo-wrapper">
+      <img src="src/logo.png" alt="TPL" class="pwa-logo-img pwa-logo-default">
+      <img src="src/logo1.png" alt="TPL" class="pwa-logo-img pwa-logo-hover">
+    </div>
+    <div class="pwa-brand-title">
+      <div class="pwa-logo-acronym">
+        <div>tpl</div>
+        <div>fvg</div>
+      </div>
+      <div class="pwa-logo-text">
+        <div>trasporto</div>
+        <div>pubblico</div>
+        <div>locale</div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- PWA Bottom Navigation (in basso) -->
   <nav id="pwa-bottom-nav" class="pwa-bottom-nav" style="display: none;">
     <a href="index.html" class="pwa-nav-item active" data-page="home">
       <svg class="pwa-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
@@ -254,12 +269,6 @@
       </svg>
       <span class="pwa-nav-label">Fermate</span>
     </a>
-    
-    <div class="pwa-nav-item pwa-nav-logo" data-page="logo">
-      <div class="pwa-logo-wrapper">
-        <img src="src/logo.png" alt="TPL FVG" class="pwa-logo-img">
-      </div>
-    </div>
     
     <a href="prezzi.html" class="pwa-nav-item" data-page="prezzi">
       <svg class="pwa-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
@@ -280,7 +289,7 @@
 
   <!-- Footer -->
   <footer class="footer">
-    <p>© <span id="footer-year"></span> Michele Carnimeo. Tutti i diritti riservati.<br>TPL FVG è un marchio di TPL FVG S.C. a R.L. · <a href="test.html" style="color: inherit; text-decoration: none; transition: text-decoration 0.3s ease;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">TPL Autisti 1.4.2</a></p>
+    <p>© <span id="footer-year"></span> Michele Carnimeo. Tutti i diritti riservati.<br>TPL FVG è un marchio di TPL FVG S.C. a R.L. · <a href="test.html" style="color: inherit; text-decoration: none; transition: text-decoration 0.3s ease;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">TPL Autisti 1.4.3</a></p>
     <div class="footer-links">
       <a href="https://t.me/+eoJ9nYFFrjphMzVk" target="_blank" class="telegram-link" title="Canale Telegram">
         <span class="telegram-icon">📢</span> Avvisi & Aggiornamenti
@@ -407,7 +416,7 @@
               </div>
               <div class="settings-theme-options">
                 <label class="settings-theme-option">
-                  <input type="radio" name="theme-mode" value="system" id="theme-system">
+                  <input type="radio" name="theme-mode" value="system" id="theme-system" checked>
                   <span class="theme-option-card">
                     <span class="theme-option-icon">⚙️</span>
                     <span class="theme-option-label">Sistema</span>
@@ -480,7 +489,7 @@
                 </div>
               </div>
               <div class="settings-font-buttons">
-                <button class="settings-font-btn" data-size="normal">
+                <button class="settings-font-btn active" data-size="normal">
                   <span class="font-sample">A</span>
                   <span class="font-label">Normale</span>
                 </button>
@@ -510,6 +519,172 @@
               </label>
             </div>
           </div>
+          
+          <!-- Sezione Dimensione Interfaccia -->
+          <div class="settings-section">
+            <h4 class="settings-section-title">🔍 Dimensione Interfaccia</h4>
+            
+            <div class="scale-preset-selector">
+              <div class="scale-preset-description">
+                Scala l'intera interfaccia della web app
+              </div>
+              
+              <div class="scale-preset-options">
+                <label class="scale-preset-option">
+                  <input type="radio" name="interface-scale" value="75" id="scale-75">
+                  <div class="scale-preset-card">
+                    <div class="scale-preset-info">
+                      <div class="scale-preset-name">Molto Compatta</div>
+                      <div class="scale-preset-percent">75%</div>
+                    </div>
+                  </div>
+                </label>
+                
+                <label class="scale-preset-option">
+                  <input type="radio" name="interface-scale" value="85" id="scale-85">
+                  <div class="scale-preset-card">
+                    <div class="scale-preset-info">
+                      <div class="scale-preset-name">Compatta</div>
+                      <div class="scale-preset-percent">85%</div>
+                    </div>
+                  </div>
+                </label>
+                
+                <label class="scale-preset-option">
+                  <input type="radio" name="interface-scale" value="100" id="scale-100" checked>
+                  <div class="scale-preset-card">
+                    <div class="scale-preset-info">
+                      <div class="scale-preset-name">Normale</div>
+                      <div class="scale-preset-percent">100%</div>
+                    </div>
+                  </div>
+                </label>
+                
+                <label class="scale-preset-option">
+                  <input type="radio" name="interface-scale" value="115" id="scale-115">
+                  <div class="scale-preset-card">
+                    <div class="scale-preset-info">
+                      <div class="scale-preset-name">Grande</div>
+                      <div class="scale-preset-percent">115%</div>
+                    </div>
+                  </div>
+                </label>
+                
+                <label class="scale-preset-option">
+                  <input type="radio" name="interface-scale" value="125" id="scale-125">
+                  <div class="scale-preset-card">
+                    <div class="scale-preset-info">
+                      <div class="scale-preset-name">Molto Grande</div>
+                      <div class="scale-preset-percent">125%</div>
+                    </div>
+                  </div>
+                </label>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Sezione Ottimizzazione Display -->
+          <div class="settings-section">
+            <h4 class="settings-section-title">🖥️ Ottimizzazione Display</h4>
+            
+            <!-- Info Display Rilevato -->
+            <div class="display-optimization-card">
+              <div class="display-detection">
+                <div class="display-detection-header">
+                  <span class="display-detection-icon">📱</span>
+                  <div class="display-detection-info">
+                    <div class="display-detection-title">Display rilevato</div>
+                    <div class="display-detection-type" id="display-type-indicator">
+                      <span id="display-type-text">Rilevamento...</span>
+                      <span class="display-dpr-badge" id="display-dpr-badge">-</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="display-specs">
+                  <div class="display-spec-item">
+                    <span class="display-spec-label">Device Pixel Ratio</span>
+                    <span class="display-spec-value" id="dpr-value">-</span>
+                  </div>
+                  <div class="display-spec-item">
+                    <span class="display-spec-label">Risoluzione fisica</span>
+                    <span class="display-spec-value" id="resolution-value">-</span>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Preset Ottimizzazione -->
+              <div class="display-preset-selector" style="margin-top: 1rem; border-top: 1px solid var(--bordo); padding-top: 1rem;">
+                <div class="preset-header">
+                  <span class="preset-header-icon">🎨</span>
+                  <div class="preset-header-text">
+                    <div class="preset-header-title">Livello di ottimizzazione</div>
+                    <div class="preset-header-description">Scegli il preset più adatto al tuo display</div>
+                  </div>
+                </div>
+                
+                <div class="preset-options">
+                  <label class="preset-option" data-preset="auto">
+                    <input type="radio" name="display-preset" value="auto" id="preset-auto">
+                    <div class="preset-card">
+                      <div class="preset-icon">⚡</div>
+                      <div class="preset-info">
+                        <div class="preset-name">
+                          Automatico
+                          <span class="recommended-badge" id="auto-badge" style="display: none;">Consigliato</span>
+                        </div>
+                        <div class="preset-description">Rileva e ottimizza automaticamente</div>
+                      </div>
+                    </div>
+                  </label>
+                  
+                  <label class="preset-option" data-preset="standard">
+                    <input type="radio" name="display-preset" value="standard" id="preset-standard">
+                    <div class="preset-card">
+                      <div class="preset-icon">📺</div>
+                      <div class="preset-info">
+                        <div class="preset-name">Standard</div>
+                        <div class="preset-description">Nessuna ottimizzazione (DPR 1.0x)</div>
+                      </div>
+                    </div>
+                  </label>
+                  
+                  <label class="preset-option" data-preset="retina">
+                    <input type="radio" name="display-preset" value="retina" id="preset-retina">
+                    <div class="preset-card">
+                      <div class="preset-icon">💎</div>
+                      <div class="preset-info">
+                        <div class="preset-name">Retina</div>
+                        <div class="preset-description">Ottimizzato per DPR 2.0x (HiDPI)</div>
+                      </div>
+                    </div>
+                  </label>
+                  
+                  <label class="preset-option" data-preset="ultra">
+                    <input type="radio" name="display-preset" value="ultra" id="preset-ultra">
+                    <div class="preset-card">
+                      <div class="preset-icon">✨</div>
+                      <div class="preset-info">
+                        <div class="preset-name">Ultra HD</div>
+                        <div class="preset-description">Massima qualità per DPR 3.0x+</div>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+              </div>
+              
+              <!-- Suggerimenti -->
+              <div class="display-recommendations" id="display-recommendations" style="display: none;">
+                <div class="recommendation-header">
+                  <span class="recommendation-icon">💡</span>
+                  <span class="recommendation-title">Suggerimenti per il tuo display</span>
+                </div>
+                <ul class="recommendation-list" id="recommendation-list">
+                  <!-- Popolato dinamicamente -->
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
         
         <!-- Tab Info e Aggiornamenti -->
@@ -523,8 +698,8 @@
                 <img src="src/logo.png" alt="TPL FVG" class="info-logo">
                 <div class="info-title">
                   <h3>TPL FVG Autisti</h3>
-                  <p class="info-version">Versione 1.4.2</p>
-                  <p class="info-date">24 Ottobre 2025 - 12:08</p>
+                  <p class="info-version">Versione 1.4.3</p>
+                  <p class="info-date">24 Ottobre 2025 - 20:15</p>
                 </div>
               </div>
               
@@ -552,9 +727,41 @@
               </div>
             </div>
             
+            <!-- Verifica Aggiornamenti -->
+            <div class="info-card update-check-card">
+              <div class="update-check-header">
+                <div class="update-check-icon">🔄</div>
+                <div class="update-check-text">
+                  <h4 class="update-check-title">Verifica Aggiornamenti</h4>
+                  <p class="update-check-description">Controlla se è disponibile una nuova versione dell'app</p>
+                </div>
+              </div>
+              <button id="pwa-cache-reset" class="update-check-btn">
+                Verifica Aggiornamenti
+              </button>
+            </div>
+            
             <!-- Aggiornamenti Recenti -->
             <div class="info-card">
               <h4 class="info-card-title">📋 Aggiornamenti Recenti</h4>
+              
+              <div class="update-item">
+                <div class="update-version">
+                  <span class="update-badge">v1.4.3</span>
+                  <span class="update-date">24 Ottobre 2025</span>
+                </div>
+                <div class="update-content">
+                  <p class="update-title">Verifica Aggiornamenti PWA e Miglioramenti UI</p>
+                  <ul class="update-list">
+                    <li>Aggiunto pulsante "Verifica Aggiornamenti" in modalità PWA</li>
+                    <li>Contorni attivi per sezioni impostazioni personalizzate</li>
+                    <li>Tema "Sistema" selezionato di default</li>
+                    <li>Dimensione testo "Normale" evidenziato di default</li>
+                    <li>Rimosso link ridondante "Vedi tutti gli aggiornamenti"</li>
+                    <li>Ottimizzazioni UI e UX generali</li>
+                  </ul>
+                </div>
+              </div>
               
               <div class="update-item">
                 <div class="update-version">
@@ -588,11 +795,6 @@
                   </ul>
                 </div>
               </div>
-              
-              <a href="AGGIORNAMENTI.md" target="_blank" class="info-link">
-                <span>📄 Vedi tutti gli aggiornamenti</span>
-                <span>→</span>
-              </a>
             </div>
             
             <!-- Link Utili -->
@@ -632,6 +834,286 @@
         navigator.serviceWorker.register('sw.js').catch(err => console.error('SW registration failed', err));
       });
     }
+    
+    // ===== SISTEMA PRO DI OTTIMIZZAZIONE DISPLAY =====
+    (function() {
+      const STORAGE_KEY = 'tpl.displayOptimization';
+      const FIRST_RUN_KEY = 'tpl.displayOptFirstRun';
+      
+      // Rileva info display
+      function detectDisplayInfo() {
+        const dpr = window.devicePixelRatio || 1;
+        const screenWidth = window.screen.width;
+        const screenHeight = window.screen.height;
+        const physicalWidth = Math.round(screenWidth * dpr);
+        const physicalHeight = Math.round(screenHeight * dpr);
+        
+        let type = 'standard';
+        let typeName = 'Standard';
+        let typeClass = '';
+        
+        if (dpr >= 3) {
+          type = 'super-retina';
+          typeName = 'Super Retina / Ultra HD';
+          typeClass = 'super-retina';
+        } else if (dpr >= 2) {
+          type = 'retina';
+          typeName = 'Retina / HiDPI';
+          typeClass = 'retina';
+        } else if (dpr > 1) {
+          type = 'high-density';
+          typeName = 'Alta Densità';
+          typeClass = 'retina';
+        }
+        
+        return {
+          dpr,
+          type,
+          typeName,
+          typeClass,
+          screenWidth,
+          screenHeight,
+          physicalWidth,
+          physicalHeight,
+          isHighDPI: dpr >= 2
+        };
+      }
+      
+      // Genera suggerimenti intelligenti
+      function generateRecommendations(displayInfo) {
+        const recommendations = [];
+        
+        if (displayInfo.dpr >= 2) {
+          recommendations.push('Il tuo display <strong>ad alta densità</strong> beneficia delle ottimizzazioni automatiche');
+          
+          if (displayInfo.dpr >= 3) {
+            recommendations.push('Con DPR <strong>' + displayInfo.dpr.toFixed(2) + 'x</strong>, potresti preferire la dimensione testo "Grande" o "Molto Grande"');
+          } else {
+            recommendations.push('Considera di usare la dimensione testo "Media" o "Grande" per una migliore leggibilità');
+          }
+          
+          recommendations.push('Le icone e i bordi sono ottimizzati automaticamente per apparire più nitidi');
+          
+          if (displayInfo.physicalWidth >= 2880) {
+            recommendations.push('Il tuo schermo ad altissima risoluzione visualizza i dettagli in modo eccellente');
+          }
+        } else {
+          recommendations.push('Il tuo display ha una densità standard. Le ottimizzazioni non sono necessarie.');
+        }
+        
+        return recommendations;
+      }
+      
+      // Aggiorna UI
+      function updateDisplayUI(displayInfo) {
+        // Tipo display
+        const displayTypeText = document.getElementById('display-type-text');
+        const displayDprBadge = document.getElementById('display-dpr-badge');
+        
+        if (displayTypeText) {
+          displayTypeText.textContent = displayInfo.typeName;
+          displayTypeText.className = displayInfo.typeClass;
+        }
+        
+        if (displayDprBadge) {
+          displayDprBadge.textContent = displayInfo.dpr.toFixed(2) + 'x';
+          displayDprBadge.className = 'display-dpr-badge ' + displayInfo.typeClass;
+        }
+        
+        // Valori spec
+        const dprValue = document.getElementById('dpr-value');
+        const resolutionValue = document.getElementById('resolution-value');
+        
+        if (dprValue) {
+          dprValue.textContent = displayInfo.dpr.toFixed(2) + 'x';
+        }
+        
+        if (resolutionValue) {
+          resolutionValue.textContent = displayInfo.physicalWidth + ' × ' + displayInfo.physicalHeight + ' px';
+        }
+        
+        // Badge consigliato
+        const autoBadge = document.getElementById('auto-opt-badge');
+        if (autoBadge && displayInfo.isHighDPI) {
+          autoBadge.style.display = 'inline-block';
+        }
+        
+        // Suggerimenti
+        const recommendations = generateRecommendations(displayInfo);
+        const recContainer = document.getElementById('display-recommendations');
+        const recList = document.getElementById('recommendation-list');
+        
+        if (recContainer && recList && recommendations.length > 0) {
+          recList.innerHTML = recommendations.map(rec => '<li>' + rec + '</li>').join('');
+          recContainer.style.display = 'block';
+        }
+        
+        // Log console
+        console.log('🖥️ Display rilevato:', {
+          tipo: displayInfo.typeName,
+          dpr: displayInfo.dpr,
+          risoluzione: displayInfo.screenWidth + 'x' + displayInfo.screenHeight,
+          fisica: displayInfo.physicalWidth + 'x' + displayInfo.physicalHeight,
+          highDPI: displayInfo.isHighDPI
+        });
+      }
+      
+      // Applica ottimizzazioni in base al preset
+      function applyPreset(preset, displayInfo) {
+        // Rimuovi tutte le classi di ottimizzazione
+        document.body.classList.remove('display-optimized', 'display-retina', 'display-ultra');
+        
+        let appliedClass = '';
+        
+        switch(preset) {
+          case 'auto':
+            // Automatico - rileva e applica
+            if (displayInfo.dpr >= 3) {
+              document.body.classList.add('display-optimized', 'display-ultra');
+              appliedClass = 'Ultra HD (auto)';
+            } else if (displayInfo.dpr >= 2) {
+              document.body.classList.add('display-optimized', 'display-retina');
+              appliedClass = 'Retina (auto)';
+            } else {
+              appliedClass = 'Standard (auto)';
+            }
+            break;
+            
+          case 'retina':
+            document.body.classList.add('display-optimized', 'display-retina');
+            appliedClass = 'Retina';
+            break;
+            
+          case 'ultra':
+            document.body.classList.add('display-optimized', 'display-ultra');
+            appliedClass = 'Ultra HD';
+            break;
+            
+          case 'standard':
+          default:
+            appliedClass = 'Standard';
+            break;
+        }
+        
+        console.log('🎨 Preset applicato:', appliedClass);
+        
+        // Salva preferenza
+        localStorage.setItem(STORAGE_KEY, preset);
+      }
+      
+      // Auto-configurazione al primo avvio
+      function firstRunAutoConfig(displayInfo) {
+        const hasRun = localStorage.getItem(FIRST_RUN_KEY);
+        
+        if (!hasRun) {
+          // Primo avvio - pre-configura 'auto'
+          localStorage.setItem(STORAGE_KEY, 'auto');
+          console.log('🎉 Prima configurazione: Preset "Automatico" selezionato');
+          localStorage.setItem(FIRST_RUN_KEY, 'true');
+        }
+      }
+      
+      // Inizializzazione
+      function init() {
+        const displayInfo = detectDisplayInfo();
+        updateDisplayUI(displayInfo);
+        
+        // Auto-config al primo avvio
+        firstRunAutoConfig(displayInfo);
+        
+        // Leggi preset salvato
+        const savedPreset = localStorage.getItem(STORAGE_KEY) || 'auto';
+        
+        // Setup radio buttons
+        const presetRadios = document.querySelectorAll('input[name="display-preset"]');
+        presetRadios.forEach(radio => {
+          if (radio.value === savedPreset) {
+            radio.checked = true;
+          }
+          
+          radio.addEventListener('change', (e) => {
+            if (e.target.checked) {
+              applyPreset(e.target.value, displayInfo);
+            }
+          });
+        });
+        
+        // Mostra badge "Consigliato" su Automatico se HiDPI
+        const autoBadge = document.getElementById('auto-badge');
+        if (autoBadge && displayInfo.isHighDPI) {
+          autoBadge.style.display = 'inline-block';
+        }
+        
+        // Applica preset iniziale
+        applyPreset(savedPreset, displayInfo);
+      }
+      
+      // Avvia al caricamento
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+      
+      // Re-detect su resize (rotazione, zoom)
+      let resizeTimeout;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+          const displayInfo = detectDisplayInfo();
+          updateDisplayUI(displayInfo);
+        }, 300);
+      });
+    })();
+    
+    // ===== SISTEMA SCALA INTERFACCIA =====
+    (function() {
+      const STORAGE_KEY_SCALE = 'tpl.interfaceScale';
+      
+      // Applica scala all'interfaccia
+      function applyScale(scale) {
+        // Rimuovi tutte le classi di scala
+        document.documentElement.classList.remove('scale-75', 'scale-85', 'scale-100', 'scale-115', 'scale-125');
+        
+        // Aggiungi la classe corretta
+        document.documentElement.classList.add('scale-' + scale);
+        
+        console.log('🔍 Scala interfaccia applicata:', scale + '%');
+        
+        // Salva preferenza
+        localStorage.setItem(STORAGE_KEY_SCALE, scale);
+      }
+      
+      // Inizializzazione
+      function initScale() {
+        // Leggi scala salvata (default 100)
+        const savedScale = localStorage.getItem(STORAGE_KEY_SCALE) || '100';
+        
+        // Setup radio buttons
+        const scaleRadios = document.querySelectorAll('input[name="interface-scale"]');
+        scaleRadios.forEach(radio => {
+          if (radio.value === savedScale) {
+            radio.checked = true;
+          }
+          
+          radio.addEventListener('change', (e) => {
+            if (e.target.checked) {
+              applyScale(e.target.value);
+            }
+          });
+        });
+        
+        // Applica scala iniziale
+        applyScale(savedScale);
+      }
+      
+      // Avvia al caricamento
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initScale);
+      } else {
+        initScale();
+      }
+    })();
   </script>
 </body>
 
