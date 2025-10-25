@@ -1,6 +1,6 @@
 {
-  "version": "1.4.5",
+  "version": "1.4.6",
   "versionDate": "25 Ottobre 2025",
-  "versionTime": "16:00",
-  "updateNotes": "Miglioramenti Test Geolocalizzazione: status permessi real-time, copia coordinate, reverse geocoding indirizzo, velocità e direzione"
+  "versionTime": "17:30",
+  "updateNotes": "Calcolo Distanza GPS: preset città FVG, coordinate personalizzate, tempi stimati a piedi/bus/auto con formula Haversine"
 }

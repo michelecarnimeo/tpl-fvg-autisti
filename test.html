@@ -639,6 +639,39 @@
                 min-width: 400px;
             }
         }
+        
+        /* Stili per calcolo distanza */
+        .distance-preset-btn {
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .distance-preset-btn:hover {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+        
+        .distance-preset-btn:active {
+            transform: translateY(0);
+        }
+        
+        #calculate-distance-btn:hover {
+            background: #d97706;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+        
+        #calculate-distance-btn:active {
+            transform: translateY(0);
+        }
     </style>
 </head>
 
@@ -925,6 +958,42 @@
             <div id="test-location-result" class="test-result" style="display: none; margin-top: 1rem; padding: 1rem; background: var(--grigio-chiaro); border-radius: 8px; border-left: 4px solid var(--turchese);">
                 <h4>Risultato Rilevamento:</h4>
                 <div id="test-location-info"></div>
+            </div>
+            
+            <!-- Calcolo Distanza -->
+            <div id="distance-calculator" style="display: none; margin-top: 1rem; padding: 1.5rem; background: var(--grigio-chiaro); border-radius: 12px; border: 2px solid #f59e0b;">
+                <h4 style="margin-top: 0; color: #92400e;">📏 Calcolo Distanza</h4>
+                <p style="margin-bottom: 1rem; color: #666; font-size: 0.9rem;">Calcola la distanza dalla tua posizione attuale a un punto di riferimento</p>
+                
+                <!-- Preset Città FVG -->
+                <div style="margin-bottom: 1rem;">
+                    <strong style="display: block; margin-bottom: 0.5rem; color: #374151;">🏙️ Città Principali FVG:</strong>
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                        <button class="distance-preset-btn" data-lat="45.6495" data-lng="13.7768" data-name="Trieste">Trieste</button>
+                        <button class="distance-preset-btn" data-lat="46.0710" data-lng="13.2345" data-name="Udine">Udine</button>
+                        <button class="distance-preset-btn" data-lat="45.9632" data-lng="12.6603" data-name="Pordenone">Pordenone</button>
+                        <button class="distance-preset-btn" data-lat="45.9405" data-lng="13.6222" data-name="Gorizia">Gorizia</button>
+                    </div>
+                </div>
+                
+                <!-- Input Manuale -->
+                <div style="margin-bottom: 1rem;">
+                    <strong style="display: block; margin-bottom: 0.5rem; color: #374151;">📍 O inserisci coordinate personalizzate:</strong>
+                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                        <input type="number" id="target-lat" placeholder="Latitudine" step="0.000001" style="flex: 1; min-width: 150px; padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.9rem;">
+                        <input type="number" id="target-lng" placeholder="Longitudine" step="0.000001" style="flex: 1; min-width: 150px; padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.9rem;">
+                    </div>
+                </div>
+                
+                <!-- Pulsante Calcola -->
+                <button id="calculate-distance-btn" style="width: 100%; padding: 0.75rem; background: #f59e0b; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                    📏 Calcola Distanza
+                </button>
+                
+                <!-- Risultato Distanza -->
+                <div id="distance-result" style="display: none; margin-top: 1rem; padding: 1rem; background: white; border-radius: 8px; border-left: 4px solid #f59e0b;">
+                    <div id="distance-info"></div>
+                </div>
             </div>
         </div>
 
@@ -1423,8 +1492,8 @@
                                 <img src="src/logo.png" alt="TPL FVG" class="info-logo">
                                 <div class="info-title">
                                     <h3>TPL FVG Autisti</h3>
-                                    <p class="info-version">Versione 1.4.5</p>
-                                    <p class="info-date">25 Ottobre 2025 - 16:00</p>
+                                    <p class="info-version">Versione 1.4.6</p>
+                                    <p class="info-date">25 Ottobre 2025 - 17:30</p>
                                 </div>
                             </div>
                             
@@ -1485,6 +1554,23 @@
                             <h4 class="info-card-title">📋 Aggiornamenti Recenti</h4>
                             
                             <div class="update-item">
+                                <div class="update-version">
+                                    <span class="update-badge">v1.4.6</span>
+                                    <span class="update-date">25 Ottobre 2025</span>
+                                </div>
+                                <div class="update-content">
+                                    <p class="update-title">Calcolo Distanza GPS</p>
+                                    <ul class="update-list">
+                                        <li>Preset città FVG: Trieste, Udine, Pordenone, Gorizia</li>
+                                        <li>Input coordinate personalizzate per punti specifici</li>
+                                        <li>Formula Haversine per distanza in linea d'aria (km)</li>
+                                        <li>Tempi stimati: a piedi (5km/h), bus (30km/h), auto (50km/h)</li>
+                                        <li>Formattazione intelligente tempi (15min o 1h 25min)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="update-item update-item-hidden">
                                 <div class="update-version">
                                     <span class="update-badge">v1.4.5</span>
                                     <span class="update-date">25 Ottobre 2025</span>
@@ -2474,6 +2560,15 @@
                 icon.textContent = '✅';
                 text.textContent = 'Posizione Rilevata';
                 
+                // Salva posizione per calcolo distanza
+                lastKnownPosition = position;
+                
+                // Mostra calcolatore distanza
+                const distanceCalculator = document.getElementById('distance-calculator');
+                if (distanceCalculator) {
+                    distanceCalculator.style.display = 'block';
+                }
+                
                 // Mostra informazioni dettagliate
                 const coords = position.coords;
                 const timestamp = new Date(position.timestamp).toLocaleString('it-IT');
@@ -2641,6 +2736,178 @@
         if (document.getElementById('geo-permission-status')) {
             checkGeolocationPermission();
         }
+        
+        // ===== CALCOLO DISTANZA =====
+        
+        // Variabile globale per memorizzare ultima posizione rilevata
+        let lastKnownPosition = null;
+        
+        // Formula Haversine per calcolare distanza tra due coordinate (km)
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; // Raggio Terra in km
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = 
+                Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            const distance = R * c;
+            return distance;
+        }
+        
+        // Calcola tempo stimato basato su distanza
+        function estimateTime(distanceKm) {
+            const walkingSpeed = 5; // km/h a piedi
+            const carSpeed = 50; // km/h in città
+            const busSpeed = 30; // km/h autobus urbano
+            
+            const walkMinutes = Math.round((distanceKm / walkingSpeed) * 60);
+            const carMinutes = Math.round((distanceKm / carSpeed) * 60);
+            const busMinutes = Math.round((distanceKm / busSpeed) * 60);
+            
+            return { walk: walkMinutes, car: carMinutes, bus: busMinutes };
+        }
+        
+        // Formatta tempo in ore e minuti
+        function formatTime(minutes) {
+            if (minutes < 60) {
+                return `${minutes} min`;
+            } else {
+                const hours = Math.floor(minutes / 60);
+                const mins = minutes % 60;
+                return mins > 0 ? `${hours}h ${mins}min` : `${hours}h`;
+            }
+        }
+        
+        // Setup event listeners per calcolo distanza
+        (function setupDistanceCalculator() {
+            const distanceCalculator = document.getElementById('distance-calculator');
+            const calculateBtn = document.getElementById('calculate-distance-btn');
+            const targetLatInput = document.getElementById('target-lat');
+            const targetLngInput = document.getElementById('target-lng');
+            const presetButtons = document.querySelectorAll('.distance-preset-btn');
+            const distanceResult = document.getElementById('distance-result');
+            const distanceInfo = document.getElementById('distance-info');
+            
+            if (!distanceCalculator || !calculateBtn) return;
+            
+            // Preset città buttons
+            presetButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const lat = parseFloat(this.getAttribute('data-lat'));
+                    const lng = parseFloat(this.getAttribute('data-lng'));
+                    const name = this.getAttribute('data-name');
+                    
+                    // Popola inputs
+                    targetLatInput.value = lat;
+                    targetLngInput.value = lng;
+                    
+                    // Calcola automaticamente
+                    calculateDistanceToTarget(lat, lng, name);
+                });
+            });
+            
+            // Pulsante calcola con input manuale
+            calculateBtn.addEventListener('click', function() {
+                const lat = parseFloat(targetLatInput.value);
+                const lng = parseFloat(targetLngInput.value);
+                
+                if (isNaN(lat) || isNaN(lng)) {
+                    distanceInfo.innerHTML = `
+                        <div style="color: var(--rosso);">
+                            <strong>❌ Errore:</strong><br>
+                            Inserisci coordinate valide (es. 45.6495 per latitudine)
+                        </div>
+                    `;
+                    distanceResult.style.display = 'block';
+                    return;
+                }
+                
+                calculateDistanceToTarget(lat, lng, 'Punto Personalizzato');
+            });
+            
+            // Funzione per calcolare e mostrare distanza
+            function calculateDistanceToTarget(targetLat, targetLng, targetName) {
+                if (!lastKnownPosition) {
+                    distanceInfo.innerHTML = `
+                        <div style="color: var(--rosso);">
+                            <strong>❌ Errore:</strong><br>
+                            Devi prima rilevare la tua posizione GPS
+                        </div>
+                    `;
+                    distanceResult.style.display = 'block';
+                    return;
+                }
+                
+                const myLat = lastKnownPosition.coords.latitude;
+                const myLng = lastKnownPosition.coords.longitude;
+                
+                // Calcola distanza
+                const distanceKm = calculateDistance(myLat, myLng, targetLat, targetLng);
+                const distanceM = distanceKm * 1000;
+                
+                // Calcola tempi stimati
+                const times = estimateTime(distanceKm);
+                
+                // Formato distanza
+                let distanceText = '';
+                if (distanceKm < 1) {
+                    distanceText = `${Math.round(distanceM)} metri`;
+                } else {
+                    distanceText = `${distanceKm.toFixed(2)} km`;
+                }
+                
+                // Mostra risultato
+                distanceInfo.innerHTML = `
+                    <div style="margin-bottom: 1rem;">
+                        <strong style="font-size: 1.2rem; color: #f59e0b;">📏 ${distanceText}</strong>
+                        <br>
+                        <span style="color: #666; font-size: 0.9rem;">distanza in linea d'aria da ${targetName}</span>
+                    </div>
+                    
+                    <div style="background: #fef3c7; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                        <strong style="color: #92400e;">🎯 Da:</strong> ${myLat.toFixed(6)}, ${myLng.toFixed(6)}<br>
+                        <strong style="color: #92400e;">🎯 A:</strong> ${targetLat.toFixed(6)}, ${targetLng.toFixed(6)}
+                    </div>
+                    
+                    <div style="margin-bottom: 0.5rem;">
+                        <strong style="color: #374151;">⏱️ Tempo Stimato:</strong>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 0.75rem;">
+                        <div style="background: #e0f2fe; padding: 0.75rem; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.5rem;">🚶</div>
+                            <div style="font-size: 0.85rem; color: #075985; margin-top: 0.25rem;">
+                                <strong>${formatTime(times.walk)}</strong><br>
+                                <span style="font-size: 0.75rem;">a piedi</span>
+                            </div>
+                        </div>
+                        <div style="background: #dbeafe; padding: 0.75rem; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.5rem;">🚌</div>
+                            <div style="font-size: 0.85rem; color: #1e40af; margin-top: 0.25rem;">
+                                <strong>${formatTime(times.bus)}</strong><br>
+                                <span style="font-size: 0.75rem;">in bus</span>
+                            </div>
+                        </div>
+                        <div style="background: #dcfce7; padding: 0.75rem; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.5rem;">🚗</div>
+                            <div style="font-size: 0.85rem; color: #166534; margin-top: 0.25rem;">
+                                <strong>${formatTime(times.car)}</strong><br>
+                                <span style="font-size: 0.75rem;">in auto</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 1rem; padding: 0.75rem; background: #f3f4f6; border-radius: 6px; font-size: 0.85rem; color: #6b7280;">
+                        💡 <strong>Nota:</strong> I tempi sono stime indicative basate su velocità medie. Il tempo reale può variare per traffico, percorso e condizioni stradali.
+                    </div>
+                `;
+                
+                distanceResult.style.display = 'block';
+                distanceResult.style.borderLeftColor = '#10b981';
+                distanceResult.style.background = 'rgba(16, 185, 129, 0.1)';
+            }
+        })();
 
         // Esegui tutti i test
         async function runAllTests() {
