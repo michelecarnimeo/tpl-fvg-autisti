@@ -1,6 +1,6 @@
 {
-  "version": "1.4.4",
+  "version": "1.4.5",
   "versionDate": "25 Ottobre 2025",
-  "versionTime": "14:15",
-  "updateNotes": "Aggiunto banner notifica offline/online in alto con design glassmorphism e animazioni, simulazione modalità offline persistente su test.html"
+  "versionTime": "16:00",
+  "updateNotes": "Miglioramenti Test Geolocalizzazione: status permessi real-time, copia coordinate, reverse geocoding indirizzo, velocità e direzione"
 }
