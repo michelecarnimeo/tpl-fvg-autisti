@@ -1,6 +1,6 @@
 {
-  "version": "1.4.8",
+  "version": "1.4.9",
   "versionDate": "25 Ottobre 2025",
-  "versionTime": "19:30",
-  "updateNotes": "Simulazione posizione GPS fake per test senza GPS reale, con preset città FVG e coordinate personalizzate"
+  "versionTime": "21:00",
+  "updateNotes": "Info Device/Browser con layout responsive, Test Rapido GPS automatico, Export Report JSON/TXT, Modal Reset con design moderno"
 }

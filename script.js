@@ -768,9 +768,9 @@ function resetFilters() {
 
 // Funzione reset cache
 // Versione corrente dell'app
-const CURRENT_VERSION = '1.4.0';
-const VERSION_DATE = '23 Ottobre 2025';
-const VERSION_TIME = '14:20';
+const CURRENT_VERSION = '1.4.9';
+const VERSION_DATE = '25 Ottobre 2025';
+const VERSION_TIME = '21:00';
 
 // Funzione helper per aggiornare versione, data e ora
 function updateVersion(version, date, time) {

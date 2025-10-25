@@ -943,9 +943,9 @@ p, span, div, a, button, input, select, textarea, label, li {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);  /* Ombra leggera per visibilità */
     font-weight: 500;                  /* Peso font medium */
     position: relative;               /* Per posizionamento assoluto del ::before */
-    appearance: none;                 /* Rimuove lo stile di default del browser */
     -webkit-appearance: none;         /* Supporto WebKit */
     -moz-appearance: none;            /* Supporto Firefox */
+    appearance: none;                 /* Rimuove lo stile di default del browser (Standard) */
     background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23374151' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");  /* Freccia custom */
     background-repeat: no-repeat;     /* Non ripete l'immagine */
     background-position: right 0.75rem center;  /* Posizione freccia */
@@ -1304,9 +1304,9 @@ p, span, div, a, button, input, select, textarea, label, li {
   
   /* Main content per pagine tratte */
   .fermate-page .main-content {
-    min-height: auto;            /* Altezza minima automatica */
+    min-height: 0;               /* Altezza minima (reset) */
     align-items: flex-start;     /* Allineamento in alto */
-    padding: 1rem 0;            /* Padding verticale */
+    padding: 1rem 0;             /* Padding verticale */
     flex: 1;                    /* Occupa spazio disponibile */
     overflow: visible;          /* Contenuto visibile */
   }

@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>TPL FVG - Fermate</title>
   <!-- Font locali per PWA offline -->
   <!-- CSS personalizzati -->
@@ -354,7 +354,7 @@
 
   <!-- Footer -->
   <footer class="footer">
-    <p>© <span id="footer-year"></span> Michele Carnimeo. Tutti i diritti riservati.<br>TPL FVG è un marchio di TPL FVG S.C. a R.L. · <a href="test.html" style="color: inherit; text-decoration: none; transition: text-decoration 0.3s ease;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">TPL Autisti 1.4.3</a></p>
+    <p>© <span id="footer-year"></span> Michele Carnimeo. Tutti i diritti riservati.<br>TPL FVG è un marchio di TPL FVG S.C. a R.L. · <a href="test.html" style="color: inherit; text-decoration: none; transition: text-decoration 0.3s ease;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">TPL Autisti 1.4.9</a></p>
     <div class="footer-links">
       <a href="https://t.me/+eoJ9nYFFrjphMzVk" target="_blank" class="telegram-link" title="Canale Telegram">
         <span class="telegram-icon">📢</span> Avvisi & Aggiornamenti
@@ -425,6 +425,10 @@
         <button class="settings-tab" data-tab="accessibility">
           <span class="tab-icon">♿</span>
           <span>Accessibilità</span>
+        </button>
+        <button class="settings-tab" data-tab="info">
+          <span class="tab-icon">ℹ️</span>
+          <span>Info</span>
         </button>
       </div>
       
@@ -714,6 +718,265 @@
                   <!-- Popolato dinamicamente -->
                 </ul>
               </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Tab Info e Aggiornamenti -->
+        <div class="settings-tab-content" data-content="info">
+          <div class="settings-section">
+            <h4 class="settings-section-title">ℹ️ Informazioni</h4>
+            
+            <!-- Informazioni App -->
+            <div class="info-card">
+              <div class="info-header">
+                <img src="src/logo.png" alt="TPL FVG" class="info-logo">
+                <div class="info-title">
+                  <h3>TPL FVG Autisti</h3>
+                  <p class="info-version">Versione 1.4.9</p>
+                  <p class="info-date">25 Ottobre 2025 - 21:00</p>
+                </div>
+              </div>
+              
+              <div class="info-description">
+                <p>App per calcolare i prezzi dei biglietti e visualizzare le fermate del trasporto pubblico locale del Friuli Venezia Giulia.</p>
+              </div>
+              
+              <div class="info-features">
+                <div class="info-feature">
+                  <span class="info-feature-icon">💰</span>
+                  <span>Calcolo prezzi biglietti</span>
+                </div>
+                <div class="info-feature">
+                  <span class="info-feature-icon">🚌</span>
+                  <span>Elenco fermate per linea</span>
+                </div>
+                <div class="info-feature">
+                  <span class="info-feature-icon">📱</span>
+                  <span>Installabile come PWA</span>
+                </div>
+                <div class="info-feature">
+                  <span class="info-feature-icon">🌙</span>
+                  <span>Modalità scura</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Verifica Aggiornamenti -->
+            <div class="info-card update-check-card">
+              <div class="update-check-header">
+                <div class="update-check-icon">🔄</div>
+                <div class="update-check-text">
+                  <h4 class="update-check-title">Verifica Aggiornamenti</h4>
+                  <p class="update-check-description">Controlla se è disponibile una nuova versione dell'app</p>
+                </div>
+              </div>
+              <button id="pwa-cache-reset" class="update-check-btn">
+                Verifica Aggiornamenti
+              </button>
+            </div>
+            
+            <!-- Riavvia App -->
+            <div class="info-card update-check-card">
+              <div class="update-check-header">
+                <div class="update-check-icon">📲</div>
+                <div class="update-check-text">
+                  <h4 class="update-check-title">Riavvia App</h4>
+                  <p class="update-check-description">Riavvia l'applicazione per applicare le modifiche</p>
+                </div>
+              </div>
+              <button id="restart-app-btn" class="update-check-btn restart-app-btn">
+                Riavvia Ora
+              </button>
+            </div>
+            
+            <!-- Aggiornamenti Recenti -->
+            <div class="info-card">
+              <h4 class="info-card-title">📋 Aggiornamenti Recenti</h4>
+              
+              <div class="update-item">
+                <div class="update-version">
+                  <span class="update-badge">v1.4.9</span>
+                  <span class="update-date">25 Ottobre 2025</span>
+                </div>
+                <div class="update-content">
+                  <p class="update-title">Info Device & Test GPS Avanzati</p>
+                  <ul class="update-list">
+                    <li>📱 Sezione "Info Device/Browser" con rilevamento hardware</li>
+                    <li>🎨 Layout responsive: card colorate su desktop, lista su mobile</li>
+                    <li>⚡ Test Rapido GPS One-Click con report automatico</li>
+                    <li>📄 Export Report completo (JSON + TXT)</li>
+                    <li>🔄 Modal moderno per Reset dati GPS</li>
+                    <li>🔋 Monitoraggio batteria e connessione in tempo reale</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div class="update-item update-item-hidden">
+                <div class="update-version">
+                  <span class="update-badge">v1.4.8</span>
+                  <span class="update-date">25 Ottobre 2025</span>
+                </div>
+                <div class="update-content">
+                  <p class="update-title">Simulazione Posizione GPS Fake</p>
+                  <ul class="update-list">
+                    <li>🎭 Modalità test con posizione GPS simulata</li>
+                    <li>Preset città FVG: Trieste, Udine, Pordenone, Gorizia</li>
+                    <li>Input manuale coordinate personalizzate (lat/lng)</li>
+                    <li>Configurazione accuratezza e altitudine</li>
+                    <li>Badge visivo GPS reale vs simulato</li>
+                    <li>Integrazione completa con mappa e calcolo distanza</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div class="update-item update-item-hidden">
+                <div class="update-version">
+                  <span class="update-badge">v1.4.7</span>
+                  <span class="update-date">25 Ottobre 2025</span>
+                </div>
+                <div class="update-content">
+                  <p class="update-title">Mappa Interattiva e Banner HTTPS</p>
+                  <ul class="update-list">
+                    <li>Mappa interattiva con Leaflet.js (~40KB, tile OpenStreetMap)</li>
+                    <li>Marker blu posizione attuale con popup coordinate</li>
+                    <li>Cerchio accuratezza GPS con raggio dinamico</li>
+                    <li>Zoom automatico intelligente e pulsante "Centra"</li>
+                    <li>Banner HTTPS dinamico (visibile solo se necessario)</li>
+                    <li>Controlli interattivi: drag, zoom, popup click</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div class="update-item update-item-hidden">
+                <div class="update-version">
+                  <span class="update-badge">v1.4.6</span>
+                  <span class="update-date">25 Ottobre 2025</span>
+                </div>
+                <div class="update-content">
+                  <p class="update-title">Calcolo Distanza GPS</p>
+                  <ul class="update-list">
+                    <li>Preset città FVG: Trieste, Udine, Pordenone, Gorizia</li>
+                    <li>Input coordinate personalizzate per punti specifici</li>
+                    <li>Formula Haversine per distanza in linea d'aria (km)</li>
+                    <li>Tempi stimati: a piedi (5km/h), bus (30km/h), auto (50km/h)</li>
+                    <li>Formattazione intelligente tempi (15min o 1h 25min)</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div class="update-item update-item-hidden">
+                <div class="update-version">
+                  <span class="update-badge">v1.4.5</span>
+                  <span class="update-date">25 Ottobre 2025</span>
+                </div>
+                <div class="update-content">
+                  <p class="update-title">Miglioramenti Test Geolocalizzazione</p>
+                  <ul class="update-list">
+                    <li>Status permessi geolocalizzazione in tempo reale (granted/denied/prompt)</li>
+                    <li>Pulsante "Copia Coordinate" per copiare lat/long negli appunti</li>
+                    <li>Reverse geocoding: mostra indirizzo testuale (via, città, CAP)</li>
+                    <li>Velocità e direzione (se disponibili durante movimento)</li>
+                    <li>Altitudine con margine errore (±m)</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div class="update-item update-item-hidden">
+                <div class="update-version">
+                  <span class="update-badge">v1.4.4</span>
+                  <span class="update-date">25 Ottobre 2025</span>
+                </div>
+                <div class="update-content">
+                  <p class="update-title">Banner Offline e Simulazione Connettività</p>
+                  <ul class="update-list">
+                    <li>Aggiunto banner notifica offline/online in alto con design glassmorphism</li>
+                    <li>Animazione icona pulsante e transizione slide-down</li>
+                    <li>Banner verde "Connessione ripristinata" quando torna online</li>
+                    <li>Simulazione modalità offline persistente su test.html</li>
+                    <li>Sincronizzazione cross-tab della modalità offline test</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div class="update-item update-item-hidden">
+                <div class="update-version">
+                  <span class="update-badge">v1.4.3</span>
+                  <span class="update-date">24 Ottobre 2025</span>
+                </div>
+                <div class="update-content">
+                  <p class="update-title">Verifica Aggiornamenti PWA e Miglioramenti UI</p>
+                  <ul class="update-list">
+                    <li>Aggiunto pulsante "Verifica Aggiornamenti" in modalità PWA</li>
+                    <li>Contorni attivi per sezioni impostazioni personalizzate</li>
+                    <li>Tema "Sistema" selezionato di default</li>
+                    <li>Dimensione testo "Normale" evidenziato di default</li>
+                    <li>Rimosso link ridondante "Vedi tutti gli aggiornamenti"</li>
+                    <li>Ottimizzazioni UI e UX generali</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div class="update-item update-item-hidden">
+                <div class="update-version">
+                  <span class="update-badge">v1.4.2</span>
+                  <span class="update-date">24 Ottobre 2025</span>
+                </div>
+                <div class="update-content">
+                  <p class="update-title">PWA Bottom Navigation e Tab Info</p>
+                  <ul class="update-list">
+                    <li>Barra di navigazione moderna e sospesa in modalità PWA</li>
+                    <li>Design con glassmorphism e bordi arrotondati</li>
+                    <li>Logo TPL centrale (60px) con effetto rifrazione luce</li>
+                    <li>Accesso rapido: Home, Fermate, Prezzi, Impostazioni</li>
+                    <li>Nuova tab "Info e Aggiornamenti" nel modal Impostazioni</li>
+                    <li>Navbar superiore nascosta in modalità PWA</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div class="update-item update-item-hidden">
+                <div class="update-version">
+                  <span class="update-badge">v1.4.0</span>
+                  <span class="update-date">Ottobre 2025</span>
+                </div>
+                <div class="update-content">
+                  <p class="update-title">Miglioramenti Generali</p>
+                  <ul class="update-list">
+                    <li>Ottimizzazioni performance</li>
+                    <li>Miglioramenti UI/UX</li>
+                    <li>Bug fix vari</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <button class="show-all-updates-btn" id="show-all-updates-btn">
+                <span class="show-updates-icon">📋</span>
+                <span class="show-updates-text">Vedi tutti gli aggiornamenti</span>
+              </button>
+            </div>
+            
+            <!-- Link Utili -->
+            <div class="info-card">
+              <h4 class="info-card-title">🔗 Link Utili</h4>
+              
+              <a href="https://t.me/+eoJ9nYFFrjphMzVk" target="_blank" class="info-link external-link">
+                <span class="info-link-icon">📢</span>
+                <span>Canale Telegram - Avvisi & Aggiornamenti</span>
+                <span>↗</span>
+              </a>
+              
+              <a href="test.html" class="info-link">
+                <span class="info-link-icon">🧪</span>
+                <span>Pagina Test Funzionalità</span>
+                <span>→</span>
+              </a>
+            </div>
+            
+            <!-- Crediti -->
+            <div class="info-footer">
+              <p>© 2025 Michele Carnimeo. Tutti i diritti riservati.</p>
+              <p class="info-disclaimer">TPL FVG è un marchio di TPL FVG S.C. a R.L.</p>
             </div>
           </div>
         </div>
