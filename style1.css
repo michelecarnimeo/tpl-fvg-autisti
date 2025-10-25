@@ -6284,3 +6284,217 @@ body.pwa-mode .navbar {
     gap: 0.4rem;
   }
 }
+
+/* ========================================
+   BANNER OFFLINE
+   ======================================== */
+
+.offline-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10000;
+  transform: translateY(-100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.offline-banner.show {
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.offline-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, 
+    rgba(251, 146, 60, 0.95), 
+    rgba(234, 88, 12, 0.95)
+  );
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.offline-icon {
+  font-size: 1.5rem;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.1);
+  }
+}
+
+.offline-text {
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.offline-close {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.5rem;
+  font-weight: bold;
+  line-height: 1;
+  transition: all 0.2s ease;
+  margin-left: auto;
+}
+
+.offline-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.offline-close:active {
+  transform: scale(0.95);
+}
+
+/* Stato online (verde) */
+.offline-banner.online .offline-content {
+  background: linear-gradient(135deg, 
+    rgba(34, 197, 94, 0.95), 
+    rgba(22, 163, 74, 0.95)
+  );
+}
+
+.offline-banner.online .offline-text {
+  color: white;
+}
+
+/* Dark mode */
+.dark .offline-content {
+  background: linear-gradient(135deg, 
+    rgba(251, 146, 60, 0.98), 
+    rgba(234, 88, 12, 0.98)
+  );
+  border-bottom-color: rgba(255, 255, 255, 0.2);
+}
+
+.dark .offline-banner.online .offline-content {
+  background: linear-gradient(135deg, 
+    rgba(34, 197, 94, 0.98), 
+    rgba(22, 163, 74, 0.98)
+  );
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .offline-content {
+    padding: 0.75rem 1.5rem;
+    gap: 0.5rem;
+  }
+  
+  .offline-text {
+    font-size: 0.9rem;
+  }
+  
+  .offline-icon {
+    font-size: 1.25rem;
+  }
+  
+  .offline-close {
+    width: 24px;
+    height: 24px;
+    font-size: 1.25rem;
+  }
+}
+
+/* Supporto safe-area per notch/isole */
+@media (max-width: 768px) {
+  .offline-content {
+    padding-top: max(0.75rem, env(safe-area-inset-top));
+  }
+}
+
+/* ========================================
+   PULSANTE "VEDI TUTTI GLI AGGIORNAMENTI"
+   ======================================== */
+
+.update-item-hidden {
+  display: none;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+}
+
+.update-item-hidden.show {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.show-all-updates-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  margin-top: 1rem;
+  background: linear-gradient(135deg, rgba(23, 183, 177, 0.1), rgba(16, 185, 129, 0.1));
+  border: 2px solid rgba(23, 183, 177, 0.3);
+  border-radius: 10px;
+  color: #17b7b1;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.show-all-updates-btn:hover {
+  background: linear-gradient(135deg, rgba(23, 183, 177, 0.15), rgba(16, 185, 129, 0.15));
+  border-color: #17b7b1;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(23, 183, 177, 0.2);
+}
+
+.show-all-updates-btn:active {
+  transform: translateY(0);
+}
+
+.show-updates-icon {
+  font-size: 1.1rem;
+  transition: transform 0.3s ease;
+}
+
+.show-all-updates-btn.active .show-updates-icon {
+  transform: rotate(180deg);
+}
+
+.show-all-updates-btn.active .show-updates-text::after {
+  content: ' meno';
+}
+
+/* Dark mode */
+.dark .show-all-updates-btn {
+  background: linear-gradient(135deg, rgba(23, 183, 177, 0.15), rgba(16, 185, 129, 0.15));
+  border-color: rgba(23, 183, 177, 0.4);
+  color: #10b981;
+}
+
+.dark .show-all-updates-btn:hover {
+  background: linear-gradient(135deg, rgba(23, 183, 177, 0.2), rgba(16, 185, 129, 0.2));
+  border-color: #10b981;
+}

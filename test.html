@@ -877,6 +877,28 @@
             </div>
         </div>
 
+        <!-- Test Connettività -->
+        <div class="test-section" style="border: 3px solid #ef4444; background: linear-gradient(135deg, rgba(239, 68, 68, 0.05), rgba(220, 38, 38, 0.05));">
+            <h2>🌐 Test Connettività</h2>
+            <div class="test-item">
+                <div>
+                    <strong>Simulazione Modalità Offline</strong>
+                    <br>
+                    <small>Simula la perdita di connessione per testare il banner offline</small>
+                </div>
+                <div>
+                    <button id="toggle-offline-mode" class="test-btn" style="background: #10b981; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer; font-weight: 500; transition: all 0.3s;">
+                        <span id="offline-mode-icon">📶</span>
+                        <span id="offline-mode-text">Simula Offline</span>
+                    </button>
+                </div>
+            </div>
+            <div id="offline-mode-status" style="display: none; margin-top: 1rem; padding: 1.5rem; background: var(--grigio-chiaro); border-radius: 12px; border-left: 5px solid #ef4444;">
+                <h4 style="margin-top: 0; color: #ef4444;">Status Connettività:</h4>
+                <div id="offline-mode-info"></div>
+            </div>
+        </div>
+
         <!-- Test Geolocalizzazione -->
         <div class="test-section">
             <h2>📍 Test Geolocalizzazione</h2>
@@ -1394,8 +1416,8 @@
                                 <img src="src/logo.png" alt="TPL FVG" class="info-logo">
                                 <div class="info-title">
                                     <h3>TPL FVG Autisti</h3>
-                                    <p class="info-version">Versione 1.4.3</p>
-                                    <p class="info-date">24 Ottobre 2025 - 20:15</p>
+                                    <p class="info-version">Versione 1.4.4</p>
+                                    <p class="info-date">25 Ottobre 2025 - 14:15</p>
                                 </div>
                             </div>
                             
@@ -1437,11 +1459,42 @@
                             </button>
                         </div>
                         
+                        <!-- Riavvia App -->
+                        <div class="info-card update-check-card">
+                            <div class="update-check-header">
+                                <div class="update-check-icon">📲</div>
+                                <div class="update-check-text">
+                                    <h4 class="update-check-title">Riavvia App</h4>
+                                    <p class="update-check-description">Riavvia l'applicazione per applicare le modifiche</p>
+                                </div>
+                            </div>
+                            <button id="restart-app-btn" class="update-check-btn restart-app-btn">
+                                Riavvia Ora
+                            </button>
+                        </div>
+                        
                         <!-- Aggiornamenti Recenti -->
                         <div class="info-card">
                             <h4 class="info-card-title">📋 Aggiornamenti Recenti</h4>
                             
                             <div class="update-item">
+                                <div class="update-version">
+                                    <span class="update-badge">v1.4.4</span>
+                                    <span class="update-date">25 Ottobre 2025</span>
+                                </div>
+                                <div class="update-content">
+                                    <p class="update-title">Banner Offline e Simulazione Connettività</p>
+                                    <ul class="update-list">
+                                        <li>Aggiunto banner notifica offline/online in alto con design glassmorphism</li>
+                                        <li>Animazione icona pulsante e transizione slide-down</li>
+                                        <li>Banner verde "Connessione ripristinata" quando torna online</li>
+                                        <li>Simulazione modalità offline persistente su test.html</li>
+                                        <li>Sincronizzazione cross-tab della modalità offline test</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="update-item update-item-hidden">
                                 <div class="update-version">
                                     <span class="update-badge">v1.4.3</span>
                                     <span class="update-date">24 Ottobre 2025</span>
@@ -1459,7 +1512,7 @@
                                 </div>
                             </div>
                             
-                            <div class="update-item">
+                            <div class="update-item update-item-hidden">
                                 <div class="update-version">
                                     <span class="update-badge">v1.4.2</span>
                                     <span class="update-date">24 Ottobre 2025</span>
@@ -1477,7 +1530,7 @@
                                 </div>
                             </div>
                             
-                            <div class="update-item">
+                            <div class="update-item update-item-hidden">
                                 <div class="update-version">
                                     <span class="update-badge">v1.4.0</span>
                                     <span class="update-date">Ottobre 2025</span>
@@ -1491,6 +1544,11 @@
                                     </ul>
                                 </div>
                             </div>
+                            
+                            <button class="show-all-updates-btn" id="show-all-updates-btn">
+                                <span class="show-updates-icon">📋</span>
+                                <span class="show-updates-text">Vedi tutti gli aggiornamenti</span>
+                            </button>
                         </div>
                         
                         <!-- Link Utili -->
@@ -1680,6 +1738,145 @@
                 
                 // Aggiungi event listener
                 btn.addEventListener('click', togglePWATestMode);
+            }
+        });
+
+        // ===== GESTIONE SIMULAZIONE OFFLINE =====
+        function getOfflineSimulatedState() {
+            return localStorage.getItem('tpl.offlineTestMode') === 'true';
+        }
+        
+        function setOfflineSimulatedState(value) {
+            localStorage.setItem('tpl.offlineTestMode', value);
+        }
+        
+        function toggleOfflineMode() {
+            const btn = document.getElementById('toggle-offline-mode');
+            const icon = document.getElementById('offline-mode-icon');
+            const text = document.getElementById('offline-mode-text');
+            const statusDiv = document.getElementById('offline-mode-status');
+            const infoDiv = document.getElementById('offline-mode-info');
+            
+            if (!btn || !icon || !text || !statusDiv || !infoDiv) return;
+            
+            const isOfflineSimulated = !getOfflineSimulatedState();
+            setOfflineSimulatedState(isOfflineSimulated);
+            
+            if (isOfflineSimulated) {
+                // Attiva modalità offline
+                icon.textContent = '📵';
+                text.textContent = 'Torna Online';
+                btn.style.background = '#ef4444';
+                
+                // Trigger evento offline
+                window.dispatchEvent(new Event('offline'));
+                
+                infoDiv.innerHTML = `
+                    <div style="margin-bottom: 1rem; padding: 1rem; background: rgba(239, 68, 68, 0.1); border-radius: 8px;">
+                        <strong style="color: #ef4444; font-size: 1.1rem;">📵 Modalità Offline: ATTIVA</strong><br>
+                        <p style="margin: 0.5rem 0; color: var(--testo);">Simulazione della perdita di connessione internet.</p>
+                    </div>
+                    <div style="margin-bottom: 1rem; padding: 1rem; background: var(--bianco); border-radius: 8px; border: 1px solid var(--bordo);">
+                        <strong style="color: #ef4444;">🚫 Cosa succede ora:</strong>
+                        <ul style="margin: 0.5rem 0; padding-left: 1.5rem; line-height: 1.8;">
+                            <li>Il banner "Sei offline" dovrebbe apparire in alto</li>
+                            <li>Le richieste di rete falliranno (simulato)</li>
+                            <li>L'app continua a funzionare in modalità offline (PWA)</li>
+                            <li>I dati cached rimangono disponibili</li>
+                        </ul>
+                    </div>
+                    <div style="margin-bottom: 1rem; padding: 1rem; background: var(--bianco); border-radius: 8px; border: 1px solid var(--bordo);">
+                        <strong style="color: var(--turchese);">📊 Status corrente:</strong>
+                        <ul style="margin: 0.5rem 0; padding-left: 1.5rem; line-height: 1.8;">
+                            <li><strong>navigator.onLine:</strong> <code>${navigator.onLine}</code></li>
+                            <li><strong>Evento offline:</strong> <code>dispatched</code></li>
+                            <li><strong>Banner offline:</strong> <code>dovrebbe essere visibile</code></li>
+                        </ul>
+                    </div>
+                    <div style="font-size: 0.9rem; color: var(--testo-secondario); font-style: italic;">
+                        <strong>💡 Nota:</strong> Questa è una simulazione. Per testare realmente la modalità offline, usa DevTools → Network → Offline.
+                    </div>
+                `;
+                statusDiv.style.display = 'block';
+                statusDiv.style.borderLeftColor = '#ef4444';
+                statusDiv.style.background = 'rgba(239, 68, 68, 0.05)';
+                
+                console.log('🔴 Modalità offline simulata: ATTIVA');
+                
+                // Notifica altre pagine/tab
+                window.dispatchEvent(new Event('offlineTestModeChanged'));
+            } else {
+                // Disattiva modalità offline
+                icon.textContent = '📶';
+                text.textContent = 'Simula Offline';
+                btn.style.background = '#10b981';
+                
+                // Trigger evento online
+                window.dispatchEvent(new Event('online'));
+                
+                infoDiv.innerHTML = `
+                    <div style="margin-bottom: 1rem; padding: 1rem; background: rgba(16, 185, 129, 0.1); border-radius: 8px;">
+                        <strong style="color: #10b981; font-size: 1.1rem;">📶 Modalità Online: ATTIVA</strong><br>
+                        <p style="margin: 0.5rem 0; color: var(--testo);">Connessione internet ripristinata (simulato).</p>
+                    </div>
+                    <div style="margin-bottom: 1rem; padding: 1rem; background: var(--bianco); border-radius: 8px; border: 1px solid var(--bordo);">
+                        <strong style="color: #10b981;">✅ Cosa succede ora:</strong>
+                        <ul style="margin: 0.5rem 0; padding-left: 1.5rem; line-height: 1.8;">
+                            <li>Il banner "Sei offline" dovrebbe scomparire</li>
+                            <li>Le richieste di rete funzionano normalmente</li>
+                            <li>Sincronizzazione dati ripristinata</li>
+                            <li>Accesso completo a tutte le funzionalità</li>
+                        </ul>
+                    </div>
+                    <div style="margin-bottom: 1rem; padding: 1rem; background: var(--bianco); border-radius: 8px; border: 1px solid var(--bordo);">
+                        <strong style="color: var(--turchese);">📊 Status corrente:</strong>
+                        <ul style="margin: 0.5rem 0; padding-left: 1.5rem; line-height: 1.8;">
+                            <li><strong>navigator.onLine:</strong> <code>${navigator.onLine}</code></li>
+                            <li><strong>Evento online:</strong> <code>dispatched</code></li>
+                            <li><strong>Banner offline:</strong> <code>nascosto</code></li>
+                        </ul>
+                    </div>
+                    <div style="font-size: 0.9rem; color: var(--testo-secondario); font-style: italic;">
+                        <strong>💡 Suggerimento:</strong> Clicca su "Simula Offline" per testare nuovamente il comportamento offline dell'app.
+                    </div>
+                `;
+                statusDiv.style.display = 'block';
+                statusDiv.style.borderLeftColor = '#10b981';
+                statusDiv.style.background = 'rgba(16, 185, 129, 0.05)';
+                
+                console.log('🟢 Modalità offline simulata: DISATTIVA');
+                
+                // Notifica altre pagine/tab
+                window.dispatchEvent(new Event('offlineTestModeChanged'));
+            }
+        }
+        
+        // Event listener per il pulsante toggle offline
+        window.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('toggle-offline-mode');
+            if (btn) {
+                // Imposta lo stato iniziale del pulsante
+                const isOfflineMode = getOfflineSimulatedState();
+                const icon = document.getElementById('offline-mode-icon');
+                const text = document.getElementById('offline-mode-text');
+                const statusDiv = document.getElementById('offline-mode-status');
+                
+                if (isOfflineMode) {
+                    icon.textContent = '📵';
+                    text.textContent = 'Torna Online';
+                    btn.style.background = '#ef4444';
+                    // Mostra lo status se già attivo
+                    toggleOfflineMode();
+                    toggleOfflineMode(); // Doppio toggle per mostrare lo status
+                } else {
+                    icon.textContent = '📶';
+                    text.textContent = 'Simula Offline';
+                    btn.style.background = '#10b981';
+                }
+                
+                // Aggiungi event listener
+                btn.addEventListener('click', toggleOfflineMode);
+                console.log('✅ Pulsante simulazione offline inizializzato');
             }
         });
 

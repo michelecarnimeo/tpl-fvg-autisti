@@ -2239,11 +2239,15 @@ window.addEventListener('online', () => {
   isOnline = true;
   
   if (offlineBanner) {
-    // Aggiorna testo quando torna online
+    // Aggiorna testo e stile quando torna online
+    offlineBanner.classList.add('online');
     const textElement = offlineBanner.querySelector('.offline-text');
+    const iconElement = offlineBanner.querySelector('.offline-icon');
     if (textElement) {
       textElement.textContent = 'Connessione ripristinata';
-      textElement.style.color = '#10b981';
+    }
+    if (iconElement) {
+      iconElement.textContent = '✅';
     }
     
     // Nasconde automaticamente dopo 2 secondi
@@ -2701,11 +2705,98 @@ if (!navigator.onLine) {
       toggleBottomNav();
     });
     
+    // ===== GESTIONE SIMULAZIONE OFFLINE GLOBALE =====
+    // Controlla se la modalità offline test è attiva e trigger l'evento
+    (function checkOfflineTestMode() {
+      const isOfflineTestMode = localStorage.getItem('tpl.offlineTestMode') === 'true';
+      
+      if (isOfflineTestMode) {
+        console.log('🔴 Modalità offline test attiva - triggering evento offline');
+        // Trigger evento offline al caricamento della pagina
+        setTimeout(() => {
+          window.dispatchEvent(new Event('offline'));
+        }, 100);
+      }
+      
+      // Listener per cambio stato offline test mode
+      window.addEventListener('storage', (e) => {
+        if (e.key === 'tpl.offlineTestMode') {
+          const isOffline = e.newValue === 'true';
+          console.log('🌐 Modalità offline test cambiata:', isOffline ? 'OFFLINE' : 'ONLINE');
+          
+          if (isOffline) {
+            window.dispatchEvent(new Event('offline'));
+          } else {
+            window.dispatchEvent(new Event('online'));
+          }
+        }
+      });
+    })();
+    
     // Espone funzione refresh globale per la pagina test
     window.refreshPWABottomNav = function() {
       toggleBottomNav();
       highlightActiveTab();
     };
+  })();
+  
+  // ========================================
+  // PULSANTE "VEDI TUTTI GLI AGGIORNAMENTI"
+  // ========================================
+  (function() {
+    const showAllBtn = document.getElementById('show-all-updates-btn');
+    
+    if (showAllBtn) {
+      showAllBtn.addEventListener('click', function() {
+        const hiddenItems = document.querySelectorAll('.update-item-hidden');
+        const isExpanded = this.classList.contains('active');
+        
+        if (isExpanded) {
+          // Nascondi
+          hiddenItems.forEach(item => {
+            item.classList.remove('show');
+            setTimeout(() => {
+              item.style.display = 'none';
+            }, 300);
+          });
+          this.classList.remove('active');
+          this.querySelector('.show-updates-text').textContent = 'Vedi tutti gli aggiornamenti';
+        } else {
+          // Mostra
+          hiddenItems.forEach((item, index) => {
+            item.style.display = 'block';
+            setTimeout(() => {
+              item.classList.add('show');
+            }, index * 50);
+          });
+          this.classList.add('active');
+          this.querySelector('.show-updates-text').textContent = 'Mostra';
+        }
+      });
+    }
+  })();
+  
+  // ========================================
+  // PULSANTE "RIAVVIA APP"
+  // ========================================
+  (function() {
+    const restartBtn = document.getElementById('restart-app-btn');
+    
+    if (restartBtn) {
+      restartBtn.addEventListener('click', function() {
+        console.log('🔄 Riavvio app...');
+        
+        // Feedback visivo
+        this.textContent = 'Riavvio...';
+        this.style.opacity = '0.6';
+        this.style.cursor = 'wait';
+        
+        // Riavvia dopo 300ms
+        setTimeout(() => {
+          location.reload();
+        }, 300);
+      });
+    }
   })();
   
   // ========================================

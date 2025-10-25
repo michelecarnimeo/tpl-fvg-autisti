@@ -478,8 +478,8 @@
                 <img src="src/logo.png" alt="TPL FVG" class="info-logo">
                 <div class="info-title">
                   <h3>TPL FVG Autisti</h3>
-                  <p class="info-version">Versione 1.4.3</p>
-                  <p class="info-date">24 Ottobre 2025 - 20:15</p>
+                  <p class="info-version">Versione 1.4.4</p>
+                  <p class="info-date">25 Ottobre 2025 - 14:15</p>
                 </div>
               </div>
               
@@ -521,11 +521,42 @@
               </button>
             </div>
             
+            <!-- Riavvia App -->
+            <div class="info-card update-check-card">
+              <div class="update-check-header">
+                <div class="update-check-icon">📲</div>
+                <div class="update-check-text">
+                  <h4 class="update-check-title">Riavvia App</h4>
+                  <p class="update-check-description">Riavvia l'applicazione per applicare le modifiche</p>
+                </div>
+              </div>
+              <button id="restart-app-btn" class="update-check-btn restart-app-btn">
+                Riavvia Ora
+              </button>
+            </div>
+            
             <!-- Aggiornamenti Recenti -->
             <div class="info-card">
               <h4 class="info-card-title">📋 Aggiornamenti Recenti</h4>
               
               <div class="update-item">
+                <div class="update-version">
+                  <span class="update-badge">v1.4.4</span>
+                  <span class="update-date">25 Ottobre 2025</span>
+                </div>
+                <div class="update-content">
+                  <p class="update-title">Banner Offline e Simulazione Connettività</p>
+                  <ul class="update-list">
+                    <li>Aggiunto banner notifica offline/online in alto con design glassmorphism</li>
+                    <li>Animazione icona pulsante e transizione slide-down</li>
+                    <li>Banner verde "Connessione ripristinata" quando torna online</li>
+                    <li>Simulazione modalità offline persistente su test.html</li>
+                    <li>Sincronizzazione cross-tab della modalità offline test</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div class="update-item update-item-hidden">
                 <div class="update-version">
                   <span class="update-badge">v1.4.3</span>
                   <span class="update-date">24 Ottobre 2025</span>
@@ -543,7 +574,7 @@
                 </div>
               </div>
               
-              <div class="update-item">
+              <div class="update-item update-item-hidden">
                 <div class="update-version">
                   <span class="update-badge">v1.4.2</span>
                   <span class="update-date">24 Ottobre 2025</span>
@@ -561,7 +592,7 @@
                 </div>
               </div>
               
-              <div class="update-item">
+              <div class="update-item update-item-hidden">
                 <div class="update-version">
                   <span class="update-badge">v1.4.0</span>
                   <span class="update-date">Ottobre 2025</span>
@@ -575,6 +606,11 @@
                   </ul>
                 </div>
               </div>
+              
+              <button class="show-all-updates-btn" id="show-all-updates-btn">
+                <span class="show-updates-icon">📋</span>
+                <span class="show-updates-text">Vedi tutti gli aggiornamenti</span>
+              </button>
             </div>
             
             <!-- Link Utili -->
