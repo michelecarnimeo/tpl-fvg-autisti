@@ -1,6 +1,6 @@
 {
-  "version": "1.4.7",
+  "version": "1.4.8",
   "versionDate": "25 Ottobre 2025",
-  "versionTime": "18:45",
-  "updateNotes": "Mappa interattiva Leaflet.js con marker posizione, cerchio accuratezza GPS, zoom automatico e banner HTTPS dinamico"
+  "versionTime": "19:30",
+  "updateNotes": "Simulazione posizione GPS fake per test senza GPS reale, con preset città FVG e coordinate personalizzate"
 }

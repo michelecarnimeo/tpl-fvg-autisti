@@ -1007,6 +1007,66 @@
                 <div id="test-location-info"></div>
             </div>
             
+            <!-- Simulazione Posizione Fake -->
+            <div id="fake-position-section" style="margin-top: 1rem; padding: 1.5rem; background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(147, 51, 234, 0.1)); border-radius: 12px; border: 2px solid #a855f7;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <div>
+                        <h4 style="margin: 0; color: #7e22ce;">🎭 Simulazione Posizione</h4>
+                        <p style="margin: 0.25rem 0 0 0; color: #666; font-size: 0.85rem;">Usa coordinate fake per test senza GPS reale</p>
+                    </div>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                        <input type="checkbox" id="use-fake-position" style="width: 20px; height: 20px; cursor: pointer;">
+                        <span style="font-weight: 600; color: #7e22ce;">Attiva</span>
+                    </label>
+                </div>
+                
+                <!-- Contenuto collassabile -->
+                <div id="fake-position-content" style="display: none;">
+                    <!-- Warning -->
+                    <div style="padding: 0.75rem; background: #fef3c7; border-radius: 8px; border-left: 4px solid #f59e0b; margin-bottom: 1rem;">
+                        <strong style="color: #92400e;">⚠️ Modalità Test Attiva</strong>
+                        <p style="margin: 0.25rem 0 0 0; color: #78350f; font-size: 0.85rem;">
+                            Stai usando coordinate simulate. Il GPS reale è disabilitato.
+                        </p>
+                    </div>
+                    
+                    <!-- Preset Città -->
+                    <div style="margin-bottom: 1rem;">
+                        <strong style="display: block; margin-bottom: 0.5rem; color: #374151;">🏙️ Preset Città FVG:</strong>
+                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                            <button class="fake-position-preset" data-lat="45.6495" data-lng="13.7768" data-name="Trieste">Trieste</button>
+                            <button class="fake-position-preset" data-lat="46.0710" data-lng="13.2345" data-name="Udine">Udine</button>
+                            <button class="fake-position-preset" data-lat="45.9632" data-lng="12.6603" data-name="Pordenone">Pordenone</button>
+                            <button class="fake-position-preset" data-lat="45.9405" data-lng="13.6222" data-name="Gorizia">Gorizia</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Input Manuale -->
+                    <div style="margin-bottom: 1rem;">
+                        <strong style="display: block; margin-bottom: 0.5rem; color: #374151;">📍 Coordinate Personalizzate:</strong>
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.5rem;">
+                            <input type="number" id="fake-lat" placeholder="Latitudine" step="0.000001" style="flex: 1; min-width: 150px; padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.9rem;">
+                            <input type="number" id="fake-lng" placeholder="Longitudine" step="0.000001" style="flex: 1; min-width: 150px; padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.9rem;">
+                        </div>
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                            <input type="number" id="fake-accuracy" placeholder="Accuratezza (metri)" value="10" min="1" max="10000" style="flex: 1; min-width: 150px; padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.9rem;">
+                            <input type="number" id="fake-altitude" placeholder="Altitudine (metri)" value="0" style="flex: 1; min-width: 150px; padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.9rem;">
+                        </div>
+                    </div>
+                    
+                    <!-- Pulsante Applica -->
+                    <button id="apply-fake-position" style="width: 100%; padding: 0.75rem; background: #a855f7; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                        🎯 Applica Posizione Fake
+                    </button>
+                    
+                    <!-- Info Posizione Corrente -->
+                    <div id="fake-position-info" style="display: none; margin-top: 1rem; padding: 0.75rem; background: white; border-radius: 8px; border-left: 4px solid #a855f7;">
+                        <strong style="color: #7e22ce;">📍 Posizione Fake Attiva:</strong>
+                        <div id="fake-position-details" style="margin-top: 0.5rem; font-size: 0.9rem; color: #666;"></div>
+                    </div>
+                </div>
+            </div>
+            
             <!-- Calcolo Distanza -->
             <div id="distance-calculator" style="display: none; margin-top: 1rem; padding: 1.5rem; background: var(--grigio-chiaro); border-radius: 12px; border: 2px solid #f59e0b;">
                 <h4 style="margin-top: 0; color: #92400e;">📏 Calcolo Distanza</h4>
@@ -1565,8 +1625,8 @@
                                 <img src="src/logo.png" alt="TPL FVG" class="info-logo">
                                 <div class="info-title">
                                     <h3>TPL FVG Autisti</h3>
-                                    <p class="info-version">Versione 1.4.7</p>
-                                    <p class="info-date">25 Ottobre 2025 - 18:45</p>
+                                    <p class="info-version">Versione 1.4.8</p>
+                                    <p class="info-date">25 Ottobre 2025 - 19:30</p>
                                 </div>
                             </div>
                             
@@ -1627,6 +1687,24 @@
                             <h4 class="info-card-title">📋 Aggiornamenti Recenti</h4>
                             
                             <div class="update-item">
+                                <div class="update-version">
+                                    <span class="update-badge">v1.4.8</span>
+                                    <span class="update-date">25 Ottobre 2025</span>
+                                </div>
+                                <div class="update-content">
+                                    <p class="update-title">Simulazione Posizione GPS Fake</p>
+                                    <ul class="update-list">
+                                        <li>🎭 Modalità test con posizione GPS simulata</li>
+                                        <li>Preset città FVG: Trieste, Udine, Pordenone, Gorizia</li>
+                                        <li>Input manuale coordinate personalizzate (lat/lng)</li>
+                                        <li>Configurazione accuratezza e altitudine</li>
+                                        <li>Badge visivo GPS reale vs simulato</li>
+                                        <li>Integrazione completa con mappa e calcolo distanza</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="update-item update-item-hidden">
                                 <div class="update-version">
                                     <span class="update-badge">v1.4.7</span>
                                     <span class="update-date">25 Ottobre 2025</span>
@@ -1777,7 +1855,7 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <p>© <span id="footer-year"></span> Michele Carnimeo. Tutti i diritti riservati.<br>TPL FVG è un marchio di TPL FVG S.C. a R.L. · <a href="test.html" style="color: inherit; text-decoration: none; transition: text-decoration 0.3s ease;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">TPL Autisti 1.4.3</a></p>
+        <p>© <span id="footer-year"></span> Michele Carnimeo. Tutti i diritti riservati.<br>TPL FVG è un marchio di TPL FVG S.C. a R.L. · <a href="test.html" style="color: inherit; text-decoration: none; transition: text-decoration 0.3s ease;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">TPL Autisti 1.4.8</a></p>
         <div class="footer-links">
           <a href="https://t.me/+eoJ9nYFFrjphMzVk" target="_blank" class="telegram-link" title="Canale Telegram">
             <span class="telegram-icon">📢</span> Avvisi & Aggiornamenti
@@ -2579,6 +2657,109 @@
             }
         }
         
+        // ===== SIMULAZIONE POSIZIONE FAKE =====
+        
+        // Variabili globali per fake position
+        let useFakePosition = false;
+        let fakePositionData = null;
+        
+        // Setup gestione simulazione posizione
+        (function setupFakePosition() {
+            const toggleCheckbox = document.getElementById('use-fake-position');
+            const content = document.getElementById('fake-position-content');
+            const applyBtn = document.getElementById('apply-fake-position');
+            const presetBtns = document.querySelectorAll('.fake-position-preset');
+            
+            if (!toggleCheckbox || !content || !applyBtn) return;
+            
+            // Toggle on/off simulazione
+            toggleCheckbox.addEventListener('change', (e) => {
+                useFakePosition = e.target.checked;
+                content.style.display = useFakePosition ? 'block' : 'none';
+                
+                if (useFakePosition) {
+                    console.log('🎭 Simulazione posizione ATTIVA');
+                } else {
+                    console.log('✅ GPS reale ATTIVO');
+                    fakePositionData = null;
+                    document.getElementById('fake-position-info').style.display = 'none';
+                }
+            });
+            
+            // Preset città
+            presetBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const lat = parseFloat(btn.dataset.lat);
+                    const lng = parseFloat(btn.dataset.lng);
+                    const name = btn.dataset.name;
+                    
+                    // Popola input
+                    document.getElementById('fake-lat').value = lat;
+                    document.getElementById('fake-lng').value = lng;
+                    
+                    // Visual feedback
+                    presetBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    console.log(`🏙️ Preset selezionato: ${name}`);
+                });
+            });
+            
+            // Applica posizione fake
+            applyBtn.addEventListener('click', () => {
+                const lat = parseFloat(document.getElementById('fake-lat').value);
+                const lng = parseFloat(document.getElementById('fake-lng').value);
+                const accuracy = parseFloat(document.getElementById('fake-accuracy').value) || 10;
+                const altitude = parseFloat(document.getElementById('fake-altitude').value) || 0;
+                
+                // Validazione
+                if (!lat || !lng || isNaN(lat) || isNaN(lng)) {
+                    alert('⚠️ Inserisci coordinate valide!');
+                    return;
+                }
+                
+                if (lat < -90 || lat > 90 || lng < -180 || lng > 180) {
+                    alert('⚠️ Coordinate fuori range!\nLatitudine: -90 to 90\nLongitudine: -180 to 180');
+                    return;
+                }
+                
+                // Crea oggetto fake position (simula Position API)
+                fakePositionData = {
+                    coords: {
+                        latitude: lat,
+                        longitude: lng,
+                        accuracy: accuracy,
+                        altitude: altitude,
+                        altitudeAccuracy: accuracy * 2,
+                        heading: null,
+                        speed: null
+                    },
+                    timestamp: Date.now()
+                };
+                
+                // Mostra info posizione fake
+                const infoDiv = document.getElementById('fake-position-info');
+                const detailsDiv = document.getElementById('fake-position-details');
+                
+                if (infoDiv && detailsDiv) {
+                    detailsDiv.innerHTML = `
+                        <strong>Coordinate:</strong> ${lat.toFixed(6)}, ${lng.toFixed(6)}<br>
+                        <strong>Accuratezza:</strong> ±${accuracy}m<br>
+                        <strong>Altitudine:</strong> ${altitude}m
+                    `;
+                    infoDiv.style.display = 'block';
+                }
+                
+                // Visual feedback
+                applyBtn.textContent = '✅ Posizione Applicata';
+                setTimeout(() => {
+                    applyBtn.innerHTML = '🎯 Applica Posizione Fake';
+                }, 2000);
+                
+                console.log('🎯 Posizione fake applicata:', fakePositionData.coords);
+            });
+        })();
+        
         // Funzione helper: Copia coordinate negli appunti
         async function copyCoordinates(lat, lng) {
             try {
@@ -2629,27 +2810,50 @@
             result.style.display = 'none';
 
             try {
-                // Verifica supporto geolocalizzazione
-                if (!navigator.geolocation) {
-                    throw new Error('Geolocalizzazione non supportata dal browser');
+                let position;
+                
+                // ===== CONTROLLA SE USARE FAKE POSITION =====
+                if (useFakePosition && fakePositionData) {
+                    // Usa posizione fake
+                    console.log('🎭 Uso posizione simulata:', fakePositionData.coords);
+                    
+                    // Simula delay realistico (500ms)
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                    
+                    position = fakePositionData;
+                    
+                    // Feedback visivo
+                    icon.textContent = '🎭';
+                    text.textContent = 'Posizione Simulata';
+                    
+                } else if (useFakePosition && !fakePositionData) {
+                    // Fake attivato ma nessuna posizione impostata
+                    throw new Error('⚠️ Nessuna posizione fake impostata! Clicca "Applica Posizione Fake" prima.');
+                    
+                } else {
+                    // Usa GPS reale
+                    // Verifica supporto geolocalizzazione
+                    if (!navigator.geolocation) {
+                        throw new Error('Geolocalizzazione non supportata dal browser');
+                    }
+
+                    // Richiedi posizione con timeout
+                    position = await new Promise((resolve, reject) => {
+                        navigator.geolocation.getCurrentPosition(
+                            resolve,
+                            reject,
+                            {
+                                enableHighAccuracy: true,
+                                timeout: 10000,
+                                maximumAge: 0 // Sempre posizione fresca
+                            }
+                        );
+                    });
+
+                    // Successo
+                    icon.textContent = '✅';
+                    text.textContent = 'Posizione Rilevata';
                 }
-
-                // Richiedi posizione con timeout
-                const position = await new Promise((resolve, reject) => {
-                    navigator.geolocation.getCurrentPosition(
-                        resolve,
-                        reject,
-                        {
-                            enableHighAccuracy: true,
-                            timeout: 10000,
-                            maximumAge: 0 // Sempre posizione fresca
-                        }
-                    );
-                });
-
-                // Successo
-                icon.textContent = '✅';
-                text.textContent = 'Posizione Rilevata';
                 
                 // Salva posizione per calcolo distanza
                 lastKnownPosition = position;
@@ -2671,8 +2875,14 @@
                 const speedKmh = coords.speed !== null ? (coords.speed * 3.6).toFixed(1) : null;
                 const heading = coords.heading !== null ? coords.heading.toFixed(0) : null;
                 
+                // Badge modalità (GPS reale o fake)
+                const modeBadge = useFakePosition 
+                    ? '<span style="display: inline-block; padding: 0.25rem 0.75rem; background: linear-gradient(135deg, #a855f7, #9333ea); color: white; border-radius: 6px; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.75rem;">🎭 MODALITÀ SIMULATA</span>'
+                    : '<span style="display: inline-block; padding: 0.25rem 0.75rem; background: linear-gradient(135deg, #10b981, #059669); color: white; border-radius: 6px; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.75rem;">✅ GPS REALE</span>';
+                
                 // Costruisci HTML base
                 let html = `
+                    ${modeBadge}
                     <div style="margin-bottom: 0.5rem;">
                         <strong>📍 Coordinate:</strong>
                         <button id="copy-coords-btn" style="margin-left: 0.5rem; padding: 0.25rem 0.75rem; background: var(--turchese); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 500;">
