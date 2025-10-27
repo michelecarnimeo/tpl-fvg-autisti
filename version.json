@@ -1,6 +1,6 @@
 {
-  "version": "1.4.9",
-  "versionDate": "25 Ottobre 2025",
-  "versionTime": "21:00",
-  "updateNotes": "Info Device/Browser con layout responsive, Test Rapido GPS automatico, Export Report JSON/TXT, Modal Reset con design moderno"
+  "version": "1.5.0",
+  "versionDate": "27 Ottobre 2025",
+  "versionTime": "11:07",
+  "updateNotes": "Feedback aptico (vibrazione) per azioni e conferme. UI impostazioni ottimizzata (rimossi titoli ridondanti)."
 }

@@ -1,7 +1,44 @@
 // script.js - Gestione logica TPL FVG
 
 // ========================================
-// SEZIONE 0: RILEVAMENTO POSIZIONE
+// SEZIONE 0: FEEDBACK APTICO (VIBRAZIONE)
+// ========================================
+
+// Pattern di vibrazione predefiniti
+const HAPTIC_PATTERNS = {
+  light: 20,           // Micro feedback (tap generico)
+  medium: 50,          // Feedback standard (selezione)
+  strong: 100,         // Feedback importante (successo)
+  success: [100, 50, 100], // Pattern successo
+  warning: [50, 30, 50],   // Pattern avviso
+  error: 200           // Vibrazione lunga (errore)
+};
+
+// Funzione principale per feedback aptico
+function triggerHaptic(pattern = 'light') {
+  // Verifica se il feedback aptico è abilitato
+  const isEnabled = localStorage.getItem('tpl.hapticFeedback') === 'true';
+  if (!isEnabled) return;
+  
+  // Verifica supporto API Vibration
+  if (!navigator.vibrate) {
+    console.log('⚠️ API Vibration non supportata');
+    return;
+  }
+  
+  // Ottieni il pattern
+  const vibrationPattern = HAPTIC_PATTERNS[pattern] || pattern;
+  
+  try {
+    navigator.vibrate(vibrationPattern);
+    console.log(`📳 Vibrazione: ${pattern}`);
+  } catch (error) {
+    console.error('❌ Errore vibrazione:', error);
+  }
+}
+
+// ========================================
+// SEZIONE 1: RILEVAMENTO POSIZIONE
 // ========================================
 // Sistema di rilevamento posizione per ordinare fermate per distanza
 let userPosition = null;
@@ -768,9 +805,9 @@ function resetFilters() {
 
 // Funzione reset cache
 // Versione corrente dell'app
-const CURRENT_VERSION = '1.4.9';
-const VERSION_DATE = '25 Ottobre 2025';
-const VERSION_TIME = '21:00';
+const CURRENT_VERSION = '1.5.0';
+const VERSION_DATE = '27 Ottobre 2025';
+const VERSION_TIME = '11:07';
 
 // Funzione helper per aggiornare versione, data e ora
 function updateVersion(version, date, time) {
@@ -2306,6 +2343,7 @@ if (!navigator.onLine) {
   const animationToggle = document.getElementById('settings-animation');
   const highContrastToggle = document.getElementById('settings-high-contrast');
   const touchFriendlyToggle = document.getElementById('settings-touch-friendly');
+  const hapticFeedbackToggle = document.getElementById('settings-haptic-feedback');
   
   // Font size buttons
   const fontButtons = document.querySelectorAll('.settings-font-btn');
@@ -2421,6 +2459,12 @@ if (!navigator.onLine) {
       touchFriendlyToggle.checked = isTouchFriendly;
     }
     
+    // Haptic Feedback
+    if (hapticFeedbackToggle) {
+      const isHapticEnabled = localStorage.getItem('tpl.hapticFeedback') === 'true';
+      hapticFeedbackToggle.checked = isHapticEnabled;
+    }
+    
     // Font Size
     const currentFontSize = localStorage.getItem('tpl.fontSize') || 'normal';
     fontButtons.forEach(btn => {
@@ -2472,6 +2516,17 @@ if (!navigator.onLine) {
     });
   }
   
+  // Haptic Feedback
+  if (hapticFeedbackToggle) {
+    hapticFeedbackToggle.addEventListener('change', (e) => {
+      setHapticFeedback(e.target.checked);
+      // Vibra per confermare l'attivazione/disattivazione
+      if (e.target.checked) {
+        triggerHaptic('success');
+      }
+    });
+  }
+  
   // Font Size
   fontButtons.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -2481,6 +2536,9 @@ if (!navigator.onLine) {
       // Aggiorna UI
       fontButtons.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
+      
+      // Feedback aptico
+      triggerHaptic('light');
     });
   });
   
@@ -2498,6 +2556,7 @@ if (!navigator.onLine) {
     } catch {}
     
     console.log('Contrasto alto:', enabled ? 'attivato' : 'disattivato');
+    triggerHaptic('medium'); // Feedback al cambio contrasto
   }
   
   function loadHighContrast() {
@@ -2521,12 +2580,32 @@ if (!navigator.onLine) {
     } catch {}
     
     console.log('Touch friendly:', enabled ? 'attivato' : 'disattivato');
+    triggerHaptic('medium'); // Feedback al cambio modalità touch
   }
   
   function loadTouchFriendly() {
     const saved = localStorage.getItem('tpl.touchFriendly');
     if (saved === 'true') {
       setTouchFriendly(true);
+    }
+  }
+  
+  // ===== FUNZIONI FEEDBACK APTICO =====
+  
+  function setHapticFeedback(enabled) {
+    try {
+      localStorage.setItem('tpl.hapticFeedback', enabled);
+      console.log('Feedback aptico:', enabled ? 'attivato' : 'disattivato');
+    } catch (error) {
+      console.error('Errore salvataggio haptic feedback:', error);
+    }
+  }
+  
+  function loadHapticFeedback() {
+    const saved = localStorage.getItem('tpl.hapticFeedback');
+    // Nota: non impostiamo una classe CSS, il feedback è gestito via JavaScript
+    if (saved === 'true') {
+      console.log('✅ Feedback aptico caricato: attivo');
     }
   }
   
@@ -2539,6 +2618,7 @@ if (!navigator.onLine) {
     localStorage.setItem('tpl.themeMode', mode);
     applyTheme();
     console.log('Tema impostato su:', mode);
+    triggerHaptic('medium'); // Feedback al cambio tema
   }
   
   function applyTheme() {
@@ -2578,6 +2658,7 @@ if (!navigator.onLine) {
     loadTheme();
     loadHighContrast();
     loadTouchFriendly();
+    loadHapticFeedback();
   });
   
   // ========================================
