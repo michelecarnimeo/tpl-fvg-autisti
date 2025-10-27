@@ -1,6 +1,6 @@
 {
-  "version": "1.5.1",
+  "version": "1.5.2",
   "versionDate": "27 Ottobre 2025",
-  "versionTime": "19:30",
-  "updateNotes": "Bugfix multipli (reset biglietto, vibrazione, crash dark mode) + nuova funzione 'Riduci animazioni'."
+  "versionTime": "20:00",
+  "updateNotes": "Schermo sempre attivo (Keep Screen On) + bugfix card prezzo opaca."
 }

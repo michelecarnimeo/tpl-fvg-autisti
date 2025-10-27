@@ -561,6 +561,7 @@ function selectLinea(idx, nome) {
   updateFermateButtons();
   updateSummary();
   calcolaPrezzo();
+  updatePriceCardState();  // ← AGGIUNTO! Resetta la card quando cambi linea
   
   // Salva in localStorage
   try { 
@@ -613,6 +614,7 @@ function selectFermata(index) {
   hasCalculated = false;
   updateSummary();
   calcolaPrezzo();
+  updatePriceCardState();  // ← AGGIUNTO! Chiama sempre per aggiornare lo stato della card
   
   // Salva nello storage
   try {
@@ -820,15 +822,18 @@ function resetFilters() {
     }, 150);
   }
   
+  // Aggiorna lo stato della card prezzo (torna inactive)
+  updatePriceCardState();
+  
   // Vibrazione di conferma reset
   triggerHaptic('medium');
 }
 
 // Funzione reset cache
 // Versione corrente dell'app
-const CURRENT_VERSION = '1.5.1';
+const CURRENT_VERSION = '1.5.2';
 const VERSION_DATE = '27 Ottobre 2025';
-const VERSION_TIME = '19:30';
+const VERSION_TIME = '20:00';
 
 // Funzione helper per aggiornare versione, data e ora
 function updateVersion(version, date, time) {
@@ -2366,6 +2371,7 @@ if (!navigator.onLine) {
   const touchFriendlyToggle = document.getElementById('settings-touch-friendly');
   const hapticFeedbackToggle = document.getElementById('settings-haptic-feedback');
   const reduceMotionToggle = document.getElementById('settings-reduce-motion');
+  const keepScreenOnToggle = document.getElementById('settings-keep-screen-on');
   
   // Font size buttons
   const fontButtons = document.querySelectorAll('.settings-font-btn');
@@ -2493,6 +2499,12 @@ if (!navigator.onLine) {
       reduceMotionToggle.checked = isReduceMotion;
     }
     
+    // Keep Screen On
+    if (keepScreenOnToggle) {
+      const isKeepScreenOn = localStorage.getItem('tpl.keepScreenOn') === 'true';
+      keepScreenOnToggle.checked = isKeepScreenOn;
+    }
+    
     // Font Size
     const currentFontSize = localStorage.getItem('tpl.fontSize') || 'normal';
     fontButtons.forEach(btn => {
@@ -2559,6 +2571,14 @@ if (!navigator.onLine) {
   if (reduceMotionToggle) {
     reduceMotionToggle.addEventListener('change', (e) => {
       setReduceMotion(e.target.checked);
+      triggerHaptic('medium'); // Feedback al cambio
+    });
+  }
+  
+  // Keep Screen On
+  if (keepScreenOnToggle) {
+    keepScreenOnToggle.addEventListener('change', async (e) => {
+      await setKeepScreenOn(e.target.checked);
       triggerHaptic('medium'); // Feedback al cambio
     });
   }
@@ -2668,6 +2688,74 @@ if (!navigator.onLine) {
     }
   }
   
+  // ===== FUNZIONI KEEP SCREEN ON (WAKE LOCK API) =====
+  
+  // Variabile globale per tracciare il WakeLock
+  let wakeLock = null;
+  
+  async function setKeepScreenOn(enabled) {
+    // Salva preferenza
+    try {
+      localStorage.setItem('tpl.keepScreenOn', enabled);
+    } catch {}
+    
+    if (!('wakeLock' in navigator)) {
+      console.warn('⚠️ Wake Lock API non supportata da questo browser');
+      return;
+    }
+    
+    if (enabled) {
+      await requestWakeLock();
+    } else {
+      await releaseWakeLock();
+    }
+  }
+  
+  async function requestWakeLock() {
+    try {
+      wakeLock = await navigator.wakeLock.request('screen');
+      console.log('☀️ Wake Lock attivato - schermo sempre acceso');
+      
+      // Listener per quando il lock viene rilasciato
+      wakeLock.addEventListener('release', () => {
+        console.log('☀️ Wake Lock rilasciato');
+      });
+    } catch (err) {
+      console.error('❌ Errore richiesta Wake Lock:', err);
+    }
+  }
+  
+  async function releaseWakeLock() {
+    if (wakeLock !== null) {
+      try {
+        await wakeLock.release();
+        wakeLock = null;
+        console.log('☀️ Wake Lock disattivato - schermo può spegnersi');
+      } catch (err) {
+        console.error('❌ Errore rilascio Wake Lock:', err);
+      }
+    }
+  }
+  
+  function loadKeepScreenOn() {
+    const saved = localStorage.getItem('tpl.keepScreenOn');
+    if (saved === 'true') {
+      setKeepScreenOn(true);
+    }
+  }
+  
+  // Gestione visibilità pagina (background/foreground)
+  // Quando la pagina va in background, il Wake Lock viene automaticamente rilasciato
+  // Quando torna in foreground, lo riattiviamo se era abilitato
+  document.addEventListener('visibilitychange', async () => {
+    const isEnabled = localStorage.getItem('tpl.keepScreenOn') === 'true';
+    
+    if (document.visibilityState === 'visible' && isEnabled) {
+      // Pagina tornata visibile e Keep Screen On è attivo
+      await requestWakeLock();
+    }
+  });
+  
   // ===== FUNZIONI TEMA =====
   
   // Media query per rilevare tema sistema
@@ -2719,6 +2807,7 @@ if (!navigator.onLine) {
     loadTouchFriendly();
     loadHapticFeedback();
     loadReduceMotion();
+    loadKeepScreenOn();
   });
   
   // ========================================

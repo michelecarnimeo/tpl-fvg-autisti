@@ -3154,6 +3154,22 @@ p, span, div, a, button, input, select, textarea, label, li {
     z-index: 1;
   }
   
+  /* STATO ATTIVO - Forza colori pieni quando card è attiva (non inactive) */
+  .price-card:not(.inactive) .price-label,
+  .price-card:not(.inactive) .price-code,
+  .price-card:not(.inactive) .price-value {
+    color: rgba(15, 23, 42, 1) !important;  /* Nero scuro al 100% */
+    opacity: 1 !important;
+  }
+  
+  /* Dark mode - testo chiaro al 100% quando card attiva */
+  body.dark .price-card:not(.inactive) .price-label,
+  body.dark .price-card:not(.inactive) .price-code,
+  body.dark .price-card:not(.inactive) .price-value {
+    color: rgba(255, 255, 255, 1) !important;  /* Bianco al 100% */
+    opacity: 1 !important;
+  }
+  
   /* Stato inattivo - quando i campi non sono selezionati */
   .price-card.inactive {
     opacity: 0.6;
@@ -3165,6 +3181,7 @@ p, span, div, a, button, input, select, textarea, label, li {
   
   .price-card.inactive .price-label {
     color: #64748b;
+    opacity: 0.8;  /* Opacità ridotta solo quando inactive */
   }
   
   .price-card.inactive .price-code {
@@ -3210,7 +3227,7 @@ p, span, div, a, button, input, select, textarea, label, li {
     font-weight: 500;               /* Peso font medium */
     letter-spacing: 1px;            /* Spaziatura tra lettere */
     text-transform: uppercase;      /* Testo maiuscolo */
-    opacity: 0.8;                   /* Opacità ridotta */
+    /* opacity: 0.8 RIMOSSA - ora è 100% quando attiva, ridotta solo quando inactive */
   }
   
   /* SOTTOSEZIONE 22.4: Valore del prezzo */

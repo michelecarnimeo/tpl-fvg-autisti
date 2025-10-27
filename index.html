@@ -289,7 +289,7 @@
 
   <!-- Footer -->
   <footer class="footer">
-    <p>© <span id="footer-year"></span> Michele Carnimeo. Tutti i diritti riservati.<br>TPL FVG è un marchio di TPL FVG S.C. a R.L. · <a href="test.html" style="color: inherit; text-decoration: none; transition: text-decoration 0.3s ease;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">TPL Autisti 1.5.1</a></p>
+    <p>© <span id="footer-year"></span> Michele Carnimeo. Tutti i diritti riservati.<br>TPL FVG è un marchio di TPL FVG S.C. a R.L. · <a href="test.html" style="color: inherit; text-decoration: none; transition: text-decoration 0.3s ease;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">TPL Autisti 1.5.2</a></p>
     <div class="footer-links">
       <a href="https://t.me/+eoJ9nYFFrjphMzVk" target="_blank" class="telegram-link" title="Canale Telegram">
         <span class="telegram-icon">📢</span> Avvisi & Aggiornamenti
@@ -546,6 +546,21 @@
                 <span class="settings-toggle-slider"></span>
               </label>
             </div>
+            
+            <!-- Keep Screen On -->
+            <div class="settings-item">
+              <div class="settings-item-info">
+                <span class="settings-item-icon">☀️</span>
+                <div class="settings-item-text">
+                  <div class="settings-item-label">Schermo sempre attivo</div>
+                  <div class="settings-item-description">Impedisce lo spegnimento automatico</div>
+                </div>
+              </div>
+              <label class="settings-toggle">
+                <input type="checkbox" id="settings-keep-screen-on" aria-label="Attiva/disattiva schermo sempre attivo">
+                <span class="settings-toggle-slider"></span>
+              </label>
+            </div>
           </div>
           
           <!-- Sezione Dimensione Interfaccia -->
@@ -725,8 +740,8 @@
                 <img src="src/logo.png" alt="TPL FVG" class="info-logo">
                 <div class="info-title">
                   <h3>TPL FVG Autisti</h3>
-                  <p class="info-version">Versione 1.5.1</p>
-                  <p class="info-date">27 Ottobre 2025 - 19:30</p>
+                  <p class="info-version">Versione 1.5.2</p>
+                  <p class="info-date">27 Ottobre 2025 - 20:00</p>
                 </div>
               </div>
               
@@ -785,6 +800,24 @@
             <!-- Aggiornamenti Recenti -->
             <div class="info-card">
               <h4 class="info-card-title">📋 Aggiornamenti Recenti</h4>
+              
+              <div class="update-item">
+                <div class="update-version">
+                  <span class="update-badge">v1.5.2</span>
+                  <span class="update-date">27 Ottobre 2025</span>
+                </div>
+                <div class="update-content">
+                  <p class="update-title">Keep Screen On & Bugfix Card Prezzo</p>
+                  <ul class="update-list">
+                    <li>☀️ Nuova: "Schermo sempre attivo" - impedisce spegnimento automatico (Accessibilità)</li>
+                    <li>🔋 Wake Lock API nativa - si disattiva automaticamente in background</li>
+                    <li>🐛 Risolto: card prezzo opaca anche quando attiva (testo ora leggibile al 100%)</li>
+                    <li>🐛 Risolto: "Riparti da capo" non disattivava la card prezzo</li>
+                    <li>🐛 Risolto: errore CSS in test.html (#gray non valido)</li>
+                    <li>⚡ Ottimizzata gestione stato card prezzo (chiamate dirette in selectFermata/selectLinea)</li>
+                  </ul>
+                </div>
+              </div>
               
               <div class="update-item">
                 <div class="update-version">

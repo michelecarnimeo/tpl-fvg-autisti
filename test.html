@@ -1326,7 +1326,7 @@
             </style>
             
             <!-- Status Permessi -->
-            <div id="geo-permission-status" style="margin-bottom: 1rem; padding: 0.75rem; background: var(--grigio-chiaro); border-radius: 8px; border-left: 4px solid #gray;">
+            <div id="geo-permission-status" style="margin-bottom: 1rem; padding: 0.75rem; background: var(--grigio-chiaro); border-radius: 8px; border-left: 4px solid gray;">
                 <strong>🔐 Status Permessi:</strong>
                 <span id="geo-permission-text" style="margin-left: 0.5rem; font-weight: 500;">Verifica in corso...</span>
             </div>
@@ -1909,6 +1909,21 @@
                             <span class="settings-toggle-slider"></span>
                         </label>
                     </div>
+                    
+                    <!-- Keep Screen On -->
+                    <div class="settings-item">
+                        <div class="settings-item-info">
+                            <span class="settings-item-icon">☀️</span>
+                            <div class="settings-item-text">
+                                <div class="settings-item-label">Schermo sempre attivo</div>
+                                <div class="settings-item-description">Impedisce lo spegnimento automatico</div>
+                            </div>
+                        </div>
+                        <label class="settings-toggle">
+                            <input type="checkbox" id="settings-keep-screen-on" aria-label="Attiva/disattiva schermo sempre attivo">
+                            <span class="settings-toggle-slider"></span>
+                        </label>
+                    </div>
                 </div>
                 
                 <!-- Sezione Dimensione Interfaccia -->
@@ -2354,7 +2369,7 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <p>© <span id="footer-year"></span> Michele Carnimeo. Tutti i diritti riservati.<br>TPL FVG è un marchio di TPL FVG S.C. a R.L. · <a href="test.html" style="color: inherit; text-decoration: none; transition: text-decoration 0.3s ease;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">TPL Autisti 1.5.1</a></p>
+        <p>© <span id="footer-year"></span> Michele Carnimeo. Tutti i diritti riservati.<br>TPL FVG è un marchio di TPL FVG S.C. a R.L. · <a href="test.html" style="color: inherit; text-decoration: none; transition: text-decoration 0.3s ease;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">TPL Autisti 1.5.2</a></p>
         <div class="footer-links">
           <a href="https://t.me/+eoJ9nYFFrjphMzVk" target="_blank" class="telegram-link" title="Canale Telegram">
             <span class="telegram-icon">📢</span> Avvisi & Aggiornamenti
