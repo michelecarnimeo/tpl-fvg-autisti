@@ -15,10 +15,10 @@ const HAPTIC_PATTERNS = {
 };
 
 // Funzione principale per feedback aptico
-function triggerHaptic(pattern = 'light') {
-  // Verifica se il feedback aptico è abilitato
+function triggerHaptic(pattern = 'light', force = false) {
+  // Verifica se il feedback aptico è abilitato (o se forzato)
   const isEnabled = localStorage.getItem('tpl.hapticFeedback') === 'true';
-  if (!isEnabled) return;
+  if (!isEnabled && !force) return;
   
   // Verifica supporto API Vibration
   if (!navigator.vibrate) {
@@ -31,7 +31,7 @@ function triggerHaptic(pattern = 'light') {
   
   try {
     navigator.vibrate(vibrationPattern);
-    console.log(`📳 Vibrazione: ${pattern}`);
+    console.log(`📳 Vibrazione: ${pattern}${force ? ' (forced)' : ''}`);
   } catch (error) {
     console.error('❌ Errore vibrazione:', error);
   }
@@ -325,6 +325,7 @@ function toggleDark() {
 
 // Funzione per aggiornare l'icona del toggle
 function updateToggleIcon(isDark) {
+  if (!darkModeToggle) return; // Elemento non esiste in tutte le pagine
   const toggleIcon = darkModeToggle.querySelector('span');
   if (toggleIcon) {
     toggleIcon.textContent = isDark ? '☀️' : '🌙';
@@ -655,6 +656,8 @@ function updatePriceCardState() {
   } else {
     priceCard.classList.add('inactive');
   }
+  
+  // Nota: la card rimane sempre visibile, cambia solo l'opacità con .inactive
 }
 
 // Aggiorna riepilogo selezioni
@@ -765,14 +768,29 @@ function resetFilters() {
     arrivoBtn.disabled = true;
   }
   
-  // Reset card prezzo
-  if (priceCard) {
-    priceCard.classList.add('inactive');
+  // Reset FORZATO del contenuto (la card rimane visibile ma vuota)
+  if (summaryPrezzo) {
+    summaryPrezzo.textContent = '-';
+    summaryPrezzo.innerHTML = '-';
+  }
+  if (summaryCodice) {
+    summaryCodice.textContent = '-';
+    summaryCodice.innerHTML = '-';
+  }
+  if (summaryPartenza) {
+    summaryPartenza.textContent = '-';
+    summaryPartenza.innerHTML = '-';
+  }
+  if (summaryArrivo) {
+    summaryArrivo.textContent = '-';
+    summaryArrivo.innerHTML = '-';
+  }
+  if (prezzoErrore) {
+    prezzoErrore.style.display = 'none';
   }
   
-  // Reset summary e prezzo usando la logica esistente
-  updateSummary();
-  calcolaPrezzo();
+  // NON richiamare updateSummary() e calcolaPrezzo() 
+  // perché potrebbero ri-popolare i campi con vecchi valori in cache
   
   // Nascondi pulsanti geolocalizzazione e swap
   toggleLocationButton(false);
@@ -793,7 +811,7 @@ function resetFilters() {
     localStorage.removeItem('tpl.arrivoIdx');
   } catch { }
   
-  // Feedback visivo
+  // Feedback visivo e aptico
   const resetBtn = document.getElementById('reset-btn');
   if (resetBtn) {
     resetBtn.style.transform = 'scale(0.95)';
@@ -801,13 +819,16 @@ function resetFilters() {
       resetBtn.style.transform = 'scale(1)';
     }, 150);
   }
+  
+  // Vibrazione di conferma reset
+  triggerHaptic('medium');
 }
 
 // Funzione reset cache
 // Versione corrente dell'app
-const CURRENT_VERSION = '1.5.0';
+const CURRENT_VERSION = '1.5.1';
 const VERSION_DATE = '27 Ottobre 2025';
-const VERSION_TIME = '11:07';
+const VERSION_TIME = '19:30';
 
 // Funzione helper per aggiornare versione, data e ora
 function updateVersion(version, date, time) {
@@ -2344,6 +2365,7 @@ if (!navigator.onLine) {
   const highContrastToggle = document.getElementById('settings-high-contrast');
   const touchFriendlyToggle = document.getElementById('settings-touch-friendly');
   const hapticFeedbackToggle = document.getElementById('settings-haptic-feedback');
+  const reduceMotionToggle = document.getElementById('settings-reduce-motion');
   
   // Font size buttons
   const fontButtons = document.querySelectorAll('.settings-font-btn');
@@ -2465,6 +2487,12 @@ if (!navigator.onLine) {
       hapticFeedbackToggle.checked = isHapticEnabled;
     }
     
+    // Reduce Motion
+    if (reduceMotionToggle) {
+      const isReduceMotion = localStorage.getItem('tpl.reduceMotion') === 'true';
+      reduceMotionToggle.checked = isReduceMotion;
+    }
+    
     // Font Size
     const currentFontSize = localStorage.getItem('tpl.fontSize') || 'normal';
     fontButtons.forEach(btn => {
@@ -2520,10 +2548,18 @@ if (!navigator.onLine) {
   if (hapticFeedbackToggle) {
     hapticFeedbackToggle.addEventListener('change', (e) => {
       setHapticFeedback(e.target.checked);
-      // Vibra per confermare l'attivazione/disattivazione
+      // Vibra per confermare l'attivazione (forzato perché localStorage non è ancora aggiornato)
       if (e.target.checked) {
-        triggerHaptic('success');
+        triggerHaptic('success', true); // force = true
       }
+    });
+  }
+  
+  // Reduce Motion
+  if (reduceMotionToggle) {
+    reduceMotionToggle.addEventListener('change', (e) => {
+      setReduceMotion(e.target.checked);
+      triggerHaptic('medium'); // Feedback al cambio
     });
   }
   
@@ -2609,6 +2645,29 @@ if (!navigator.onLine) {
     }
   }
   
+  // ===== FUNZIONI RIDUCI ANIMAZIONI =====
+  
+  function setReduceMotion(enabled) {
+    if (enabled) {
+      document.body.classList.add('reduce-motion');
+    } else {
+      document.body.classList.remove('reduce-motion');
+    }
+    
+    try {
+      localStorage.setItem('tpl.reduceMotion', enabled);
+    } catch {}
+    
+    console.log('Riduci animazioni:', enabled ? 'attivato' : 'disattivato');
+  }
+  
+  function loadReduceMotion() {
+    const saved = localStorage.getItem('tpl.reduceMotion');
+    if (saved === 'true') {
+      setReduceMotion(true);
+    }
+  }
+  
   // ===== FUNZIONI TEMA =====
   
   // Media query per rilevare tema sistema
@@ -2659,6 +2718,7 @@ if (!navigator.onLine) {
     loadHighContrast();
     loadTouchFriendly();
     loadHapticFeedback();
+    loadReduceMotion();
   });
   
   // ========================================

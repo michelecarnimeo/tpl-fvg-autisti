@@ -1,6 +1,6 @@
 {
-  "version": "1.5.0",
+  "version": "1.5.1",
   "versionDate": "27 Ottobre 2025",
-  "versionTime": "11:07",
-  "updateNotes": "Feedback aptico (vibrazione) per azioni e conferme. UI impostazioni ottimizzata (rimossi titoli ridondanti)."
+  "versionTime": "19:30",
+  "updateNotes": "Bugfix multipli (reset biglietto, vibrazione, crash dark mode) + nuova funzione 'Riduci animazioni'."
 }
