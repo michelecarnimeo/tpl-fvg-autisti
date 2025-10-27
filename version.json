@@ -1,6 +1,6 @@
 {
-  "version": "1.5.2",
+  "version": "1.5.3",
   "versionDate": "27 Ottobre 2025",
-  "versionTime": "20:00",
-  "updateNotes": "Schermo sempre attivo (Keep Screen On) + bugfix card prezzo opaca."
+  "versionTime": "20:53",
+  "updateNotes": "Spaziatura extra + modali ottimizzati per schermi piccoli (iPhone 12 Mini)."
 }

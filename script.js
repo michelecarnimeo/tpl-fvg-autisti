@@ -831,9 +831,9 @@ function resetFilters() {
 
 // Funzione reset cache
 // Versione corrente dell'app
-const CURRENT_VERSION = '1.5.2';
+const CURRENT_VERSION = '1.5.3';
 const VERSION_DATE = '27 Ottobre 2025';
-const VERSION_TIME = '20:00';
+const VERSION_TIME = '20:53';
 
 // Funzione helper per aggiornare versione, data e ora
 function updateVersion(version, date, time) {
@@ -2372,6 +2372,7 @@ if (!navigator.onLine) {
   const hapticFeedbackToggle = document.getElementById('settings-haptic-feedback');
   const reduceMotionToggle = document.getElementById('settings-reduce-motion');
   const keepScreenOnToggle = document.getElementById('settings-keep-screen-on');
+  const extraSpacingToggle = document.getElementById('settings-extra-spacing');
   
   // Font size buttons
   const fontButtons = document.querySelectorAll('.settings-font-btn');
@@ -2505,6 +2506,12 @@ if (!navigator.onLine) {
       keepScreenOnToggle.checked = isKeepScreenOn;
     }
     
+    // Extra Spacing
+    if (extraSpacingToggle) {
+      const isExtraSpacing = localStorage.getItem('tpl.extraSpacing') === 'true';
+      extraSpacingToggle.checked = isExtraSpacing;
+    }
+    
     // Font Size
     const currentFontSize = localStorage.getItem('tpl.fontSize') || 'normal';
     fontButtons.forEach(btn => {
@@ -2579,6 +2586,14 @@ if (!navigator.onLine) {
   if (keepScreenOnToggle) {
     keepScreenOnToggle.addEventListener('change', async (e) => {
       await setKeepScreenOn(e.target.checked);
+      triggerHaptic('medium'); // Feedback al cambio
+    });
+  }
+  
+  // Extra Spacing
+  if (extraSpacingToggle) {
+    extraSpacingToggle.addEventListener('change', (e) => {
+      setExtraSpacing(e.target.checked);
       triggerHaptic('medium'); // Feedback al cambio
     });
   }
@@ -2685,6 +2700,29 @@ if (!navigator.onLine) {
     const saved = localStorage.getItem('tpl.reduceMotion');
     if (saved === 'true') {
       setReduceMotion(true);
+    }
+  }
+  
+  // ===== FUNZIONI SPAZIATURA EXTRA =====
+  
+  function setExtraSpacing(enabled) {
+    if (enabled) {
+      document.body.classList.add('extra-spacing');
+    } else {
+      document.body.classList.remove('extra-spacing');
+    }
+    
+    try {
+      localStorage.setItem('tpl.extraSpacing', enabled);
+    } catch {}
+    
+    console.log('Spaziatura extra:', enabled ? 'attivata' : 'disattivata');
+  }
+  
+  function loadExtraSpacing() {
+    const saved = localStorage.getItem('tpl.extraSpacing');
+    if (saved === 'true') {
+      setExtraSpacing(true);
     }
   }
   
@@ -2808,6 +2846,7 @@ if (!navigator.onLine) {
     loadHapticFeedback();
     loadReduceMotion();
     loadKeepScreenOn();
+    loadExtraSpacing();
   });
   
   // ========================================

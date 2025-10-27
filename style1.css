@@ -2327,6 +2327,15 @@ p, span, div, a, button, input, select, textarea, label, li {
     transition: transform 0.3s ease;
   }
   
+  /* Ottimizzazione per schermi piccoli (iPhone 12 Mini, iPhone SE, ecc.) */
+  @media (max-width: 400px), (max-height: 700px) {
+    .fermate-modal-content {
+      max-height: 90vh;
+      margin: 10px;
+      border-radius: 12px;
+    }
+  }
+  
   .fermate-modal.show .fermate-modal-content {
     transform: scale(1);
   }
@@ -2971,6 +2980,46 @@ p, span, div, a, button, input, select, textarea, label, li {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+  
+  /* SOTTOSEZIONE 19.5: Spaziatura Extra (Extra Spacing) */
+  /* Aumenta padding e margin per touch più accurato */
+  body.extra-spacing button,
+  body.extra-spacing .btn,
+  body.extra-spacing .button,
+  body.extra-spacing input[type="button"],
+  body.extra-spacing .settings-toggle {
+    padding: 1rem !important;
+    margin: 0.75rem 0 !important;
+  }
+  
+  body.extra-spacing .settings-item {
+    padding: 1.25rem !important;
+    gap: 1rem !important;
+  }
+  
+  body.extra-spacing .container,
+  body.extra-spacing .main-content {
+    gap: 1.5rem !important;
+  }
+  
+  body.extra-spacing .navbar-item {
+    padding: 1rem 1.5rem !important;
+  }
+  
+  body.extra-spacing .pwa-nav-item {
+    padding: 1rem !important;
+    gap: 0.75rem !important;
+  }
+  
+  body.extra-spacing .modal-content {
+    padding: 2rem !important;
+  }
+  
+  body.extra-spacing .fermata-item,
+  body.extra-spacing .linea-item {
+    padding: 1.25rem !important;
+    margin-bottom: 1rem !important;
   }
   
   
@@ -4206,6 +4255,31 @@ p, span, div, a, button, input, select, textarea, label, li {
   transform: scale(0.9);
   transition: transform 0.3s ease;
   overflow: hidden;
+}
+
+/* Ottimizzazione per schermi piccoli (iPhone 12 Mini, iPhone SE, ecc.) */
+@media (max-width: 400px), (max-height: 700px) {
+  .settings-modal-content {
+    max-height: 90vh;
+    margin: 10px;
+    width: 95%;
+    border-radius: 12px;
+  }
+  
+  .settings-modal-header {
+    padding: 8px 16px;
+    min-height: 48px;
+  }
+  
+  .fermate-modal-header {
+    padding: 8px 16px;
+    min-height: 48px;
+  }
+  
+  .settings-modal-header h3,
+  .fermate-modal-header h2 {
+    font-size: 1.1rem;
+  }
 }
 
 .settings-modal.show .settings-modal-content {
