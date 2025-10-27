@@ -1,6 +1,6 @@
 {
-  "version": "1.5.3",
+  "version": "1.5.4",
   "versionDate": "27 Ottobre 2025",
-  "versionTime": "20:53",
-  "updateNotes": "Spaziatura extra + modali ottimizzati per schermi piccoli (iPhone 12 Mini)."
+  "versionTime": "21:15",
+  "updateNotes": "Preset universale schermi piccoli - ottimizzazione completa modali e PWA nav."
 }

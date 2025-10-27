@@ -831,9 +831,9 @@ function resetFilters() {
 
 // Funzione reset cache
 // Versione corrente dell'app
-const CURRENT_VERSION = '1.5.3';
+const CURRENT_VERSION = '1.5.4';
 const VERSION_DATE = '27 Ottobre 2025';
-const VERSION_TIME = '20:53';
+const VERSION_TIME = '21:15';
 
 // Funzione helper per aggiornare versione, data e ora
 function updateVersion(version, date, time) {
@@ -2373,6 +2373,7 @@ if (!navigator.onLine) {
   const reduceMotionToggle = document.getElementById('settings-reduce-motion');
   const keepScreenOnToggle = document.getElementById('settings-keep-screen-on');
   const extraSpacingToggle = document.getElementById('settings-extra-spacing');
+  const compactLayoutToggle = document.getElementById('settings-compact-layout');
   
   // Font size buttons
   const fontButtons = document.querySelectorAll('.settings-font-btn');
@@ -2512,6 +2513,12 @@ if (!navigator.onLine) {
       extraSpacingToggle.checked = isExtraSpacing;
     }
     
+    // Compact Layout
+    if (compactLayoutToggle) {
+      const isCompactLayout = localStorage.getItem('tpl.compactLayout') === 'true';
+      compactLayoutToggle.checked = isCompactLayout;
+    }
+    
     // Font Size
     const currentFontSize = localStorage.getItem('tpl.fontSize') || 'normal';
     fontButtons.forEach(btn => {
@@ -2594,6 +2601,14 @@ if (!navigator.onLine) {
   if (extraSpacingToggle) {
     extraSpacingToggle.addEventListener('change', (e) => {
       setExtraSpacing(e.target.checked);
+      triggerHaptic('medium'); // Feedback al cambio
+    });
+  }
+  
+  // Compact Layout
+  if (compactLayoutToggle) {
+    compactLayoutToggle.addEventListener('change', (e) => {
+      setCompactLayout(e.target.checked);
       triggerHaptic('medium'); // Feedback al cambio
     });
   }
@@ -2726,6 +2741,29 @@ if (!navigator.onLine) {
     }
   }
   
+  // ===== FUNZIONI LAYOUT COMPATTO =====
+  
+  function setCompactLayout(enabled) {
+    if (enabled) {
+      document.body.classList.add('compact-layout');
+    } else {
+      document.body.classList.remove('compact-layout');
+    }
+    
+    try {
+      localStorage.setItem('tpl.compactLayout', enabled);
+    } catch {}
+    
+    console.log('Layout compatto:', enabled ? 'attivato' : 'disattivato');
+  }
+  
+  function loadCompactLayout() {
+    const saved = localStorage.getItem('tpl.compactLayout');
+    if (saved === 'true') {
+      setCompactLayout(true);
+    }
+  }
+  
   // ===== FUNZIONI KEEP SCREEN ON (WAKE LOCK API) =====
   
   // Variabile globale per tracciare il WakeLock
@@ -2847,6 +2885,7 @@ if (!navigator.onLine) {
     loadReduceMotion();
     loadKeepScreenOn();
     loadExtraSpacing();
+    loadCompactLayout();
   });
   
   // ========================================

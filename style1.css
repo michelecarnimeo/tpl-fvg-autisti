@@ -2327,12 +2327,87 @@ p, span, div, a, button, input, select, textarea, label, li {
     transition: transform 0.3s ease;
   }
   
-  /* Ottimizzazione per schermi piccoli (iPhone 12 Mini, iPhone SE, ecc.) */
-  @media (max-width: 400px), (max-height: 700px) {
+  /* ========================================
+     OTTIMIZZAZIONE SCHERMI PICCOLI (Universal Small Screen)
+     Copre: iPhone SE, 12/13 Mini, Galaxy S, Pixel compatti, ecc.
+     ======================================== */
+  @media (max-width: 430px), (max-height: 670px) {
     .fermate-modal-content {
-      max-height: 90vh;
-      margin: 10px;
+      max-height: 95vh; /* Usa più spazio verticale */
+      margin: 8px; /* Margini ridotti */
       border-radius: 12px;
+      width: calc(100% - 16px); /* Sfrutta tutta la larghezza */
+    }
+    
+    .fermate-modal-header {
+      padding: 8px 12px; /* Header più compatto */
+      min-height: 44px; /* Altezza minima iOS standard */
+    }
+    
+    .fermate-modal-header h2 {
+      font-size: 1rem; /* Titolo più piccolo */
+    }
+    
+    .fermate-modal-body {
+      padding: 12px; /* Padding ridotto */
+    }
+    
+    .fermate-search-box {
+      padding: 8px 10px; /* Input più compatto */
+      font-size: 0.95rem;
+    }
+    
+    .fermate-modal-list li {
+      padding: 12px 14px; /* Elementi lista più compatti */
+      font-size: 0.95rem;
+    }
+    
+    /* Ottimizzazione modale linee */
+    .linea-modal-item {
+      padding: 10px 12px; /* Elementi linea più compatti */
+      gap: 12px;
+      font-size: 0.95rem;
+    }
+    
+    .linea-badge {
+      min-width: 55px; /* Badge più piccolo */
+      height: 55px;
+    }
+    
+    .linea-icon {
+      font-size: 20px; /* Icona più piccola */
+    }
+    
+    .linea-number {
+      font-size: 0.9rem; /* Numero più piccolo */
+    }
+    
+    .linea-route {
+      font-size: 0.95rem; /* Rotta più piccola */
+    }
+    
+    .linea-stops {
+      font-size: 0.85rem; /* Fermate più piccole */
+    }
+    
+    /* Ottimizzazione PWA Bottom Navigation */
+    .pwa-nav-item {
+      padding: 0.5rem 0.9rem; /* Padding ridotto */
+      gap: 0.25rem; /* Gap ridotto tra icona e testo */
+    }
+    
+    .pwa-nav-icon {
+      width: 22px; /* Icone più piccole */
+      height: 22px;
+    }
+    
+    .pwa-nav-label {
+      font-size: 0.7rem; /* Label più piccole */
+    }
+    
+    .pwa-bottom-nav {
+      padding: 0.5rem; /* Barra più compatta */
+      gap: 0.25rem;
     }
   }
   
@@ -3020,6 +3095,89 @@ p, span, div, a, button, input, select, textarea, label, li {
   body.extra-spacing .linea-item {
     padding: 1.25rem !important;
     margin-bottom: 1rem !important;
+  }
+  
+  /* SOTTOSEZIONE 19.6: Layout Compatto (Compact Layout) */
+  /* Riduce padding e margin per mostrare più contenuto */
+  body.compact-layout button,
+  body.compact-layout .btn,
+  body.compact-layout .button,
+  body.compact-layout input[type="button"] {
+    padding: 0.5rem 0.75rem !important;
+    margin: 0.35rem 0 !important;
+  }
+  
+  body.compact-layout .settings-item {
+    padding: 0.75rem !important;
+    gap: 0.5rem !important;
+  }
+  
+  body.compact-layout .settings-section {
+    padding: 0.75rem !important;
+    margin-bottom: 0.75rem !important;
+  }
+  
+  body.compact-layout .container,
+  body.compact-layout .main-content {
+    gap: 0.75rem !important;
+  }
+  
+  body.compact-layout .navbar-item {
+    padding: 0.6rem 1rem !important;
+  }
+  
+  body.compact-layout .pwa-nav-item {
+    padding: 0.4rem 0.7rem !important;
+    gap: 0.2rem !important;
+  }
+  
+  body.compact-layout .modal-content,
+  body.compact-layout .settings-content {
+    padding: 1rem !important;
+  }
+  
+  body.compact-layout .fermate-modal-content,
+  body.compact-layout .settings-modal-content {
+    padding: 0 !important; /* I modali hanno già padding interno */
+  }
+  
+  body.compact-layout .fermate-modal-body {
+    padding: 0.75rem !important;
+  }
+  
+  body.compact-layout .fermata-item,
+  body.compact-layout .linea-item,
+  body.compact-layout .linea-modal-item {
+    padding: 0.75rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  
+  body.compact-layout .fermate-modal-list li {
+    padding: 0.75rem !important;
+    margin-bottom: 0.35rem !important;
+  }
+  
+  body.compact-layout .price-card {
+    padding: 1rem !important;
+  }
+  
+  body.compact-layout .price-section {
+    margin-bottom: 0.75rem !important;
+  }
+  
+  body.compact-layout .settings-tabs {
+    padding: 0.5rem !important;
+    gap: 0.25rem !important;
+  }
+  
+  body.compact-layout .settings-tab {
+    padding: 0.6rem 1rem !important;
+  }
+  
+  body.compact-layout .info-card,
+  body.compact-layout .update-item {
+    padding: 1rem !important;
+    margin-bottom: 0.75rem !important;
   }
   
   
@@ -4257,28 +4415,77 @@ p, span, div, a, button, input, select, textarea, label, li {
   overflow: hidden;
 }
 
-/* Ottimizzazione per schermi piccoli (iPhone 12 Mini, iPhone SE, ecc.) */
-@media (max-width: 400px), (max-height: 700px) {
+/* ========================================
+   OTTIMIZZAZIONE SCHERMI PICCOLI (Universal Small Screen)
+   Copre: iPhone SE, 12/13 Mini, Galaxy S, Pixel compatti, ecc.
+   ======================================== */
+@media (max-width: 430px), (max-height: 670px) {
   .settings-modal-content {
-    max-height: 90vh;
-    margin: 10px;
-    width: 95%;
+    max-height: 95vh; /* Usa più spazio verticale */
+    margin: 8px; /* Margini ridotti */
+    width: calc(100% - 16px); /* Sfrutta tutta la larghezza */
     border-radius: 12px;
   }
   
   .settings-modal-header {
-    padding: 8px 16px;
-    min-height: 48px;
+    padding: 8px 12px; /* Header più compatto */
+    min-height: 44px; /* Altezza minima iOS standard */
   }
   
-  .fermate-modal-header {
-    padding: 8px 16px;
-    min-height: 48px;
+  .settings-modal-header h3 {
+    font-size: 1rem; /* Titolo più piccolo */
   }
   
-  .settings-modal-header h3,
-  .fermate-modal-header h2 {
-    font-size: 1.1rem;
+  .settings-tabs {
+    padding: 8px; /* Tabs più compatte */
+    gap: 4px;
+  }
+  
+  .settings-tab {
+    padding: 8px 12px; /* Tab più compatte */
+    font-size: 0.9rem;
+  }
+  
+  .settings-content {
+    padding: 12px; /* Contenuto più compatto */
+  }
+  
+  .settings-section {
+    padding: 12px; /* Sezioni più compatte */
+    margin-bottom: 12px;
+  }
+  
+  .settings-item {
+    padding: 10px; /* Elementi più compatti */
+    gap: 8px;
+  }
+  
+  .settings-item-label {
+    font-size: 0.95rem;
+  }
+  
+  .settings-item-description {
+    font-size: 0.85rem;
+  }
+  
+  /* Ottimizzazione PWA Bottom Navigation (duplicato per consistenza) */
+  .pwa-nav-item {
+    padding: 0.5rem 0.9rem;
+    gap: 0.25rem;
+  }
+  
+  .pwa-nav-icon {
+    width: 22px;
+    height: 22px;
+  }
+  
+  .pwa-nav-label {
+    font-size: 0.7rem;
+  }
+  
+  .pwa-bottom-nav {
+    padding: 0.5rem;
+    gap: 0.25rem;
   }
 }
 
