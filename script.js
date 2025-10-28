@@ -2374,6 +2374,7 @@ if (!navigator.onLine) {
   const keepScreenOnToggle = document.getElementById('settings-keep-screen-on');
   const extraSpacingToggle = document.getElementById('settings-extra-spacing');
   const compactLayoutToggle = document.getElementById('settings-compact-layout');
+  const blueLightFilterToggle = document.getElementById('settings-blue-light-filter');
   
   // Font size buttons
   const fontButtons = document.querySelectorAll('.settings-font-btn');
@@ -2519,6 +2520,12 @@ if (!navigator.onLine) {
       compactLayoutToggle.checked = isCompactLayout;
     }
     
+    // Blue Light Filter
+    if (blueLightFilterToggle) {
+      const isBlueLightFilter = localStorage.getItem('tpl.blueLightFilter') === 'true';
+      blueLightFilterToggle.checked = isBlueLightFilter;
+    }
+    
     // Font Size
     const currentFontSize = localStorage.getItem('tpl.fontSize') || 'normal';
     fontButtons.forEach(btn => {
@@ -2609,6 +2616,14 @@ if (!navigator.onLine) {
   if (compactLayoutToggle) {
     compactLayoutToggle.addEventListener('change', (e) => {
       setCompactLayout(e.target.checked);
+      triggerHaptic('medium'); // Feedback al cambio
+    });
+  }
+  
+  // Blue Light Filter
+  if (blueLightFilterToggle) {
+    blueLightFilterToggle.addEventListener('change', (e) => {
+      setBlueLightFilter(e.target.checked);
       triggerHaptic('medium'); // Feedback al cambio
     });
   }
@@ -2764,6 +2779,29 @@ if (!navigator.onLine) {
     }
   }
   
+  // ===== FUNZIONI FILTRO LUCE BLU =====
+  
+  function setBlueLightFilter(enabled) {
+    if (enabled) {
+      document.body.classList.add('blue-light-filter');
+    } else {
+      document.body.classList.remove('blue-light-filter');
+    }
+    
+    try {
+      localStorage.setItem('tpl.blueLightFilter', enabled);
+    } catch {}
+    
+    console.log('Filtro luce blu:', enabled ? 'attivato' : 'disattivato');
+  }
+  
+  function loadBlueLightFilter() {
+    const saved = localStorage.getItem('tpl.blueLightFilter');
+    if (saved === 'true') {
+      setBlueLightFilter(true);
+    }
+  }
+  
   // ===== FUNZIONI KEEP SCREEN ON (WAKE LOCK API) =====
   
   // Variabile globale per tracciare il WakeLock
@@ -2886,6 +2924,13 @@ if (!navigator.onLine) {
     loadKeepScreenOn();
     loadExtraSpacing();
     loadCompactLayout();
+    loadBlueLightFilter();
+    
+    // Sincronizza lo stato dei checkbox con localStorage
+    // (necessario per PWA quando si naviga tra pagine)
+    setTimeout(() => {
+      syncSettingsWithState();
+    }, 100); // Piccolo delay per assicurarsi che tutti i toggle esistano nel DOM
   });
   
   // ========================================
