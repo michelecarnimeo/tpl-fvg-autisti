@@ -1902,14 +1902,14 @@
                             <div class="settings-item-text">
                                 <div class="settings-item-label">Feedback aptico</div>
                                 <div class="settings-item-description">Vibrazione su azioni e conferme</div>
-                            </div>
+                    </div>
                         </div>
                         <label class="settings-toggle">
                             <input type="checkbox" id="settings-haptic-feedback" aria-label="Attiva/disattiva feedback aptico">
                             <span class="settings-toggle-slider"></span>
                         </label>
-                    </div>
-                    
+                </div>
+                
                     <!-- Keep Screen On -->
                     <div class="settings-item">
                         <div class="settings-item-info">
@@ -1951,6 +1951,21 @@
                         </div>
                         <label class="settings-toggle">
                             <input type="checkbox" id="settings-compact-layout" aria-label="Attiva/disattiva layout compatto">
+                            <span class="settings-toggle-slider"></span>
+                        </label>
+                    </div>
+                    
+                    <!-- Filtro Luce Blu -->
+                    <div class="settings-item">
+                        <div class="settings-item-info">
+                            <span class="settings-item-icon">🔵</span>
+                            <div class="settings-item-text">
+                                <div class="settings-item-label">Filtro luce blu</div>
+                                <div class="settings-item-description">Riduce affaticamento occhi (uso notturno)</div>
+                            </div>
+                        </div>
+                        <label class="settings-toggle">
+                            <input type="checkbox" id="settings-blue-light-filter" aria-label="Attiva/disattiva filtro luce blu">
                             <span class="settings-toggle-slider"></span>
                         </label>
                     </div>
@@ -2194,184 +2209,10 @@
                         <div class="info-card">
                             <h4 class="info-card-title">📋 Aggiornamenti Recenti</h4>
                             
-                            <div class="update-item">
-                                <div class="update-version">
-                                    <span class="update-badge">v1.5.0</span>
-                                    <span class="update-date">27 Ottobre 2025</span>
-                                </div>
-                                <div class="update-content">
-                                    <p class="update-title">Feedback Aptico & UI Ottimizzata</p>
-                                    <ul class="update-list">
-                                        <li>📳 Feedback aptico (vibrazione) su azioni e conferme</li>
-                                        <li>⚡ 6 pattern di vibrazione predefiniti (light, medium, strong, success, warning, error)</li>
-                                        <li>🎚️ Toggle attivazione/disattivazione in Accessibilità</li>
-                                        <li>✨ Vibrazione su: cambio tema, font, contrasto, touch-friendly</li>
-                                        <li>🧹 Rimossi titoli ridondanti dalle impostazioni (più spazio visibile)</li>
-                                        <li>📱 Ottimizzato per dispositivi mobile (solo HTTPS/localhost)</li>
-                                    </ul>
-                                </div>
+                            <!-- Contenitore dinamico per il changelog -->
+                            <div id="changelog-container">
+                                <!-- Il changelog verrà inserito qui da changelog.js -->
                             </div>
-                            
-                            <div class="update-item">
-                                <div class="update-version">
-                                    <span class="update-badge">v1.4.9</span>
-                                    <span class="update-date">25 Ottobre 2025</span>
-                                </div>
-                                <div class="update-content">
-                                    <p class="update-title">Info Device & Test GPS Avanzati</p>
-                                    <ul class="update-list">
-                                        <li>📱 Sezione "Info Device/Browser" con rilevamento hardware</li>
-                                        <li>🎨 Layout responsive: card colorate su desktop, lista su mobile</li>
-                                        <li>⚡ Test Rapido GPS One-Click con report automatico</li>
-                                        <li>📄 Export Report completo (JSON + TXT)</li>
-                                        <li>🔄 Modal moderno per Reset dati GPS</li>
-                                        <li>🔋 Monitoraggio batteria e connessione in tempo reale</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            
-                            <div class="update-item update-item-hidden">
-                                <div class="update-version">
-                                    <span class="update-badge">v1.4.8</span>
-                                    <span class="update-date">25 Ottobre 2025</span>
-                                </div>
-                                <div class="update-content">
-                                    <p class="update-title">Simulazione Posizione GPS Fake</p>
-                                    <ul class="update-list">
-                                        <li>🎭 Modalità test con posizione GPS simulata</li>
-                                        <li>Preset città FVG: Trieste, Udine, Pordenone, Gorizia</li>
-                                        <li>Input manuale coordinate personalizzate (lat/lng)</li>
-                                        <li>Configurazione accuratezza e altitudine</li>
-                                        <li>Badge visivo GPS reale vs simulato</li>
-                                        <li>Integrazione completa con mappa e calcolo distanza</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            
-                            <div class="update-item update-item-hidden">
-                                <div class="update-version">
-                                    <span class="update-badge">v1.4.7</span>
-                                    <span class="update-date">25 Ottobre 2025</span>
-                                </div>
-                                <div class="update-content">
-                                    <p class="update-title">Mappa Interattiva e Banner HTTPS</p>
-                                    <ul class="update-list">
-                                        <li>Mappa interattiva con Leaflet.js (~40KB, tile OpenStreetMap)</li>
-                                        <li>Marker blu posizione attuale con popup coordinate</li>
-                                        <li>Cerchio accuratezza GPS con raggio dinamico</li>
-                                        <li>Zoom automatico intelligente e pulsante "Centra"</li>
-                                        <li>Banner HTTPS dinamico (visibile solo se necessario)</li>
-                                        <li>Controlli interattivi: drag, zoom, popup click</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            
-                            <div class="update-item update-item-hidden">
-                                <div class="update-version">
-                                    <span class="update-badge">v1.4.6</span>
-                                    <span class="update-date">25 Ottobre 2025</span>
-                                </div>
-                                <div class="update-content">
-                                    <p class="update-title">Calcolo Distanza GPS</p>
-                                    <ul class="update-list">
-                                        <li>Preset città FVG: Trieste, Udine, Pordenone, Gorizia</li>
-                                        <li>Input coordinate personalizzate per punti specifici</li>
-                                        <li>Formula Haversine per distanza in linea d'aria (km)</li>
-                                        <li>Tempi stimati: a piedi (5km/h), bus (30km/h), auto (50km/h)</li>
-                                        <li>Formattazione intelligente tempi (15min o 1h 25min)</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            
-                            <div class="update-item update-item-hidden">
-                                <div class="update-version">
-                                    <span class="update-badge">v1.4.5</span>
-                                    <span class="update-date">25 Ottobre 2025</span>
-                                </div>
-                                <div class="update-content">
-                                    <p class="update-title">Miglioramenti Test Geolocalizzazione</p>
-                                    <ul class="update-list">
-                                        <li>Status permessi geolocalizzazione in tempo reale (granted/denied/prompt)</li>
-                                        <li>Pulsante "Copia Coordinate" per copiare lat/long negli appunti</li>
-                                        <li>Reverse geocoding: mostra indirizzo testuale (via, città, CAP)</li>
-                                        <li>Velocità e direzione (se disponibili durante movimento)</li>
-                                        <li>Altitudine con margine errore (±m)</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            
-                            <div class="update-item update-item-hidden">
-                                <div class="update-version">
-                                    <span class="update-badge">v1.4.4</span>
-                                    <span class="update-date">25 Ottobre 2025</span>
-                                </div>
-                                <div class="update-content">
-                                    <p class="update-title">Banner Offline e Simulazione Connettività</p>
-                                    <ul class="update-list">
-                                        <li>Aggiunto banner notifica offline/online in alto con design glassmorphism</li>
-                                        <li>Animazione icona pulsante e transizione slide-down</li>
-                                        <li>Banner verde "Connessione ripristinata" quando torna online</li>
-                                        <li>Simulazione modalità offline persistente su test.html</li>
-                                        <li>Sincronizzazione cross-tab della modalità offline test</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            
-                            <div class="update-item update-item-hidden">
-                                <div class="update-version">
-                                    <span class="update-badge">v1.4.3</span>
-                                    <span class="update-date">24 Ottobre 2025</span>
-                                </div>
-                                <div class="update-content">
-                                    <p class="update-title">Verifica Aggiornamenti PWA e Miglioramenti UI</p>
-                                    <ul class="update-list">
-                                        <li>Aggiunto pulsante "Verifica Aggiornamenti" in modalità PWA</li>
-                                        <li>Contorni attivi per sezioni impostazioni personalizzate</li>
-                                        <li>Tema "Sistema" selezionato di default</li>
-                                        <li>Dimensione testo "Normale" evidenziato di default</li>
-                                        <li>Rimosso link ridondante "Vedi tutti gli aggiornamenti"</li>
-                                        <li>Ottimizzazioni UI e UX generali</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            
-                            <div class="update-item update-item-hidden">
-                                <div class="update-version">
-                                    <span class="update-badge">v1.4.2</span>
-                                    <span class="update-date">24 Ottobre 2025</span>
-                                </div>
-                                <div class="update-content">
-                                    <p class="update-title">PWA Bottom Navigation e Tab Info</p>
-                                    <ul class="update-list">
-                                        <li>Barra di navigazione moderna e sospesa in modalità PWA</li>
-                                        <li>Design con glassmorphism e bordi arrotondati</li>
-                                        <li>Logo TPL centrale (60px) con effetto rifrazione luce</li>
-                                        <li>Accesso rapido: Home, Fermate, Prezzi, Impostazioni</li>
-                                        <li>Nuova tab "Info e Aggiornamenti" nel modal Impostazioni</li>
-                                        <li>Navbar superiore nascosta in modalità PWA</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            
-                            <div class="update-item update-item-hidden">
-                                <div class="update-version">
-                                    <span class="update-badge">v1.4.0</span>
-                                    <span class="update-date">Ottobre 2025</span>
-                                </div>
-                                <div class="update-content">
-                                    <p class="update-title">Miglioramenti Generali</p>
-                                    <ul class="update-list">
-                                        <li>Ottimizzazioni performance</li>
-                                        <li>Miglioramenti UI/UX</li>
-                                        <li>Bug fix vari</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            
-                            <button class="show-all-updates-btn" id="show-all-updates-btn">
-                                <span class="show-updates-icon">📋</span>
-                                <span class="show-updates-text">Vedi tutti gli aggiornamenti</span>
-                            </button>
                         </div>
                         
                         <!-- Link Utili -->
@@ -2411,6 +2252,7 @@
       </footer>
 
     <!-- Script di test -->
+    <script src="changelog.js"></script>
     <script src="script.js"></script>
     <script src="test-config.js"></script>
     <script>
@@ -5105,6 +4947,14 @@ ${JSON.stringify(reportData.gps.fakePositionData, null, 2)}
                 });
             }
         })();
+    </script>
+    
+    <!-- Render del Changelog -->
+    <script>
+        // Aspetta che il DOM sia pronto
+        document.addEventListener('DOMContentLoaded', () => {
+            renderChangelog('changelog-container');
+        });
     </script>
 
 </body>
