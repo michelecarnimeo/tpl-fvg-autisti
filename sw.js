@@ -20,7 +20,10 @@ const STATIC_ASSETS = [
   './fermate.html', // Fermate (offline critico)
   './prezzi.html', // Prezzi (offline critico)
   './style1.css', // Stili essenziali
+  './css/components/footer.css', // Footer modulare CSS
   './script.js', // Funzionalità app
+  './footer.js', // Footer modulare JS
+  './changelog.js', // Changelog dinamico
   './database.json', // DATI CRITICI per offline
   './manifest.json', // PWA
   './src/tpl.jpg', // Icona app

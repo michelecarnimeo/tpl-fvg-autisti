@@ -1,0 +1,128 @@
+/* ========================================
+   FOOTER COMPONENT
+   Stili per il footer dell'applicazione
+   ======================================== */
+
+/* ========================================
+   FOOTER BASE
+   ======================================== */
+
+.footer {
+  background: var(--grigio-chiaro);        /* Sfondo grigio chiaro */
+  padding: 2rem 1rem;                      /* Padding generoso */
+  text-align: center;                      /* Testo centrato */
+  color: var(--testo-secondario);          /* Colore testo secondario */
+  font-size: 0.9rem;                       /* Font leggermente più piccolo */
+  line-height: 1.8;                        /* Altezza linea per leggibilità */
+  border-top: 1px solid var(--bordo);      /* Bordo superiore sottile */
+  margin-top: auto;                        /* Spinge il footer in basso */
+}
+
+.footer p {
+  margin: 0 0 1rem 0;                      /* Margine sotto i paragrafi */
+}
+
+/* ========================================
+   FOOTER LINKS
+   ======================================== */
+
+.footer-links {
+  display: flex;                           /* Layout flexbox orizzontale */
+  justify-content: center;                 /* Centra i link */
+  gap: 2rem;                              /* Spazio tra i link */
+  margin: 1rem 0;                         /* Margine verticale */
+  flex-wrap: wrap;                        /* Va a capo su schermi piccoli */
+}
+
+/* ========================================
+   TELEGRAM LINKS
+   ======================================== */
+
+.telegram-link {
+  color: var(--testo-secondario);          /* Colore testo secondario */
+  text-decoration: none;                  /* Nessuna sottolineatura */
+  transition: color 0.3s ease;            /* Transizione colore */
+  display: flex;                          /* Layout flexbox */
+  align-items: center;                    /* Allineamento verticale centrale */
+  gap: 0.5rem;                            /* Spazio tra icona e testo */
+}
+
+.telegram-link:hover {
+  color: var(--turchese);                 /* Colore turchese al hover */
+}
+
+.telegram-icon {
+  font-size: 1.2rem;                      /* Icona leggermente più grande */
+  transition: transform 0.3s ease;        /* Transizione trasformazione */
+}
+
+.telegram-link:hover .telegram-icon {
+  transform: scale(1.1);                  /* Ingrandisci icona al hover */
+}
+
+/* ========================================
+   RESPONSIVE - TABLET (max-width: 768px)
+   ======================================== */
+
+@media (max-width: 768px) {
+  .footer {
+    padding: 1.5rem 0.75rem;               /* Padding ridotto */
+    font-size: 0.85rem;                    /* Font più piccolo */
+  }
+  
+  .footer p {
+    margin-bottom: 0.75rem;                /* Spazio sotto il paragrafo */
+  }
+  
+  .footer-links {
+    gap: 1rem;                             /* Spazio ridotto tra link */
+    margin: 0.75rem 0;                     /* Margine ridotto */
+  }
+  
+  .telegram-link {
+    font-size: 0.9rem;                     /* Font più piccolo */
+    padding: 0.5rem;                       /* Padding per area di tap più grande */
+  }
+  
+  .telegram-icon {
+    font-size: 1.1rem;                     /* Icona leggermente più piccola */
+  }
+}
+
+/* ========================================
+   RESPONSIVE - MOBILE (max-width: 480px)
+   ======================================== */
+
+@media (max-width: 480px) {
+  .footer {
+    padding: 1.25rem 0.5rem;               /* Padding più stretto */
+    font-size: 0.8rem;                     /* Font ancora più piccolo */
+  }
+  
+  .footer p {
+    margin-bottom: 0.5rem;                 /* Meno spazio */
+  }
+  
+  .footer-links {
+    flex-direction: column;                /* Link in colonna */
+    gap: 0.5rem;                           /* Spazio ridotto */
+    align-items: center;                   /* Centra i link */
+  }
+  
+  .telegram-link {
+    width: 100%;                           /* Larghezza completa */
+    max-width: 280px;                      /* Larghezza massima */
+    justify-content: center;               /* Centra il contenuto */
+    padding: 0.75rem 1rem;                 /* Padding maggiore per tap */
+    background: rgba(23, 183, 177, 0.1);  /* Sfondo leggero */
+    border-radius: 8px;                    /* Bordi arrotondati */
+    transition: all 0.3s ease;            /* Transizione fluida */
+  }
+  
+  .telegram-link:hover,
+  .telegram-link:active {
+    background: rgba(23, 183, 177, 0.2);  /* Sfondo più scuro al tap */
+    transform: translateY(-2px);          /* Leggero sollevamento */
+  }
+}
+

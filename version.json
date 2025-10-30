@@ -1,6 +1,6 @@
 {
-  "version": "1.5.4",
-  "versionDate": "27 Ottobre 2025",
-  "versionTime": "21:15",
-  "updateNotes": "Preset universale schermi piccoli - ottimizzazione completa modali e PWA nav."
+  "version": "1.5.6",
+  "versionDate": "30 Ottobre 2025",
+  "versionTime": "15:45",
+  "updateNotes": "Fix Dimensione Interfaccia + Footer modulare + Architettura CSS documentata"
 }

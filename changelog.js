@@ -4,6 +4,20 @@
 
 const changelogData = [
   {
+    version: '1.5.6',
+    date: '30 Ottobre 2025',
+    title: 'Fix Dimensione Interfaccia + Footer Modulare',
+    hidden: false,
+    changes: [
+      '🔧 Fix: Ripristinata funzionalità "Dimensione Interfaccia" in Accessibilità',
+      '✅ Implementati event listener e logica mancante per scala interfaccia (75%-125%)',
+      '📦 Footer modulare: HTML dinamico (footer.js) + CSS componente (css/components/footer.css)',
+      '📚 Documentazione architettura CSS (CSS_ARCHITECTURE.md) per future modularizzazioni',
+      '🎨 Footer centralizzato: modifica una volta, aggiorna ovunque (5 pagine)',
+      '💾 Service Worker aggiornato con nuovi asset modulari'
+    ]
+  },
+  {
     version: '1.5.5',
     date: '28 Ottobre 2025',
     title: 'Sistema Changelog Dinamico',

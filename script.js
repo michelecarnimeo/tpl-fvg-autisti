@@ -831,9 +831,9 @@ function resetFilters() {
 
 // Funzione reset cache
 // Versione corrente dell'app
-const CURRENT_VERSION = '1.5.4';
-const VERSION_DATE = '27 Ottobre 2025';
-const VERSION_TIME = '21:15';
+const CURRENT_VERSION = '1.5.6';
+const VERSION_DATE = '30 Ottobre 2025';
+const VERSION_TIME = '15:45';
 
 // Funzione helper per aggiornare versione, data e ora
 function updateVersion(version, date, time) {
@@ -2526,6 +2526,13 @@ if (!navigator.onLine) {
       blueLightFilterToggle.checked = isBlueLightFilter;
     }
     
+    // Interface Scale
+    const currentScale = localStorage.getItem('tpl.interfaceScale') || '100';
+    const scaleRadios = document.querySelectorAll('input[name="interface-scale"]');
+    scaleRadios.forEach(radio => {
+      radio.checked = (radio.value === currentScale);
+    });
+    
     // Font Size
     const currentFontSize = localStorage.getItem('tpl.fontSize') || 'normal';
     fontButtons.forEach(btn => {
@@ -2627,6 +2634,17 @@ if (!navigator.onLine) {
       triggerHaptic('medium'); // Feedback al cambio
     });
   }
+  
+  // Interface Scale (Dimensione Interfaccia)
+  const scaleRadios = document.querySelectorAll('input[name="interface-scale"]');
+  scaleRadios.forEach(radio => {
+    radio.addEventListener('change', (e) => {
+      if (e.target.checked) {
+        const scale = e.target.value;
+        setInterfaceScale(scale);
+      }
+    });
+  });
   
   // Font Size
   fontButtons.forEach(btn => {
@@ -2802,6 +2820,29 @@ if (!navigator.onLine) {
     }
   }
   
+  // ===== FUNZIONI DIMENSIONE INTERFACCIA =====
+  
+  function setInterfaceScale(scale) {
+    // Rimuovi tutte le classi di scala precedenti
+    document.body.classList.remove('interface-scale-75', 'interface-scale-85', 'interface-scale-100', 'interface-scale-115', 'interface-scale-125');
+    
+    // Aggiungi la nuova classe di scala
+    document.body.classList.add(`interface-scale-${scale}`);
+    
+    try {
+      localStorage.setItem('tpl.interfaceScale', scale);
+    } catch {}
+    
+    console.log('Dimensione interfaccia:', scale + '%');
+    triggerHaptic('medium'); // Feedback al cambio dimensione
+  }
+  
+  function loadInterfaceScale() {
+    const saved = localStorage.getItem('tpl.interfaceScale');
+    const scale = saved || '100'; // Default 100%
+    setInterfaceScale(scale);
+  }
+  
   // ===== FUNZIONI KEEP SCREEN ON (WAKE LOCK API) =====
   
   // Variabile globale per tracciare il WakeLock
@@ -2925,6 +2966,7 @@ if (!navigator.onLine) {
     loadExtraSpacing();
     loadCompactLayout();
     loadBlueLightFilter();
+    loadInterfaceScale();
     
     // Sincronizza lo stato dei checkbox con localStorage
     // (necessario per PWA quando si naviga tra pagine)
