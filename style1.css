@@ -180,17 +180,7 @@ p, span, div, a, button, input, select, textarea, label, li {
   
   /* SOTTOSEZIONE 5.6: Animazione del gradiente di sfondo */
   /* Definisce l'animazione per far muovere il gradiente di sfondo */
-  @keyframes gradientShift {
-    0% {
-      background-position: 0% 50%;    /* Posizione iniziale del gradiente */
-    }
-    50% {
-      background-position: 100% 50%;  /* Posizione centrale - gradiente si sposta */
-    }
-    100% {
-      background-position: 0% 50%;    /* Ritorna alla posizione iniziale */
-    }
-  }
+  /* NOTA: @keyframes gradientShift spostato in css/animations.css */
   
   /* SOTTOSEZIONE 5.6.1: Animazione controllata da JavaScript */
   /* L'animazione è disabilitata di default per migliorare le performance */
@@ -1657,16 +1647,7 @@ p, span, div, a, button, input, select, textarea, label, li {
     animation: modalSlideIn 0.3s ease-out;      /* Animazione di entrata */
   }
   
-  @keyframes modalSlideIn {
-    from {
-      opacity: 0;
-      transform: translate(-50%, -60%);
-    }
-    to {
-      opacity: 1;
-      transform: translate(-50%, -50%);
-    }
-  }
+  /* NOTA: @keyframes modalSlideIn spostato in css/animations.css */
   
   /* SOTTOSEZIONE 16.3: Header modal */
   .cache-modal-header {
@@ -2062,14 +2043,7 @@ p, span, div, a, button, input, select, textarea, label, li {
   }
   
   /* Animazione pulse per stato attivo */
-  @keyframes pulse-active {
-    0%, 100% {
-      box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
-    }
-    50% {
-      box-shadow: 0 0 0 6px rgba(34, 197, 94, 0);
-    }
-  }
+  /* NOTA: @keyframes pulse-active spostato in css/animations.css */
   
   /* Animazione click */
   .mobile-nav-button:active {
@@ -2090,14 +2064,7 @@ p, span, div, a, button, input, select, textarea, label, li {
   }
   
   /* Animazione rotazione icona */
-  @keyframes rotate-icon {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
+  /* NOTA: @keyframes rotate-icon spostato in css/animations.css */
   
   .mobile-menu-divider {
     height: 1px;
@@ -2304,12 +2271,16 @@ p, span, div, a, button, input, select, textarea, label, li {
     align-items: center;
     justify-content: center;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
   .fermate-modal.show {
     display: flex;
     opacity: 1;
+  }
+  
+  .fermate-modal.closing {
+    opacity: 0;
   }
   
   .fermate-modal-content {
@@ -2319,12 +2290,13 @@ p, span, div, a, button, input, select, textarea, label, li {
     box-shadow: var(--glass-shadow);
     width: 100%;
     max-width: 500px;
-    max-height: 80vh;
+    max-height: 65vh; /* Ridotto da 80vh per modale più compatto */
     margin: 20px;
     display: flex;
     flex-direction: column;
-    transform: scale(0.9);
-    transition: transform 0.3s ease;
+    transform: scale(0.9) translateY(-10px);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
   }
   
   /* ========================================
@@ -2333,7 +2305,7 @@ p, span, div, a, button, input, select, textarea, label, li {
      ======================================== */
   @media (max-width: 430px), (max-height: 670px) {
     .fermate-modal-content {
-      max-height: 95vh; /* Usa più spazio verticale */
+      max-height: 70vh; /* Ridotto per modale più compatto */
       margin: 8px; /* Margini ridotti */
       border-radius: 12px;
       width: calc(100% - 16px); /* Sfrutta tutta la larghezza */
@@ -2412,7 +2384,13 @@ p, span, div, a, button, input, select, textarea, label, li {
   }
   
   .fermate-modal.show .fermate-modal-content {
-    transform: scale(1);
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+  
+  .fermate-modal.closing .fermate-modal-content {
+    transform: scale(0.95) translateY(10px);
+    opacity: 0;
   }
   
   .fermate-modal-header {
@@ -2523,21 +2501,30 @@ p, span, div, a, button, input, select, textarea, label, li {
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
     border-radius: 12px;
-    padding: 12px 16px;
+    padding: 8px 12px; /* Stato compatto di default */
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: scale(1);
   }
   
   .fermate-search-box:focus-within {
     border-color: var(--turchese);
-    box-shadow: 0 0 0 3px rgba(23, 183, 177, 0.1);
+    box-shadow: 0 0 0 3px rgba(23, 183, 177, 0.15), 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 12px 16px; /* Ingrandisce al focus */
+    transform: scale(1.02); /* Leggero ingrandimento visivo */
   }
   
   .fermate-search-icon {
-    font-size: 1.2rem;
+    font-size: 1.1rem; /* Leggermente più piccolo nello stato compatto */
     color: var(--testo-secondario);
-    margin-right: 12px;
+    margin-right: 10px;
     flex-shrink: 0;
+    transition: all 0.3s ease;
+  }
+  
+  .fermate-search-box:focus-within .fermate-search-icon {
+    font-size: 1.2rem; /* Ingrandisce al focus */
+    color: var(--turchese);
   }
   
   .fermate-search-input {
@@ -2546,8 +2533,13 @@ p, span, div, a, button, input, select, textarea, label, li {
     outline: none;
     background: transparent;
     color: var(--testo-principale);
-    font-size: 1rem;
+    font-size: 0.95rem; /* Leggermente più piccolo nello stato compatto */
     font-weight: 500;
+    transition: all 0.3s ease;
+  }
+  
+  .fermate-search-box:focus-within .fermate-search-input {
+    font-size: 1rem; /* Ingrandisce al focus */
   }
   
   .fermate-search-input::placeholder {
@@ -2628,10 +2620,13 @@ p, span, div, a, button, input, select, textarea, label, li {
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: var(--turchese) var(--grigio-chiaro);
+    /* Migliora usabilità su mobile */
+    -webkit-overflow-scrolling: touch; /* Scorrimento fluido iOS */
+    touch-action: pan-y; /* Abilita scroll verticale touch */
   }
   
   .fermate-modal-list::-webkit-scrollbar {
-    width: 6px;
+    width: 6px; /* Desktop: sottile */
   }
   
   .fermate-modal-list::-webkit-scrollbar-track {
@@ -2646,6 +2641,65 @@ p, span, div, a, button, input, select, textarea, label, li {
   
   .fermate-modal-list::-webkit-scrollbar-thumb:hover {
     background: var(--turchese-scuro);
+  }
+  
+  /* Scrollbar sempre visibile e utilizzabile su mobile */
+  @media (max-width: 768px), (pointer: coarse) {
+    .fermate-modal-list {
+      /* Forza scrollbar sempre visibile */
+      scrollbar-width: auto; /* Scrollbar più spessa su Firefox mobile */
+      padding-right: 12px; /* Più spazio per la scrollbar più grande */
+      /* Assicura che la scrollbar non scompaia */
+      overflow-y: scroll !important; /* Sempre visibile, non solo quando necessario */
+    }
+    
+    /* Webkit scrollbar per Chrome/Safari mobile */
+    .fermate-modal-list::-webkit-scrollbar {
+      width: 20px; /* Scrollbar molto più spessa per essere utilizzabile */
+      -webkit-appearance: none; /* Rimuove stile nativo */
+      background: transparent;
+    }
+    
+    .fermate-modal-list::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.1); /* Track molto più visibile */
+      border-radius: 10px;
+      border: 2px solid transparent; /* Bordo per area touch */
+      background-clip: padding-box;
+      /* Forza track sempre visibile */
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .fermate-modal-list::-webkit-scrollbar-thumb {
+      background: var(--turchese);
+      border-radius: 10px;
+      border: 4px solid rgba(255, 255, 255, 0); /* Bordo trasparente più spesso per area touch */
+      background-clip: padding-box; /* Il colore riempie solo il contenuto interno */
+      min-height: 60px; /* Altezza minima maggiore per essere più facile da afferrare */
+      /* Ombra per visibilità */
+      -webkit-box-shadow: 0 0 1px rgba(0, 123, 138, 0.5);
+      /* Forza thumb sempre visibile */
+      opacity: 0.9;
+    }
+    
+    .fermate-modal-list::-webkit-scrollbar-thumb:active,
+    .fermate-modal-list::-webkit-scrollbar-thumb:hover {
+      background: var(--turchese-scuro);
+      background-clip: padding-box;
+      opacity: 1;
+      border-color: rgba(255, 255, 255, 0);
+    }
+    
+    /* Forza scrollbar a rimanere visibile anche quando non si scrolla */
+    .fermate-modal-list::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 20px;
+      pointer-events: none;
+      background: transparent;
+    }
   }
   
   .fermate-modal-list li {
@@ -2782,7 +2836,7 @@ p, span, div, a, button, input, select, textarea, label, li {
   @media (max-width: 480px) {
     .fermate-modal-content {
       margin: 10px;
-      max-height: 90vh;
+      max-height: 68vh; /* Ridotto per modale più compatto */
     }
     
     .fermate-modal-header,
@@ -3020,20 +3074,8 @@ p, span, div, a, button, input, select, textarea, label, li {
    SEZIONE 19: ANIMAZIONI E TRANSIZIONI
    ======================================== */
 /* SOTTOSEZIONE 19.1: Animazione fade-in */
-.fade-in {
-    animation: fadeIn 0.6s ease-in-out;
-  }
-  
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
+/* NOTA: .fade-in e @keyframes fadeIn spostati in css/animations.css */
+/* Usa la classe .fade-in da animations.css oppure .fade-in-large per translateY(20px) */
   
   /* SOTTOSEZIONE 19.2: Classe per nascondere elementi */
   .hidden {
@@ -3972,6 +4014,7 @@ p, span, div, a, button, input, select, textarea, label, li {
     box-shadow: 0 8px 24px rgba(0, 123, 138, 0.25); /* Ombra turchese */
     animation: slideUp 0.4s ease-out;         /* Animazione di entrata */
     transition: all 0.3s ease;                /* Transizione fluida */
+    /* NOTA: @keyframes slideUp spostato in css/animations.css */
   }
   
   .pwa-install-banner:hover {
@@ -4137,16 +4180,7 @@ p, span, div, a, button, input, select, textarea, label, li {
   }
   
   /* Animazione slide-up */
-  @keyframes slideUp {
-    from {
-      opacity: 0;                             /* Inizia invisibile */
-      transform: translateY(20px);            /* Inizia spostato in basso */
-    }
-    to {
-      opacity: 1;                             /* Finisce visibile */
-      transform: translateY(0);               /* Finisce nella posizione normale */
-    }
-  }
+  /* NOTA: @keyframes slideUp spostato in css/animations.css */
   
   /* Dark mode per banner PWA */
   body.dark-mode .pwa-install-banner {
@@ -4657,18 +4691,8 @@ p, span, div, a, button, input, select, textarea, label, li {
 
 .settings-tab-content.active {
   display: block;
-  animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  /* NOTA: Animazione fadeIn sostituita con utility class .fade-in in HTML */
+  /* @keyframes fadeIn spostato in css/animations.css */
 }
 
 /* Section */
@@ -5754,15 +5778,7 @@ p, span, div, a, button, input, select, textarea, label, li {
   text-transform: uppercase;
   letter-spacing: 0.5px;
   animation: pulseGlow 2s ease-in-out infinite;
-}
-
-@keyframes pulseGlow {
-  0%, 100% {
-    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
-  }
-  50% {
-    box-shadow: 0 0 0 4px rgba(34, 197, 94, 0);
-  }
+  /* NOTA: @keyframes pulseGlow spostato in css/animations.css */
 }
 
 /* Suggerimenti Display */
@@ -5993,16 +6009,8 @@ html.scale-125 {
 
 .update-check-icon {
   font-size: 2.5rem;
-  animation: rotate-slow 3s linear infinite;
-}
-
-@keyframes rotate-slow {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  /* NOTA: Animazione rotate-slow sostituita con utility class .rotate-slow in HTML */
+  /* @keyframes rotate-slow spostato in css/animations.css */
 }
 
 .update-check-text {
@@ -6491,17 +6499,7 @@ button.pwa-nav-item:focus {
   border-radius: 50%;
   background: #ffffff;
   animation: dotPulse 2s ease-in-out infinite;
-}
-
-@keyframes dotPulse {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.6;
-    transform: scale(1.3);
-  }
+  /* NOTA: @keyframes dotPulse spostato in css/animations.css */
 }
 
 /* Dark mode - stesso colore turchese ma più scuro */
@@ -6550,16 +6548,7 @@ body.pwa-mode .navbar {
 }
 
 /* Animazione entrata */
-@keyframes slideUpNav {
-  from {
-    transform: translateX(-50%) translateY(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(-50%) translateY(0);
-    opacity: 1;
-  }
-}
+/* NOTA: @keyframes slideUpNav spostato in css/animations.css */
 
 .pwa-bottom-nav.show {
   animation: slideUpNav 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
@@ -6696,18 +6685,8 @@ body.pwa-mode .navbar {
 
 .offline-icon {
   font-size: 1.5rem;
-  animation: pulse 2s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.7;
-    transform: scale(1.1);
-  }
+  /* NOTA: Animazione pulse sostituita con utility class .pulse in HTML/JS */
+  /* @keyframes pulse spostato in css/animations.css */
 }
 
 .offline-text {

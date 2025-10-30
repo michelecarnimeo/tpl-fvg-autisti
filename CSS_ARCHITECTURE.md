@@ -7,9 +7,10 @@ Questo documento descrive l'architettura CSS modulare del progetto.
 ```
 tpl-fvg-autisti-4/
 ├── css/
-│   ├── variables.css          ← Variabili globali CSS (:root)
+│   ├── variables.css          ✅ CREATO (vuoto, sarà popolato gradualmente)
 │   ├── base.css               ← Reset, typography, body base
 │   ├── layout.css             ← Container, grid, spacing globale
+│   ├── animations.css         ✅ FATTO (variabili temporanee, saranno spostate in variables.css)
 │   ├── themes.css             ← Dark mode, high contrast, filtri
 │   ├── responsive.css         ← Media queries globali
 │   └── components/            ← Componenti UI modulari
@@ -40,7 +41,10 @@ Gli stili devono essere caricati in questo ordine preciso:
 <!-- 3. LAYOUT (struttura generale) -->
 <link rel="stylesheet" href="css/layout.css">
 
-<!-- 4. COMPONENTI (in qualsiasi ordine) -->
+<!-- 4. ANIMATIONS (dopo layout, prima componenti) -->
+<link rel="stylesheet" href="css/animations.css">
+
+<!-- 5. COMPONENTI (in qualsiasi ordine) -->
 <link rel="stylesheet" href="css/components/navbar.css">
 <link rel="stylesheet" href="css/components/footer.css">
 <link rel="stylesheet" href="css/components/buttons.css">
@@ -49,15 +53,16 @@ Gli stili devono essere caricati in questo ordine preciso:
 <link rel="stylesheet" href="css/components/forms.css">
 <link rel="stylesheet" href="css/components/pwa-nav.css">
 
-<!-- 5. TEMI (quasi ultimo) -->
+<!-- 6. TEMI (quasi ultimo) -->
 <link rel="stylesheet" href="css/themes.css">
 
-<!-- 6. RESPONSIVE (sempre ultimo!) -->
+<!-- 7. RESPONSIVE (sempre ultimo!) -->
 <link rel="stylesheet" href="css/responsive.css">
 ```
 
 **Perché questo ordine?**
 - Le **variabili** devono esistere prima che altri file le usino
+- Le **animazioni** devono essere disponibili prima dei componenti che le usano
 - Il **responsive** sovrascrive tutto quando necessario
 - I **componenti** possono essere caricati in qualsiasi ordine tra loro
 
@@ -65,14 +70,16 @@ Gli stili devono essere caricati in questo ordine preciso:
 
 ## 📋 Descrizione dei File
 
-### **1. variables.css** (Fondamenta)
+### **1. variables.css** (Fondamenta) ✅ CREATO
 **Contenuto:**
-- Variabili colori (`:root`)
-- Variabili spacing
-- Variabili font
-- Variabili transizioni/animazioni
+- Variabili colori (`:root`) - da spostare da style1.css
+- Variabili spacing - da aggiungere quando servono
+- Variabili font - da aggiungere quando servono
+- Variabili transizioni/animazioni - da spostare da animations.css
 
-**Esempio:**
+**Stato attuale:** File creato vuoto, sarà popolato gradualmente durante la modularizzazione.
+
+**Esempio futuro:**
 ```css
 :root {
   /* Colori */
@@ -87,11 +94,15 @@ Gli stili devono essere caricati in questo ordine preciso:
   
   /* Font */
   --font-size-multiplier: 1;
+  
+  /* Animazioni */
+  --anim-duration-normal: 0.3s;
+  --easing-bezier-standard: cubic-bezier(0.4, 0, 0.2, 1);
 }
 ```
 
 **Dipendenze:** Nessuna  
-**Usato da:** Tutti gli altri file CSS
+**Usato da:** Tutti gli altri file CSS (attualmente non ancora incluso nell'HTML)
 
 ---
 
@@ -148,7 +159,69 @@ body {
 
 ---
 
-### **4. components/** (Componenti UI)
+### **4. animations.css** (Animazioni e Transizioni) ✅ FATTO
+**Contenuto:**
+- Tutti i `@keyframes` comuni (fadeIn, slideUp, pulse, ecc.) ✅ Spostati da style1.css
+- Utility classes per transizioni (`.transition-all`, `.transition-fast`, ecc.) ✅ Creati
+- Utility classes per animazioni (`.fade-in`, `.slide-up`, ecc.) ✅ Creati
+- Configurazione reduce-motion (prefers-reduced-motion) ✅ Implementato
+
+**Esempio:**
+```css
+/* Variabili durate/easing vengono da variables.css */
+.transition-all {
+  transition: all var(--anim-duration-normal) var(--easing-ease);
+}
+
+.fade-in {
+  animation: fadeIn var(--anim-duration-normal) var(--easing-ease-out);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+```
+
+**Dipendenze:** `variables.css` (variabili temporanee in animations.css, saranno spostate)  
+**Usato da:** Tutti i componenti (buttons.css, modals.css, ecc.)
+
+**Stato modularizzazione animazioni:**
+- ✅ **Tutti i `@keyframes` spostati** da style1.css → animations.css
+- ✅ **Utility classes create** per animazioni e transizioni comuni
+- ✅ **Duplicazioni rimosse** (SEZIONE 2 vs SEZIONE 5 unificate)
+- ✅ **Variabili CSS** usate in tutte le utility classes
+
+**Animazioni inline rimaste in style1.css:**
+
+**🔵 ✅ Completate - Sostituite con utility classes:**
+- ✅ Linea 4694: `.settings-tab-content.active` → sostituito con `.fade-in` (HTML + JS)
+- ✅ Linea 6012: `.update-check-icon` → sostituito con `.rotate-slow` (HTML)
+- ✅ Linea 6688: `.offline-icon` → sostituito con `.pulse` (JS dinamico)
+
+**🟡 Componenti-specifiche (da spostare con componente):**
+- Linea 190, 194: `body.animation-enabled` → `animation: gradientShift` (controllato da JS, OK così)
+- Linea 1647: `.cache-modal-content` → `animation: modalSlideIn 0.3s ease-out` → spostare in `modals.css`
+- Linea 2030: `.mobile-toggle-with-badge.active::after` → `animation: pulse-active` → spostare in `navbar.css`
+- Linea 2063: `.mobile-toggle-with-badge.active .mobile-nav-icon` → `animation: rotate-icon` → spostare in `navbar.css`
+- Linea 4015: `.pwa-install-banner` → `animation: slideUp 0.4s ease-out` → spostare in `pwa-nav.css`
+- Linea 5780: `.display-optimal` → `animation: pulseGlow` → spostare con componente display
+- Linea 6501: `.pwa-brand-header::before` → `animation: dotPulse` → spostare in `pwa-nav.css`
+- Linea 6554: `.pwa-bottom-nav.show` → `animation: slideUpNav` → spostare in `pwa-nav.css`
+
+**Note:**
+- Le animazioni componenti-specifiche saranno spostate insieme ai rispettivi componenti durante la modularizzazione
+- ✅ Le 3 animazioni sostituibili con utility classes sono state completate
+
+---
+
+### **5. components/** (Componenti UI)
 
 #### **components/footer.css** ✅
 **Contenuto:**
@@ -202,7 +275,7 @@ body {
 
 ---
 
-### **5. themes.css** (Temi)
+### **6. themes.css** (Temi)
 **Contenuto:**
 - Dark mode (`.dark`)
 - High contrast (`.high-contrast`)
@@ -227,7 +300,7 @@ body {
 
 ---
 
-### **6. responsive.css** (Media Queries)
+### **7. responsive.css** (Media Queries)
 **Contenuto:**
 - Media queries globali
 - Breakpoints standard
@@ -285,7 +358,8 @@ const STATIC_ASSETS = [
   './css/variables.css',
   './css/base.css',
   './css/layout.css',
-  './css/components/footer.css',  // ← Aggiungi qui
+  './css/animations.css',  // ← Animazioni comuni
+  './css/components/footer.css',  // ← Componenti
   './css/themes.css',
   './css/responsive.css',
   // ...

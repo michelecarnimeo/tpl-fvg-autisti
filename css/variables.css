@@ -1,0 +1,46 @@
+/* ========================================
+   VARIABLES MODULE
+   Variabili globali CSS per tutto il progetto
+   Usato da: tutti i file CSS
+   ======================================== */
+
+/* NOTA: Questo file verrà popolato gradualmente mentre modularizziamo i componenti.
+   Le variabili vengono spostate qui da style1.css e animations.css man mano che servono. */
+
+:root {
+  /* ========================================
+     SEZIONE 1: COLORI
+     ======================================== */
+  /* NOTA: Variabili colori verranno spostate qui da style1.css (linee 28-60)
+     quando modularizziamo i componenti che le usano */
+  
+  /* ========================================
+     SEZIONE 2: ANIMAZIONI E TRANSIZIONI
+     ======================================== */
+  /* NOTA: Variabili animazioni verranno spostate qui da animations.css (linee 12-32)
+     quando modularizziamo le animazioni */
+  
+  /* ========================================
+     SEZIONE 3: SPACING
+     ======================================== */
+  /* NOTA: Variabili spacing verranno aggiunte qui quando servono */
+  
+  /* ========================================
+     SEZIONE 4: TYPOGRAPHY
+     ======================================== */
+  /* NOTA: Variabili font verranno aggiunte qui quando servono */
+  
+  /* ========================================
+     SEZIONE 5: ALTRE VARIABILI GLOBALI
+     ======================================== */
+  /* NOTA: Altre variabili globali verranno aggiunte qui quando servono */
+}
+
+/* ========================================
+   DARK MODE OVERRIDES
+   ======================================== */
+/* NOTA: Overrides per dark mode verranno aggiunti qui quando servono */
+.dark {
+  /* Override variabili per modalità scura */
+}
+

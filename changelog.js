@@ -4,6 +4,24 @@
 
 const changelogData = [
   {
+    version: '1.5.7',
+    date: '30 Ottobre 2025',
+    title: 'Modularizzazione CSS Animazioni e Transizioni',
+    hidden: false,
+    changes: [
+      '📦 Creato css/animations.css con tutti i @keyframes estratti da style1.css',
+      '📦 Creato css/variables.css (vuoto, pronto per popolamento graduale)',
+      '🗑️ Rimossi tutti i @keyframes duplicati da style1.css',
+      '✨ Creati utility classes per animazioni (.fade-in, .pulse, .rotate, ecc.)',
+      '✨ Creati utility classes per transizioni (.transition-all, .transition-transform, ecc.)',
+      '🔧 Rimossi duplicati in animations.css (SEZIONE 2 vs SEZIONE 5 unificate)',
+      '✅ Sostituite 3 animazioni inline con utility classes (.fade-in, .rotate-slow, .pulse)',
+      '📚 Aggiornato CSS_ARCHITECTURE.md con documentazione completa stato animazioni',
+      '📚 Creato JS_ARCHITECTURE.md per architettura JavaScript modulare',
+      '🎨 Animazioni modulari: tutti i keyframes centralizzati e riutilizzabili'
+    ]
+  },
+  {
     version: '1.5.6',
     date: '30 Ottobre 2025',
     title: 'Fix Dimensione Interfaccia + Footer Modulare',

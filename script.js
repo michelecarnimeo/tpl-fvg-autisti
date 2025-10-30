@@ -511,15 +511,33 @@ function openFermateModal(type) {
   populateFermateList();
   
   // Mostra il modale
-  fermateModal.classList.add('show');
   fermateModal.style.display = 'flex';
+  
+  // Piccolo delay per permettere al browser di renderizzare il display
+  // prima di applicare l'animazione
+  setTimeout(() => {
+    fermateModal.classList.add('show');
+  }, 10);
+  
+  // Focus automatico sul campo ricerca (solo su desktop, non mobile)
+  // Su mobile evita di aprire la tastiera automaticamente
+  if (fermateSearchInput && window.innerWidth > 768) {
+    setTimeout(() => {
+      fermateSearchInput.focus();
+    }, 350); // Delay per permettere l'animazione del modale
+  }
 }
 
 function closeFermateModal() {
   if (!fermateModal) return;
   
+  // Aggiungi classe per animazione di chiusura
+  fermateModal.classList.add('closing');
   fermateModal.classList.remove('show');
+  
+  // Attendi fine animazione prima di nascondere completamente
   setTimeout(() => {
+    fermateModal.classList.remove('closing');
     fermateModal.style.display = 'none';
   }, 300);
   
@@ -590,12 +608,8 @@ function renderFermateList() {
     li.textContent = name;
     li.dataset.index = index;
     
-    // Evidenzia la fermata selezionata
-    if (currentModalType === 'partenza' && index == partenzaIdx) {
-      li.classList.add('selected');
-    } else if (currentModalType === 'arrivo' && index == arrivoIdx) {
-      li.classList.add('selected');
-    }
+    // NON evidenziare la fermata selezionata all'apertura del modale
+    // La colorazione verrà applicata solo al click per feedback visivo
     
     li.addEventListener('click', () => selectFermata(index));
     fermateModalList.appendChild(li);
@@ -603,29 +617,42 @@ function renderFermateList() {
 }
 
 function selectFermata(index) {
-  if (currentModalType === 'partenza') {
-    partenzaIdx = index;
-    partenzaText.textContent = tariffario[lineaIdx].fermate[index];
-  } else if (currentModalType === 'arrivo') {
-    arrivoIdx = index;
-    arrivoText.textContent = tariffario[lineaIdx].fermate[index];
+  // Rimuovi la classe 'selected' da tutte le fermate
+  const allFermateItems = fermateModalList.querySelectorAll('li');
+  allFermateItems.forEach(item => item.classList.remove('selected'));
+  
+  // Aggiungi la classe 'selected' alla fermata cliccata per feedback visivo
+  const clickedItem = fermateModalList.querySelector(`li[data-index="${index}"]`);
+  if (clickedItem) {
+    clickedItem.classList.add('selected');
   }
   
-  hasCalculated = false;
-  updateSummary();
-  calcolaPrezzo();
-  updatePriceCardState();  // ← AGGIUNTO! Chiama sempre per aggiornare lo stato della card
-  
-  // Salva nello storage
-  try {
+  // Aggiorna i valori dopo un breve delay per far vedere il feedback visivo
+  setTimeout(() => {
     if (currentModalType === 'partenza') {
-      localStorage.setItem('tpl.partenzaIdx', partenzaIdx);
-    } else {
-      localStorage.setItem('tpl.arrivoIdx', arrivoIdx);
+      partenzaIdx = index;
+      partenzaText.textContent = tariffario[lineaIdx].fermate[index];
+    } else if (currentModalType === 'arrivo') {
+      arrivoIdx = index;
+      arrivoText.textContent = tariffario[lineaIdx].fermate[index];
     }
-  } catch { }
-  
-  closeFermateModal();
+    
+    hasCalculated = false;
+    updateSummary();
+    calcolaPrezzo();
+    updatePriceCardState();
+    
+    // Salva nello storage
+    try {
+      if (currentModalType === 'partenza') {
+        localStorage.setItem('tpl.partenzaIdx', partenzaIdx);
+      } else {
+        localStorage.setItem('tpl.arrivoIdx', arrivoIdx);
+      }
+    } catch { }
+    
+    closeFermateModal();
+  }, 150); // Breve delay per feedback visivo
 }
 
 function filterFermate(searchTerm) {
@@ -2251,7 +2278,7 @@ function createOfflineBanner() {
   offlineBanner.className = 'offline-banner';
   offlineBanner.innerHTML = `
     <div class="offline-content">
-      <span class="offline-icon">📡</span>
+      <span class="offline-icon pulse">📡</span>
       <span class="offline-text">Modalità offline - App funzionante</span>
       <button class="offline-close" onclick="hideOfflineBanner()">×</button>
     </div>
@@ -2453,13 +2480,17 @@ if (!navigator.onLine) {
       
       // Rimuovi active da tutti
       tabs.forEach(t => t.classList.remove('active'));
-      tabContents.forEach(tc => tc.classList.remove('active'));
+      tabContents.forEach(tc => {
+        tc.classList.remove('active');
+        tc.classList.remove('fade-in'); // Rimuovi anche fade-in
+      });
       
       // Aggiungi active al selezionato
       tab.classList.add('active');
       const targetContent = document.querySelector(`[data-content="${targetTab}"]`);
       if (targetContent) {
         targetContent.classList.add('active');
+        targetContent.classList.add('fade-in'); // Aggiungi fade-in per animazione
       }
     });
   });

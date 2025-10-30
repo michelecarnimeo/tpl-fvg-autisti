@@ -1,0 +1,378 @@
+/* ========================================
+   ANIMATIONS MODULE
+   Sistema modulare per animazioni e transizioni
+   Usato da: tutti i componenti
+   ======================================== */
+
+/* ========================================
+   SEZIONE 1: VARIABILI ANIMAZIONI
+   ======================================== */
+/* NOTA: Se variables.css esiste, sposta queste variabili lì */
+
+:root {
+  /* Durate standard */
+  --anim-duration-fast: 0.2s;
+  --anim-duration-normal: 0.3s;
+  --anim-duration-slow: 0.5s;
+  --anim-duration-slower: 0.8s;
+  
+  /* Easing functions */
+  --easing-ease: ease;
+  --easing-ease-in: ease-in;
+  --easing-ease-out: ease-out;
+  --easing-ease-in-out: ease-in-out;
+  --easing-bezier-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --easing-bezier-entrance: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --easing-bezier-exit: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+  
+  /* Delay standard */
+  --anim-delay-short: 0.1s;
+  --anim-delay-medium: 0.2s;
+  --anim-delay-long: 0.3s;
+}
+
+/* ========================================
+   SEZIONE 2: KEYFRAMES ANIMATIONS
+   ======================================== */
+
+/* Animazione gradiente sfondo */
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Animazione fade in */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animazione fade in con maggiore spostamento */
+@keyframes fadeInLarge {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animazione fade out */
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+/* Animazione slide up */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animazione slide down */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animazione pulse */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.1);
+  }
+}
+
+/* Animazione pulse attivo (con box-shadow) */
+@keyframes pulse-active {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(34, 197, 94, 0);
+  }
+}
+
+/* Animazione pulse glow */
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(34, 197, 94, 0);
+  }
+}
+
+/* Animazione rotazione icona */
+@keyframes rotate-icon {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Animazione rotazione lenta */
+@keyframes rotate-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Animazione dot pulse */
+@keyframes dotPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.3);
+  }
+}
+
+/* Animazione modal slide in */
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -60%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+/* Animazione slide up nav */
+@keyframes slideUpNav {
+  from {
+    transform: translateX(-50%) translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ========================================
+   SEZIONE 3: UTILITY CLASSES PER ANIMAZIONI
+   ======================================== */
+
+/* Fade in */
+.fade-in {
+  animation: fadeIn var(--anim-duration-normal) var(--easing-ease-out);
+}
+
+/* Fade in large */
+.fade-in-large {
+  animation: fadeInLarge var(--anim-duration-normal) var(--easing-ease-out);
+}
+
+/* Fade out */
+.fade-out {
+  animation: fadeOut var(--anim-duration-normal) var(--easing-ease-in);
+}
+
+/* Slide up */
+.slide-up {
+  animation: slideUp var(--anim-duration-normal) var(--easing-bezier-entrance);
+}
+
+/* Slide down */
+.slide-down {
+  animation: slideDown var(--anim-duration-normal) var(--easing-bezier-entrance);
+}
+
+/* Pulse */
+.pulse {
+  animation: pulse 2s var(--easing-ease-in-out) infinite;
+}
+
+/* Pulse active */
+.pulse-active {
+  animation: pulse-active 2s var(--easing-ease-in-out) infinite;
+}
+
+/* Pulse glow */
+.pulse-glow {
+  animation: pulseGlow 2s var(--easing-ease-in-out) infinite;
+}
+
+/* Rotate */
+.rotate {
+  animation: rotate-icon 1s linear infinite;
+}
+
+/* Rotate slow */
+.rotate-slow {
+  animation: rotate-slow 3s linear infinite;
+}
+
+/* Dot pulse */
+.dot-pulse {
+  animation: dotPulse 1.5s var(--easing-ease-in-out) infinite;
+}
+
+/* ========================================
+   SEZIONE 4: UTILITY CLASSES - TRANSIZIONI
+   ======================================== */
+
+/* Transizione standard (all 0.3s ease) - più comune */
+.transition-all {
+  transition: all var(--anim-duration-normal) var(--easing-ease);
+}
+
+/* Transizione con cubic-bezier (più fluida) */
+.transition-all-smooth {
+  transition: all var(--anim-duration-normal) var(--easing-bezier-standard);
+}
+
+/* Transizione rapida per click (0.1s) */
+.transition-all-fast {
+  transition: all var(--anim-duration-fast) var(--easing-ease);
+}
+
+/* Transizione veloce (alias per transition-all-fast) */
+.transition-fast {
+  transition: all var(--anim-duration-fast) var(--easing-ease);
+}
+
+/* Transizione lenta */
+.transition-slow {
+  transition: all var(--anim-duration-slow) var(--easing-ease);
+}
+
+/* Transizione solo transform */
+.transition-transform {
+  transition: transform var(--anim-duration-normal) var(--easing-ease);
+}
+
+/* Transizione transform con cubic-bezier */
+.transition-transform-smooth {
+  transition: transform var(--anim-duration-normal) var(--easing-bezier-standard);
+}
+
+/* Transizione rapida transform per click */
+.transition-transform-fast {
+  transition: transform var(--anim-duration-fast) var(--easing-ease);
+}
+
+/* Transizione solo opacity */
+.transition-opacity {
+  transition: opacity var(--anim-duration-normal) var(--easing-ease);
+}
+
+/* Transizione opacity con cubic-bezier */
+.transition-opacity-smooth {
+  transition: opacity var(--anim-duration-normal) var(--easing-bezier-standard);
+}
+
+/* Transizione transform + opacity (comune per modali) */
+.transition-transform-opacity {
+  transition: transform var(--anim-duration-normal) var(--easing-ease), 
+              opacity var(--anim-duration-normal) var(--easing-ease);
+}
+
+/* Transizione transform + opacity con cubic-bezier (per modali) */
+.transition-transform-opacity-smooth {
+  transition: transform var(--anim-duration-normal) var(--easing-bezier-standard), 
+              opacity var(--anim-duration-normal) var(--easing-bezier-standard);
+}
+
+/* Transizione color */
+.transition-color {
+  transition: color var(--anim-duration-normal) var(--easing-ease);
+}
+
+/* Transizione background */
+.transition-bg {
+  transition: background var(--anim-duration-normal) var(--easing-ease);
+}
+
+/* Transizione box-shadow */
+.transition-shadow {
+  transition: box-shadow var(--anim-duration-normal) var(--easing-ease);
+}
+
+/* Transizione su colori (colori multipli) */
+.transition-colors {
+  transition: color var(--anim-duration-normal) var(--easing-ease),
+              background-color var(--anim-duration-normal) var(--easing-ease),
+              border-color var(--anim-duration-normal) var(--easing-ease);
+}
+
+/* Transizione combinata per modali complessi */
+.transition-modal {
+  transition: transform var(--anim-duration-normal) var(--easing-bezier-standard), 
+              opacity var(--anim-duration-normal) var(--easing-bezier-standard),
+              box-shadow var(--anim-duration-normal) var(--easing-ease);
+}
+
+/* ========================================
+   SEZIONE 5: ACCESSIBILITÀ - REDUCE MOTION
+   ======================================== */
+
+/* Disabilita TUTTE le animazioni quando reduce-motion è attivo */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Classe manuale per ridurre animazioni */
+body.reduce-motion *,
+body.reduce-motion *::before,
+body.reduce-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+

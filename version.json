@@ -1,6 +1,6 @@
 {
-  "version": "1.5.6",
+  "version": "1.5.7",
   "versionDate": "30 Ottobre 2025",
-  "versionTime": "15:45",
-  "updateNotes": "Fix Dimensione Interfaccia + Footer modulare + Architettura CSS documentata"
+  "versionTime": "23:45",
+  "updateNotes": "Modularizzazione CSS Animazioni e Transizioni completata"
 }

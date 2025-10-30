@@ -8,6 +8,8 @@
   <!-- Font locali per PWA offline -->
   <!-- CSS personalizzati -->
   <link rel="stylesheet" href="style1.css">
+  <!-- Animazioni e transizioni globali -->
+  <link rel="stylesheet" href="css/animations.css">
   <link rel="stylesheet" href="css/components/footer.css">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="src/tpl.jpg" type="image/jpeg">
@@ -307,7 +309,7 @@
         <div class="fermate-search-container">
           <div class="fermate-search-box">
             <span class="fermate-search-icon">🔍</span>
-            <input type="text" id="fermate-search-input" class="fermate-search-input" placeholder="Cerca fermata..." />
+            <input type="text" id="fermate-search-input" class="fermate-search-input" placeholder="Cerca per nome..." />
             <button id="fermate-clear-search" class="fermate-clear-btn" style="display: none;">✕</button>
           </div>
         </div>
@@ -394,7 +396,7 @@
       <div class="settings-content">
         
         <!-- Tab Aspetto -->
-        <div class="settings-tab-content active" data-content="appearance">
+        <div class="settings-tab-content active fade-in" data-content="appearance">
           <div class="settings-section">
             
             <!-- Theme Mode -->
@@ -810,7 +812,7 @@
             <!-- Verifica Aggiornamenti -->
             <div class="info-card update-check-card">
               <div class="update-check-header">
-                <div class="update-check-icon">🔄</div>
+                <div class="update-check-icon rotate-slow">🔄</div>
                 <div class="update-check-text">
                   <h4 class="update-check-title">Verifica Aggiornamenti</h4>
                   <p class="update-check-description">Controlla se è disponibile una nuova versione dell'app</p>
@@ -824,7 +826,7 @@
             <!-- Riavvia App -->
             <div class="info-card update-check-card">
               <div class="update-check-header">
-                <div class="update-check-icon">📲</div>
+                <div class="update-check-icon rotate-slow">📲</div>
                 <div class="update-check-text">
                   <h4 class="update-check-title">Riavvia App</h4>
                   <p class="update-check-description">Riavvia l'applicazione per applicare le modifiche</p>
