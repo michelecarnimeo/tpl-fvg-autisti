@@ -33,34 +33,35 @@ Gli stili devono essere caricati in questo ordine preciso:
 
 ```html
 <!-- 1. VARIABILI (sempre per primo!) -->
-<link rel="stylesheet" href="css/variables.css">
+<link rel="stylesheet" href="css/variables.css" />
 
 <!-- 2. BASE (reset e typography) -->
-<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/base.css" />
 
 <!-- 3. LAYOUT (struttura generale) -->
-<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/layout.css" />
 
 <!-- 4. ANIMATIONS (dopo layout, prima componenti) -->
-<link rel="stylesheet" href="css/animations.css">
+<link rel="stylesheet" href="css/animations.css" />
 
 <!-- 5. COMPONENTI (in qualsiasi ordine) -->
-<link rel="stylesheet" href="css/components/navbar.css">
-<link rel="stylesheet" href="css/components/footer.css">
-<link rel="stylesheet" href="css/components/buttons.css">
-<link rel="stylesheet" href="css/components/modals.css">
-<link rel="stylesheet" href="css/components/cards.css">
-<link rel="stylesheet" href="css/components/forms.css">
-<link rel="stylesheet" href="css/components/pwa-nav.css">
+<link rel="stylesheet" href="css/components/navbar.css" />
+<link rel="stylesheet" href="css/components/footer.css" />
+<link rel="stylesheet" href="css/components/buttons.css" />
+<link rel="stylesheet" href="css/components/modals.css" />
+<link rel="stylesheet" href="css/components/cards.css" />
+<link rel="stylesheet" href="css/components/forms.css" />
+<link rel="stylesheet" href="css/components/pwa-nav.css" />
 
 <!-- 6. TEMI (quasi ultimo) -->
-<link rel="stylesheet" href="css/themes.css">
+<link rel="stylesheet" href="css/themes.css" />
 
 <!-- 7. RESPONSIVE (sempre ultimo!) -->
-<link rel="stylesheet" href="css/responsive.css">
+<link rel="stylesheet" href="css/responsive.css" />
 ```
 
 **Perché questo ordine?**
+
 - Le **variabili** devono esistere prima che altri file le usino
 - Le **animazioni** devono essere disponibili prima dei componenti che le usano
 - Il **responsive** sovrascrive tutto quando necessario
@@ -71,7 +72,9 @@ Gli stili devono essere caricati in questo ordine preciso:
 ## 📋 Descrizione dei File
 
 ### **1. variables.css** (Fondamenta) ✅ CREATO
+
 **Contenuto:**
+
 - Variabili colori (`:root`) - da spostare da style1.css
 - Variabili spacing - da aggiungere quando servono
 - Variabili font - da aggiungere quando servono
@@ -80,21 +83,22 @@ Gli stili devono essere caricati in questo ordine preciso:
 **Stato attuale:** File creato vuoto, sarà popolato gradualmente durante la modularizzazione.
 
 **Esempio futuro:**
+
 ```css
 :root {
   /* Colori */
   --turchese: #007b8a;
   --bianco: #ffffff;
   --testo-principale: #0f172a;
-  
+
   /* Spacing */
   --spacing-sm: 0.5rem;
   --spacing-md: 1rem;
   --spacing-lg: 2rem;
-  
+
   /* Font */
   --font-size-multiplier: 1;
-  
+
   /* Animazioni */
   --anim-duration-normal: 0.3s;
   --easing-bezier-standard: cubic-bezier(0.4, 0, 0.2, 1);
@@ -107,13 +111,16 @@ Gli stili devono essere caricati in questo ordine preciso:
 ---
 
 ### **2. base.css** (Reset e Base)
+
 **Contenuto:**
+
 - Reset CSS globale (`* { margin: 0; padding: 0; }`)
 - Font di sistema
 - Stili body base
 - Typography (h1, h2, h3, p)
 
 **Esempio:**
+
 ```css
 * {
   margin: 0;
@@ -122,7 +129,7 @@ Gli stili devono essere caricati in questo ordine preciso:
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
   font-size: calc(16px * var(--font-size-multiplier));
   color: var(--testo-principale);
 }
@@ -134,13 +141,16 @@ body {
 ---
 
 ### **3. layout.css** (Struttura)
+
 **Contenuto:**
+
 - Container principale (`.container`)
 - Layout grid/flexbox globali
 - Spacing e margin utilities
 - Main content area
 
 **Esempio:**
+
 ```css
 .container {
   max-width: 1200px;
@@ -160,13 +170,16 @@ body {
 ---
 
 ### **4. animations.css** (Animazioni e Transizioni) ✅ FATTO
+
 **Contenuto:**
+
 - Tutti i `@keyframes` comuni (fadeIn, slideUp, pulse, ecc.) ✅ Spostati da style1.css
 - Utility classes per transizioni (`.transition-all`, `.transition-fast`, ecc.) ✅ Creati
 - Utility classes per animazioni (`.fade-in`, `.slide-up`, ecc.) ✅ Creati
 - Configurazione reduce-motion (prefers-reduced-motion) ✅ Implementato
 
 **Esempio:**
+
 ```css
 /* Variabili durate/easing vengono da variables.css */
 .transition-all {
@@ -193,6 +206,7 @@ body {
 **Usato da:** Tutti i componenti (buttons.css, modals.css, ecc.)
 
 **Stato modularizzazione animazioni:**
+
 - ✅ **Tutti i `@keyframes` spostati** da style1.css → animations.css
 - ✅ **Utility classes create** per animazioni e transizioni comuni
 - ✅ **Duplicazioni rimosse** (SEZIONE 2 vs SEZIONE 5 unificate)
@@ -201,11 +215,13 @@ body {
 **Animazioni inline rimaste in style1.css:**
 
 **🔵 ✅ Completate - Sostituite con utility classes:**
+
 - ✅ Linea 4694: `.settings-tab-content.active` → sostituito con `.fade-in` (HTML + JS)
 - ✅ Linea 6012: `.update-check-icon` → sostituito con `.rotate-slow` (HTML)
 - ✅ Linea 6688: `.offline-icon` → sostituito con `.pulse` (JS dinamico)
 
 **🟡 Componenti-specifiche (da spostare con componente):**
+
 - Linea 190, 194: `body.animation-enabled` → `animation: gradientShift` (controllato da JS, OK così)
 - Linea 1647: `.cache-modal-content` → `animation: modalSlideIn 0.3s ease-out` → spostare in `modals.css`
 - Linea 2030: `.mobile-toggle-with-badge.active::after` → `animation: pulse-active` → spostare in `navbar.css`
@@ -216,6 +232,7 @@ body {
 - Linea 6554: `.pwa-bottom-nav.show` → `animation: slideUpNav` → spostare in `pwa-nav.css`
 
 **Note:**
+
 - Le animazioni componenti-specifiche saranno spostate insieme ai rispettivi componenti durante la modularizzazione
 - ✅ Le 3 animazioni sostituibili con utility classes sono state completate
 
@@ -224,7 +241,9 @@ body {
 ### **5. components/** (Componenti UI)
 
 #### **components/footer.css** ✅
+
 **Contenuto:**
+
 - Stili `.footer`
 - Stili `.footer-links`
 - Stili `.telegram-link`
@@ -234,41 +253,62 @@ body {
 **Usato da:** Tutte le pagine (caricato da `footer.js`)
 
 #### **components/navbar.css** ⏳
+
 **Contenuto:**
+
 - Header/navbar
 - Logo e brand
 - Menu mobile/desktop
 - Hamburger button
 
 #### **components/buttons.css** ⏳
+
 **Contenuto:**
+
 - Tutti i pulsanti dell'app
 - Stati hover/active/disabled
 - Varianti (primary, secondary, danger, etc.)
 
-#### **components/modals.css** ⏳
+#### **components/modals.css** ✅
+
 **Contenuto:**
-- Modal overlay
-- Modal content
-- Modal header/body/footer
+
+- Modal cache (verifica aggiornamenti)
+- Modal fermate (selezione fermate)
+- Modal linee (selezione linee)
+- Modal impostazioni (settings)
+- Modal overlay, content, header, body, footer
 - Animazioni apertura/chiusura
+- Stili per barra ricerca, liste, toggle switch
+- Dark mode per tutti i modali
+- Responsive mobile e schermi piccoli
+- Stili per compact-layout e extra-spacing
+
+**Dipendenze:** `variables.css`, `animations.css`  
+**Usato da:** Tutte le pagine (index.html, fermate.html, prezzi.html, benvenuto.html, test.html)
 
 #### **components/cards.css** ⏳
+
 **Contenuto:**
+
 - Price card
 - Info card
 - Settings card
 - Glassmorphism effects
 
 #### **components/forms.css** ⏳
+
 **Contenuto:**
+
 - Input, select, textarea
 - Labels e placeholders
 - Form groups
 - Validation styles
 
 #### **components/pwa-nav.css** ⏳
+
 **Contenuto:**
+
 - PWA bottom navigation
 - PWA brand header
 - Tab attivi/inattivi
@@ -276,7 +316,9 @@ body {
 ---
 
 ### **6. themes.css** (Temi)
+
 **Contenuto:**
+
 - Dark mode (`.dark`)
 - High contrast (`.high-contrast`)
 - Blue light filter (`.blue-light-filter`)
@@ -284,6 +326,7 @@ body {
 - Touch friendly (`.touch-friendly`)
 
 **Esempio:**
+
 ```css
 .dark {
   --testo-principale: #ffffff;
@@ -301,12 +344,15 @@ body {
 ---
 
 ### **7. responsive.css** (Media Queries)
+
 **Contenuto:**
+
 - Media queries globali
 - Breakpoints standard
 - Adattamenti layout responsive
 
 **Esempio:**
+
 ```css
 @media (max-width: 768px) {
   .container {
@@ -339,9 +385,9 @@ body {
 ## ✅ Componenti Completati
 
 - [x] **footer.css** ✅ - Footer e link Telegram (30 Ottobre 2025)
+- [x] **modals.css** ✅ - Tutti i modali (cache, fermate, linee, impostazioni) (31 Ottobre 2025)
 - [ ] navbar.css
 - [ ] buttons.css
-- [ ] modals.css
 - [ ] cards.css
 - [ ] forms.css
 - [ ] pwa-nav.css
@@ -355,13 +401,14 @@ body {
 ```javascript
 const STATIC_ASSETS = [
   // ... altri file ...
-  './css/variables.css',
-  './css/base.css',
-  './css/layout.css',
-  './css/animations.css',  // ← Animazioni comuni
-  './css/components/footer.css',  // ← Componenti
-  './css/themes.css',
-  './css/responsive.css',
+  "./css/variables.css",
+  "./css/base.css",
+  "./css/layout.css",
+  "./css/animations.css", // ← Animazioni comuni
+  "./css/components/footer.css", // ← Componenti
+  "./css/components/modals.css", // ← Modals
+  "./css/themes.css",
+  "./css/responsive.css",
   // ...
 ];
 ```
@@ -376,7 +423,7 @@ const STATIC_ASSETS = [
 ✅ **Performance**: Carica solo ciò che serve (futuro)  
 ✅ **Git**: Diff più puliti, meno conflitti  
 ✅ **Team**: Più sviluppatori possono lavorare in parallelo  
-✅ **Debug**: Isola problemi CSS velocemente  
+✅ **Debug**: Isola problemi CSS velocemente
 
 ---
 
@@ -392,4 +439,3 @@ const STATIC_ASSETS = [
 
 **Ultimo aggiornamento**: 30 Ottobre 2025  
 **Versione progetto**: 1.5.5 → 1.5.6 (in sviluppo)
-

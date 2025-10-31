@@ -11,6 +11,7 @@
   <!-- Animazioni e transizioni globali -->
   <link rel="stylesheet" href="css/animations.css">
   <link rel="stylesheet" href="css/components/footer.css">
+  <link rel="stylesheet" href="css/components/modals.css">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="src/tpl.jpg" type="image/jpeg">
   <style>
@@ -701,108 +702,6 @@
             </div>
           </div>
           
-          <!-- Sezione Ottimizzazione Display -->
-          <div class="settings-section">
-            <h4 class="settings-section-title">🖥️ Ottimizzazione Display</h4>
-            
-            <!-- Info Display Rilevato -->
-            <div class="display-optimization-card">
-              <div class="display-detection">
-                <div class="display-detection-header">
-                  <span class="display-detection-icon">📱</span>
-                  <div class="display-detection-info">
-                    <div class="display-detection-title">Display rilevato</div>
-                    <div class="display-detection-type" id="display-type-indicator">
-                      <span id="display-type-text">Rilevamento...</span>
-                      <span class="display-dpr-badge" id="display-dpr-badge">-</span>
-                    </div>
-                  </div>
-                </div>
-                
-                <div class="display-specs">
-                  <div class="display-spec-item">
-                    <span class="display-spec-label">Device Pixel Ratio</span>
-                    <span class="display-spec-value" id="dpr-value">-</span>
-                  </div>
-                  <div class="display-spec-item">
-                    <span class="display-spec-label">Risoluzione fisica</span>
-                    <span class="display-spec-value" id="resolution-value">-</span>
-                  </div>
-                </div>
-              </div>
-              
-              <!-- Preset Ottimizzazione -->
-              <div class="display-preset-selector" style="margin-top: 1rem; border-top: 1px solid var(--bordo); padding-top: 1rem;">
-                <div class="preset-header">
-                  <span class="preset-header-icon">🎨</span>
-                  <div class="preset-header-text">
-                    <div class="preset-header-title">Livello di ottimizzazione</div>
-                    <div class="preset-header-description">Scegli il preset più adatto al tuo display</div>
-                  </div>
-                </div>
-                
-                <div class="preset-options">
-                  <label class="preset-option" data-preset="auto">
-                    <input type="radio" name="display-preset" value="auto" id="preset-auto">
-                    <div class="preset-card">
-                      <div class="preset-icon">⚡</div>
-                      <div class="preset-info">
-                        <div class="preset-name">
-                          Automatico
-                          <span class="recommended-badge" id="auto-badge" style="display: none;">Consigliato</span>
-                        </div>
-                        <div class="preset-description">Rileva e ottimizza automaticamente</div>
-                      </div>
-                    </div>
-                  </label>
-                  
-                  <label class="preset-option" data-preset="standard">
-                    <input type="radio" name="display-preset" value="standard" id="preset-standard">
-                    <div class="preset-card">
-                      <div class="preset-icon">📺</div>
-                      <div class="preset-info">
-                        <div class="preset-name">Standard</div>
-                        <div class="preset-description">Nessuna ottimizzazione (DPR 1.0x)</div>
-                      </div>
-                    </div>
-                  </label>
-                  
-                  <label class="preset-option" data-preset="retina">
-                    <input type="radio" name="display-preset" value="retina" id="preset-retina">
-                    <div class="preset-card">
-                      <div class="preset-icon">💎</div>
-                      <div class="preset-info">
-                        <div class="preset-name">Retina</div>
-                        <div class="preset-description">Ottimizzato per DPR 2.0x (HiDPI)</div>
-                      </div>
-                    </div>
-                  </label>
-                  
-                  <label class="preset-option" data-preset="ultra">
-                    <input type="radio" name="display-preset" value="ultra" id="preset-ultra">
-                    <div class="preset-card">
-                      <div class="preset-icon">✨</div>
-                      <div class="preset-info">
-                        <div class="preset-name">Ultra HD</div>
-                        <div class="preset-description">Massima qualità per DPR 3.0x+</div>
-                      </div>
-                    </div>
-                  </label>
-                </div>
-              </div>
-              
-              <!-- Suggerimenti -->
-              <div class="display-recommendations" id="display-recommendations" style="display: none;">
-                <div class="recommendation-header">
-                  <span class="recommendation-icon">💡</span>
-                  <span class="recommendation-title">Suggerimenti per il tuo display</span>
-                </div>
-                <ul class="recommendation-list" id="recommendation-list">
-                  <!-- Popolato dinamicamente -->
-                </ul>
-              </div>
-            </div>
-          </div>
         </div>
         
         <!-- Tab Info e Aggiornamenti -->
@@ -815,7 +714,7 @@
                 <img src="src/logo.png" alt="TPL FVG" class="info-logo">
                 <div class="info-title">
                   <h3>TPL FVG Autisti</h3>
-                  <p class="info-version">Versione 1.5.1</p>
+                  <p class="info-version">Versione ...</p>
                   <p class="info-date">27 Ottobre 2025 - 19:30</p>
                 </div>
               </div>

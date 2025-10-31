@@ -1,6 +1,6 @@
 {
-  "version": "1.5.7",
-  "versionDate": "30 Ottobre 2025",
-  "versionTime": "23:45",
-  "updateNotes": "Modularizzazione CSS Animazioni e Transizioni completata"
+  "version": "1.5.8",
+  "versionDate": "31 Ottobre 2025",
+  "versionTime": "12:00",
+  "updateNotes": "Modularizzazione Modals CSS + Ottimizzazioni Test Page completata"
 }

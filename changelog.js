@@ -4,6 +4,27 @@
 
 const changelogData = [
   {
+    version: '1.5.8',
+    date: '31 Ottobre 2025',
+    time: '12:00',
+    title: 'Modularizzazione Modals CSS + Ottimizzazioni Test Page',
+    hidden: false,
+    changes: [
+      '📦 Creato css/components/modals.css con tutti gli stili dei modali',
+      '🗑️ Rimossa sezione "Ottimizzazione Display" dalle impostazioni (non necessaria)',
+      '🔧 Rilevamento display spostato in test.html con card migliorate',
+      '🚀 Rimosso speed test non affidabile, sostituito con monitoraggio connessione semplice',
+      '✨ Card "Stato Connessione" con pulsanti Verifica/Reset e data test',
+      '📐 Viewport spostato nella sezione "Rilevamento Display"',
+      '🎨 Card dettagli tecnici unificate con le altre (Touch Support, PWA Mode)',
+      '📋 Changelog ottimizzato: mostra solo ultima versione con pulsante "Vedi tutti"',
+      '🎨 Card GPS e Batteria cambiano colore dinamicamente in base allo stato',
+      '📱 Miglioramenti layout mobile: risolti problemi sovrapposizione pulsanti',
+      '🔄 Listener PWA Mode per aggiornamento automatico installazione/disinstallazione',
+      '✨ Versione "TPL FVG Autisti" aggiornata automaticamente da changelog.js (un solo file da modificare)'
+    ]
+  },
+  {
     version: '1.5.7',
     date: '30 Ottobre 2025',
     title: 'Modularizzazione CSS Animazioni e Transizioni',
@@ -249,8 +270,10 @@ function renderChangelog(containerId = 'changelog-container') {
   let html = '';
   
   // Genera l'HTML per ogni versione
-  changelogData.forEach(version => {
-    const hiddenClass = version.hidden ? ' update-item-hidden' : '';
+  // Mostra solo l'ultima versione inizialmente, nascondi le altre
+  changelogData.forEach((version, index) => {
+    // Solo la prima versione (ultima) è visibile, tutte le altre sono nascoste
+    const hiddenClass = index === 0 ? '' : ' update-item-hidden';
     
     html += `
       <div class="update-item${hiddenClass}">
@@ -274,17 +297,104 @@ function renderChangelog(containerId = 'changelog-container') {
 `;
   });
   
-  // Aggiungi il pulsante "Vedi tutti gli aggiornamenti"
-  html += `
+  // Aggiungi il pulsante "Vedi tutti gli aggiornamenti" solo se ci sono più versioni
+  if (changelogData.length > 1) {
+    html += `
       <button class="show-all-updates-btn" id="show-all-updates-btn">
         <span class="show-updates-icon">📋</span>
         <span class="show-updates-text">Vedi tutti gli aggiornamenti</span>
       </button>
 `;
+  }
   
   // Inserisci l'HTML nel container
   container.innerHTML = html;
   
+  // Event listener per il pulsante "Vedi tutti gli aggiornamenti"
+  const showAllBtn = document.getElementById('show-all-updates-btn');
+  if (showAllBtn) {
+    showAllBtn.addEventListener('click', () => {
+      const hiddenItems = container.querySelectorAll('.update-item-hidden');
+      const btnIcon = showAllBtn.querySelector('.show-updates-icon');
+      const btnText = showAllBtn.querySelector('.show-updates-text');
+      
+      if (hiddenItems.length > 0) {
+        // Mostra tutte le versioni nascoste
+        hiddenItems.forEach(item => {
+          item.classList.remove('update-item-hidden');
+        });
+        
+        // Cambia testo del pulsante
+        if (btnIcon) btnIcon.textContent = '🔽';
+        if (btnText) btnText.textContent = 'Nascondi altri aggiornamenti';
+      } else {
+        // Nascondi tutte tranne l'ultima
+        const allItems = container.querySelectorAll('.update-item');
+        allItems.forEach((item, index) => {
+          if (index > 0) {
+            item.classList.add('update-item-hidden');
+          }
+        });
+        
+        // Cambia testo del pulsante
+        if (btnIcon) btnIcon.textContent = '📋';
+        if (btnText) btnText.textContent = 'Vedi tutti gli aggiornamenti';
+      }
+    });
+  }
+  
   console.log('✅ Changelog renderizzato con successo!');
+}
+
+// ===== FUNZIONE PER AGGIORNARE DINAMICAMENTE LA VERSIONE =====
+// Aggiorna automaticamente la versione in "TPL FVG Autisti" da changelogData[0].version
+
+function updateAppVersion() {
+  // Leggi la versione più recente dal changelog
+  if (!changelogData || changelogData.length === 0) {
+    console.warn('⚠️ changelogData non disponibile, impossibile aggiornare versione');
+    return;
+  }
+  
+  const latestVersion = changelogData[0].version;
+  const latestDate = changelogData[0].date || '';
+  const latestTime = changelogData[0].time || '';
+  
+  // Trova tutti gli elementi con classe .info-version e aggiorna il testo
+  const versionElements = document.querySelectorAll('.info-version');
+  
+  versionElements.forEach(element => {
+    element.textContent = `Versione ${latestVersion}`;
+  });
+  
+  // Trova tutti gli elementi con classe .info-date e aggiorna data e ora
+  const dateElements = document.querySelectorAll('.info-date');
+  
+  if (latestDate && latestTime) {
+    dateElements.forEach(element => {
+      element.textContent = `${latestDate} - ${latestTime}`;
+    });
+  } else if (latestDate) {
+    dateElements.forEach(element => {
+      element.textContent = latestDate;
+    });
+  }
+  
+  // Aggiorna anche il footer se esiste
+  if (typeof updateFooterVersion === 'function') {
+    updateFooterVersion(latestVersion);
+  }
+  
+  if (versionElements.length > 0 || dateElements.length > 0) {
+    console.log(`✅ Versione aggiornata automaticamente a ${latestVersion} in ${versionElements.length} elemento/i versione e ${dateElements.length} elemento/i data`);
+  }
+}
+
+// Aggiorna la versione quando il DOM è pronto
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', updateAppVersion);
+} else {
+  // DOM già pronto, aggiorna immediatamente
+  updateAppVersion();
 }
 

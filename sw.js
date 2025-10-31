@@ -21,6 +21,7 @@ const STATIC_ASSETS = [
   './prezzi.html', // Prezzi (offline critico)
   './style1.css', // Stili essenziali
   './css/components/footer.css', // Footer modulare CSS
+  './css/components/modals.css', // Modals modulare CSS
   './script.js', // Funzionalità app
   './footer.js', // Footer modulare JS
   './changelog.js', // Changelog dinamico

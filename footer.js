@@ -24,6 +24,23 @@ function generateFooterHTML(version) {
 }
 
 /**
+ * Aggiorna la versione nel footer (chiamata da changelog.js se disponibile)
+ * @param {string} version - Versione dell'app da usare
+ */
+function updateFooterVersion(version) {
+  const footerElement = document.querySelector('.footer');
+  if (!footerElement) {
+    return;
+  }
+  
+  // Trova il link "TPL Autisti" nel footer e aggiorna la versione
+  const footerLink = footerElement.querySelector('a[href="test.html"]');
+  if (footerLink) {
+    footerLink.textContent = `TPL Autisti ${version}`;
+  }
+}
+
+/**
  * Inizializza il footer caricando la versione e inserendo l'HTML
  */
 async function initializeFooter() {
@@ -33,24 +50,28 @@ async function initializeFooter() {
     return;
   }
   
-  try {
-    // Carica la versione dal file version.json
-    const response = await fetch('version.json');
-    const versionData = await response.json();
-    const version = versionData.version || '1.5.5';
-    
-    // Genera e inserisci il footer
-    footerElement.innerHTML = generateFooterHTML(version);
-    
-    console.log('✅ Footer caricato correttamente - v' + version);
-  } catch (error) {
-    console.error('Errore caricamento footer:', error);
-    
-    // Fallback: usa versione di default se il caricamento fallisce
-    const fallbackVersion = '1.5.5';
-    footerElement.innerHTML = generateFooterHTML(fallbackVersion);
-    console.log('⚠️ Footer caricato con versione fallback - v' + fallbackVersion);
+  let version = '1.5.8'; // Fallback default
+  
+  // Prova prima a leggere dal changelog (se già caricato)
+  if (typeof changelogData !== 'undefined' && changelogData && changelogData.length > 0) {
+    version = changelogData[0].version;
+    console.log('✅ Versione letta dal changelog - v' + version);
+  } else {
+    // Altrimenti carica da version.json
+    try {
+      const response = await fetch('version.json');
+      const versionData = await response.json();
+      version = versionData.version || '1.5.8';
+      console.log('✅ Versione letta da version.json - v' + version);
+    } catch (error) {
+      console.warn('⚠️ Impossibile caricare version.json, uso versione fallback');
+    }
   }
+  
+  // Genera e inserisci il footer
+  footerElement.innerHTML = generateFooterHTML(version);
+  
+  console.log('✅ Footer caricato correttamente - v' + version);
 }
 
 // Inizializza il footer quando il DOM è pronto

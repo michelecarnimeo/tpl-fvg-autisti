@@ -9,6 +9,7 @@
     <!-- Animazioni e transizioni globali -->
     <link rel="stylesheet" href="css/animations.css">
     <link rel="stylesheet" href="css/components/footer.css">
+    <link rel="stylesheet" href="css/components/modals.css">
     <link rel="icon" href="src/tpl.jpg" type="image/jpeg">
     
     <!-- Leaflet CSS -->
@@ -1005,15 +1006,6 @@
                     </div>
                 </div>
                 
-                <!-- Connection -->
-                <div class="device-info-card" data-color="green">
-                    <div class="device-info-icon">📡</div>
-                    <div class="device-info-content">
-                        <div class="device-info-label">Connessione</div>
-                        <div id="device-connection" class="device-info-value">Rilevamento...</div>
-                    </div>
-                </div>
-                
                 <!-- Battery -->
                 <div class="device-info-card" data-color="orange">
                     <div class="device-info-icon">🔋</div>
@@ -1031,26 +1023,148 @@
                         <div id="device-gps" class="device-info-value">Rilevamento...</div>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Dettagli Tecnici (Collapsabile) -->
-            <details style="margin-top: 1rem; padding: 1rem; background: white; border-radius: 12px; border: 2px solid #e5e7eb;">
-                <summary style="cursor: pointer; font-weight: 600; color: #374151; padding: 0.5rem;">
-                    🔍 Dettagli Tecnici (User Agent & API)
-                </summary>
-                <div style="margin-top: 1rem; padding: 1rem; background: #f9fafb; border-radius: 8px; font-family: monospace; font-size: 0.85rem; color: #374151; word-break: break-all;">
-                    <strong>User Agent:</strong><br>
-                    <span id="device-user-agent" style="color: #6b7280;"></span>
-                    
-                    <div style="margin-top: 1rem;">
-                        <strong>Screen:</strong> <span id="device-screen"></span><br>
-                        <strong>Viewport:</strong> <span id="device-viewport"></span><br>
-                        <strong>Pixel Ratio:</strong> <span id="device-pixel-ratio"></span><br>
-                        <strong>Touch Support:</strong> <span id="device-touch"></span><br>
-                        <strong>PWA Mode:</strong> <span id="device-pwa"></span>
+                
+                <!-- Touch Support -->
+                <div class="device-info-card" data-color="cyan">
+                    <div class="device-info-icon">👆</div>
+                    <div class="device-info-content">
+                        <div class="device-info-label">Touch Support</div>
+                        <div id="device-touch" class="device-info-value">Rilevamento...</div>
                     </div>
                 </div>
-            </details>
+                
+                <!-- PWA Mode -->
+                <div class="device-info-card" data-color="indigo">
+                    <div class="device-info-icon">📲</div>
+                    <div class="device-info-content">
+                        <div class="device-info-label">PWA Mode</div>
+                        <div id="device-pwa" class="device-info-value">Rilevamento...</div>
+                    </div>
+                </div>
+                
+                <!-- Stato Connessione -->
+                <div class="device-info-card" data-color="green" style="grid-column: 1 / -1;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 1rem; flex-wrap: wrap;">
+                        <div style="display: flex; align-items: center; gap: 1rem; flex: 1; min-width: 200px;">
+                            <div class="device-info-icon">
+                                <span id="connection-status-icon">🟢</span>
+                            </div>
+                            <div class="device-info-content" style="flex: 1; min-width: 0;">
+                                <div class="device-info-label">Stato Connessione</div>
+                                <div id="connection-status-text" class="device-info-value" style="word-break: break-word;">Rilevamento...</div>
+                                <div id="connection-test-date" style="font-size: 0.75rem; color: var(--testo-secondario); margin-top: 0.25rem; opacity: 0.7; word-break: break-word;">-</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem; align-items: center; flex-shrink: 0;">
+                            <button id="check-connection-btn" class="test-btn" style="background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; padding: 0.5rem 0.875rem; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.8rem; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3); transition: all 0.3s ease; display: flex; align-items: center; gap: 0.35rem; white-space: nowrap; flex-shrink: 0;" title="Verifica stato connessione">
+                                <span>🔄</span>
+                                <span>Verifica</span>
+                            </button>
+                            <button id="reset-connection-btn" class="test-btn" style="background: var(--grigio-medio); color: var(--testo-principale); border: none; padding: 0.5rem 0.875rem; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.8rem; transition: all 0.3s ease; display: flex; align-items: center; gap: 0.35rem; white-space: nowrap; flex-shrink: 0; opacity: 0.6;" title="Reset risultati" disabled>
+                                <span>🗑️</span>
+                                <span>Reset</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Test Rilevamento Display -->
+            <div style="margin-top: 2rem; padding-top: 2rem; border-top: 2px solid var(--bordo);">
+                <h3 style="margin: 0 0 1.5rem 0; color: var(--turchese); font-size: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
+                    🖥️ Rilevamento Display
+                </h3>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                    
+                    <!-- Card Tipo Display -->
+                    <div class="display-info-card">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                                📱
+                            </div>
+                            <div>
+                                <div style="font-size: 0.85rem; color: var(--testo-secondario); font-weight: 500;">Tipo Display</div>
+                                <div id="test-display-type" style="font-size: 1rem; color: var(--testo-principale); font-weight: 600; margin-top: 0.25rem;">Rilevamento...</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Card Device Pixel Ratio -->
+                    <div class="display-info-card">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #3b82f6, #2563eb); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                                🔍
+                            </div>
+                            <div>
+                                <div style="font-size: 0.85rem; color: var(--testo-secondario); font-weight: 500;">Device Pixel Ratio</div>
+                                <div id="test-display-dpr" style="font-size: 1.1rem; color: #3b82f6; font-weight: 700; margin-top: 0.25rem;">-</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Card Risoluzione Logica -->
+                    <div class="display-info-card">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #8b5cf6, #7c3aed); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                                📐
+                            </div>
+                            <div>
+                                <div style="font-size: 0.85rem; color: var(--testo-secondario); font-weight: 500;">Risoluzione Logica</div>
+                                <div id="test-display-logical" style="font-size: 0.95rem; color: var(--testo-principale); font-weight: 600; margin-top: 0.25rem; font-family: 'Courier New', monospace;">-</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Card Risoluzione Fisica -->
+                    <div class="display-info-card">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #f59e0b, #d97706); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                                🖼️
+                            </div>
+                            <div>
+                                <div style="font-size: 0.85rem; color: var(--testo-secondario); font-weight: 500;">Risoluzione Fisica</div>
+                                <div id="test-display-physical" style="font-size: 0.95rem; color: var(--testo-principale); font-weight: 600; margin-top: 0.25rem; font-family: 'Courier New', monospace;">-</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Card High DPI -->
+                    <div class="display-info-card">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #ef4444, #dc2626); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                                ✨
+                            </div>
+                            <div>
+                                <div style="font-size: 0.85rem; color: var(--testo-secondario); font-weight: 500;">High DPI</div>
+                                <div id="test-display-highdpi" style="font-size: 1rem; color: var(--testo-principale); font-weight: 600; margin-top: 0.25rem;">
+                                    <span id="test-display-highdpi-badge" style="display: inline-block; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.85rem; font-weight: 600;">-</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Card Viewport -->
+                    <div class="display-info-card">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #06b6d4, #0891b2); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                                📏
+                            </div>
+                            <div>
+                                <div style="font-size: 0.85rem; color: var(--testo-secondario); font-weight: 500;">Viewport</div>
+                                <div id="test-display-viewport" style="font-size: 0.95rem; color: var(--testo-principale); font-weight: 600; margin-top: 0.25rem; font-family: 'Courier New', monospace;">-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="display: flex; justify-content: center; gap: 1rem;">
+                    <button id="test-display-refresh" class="test-btn" style="background: linear-gradient(135deg, var(--turchese), var(--turchese-scuro)); color: white; border: none; padding: 0.875rem 2rem; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 1rem; box-shadow: 0 4px 12px rgba(0, 123, 138, 0.3); transition: all 0.3s ease; display: flex; align-items: center; gap: 0.5rem;">
+                        <span>🔄</span>
+                        <span>Aggiorna Rilevamento</span>
+                    </button>
+                </div>
+            </div>
         </div>
 
         <!-- Test Geolocalizzazione -->
@@ -1234,6 +1348,22 @@
                         background: linear-gradient(135deg, #ffa726, #fb8c00);
                     }
                     
+                    .device-info-card[data-color="cyan"] {
+                        background: linear-gradient(135deg, #06b6d4, #0891b2);
+                    }
+                    
+                    .device-info-card[data-color="indigo"] {
+                        background: linear-gradient(135deg, #6366f1, #4f46e5);
+                    }
+                    
+                    .device-info-card[data-color="gray"] {
+                        background: linear-gradient(135deg, #9ca3af, #6b7280);
+                    }
+                    
+                    .device-info-card[data-color="red"] {
+                        background: linear-gradient(135deg, #ef4444, #dc2626);
+                    }
+                    
                     .device-info-icon {
                         font-size: 2rem;
                         margin-bottom: 0.5rem;
@@ -1300,15 +1430,27 @@
                         border-left-color: #f97316;
                     }
                     
+                    .device-info-card[data-color="red"] {
+                        border-left-color: #ef4444;
+                    }
+                    
                     .device-info-icon {
                         font-size: 1.5rem;
                         flex-shrink: 0;
+                        min-width: 2rem;
+                        width: 2rem;
+                        text-align: center;
+                        line-height: 1.2;
+                        white-space: nowrap;
+                        overflow: hidden;
                     }
                     
                     .device-info-content {
                         flex: 1;
                         display: flex;
                         flex-direction: column;
+                        min-width: 0;
+                        overflow: hidden;
                     }
                     
                     .device-info-label {
@@ -1318,12 +1460,44 @@
                         letter-spacing: 0.05em;
                         font-weight: 600;
                         margin-bottom: 0.15rem;
+                        word-break: break-word;
                     }
                     
                     .device-info-value {
                         font-size: 0.95rem;
                         font-weight: 600;
                         color: #374151;
+                        word-break: break-word;
+                        overflow-wrap: break-word;
+                    }
+                    
+                    /* Stato Connessione: layout verticale su mobile per evitare sovrapposizioni */
+                    .device-info-card[data-color="green"] {
+                        flex-direction: column !important;
+                        align-items: flex-start !important;
+                        gap: 1rem !important;
+                    }
+                    
+                    .device-info-card[data-color="green"] > div {
+                        flex-direction: column !important;
+                        width: 100% !important;
+                    }
+                    
+                    .device-info-card[data-color="green"] > div > div:first-child {
+                        width: 100% !important;
+                        margin-bottom: 0.5rem;
+                    }
+                    
+                    .device-info-card[data-color="green"] > div > div:last-child {
+                        width: 100% !important;
+                        display: flex !important;
+                        justify-content: flex-start !important;
+                        gap: 0.5rem !important;
+                    }
+                    
+                    .device-info-card[data-color="green"] button {
+                        flex: 1 !important;
+                        min-width: auto !important;
                     }
                 }
             </style>
@@ -2151,7 +2325,7 @@
                                 <img src="src/logo.png" alt="TPL FVG" class="info-logo">
                         <div class="info-title">
                             <h3>TPL FVG Autisti</h3>
-                            <p class="info-version">Versione 1.5.1</p>
+                            <p class="info-version">Versione ...</p>
                             <p class="info-date">27 Ottobre 2025 - 19:30</p>
                         </div>
                             </div>
@@ -4257,67 +4431,138 @@
             }
             document.getElementById('device-browser').textContent = browser;
             
-            // === Connection ===
-            const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-            let connectionText = 'Non disponibile';
-            if (connection) {
-                const effectiveType = connection.effectiveType || 'unknown';
-                const downlink = connection.downlink ? `${connection.downlink} Mbps` : '';
-                const typeEmoji = {
-                    'slow-2g': '📶 Molto Lenta',
-                    '2g': '📶 2G',
-                    '3g': '📶 3G',
-                    '4g': '📶 4G',
-                    '5g': '📶 5G',
-                    'wifi': '📡 WiFi'
-                };
-                connectionText = typeEmoji[effectiveType] || effectiveType.toUpperCase();
-                if (downlink) connectionText += ` (${downlink})`;
-            } else {
-                connectionText = navigator.onLine ? '🟢 Online' : '🔴 Offline';
+            
+            // Funzione per aggiornare colore card batteria
+            function updateBatteryCardColor(level, isCharging, isSupported) {
+                const batteryCard = document.getElementById('device-battery')?.closest('.device-info-card');
+                if (!batteryCard) return;
+                
+                if (!isSupported) {
+                    batteryCard.setAttribute('data-color', 'gray');
+                } else if (isCharging) {
+                    batteryCard.setAttribute('data-color', 'green');
+                } else if (level >= 50) {
+                    batteryCard.setAttribute('data-color', 'green');
+                } else if (level >= 20) {
+                    batteryCard.setAttribute('data-color', 'orange');
+                } else {
+                    batteryCard.setAttribute('data-color', 'red');
+                }
             }
-            document.getElementById('device-connection').textContent = connectionText;
             
             // === Battery ===
             if ('getBattery' in navigator) {
                 navigator.getBattery().then(battery => {
                     const level = Math.round(battery.level * 100);
                     const charging = battery.charging ? '🔌 In carica' : '🔋';
-                    document.getElementById('device-battery').textContent = `${charging} ${level}%`;
+                    const batteryEl = document.getElementById('device-battery');
+                    if (batteryEl) {
+                        batteryEl.textContent = `${charging} ${level}%`;
+                        updateBatteryCardColor(level, battery.charging, true);
+                    }
                     
                     // Aggiorna su cambio batteria
                     battery.addEventListener('levelchange', () => {
                         const newLevel = Math.round(battery.level * 100);
                         const newCharging = battery.charging ? '🔌 In carica' : '🔋';
-                        document.getElementById('device-battery').textContent = `${newCharging} ${newLevel}%`;
+                        const batteryEl = document.getElementById('device-battery');
+                        if (batteryEl) {
+                            batteryEl.textContent = `${newCharging} ${newLevel}%`;
+                            updateBatteryCardColor(newLevel, battery.charging, true);
+                        }
                     });
                     
                     battery.addEventListener('chargingchange', () => {
                         const currentLevel = Math.round(battery.level * 100);
                         const isCharging = battery.charging ? '🔌 In carica' : '🔋';
-                        document.getElementById('device-battery').textContent = `${isCharging} ${currentLevel}%`;
+                        const batteryEl = document.getElementById('device-battery');
+                        if (batteryEl) {
+                            batteryEl.textContent = `${isCharging} ${currentLevel}%`;
+                            updateBatteryCardColor(currentLevel, battery.charging, true);
+                        }
                     });
                 });
             } else {
-                document.getElementById('device-battery').textContent = 'Non supportato';
+                const batteryEl = document.getElementById('device-battery');
+                if (batteryEl) {
+                    batteryEl.textContent = 'Non supportato';
+                    updateBatteryCardColor(0, false, false);
+                }
             }
             
             // === GPS Support ===
             const hasGPS = 'geolocation' in navigator;
-            document.getElementById('device-gps').textContent = hasGPS ? '✅ Supportato' : '❌ Non supportato';
+            const gpsEl = document.getElementById('device-gps');
+            const gpsCard = gpsEl?.closest('.device-info-card');
+            
+            if (gpsEl) {
+                gpsEl.textContent = hasGPS ? '✅ Supportato' : '❌ Non supportato';
+                // Cambia colore card: verde se supportato, grigio se non supportato
+                if (gpsCard) {
+                    gpsCard.setAttribute('data-color', hasGPS ? 'green' : 'gray');
+                }
+            }
             
             // === Dettagli Tecnici ===
-            document.getElementById('device-user-agent').textContent = ua;
-            document.getElementById('device-screen').textContent = `${screen.width}x${screen.height}`;
-            document.getElementById('device-viewport').textContent = `${window.innerWidth}x${window.innerHeight}`;
-            document.getElementById('device-pixel-ratio').textContent = window.devicePixelRatio || 1;
-            document.getElementById('device-touch').textContent = ('ontouchstart' in window) ? '✅ Sì' : '❌ No';
+            // Touch Support
+            const touchSupport = ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+            const touchEl = document.getElementById('device-touch');
+            const touchCard = touchEl?.closest('.device-info-card');
             
-            // PWA Mode
-            const isPWA = window.matchMedia('(display-mode: standalone)').matches ||
-                          window.navigator.standalone ||
-                          document.referrer.includes('android-app://');
-            document.getElementById('device-pwa').textContent = isPWA ? '✅ Sì' : '❌ No';
+            if (touchEl) {
+                touchEl.textContent = touchSupport ? '✅ Sì' : '❌ No';
+                // Cambia colore card: verde se "Sì", grigio se "No"
+                if (touchCard) {
+                    touchCard.setAttribute('data-color', touchSupport ? 'green' : 'gray');
+                }
+            }
+            
+            // PWA Mode - funzione per aggiornare stato PWA
+            function updatePWAMode() {
+                const isPWA = window.matchMedia('(display-mode: standalone)').matches ||
+                              window.matchMedia('(display-mode: minimal-ui)').matches ||
+                              window.matchMedia('(display-mode: fullscreen)').matches ||
+                              (window.navigator.standalone === true);
+                const pwaEl = document.getElementById('device-pwa');
+                const pwaCard = pwaEl?.closest('.device-info-card');
+                
+                if (pwaEl) {
+                    pwaEl.textContent = isPWA ? '✅ Sì' : '❌ No';
+                    // Cambia colore card: verde se "Sì", grigio se "No"
+                    if (pwaCard) {
+                        pwaCard.setAttribute('data-color', isPWA ? 'green' : 'gray');
+                    }
+                }
+            }
+            
+            // Aggiorna inizialmente
+            updatePWAMode();
+            
+            // Listener per aggiornare PWA Mode quando cambia display-mode (installazione/disinstallazione)
+            // Pesatura: praticamente zero - solo ascolto passivo di eventi
+            if (window.matchMedia) {
+                const standaloneQuery = window.matchMedia('(display-mode: standalone)');
+                const minimalUIQuery = window.matchMedia('(display-mode: minimal-ui)');
+                const fullscreenQuery = window.matchMedia('(display-mode: fullscreen)');
+                
+                // Ascolta cambiamenti (usando addEventListener se supportato, altrimenti addListener per compatibilità)
+                if (standaloneQuery.addEventListener) {
+                    standaloneQuery.addEventListener('change', updatePWAMode);
+                    minimalUIQuery.addEventListener('change', updatePWAMode);
+                    fullscreenQuery.addEventListener('change', updatePWAMode);
+                } else if (standaloneQuery.addListener) {
+                    // Fallback per browser più vecchi
+                    standaloneQuery.addListener(updatePWAMode);
+                    minimalUIQuery.addListener(updatePWAMode);
+                    fullscreenQuery.addListener(updatePWAMode);
+                }
+            }
+            
+            // Ascolta anche eventi di installazione PWA (se supportati)
+            window.addEventListener('appinstalled', () => {
+                console.log('📲 PWA installata - aggiorno stato');
+                setTimeout(updatePWAMode, 100); // Piccolo delay per permettere al browser di aggiornare display-mode
+            });
         }
 
         // ===== TEST RAPIDO GPS ONE-CLICK =====
@@ -4536,12 +4781,9 @@
                     type: document.getElementById('device-type')?.textContent || 'N/A',
                     os: document.getElementById('device-os')?.textContent || 'N/A',
                     browser: document.getElementById('device-browser')?.textContent || 'N/A',
-                    connection: document.getElementById('device-connection')?.textContent || 'N/A',
                     battery: document.getElementById('device-battery')?.textContent || 'N/A',
                     gpsSupport: document.getElementById('device-gps')?.textContent || 'N/A',
-                    screen: document.getElementById('device-screen')?.textContent || 'N/A',
                     viewport: document.getElementById('device-viewport')?.textContent || 'N/A',
-                    pixelRatio: document.getElementById('device-pixel-ratio')?.textContent || 'N/A',
                     touchSupport: document.getElementById('device-touch')?.textContent || 'N/A',
                     pwaMode: document.getElementById('device-pwa')?.textContent || 'N/A',
                     userAgent: navigator.userAgent
@@ -4604,7 +4846,6 @@ Data e Ora: ${reportData.timestampReadable}
 Device Type:        ${reportData.device.type}
 Sistema Operativo:  ${reportData.device.os}
 Browser:            ${reportData.device.browser}
-Connessione:        ${reportData.device.connection}
 Batteria:           ${reportData.device.battery}
 Supporto GPS:       ${reportData.device.gpsSupport}
 
@@ -4945,12 +5186,333 @@ ${JSON.stringify(reportData.gps.fakePositionData, null, 2)}
         })();
     </script>
     
+    <!-- Stile Card Display -->
+    <style>
+        .display-info-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            box-shadow: var(--glass-shadow);
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+        
+        .display-info-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            border-color: var(--turchese);
+        }
+        
+        #test-display-refresh:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 123, 138, 0.4);
+        }
+        
+        #test-display-refresh:active {
+            transform: translateY(0);
+        }
+        
+        @media (max-width: 768px) {
+            .display-info-card {
+                padding: 1rem;
+            }
+        }
+    </style>
+    
     <!-- Render del Changelog -->
     <script>
         // Aspetta che il DOM sia pronto
         document.addEventListener('DOMContentLoaded', () => {
             renderChangelog('changelog-container');
         });
+    </script>
+    
+    <!-- Script Rilevamento Display -->
+    <script>
+        (function() {
+            // Rileva info display
+            function detectDisplayInfo() {
+                const dpr = window.devicePixelRatio || 1;
+                const screenWidth = window.screen.width;
+                const screenHeight = window.screen.height;
+                const physicalWidth = Math.round(screenWidth * dpr);
+                const physicalHeight = Math.round(screenHeight * dpr);
+                
+                let typeName = 'Standard';
+                
+                if (dpr >= 3) {
+                    typeName = 'Super Retina / Ultra HD';
+                } else if (dpr >= 2) {
+                    typeName = 'Retina / HiDPI';
+                } else if (dpr > 1) {
+                    typeName = 'Alta Densità';
+                }
+                
+                return {
+                    dpr,
+                    typeName,
+                    screenWidth,
+                    screenHeight,
+                    physicalWidth,
+                    physicalHeight,
+                    isHighDPI: dpr >= 2
+                };
+            }
+            
+            // Aggiorna UI
+            function updateDisplayUI(displayInfo) {
+                const typeEl = document.getElementById('test-display-type');
+                const dprEl = document.getElementById('test-display-dpr');
+                const logicalEl = document.getElementById('test-display-logical');
+                const physicalEl = document.getElementById('test-display-physical');
+                const highDpiBadge = document.getElementById('test-display-highdpi-badge');
+                const viewportEl = document.getElementById('test-display-viewport');
+                
+                if (typeEl) typeEl.textContent = displayInfo.typeName;
+                if (dprEl) dprEl.textContent = displayInfo.dpr.toFixed(2) + 'x';
+                if (logicalEl) logicalEl.textContent = displayInfo.screenWidth + ' × ' + displayInfo.screenHeight + ' px';
+                if (physicalEl) physicalEl.textContent = displayInfo.physicalWidth + ' × ' + displayInfo.physicalHeight + ' px';
+                
+                // Viewport (aggiornato automaticamente)
+                if (viewportEl) {
+                    viewportEl.textContent = window.innerWidth + ' × ' + window.innerHeight + ' px';
+                }
+                
+                // Badge High DPI con colori
+                if (highDpiBadge) {
+                    if (displayInfo.isHighDPI) {
+                        highDpiBadge.textContent = 'Sì';
+                        highDpiBadge.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+                        highDpiBadge.style.color = 'white';
+                    } else {
+                        highDpiBadge.textContent = 'No';
+                        highDpiBadge.style.background = 'var(--grigio-medio)';
+                        highDpiBadge.style.color = 'var(--testo-secondario)';
+                    }
+                }
+                
+                // Log console
+                console.log('🖥️ Display rilevato:', {
+                    tipo: displayInfo.typeName,
+                    dpr: displayInfo.dpr,
+                    risoluzione: displayInfo.screenWidth + 'x' + displayInfo.screenHeight,
+                    fisica: displayInfo.physicalWidth + 'x' + displayInfo.physicalHeight,
+                    viewport: window.innerWidth + 'x' + window.innerHeight,
+                    highDPI: displayInfo.isHighDPI
+                });
+            }
+            
+            // Inizializzazione
+            function init() {
+                const displayInfo = detectDisplayInfo();
+                updateDisplayUI(displayInfo);
+            }
+            
+            // Avvia al caricamento
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+            
+            // Bottone refresh
+            const refreshBtn = document.getElementById('test-display-refresh');
+            if (refreshBtn) {
+                refreshBtn.addEventListener('click', () => {
+                    const displayInfo = detectDisplayInfo();
+                    updateDisplayUI(displayInfo);
+                });
+            }
+            
+            // Re-detect su resize (rotazione, zoom) - aggiorna anche viewport
+            let resizeTimeout;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => {
+                    const displayInfo = detectDisplayInfo();
+                    updateDisplayUI(displayInfo);
+                    
+                    // Aggiorna viewport anche in modo rapido (senza rifare tutto)
+                    const viewportEl = document.getElementById('test-display-viewport');
+                    if (viewportEl) {
+                        viewportEl.textContent = window.innerWidth + ' × ' + window.innerHeight + ' px';
+                    }
+                }, 250);
+            });
+        })();
+    </script>
+    
+    <!-- Script Monitoraggio Connessione -->
+    <script>
+        (function() {
+            // Elementi info connessione
+            const statusIconEl = document.getElementById('connection-status-icon');
+            const statusTextEl = document.getElementById('connection-status-text');
+            const testDateEl = document.getElementById('connection-test-date');
+            const resetBtn = document.getElementById('reset-connection-btn');
+            
+            // Storico test connessione
+            let lastTestDate = null;
+            let lastTestStatus = null;
+            
+            // Formatta data/ora per visualizzazione
+            function formatTestDate(date) {
+                if (!date) return '-';
+                const d = new Date(date);
+                const now = new Date();
+                const diffMs = now - d;
+                const diffMins = Math.floor(diffMs / 60000);
+                const diffHours = Math.floor(diffMs / 3600000);
+                const diffDays = Math.floor(diffMs / 86400000);
+                
+                // Data completa
+                const dateStr = d.toLocaleDateString('it-IT', { 
+                    day: '2-digit', 
+                    month: '2-digit', 
+                    year: 'numeric' 
+                });
+                const timeStr = d.toLocaleTimeString('it-IT', { 
+                    hour: '2-digit', 
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+                
+                // Tempo relativo
+                if (diffMins < 1) return 'Adesso';
+                if (diffMins < 60) return `${diffMins} min fa`;
+                if (diffHours < 24) return `${diffHours} ore fa`;
+                if (diffDays < 7) return `${diffDays} giorni fa`;
+                
+                return `${dateStr} ${timeStr}`;
+            }
+            
+            // Rileva stato connessione (solo Online/Offline)
+            async function detectConnectionInfo(showDate = true) {
+                // Verifica reale della connessione
+                let isOnline = navigator.onLine;
+                
+                // Se navigator.onLine dice online, verifica con richiesta reale
+                if (navigator.onLine) {
+                    try {
+                        const controller = new AbortController();
+                        const timeout = setTimeout(() => controller.abort(), 1500);
+                        
+                        await fetch('https://www.google.com/favicon.ico?t=' + Date.now(), {
+                            method: 'HEAD',
+                            mode: 'no-cors',
+                            cache: 'no-cache',
+                            signal: controller.signal
+                        });
+                        
+                        clearTimeout(timeout);
+                        isOnline = true;
+                    } catch (e) {
+                        // Se la richiesta fallisce, probabilmente offline
+                        isOnline = false;
+                        console.log('🔴 Verifica reale: OFFLINE');
+                    }
+                } else {
+                    isOnline = false;
+                }
+                
+                // Aggiorna storico se c'è un cambiamento o è una verifica manuale
+                if (showDate && (lastTestStatus !== isOnline || !lastTestDate)) {
+                    lastTestDate = new Date();
+                    lastTestStatus = isOnline;
+                }
+                
+                // Aggiorna UI
+                if (statusIconEl) {
+                    statusIconEl.textContent = isOnline ? '🟢' : '🔴';
+                }
+                if (statusTextEl) {
+                    statusTextEl.textContent = isOnline ? 'Online' : 'Offline';
+                    statusTextEl.style.color = isOnline ? '#10b981' : '#ef4444';
+                }
+                if (testDateEl && showDate && lastTestDate) {
+                    testDateEl.textContent = `Test: ${formatTestDate(lastTestDate)}`;
+                    testDateEl.style.opacity = '1';
+                }
+                
+                // Abilita/disabilita pulsante reset
+                if (resetBtn) {
+                    resetBtn.disabled = !lastTestDate;
+                    resetBtn.style.opacity = lastTestDate ? '1' : '0.6';
+                }
+            }
+            
+            // Reset risultati
+            if (resetBtn) {
+                resetBtn.addEventListener('click', () => {
+                    lastTestDate = null;
+                    lastTestStatus = null;
+                    
+                    if (statusTextEl) {
+                        statusTextEl.textContent = 'Non testato';
+                        statusTextEl.style.color = 'var(--testo-secondario)';
+                    }
+                    if (statusIconEl) {
+                        statusIconEl.textContent = '⚪';
+                    }
+                    if (testDateEl) {
+                        testDateEl.textContent = '-';
+                        testDateEl.style.opacity = '0.7';
+                    }
+                    
+                    resetBtn.disabled = true;
+                    resetBtn.style.opacity = '0.6';
+                });
+            }
+            
+            // Inizializza monitoraggio connessione (solo eventi del browser, NO aggiornamento automatico)
+            async function initConnectionMonitoring() {
+                // Verifica iniziale (senza data, solo per mostrare stato corrente)
+                await detectConnectionInfo(false);
+                
+                // Ascolta SOLO eventi online/offline del browser (per le notifiche)
+                // Questi eventi scatenano anche le notifiche in script.js
+                window.addEventListener('online', async () => {
+                    await detectConnectionInfo(true); // Con data quando è un evento reale
+                    console.log('🟢 Connessione ripristinata');
+                });
+                
+                window.addEventListener('offline', async () => {
+                    await detectConnectionInfo(true); // Con data quando è un evento reale
+                    console.log('🔴 Connessione persa');
+                });
+            }
+            
+            // Pulsante verifica manuale
+            const checkConnectionBtn = document.getElementById('check-connection-btn');
+            if (checkConnectionBtn) {
+                checkConnectionBtn.addEventListener('click', async () => {
+                    // Disabilita pulsante durante verifica
+                    checkConnectionBtn.disabled = true;
+                    checkConnectionBtn.style.opacity = '0.6';
+                    const btnText = checkConnectionBtn.querySelector('span:last-child');
+                    const originalText = btnText.textContent;
+                    btnText.textContent = 'Verifica...';
+                    
+                    // Verifica connessione (con data perché è un test manuale)
+                    await detectConnectionInfo(true);
+                    
+                    // Reabilita pulsante dopo 1 secondo
+                    setTimeout(() => {
+                        checkConnectionBtn.disabled = false;
+                        checkConnectionBtn.style.opacity = '1';
+                        btnText.textContent = originalText;
+                    }, 1000);
+                });
+            }
+            
+            // Inizializza al caricamento
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initConnectionMonitoring);
+            } else {
+                initConnectionMonitoring();
+            }
+        })();
     </script>
 
 </body>
