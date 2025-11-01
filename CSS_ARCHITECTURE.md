@@ -17,7 +17,12 @@ tpl-fvg-autisti-4/
 │       ├── footer.css         ✅ FATTO
 │       ├── navbar.css         ⏳ TODO
 │       ├── buttons.css        ⏳ TODO
-│       ├── modals.css         ⏳ TODO
+│       ├── modals.css         ✅ FATTO (cache, fermate, linee - struttura base)
+│       ├── settings/          ← Componente Settings modulare
+│       │   ├── impostazioni.css     ✅ FATTO (struttura modale: overlay, header, tabs, layout)
+│       │   ├── accessibilita.css    ✅ FATTO (tab "Accessibilità": font, touch, spacing, layout, blue filter, scale)
+│       │   ├── aspetto.css          ✅ FATTO (tab "Aspetto": theme, animation, contrast, reduce motion)
+│       │   └── info.css             ✅ FATTO (tab "Info": info-card, update-check-card)
 │       ├── cards.css          ⏳ TODO
 │       ├── forms.css          ⏳ TODO
 │       └── pwa-nav.css        ⏳ TODO
@@ -49,6 +54,11 @@ Gli stili devono essere caricati in questo ordine preciso:
 <link rel="stylesheet" href="css/components/footer.css" />
 <link rel="stylesheet" href="css/components/buttons.css" />
 <link rel="stylesheet" href="css/components/modals.css" />
+<!-- Settings (dopo modals.css perché modifica modale esistente) -->
+<link rel="stylesheet" href="css/components/settings/impostazioni.css" />
+<link rel="stylesheet" href="css/components/settings/accessibilita.css" />
+<link rel="stylesheet" href="css/components/settings/aspetto.css" />
+<link rel="stylesheet" href="css/components/settings/info.css" />
 <link rel="stylesheet" href="css/components/cards.css" />
 <link rel="stylesheet" href="css/components/forms.css" />
 <link rel="stylesheet" href="css/components/pwa-nav.css" />
@@ -276,16 +286,83 @@ body {
 - Modal cache (verifica aggiornamenti)
 - Modal fermate (selezione fermate)
 - Modal linee (selezione linee)
-- Modal impostazioni (settings)
-- Modal overlay, content, header, body, footer
+- Modal overlay, content, header, body, footer (struttura base)
 - Animazioni apertura/chiusura
 - Stili per barra ricerca, liste, toggle switch
 - Dark mode per tutti i modali
 - Responsive mobile e schermi piccoli
-- Stili per compact-layout e extra-spacing
 
 **Dipendenze:** `variables.css`, `animations.css`  
 **Usato da:** Tutte le pagine (index.html, fermate.html, prezzi.html, benvenuto.html, test.html)
+
+**Note:** Il modal impostazioni è stato modularizzato in `components/settings/` (vedi sotto)
+
+---
+
+#### **components/settings/** (Componente Settings modulare)
+
+Struttura allineata all'UI del modal Impostazioni per facilità di manutenzione.
+
+##### **impostazioni.css** ✅
+
+**Contenuto:**
+
+- Struttura modale impostazioni (`.settings-modal`, `.settings-modal-content`)
+- Header modale (`.settings-modal-header`, `.settings-modal-close`)
+- Sistema tabs (`.settings-tabs`, `.settings-tab`, `.tab-icon`)
+- Layout content (`.settings-content`, `.settings-tab-content`)
+- Section container (`.settings-section`, `.settings-section-title`)
+- Responsive schermi piccoli
+
+**Dipendenze:** `variables.css`, `animations.css`, `components/modals.css` (eredita struttura base)  
+**Usato da:** Modal Impostazioni (tab container)
+
+##### **accessibilita.css** ✅
+
+**Contenuto:**
+
+- **Stili UI tab "Accessibilità"** (componenti visibili nel modal):
+  - `.settings-font-buttons`, `.font-sample`, `.font-label` (pulsanti dimensione testo)
+  - `.scale-preset-selector`, `.scale-preset-card` (selettore dimensione interfaccia)
+  - `.settings-item` per touch, spacing, layout, blue filter
+  - Toggle switch e label della tab
+- **NOTA**: Gli effetti globali (`.touch-friendly`, `.extra-spacing`, `.compact-layout`, `.blue-light-filter`, `.font-size-*`, `.interface-scale-*` applicati a `body`) sono in `themes.css`
+
+**Dipendenze:** `variables.css`, `components/settings/impostazioni.css`  
+**Usato da:** Tab "Accessibilità" del modal Impostazioni
+
+**Note:** Allineato all'UI - modifichi la tab Accessibilità → modifichi questo file  
+**Distinzione**: Questo file = UI della tab | `themes.css` = effetti globali applicati all'app
+
+##### **aspetto.css** ✅
+
+**Contenuto:**
+
+- **Stili UI tab "Aspetto"** (componenti visibili nel modal):
+  - `.settings-theme-options`, `.theme-option-card`, `.theme-option-icon`
+  - `.settings-item` per animazione, contrasto, reduce motion
+  - Toggle switch e label della tab
+- **NOTA**: Gli effetti globali (`.dark`, `.high-contrast`, `.reduce-motion` applicati a `body`) sono in `themes.css`
+
+**Dipendenze:** `variables.css`, `components/settings/impostazioni.css`  
+**Usato da:** Tab "Aspetto" del modal Impostazioni
+
+**Note:** Allineato all'UI - modifichi la tab Aspetto → modifichi questo file  
+**Distinzione**: Questo file = UI della tab | `themes.css` = effetti globali applicati all'app
+
+##### **info.css** ✅
+
+**Contenuto:**
+
+- Info card app (`.info-card`, `.info-header`, `.info-logo`, `.info-title`)
+- Update check card (`.update-check-card`, `.update-check-header`, `.update-check-btn`)
+- Link utili (`.info-links`)
+- Aggiornamenti recenti (stili changelog nella tab Info)
+
+**Dipendenze:** `variables.css`, `components/settings/impostazioni.css`  
+**Usato da:** Tab "Info" del modal Impostazioni
+
+**Note:** Allineato all'UI - modifichi la tab Info → modifichi questo file
 
 #### **components/cards.css** ⏳
 
@@ -315,31 +392,45 @@ body {
 
 ---
 
-### **6. themes.css** (Temi)
+### **6. themes.css** (Effetti Globali Temi)
+
+**IMPORTANTE**: Questo file contiene gli **effetti globali** applicati all'intera app quando le impostazioni sono attive, NON gli stili UI delle tab (che sono in `components/settings/`).
 
 **Contenuto:**
 
-- Dark mode (`.dark`)
-- High contrast (`.high-contrast`)
-- Blue light filter (`.blue-light-filter`)
-- Reduce motion (`.reduce-motion`)
-- Touch friendly (`.touch-friendly`)
+- **Effetti globali dark mode** (`.dark` applicato a `:root` - override variabili CSS)
+- **Effetti globali high contrast** (`.high-contrast` applicato a `body` - stili globali)
+- **Effetti globali blue light filter** (`.blue-light-filter` applicato a `body` - overlay globale)
+- **Effetti globali reduce motion** (`.reduce-motion` applicato a `body` - disabilita animazioni globali)
+- **Effetti globali touch friendly** (`.touch-friendly` applicato a `body` - stili globali pulsanti/spacing)
+
+**Nota**: Gli stili UI delle tab (pulsanti, card, toggle) sono in:
+
+- `components/settings/aspetto.css` → UI tab "Aspetto"
+- `components/settings/accessibilita.css` → UI tab "Accessibilità"
 
 **Esempio:**
 
 ```css
+/* Effetti globali - applicati a body/:root quando la classe è attiva */
 .dark {
   --testo-principale: #ffffff;
   --bg: #0f172a;
 }
 
-.high-contrast {
-  --contrasto: 1.5;
+body.high-contrast button {
+  border-width: 3px; /* Bordo più spesso globalmente */
+}
+
+body.blue-light-filter::after {
+  background-color: rgba(255, 235, 200, 0.2); /* Overlay globale */
+  opacity: 1;
 }
 ```
 
 **Dipendenze:** `variables.css`  
-**Usato da:** Tutte le pagine
+**Usato da:** Tutte le pagine (effetti globali quando impostazioni attive)  
+**Caricato dopo:** `components/settings/*.css` (per poter sovrascrivere se necessario)
 
 ---
 
@@ -385,7 +476,11 @@ body {
 ## ✅ Componenti Completati
 
 - [x] **footer.css** ✅ - Footer e link Telegram (30 Ottobre 2025)
-- [x] **modals.css** ✅ - Tutti i modali (cache, fermate, linee, impostazioni) (31 Ottobre 2025)
+- [x] **modals.css** ✅ - Modali cache, fermate, linee (struttura base) (31 Ottobre 2025)
+- [x] **settings/impostazioni.css** ✅ - Struttura modale impostazioni (1 Novembre 2025)
+- [x] **settings/accessibilita.css** ✅ - Tab Accessibilità (1 Novembre 2025)
+- [x] **settings/aspetto.css** ✅ - Tab Aspetto (1 Novembre 2025)
+- [x] **settings/info.css** ✅ - Tab Info (1 Novembre 2025)
 - [ ] navbar.css
 - [ ] buttons.css
 - [ ] cards.css
@@ -406,7 +501,11 @@ const STATIC_ASSETS = [
   "./css/layout.css",
   "./css/animations.css", // ← Animazioni comuni
   "./css/components/footer.css", // ← Componenti
-  "./css/components/modals.css", // ← Modals
+  "./css/components/modals.css", // ← Modals (base)
+  "./css/components/settings/impostazioni.css", // ← Settings (struttura)
+  "./css/components/settings/accessibilita.css", // ← Settings (tab Accessibilità)
+  "./css/components/settings/aspetto.css", // ← Settings (tab Aspetto)
+  "./css/components/settings/info.css", // ← Settings (tab Info)
   "./css/themes.css",
   "./css/responsive.css",
   // ...
@@ -437,5 +536,5 @@ const STATIC_ASSETS = [
 
 ---
 
-**Ultimo aggiornamento**: 30 Ottobre 2025  
-**Versione progetto**: 1.5.5 → 1.5.6 (in sviluppo)
+**Ultimo aggiornamento**: 31 Ottobre 2025  
+**Versione progetto**: 1.5.8 (modularizzazione settings in corso)

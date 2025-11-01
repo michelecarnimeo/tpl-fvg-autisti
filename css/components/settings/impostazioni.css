@@ -1,0 +1,476 @@
+/* ========================================
+   COMPONENTE: MODAL IMPOSTAZIONI - STRUTTURA
+   File: css/components/settings/impostazioni.css
+   Descrizione: Struttura base del modal impostazioni (overlay, header, tabs, layout)
+   Dipendenze: variables.css, animations.css, components/modals.css (base)
+   ======================================== */
+
+/* ========================================
+   OVERLAY E CONTENITORE MODALE
+   ======================================== */
+
+/* Modal Overlay */
+.settings-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 10000;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.settings-modal.show {
+  opacity: 1;
+}
+
+/* Modal Content */
+.settings-modal-content {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  box-shadow: var(--glass-shadow);
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+  overflow: hidden;
+}
+
+.settings-modal.show .settings-modal-content {
+  transform: scale(1);
+}
+
+/* ========================================
+   HEADER MODALE
+   ======================================== */
+
+/* Header - Stile navbar con gradient turchese */
+.settings-modal-header {
+  background: linear-gradient(135deg, 
+    rgba(0, 123, 138, 0.9) 0%, 
+    rgba(0, 123, 138, 0.7) 50%, 
+    rgba(0, 123, 138, 0.5) 100%);
+  border-bottom: 1px solid rgba(0, 123, 138, 0.3);
+  box-shadow: 0 4px 12px 0 rgba(0, 123, 138, 0.4);
+  border-radius: 16px 16px 0 0;
+  padding: 10px 20px;
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.settings-modal-header h3 {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.settings-modal-close {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  font-size: 1.5rem;
+  color: white;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.settings-modal-close:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: rotate(90deg);
+}
+
+/* ========================================
+   SISTEMA TABS
+   ======================================== */
+
+/* Tabs */
+.settings-tabs {
+  display: flex;
+  border-bottom: 2px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.settings-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 1rem;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: var(--testo-secondario);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.settings-tab:hover {
+  background: rgba(0, 123, 138, 0.1);
+  color: var(--turchese);
+}
+
+.settings-tab.active {
+  color: var(--turchese);
+  border-bottom-color: var(--turchese);
+  background: rgba(0, 123, 138, 0.05);
+  font-weight: 600;
+}
+
+.tab-icon {
+  font-size: 1.2rem;
+}
+
+/* ========================================
+   CONTENUTO TABS
+   ======================================== */
+
+/* Content */
+.settings-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+}
+
+.settings-tab-content {
+  display: none;
+}
+
+.settings-tab-content.active {
+  display: block;
+  /* NOTA: Animazione fadeIn sostituita con utility class .fade-in in HTML */
+  /* @keyframes fadeIn spostato in css/animations.css */
+}
+
+/* ========================================
+   SEZIONI E ITEM
+   ======================================== */
+
+/* Section */
+.settings-section {
+  margin-bottom: 1.5rem;
+}
+
+.settings-section-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--testo-principale);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+/* Settings Item */
+.settings-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  margin-bottom: 0.75rem;
+  transition: all 0.2s ease;
+}
+
+.settings-item:hover {
+  background: rgba(0, 123, 138, 0.05);
+  border-color: var(--turchese);
+  transform: translateX(4px);
+}
+
+.settings-item.active {
+  background: rgba(34, 197, 94, 0.1);
+  border-color: #22c55e;
+  border-width: 2px;
+}
+
+.settings-item-vertical {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1rem;
+}
+
+.settings-item-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.settings-item-icon {
+  font-size: 1.5rem;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 123, 138, 0.1);
+  border-radius: 10px;
+}
+
+.settings-item-text {
+  flex: 1;
+}
+
+.settings-item-label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--testo-principale);
+  margin-bottom: 0.25rem;
+}
+
+.settings-item-description {
+  font-size: 0.85rem;
+  color: var(--testo-secondario);
+  line-height: 1.4;
+}
+
+/* ========================================
+   TOGGLE SWITCH (Base - usato da tutte le tab)
+   ======================================== */
+
+.settings-toggle {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 28px;
+  flex-shrink: 0;
+}
+
+.settings-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.settings-toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #cbd5e1;
+  transition: all 0.3s ease;
+  border-radius: 28px;
+}
+
+.settings-toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: all 0.3s ease;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.settings-toggle input:checked + .settings-toggle-slider {
+  background-color: #22c55e;
+}
+
+.settings-toggle input:checked + .settings-toggle-slider:before {
+  transform: translateX(22px);
+}
+
+.settings-toggle input:focus + .settings-toggle-slider {
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.2);
+}
+
+/* NOTA: Gli stili specifici delle tab (Theme Options, Font Buttons, Scale Selector) 
+   sono nei rispettivi file: aspetto.css, accessibilita.css */
+
+/* ========================================
+   DARK MODE - STRUTTURA
+   ======================================== */
+
+.dark .settings-modal-content {
+  background: var(--glass-bg-dark);
+  border-color: var(--glass-border-dark);
+  box-shadow: var(--glass-shadow-dark);
+}
+
+.dark .settings-modal-header {
+  /* Mantieni lo stesso gradient turchese anche in dark mode */
+  border-bottom-color: var(--glass-border-dark);
+}
+
+.dark .settings-tabs {
+  border-color: var(--glass-border-dark);
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.dark .settings-tab:hover {
+  background: rgba(23, 183, 177, 0.1);
+}
+
+.dark .settings-tab.active {
+  background: rgba(23, 183, 177, 0.05);
+}
+
+.dark .settings-item {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: var(--glass-border-dark);
+}
+
+.dark .settings-item:hover {
+  background: rgba(23, 183, 177, 0.1);
+}
+
+.dark .settings-item-icon {
+  background: rgba(23, 183, 177, 0.15);
+}
+
+.dark .settings-item.active {
+  background: rgba(34, 197, 94, 0.15);
+  border-color: #86efac;
+}
+
+/* ========================================
+   RESPONSIVE - SCHERMI PICCOLI
+   ======================================== */
+
+/* Universal Small Screen (iPhone SE, 12/13 Mini, Galaxy S, Pixel compatti) */
+@media (max-width: 430px), (max-height: 670px) {
+  .settings-modal-content {
+    max-height: 95vh; /* Usa più spazio verticale */
+    margin: 8px; /* Margini ridotti */
+    width: calc(100% - 16px); /* Sfrutta tutta la larghezza */
+    border-radius: 12px;
+  }
+  
+  .settings-modal-header {
+    padding: 8px 12px; /* Header più compatto */
+    min-height: 44px; /* Altezza minima iOS standard */
+  }
+  
+  .settings-modal-header h3 {
+    font-size: 1rem; /* Titolo più piccolo */
+  }
+  
+  .settings-tabs {
+    padding: 8px; /* Tabs più compatte */
+    gap: 4px;
+  }
+  
+  .settings-tab {
+    padding: 8px 12px; /* Tab più compatte */
+    font-size: 0.9rem;
+  }
+  
+  .settings-content {
+    padding: 12px; /* Contenuto più compatto */
+  }
+  
+  .settings-section {
+    padding: 12px; /* Sezioni più compatte */
+    margin-bottom: 12px;
+  }
+  
+  .settings-item {
+    padding: 10px; /* Elementi più compatti */
+    gap: 8px;
+  }
+  
+  .settings-item-label {
+    font-size: 0.95rem;
+  }
+  
+  .settings-item-description {
+    font-size: 0.85rem;
+  }
+}
+
+/* Tablet e Mobile */
+@media (max-width: 768px) {
+  .settings-modal-content {
+    width: 95%;
+    max-height: 90vh;
+    margin: 10px;
+  }
+  
+  .settings-modal-header {
+    padding: 10px 16px;
+  }
+  
+  .settings-modal-header h3 {
+    font-size: 1.1rem;
+  }
+  
+  .settings-content {
+    padding: 1rem;
+  }
+  
+  .settings-tab {
+    font-size: 0.9rem;
+    padding: 0.75rem 0.5rem;
+  }
+  
+  .tab-icon {
+    font-size: 1rem;
+  }
+  
+  .settings-item {
+    padding: 0.75rem;
+  }
+  
+  .settings-item-icon {
+    font-size: 1.2rem;
+    width: 35px;
+    height: 35px;
+  }
+  
+  .settings-item-label {
+    font-size: 0.95rem;
+  }
+  
+  .settings-item-description {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .settings-modal-content {
+    margin: 10px;
+    max-height: 90vh;
+  }
+  
+  .settings-modal-header {
+    padding: 10px 16px;
+  }
+  
+  .settings-content {
+    padding: 16px;
+  }
+}
+

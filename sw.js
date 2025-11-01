@@ -22,9 +22,16 @@ const STATIC_ASSETS = [
   './style1.css', // Stili essenziali
   './css/components/footer.css', // Footer modulare CSS
   './css/components/modals.css', // Modals modulare CSS
+  './css/components/settings/impostazioni.css', // Settings (struttura)
+  './css/components/settings/accessibilita.css', // Settings (tab Accessibilità)
+  './css/components/settings/aspetto.css', // Settings (tab Aspetto)
+  './css/components/settings/info.css', // Settings (tab Info)
   './script.js', // Funzionalità app
   './footer.js', // Footer modulare JS
   './changelog.js', // Changelog dinamico
+  './js/features/updates.js', // Verifica aggiornamenti
+  './js/features/settings.js', // Gestione impostazioni
+  './js/components/modals.js', // Modal fermate
   './database.json', // DATI CRITICI per offline
   './manifest.json', // PWA
   './src/tpl.jpg', // Icona app

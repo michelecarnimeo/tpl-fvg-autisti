@@ -3,39 +3,8 @@
 // ========================================
 // SEZIONE 0: FEEDBACK APTICO (VIBRAZIONE)
 // ========================================
-
-// Pattern di vibrazione predefiniti
-const HAPTIC_PATTERNS = {
-  light: 20,           // Micro feedback (tap generico)
-  medium: 50,          // Feedback standard (selezione)
-  strong: 100,         // Feedback importante (successo)
-  success: [100, 50, 100], // Pattern successo
-  warning: [50, 30, 50],   // Pattern avviso
-  error: 200           // Vibrazione lunga (errore)
-};
-
-// Funzione principale per feedback aptico
-function triggerHaptic(pattern = 'light', force = false) {
-  // Verifica se il feedback aptico è abilitato (o se forzato)
-  const isEnabled = localStorage.getItem('tpl.hapticFeedback') === 'true';
-  if (!isEnabled && !force) return;
-  
-  // Verifica supporto API Vibration
-  if (!navigator.vibrate) {
-    console.log('⚠️ API Vibration non supportata');
-    return;
-  }
-  
-  // Ottieni il pattern
-  const vibrationPattern = HAPTIC_PATTERNS[pattern] || pattern;
-  
-  try {
-    navigator.vibrate(vibrationPattern);
-    console.log(`📳 Vibrazione: ${pattern}${force ? ' (forced)' : ''}`);
-  } catch (error) {
-    console.error('❌ Errore vibrazione:', error);
-  }
-}
+// Le funzioni di feedback aptico sono ora in js/features/settings.js
+// Usa window.Settings.triggerHaptic() per richiamarle
 
 // ========================================
 // SEZIONE 1: RILEVAMENTO POSIZIONE
@@ -197,46 +166,8 @@ function updateLocationButtonIcon(hasLocation) {
 // ========================================
 // SEZIONE 1: ANIMAZIONE SFONDO
 // ========================================
-// Controllo dell'animazione del gradiente di sfondo
-let animationEnabled = false;
-
-// Funzione per abilitare/disabilitare l'animazione
-function toggleAnimation() {
-  console.log('Toggle animation clicked, current state:', animationEnabled);
-  animationEnabled = !animationEnabled;
-  
-  if (animationEnabled) {
-    document.body.classList.add('animation-enabled');
-    console.log('Animation enabled, class added to body');
-    // Aggiorna tutti i pulsanti
-    document.querySelectorAll('.animation-toggle, #mobile-animation-toggle').forEach(btn => {
-      btn.classList.add('active');
-    });
-  } else {
-    document.body.classList.remove('animation-enabled');
-    console.log('Animation disabled, class removed from body');
-    // Aggiorna tutti i pulsanti
-    document.querySelectorAll('.animation-toggle, #mobile-animation-toggle').forEach(btn => {
-      btn.classList.remove('active');
-    });
-  }
-  
-  // Salva la preferenza
-  localStorage.setItem('animationEnabled', animationEnabled);
-  console.log('Animation state saved:', animationEnabled);
-}
-
-// Carica la preferenza salvata
-function loadAnimationPreference() {
-  const saved = localStorage.getItem('animationEnabled');
-  if (saved === 'true') {
-    animationEnabled = true;
-    document.body.classList.add('animation-enabled');
-    document.querySelectorAll('.animation-toggle, #mobile-animation-toggle').forEach(btn => {
-      btn.classList.add('active');
-    });
-  }
-}
+// Le funzioni di animazione sono ora in js/features/settings.js
+// Usa window.Settings.toggleAnimation() per richiamarle
 
 // Elementi DOM
 const mainApp = document.getElementById('main-app');
@@ -287,8 +218,7 @@ let arrivoIdx = '';
 let hasCalculated = false;
 let deferredInstallPrompt = null; // beforeinstallprompt event
 // Modal fermate state
-let currentModalType = ''; // 'partenza' o 'arrivo'
-let filteredFermate = [];
+// Le variabili currentModalType e filteredFermate sono ora gestite internamente da js/components/modals.js
 
 // Utility dark mode
 function setDarkMode(isDark) {
@@ -297,15 +227,8 @@ function setDarkMode(isDark) {
     localStorage.setItem('tpl.isDark', isDark ? '1' : '0');
   } catch { }
   // Aggiorna i colori del body per tutte le pagine
-  updateBodyColors(isDark);
-}
-
-function updateBodyColors(isDark) {
-  const body = document.body;
-  if (isDark) {
-    body.className = body.className.replace(/bg-background-light|text-foreground-light/g, '') + ' bg-background-dark text-foreground-dark';
-  } else {
-    body.className = body.className.replace(/bg-background-dark|text-foreground-dark/g, '') + ' bg-background-light text-foreground-light';
+  if (window.Settings && window.Settings.updateBodyColors) {
+    window.Settings.updateBodyColors(isDark);
   }
 }
 
@@ -314,155 +237,43 @@ function toggleDark() {
   const isDark = !document.documentElement.classList.contains('dark');
   const newMode = isDark ? 'dark' : 'light';
   
-  localStorage.setItem('tpl.themeMode', newMode);
-  document.documentElement.classList.toggle('dark', isDark);
-  updateBodyColors(isDark);
-  updateToggleIcon(isDark);
-  updateMobileDarkModeButton(isDark);
+  // Usa Settings.setThemeMode() se disponibile
+  if (window.Settings && window.Settings.setThemeMode) {
+    window.Settings.setThemeMode(newMode);
+  } else {
+    // Fallback
+    localStorage.setItem('tpl.themeMode', newMode);
+    document.documentElement.classList.toggle('dark', isDark);
+    if (window.Settings && window.Settings.updateBodyColors) {
+      window.Settings.updateBodyColors(isDark);
+    }
+    if (window.Settings && window.Settings.updateToggleIcon) {
+      window.Settings.updateToggleIcon(isDark);
+    }
+    if (window.Settings && window.Settings.updateMobileDarkModeButton) {
+      window.Settings.updateMobileDarkModeButton(isDark);
+    }
+  }
   
   console.log('Tema cambiato manualmente a:', newMode);
-}
-
-// Funzione per aggiornare l'icona del toggle
-function updateToggleIcon(isDark) {
-  if (!darkModeToggle) return; // Elemento non esiste in tutte le pagine
-  const toggleIcon = darkModeToggle.querySelector('span');
-  if (toggleIcon) {
-    toggleIcon.textContent = isDark ? '☀️' : '🌙';
-  }
-}
-
-// Funzione per aggiornare il pulsante mobile dark mode
-function updateMobileDarkModeButton(isDark) {
-  const mobileBtn = document.getElementById('mobile-darkmode-toggle');
-  if (!mobileBtn) return;
-  
-  const icon = mobileBtn.querySelector('.mobile-nav-icon');
-  const text = mobileBtn.querySelector('span:not(.mobile-nav-icon)');
-  
-  if (icon) {
-    icon.textContent = isDark ? '☀️' : '🌙';
-  }
-  
-  if (text) {
-    text.textContent = isDark ? 'Modalità chiara' : 'Modalità scura';
-  }
 }
 
 // ================================
 // SISTEMA ACCESSIBILITÀ - DIMENSIONE TESTO
 // ================================
-
-// Livelli di dimensione testo
-const fontSizeLevels = ['normal', 'large', 'xlarge'];
-let currentFontSizeIndex = 0;
-
-// Funzione per impostare la dimensione del testo
-function setFontSize(level) {
-  // Rimuovi tutte le classi di dimensione testo
-  document.body.classList.remove('font-size-normal', 'font-size-large', 'font-size-xlarge');
-  
-  // Aggiungi la nuova classe
-  document.body.classList.add(`font-size-${level}`);
-  
-  // Salva preferenza in localStorage
-  try {
-    localStorage.setItem('tpl.fontSize', level);
-  } catch { }
-  
-  // Aggiorna il pulsante
-  updateFontSizeButton(level);
-  
-  // Aggiorna il testo nel menu mobile
-  updateMobileFontSizeText(level);
-}
-
-// Funzione per aggiornare i pulsanti (stato attivo)
-function updateFontSizeButton(level) {
-  // Aggiorna pulsanti desktop
-  const desktopButtons = document.querySelectorAll('.font-size-btn');
-  desktopButtons.forEach(btn => {
-    if (btn.dataset.size === level) {
-      btn.classList.add('active');
-    } else {
-      btn.classList.remove('active');
-    }
-  });
-  
-  // Aggiorna pulsanti mobile
-  const mobileButtons = document.querySelectorAll('.mobile-font-btn');
-  mobileButtons.forEach(btn => {
-    if (btn.dataset.size === level) {
-      btn.classList.add('active');
-    } else {
-      btn.classList.remove('active');
-    }
-  });
-  
-  // Aggiorna pulsanti benvenuto
-  const benvenutoButtons = document.querySelectorAll('.benvenuto-font-btn');
-  benvenutoButtons.forEach(btn => {
-    if (btn.dataset.size === level) {
-      btn.classList.add('active');
-    } else {
-      btn.classList.remove('active');
-    }
-  });
-}
-
-// Funzione per aggiornare il testo nel menu mobile (deprecata, mantenuta per compatibilità)
-function updateMobileFontSizeText(level) {
-  // Non più necessaria con i nuovi pulsanti separati
-}
-
-// Inizializza dimensione testo dal localStorage
-function initFontSize() {
-  try {
-    const savedFontSize = localStorage.getItem('tpl.fontSize');
-    if (savedFontSize && fontSizeLevels.includes(savedFontSize)) {
-      currentFontSizeIndex = fontSizeLevels.indexOf(savedFontSize);
-      setFontSize(savedFontSize);
-    } else {
-      setFontSize('normal');
-    }
-  } catch {
-    setFontSize('normal');
-  }
-}
+// Le funzioni di dimensione testo sono ora in js/features/settings.js
+// Usa window.Settings.setFontSize() e window.Settings.initFontSize() per richiamarle
 
 
-// Popola modale linee con stile avanzato
+// Funzione populateLinee() è ora in js/components/modals.js
+// Gestita internamente quando viene aperto il modal
 function populateLinee() {
-  if (!lineeModalList) return; // Non siamo su index.html
-  lineeModalList.innerHTML = '';
-  tariffario.forEach((l, i) => {
-    const li = document.createElement('li');
-    li.className = 'linea-modal-item';
-    li.dataset.lineaIdx = i;
-    
-    // Estrai numero linea dal nome (es: "Linea 400 Udine-Grado" -> "400")
-    const lineaNumMatch = l.nome.match(/\d+/);
-    const lineaNum = lineaNumMatch ? lineaNumMatch[0] : (i + 1);
-    
-    // Estrai percorso (es: "Udine-Grado")
-    const percorso = l.nome.replace(/Linea\s+\d+\s*/i, '');
-    
-    // Crea struttura HTML con icona e dettagli
-    li.innerHTML = `
-      <div class="linea-badge">
-        <span class="linea-icon">🚌</span>
-        <span class="linea-number">${lineaNum}</span>
-      </div>
-      <div class="linea-details">
-        <span class="linea-route">${percorso}</span>
-        <span class="linea-stops">${l.fermate.length} fermate</span>
-      </div>
-      <span class="linea-arrow">›</span>
-    `;
-    
-    li.addEventListener('click', () => selectLinea(i, l.nome));
-    lineeModalList.appendChild(li);
-  });
+  // Funzione mantenuta per compatibilità (potrebbe essere chiamata da altri punti)
+  // Il popolamento viene fatto automaticamente da LineeModal.open()
+  if (typeof LineeModal !== 'undefined' && LineeModal.open) {
+    // Non apriamo il modal, solo popoliamo se necessario
+    // In realtà il popolamento avviene quando si apre il modal
+  }
 }
 
 // Abilita/disabilita pulsanti partenza/arrivo
@@ -491,81 +302,46 @@ function updateFermateButtons() {
   toggleSwapButton(true);
 }
 
-// Funzioni per gestire il modale delle fermate
+// ===== MODAL FERMATE =====
+// Le funzioni del modal fermate sono ora in js/components/modals.js
+// Questo script usa solo l'API pubblica esposta dal modulo
+
+// Wrapper per compatibilità - delega a FermateModal
 function openFermateModal(type) {
-  if (!fermateModal || lineaIdx === '' || !tariffario[lineaIdx]) return;
-  
-  currentModalType = type;
-  fermateModalTitle.textContent = type === 'partenza' ? 'Seleziona fermata di partenza' : 'Seleziona fermata di arrivo';
-  
-  // Mostra/nascondi pulsante geolocalizzazione solo per la partenza
-  if (fermateLocationBtn) {
-    if (type === 'partenza') {
-      fermateLocationBtn.style.display = 'flex'; // Pulsante inline full-width
-    } else {
-      fermateLocationBtn.style.display = 'none';
-    }
-  }
-  
-  // Popola la lista delle fermate
-  populateFermateList();
-  
-  // Mostra il modale
-  fermateModal.style.display = 'flex';
-  
-  // Piccolo delay per permettere al browser di renderizzare il display
-  // prima di applicare l'animazione
-  setTimeout(() => {
-    fermateModal.classList.add('show');
-  }, 10);
-  
-  // Focus automatico sul campo ricerca (solo su desktop, non mobile)
-  // Su mobile evita di aprire la tastiera automaticamente
-  if (fermateSearchInput && window.innerWidth > 768) {
-    setTimeout(() => {
-      fermateSearchInput.focus();
-    }, 350); // Delay per permettere l'animazione del modale
+  if (typeof FermateModal !== 'undefined' && FermateModal.open) {
+    FermateModal.open(type);
+  } else {
+    console.warn('⚠️ FermateModal non ancora inizializzato');
   }
 }
 
 function closeFermateModal() {
-  if (!fermateModal) return;
-  
-  // Aggiungi classe per animazione di chiusura
-  fermateModal.classList.add('closing');
-  fermateModal.classList.remove('show');
-  
-  // Attendi fine animazione prima di nascondere completamente
-  setTimeout(() => {
-    fermateModal.classList.remove('closing');
-    fermateModal.style.display = 'none';
-  }, 300);
-  
-  // Reset ricerca
-  if (fermateSearchInput) {
-    fermateSearchInput.value = '';
-    fermateSearchInput.dispatchEvent(new Event('input'));
+  if (typeof FermateModal !== 'undefined' && FermateModal.close) {
+    FermateModal.close();
   }
 }
 
-// === FUNZIONI MODALE LINEE ===
+// ===== MODAL LINEE =====
+// Le funzioni del modal linee sono ora in js/components/modals.js
+// Questo script usa solo l'API pubblica esposta dal modulo
+
+// Wrapper per compatibilità - delega a LineeModal
 function openLineeModal() {
-  if (!lineeModal) return;
-  
-  lineeModal.style.display = 'flex';
-  setTimeout(() => lineeModal.classList.add('show'), 10);
+  if (typeof LineeModal !== 'undefined' && LineeModal.open) {
+    LineeModal.open();
+  } else {
+    console.warn('⚠️ LineeModal non ancora inizializzato');
+  }
 }
 
 function closeLineeModal() {
-  if (!lineeModal) return;
-  
-  lineeModal.classList.remove('show');
-  setTimeout(() => {
-    lineeModal.style.display = 'none';
-  }, 300);
+  if (typeof LineeModal !== 'undefined' && LineeModal.close) {
+    LineeModal.close();
+  }
 }
 
 function selectLinea(idx, nome) {
+  // Questa funzione viene chiamata dal callback di LineeModal
   lineaIdx = idx;
   partenzaIdx = '';
   arrivoIdx = '';
@@ -579,7 +355,7 @@ function selectLinea(idx, nome) {
   updateFermateButtons();
   updateSummary();
   calcolaPrezzo();
-  updatePriceCardState();  // ← AGGIUNTO! Resetta la card quando cambi linea
+  updatePriceCardState();
   
   // Salva in localStorage
   try { 
@@ -589,88 +365,8 @@ function selectLinea(idx, nome) {
   closeLineeModal();
 }
 
-function populateFermateList() {
-  if (!fermateModalList || !tariffario[lineaIdx]) return;
-  
-  const fermate = tariffario[lineaIdx].fermate;
-  filteredFermate = fermate.map((fermata, index) => ({ name: fermata, index }));
-  
-  renderFermateList();
-}
-
-function renderFermateList() {
-  if (!fermateModalList) return;
-  
-  fermateModalList.innerHTML = '';
-  
-  filteredFermate.forEach(({ name, index }) => {
-    const li = document.createElement('li');
-    li.textContent = name;
-    li.dataset.index = index;
-    
-    // NON evidenziare la fermata selezionata all'apertura del modale
-    // La colorazione verrà applicata solo al click per feedback visivo
-    
-    li.addEventListener('click', () => selectFermata(index));
-    fermateModalList.appendChild(li);
-  });
-}
-
-function selectFermata(index) {
-  // Rimuovi la classe 'selected' da tutte le fermate
-  const allFermateItems = fermateModalList.querySelectorAll('li');
-  allFermateItems.forEach(item => item.classList.remove('selected'));
-  
-  // Aggiungi la classe 'selected' alla fermata cliccata per feedback visivo
-  const clickedItem = fermateModalList.querySelector(`li[data-index="${index}"]`);
-  if (clickedItem) {
-    clickedItem.classList.add('selected');
-  }
-  
-  // Aggiorna i valori dopo un breve delay per far vedere il feedback visivo
-  setTimeout(() => {
-    if (currentModalType === 'partenza') {
-      partenzaIdx = index;
-      partenzaText.textContent = tariffario[lineaIdx].fermate[index];
-    } else if (currentModalType === 'arrivo') {
-      arrivoIdx = index;
-      arrivoText.textContent = tariffario[lineaIdx].fermate[index];
-    }
-    
-    hasCalculated = false;
-    updateSummary();
-    calcolaPrezzo();
-    updatePriceCardState();
-    
-    // Salva nello storage
-    try {
-      if (currentModalType === 'partenza') {
-        localStorage.setItem('tpl.partenzaIdx', partenzaIdx);
-      } else {
-        localStorage.setItem('tpl.arrivoIdx', arrivoIdx);
-      }
-    } catch { }
-    
-    closeFermateModal();
-  }, 150); // Breve delay per feedback visivo
-}
-
-function filterFermate(searchTerm) {
-  if (!tariffario[lineaIdx]) return;
-  
-  const fermate = tariffario[lineaIdx].fermate;
-  const term = searchTerm.toLowerCase().trim();
-  
-  if (term === '') {
-    filteredFermate = fermate.map((fermata, index) => ({ name: fermata, index }));
-  } else {
-    filteredFermate = fermate
-      .map((fermata, index) => ({ name: fermata, index }))
-      .filter(({ name }) => name.toLowerCase().includes(term));
-  }
-  
-  renderFermateList();
-}
+// Funzioni populateFermateList, renderFermateList, selectFermata, filterFermate
+// sono ora in js/components/modals.js e vengono gestite internamente dal modulo
 
 // Controlla e aggiorna lo stato della card prezzo
 function updatePriceCardState() {
@@ -853,238 +549,33 @@ function resetFilters() {
   updatePriceCardState();
   
   // Vibrazione di conferma reset
-  triggerHaptic('medium');
-}
-
-// Funzione reset cache
-// Versione corrente dell'app
-const CURRENT_VERSION = '1.5.6';
-const VERSION_DATE = '30 Ottobre 2025';
-const VERSION_TIME = '15:45';
-
-// Funzione helper per aggiornare versione, data e ora
-function updateVersion(version, date, time) {
-  // Questa funzione può essere usata per aggiornare programmaticamente versione, data e ora
-  // Utile per automatizzare gli aggiornamenti
-  console.log(`Aggiornamento versione: ${version} - ${date} alle ${time}`);
-}
-
-async function checkForUpdates() {
-  // Mostra il modal di verifica
-  const modal = document.getElementById('cache-modal');
-  const modalTitle = document.getElementById('modal-title');
-  const modalMessage = document.getElementById('modal-message');
-  const modalWarning = document.getElementById('modal-warning');
-  const confirmBtn = document.getElementById('cache-confirm');
-  const cancelBtn = document.getElementById('cache-cancel');
-  
-  if (!modal) return;
-  
-  modal.style.display = 'block';
-  modalTitle.innerHTML = '🔄 Verifica Aggiornamenti';
-  modalMessage.innerHTML = '<p style="text-align: center;">⏳ Verifica aggiornamenti in corso...</p>';
-  modalWarning.style.display = 'none';
-  confirmBtn.style.display = 'none';
-  if (cancelBtn) cancelBtn.textContent = 'Chiudi';
-  
-  try {
-    // Aggiunge un timestamp per evitare la cache del browser
-    const timestamp = new Date().getTime();
-    const response = await fetch(`version.json?t=${timestamp}`, {
-      cache: 'no-store',
-      headers: {
-        'Cache-Control': 'no-cache',
-        'Pragma': 'no-cache'
-      }
-    });
-    
-    if (!response.ok) {
-      throw new Error('Impossibile recuperare le informazioni sulla versione');
-    }
-    
-    const remoteVersion = await response.json();
-    const currentVersion = CURRENT_VERSION;
-    const remoteVersionNum = remoteVersion.version;
-    
-    // Confronta le versioni
-    const isUpdateAvailable = compareVersions(remoteVersionNum, currentVersion) > 0;
-    const isDifferentVersion = remoteVersionNum !== currentVersion;
-    
-    if (isUpdateAvailable) {
-      // C'è un aggiornamento disponibile
-      modalTitle.innerHTML = '🎉 Aggiornamento Disponibile!';
-      modalMessage.innerHTML = `
-        <div style="text-align: center;">
-          <div style="background: #dcfce7; border: 2px solid #22c55e; border-radius: 8px; padding: 1.25rem; margin-bottom: 1rem;">
-            <p style="margin: 0 0 0.5rem 0; color: #15803d; font-weight: 600; font-size: 1.1em;">
-              ✨ Nuova versione disponibile!
-            </p>
-            <p style="margin: 0; color: #166534; font-size: 0.95em;">
-              Versione attuale: <strong>${currentVersion}</strong><br>
-              Nuova versione: <strong style="color: #22c55e;">${remoteVersionNum}</strong>
-            </p>
-          </div>
-          ${remoteVersion.updateNotes ? `
-            <div style="background: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
-              <p style="margin: 0 0 0.5rem 0; color: #0c4a6e; font-weight: 600; font-size: 0.9em;">
-                📝 Novità:
-              </p>
-              <p style="margin: 0; color: #075985; font-size: 0.9em;">
-                ${remoteVersion.updateNotes}
-              </p>
-            </div>
-          ` : ''}
-          <div style="background: #fef3c7; border: 2px solid #f59e0b; border-radius: 8px; padding: 1rem;">
-            <p style="margin: 0; color: #92400e; font-size: 0.95em; line-height: 1.5;">
-              ⚠️ Premendo "Aggiorna Ora", l'app si aggiornerà e riavvierà automaticamente.
-            </p>
-          </div>
-        </div>
-      `;
-      confirmBtn.textContent = 'Aggiorna Ora';
-      confirmBtn.style.display = 'block';
-      modalWarning.style.display = 'none';
-      
-    } else if (isDifferentVersion) {
-      // Versione diversa ma non più recente (downgrade o versione personalizzata)
-      modalTitle.innerHTML = 'ℹ️ Versione Diversa Rilevata';
-      modalMessage.innerHTML = `
-        <div style="text-align: center;">
-          <div style="background: #fff7ed; border: 2px solid #f97316; border-radius: 8px; padding: 1.25rem; margin-bottom: 1rem;">
-            <p style="margin: 0 0 0.5rem 0; color: #9a3412; font-weight: 600;">
-              Versione server: ${remoteVersionNum}
-            </p>
-            <p style="margin: 0; color: #9a3412;">
-              Versione locale: ${currentVersion}
-            </p>
-          </div>
-          <p style="color: #666; font-size: 0.9em;">
-            Vuoi comunque riavviare l'app?
-          </p>
-        </div>
-      `;
-      confirmBtn.textContent = 'Riavvia App';
-      confirmBtn.style.display = 'block';
-      
-    } else {
-      // App già aggiornata
-      modalTitle.innerHTML = '✅ App Aggiornata';
-      modalMessage.innerHTML = `
-        <div style="text-align: center;">
-          <div style="background: #dcfce7; border: 2px solid #22c55e; border-radius: 8px; padding: 1.25rem; margin-bottom: 1rem;">
-            <p style="margin: 0; color: #15803d; font-weight: 600; font-size: 1.1em;">
-              ✨ Stai usando l'ultima versione!
-            </p>
-          </div>
-          <div style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
-            <p style="margin: 0 0 0.5rem 0; color: #374151; font-weight: 600; font-size: 0.95em;">
-              Versione: <strong>${currentVersion}</strong>
-            </p>
-            <p style="margin: 0; color: #6b7280; font-size: 0.85em;">
-              Pubblicata: ${VERSION_DATE} alle ${VERSION_TIME}
-            </p>
-          </div>
-          <p style="color: #666; font-size: 0.9em; margin-top: 1rem;">
-            Vuoi comunque riavviare l'app?
-          </p>
-        </div>
-      `;
-      confirmBtn.textContent = 'Riavvia App';
-      confirmBtn.style.display = 'block';
-    }
-    
-  } catch (error) {
-    console.error('Errore verifica aggiornamenti:', error);
-    
-    // Errore nella verifica (probabilmente offline o problema di rete)
-    modalTitle.innerHTML = '⚠️ Verifica non Disponibile';
-    modalMessage.innerHTML = `
-      <div style="text-align: center;">
-        <div style="background: #fee2e2; border: 2px solid #ef4444; border-radius: 8px; padding: 1.25rem; margin-bottom: 1rem;">
-          <p style="margin: 0 0 0.5rem 0; color: #991b1b; font-weight: 600;">
-            ❌ Impossibile verificare gli aggiornamenti
-          </p>
-          <p style="margin: 0; color: #991b1b; font-size: 0.9em;">
-            ${error.message || 'Errore di connessione'}
-          </p>
-        </div>
-        <div style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
-          <p style="margin: 0 0 0.5rem 0; color: #374151; font-weight: 600;">
-            Versione locale: ${CURRENT_VERSION}
-          </p>
-          <p style="margin: 0; color: #6b7280; font-size: 0.85em;">
-            ${VERSION_DATE} alle ${VERSION_TIME}
-          </p>
-        </div>
-        <p style="color: #666; font-size: 0.9em;">
-          Verifica la connessione internet e riprova.<br>
-          Puoi comunque riavviare l'app se necessario.
-        </p>
-      </div>
-    `;
-    confirmBtn.textContent = 'Riavvia App';
-    confirmBtn.style.display = 'block';
+  if (window.Settings && window.Settings.triggerHaptic) {
+    window.Settings.triggerHaptic('medium');
   }
 }
 
-// Funzione helper per confrontare versioni (es: "1.3.4" > "1.3.3")
-function compareVersions(v1, v2) {
-  const parts1 = v1.split('.').map(Number);
-  const parts2 = v2.split('.').map(Number);
-  
-  for (let i = 0; i < Math.max(parts1.length, parts2.length); i++) {
-    const part1 = parts1[i] || 0;
-    const part2 = parts2[i] || 0;
-    
-    if (part1 > part2) return 1;
-    if (part1 < part2) return -1;
+// ===== VERSIONE DINAMICA =====
+// Le funzioni di verifica aggiornamenti sono ora in changelog.js (completamente indipendenti)
+// Questo file usa solo le funzioni pubbliche esposte da changelog.js
+
+// Funzioni di compatibilità/wrapper che delegano a changelog.js
+// Se changelog.js non è caricato, queste funzioni faranno fallback
+function getCurrentVersion() {
+  if (typeof getChangelogVersion === 'function') {
+    return getChangelogVersion();
   }
-  
-  return 0; // Versioni uguali
+  return null;
 }
 
-function resetCache() {
-  checkForUpdates();
+function getCurrentVersionSync() {
+  if (typeof getChangelogVersionString === 'function') {
+    return getChangelogVersionString() || '1.5.8';
+  }
+  return '1.5.8';
 }
 
-// Funzione conferma reset cache
-function confirmResetCache() {
-  // Cancella la cache del Service Worker
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.getRegistrations().then(function(registrations) {
-      for(let registration of registrations) {
-        registration.unregister();
-      }
-    });
-  }
-  
-  // Cancella la cache del browser
-  if ('caches' in window) {
-    caches.keys().then(function(names) {
-      for (let name of names) {
-        caches.delete(name);
-      }
-    });
-  }
-  
-  // Cancella il LocalStorage
-  try {
-    localStorage.clear();
-  } catch { }
-  
-  // Torna alla pagina di benvenuto
-  setTimeout(() => {
-    window.location.href = 'benvenuto.html';
-  }, 500);
-}
-
-// Funzione annulla reset cache
-function cancelResetCache() {
-  const modal = document.getElementById('cache-modal');
-  if (modal) {
-    modal.style.display = 'none';
-  }
-}
+// Le funzioni checkForUpdates, resetCache, confirmResetCache, cancelResetCache
+// sono ora in js/features/updates.js e vengono usate direttamente da lì
 
 // Event listeners
 if (darkModeToggle) darkModeToggle.addEventListener('click', toggleDark);
@@ -1093,9 +584,8 @@ if (darkModeToggle) darkModeToggle.addEventListener('click', toggleDark);
 document.querySelectorAll('.font-size-btn, .mobile-font-btn').forEach(btn => {
   btn.addEventListener('click', function() {
     const size = this.dataset.size;
-    if (size) {
-      setFontSize(size);
-      currentFontSizeIndex = fontSizeLevels.indexOf(size);
+    if (size && window.Settings && window.Settings.setFontSize) {
+      window.Settings.setFontSize(size);
     }
   });
 });
@@ -1174,58 +664,101 @@ if (locationBtn) {
   });
 }
 
-// Event listeners per modale fermate
-if (fermateModalClose) {
-  fermateModalClose.addEventListener('click', closeFermateModal);
-}
-
+// Event listeners per modale fermate sono ora gestiti da js/components/modals.js
+// Gestito solo il pulsante geolocalizzazione che è specifico di script.js
 if (fermateLocationBtn) {
   fermateLocationBtn.addEventListener('click', handleFermateLocationClick);
 }
 
-if (fermateModal) {
-  fermateModal.addEventListener('click', (e) => {
-    if (e.target === fermateModal) {
-      closeFermateModal();
-    }
+// Inizializza i modali dopo il caricamento dei dati
+function initializeModalsModules() {
+  console.log('🚀 Inizializzazione moduli modali...');
+  console.log('🔍 Verifica moduli disponibili:', {
+    FermateModal: typeof FermateModal !== 'undefined',
+    LineeModal: typeof LineeModal !== 'undefined',
+    SettingsModal: typeof SettingsModal !== 'undefined'
   });
+  
+  // Inizializza modal fermate
+  if (typeof FermateModal !== 'undefined' && FermateModal.initialize) {
+    FermateModal.initialize({
+      getCurrentLineaIdx: () => lineaIdx,
+      getTariffario: () => tariffario,
+      onFermataSelected: (index, type) => {
+        // Questa funzione viene chiamata quando viene selezionata una fermata
+        if (type === 'partenza') {
+          partenzaIdx = index;
+          if (partenzaText) {
+            partenzaText.textContent = tariffario[lineaIdx].fermate[index];
+          }
+        } else if (type === 'arrivo') {
+          arrivoIdx = index;
+          if (arrivoText) {
+            arrivoText.textContent = tariffario[lineaIdx].fermate[index];
+          }
+        }
+        
+        hasCalculated = false;
+        updateSummary();
+        calcolaPrezzo();
+        updatePriceCardState();
+        
+        // Salva nello storage
+        try {
+          if (type === 'partenza') {
+            localStorage.setItem('tpl.partenzaIdx', partenzaIdx);
+          } else {
+            localStorage.setItem('tpl.arrivoIdx', arrivoIdx);
+          }
+        } catch { }
+      }
+    });
+  }
+  
+  // Inizializza modal linee
+  if (typeof LineeModal !== 'undefined' && LineeModal.initialize) {
+    LineeModal.initialize({
+      getTariffario: () => tariffario,
+      onLineaSelected: (idx, nome) => {
+        selectLinea(idx, nome);
+      }
+    });
+  }
+  
+  // Inizializza modal impostazioni
+  console.log('🔧 Inizializzazione SettingsModal...', typeof SettingsModal, typeof SettingsModal !== 'undefined' ? (typeof SettingsModal.initialize === 'function' ? 'initialize presente' : 'initialize mancante') : 'SettingsModal non definito');
+  
+  if (typeof SettingsModal !== 'undefined' && SettingsModal.initialize) {
+    console.log('✅ SettingsModal trovato, procedo con inizializzazione');
+    SettingsModal.initialize({
+      setThemeMode: window.Settings && window.Settings.setThemeMode ? window.Settings.setThemeMode : null,
+      toggleAnimation: window.Settings && window.Settings.toggleAnimation ? window.Settings.toggleAnimation : null,
+      setHighContrast: window.Settings && window.Settings.setHighContrast ? window.Settings.setHighContrast : null,
+      setTouchFriendly: window.Settings && window.Settings.setTouchFriendly ? window.Settings.setTouchFriendly : null,
+      setHapticFeedback: window.Settings && window.Settings.setHapticFeedback ? window.Settings.setHapticFeedback : null,
+      setReduceMotion: window.Settings && window.Settings.setReduceMotion ? window.Settings.setReduceMotion : null,
+      setKeepScreenOn: window.Settings && window.Settings.setKeepScreenOn ? window.Settings.setKeepScreenOn : null,
+      setExtraSpacing: window.Settings && window.Settings.setExtraSpacing ? window.Settings.setExtraSpacing : null,
+      setCompactLayout: window.Settings && window.Settings.setCompactLayout ? window.Settings.setCompactLayout : null,
+      setBlueLightFilter: window.Settings && window.Settings.setBlueLightFilter ? window.Settings.setBlueLightFilter : null,
+      setInterfaceScale: window.Settings && window.Settings.setInterfaceScale ? window.Settings.setInterfaceScale : null,
+      setFontSize: window.Settings && window.Settings.setFontSize ? window.Settings.setFontSize : null,
+      triggerHaptic: window.Settings && window.Settings.triggerHaptic ? window.Settings.triggerHaptic : null,
+      onCloseMobileMenu: () => {
+        // Chiudi menu mobile se aperto
+        const mobileMenu = document.getElementById('mobile-menu');
+        const overlay = document.getElementById('mobile-menu-overlay');
+        if (mobileMenu && overlay) {
+          mobileMenu.classList.remove('active');
+          overlay.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      }
+    });
+  }
 }
 
-if (fermateSearchInput) {
-  fermateSearchInput.addEventListener('input', (e) => {
-    const searchTerm = e.target.value;
-    filterFermate(searchTerm);
-    
-    // Mostra/nascondi pulsante clear
-    if (fermateClearSearch) {
-      fermateClearSearch.style.display = searchTerm ? 'block' : 'none';
-    }
-  });
-}
-
-if (fermateClearSearch) {
-  fermateClearSearch.addEventListener('click', () => {
-    if (fermateSearchInput) {
-      fermateSearchInput.value = '';
-      fermateSearchInput.dispatchEvent(new Event('input'));
-      fermateSearchInput.focus();
-    }
-  });
-}
-
-// Event listeners per modale linee
-if (lineeModalClose) {
-  lineeModalClose.addEventListener('click', closeLineeModal);
-}
-
-// Chiudi modale linee cliccando fuori
-if (lineeModal) {
-  lineeModal.addEventListener('click', (e) => {
-    if (e.target === lineeModal) {
-      closeLineeModal();
-    }
-  });
-}
+// Event listeners per modale linee sono ora gestiti da js/components/modals.js
 
 // Event listeners per modale linee fermate
 const lineeModalFermateClose = document.getElementById('linee-fermate-modal-close');
@@ -1298,7 +831,9 @@ async function loadData() {
     // Non caricare qui per evitare conflitti
     
     // Ripristina dimensione testo
-    initFontSize();
+    if (window.Settings && window.Settings.initFontSize) {
+      window.Settings.initFontSize();
+    }
     
     const sLinea = localStorage.getItem('tpl.lineaIdx');
     const sPart = localStorage.getItem('tpl.partenzaIdx');
@@ -1984,7 +1519,11 @@ function toggleScrollToTopButton() {
 // Event listener per lo scroll
 window.addEventListener('scroll', toggleScrollToTopButton);
 
-window.addEventListener('DOMContentLoaded', loadData);
+window.addEventListener('DOMContentLoaded', async () => {
+  await loadData();
+  // Inizializza modali dopo il caricamento dei dati
+  initializeModalsModules();
+});
 
 // Event listeners per controllo animazione
 window.addEventListener('DOMContentLoaded', function() {
@@ -2004,8 +1543,15 @@ function initMobileVersionCard() {
   const versionNumber = document.getElementById('mobile-version-number');
   const versionDate = document.getElementById('mobile-version-date');
   
-  if (versionNumber) versionNumber.textContent = `Versione ${CURRENT_VERSION}`;
-  if (versionDate) versionDate.textContent = `${VERSION_DATE} ${VERSION_TIME}`;
+  // Leggi versione dinamicamente da changelog.js
+  const versionData = getCurrentVersion();
+  if (versionNumber) versionNumber.textContent = `Versione ${versionData ? versionData.version : getCurrentVersionSync()}`;
+  if (versionDate) {
+    const dateTime = versionData ? 
+      (versionData.date + (versionData.time ? ' ' + versionData.time : '')) : 
+      'Data non disponibile';
+    versionDate.textContent = dateTime;
+  }
 }
 
 // Gestisce il click sulla card versione
@@ -2021,7 +1567,11 @@ function handleQuickUpdate() {
         overlay.classList.remove('active');
       }
       // Apre il modale di aggiornamento
-      checkForUpdates();
+      if (typeof Updates !== 'undefined' && typeof Updates.checkForUpdates === 'function') {
+        Updates.checkForUpdates();
+      } else {
+        console.error('❌ Updates.checkForUpdates non disponibile');
+      }
     });
   }
 }
@@ -2029,10 +1579,14 @@ function handleQuickUpdate() {
   // Pulsanti desktop - usa event delegation per gestire tutti i pulsanti
   document.addEventListener('click', function(e) {
     if (e.target.closest('#animationToggle')) {
-      toggleAnimation();
+      if (window.Settings && window.Settings.toggleAnimation) {
+        window.Settings.toggleAnimation();
+      }
     }
     if (e.target.closest('#mobile-animation-toggle')) {
-      toggleAnimation();
+      if (window.Settings && window.Settings.toggleAnimation) {
+        window.Settings.toggleAnimation();
+      }
       // Chiudi il menu mobile se esiste
       if (typeof closeMenu === 'function') {
         closeMenu();
@@ -2106,8 +1660,13 @@ function handleQuickUpdate() {
   // Mini card versione (apre modale Verifica Aggiornamenti)
   if (mobileVersionCard) {
     mobileVersionCard.addEventListener('click', () => {
-      if (typeof checkForUpdates === 'function') {
+      if (typeof Updates !== 'undefined' && typeof Updates.checkForUpdates === 'function') {
+        Updates.checkForUpdates();
+      } else if (typeof checkForUpdates === 'function') {
+        // Fallback per compatibilità
         checkForUpdates();
+      } else {
+        console.error('❌ Updates.checkForUpdates non disponibile');
       }
       closeMenu();
     });
@@ -2382,630 +1941,10 @@ if (!navigator.onLine) {
 // =====================================
 // MODAL IMPOSTAZIONI
 // =====================================
+// Le funzioni di impostazioni sono ora in js/features/settings.js
+// La gestione del modal impostazioni (UI) è in js/components/modals.js
+// Viene inizializzato in initializeModalsModules() dopo il caricamento dei dati
 
-(function() {
-  const settingsModal = document.getElementById('settings-modal');
-  const openSettingsBtn = document.getElementById('open-settings');
-  const desktopSettingsBtn = document.getElementById('desktop-settings-btn');
-  const closeSettingsBtn = document.getElementById('settings-modal-close');
-  
-  // Toggle controls
-  const themeSystem = document.getElementById('theme-system');
-  const themeLight = document.getElementById('theme-light');
-  const themeDark = document.getElementById('theme-dark');
-  const animationToggle = document.getElementById('settings-animation');
-  const highContrastToggle = document.getElementById('settings-high-contrast');
-  const touchFriendlyToggle = document.getElementById('settings-touch-friendly');
-  const hapticFeedbackToggle = document.getElementById('settings-haptic-feedback');
-  const reduceMotionToggle = document.getElementById('settings-reduce-motion');
-  const keepScreenOnToggle = document.getElementById('settings-keep-screen-on');
-  const extraSpacingToggle = document.getElementById('settings-extra-spacing');
-  const compactLayoutToggle = document.getElementById('settings-compact-layout');
-  const blueLightFilterToggle = document.getElementById('settings-blue-light-filter');
-  
-  // Font size buttons
-  const fontButtons = document.querySelectorAll('.settings-font-btn');
-  
-  // Tabs
-  const tabs = document.querySelectorAll('.settings-tab');
-  const tabContents = document.querySelectorAll('.settings-tab-content');
-  
-  if (!settingsModal) return;
-  
-  // ===== APERTURA/CHIUSURA MODAL =====
-  
-  function openSettings() {
-    settingsModal.style.display = 'flex';
-    setTimeout(() => {
-      settingsModal.classList.add('show');
-    }, 10);
-    
-    // Sincronizza valori con stato attuale
-    syncSettingsWithState();
-  }
-  
-  function closeSettings() {
-    settingsModal.classList.remove('show');
-    setTimeout(() => {
-      settingsModal.style.display = 'none';
-    }, 300);
-  }
-  
-  if (openSettingsBtn) {
-    openSettingsBtn.addEventListener('click', () => {
-      openSettings();
-      // Chiudi menu mobile se aperto
-      const mobileMenu = document.getElementById('mobile-menu');
-      const overlay = document.getElementById('mobile-menu-overlay');
-      if (mobileMenu && overlay) {
-        mobileMenu.classList.remove('active');
-        overlay.classList.remove('active');
-        document.body.style.overflow = '';
-      }
-    });
-  }
-  
-  // Desktop settings button
-  if (desktopSettingsBtn) {
-    desktopSettingsBtn.addEventListener('click', () => {
-      openSettings();
-    });
-  }
-  
-  if (closeSettingsBtn) {
-    closeSettingsBtn.addEventListener('click', closeSettings);
-  }
-  
-  // Chiudi cliccando fuori
-  if (settingsModal) {
-    settingsModal.addEventListener('click', (e) => {
-      if (e.target === settingsModal) {
-        closeSettings();
-      }
-    });
-  }
-  
-  // Chiudi con ESC
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && settingsModal.classList.contains('show')) {
-      closeSettings();
-    }
-  });
-  
-  // ===== GESTIONE TAB =====
-  
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      const targetTab = tab.dataset.tab;
-      
-      // Rimuovi active da tutti
-      tabs.forEach(t => t.classList.remove('active'));
-      tabContents.forEach(tc => {
-        tc.classList.remove('active');
-        tc.classList.remove('fade-in'); // Rimuovi anche fade-in
-      });
-      
-      // Aggiungi active al selezionato
-      tab.classList.add('active');
-      const targetContent = document.querySelector(`[data-content="${targetTab}"]`);
-      if (targetContent) {
-        targetContent.classList.add('active');
-        targetContent.classList.add('fade-in'); // Aggiungi fade-in per animazione
-      }
-    });
-  });
-  
-  // ===== SINCRONIZZAZIONE IMPOSTAZIONI =====
-  
-  function syncSettingsWithState() {
-    // Theme Mode
-    const themeMode = localStorage.getItem('tpl.themeMode') || 'system';
-    if (themeSystem) themeSystem.checked = (themeMode === 'system');
-    if (themeLight) themeLight.checked = (themeMode === 'light');
-    if (themeDark) themeDark.checked = (themeMode === 'dark');
-    
-    // Animazione
-    if (animationToggle) {
-      animationToggle.checked = document.body.classList.contains('animation-enabled');
-    }
-    
-    // Contrasto Alto
-    if (highContrastToggle) {
-      const isHighContrast = localStorage.getItem('tpl.highContrast') === 'true';
-      highContrastToggle.checked = isHighContrast;
-    }
-    
-    // Touch Friendly
-    if (touchFriendlyToggle) {
-      const isTouchFriendly = localStorage.getItem('tpl.touchFriendly') === 'true';
-      touchFriendlyToggle.checked = isTouchFriendly;
-    }
-    
-    // Haptic Feedback
-    if (hapticFeedbackToggle) {
-      const isHapticEnabled = localStorage.getItem('tpl.hapticFeedback') === 'true';
-      hapticFeedbackToggle.checked = isHapticEnabled;
-    }
-    
-    // Reduce Motion
-    if (reduceMotionToggle) {
-      const isReduceMotion = localStorage.getItem('tpl.reduceMotion') === 'true';
-      reduceMotionToggle.checked = isReduceMotion;
-    }
-    
-    // Keep Screen On
-    if (keepScreenOnToggle) {
-      const isKeepScreenOn = localStorage.getItem('tpl.keepScreenOn') === 'true';
-      keepScreenOnToggle.checked = isKeepScreenOn;
-    }
-    
-    // Extra Spacing
-    if (extraSpacingToggle) {
-      const isExtraSpacing = localStorage.getItem('tpl.extraSpacing') === 'true';
-      extraSpacingToggle.checked = isExtraSpacing;
-    }
-    
-    // Compact Layout
-    if (compactLayoutToggle) {
-      const isCompactLayout = localStorage.getItem('tpl.compactLayout') === 'true';
-      compactLayoutToggle.checked = isCompactLayout;
-    }
-    
-    // Blue Light Filter
-    if (blueLightFilterToggle) {
-      const isBlueLightFilter = localStorage.getItem('tpl.blueLightFilter') === 'true';
-      blueLightFilterToggle.checked = isBlueLightFilter;
-    }
-    
-    // Interface Scale
-    const currentScale = localStorage.getItem('tpl.interfaceScale') || '100';
-    const scaleRadios = document.querySelectorAll('input[name="interface-scale"]');
-    scaleRadios.forEach(radio => {
-      radio.checked = (radio.value === currentScale);
-    });
-    
-    // Font Size
-    const currentFontSize = localStorage.getItem('tpl.fontSize') || 'normal';
-    fontButtons.forEach(btn => {
-      if (btn.dataset.size === currentFontSize) {
-        btn.classList.add('active');
-      } else {
-        btn.classList.remove('active');
-      }
-    });
-  }
-  
-  // ===== GESTIONE TOGGLE =====
-  
-  // Theme Mode
-  if (themeSystem) {
-    themeSystem.addEventListener('change', () => {
-      if (themeSystem.checked) setThemeMode('system');
-    });
-  }
-  if (themeLight) {
-    themeLight.addEventListener('change', () => {
-      if (themeLight.checked) setThemeMode('light');
-    });
-  }
-  if (themeDark) {
-    themeDark.addEventListener('change', () => {
-      if (themeDark.checked) setThemeMode('dark');
-    });
-  }
-  
-  // Animazione
-  if (animationToggle) {
-    animationToggle.addEventListener('change', () => {
-      toggleAnimation();
-    });
-  }
-  
-  // Contrasto Alto
-  if (highContrastToggle) {
-    highContrastToggle.addEventListener('change', (e) => {
-      setHighContrast(e.target.checked);
-    });
-  }
-  
-  // Touch Friendly
-  if (touchFriendlyToggle) {
-    touchFriendlyToggle.addEventListener('change', (e) => {
-      setTouchFriendly(e.target.checked);
-    });
-  }
-  
-  // Haptic Feedback
-  if (hapticFeedbackToggle) {
-    hapticFeedbackToggle.addEventListener('change', (e) => {
-      setHapticFeedback(e.target.checked);
-      // Vibra per confermare l'attivazione (forzato perché localStorage non è ancora aggiornato)
-      if (e.target.checked) {
-        triggerHaptic('success', true); // force = true
-      }
-    });
-  }
-  
-  // Reduce Motion
-  if (reduceMotionToggle) {
-    reduceMotionToggle.addEventListener('change', (e) => {
-      setReduceMotion(e.target.checked);
-      triggerHaptic('medium'); // Feedback al cambio
-    });
-  }
-  
-  // Keep Screen On
-  if (keepScreenOnToggle) {
-    keepScreenOnToggle.addEventListener('change', async (e) => {
-      await setKeepScreenOn(e.target.checked);
-      triggerHaptic('medium'); // Feedback al cambio
-    });
-  }
-  
-  // Extra Spacing
-  if (extraSpacingToggle) {
-    extraSpacingToggle.addEventListener('change', (e) => {
-      setExtraSpacing(e.target.checked);
-      triggerHaptic('medium'); // Feedback al cambio
-    });
-  }
-  
-  // Compact Layout
-  if (compactLayoutToggle) {
-    compactLayoutToggle.addEventListener('change', (e) => {
-      setCompactLayout(e.target.checked);
-      triggerHaptic('medium'); // Feedback al cambio
-    });
-  }
-  
-  // Blue Light Filter
-  if (blueLightFilterToggle) {
-    blueLightFilterToggle.addEventListener('change', (e) => {
-      setBlueLightFilter(e.target.checked);
-      triggerHaptic('medium'); // Feedback al cambio
-    });
-  }
-  
-  // Interface Scale (Dimensione Interfaccia)
-  const scaleRadios = document.querySelectorAll('input[name="interface-scale"]');
-  scaleRadios.forEach(radio => {
-    radio.addEventListener('change', (e) => {
-      if (e.target.checked) {
-        const scale = e.target.value;
-        setInterfaceScale(scale);
-      }
-    });
-  });
-  
-  // Font Size
-  fontButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const size = btn.dataset.size;
-      setFontSize(size);
-      
-      // Aggiorna UI
-      fontButtons.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      
-      // Feedback aptico
-      triggerHaptic('light');
-    });
-  });
-  
-  // ===== FUNZIONI CONTRASTO ALTO =====
-  
-  function setHighContrast(enabled) {
-    if (enabled) {
-      document.body.classList.add('high-contrast');
-    } else {
-      document.body.classList.remove('high-contrast');
-    }
-    
-    try {
-      localStorage.setItem('tpl.highContrast', enabled);
-    } catch {}
-    
-    console.log('Contrasto alto:', enabled ? 'attivato' : 'disattivato');
-    triggerHaptic('medium'); // Feedback al cambio contrasto
-  }
-  
-  function loadHighContrast() {
-    const saved = localStorage.getItem('tpl.highContrast');
-    if (saved === 'true') {
-      setHighContrast(true);
-    }
-  }
-  
-  // ===== FUNZIONI TOUCH FRIENDLY =====
-  
-  function setTouchFriendly(enabled) {
-    if (enabled) {
-      document.body.classList.add('touch-friendly');
-    } else {
-      document.body.classList.remove('touch-friendly');
-    }
-    
-    try {
-      localStorage.setItem('tpl.touchFriendly', enabled);
-    } catch {}
-    
-    console.log('Touch friendly:', enabled ? 'attivato' : 'disattivato');
-    triggerHaptic('medium'); // Feedback al cambio modalità touch
-  }
-  
-  function loadTouchFriendly() {
-    const saved = localStorage.getItem('tpl.touchFriendly');
-    if (saved === 'true') {
-      setTouchFriendly(true);
-    }
-  }
-  
-  // ===== FUNZIONI FEEDBACK APTICO =====
-  
-  function setHapticFeedback(enabled) {
-    try {
-      localStorage.setItem('tpl.hapticFeedback', enabled);
-      console.log('Feedback aptico:', enabled ? 'attivato' : 'disattivato');
-    } catch (error) {
-      console.error('Errore salvataggio haptic feedback:', error);
-    }
-  }
-  
-  function loadHapticFeedback() {
-    const saved = localStorage.getItem('tpl.hapticFeedback');
-    // Nota: non impostiamo una classe CSS, il feedback è gestito via JavaScript
-    if (saved === 'true') {
-      console.log('✅ Feedback aptico caricato: attivo');
-    }
-  }
-  
-  // ===== FUNZIONI RIDUCI ANIMAZIONI =====
-  
-  function setReduceMotion(enabled) {
-    if (enabled) {
-      document.body.classList.add('reduce-motion');
-    } else {
-      document.body.classList.remove('reduce-motion');
-    }
-    
-    try {
-      localStorage.setItem('tpl.reduceMotion', enabled);
-    } catch {}
-    
-    console.log('Riduci animazioni:', enabled ? 'attivato' : 'disattivato');
-  }
-  
-  function loadReduceMotion() {
-    const saved = localStorage.getItem('tpl.reduceMotion');
-    if (saved === 'true') {
-      setReduceMotion(true);
-    }
-  }
-  
-  // ===== FUNZIONI SPAZIATURA EXTRA =====
-  
-  function setExtraSpacing(enabled) {
-    if (enabled) {
-      document.body.classList.add('extra-spacing');
-    } else {
-      document.body.classList.remove('extra-spacing');
-    }
-    
-    try {
-      localStorage.setItem('tpl.extraSpacing', enabled);
-    } catch {}
-    
-    console.log('Spaziatura extra:', enabled ? 'attivata' : 'disattivata');
-  }
-  
-  function loadExtraSpacing() {
-    const saved = localStorage.getItem('tpl.extraSpacing');
-    if (saved === 'true') {
-      setExtraSpacing(true);
-    }
-  }
-  
-  // ===== FUNZIONI LAYOUT COMPATTO =====
-  
-  function setCompactLayout(enabled) {
-    if (enabled) {
-      document.body.classList.add('compact-layout');
-    } else {
-      document.body.classList.remove('compact-layout');
-    }
-    
-    try {
-      localStorage.setItem('tpl.compactLayout', enabled);
-    } catch {}
-    
-    console.log('Layout compatto:', enabled ? 'attivato' : 'disattivato');
-  }
-  
-  function loadCompactLayout() {
-    const saved = localStorage.getItem('tpl.compactLayout');
-    if (saved === 'true') {
-      setCompactLayout(true);
-    }
-  }
-  
-  // ===== FUNZIONI FILTRO LUCE BLU =====
-  
-  function setBlueLightFilter(enabled) {
-    if (enabled) {
-      document.body.classList.add('blue-light-filter');
-    } else {
-      document.body.classList.remove('blue-light-filter');
-    }
-    
-    try {
-      localStorage.setItem('tpl.blueLightFilter', enabled);
-    } catch {}
-    
-    console.log('Filtro luce blu:', enabled ? 'attivato' : 'disattivato');
-  }
-  
-  function loadBlueLightFilter() {
-    const saved = localStorage.getItem('tpl.blueLightFilter');
-    if (saved === 'true') {
-      setBlueLightFilter(true);
-    }
-  }
-  
-  // ===== FUNZIONI DIMENSIONE INTERFACCIA =====
-  
-  function setInterfaceScale(scale) {
-    // Rimuovi tutte le classi di scala precedenti
-    document.body.classList.remove('interface-scale-75', 'interface-scale-85', 'interface-scale-100', 'interface-scale-115', 'interface-scale-125');
-    
-    // Aggiungi la nuova classe di scala
-    document.body.classList.add(`interface-scale-${scale}`);
-    
-    try {
-      localStorage.setItem('tpl.interfaceScale', scale);
-    } catch {}
-    
-    console.log('Dimensione interfaccia:', scale + '%');
-    triggerHaptic('medium'); // Feedback al cambio dimensione
-  }
-  
-  function loadInterfaceScale() {
-    const saved = localStorage.getItem('tpl.interfaceScale');
-    const scale = saved || '100'; // Default 100%
-    setInterfaceScale(scale);
-  }
-  
-  // ===== FUNZIONI KEEP SCREEN ON (WAKE LOCK API) =====
-  
-  // Variabile globale per tracciare il WakeLock
-  let wakeLock = null;
-  
-  async function setKeepScreenOn(enabled) {
-    // Salva preferenza
-    try {
-      localStorage.setItem('tpl.keepScreenOn', enabled);
-    } catch {}
-    
-    if (!('wakeLock' in navigator)) {
-      console.warn('⚠️ Wake Lock API non supportata da questo browser');
-      return;
-    }
-    
-    if (enabled) {
-      await requestWakeLock();
-    } else {
-      await releaseWakeLock();
-    }
-  }
-  
-  async function requestWakeLock() {
-    try {
-      wakeLock = await navigator.wakeLock.request('screen');
-      console.log('☀️ Wake Lock attivato - schermo sempre acceso');
-      
-      // Listener per quando il lock viene rilasciato
-      wakeLock.addEventListener('release', () => {
-        console.log('☀️ Wake Lock rilasciato');
-      });
-    } catch (err) {
-      console.error('❌ Errore richiesta Wake Lock:', err);
-    }
-  }
-  
-  async function releaseWakeLock() {
-    if (wakeLock !== null) {
-      try {
-        await wakeLock.release();
-        wakeLock = null;
-        console.log('☀️ Wake Lock disattivato - schermo può spegnersi');
-      } catch (err) {
-        console.error('❌ Errore rilascio Wake Lock:', err);
-      }
-    }
-  }
-  
-  function loadKeepScreenOn() {
-    const saved = localStorage.getItem('tpl.keepScreenOn');
-    if (saved === 'true') {
-      setKeepScreenOn(true);
-    }
-  }
-  
-  // Gestione visibilità pagina (background/foreground)
-  // Quando la pagina va in background, il Wake Lock viene automaticamente rilasciato
-  // Quando torna in foreground, lo riattiviamo se era abilitato
-  document.addEventListener('visibilitychange', async () => {
-    const isEnabled = localStorage.getItem('tpl.keepScreenOn') === 'true';
-    
-    if (document.visibilityState === 'visible' && isEnabled) {
-      // Pagina tornata visibile e Keep Screen On è attivo
-      await requestWakeLock();
-    }
-  });
-  
-  // ===== FUNZIONI TEMA =====
-  
-  // Media query per rilevare tema sistema
-  const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-  
-  function setThemeMode(mode) {
-    localStorage.setItem('tpl.themeMode', mode);
-    applyTheme();
-    console.log('Tema impostato su:', mode);
-    triggerHaptic('medium'); // Feedback al cambio tema
-  }
-  
-  function applyTheme() {
-    const mode = localStorage.getItem('tpl.themeMode') || 'system';
-    let shouldBeDark = false;
-    
-    if (mode === 'system') {
-      shouldBeDark = prefersDarkScheme.matches;
-    } else if (mode === 'dark') {
-      shouldBeDark = true;
-    } else {
-      shouldBeDark = false;
-    }
-    
-    // Applica il tema
-    document.documentElement.classList.toggle('dark', shouldBeDark);
-    updateBodyColors(shouldBeDark);
-    updateToggleIcon(shouldBeDark);
-    updateMobileDarkModeButton(shouldBeDark);
-  }
-  
-  function loadTheme() {
-    applyTheme();
-    
-    // Listener per cambio tema sistema
-    prefersDarkScheme.addEventListener('change', () => {
-      const mode = localStorage.getItem('tpl.themeMode') || 'system';
-      if (mode === 'system') {
-        applyTheme();
-      }
-    });
-  }
-  
-  // ===== CARICA IMPOSTAZIONI ALL'AVVIO =====
-  
-  window.addEventListener('DOMContentLoaded', () => {
-    loadTheme();
-    loadHighContrast();
-    loadTouchFriendly();
-    loadHapticFeedback();
-    loadReduceMotion();
-    loadKeepScreenOn();
-    loadExtraSpacing();
-    loadCompactLayout();
-    loadBlueLightFilter();
-    loadInterfaceScale();
-    
-    // Sincronizza lo stato dei checkbox con localStorage
-    // (necessario per PWA quando si naviga tra pagine)
-    setTimeout(() => {
-      syncSettingsWithState();
-    }, 100); // Piccolo delay per assicurarsi che tutti i toggle esistano nel DOM
-  });
-  
   // ========================================
   // PWA BOTTOM NAVIGATION
   // Gestione della barra di navigazione inferiore in modalità PWA
@@ -3264,24 +2203,22 @@ if (!navigator.onLine) {
       console.log('🔄 Pulsante PWA Update cliccato');
       
       // Chiudi il modal Impostazioni prima
-      const settingsModal = document.getElementById('settings-modal');
-      if (settingsModal) {
-        settingsModal.classList.remove('show');
-        setTimeout(() => {
-          settingsModal.style.display = 'none';
-        }, 300);
+      if (typeof SettingsModal !== 'undefined' && SettingsModal.close) {
+        SettingsModal.close();
       }
       
       // Aspetta un attimo e poi verifica aggiornamenti
       setTimeout(() => {
-        if (typeof checkForUpdates === 'function') {
-          console.log('✅ Chiamata a checkForUpdates()');
+        if (typeof Updates !== 'undefined' && typeof Updates.checkForUpdates === 'function') {
+          console.log('✅ Chiamata a Updates.checkForUpdates()');
+          Updates.checkForUpdates();
+        } else if (typeof checkForUpdates === 'function') {
+          // Fallback per compatibilità
+          console.log('✅ Chiamata a checkForUpdates() (fallback)');
           checkForUpdates();
         } else {
-          console.error('❌ checkForUpdates non è una funzione');
+          console.error('❌ Updates.checkForUpdates non è disponibile');
         }
       }, 400);
     });
   })();
-  
-})();

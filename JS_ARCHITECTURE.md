@@ -16,10 +16,12 @@ tpl-fvg-autisti/
 │   │   ├── footer.js           ✅ FATTO
 │   │   ├── changelog.js        ✅ FATTO
 │   │   ├── navbar.js           ⏳ TODO
-│   │   ├── modals.js           ⏳ TODO
+│   │   ├── modals.js           ✅ FATTO - UI modali (Fermate, Linee, Settings)
 │   │   └── pwa.js              ⏳ TODO
 │   │
 │   ├── features/
+│   │   ├── updates.js          ✅ FATTO - Verifica aggiornamenti
+│   │   ├── settings.js         ⏳ TODO - Logica impostazioni (tema, font, accessibilità)
 │   │   ├── animations.js       ← Logica animazioni JS ⏳ TODO
 │   │   ├── location.js         ← Geolocalizzazione ⏳ TODO
 │   │   └── pricing.js          ← Calcolo prezzi ⏳ TODO
@@ -53,6 +55,8 @@ I file JavaScript devono essere caricati in questo ordine preciso:
 <script src="js/data/tariffario.js"></script>
 
 <!-- 3. FEATURES (in qualsiasi ordine) -->
+<script src="js/features/updates.js"></script>
+<script src="js/features/settings.js"></script>
 <script src="js/features/location.js"></script>
 <script src="js/features/pricing.js"></script>
 <script src="js/features/animations.js"></script>
@@ -69,6 +73,7 @@ I file JavaScript devono essere caricati in questo ordine preciso:
 ```
 
 **Perché questo ordine?**
+
 - Il **core** fornisce utilities fondamentali usate da tutti
 - I **data** forniscono dati usati da features e componenti
 - I **features** usano core e data
@@ -82,20 +87,23 @@ I file JavaScript devono essere caricati in questo ordine preciso:
 ### **1. core/** (Fondamenta)
 
 #### **core/config.js** ⏳
+
 **Contenuto:**
+
 - Costanti globali dell'app
 - Configurazioni di default
 - Variabili d'ambiente
 - Versioni e metadata
 
 **Esempio:**
+
 ```javascript
 // Configurazione globale app
 export const APP_CONFIG = {
-  version: '1.5.6',
-  name: 'TPL FVG Autisti',
-  cacheVersion: 'v4',
-  defaultLanguage: 'it'
+  version: "1.5.6",
+  name: "TPL FVG Autisti",
+  cacheVersion: "v4",
+  defaultLanguage: "it",
 };
 
 // Configurazioni animazioni
@@ -103,19 +111,19 @@ export const ANIMATION_CONFIG = {
   duration: {
     fast: 200,
     normal: 300,
-    slow: 500
+    slow: 500,
   },
   easing: {
-    ease: 'ease',
-    bezier: 'cubic-bezier(0.4, 0, 0.2, 1)'
-  }
+    ease: "ease",
+    bezier: "cubic-bezier(0.4, 0, 0.2, 1)",
+  },
 };
 
 // Configurazioni haptic
 export const HAPTIC_PATTERNS = {
   light: 20,
   medium: 50,
-  strong: 100
+  strong: 100,
 };
 ```
 
@@ -125,13 +133,16 @@ export const HAPTIC_PATTERNS = {
 ---
 
 #### **core/utils.js** ⏳
+
 **Contenuto:**
+
 - Utilities generiche riutilizzabili
 - Helper functions comuni
 - Validazioni base
 - Formattazione dati
 
 **Esempio:**
+
 ```javascript
 // Utilities generiche
 export function debounce(func, wait) {
@@ -147,14 +158,14 @@ export function debounce(func, wait) {
 }
 
 export function formatPrice(price) {
-  return new Intl.NumberFormat('it-IT', {
-    style: 'currency',
-    currency: 'EUR'
+  return new Intl.NumberFormat("it-IT", {
+    style: "currency",
+    currency: "EUR",
   }).format(price);
 }
 
 export function prefersReducedMotion() {
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 ```
 
@@ -164,13 +175,16 @@ export function prefersReducedMotion() {
 ---
 
 #### **core/storage.js** ⏳
+
 **Contenuto:**
+
 - Wrapper per localStorage
 - Gestione errori localStorage
 - Validazione dati
 - Migrazione dati (se necessario)
 
 **Esempio:**
+
 ```javascript
 // Storage utilities
 export function setItem(key, value) {
@@ -178,7 +192,7 @@ export function setItem(key, value) {
     localStorage.setItem(key, JSON.stringify(value));
     return true;
   } catch (error) {
-    console.error('Errore salvataggio localStorage:', error);
+    console.error("Errore salvataggio localStorage:", error);
     return false;
   }
 }
@@ -188,7 +202,7 @@ export function getItem(key, defaultValue = null) {
     const item = localStorage.getItem(key);
     return item ? JSON.parse(item) : defaultValue;
   } catch (error) {
-    console.error('Errore lettura localStorage:', error);
+    console.error("Errore lettura localStorage:", error);
     return defaultValue;
   }
 }
@@ -202,26 +216,29 @@ export function getItem(key, defaultValue = null) {
 ### **2. data/** (Gestione Dati)
 
 #### **data/database.js** ⏳
+
 **Contenuto:**
+
 - Caricamento `database.json`
 - Caching dati
 - Gestione errori caricamento
 - Validazione struttura dati
 
 **Esempio:**
+
 ```javascript
 // Gestione database.json
 let databaseCache = null;
 
 export async function loadDatabase() {
   if (databaseCache) return databaseCache;
-  
+
   try {
-    const response = await fetch('./database.json');
+    const response = await fetch("./database.json");
     databaseCache = await response.json();
     return databaseCache;
   } catch (error) {
-    console.error('Errore caricamento database:', error);
+    console.error("Errore caricamento database:", error);
     throw error;
   }
 }
@@ -237,16 +254,19 @@ export function getDatabase() {
 ---
 
 #### **data/tariffario.js** ⏳
+
 **Contenuto:**
+
 - Accesso ai dati del tariffario
 - Query e filtri
 - Calcolo tratte
 - Validazione linee/fermate
 
 **Esempio:**
+
 ```javascript
 // Gestione tariffario
-import { loadDatabase } from './database.js';
+import { loadDatabase } from "./database.js";
 
 let tariffario = null;
 
@@ -273,27 +293,79 @@ export function getFermata(lineaIndex, fermataIndex) {
 
 ### **3. features/** (Funzionalità)
 
-#### **features/location.js** ⏳
+#### **features/updates.js** ✅
+
 **Contenuto:**
+
+- Verifica aggiornamenti disponibili
+- Confronto versioni semantiche
+- Reset cache e aggiornamento app
+- Gestione modal verifica aggiornamenti
+
+**Dipendenze:** `components/changelog.js` (usa API pubblica `getChangelogVersion()`)  
+**Usato da:** Componenti (modals.js, navbar.js), script.js
+
+**Nota:** Usa solo l'API pubblica di `changelog.js` per ottenere la versione corrente, mantenendo la separazione delle responsabilità.
+
+---
+
+#### **features/settings.js** ⏳
+
+**Contenuto:**
+
+- Logica di gestione impostazioni applicazione
+- Funzioni di settaggio: tema, dimensione testo, accessibilità
+- Salvataggio/caricamento preferenze da localStorage
+- Gestione classi CSS per le impostazioni
+
+**Funzioni principali:**
+
+- `setThemeMode(mode)` - Imposta tema (system/light/dark)
+- `setFontSize(level)` - Imposta dimensione testo
+- `setHighContrast(enabled)` - Attiva/disattiva contrasto alto
+- `setTouchFriendly(enabled)` - Attiva/disattiva modalità touch-friendly
+- `setHapticFeedback(enabled)` - Attiva/disattiva feedback aptico
+- `setReduceMotion(enabled)` - Attiva/disattiva riduzione animazioni
+- `setKeepScreenOn(enabled)` - Attiva/disattiva Wake Lock API
+- `setExtraSpacing(enabled)` - Attiva/disattiva spaziatura extra
+- `setCompactLayout(enabled)` - Attiva/disattiva layout compatto
+- `setBlueLightFilter(enabled)` - Attiva/disattiva filtro luce blu
+- `setInterfaceScale(scale)` - Imposta scala interfaccia
+- `toggleAnimation()` - Toggle animazione sfondo
+- `triggerHaptic(pattern, force)` - Trigger feedback aptico
+- Funzioni di caricamento: `loadTheme()`, `loadFontSize()`, ecc.
+
+**Dipendenze:** `core/storage.js` (opzionale, usa localStorage direttamente)  
+**Usato da:** `components/modals.js` (SettingsModal passa queste funzioni come callback)
+
+**Nota:** Gestisce solo la logica di business delle impostazioni. La UI del modal Settings è in `components/modals.js`.
+
+---
+
+#### **features/location.js** ⏳
+
+**Contenuto:**
+
 - Geolocalizzazione utente
 - Calcolo distanze (Haversine)
 - Ordinamento fermate per distanza
 - Gestione permessi
 
 **Esempio:**
+
 ```javascript
 // Geolocalizzazione
 export function getCurrentPosition() {
   return new Promise((resolve, reject) => {
     if (!navigator.geolocation) {
-      reject(new Error('Geolocalizzazione non supportata'));
+      reject(new Error("Geolocalizzazione non supportata"));
       return;
     }
-    
+
     navigator.geolocation.getCurrentPosition(resolve, reject, {
       enableHighAccuracy: true,
       timeout: 8000,
-      maximumAge: 0
+      maximumAge: 0,
     });
   });
 }
@@ -309,25 +381,28 @@ export function calculateDistance(lat1, lon1, lat2, lon2) {
 ---
 
 #### **features/pricing.js** ⏳
+
 **Contenuto:**
+
 - Calcolo prezzi biglietti
 - Validazione tratte
 - Gestione codici biglietto
 - Calcolo andata/ritorno
 
 **Esempio:**
+
 ```javascript
 // Calcolo prezzi
-import { getTariffario } from '../data/tariffario.js';
+import { getTariffario } from "../data/tariffario.js";
 
 export function calculatePrice(lineaIndex, partenzaIndex, arrivoIndex) {
   const tariffario = getTariffario();
   const linea = tariffario[lineaIndex];
-  
+
   // Logica calcolo prezzo...
   return {
-    prezzo: 2.50,
-    codice: 'ABC123'
+    prezzo: 2.5,
+    codice: "ABC123",
   };
 }
 ```
@@ -338,20 +413,23 @@ export function calculatePrice(lineaIndex, partenzaIndex, arrivoIndex) {
 ---
 
 #### **features/animations.js** ⏳
+
 **Contenuto:**
+
 - Micro-interazioni (ripple, loading, success)
 - Gestione animazioni programmatiche
 - Helpers per animazioni
 - Integrazione con prefers-reduced-motion
 
 **Esempio:**
+
 ```javascript
 // Animazioni JavaScript
-import { prefersReducedMotion } from '../core/utils.js';
+import { prefersReducedMotion } from "../core/utils.js";
 
 export function addRipple(element, event) {
   if (prefersReducedMotion()) return;
-  
+
   // Logica ripple effect...
 }
 
@@ -372,7 +450,9 @@ export function showLoading(element) {
 ### **4. components/** (Componenti UI)
 
 #### **components/footer.js** ✅
+
 **Contenuto:**
+
 - Generazione HTML footer
 - Caricamento versione
 - Gestione link
@@ -383,18 +463,25 @@ export function showLoading(element) {
 ---
 
 #### **components/changelog.js** ✅
-**Contenuto:**
-- Rendering changelog
-- Gestione versioni
-- Filtraggio aggiornamenti
 
-**Dipendenze:** `core/utils.js`  
-**Usato da:** Pagina impostazioni
+**Contenuto:**
+
+- Dati changelog (`changelogData`)
+- Rendering changelog (`renderChangelog()`)
+- Aggiornamento automatico versione nell'UI (`updateAppVersion()`)
+- API pubblica per versione: `getChangelogVersion()`, `getChangelogVersionString()`
+
+**Dipendenze:** Nessuna (componente standalone)  
+**Usato da:** Pagina impostazioni, `features/updates.js` (via API pubblica)
+
+**Nota:** La logica di verifica aggiornamenti è separata in `features/updates.js` per mantenere la separazione delle responsabilità (dati/visualizzazione vs logica funzionale).
 
 ---
 
 #### **components/navbar.js** ⏳
+
 **Contenuto:**
+
 - Gestione navbar/menu mobile
 - Hamburger toggle
 - Navigazione
@@ -405,21 +492,34 @@ export function showLoading(element) {
 
 ---
 
-#### **components/modals.js** ⏳
+#### **components/modals.js** ✅
+
 **Contenuto:**
-- Gestione modali (apertura/chiusura)
-- Modal fermate
-- Modal linee
-- Modal impostazioni
+
+- Gestione UI modali (apertura/chiusura)
+- Modal Fermate (selezione fermata partenza/arrivo)
+- Modal Linee (selezione linea)
+- Modal Settings (UI: tabs, event listeners, sincronizzazione stato)
 - Animazioni modali
 
-**Dipendenze:** `core/utils.js`, `features/animations.js`, `data/tariffario.js`  
-**Usato da:** Pagine principali
+**Dipendenze:** 
+- `data/tariffario.js` (per FermateModal e LineeModal)
+- `features/settings.js` (per SettingsModal - riceve funzioni come callback)
+
+**Usato da:** Pagine principali (index.html, fermate.html, prezzi.html, ecc.)
+
+**Nota:** 
+- Gestisce solo la **UI** dei modali (apertura/chiusura, tabs, event listeners)
+- La logica di business è delegata:
+  - FermateModal/LineeModal → callback verso script.js
+  - SettingsModal → callback verso `features/settings.js`
 
 ---
 
 #### **components/pwa.js** ⏳
+
 **Contenuto:**
+
 - Gestione PWA install
 - Bottom navigation
 - Brand header
@@ -433,36 +533,38 @@ export function showLoading(element) {
 ### **5. main.js** (Entry Point)
 
 **Contenuto:**
+
 - Inizializzazione app
 - Orchestrazione moduli
 - Event listeners globali
 - Setup iniziale
 
 **Esempio:**
+
 ```javascript
 // Entry point app
-import { loadDatabase } from './data/database.js';
-import { loadTariffario } from './data/tariffario.js';
-import { initializeFooter } from './components/footer.js';
-import { initializeModals } from './components/modals.js';
-import { initializePWA } from './components/pwa.js';
+import { loadDatabase } from "./data/database.js";
+import { loadTariffario } from "./data/tariffario.js";
+import { initializeFooter } from "./components/footer.js";
+import { initializeModals } from "./components/modals.js";
+import { initializePWA } from "./components/pwa.js";
 
 async function init() {
   // Carica dati
   await loadDatabase();
   await loadTariffario();
-  
+
   // Inizializza componenti
   initializeFooter();
   initializeModals();
   initializePWA();
-  
+
   // Setup event listeners...
 }
 
 // Avvia app
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', init);
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", init);
 } else {
   init();
 }
@@ -493,17 +595,19 @@ if (document.readyState === 'loading') {
 ## ✅ Moduli Completati
 
 - [x] **footer.js** ✅ - Footer dinamico
-- [x] **changelog.js** ✅ - Rendering changelog
+- [x] **changelog.js** ✅ - Dati e visualizzazione changelog
+- [x] **features/updates.js** ✅ - Verifica aggiornamenti
+- [x] **components/modals.js** ✅ - UI modali (Fermate, Linee, Settings)
 - [ ] core/config.js
 - [ ] core/utils.js
 - [ ] core/storage.js
 - [ ] data/database.js
 - [ ] data/tariffario.js
+- [ ] features/settings.js
 - [ ] features/location.js
 - [ ] features/pricing.js
 - [ ] features/animations.js
 - [ ] components/navbar.js
-- [ ] components/modals.js
 - [ ] components/pwa.js
 - [ ] main.js
 
@@ -516,18 +620,20 @@ if (document.readyState === 'loading') {
 ```javascript
 const STATIC_ASSETS = [
   // ... altri file ...
-  './js/core/config.js',
-  './js/core/utils.js',
-  './js/core/storage.js',
-  './js/data/database.js',
-  './js/data/tariffario.js',
-  './js/features/location.js',
-  './js/features/pricing.js',
-  './js/features/animations.js',
-  './js/components/footer.js',
-  './js/components/changelog.js',
+  "./js/core/config.js",
+  "./js/core/utils.js",
+  "./js/core/storage.js",
+  "./js/data/database.js",
+  "./js/data/tariffario.js",
+  "./js/features/updates.js",
+  "./js/features/settings.js",
+  "./js/features/location.js",
+  "./js/features/pricing.js",
+  "./js/features/animations.js",
+  "./js/components/footer.js",
+  "./js/components/changelog.js",
   // ... altri componenti ...
-  './js/main.js',
+  "./js/main.js",
   // ...
 ];
 ```
@@ -537,17 +643,20 @@ const STATIC_ASSETS = [
 ## 🎯 Convenzioni di Codice
 
 ### **Naming:**
+
 - **File**: kebab-case (`micro-interactions.js`)
 - **Funzioni**: camelCase (`calculatePrice`, `addRipple`)
 - **Costanti**: UPPER_SNAKE_CASE (`APP_CONFIG`, `HAPTIC_PATTERNS`)
 - **Classi**: PascalCase (`ModalManager`, `PriceCalculator`)
 
 ### **Export/Import:**
+
 - **Named exports**: `export function calculatePrice() { ... }`
 - **Default exports**: `export default function init() { ... }` (solo per entry points)
 - **Import**: `import { calculatePrice } from './features/pricing.js'`
 
 ### **Organizzazione:**
+
 - Una funzione per file (piccoli helpers) o gruppo logico (features grandi)
 - Commenti JSDoc per funzioni pubbliche
 - Separazione logica per tipo (data, UI, business logic)
@@ -563,7 +672,7 @@ const STATIC_ASSETS = [
 ✅ **Performance**: Lazy loading futuro dei moduli  
 ✅ **Git**: Diff più puliti, meno conflitti  
 ✅ **Team**: Più sviluppatori possono lavorare in parallelo  
-✅ **Debug**: Isola problemi JavaScript velocemente  
+✅ **Debug**: Isola problemi JavaScript velocemente
 
 ---
 
@@ -595,6 +704,5 @@ Ogni componente CSS ha il suo corrispondente JavaScript per la logica.
 
 ---
 
-**Ultimo aggiornamento**: 30 Ottobre 2025  
-**Versione progetto**: 1.5.6 (in sviluppo)
-
+**Ultimo aggiornamento**: 31 Ottobre 2025  
+**Versione progetto**: 1.5.8 (in sviluppo)

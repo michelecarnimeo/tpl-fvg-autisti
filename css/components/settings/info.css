@@ -1,0 +1,347 @@
+/* ========================================
+   COMPONENTE: MODAL IMPOSTAZIONI - TAB INFO
+   File: css/components/settings/info.css
+   Descrizione: Stili UI per la tab "Info" del modal impostazioni
+   Contenuto: Info Cards, Update Check Cards, Info Links, Changelog
+   Dipendenze: variables.css, components/settings/impostazioni.css
+   ======================================== */
+
+/* ========================================
+   INFO CARD BASE
+   ======================================== */
+
+.info-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.info-card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--testo-principale);
+  margin: 0 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ========================================
+   HEADER INFO APP
+   ======================================== */
+
+.info-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.info-logo {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  border: 2px solid var(--turchese);
+  object-fit: contain;
+}
+
+.info-title h3 {
+  margin: 0;
+  font-size: 1.3rem;
+  color: var(--testo-principale);
+}
+
+.info-version {
+  margin: 0.25rem 0 0 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--turchese);
+}
+
+.info-date {
+  margin: 0.25rem 0 0 0;
+  font-size: 0.8rem;
+  color: var(--testo-secondario);
+}
+
+/* ========================================
+   DESCRIZIONE E FEATURES
+   ======================================== */
+
+.info-description {
+  margin: 1rem 0;
+  color: var(--testo-secondario);
+  line-height: 1.6;
+}
+
+.info-description p {
+  margin: 0;
+}
+
+.info-features {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.info-feature {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: var(--grigio-chiaro);
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.info-feature-icon {
+  font-size: 1.2rem;
+}
+
+/* ========================================
+   UPDATE CHECK CARD
+   ======================================== */
+
+.update-check-card {
+  background: linear-gradient(135deg, rgba(23, 183, 177, 0.05), rgba(0, 153, 170, 0.05));
+  border: 1px solid rgba(23, 183, 177, 0.3);
+}
+
+.update-check-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.update-check-icon {
+  font-size: 2.5rem;
+  /* NOTA: Animazione rotate-slow sostituita con utility class .rotate-slow in HTML */
+  /* @keyframes rotate-slow spostato in css/animations.css */
+}
+
+.update-check-text {
+  flex: 1;
+}
+
+.update-check-title {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--testo-principale);
+}
+
+.update-check-description {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--testo-secondario);
+}
+
+.update-check-btn {
+  width: 100%;
+  padding: 1rem;
+  background: var(--turchese);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(23, 183, 177, 0.3);
+}
+
+.update-check-btn:hover {
+  background: var(--turchese-scuro);
+  box-shadow: 0 6px 16px rgba(23, 183, 177, 0.4);
+  transform: translateY(-2px);
+}
+
+.update-check-btn:active {
+  transform: translateY(0);
+}
+
+.update-check-btn-icon {
+  font-size: 1.2rem;
+}
+
+.update-check-btn-text {
+  font-size: 1rem;
+}
+
+.restart-app-btn {
+  /* Usa gli stili di .update-check-btn per default */
+  /* Eventuali override specifici possono essere aggiunti qui */
+}
+
+/* ========================================
+   UPDATE ITEMS (Changelog)
+   ======================================== */
+
+.update-item {
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.update-item:last-of-type {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.update-version {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.update-badge {
+  background: var(--turchese);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.update-date {
+  font-size: 0.85rem;
+  color: var(--testo-secondario);
+}
+
+.update-title {
+  font-weight: 600;
+  color: var(--testo-principale);
+  margin: 0.5rem 0;
+}
+
+.update-list {
+  margin: 0.5rem 0 0 0;
+  padding-left: 1.5rem;
+  color: var(--testo-secondario);
+  line-height: 1.6;
+}
+
+.update-list li {
+  margin: 0.25rem 0;
+}
+
+/* ========================================
+   INFO LINKS
+   ======================================== */
+
+.info-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  margin-top: 1rem;
+  background: var(--grigio-chiaro);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  color: var(--testo-principale);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.info-link:hover {
+  background: var(--turchese);
+  color: white;
+  border-color: var(--turchese);
+  transform: translateX(4px);
+}
+
+.info-link-icon {
+  margin-right: 0.5rem;
+}
+
+/* ========================================
+   FOOTER INFO (se presente)
+   ======================================== */
+
+.info-footer {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--glass-border);
+  text-align: center;
+  color: var(--testo-secondario);
+  font-size: 0.85rem;
+}
+
+.info-footer p {
+  margin: 0.25rem 0;
+}
+
+.info-disclaimer {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+/* ========================================
+   DARK MODE - TAB INFO
+   ======================================== */
+
+.dark .info-card {
+  background: var(--glass-bg-dark);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .info-header {
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .info-logo {
+  border-color: var(--turchese-light);
+}
+
+.dark .info-feature {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.dark .info-link {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .info-link:hover {
+  background: var(--turchese);
+  color: white;
+}
+
+.dark .update-item {
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .info-footer {
+  border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ========================================
+   RESPONSIVE - TAB INFO
+   ======================================== */
+
+@media (max-width: 480px) {
+  .info-features {
+    grid-template-columns: 1fr;
+  }
+  
+  .info-header {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .info-card {
+    padding: 1rem;
+  }
+}
+

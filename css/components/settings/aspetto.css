@@ -1,0 +1,115 @@
+/* ========================================
+   COMPONENTE: MODAL IMPOSTAZIONI - TAB ASPETTO
+   File: css/components/settings/aspetto.css
+   Descrizione: Stili UI per la tab "Aspetto" del modal impostazioni
+   Contenuto: Theme Options (Tema Sistema/Chiara/Scura)
+   Dipendenze: variables.css, components/settings/impostazioni.css
+   ======================================== */
+
+/* NOTA: Gli effetti globali (`.dark` mode applicato a `:root`) 
+   sono in themes.css, NON qui */
+
+/* ========================================
+   OPZIONI TEMA (THEME OPTIONS)
+   ======================================== */
+
+.settings-theme-options {
+  display: flex;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.settings-theme-option {
+  flex: 1;
+  cursor: pointer;
+}
+
+.settings-theme-option input[type="radio"] {
+  display: none;
+}
+
+.theme-option-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 0.75rem;
+  background: var(--glass-bg);
+  border: 2px solid var(--glass-border);
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.settings-theme-option:hover .theme-option-card {
+  background: rgba(0, 123, 138, 0.1);
+  border-color: var(--turchese);
+  transform: translateY(-2px);
+}
+
+.settings-theme-option input:checked + .theme-option-card {
+  background: rgba(34, 197, 94, 0.15);
+  border-color: #22c55e;
+  border-width: 3px;
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+}
+
+.theme-option-icon {
+  font-size: 2rem;
+}
+
+.theme-option-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--testo-principale);
+}
+
+.theme-option-description {
+  font-size: 0.75rem;
+  color: var(--testo-secondario);
+  text-align: center;
+}
+
+/* ========================================
+   DARK MODE - TAB ASPETTO
+   ======================================== */
+
+.dark .theme-option-card {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: var(--glass-border-dark);
+}
+
+.dark .settings-theme-option:hover .theme-option-card {
+  background: rgba(23, 183, 177, 0.1);
+}
+
+.dark .settings-theme-option input:checked + .theme-option-card {
+  background: rgba(34, 197, 94, 0.2);
+  border-color: #22c55e;
+}
+
+/* ========================================
+   RESPONSIVE - TAB ASPETTO
+   ======================================== */
+
+@media (max-width: 600px) {
+  .settings-theme-options {
+    flex-direction: column;
+  }
+  
+  .theme-option-card {
+    flex-direction: row;
+    justify-content: flex-start;
+    padding: 1rem;
+    gap: 1rem;
+  }
+  
+  .theme-option-icon {
+    font-size: 1.5rem;
+  }
+  
+  .theme-option-description {
+    text-align: left;
+  }
+}
+

@@ -4,6 +4,26 @@
 
 const changelogData = [
   {
+    version: '1.5.9',
+    date: '1 Novembre 2025',
+    time: '18:00',
+    title: 'Modularizzazione CSS Settings Completa',
+    hidden: false,
+    changes: [
+      '📦 Creato css/components/settings/impostazioni.css (struttura modale: overlay, header, tabs)',
+      '📦 Creato css/components/settings/accessibilita.css (tab Accessibilità: font, scale, toggle)',
+      '📦 Creato css/components/settings/aspetto.css (tab Aspetto: theme options)',
+      '📦 Creato css/components/settings/info.css (tab Info: info cards, update check, changelog)',
+      '🗑️ Rimossi tutti gli stili Settings UI da style1.css e modals.css',
+      '✨ Struttura CSS allineata all\'UI: ogni tab ha il suo file dedicato',
+      '📚 Aggiornato CSS_ARCHITECTURE.md con tutti i file settings completati',
+      '🔧 Aggiornato sw.js con i nuovi file CSS per cache offline',
+      '✅ Testing completo: tutte le tab Settings funzionanti correttamente',
+      '🎯 Zero duplicazioni: stili UI completamente estratti e organizzati',
+      '⚡ Cache PWA ottimizzata: tutti i file settings inclusi nel service worker'
+    ]
+  },
+  {
     version: '1.5.8',
     date: '31 Ottobre 2025',
     time: '12:00',
@@ -346,19 +366,50 @@ function renderChangelog(containerId = 'changelog-container') {
   console.log('✅ Changelog renderizzato con successo!');
 }
 
+// ===== API PUBBLICA PER GESTIONE VERSIONE =====
+// Funzioni pubbliche per altri script che devono accedere alla versione
+
+/**
+ * Ottiene la versione corrente dell'app dal changelog
+ * @returns {Object|null} Oggetto con version, date, time oppure null se non disponibile
+ */
+function getChangelogVersion() {
+  if (!changelogData || changelogData.length === 0) {
+    return null;
+  }
+  
+  const latest = changelogData[0];
+  return {
+    version: latest.version,
+    date: latest.date || '',
+    time: latest.time || ''
+  };
+}
+
+/**
+ * Ottiene solo la stringa della versione corrente
+ * @returns {string} Versione corrente (es. "1.5.8") o stringa vuota se non disponibile
+ */
+function getChangelogVersionString() {
+  const versionData = getChangelogVersion();
+  return versionData ? versionData.version : '';
+}
+
 // ===== FUNZIONE PER AGGIORNARE DINAMICAMENTE LA VERSIONE =====
 // Aggiorna automaticamente la versione in "TPL FVG Autisti" da changelogData[0].version
 
 function updateAppVersion() {
   // Leggi la versione più recente dal changelog
-  if (!changelogData || changelogData.length === 0) {
+  const versionData = getChangelogVersion();
+  
+  if (!versionData) {
     console.warn('⚠️ changelogData non disponibile, impossibile aggiornare versione');
     return;
   }
   
-  const latestVersion = changelogData[0].version;
-  const latestDate = changelogData[0].date || '';
-  const latestTime = changelogData[0].time || '';
+  const latestVersion = versionData.version;
+  const latestDate = versionData.date;
+  const latestTime = versionData.time;
   
   // Trova tutti gli elementi con classe .info-version e aggiorna il testo
   const versionElements = document.querySelectorAll('.info-version');
@@ -389,6 +440,7 @@ function updateAppVersion() {
     console.log(`✅ Versione aggiornata automaticamente a ${latestVersion} in ${versionElements.length} elemento/i versione e ${dateElements.length} elemento/i data`);
   }
 }
+
 
 // Aggiorna la versione quando il DOM è pronto
 if (document.readyState === 'loading') {
