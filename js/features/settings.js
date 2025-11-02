@@ -1,7 +1,7 @@
 // js/features/settings.js - Gestione logica impostazioni applicazione
 // Indipendente da script.js e modals.js - espone API pubblica
 
-(function() {
+(function () {
   'use strict';
 
   // ========================================
@@ -27,16 +27,16 @@
     // Verifica se il feedback aptico è abilitato (o se forzato)
     const isEnabled = localStorage.getItem('tpl.hapticFeedback') === 'true';
     if (!isEnabled && !force) return;
-    
+
     // Verifica supporto API Vibration
     if (!navigator.vibrate) {
       console.log('⚠️ API Vibration non supportata');
       return;
     }
-    
+
     // Ottieni il pattern
     const vibrationPattern = HAPTIC_PATTERNS[pattern] || pattern;
-    
+
     try {
       navigator.vibrate(vibrationPattern);
       console.log(`📳 Vibrazione: ${pattern}${force ? ' (forced)' : ''}`);
@@ -54,7 +54,7 @@
   function toggleAnimation() {
     console.log('Toggle animation clicked, current state:', animationEnabled);
     animationEnabled = !animationEnabled;
-    
+
     if (animationEnabled) {
       document.body.classList.add('animation-enabled');
       console.log('Animation enabled, class added to body');
@@ -70,7 +70,7 @@
         btn.classList.remove('active');
       });
     }
-    
+
     // Salva la preferenza
     localStorage.setItem('animationEnabled', animationEnabled);
     console.log('Animation state saved:', animationEnabled);
@@ -103,18 +103,18 @@
   function setFontSize(level) {
     // Rimuovi tutte le classi di dimensione testo
     document.body.classList.remove('font-size-normal', 'font-size-large', 'font-size-xlarge');
-    
+
     // Aggiungi la nuova classe
     document.body.classList.add(`font-size-${level}`);
-    
+
     // Salva preferenza in localStorage
     try {
       localStorage.setItem('tpl.fontSize', level);
     } catch { }
-    
+
     // Aggiorna il pulsante
     updateFontSizeButton(level);
-    
+
     // Aggiorna il testo nel menu mobile
     updateMobileFontSizeText(level);
   }
@@ -130,7 +130,7 @@
         btn.classList.remove('active');
       }
     });
-    
+
     // Aggiorna pulsanti mobile
     const mobileButtons = document.querySelectorAll('.mobile-font-btn');
     mobileButtons.forEach(btn => {
@@ -140,7 +140,7 @@
         btn.classList.remove('active');
       }
     });
-    
+
     // Aggiorna pulsanti benvenuto
     const benvenutoButtons = document.querySelectorAll('.benvenuto-font-btn');
     benvenutoButtons.forEach(btn => {
@@ -194,9 +194,9 @@
   }
 
   function applyTheme() {
-    const mode = localStorage.getItem('tpl.themeMode') || 'system';
+    const mode = localStorage.getItem('tpl.themeMode') || 'light';
     let shouldBeDark = false;
-    
+
     if (mode === 'system') {
       shouldBeDark = prefersDarkScheme.matches;
     } else if (mode === 'dark') {
@@ -204,7 +204,7 @@
     } else {
       shouldBeDark = false;
     }
-    
+
     // Applica il tema
     document.documentElement.classList.toggle('dark', shouldBeDark);
     updateBodyColors(shouldBeDark);
@@ -234,14 +234,14 @@
   function updateMobileDarkModeButton(isDark) {
     const mobileBtn = document.getElementById('mobile-darkmode-toggle');
     if (!mobileBtn) return;
-    
+
     const icon = mobileBtn.querySelector('.mobile-nav-icon');
     const text = mobileBtn.querySelector('span:not(.mobile-nav-icon)');
-    
+
     if (icon) {
       icon.textContent = isDark ? '☀️' : '🌙';
     }
-    
+
     if (text) {
       text.textContent = isDark ? 'Modalità chiara' : 'Modalità scura';
     }
@@ -249,10 +249,10 @@
 
   function loadTheme() {
     applyTheme();
-    
+
     // Listener per cambio tema sistema
     prefersDarkScheme.addEventListener('change', () => {
-      const mode = localStorage.getItem('tpl.themeMode') || 'system';
+      const mode = localStorage.getItem('tpl.themeMode') || 'light';
       if (mode === 'system') {
         applyTheme();
       }
@@ -269,11 +269,11 @@
     } else {
       document.body.classList.remove('high-contrast');
     }
-    
+
     try {
       localStorage.setItem('tpl.highContrast', enabled);
-    } catch {}
-    
+    } catch { }
+
     console.log('Contrasto alto:', enabled ? 'attivato' : 'disattivato');
     triggerHaptic('medium'); // Feedback al cambio contrasto
   }
@@ -295,11 +295,11 @@
     } else {
       document.body.classList.remove('touch-friendly');
     }
-    
+
     try {
       localStorage.setItem('tpl.touchFriendly', enabled);
-    } catch {}
-    
+    } catch { }
+
     console.log('Touch friendly:', enabled ? 'attivato' : 'disattivato');
     triggerHaptic('medium'); // Feedback al cambio modalità touch
   }
@@ -342,11 +342,11 @@
     } else {
       document.body.classList.remove('reduce-motion');
     }
-    
+
     try {
       localStorage.setItem('tpl.reduceMotion', enabled);
-    } catch {}
-    
+    } catch { }
+
     console.log('Riduci animazioni:', enabled ? 'attivato' : 'disattivato');
   }
 
@@ -367,11 +367,11 @@
     } else {
       document.body.classList.remove('extra-spacing');
     }
-    
+
     try {
       localStorage.setItem('tpl.extraSpacing', enabled);
-    } catch {}
-    
+    } catch { }
+
     console.log('Spaziatura extra:', enabled ? 'attivata' : 'disattivata');
   }
 
@@ -392,11 +392,11 @@
     } else {
       document.body.classList.remove('compact-layout');
     }
-    
+
     try {
       localStorage.setItem('tpl.compactLayout', enabled);
-    } catch {}
-    
+    } catch { }
+
     console.log('Layout compatto:', enabled ? 'attivato' : 'disattivato');
   }
 
@@ -417,11 +417,11 @@
     } else {
       document.body.classList.remove('blue-light-filter');
     }
-    
+
     try {
       localStorage.setItem('tpl.blueLightFilter', enabled);
-    } catch {}
-    
+    } catch { }
+
     console.log('Filtro luce blu:', enabled ? 'attivato' : 'disattivato');
   }
 
@@ -439,14 +439,14 @@
   function setInterfaceScale(scale) {
     // Rimuovi tutte le classi di scala precedenti
     document.body.classList.remove('interface-scale-75', 'interface-scale-85', 'interface-scale-100', 'interface-scale-115', 'interface-scale-125');
-    
+
     // Aggiungi la nuova classe di scala
     document.body.classList.add(`interface-scale-${scale}`);
-    
+
     try {
       localStorage.setItem('tpl.interfaceScale', scale);
-    } catch {}
-    
+    } catch { }
+
     console.log('Dimensione interfaccia:', scale + '%');
     triggerHaptic('medium'); // Feedback al cambio dimensione
   }
@@ -468,13 +468,13 @@
     // Salva preferenza
     try {
       localStorage.setItem('tpl.keepScreenOn', enabled);
-    } catch {}
-    
+    } catch { }
+
     if (!('wakeLock' in navigator)) {
       console.warn('⚠️ Wake Lock API non supportata da questo browser');
       return;
     }
-    
+
     if (enabled) {
       await requestWakeLock();
     } else {
@@ -486,7 +486,7 @@
     try {
       wakeLock = await navigator.wakeLock.request('screen');
       console.log('☀️ Wake Lock attivato - schermo sempre acceso');
-      
+
       // Listener per quando il lock viene rilasciato
       wakeLock.addEventListener('release', () => {
         console.log('☀️ Wake Lock rilasciato');
@@ -520,7 +520,7 @@
   // Quando torna in foreground, lo riattiviamo se era abilitato
   document.addEventListener('visibilitychange', async () => {
     const isEnabled = localStorage.getItem('tpl.keepScreenOn') === 'true';
-    
+
     if (document.visibilityState === 'visible' && isEnabled) {
       // Pagina tornata visibile e Keep Screen On è attivo
       await requestWakeLock();
@@ -547,7 +547,7 @@
     loadInterfaceScale();
     loadAnimationPreference();
     initFontSize();
-    
+
     console.log('✅ Impostazioni inizializzate');
   }
 
@@ -566,21 +566,21 @@
   window.Settings = {
     // Feedback aptico
     triggerHaptic: triggerHaptic,
-    
+
     // Animazione
     toggleAnimation: toggleAnimation,
-    
+
     // Dimensione testo
     setFontSize: setFontSize,
     initFontSize: initFontSize,
-    
+
     // Tema
     setThemeMode: setThemeMode,
     applyTheme: applyTheme,
     updateBodyColors: updateBodyColors,
     updateToggleIcon: updateToggleIcon,
     updateMobileDarkModeButton: updateMobileDarkModeButton,
-    
+
     // Accessibilità
     setHighContrast: setHighContrast,
     setTouchFriendly: setTouchFriendly,
@@ -591,7 +591,7 @@
     setCompactLayout: setCompactLayout,
     setBlueLightFilter: setBlueLightFilter,
     setInterfaceScale: setInterfaceScale,
-    
+
     // Inizializzazione
     initialize: initializeSettings
   };
