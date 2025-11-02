@@ -11,15 +11,15 @@
 function compareVersions(v1, v2) {
   const parts1 = v1.split('.').map(Number);
   const parts2 = v2.split('.').map(Number);
-  
+
   for (let i = 0; i < Math.max(parts1.length, parts2.length); i++) {
     const part1 = parts1[i] || 0;
     const part2 = parts2[i] || 0;
-    
+
     if (part1 > part2) return 1;
     if (part1 < part2) return -1;
   }
-  
+
   return 0; // Versioni uguali
 }
 
@@ -35,16 +35,16 @@ async function checkForUpdates() {
   const modalWarning = document.getElementById('modal-warning');
   const confirmBtn = document.getElementById('cache-confirm');
   const cancelBtn = document.getElementById('cache-cancel');
-  
+
   if (!modal) return;
-  
+
   modal.style.display = 'block';
   modalTitle.innerHTML = '🔄 Verifica Aggiornamenti';
   modalMessage.innerHTML = '<p style="text-align: center;">⏳ Verifica aggiornamenti in corso...</p>';
   modalWarning.style.display = 'none';
   confirmBtn.style.display = 'none';
   if (cancelBtn) cancelBtn.textContent = 'Chiudi';
-  
+
   try {
     // Aggiunge un timestamp per evitare la cache del browser
     const timestamp = new Date().getTime();
@@ -55,28 +55,28 @@ async function checkForUpdates() {
         'Pragma': 'no-cache'
       }
     });
-    
+
     if (!response.ok) {
       throw new Error('Impossibile recuperare le informazioni sulla versione');
     }
-    
+
     const remoteVersion = await response.json();
-    
+
     // Leggi la versione corrente usando l'API pubblica di changelog.js
-    const currentVersionData = typeof getChangelogVersion === 'function' 
-      ? getChangelogVersion() 
+    const currentVersionData = typeof getChangelogVersion === 'function'
+      ? getChangelogVersion()
       : null;
-    const currentVersion = currentVersionData 
-      ? currentVersionData.version 
-      : (typeof getChangelogVersionString === 'function' 
-        ? getChangelogVersionString() 
-        : '1.5.8') || '1.5.8';
+    const currentVersion = currentVersionData
+      ? currentVersionData.version
+      : (typeof getChangelogVersionString === 'function'
+        ? getChangelogVersionString()
+        : '1.6.0') || '1.6.0';
     const remoteVersionNum = remoteVersion.version;
-    
+
     // Confronta le versioni
     const isUpdateAvailable = compareVersions(remoteVersionNum, currentVersion) > 0;
     const isDifferentVersion = remoteVersionNum !== currentVersion;
-    
+
     if (isUpdateAvailable) {
       // C'è un aggiornamento disponibile
       modalTitle.innerHTML = '🎉 Aggiornamento Disponibile!';
@@ -111,7 +111,7 @@ async function checkForUpdates() {
       confirmBtn.textContent = 'Aggiorna Ora';
       confirmBtn.style.display = 'block';
       modalWarning.style.display = 'none';
-      
+
     } else if (isDifferentVersion) {
       // Versione diversa ma non più recente (downgrade o versione personalizzata)
       modalTitle.innerHTML = 'ℹ️ Versione Diversa Rilevata';
@@ -132,7 +132,7 @@ async function checkForUpdates() {
       `;
       confirmBtn.textContent = 'Riavvia App';
       confirmBtn.style.display = 'block';
-      
+
     } else {
       // App già aggiornata
       modalTitle.innerHTML = '✅ App Aggiornata';
@@ -159,10 +159,10 @@ async function checkForUpdates() {
       confirmBtn.textContent = 'Riavvia App';
       confirmBtn.style.display = 'block';
     }
-    
+
   } catch (error) {
     console.error('Errore verifica aggiornamenti:', error);
-    
+
     // Errore nella verifica (probabilmente offline o problema di rete)
     modalTitle.innerHTML = '⚠️ Verifica non Disponibile';
     modalMessage.innerHTML = `
@@ -181,9 +181,9 @@ async function checkForUpdates() {
           </p>
           <p style="margin: 0; color: #6b7280; font-size: 0.85em;">
             ${(() => {
-              const v = typeof getChangelogVersion === 'function' ? getChangelogVersion() : null;
-              return v ? (v.date + (v.time ? ' alle ' + v.time : '')) : 'Data non disponibile';
-            })()}
+        const v = typeof getChangelogVersion === 'function' ? getChangelogVersion() : null;
+        return v ? (v.date + (v.time ? ' alle ' + v.time : '')) : 'Data non disponibile';
+      })()}
           </p>
         </div>
         <p style="color: #666; font-size: 0.9em;">
@@ -210,27 +210,27 @@ function resetCache() {
 function confirmResetCache() {
   // Cancella la cache del Service Worker
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.getRegistrations().then(function(registrations) {
-      for(let registration of registrations) {
+    navigator.serviceWorker.getRegistrations().then(function (registrations) {
+      for (let registration of registrations) {
         registration.unregister();
       }
     });
   }
-  
+
   // Cancella la cache del browser
   if ('caches' in window) {
-    caches.keys().then(function(names) {
+    caches.keys().then(function (names) {
       for (let name of names) {
         caches.delete(name);
       }
     });
   }
-  
+
   // Cancella il LocalStorage
   try {
     localStorage.clear();
   } catch { }
-  
+
   // Torna alla pagina di benvenuto
   setTimeout(() => {
     window.location.href = 'benvenuto.html';

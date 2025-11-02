@@ -536,5 +536,5 @@ const STATIC_ASSETS = [
 
 ---
 
-**Ultimo aggiornamento**: 31 Ottobre 2025  
-**Versione progetto**: 1.5.8 (modularizzazione settings in corso)
+**Ultimo aggiornamento**: 1 Novembre 2025  
+**Versione progetto**: 1.5.9 (modularizzazione test completata)

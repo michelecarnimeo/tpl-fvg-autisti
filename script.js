@@ -18,10 +18,10 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
   const R = 6371; // Raggio della Terra in km
   const dLat = (lat2 - lat1) * Math.PI / 180;
   const dLon = (lon2 - lon1) * Math.PI / 180;
-  const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
     Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-    Math.sin(dLon/2) * Math.sin(dLon/2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   return R * c; // Distanza in km
 }
 
@@ -63,12 +63,12 @@ function requestUserLocation() {
       (error) => {
         console.error('Errore geolocalizzazione:', error);
         locationPermissionGranted = false;
-        
+
         // Aggiungi codice errore se non presente
         if (!error.code) {
           error.code = 0; // Errore sconosciuto
         }
-        
+
         reject(error);
       },
       options
@@ -103,12 +103,12 @@ function sortFermateByDistance(fermate, userPos) {
   return fermate.map((fermata, index) => {
     const coords = fermateCoordinates[fermata];
     let distance = null;
-    
+
     if (coords) {
       distance = calculateDistance(
-        userPos.latitude, 
-        userPos.longitude, 
-        coords.lat, 
+        userPos.latitude,
+        userPos.longitude,
+        coords.lat,
         coords.lon
       );
     }
@@ -139,7 +139,7 @@ function toggleLocationButton(show) {
     // Mostra solo se la geolocalizzazione è supportata
     const shouldShow = show && isGeolocationSupported();
     locationBtn.style.display = shouldShow ? 'flex' : 'none';
-    
+
     // Se è il pulsante piccolo (index.html), usa display: flex
     if (locationBtn.classList.contains('location-btn-small')) {
       locationBtn.style.display = shouldShow ? 'flex' : 'none';
@@ -236,7 +236,7 @@ function toggleDark() {
   // Nuovo sistema: cicla tra light/dark (non usa più system per il toggle manuale)
   const isDark = !document.documentElement.classList.contains('dark');
   const newMode = isDark ? 'dark' : 'light';
-  
+
   // Usa Settings.setThemeMode() se disponibile
   if (window.Settings && window.Settings.setThemeMode) {
     window.Settings.setThemeMode(newMode);
@@ -254,7 +254,7 @@ function toggleDark() {
       window.Settings.updateMobileDarkModeButton(isDark);
     }
   }
-  
+
   console.log('Tema cambiato manualmente a:', newMode);
 }
 
@@ -279,24 +279,24 @@ function populateLinee() {
 // Abilita/disabilita pulsanti partenza/arrivo
 function updateFermateButtons() {
   if (!partenzaBtn || !arrivoBtn) return; // Non siamo su index.html
-  
+
   if (lineaIdx === '' || !tariffario[lineaIdx]) {
     partenzaText.textContent = 'Prima seleziona una linea';
     arrivoText.textContent = 'Prima seleziona una linea';
     partenzaBtn.disabled = true;
     arrivoBtn.disabled = true;
-    
+
     // Nascondi pulsanti geolocalizzazione e swap
     toggleLocationButton(false);
     toggleSwapButton(false);
     return;
   }
-  
+
   partenzaText.textContent = 'Seleziona la partenza';
   arrivoText.textContent = 'Seleziona la destinazione';
   partenzaBtn.disabled = false;
   arrivoBtn.disabled = false;
-  
+
   // Mostra pulsanti geolocalizzazione e swap
   toggleLocationButton(true);
   toggleSwapButton(true);
@@ -346,22 +346,22 @@ function selectLinea(idx, nome) {
   partenzaIdx = '';
   arrivoIdx = '';
   hasCalculated = false;
-  
+
   // Aggiorna il testo del bottone
   if (lineaText) {
     lineaText.textContent = nome;
   }
-  
+
   updateFermateButtons();
   updateSummary();
   calcolaPrezzo();
   updatePriceCardState();
-  
+
   // Salva in localStorage
-  try { 
-    localStorage.setItem('tpl.lineaIdx', lineaIdx); 
+  try {
+    localStorage.setItem('tpl.lineaIdx', lineaIdx);
   } catch { }
-  
+
   closeLineeModal();
 }
 
@@ -372,16 +372,16 @@ function selectLinea(idx, nome) {
 function updatePriceCardState() {
   const priceCard = document.getElementById('price-card');
   if (!priceCard) return;
-  
+
   // Attiva la card solo se entrambi i campi partenza e arrivo sono selezionati
   const bothSelected = partenzaIdx !== '' && arrivoIdx !== '';
-  
+
   if (bothSelected) {
     priceCard.classList.remove('inactive');
   } else {
     priceCard.classList.add('inactive');
   }
-  
+
   // Nota: la card rimane sempre visibile, cambia solo l'opacità con .inactive
 }
 
@@ -391,47 +391,29 @@ function updateSummary() {
   const fermate = (lineaIdx !== '' && tariffario[lineaIdx]) ? tariffario[lineaIdx].fermate : [];
   summaryPartenza.textContent = partenzaIdx !== '' && fermate[partenzaIdx] ? fermate[partenzaIdx] : '-';
   summaryArrivo.textContent = arrivoIdx !== '' && fermate[arrivoIdx] ? fermate[arrivoIdx] : '-';
-  
+
   // Aggiorna lo stato della card prezzo
   updatePriceCardState();
 }
 
-// Calcola prezzo e codice automaticamente
+// Calcola prezzo e codice automaticamente (usa Pricing.js)
 function calcolaPrezzo() {
   if (!summaryPrezzo || !summaryCodice || !prezzoErrore) return; // Non siamo su index.html
-  let prezzo = null;
-  let codice = '';
-  const selezioniValide = lineaIdx !== '' && partenzaIdx !== '' && arrivoIdx !== '' && partenzaIdx !== arrivoIdx;
 
-  if (selezioniValide) {
-    // Calcola il prezzo
-    try {
-      const val = tariffario[parseInt(lineaIdx)].prezzi[parseInt(partenzaIdx)][parseInt(arrivoIdx)];
-      prezzo = typeof val === 'number' ? val : null;
-    } catch { }
+  // Usa Pricing.js per calcolare prezzo e codice
+  if (typeof Pricing !== 'undefined' && Pricing.calculatePrice) {
+    const result = Pricing.calculatePrice(lineaIdx, partenzaIdx, arrivoIdx, tariffario, tariffarioAggiornato);
 
-    // Recupera il codice biglietto
-    try {
-      let c = tariffario[parseInt(lineaIdx)]?.codici?.[parseInt(partenzaIdx)]?.[parseInt(arrivoIdx)] || '';
-      if (!c && tariffarioAggiornato) {
-        const fermate = tariffario[lineaIdx].fermate;
-        const partenza = fermate[parseInt(partenzaIdx)];
-        const arrivo = fermate[parseInt(arrivoIdx)];
-        const match = tariffarioAggiornato.find(e => e.partenza === partenza && e.arrivo === arrivo);
-        if (match?.codice_biglietto) c = match.codice_biglietto;
-      }
-      codice = c;
-    } catch { }
-
-    // Mostra automaticamente il risultato
-    summaryPrezzo.textContent = prezzo !== null ? prezzo.toFixed(2) + ' €' : '-';
-    summaryCodice.textContent = codice ? codice : '-';
-    prezzoErrore.style.display = (prezzo === null) ? 'block' : 'none';
+    // Aggiorna UI con i risultati
+    summaryPrezzo.textContent = Pricing.formatPrice(result.prezzo);
+    summaryCodice.textContent = result.codice || '-';
+    prezzoErrore.style.display = (result.prezzo === null && !result.valido) ? 'block' : 'none';
   } else {
-    // Nessuna selezione valida
+    // Fallback se Pricing.js non è disponibile
     summaryPrezzo.textContent = '-';
     summaryCodice.textContent = '-';
     prezzoErrore.style.display = 'none';
+    console.warn('⚠️ Pricing.js non disponibile, impossibile calcolare prezzo');
   }
 
   // Il pulsante swap è abilitato se partenza e arrivo sono selezionati
@@ -448,13 +430,13 @@ window.swapRoutes = function () {
     partenzaIdx = arrivoIdx;
     arrivoIdx = tmp;
     hasCalculated = false;
-    
+
     // Aggiorna i testi dei pulsanti
     if (tariffario[lineaIdx]) {
       partenzaText.textContent = tariffario[lineaIdx].fermate[partenzaIdx];
       arrivoText.textContent = tariffario[lineaIdx].fermate[arrivoIdx];
     }
-    
+
     updateSummary();
     calcolaPrezzo();
   }
@@ -473,12 +455,12 @@ function resetFilters() {
   partenzaIdx = '';
   arrivoIdx = '';
   hasCalculated = false;
-  
+
   // Reset bottone linea
   if (lineaText) {
     lineaText.textContent = 'Seleziona una linea';
   }
-  
+
   // Reset pulsanti partenza e arrivo
   if (partenzaText) {
     partenzaText.textContent = 'Prima seleziona una linea';
@@ -492,7 +474,7 @@ function resetFilters() {
   if (arrivoBtn) {
     arrivoBtn.disabled = true;
   }
-  
+
   // Reset FORZATO del contenuto (la card rimane visibile ma vuota)
   if (summaryPrezzo) {
     summaryPrezzo.textContent = '-';
@@ -513,14 +495,14 @@ function resetFilters() {
   if (prezzoErrore) {
     prezzoErrore.style.display = 'none';
   }
-  
+
   // NON richiamare updateSummary() e calcolaPrezzo() 
   // perché potrebbero ri-popolare i campi con vecchi valori in cache
-  
+
   // Nascondi pulsanti geolocalizzazione e swap
   toggleLocationButton(false);
   toggleSwapButton(false);
-  
+
   // Assicurati che il pulsante swap sia disabilitato
   const swapBtn = document.getElementById('swap-btn');
   if (swapBtn) {
@@ -528,14 +510,14 @@ function resetFilters() {
     swapBtn.style.opacity = '0.5';
     swapBtn.style.cursor = 'not-allowed';
   }
-  
+
   // Reset tutto nel LocalStorage
   try {
     localStorage.removeItem('tpl.lineaIdx');
     localStorage.removeItem('tpl.partenzaIdx');
     localStorage.removeItem('tpl.arrivoIdx');
   } catch { }
-  
+
   // Feedback visivo e aptico
   const resetBtn = document.getElementById('reset-btn');
   if (resetBtn) {
@@ -544,10 +526,10 @@ function resetFilters() {
       resetBtn.style.transform = 'scale(1)';
     }, 150);
   }
-  
+
   // Aggiorna lo stato della card prezzo (torna inactive)
   updatePriceCardState();
-  
+
   // Vibrazione di conferma reset
   if (window.Settings && window.Settings.triggerHaptic) {
     window.Settings.triggerHaptic('medium');
@@ -569,9 +551,9 @@ function getCurrentVersion() {
 
 function getCurrentVersionSync() {
   if (typeof getChangelogVersionString === 'function') {
-    return getChangelogVersionString() || '1.5.8';
+    return getChangelogVersionString() || '1.6.0';
   }
-  return '1.5.8';
+  return '1.6.0';
 }
 
 // Le funzioni checkForUpdates, resetCache, confirmResetCache, cancelResetCache
@@ -582,7 +564,7 @@ if (darkModeToggle) darkModeToggle.addEventListener('click', toggleDark);
 
 // Event listeners per font size - pulsanti desktop e mobile
 document.querySelectorAll('.font-size-btn, .mobile-font-btn').forEach(btn => {
-  btn.addEventListener('click', function() {
+  btn.addEventListener('click', function () {
     const size = this.dataset.size;
     if (size && window.Settings && window.Settings.setFontSize) {
       window.Settings.setFontSize(size);
@@ -611,7 +593,7 @@ if (cacheConfirmBtn) {
 
 // Chiudi modal cliccando fuori
 if (cacheModal) {
-  cacheModal.addEventListener('click', function(e) {
+  cacheModal.addEventListener('click', function (e) {
     if (e.target === cacheModal) {
       cancelResetCache();
     }
@@ -619,19 +601,19 @@ if (cacheModal) {
 }
 
 // Chiudi modal con ESC
-document.addEventListener('keydown', function(e) {
+document.addEventListener('keydown', function (e) {
   if (e.key === 'Escape') {
     const modal = document.getElementById('cache-modal');
     if (modal && modal.style.display === 'block') {
       cancelResetCache();
     }
-    
+
     // Chiudi modal linee fermate se aperto
     const lineeModalFermate = document.getElementById('linee-fermate-modal');
     if (lineeModalFermate && lineeModalFermate.classList.contains('show')) {
       closeLineeModalFermate();
     }
-    
+
     // Chiudi modal linee prezzi se aperto
     const lineeModalPrezzi = document.getElementById('linee-prezzi-modal');
     if (lineeModalPrezzi && lineeModalPrezzi.classList.contains('show')) {
@@ -678,7 +660,7 @@ function initializeModalsModules() {
     LineeModal: typeof LineeModal !== 'undefined',
     SettingsModal: typeof SettingsModal !== 'undefined'
   });
-  
+
   // Inizializza modal fermate
   if (typeof FermateModal !== 'undefined' && FermateModal.initialize) {
     FermateModal.initialize({
@@ -697,12 +679,12 @@ function initializeModalsModules() {
             arrivoText.textContent = tariffario[lineaIdx].fermate[index];
           }
         }
-        
+
         hasCalculated = false;
         updateSummary();
         calcolaPrezzo();
         updatePriceCardState();
-        
+
         // Salva nello storage
         try {
           if (type === 'partenza') {
@@ -714,7 +696,7 @@ function initializeModalsModules() {
       }
     });
   }
-  
+
   // Inizializza modal linee
   if (typeof LineeModal !== 'undefined' && LineeModal.initialize) {
     LineeModal.initialize({
@@ -724,10 +706,10 @@ function initializeModalsModules() {
       }
     });
   }
-  
+
   // Inizializza modal impostazioni
   console.log('🔧 Inizializzazione SettingsModal...', typeof SettingsModal, typeof SettingsModal !== 'undefined' ? (typeof SettingsModal.initialize === 'function' ? 'initialize presente' : 'initialize mancante') : 'SettingsModal non definito');
-  
+
   if (typeof SettingsModal !== 'undefined' && SettingsModal.initialize) {
     console.log('✅ SettingsModal trovato, procedo con inizializzazione');
     SettingsModal.initialize({
@@ -807,8 +789,18 @@ async function loadData() {
     console.log('Database caricato, tariffario.length:', tariffario.length);
   } catch { tariffario = []; }
 
+  // Esponi tariffario su window per accesso da moduli esterni (es. test)
+  if (typeof window !== 'undefined') {
+    window.tariffario = tariffario;
+  }
+
   // tariffarioAggiornato rimane null (file opzionale non presente)
   tariffarioAggiornato = null;
+
+  // Esponi anche tariffarioAggiornato su window
+  if (typeof window !== 'undefined') {
+    window.tariffarioAggiornato = tariffarioAggiornato;
+  }
 
   populateLinee();
 
@@ -819,22 +811,22 @@ async function loadData() {
     // Retrocompatibilità: converti vecchio sistema isDark a themeMode
     const oldDarkMode = localStorage.getItem('tpl.isDark');
     const existingThemeMode = localStorage.getItem('tpl.themeMode');
-    
+
     if (!existingThemeMode && oldDarkMode !== null) {
       // Migrazione da vecchio sistema
       const newMode = oldDarkMode === '1' ? 'dark' : 'light';
       localStorage.setItem('tpl.themeMode', newMode);
       localStorage.removeItem('tpl.isDark'); // Rimuovi vecchia impostazione
     }
-    
+
     // Il tema verrà caricato dal modal impostazioni con loadTheme()
     // Non caricare qui per evitare conflitti
-    
+
     // Ripristina dimensione testo
     if (window.Settings && window.Settings.initFontSize) {
       window.Settings.initFontSize();
     }
-    
+
     const sLinea = localStorage.getItem('tpl.lineaIdx');
     const sPart = localStorage.getItem('tpl.partenzaIdx');
     const sArr = localStorage.getItem('tpl.arrivoIdx');
@@ -849,7 +841,7 @@ async function loadData() {
     if (sArr !== null) arrivoIdx = sArr;
   } catch { }
   updateFermateButtons();
-  
+
   // Aggiorna i testi dei pulsanti se ci sono valori salvati
   if (partenzaIdx !== '' && tariffario[lineaIdx] && partenzaText) {
     partenzaText.textContent = tariffario[lineaIdx].fermate[partenzaIdx];
@@ -857,7 +849,7 @@ async function loadData() {
   if (arrivoIdx !== '' && tariffario[lineaIdx] && arrivoText) {
     arrivoText.textContent = tariffario[lineaIdx].fermate[arrivoIdx];
   }
-  
+
   updateSummary();
   calcolaPrezzo();
 }
@@ -897,16 +889,16 @@ function renderFermate(lineaIndex = 0, sortByDistance = false) {
   for (let i = 0; i < sortedFermate.length; i++) {
     const li = document.createElement('li');
     li.classList.add('fermate-item');
-    
+
     // Trova l'indice originale della fermata
     const originalIndex = fermate.indexOf(sortedFermate[i]);
     const distance = userPosition ? sortFermateByDistance(fermate, userPosition).find(f => f.name === sortedFermate[i])?.distance : null;
-    
+
     let distanceText = '';
     if (distance !== null) {
       distanceText = `<span class="fermate-distance">${distance.toFixed(1)} km</span>`;
     }
-    
+
     li.innerHTML = `
       <span class="fermate-icon">📍</span>
       <span class="fermate-number">${originalIndex + 1}</span>
@@ -920,16 +912,16 @@ function renderFermate(lineaIndex = 0, sortByDistance = false) {
   for (let i = sortedFermate.length - 1; i >= 0; i--) {
     const li = document.createElement('li');
     li.classList.add('tratte-item');
-    
+
     // Trova l'indice originale della fermata
     const originalIndex = fermate.indexOf(sortedFermate[i]);
     const distance = userPosition ? sortFermateByDistance(fermate, userPosition).find(f => f.name === sortedFermate[i])?.distance : null;
-    
+
     let distanceText = '';
     if (distance !== null) {
       distanceText = `<span class="fermate-distance">${distance.toFixed(1)} km</span>`;
     }
-    
+
     li.innerHTML = `
       <span class="tratte-icon">📍</span>
       <span class="tratte-number">${fermate.length - originalIndex}</span>
@@ -960,7 +952,7 @@ function renderPrezzi(lineaIndex = 0) {
   const fermate = linea.fermate;
   console.log('Rendering tabelle prezzi per linea:', linea.nome, 'con', fermate.length, 'fermate');
 
-  // Helper per tabella
+  // Helper per tabella (usa Pricing.js)
   function buildTable(filterFn) {
     let html = '<thead><tr>';
     html += '<th>Partenza</th>';
@@ -969,24 +961,46 @@ function renderPrezzi(lineaIndex = 0) {
     html += '<th>Codice</th>';
     html += '</tr></thead><tbody>';
     const rows = [];
+
+    // Usa Pricing.js se disponibile, altrimenti fallback diretto
+    const usePricing = typeof Pricing !== 'undefined' && Pricing.getTicketCode && Pricing.formatPrice;
+
     for (let i = 0; i < fermate.length; i++) {
       for (let j = 0; j < fermate.length; j++) {
         if (i === j) continue;
         if (!filterFn(i, j)) continue;
-        const prezzo = linea.prezzi?.[i]?.[j] ?? null;
-        let codice = linea.codici?.[i]?.[j] ?? '';
-        if (!codice && tariffarioAggiornato) {
-          const match = tariffarioAggiornato.find(e => e.partenza === fermate[i] && e.arrivo === fermate[j]);
-          if (match?.codice_biglietto) codice = match.codice_biglietto;
+
+        let prezzo = null;
+        let codice = '';
+
+        if (usePricing) {
+          // Usa Pricing.js per recuperare codice e prezzo
+          const result = Pricing.calculatePrice(lineaIndex, i, j, tariffario, tariffarioAggiornato);
+          prezzo = result.prezzo;
+          codice = result.codice;
+        } else {
+          // Fallback: accesso diretto alla matrice
+          prezzo = linea.prezzi?.[i]?.[j] ?? null;
+          codice = linea.codici?.[i]?.[j] ?? '';
+          if (!codice && tariffarioAggiornato) {
+            const match = tariffarioAggiornato.find(e => e.partenza === fermate[i] && e.arrivo === fermate[j]);
+            if (match?.codice_biglietto) codice = match.codice_biglietto;
+          }
         }
+
         rows.push({ partenza: fermate[i], arrivo: fermate[j], prezzo, codice });
       }
     }
+
     rows.forEach(r => {
       html += '<tr>';
       html += `<td>${r.partenza}</td>`;
       html += `<td>${r.arrivo}</td>`;
-      html += `<td style="text-align: right;">${typeof r.prezzo === 'number' ? r.prezzo.toFixed(2) + ' €' : '-'}</td>`;
+
+      // Usa Pricing.formatPrice() se disponibile
+      const prezzoFormatted = usePricing ? Pricing.formatPrice(r.prezzo) :
+        (typeof r.prezzo === 'number' ? r.prezzo.toFixed(2) + ' €' : '-');
+      html += `<td style="text-align: right;">${prezzoFormatted}</td>`;
       html += `<td>${r.codice || '—'}</td>`;
       html += '</tr>';
     });
@@ -1003,23 +1017,23 @@ function renderPrezzi(lineaIndex = 0) {
 function populateLineeTratte() {
   const lineeModalList = document.getElementById('linee-fermate-modal-list');
   const lineaBtn = document.getElementById('linea-fermate-btn');
-  
+
   if (!lineeModalList) return;
-  
+
   // Popola modal con le linee
   lineeModalList.innerHTML = '';
   tariffario.forEach((l, i) => {
     const li = document.createElement('li');
     li.className = 'linea-modal-item';
     li.dataset.lineaIdx = i;
-    
+
     // Estrai numero linea dal nome (es: "Linea 400 Udine-Grado" -> "400")
     const lineaNumMatch = l.nome.match(/\d+/);
     const lineaNum = lineaNumMatch ? lineaNumMatch[0] : (i + 1);
-    
+
     // Estrai percorso (es: "Udine-Grado")
     const percorso = l.nome.replace(/Linea\s+\d+\s*/i, '');
-    
+
     // Crea struttura HTML con icona e dettagli
     li.innerHTML = `
       <div class="linea-badge">
@@ -1032,11 +1046,11 @@ function populateLineeTratte() {
       </div>
       <span class="linea-arrow">›</span>
     `;
-    
+
     li.addEventListener('click', () => selectLineaFermate(i, l.nome));
     lineeModalList.appendChild(li);
   });
-  
+
   // Event listener per apertura modal
   if (lineaBtn) {
     lineaBtn.addEventListener('click', openLineeModalFermate);
@@ -1047,7 +1061,7 @@ function populateLineeTratte() {
 function openLineeModalFermate() {
   const lineeModal = document.getElementById('linee-fermate-modal');
   if (!lineeModal) return;
-  
+
   lineeModal.style.display = 'flex';
   setTimeout(() => lineeModal.classList.add('show'), 10);
 }
@@ -1056,7 +1070,7 @@ function openLineeModalFermate() {
 function closeLineeModalFermate() {
   const lineeModal = document.getElementById('linee-fermate-modal');
   if (!lineeModal) return;
-  
+
   lineeModal.classList.remove('show');
   setTimeout(() => {
     lineeModal.style.display = 'none';
@@ -1072,7 +1086,7 @@ function selectLineaFermate(idx, nome) {
   const mobileMessage = document.getElementById('mobile-fermate-message');
   const andataTitle = document.getElementById('andata-title');
   const ritornoTitle = document.getElementById('ritorno-title');
-  
+
   // Aggiorna testo pulsante e salva indice
   if (lineaText) {
     lineaText.textContent = nome;
@@ -1080,17 +1094,17 @@ function selectLineaFermate(idx, nome) {
   if (lineaBtn) {
     lineaBtn.dataset.selectedIndex = idx;
   }
-  
+
   // Aggiorna titoli e mostra fermate
   const linea = tariffario[idx];
   const fermate = linea.fermate;
-  
+
   // Aggiorna titoli
   const firstStop = fermate[0];
   const lastStop = fermate[fermate.length - 1];
   if (andataTitle) andataTitle.textContent = `(${firstStop} → ${lastStop})`;
   if (ritornoTitle) ritornoTitle.textContent = `(${lastStop} → ${firstStop})`;
-  
+
   // Mostra griglia e ricerca
   if (gridContainer) {
     gridContainer.style.display = 'grid';
@@ -1100,13 +1114,13 @@ function selectLineaFermate(idx, nome) {
     searchContainer.style.display = 'flex';
     searchContainer.classList.add('show-on-mobile'); // Classe per nascondere su mobile
   }
-  
+
   // Mostra messaggio mobile
   if (mobileMessage) mobileMessage.style.display = 'block';
-  
+
   // Renderizza tratte con l'indice selezionato
   renderFermate(idx);
-  
+
   // Chiudi modal
   closeLineeModalFermate();
 }
@@ -1115,23 +1129,23 @@ function selectLineaFermate(idx, nome) {
 function populateLineePrezzi() {
   const lineeModalList = document.getElementById('linee-prezzi-modal-list');
   const lineaBtn = document.getElementById('linea-prezzi-btn');
-  
+
   if (!lineeModalList) return;
-  
+
   // Popola modal con le linee
   lineeModalList.innerHTML = '';
   tariffario.forEach((l, i) => {
     const li = document.createElement('li');
     li.className = 'linea-modal-item';
     li.dataset.lineaIdx = i;
-    
+
     // Estrai numero linea dal nome (es: "Linea 400 Udine-Grado" -> "400")
     const lineaNumMatch = l.nome.match(/\d+/);
     const lineaNum = lineaNumMatch ? lineaNumMatch[0] : (i + 1);
-    
+
     // Estrai percorso (es: "Udine-Grado")
     const percorso = l.nome.replace(/Linea\s+\d+\s*/i, '');
-    
+
     // Crea struttura HTML con icona e dettagli
     li.innerHTML = `
       <div class="linea-badge">
@@ -1144,11 +1158,11 @@ function populateLineePrezzi() {
       </div>
       <span class="linea-arrow">›</span>
     `;
-    
+
     li.addEventListener('click', () => selectLineaPrezzi(i, l.nome));
     lineeModalList.appendChild(li);
   });
-  
+
   // Event listener per apertura modal
   if (lineaBtn) {
     lineaBtn.addEventListener('click', openLineeModalPrezzi);
@@ -1159,7 +1173,7 @@ function populateLineePrezzi() {
 function openLineeModalPrezzi() {
   const lineeModal = document.getElementById('linee-prezzi-modal');
   if (!lineeModal) return;
-  
+
   lineeModal.style.display = 'flex';
   setTimeout(() => lineeModal.classList.add('show'), 10);
 }
@@ -1168,7 +1182,7 @@ function openLineeModalPrezzi() {
 function closeLineeModalPrezzi() {
   const lineeModal = document.getElementById('linee-prezzi-modal');
   if (!lineeModal) return;
-  
+
   lineeModal.classList.remove('show');
   setTimeout(() => {
     lineeModal.style.display = 'none';
@@ -1183,7 +1197,7 @@ function selectLineaPrezzi(idx, nome) {
   const searchContainer = document.getElementById('search-container-prezzi');
   const andataTitle = document.getElementById('andata-title');
   const ritornoTitle = document.getElementById('ritorno-title');
-  
+
   // Aggiorna testo pulsante e salva indice
   if (lineaText) {
     lineaText.textContent = nome;
@@ -1191,24 +1205,24 @@ function selectLineaPrezzi(idx, nome) {
   if (lineaBtn) {
     lineaBtn.dataset.selectedIndex = idx;
   }
-  
+
   // Aggiorna titoli e mostra prezzi
   const linea = tariffario[idx];
   const fermate = linea.fermate;
-  
+
   // Aggiorna titoli
   const firstStop = fermate[0];
   const lastStop = fermate[fermate.length - 1];
   if (andataTitle) andataTitle.textContent = `Prezzi e codici biglietto (${firstStop} → ${lastStop})`;
   if (ritornoTitle) ritornoTitle.textContent = `Prezzi e codici biglietto (${lastStop} → ${firstStop})`;
-  
+
   // Mostra griglia e ricerca
   if (gridContainer) gridContainer.style.display = 'grid';
   if (searchContainer) searchContainer.style.display = 'flex';
-  
+
   // Renderizza prezzi con l'indice selezionato
   renderPrezzi(idx);
-  
+
   // Chiudi modal
   closeLineeModalPrezzi();
 }
@@ -1300,7 +1314,7 @@ async function handleLocationClick() {
   const locationBtn = document.getElementById('location-btn');
   const locationIcon = document.getElementById('location-icon');
   const locationText = document.getElementById('location-text');
-  
+
   if (!locationBtn) return;
 
   // Mostra stato di caricamento
@@ -1310,23 +1324,23 @@ async function handleLocationClick() {
 
   try {
     await requestUserLocation();
-    
+
     // Aggiorna UI
     if (locationIcon) locationIcon.textContent = '📍';
     if (locationText) locationText.textContent = 'Ordina per distanza';
     locationBtn.classList.add('active');
-    
+
     // Salva preferenza
     try {
       localStorage.setItem('tpl.locationEnabled', 'true');
-    } catch {}
-    
+    } catch { }
+
     // Mostra notifica di successo
     showLocationNotification('Posizione rilevata! Le fermate saranno ordinate per distanza.', 'success');
-    
+
   } catch (error) {
     console.error('Errore geolocalizzazione:', error);
-    
+
     // Determina il tipo di errore
     let errorMessage = 'Errore nel rilevamento della posizione';
     if (error.code === 1) {
@@ -1336,14 +1350,14 @@ async function handleLocationClick() {
     } else if (error.code === 3) {
       errorMessage = 'Timeout nel rilevamento. Riprova più tardi.';
     }
-    
+
     // Mostra errore
     if (locationIcon) locationIcon.textContent = '❌';
     if (locationText) locationText.textContent = 'Errore rilevamento';
-    
+
     // Mostra notifica di errore
     showLocationNotification(errorMessage, 'error');
-    
+
     // Reset dopo 3 secondi
     setTimeout(() => {
       if (locationIcon) locationIcon.textContent = '📍';
@@ -1382,13 +1396,13 @@ async function handleFermateLocationClick() {
     // Salva preferenza
     try {
       localStorage.setItem('tpl.locationEnabled', 'true');
-    } catch {}
+    } catch { }
 
     // Ri-ordina le fermate per distanza
     if (fermateModalList && fermateModalList.children.length > 0) {
       const fermate = Array.from(fermateModalList.children).map(li => li.textContent.trim());
       const sortedFermate = sortFermateByDistance(fermate, userPosition);
-      
+
       // Re-renderizza la lista ordinata
       fermateModalList.innerHTML = '';
       sortedFermate.forEach((fermata, index) => {
@@ -1401,11 +1415,11 @@ async function handleFermateLocationClick() {
 
   } catch (error) {
     console.error('Errore geolocalizzazione modal:', error);
-    
+
     // Reset UI
     if (fermateLocationIcon) fermateLocationIcon.textContent = '❌';
     if (fermateLocationText) fermateLocationText.textContent = 'Errore';
-    
+
     // Gestisci errori specifici
     let errorMessage = 'Errore durante il rilevamento della posizione';
     if (error.code === 1) {
@@ -1417,7 +1431,7 @@ async function handleFermateLocationClick() {
     }
 
     showLocationNotification(errorMessage, 'error');
-    
+
     // Reset dopo 3 secondi
     setTimeout(() => {
       if (fermateLocationIcon) fermateLocationIcon.textContent = '📍';
@@ -1432,19 +1446,19 @@ function disableLocationSorting() {
   const locationBtn = document.getElementById('location-btn');
   const locationIcon = document.getElementById('location-icon');
   const locationText = document.getElementById('location-text');
-  
+
   if (locationBtn) {
     locationBtn.classList.remove('active');
     locationBtn.disabled = false;
   }
-  
+
   if (locationIcon) locationIcon.textContent = '📍';
   if (locationText) locationText.textContent = 'Rileva posizione';
-  
+
   // Rimuovi preferenza
   try {
     localStorage.removeItem('tpl.locationEnabled');
-  } catch {}
+  } catch { }
 }
 
 // Avvia logica tratte/tariffe solo se siamo su tratte.html o tariffe.html
@@ -1526,58 +1540,58 @@ window.addEventListener('DOMContentLoaded', async () => {
 });
 
 // Event listeners per controllo animazione
-window.addEventListener('DOMContentLoaded', function() {
-// Carica preferenza all'avvio
-loadAnimationPreference();
+window.addEventListener('DOMContentLoaded', function () {
+  // Carica preferenza all'avvio
+  loadAnimationPreference();
 
-// Inizializza la mini card versione
-initMobileVersionCard();
-handleQuickUpdate();
+  // Inizializza la mini card versione
+  initMobileVersionCard();
+  handleQuickUpdate();
 
-// Inizializza la mini card versione nel menu mobile
-function initMobileVersionCard() {
-  const versionCard = document.querySelector('.mobile-version-card');
-  if (!versionCard) return;
-  
-  // Aggiorna i valori nella card
-  const versionNumber = document.getElementById('mobile-version-number');
-  const versionDate = document.getElementById('mobile-version-date');
-  
-  // Leggi versione dinamicamente da changelog.js
-  const versionData = getCurrentVersion();
-  if (versionNumber) versionNumber.textContent = `Versione ${versionData ? versionData.version : getCurrentVersionSync()}`;
-  if (versionDate) {
-    const dateTime = versionData ? 
-      (versionData.date + (versionData.time ? ' ' + versionData.time : '')) : 
-      'Data non disponibile';
-    versionDate.textContent = dateTime;
+  // Inizializza la mini card versione nel menu mobile
+  function initMobileVersionCard() {
+    const versionCard = document.querySelector('.mobile-version-card');
+    if (!versionCard) return;
+
+    // Aggiorna i valori nella card
+    const versionNumber = document.getElementById('mobile-version-number');
+    const versionDate = document.getElementById('mobile-version-date');
+
+    // Leggi versione dinamicamente da changelog.js
+    const versionData = getCurrentVersion();
+    if (versionNumber) versionNumber.textContent = `Versione ${versionData ? versionData.version : getCurrentVersionSync()}`;
+    if (versionDate) {
+      const dateTime = versionData ?
+        (versionData.date + (versionData.time ? ' ' + versionData.time : '')) :
+        'Data non disponibile';
+      versionDate.textContent = dateTime;
+    }
   }
-}
 
-// Gestisce il click sulla card versione
-function handleQuickUpdate() {
-  const versionCard = document.getElementById('mobile-version-card');
-  if (versionCard) {
-    versionCard.addEventListener('click', function() {
-      // Chiude il menu mobile se aperto
-      const mobileMenu = document.getElementById('mobile-menu');
-      const overlay = document.getElementById('mobile-menu-overlay');
-      if (mobileMenu && overlay) {
-        mobileMenu.classList.remove('active');
-        overlay.classList.remove('active');
-      }
-      // Apre il modale di aggiornamento
-      if (typeof Updates !== 'undefined' && typeof Updates.checkForUpdates === 'function') {
-        Updates.checkForUpdates();
-      } else {
-        console.error('❌ Updates.checkForUpdates non disponibile');
-      }
-    });
+  // Gestisce il click sulla card versione
+  function handleQuickUpdate() {
+    const versionCard = document.getElementById('mobile-version-card');
+    if (versionCard) {
+      versionCard.addEventListener('click', function () {
+        // Chiude il menu mobile se aperto
+        const mobileMenu = document.getElementById('mobile-menu');
+        const overlay = document.getElementById('mobile-menu-overlay');
+        if (mobileMenu && overlay) {
+          mobileMenu.classList.remove('active');
+          overlay.classList.remove('active');
+        }
+        // Apre il modale di aggiornamento
+        if (typeof Updates !== 'undefined' && typeof Updates.checkForUpdates === 'function') {
+          Updates.checkForUpdates();
+        } else {
+          console.error('❌ Updates.checkForUpdates non disponibile');
+        }
+      });
+    }
   }
-}
-  
+
   // Pulsanti desktop - usa event delegation per gestire tutti i pulsanti
-  document.addEventListener('click', function(e) {
+  document.addEventListener('click', function (e) {
     if (e.target.closest('#animationToggle')) {
       if (window.Settings && window.Settings.toggleAnimation) {
         window.Settings.toggleAnimation();
@@ -1596,7 +1610,7 @@ function handleQuickUpdate() {
 });
 
 // --- HAMBURGER MENU LOGIC ---
-(function() {
+(function () {
   const hamburgerToggle = document.getElementById('hamburger-toggle');
   const mobileMenu = document.getElementById('mobile-menu');
   const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
@@ -1687,7 +1701,7 @@ function handleQuickUpdate() {
   const pwaBtnInstall = document.getElementById('pwa-install-button');
   const pwaBtnLater = document.getElementById('pwa-install-later');
   const pwaIosHint = document.getElementById('pwa-ios-hint');
-  
+
   // Se il banner non esiste nella pagina, esci
   if (!pwaBanner) return;
 
@@ -1726,7 +1740,7 @@ function handleQuickUpdate() {
   function isAndroidDevice() {
     return /android/i.test(window.navigator.userAgent);
   }
-  
+
   const isSafari = /^((?!chrome|android).)*safari/i.test(window.navigator.userAgent);
   const isChrome = /chrome|chromium|crios/i.test(window.navigator.userAgent) && !/edge|edg/i.test(window.navigator.userAgent);
 
@@ -1751,7 +1765,7 @@ function handleQuickUpdate() {
         deferredInstallPrompt = null;
         hideBanner();
         if (outcome === 'dismissed') {
-          try { localStorage.setItem('tpl.pwa.dismissTs', String(Date.now())); } catch {}
+          try { localStorage.setItem('tpl.pwa.dismissTs', String(Date.now())); } catch { }
         }
       } else {
         // iOS o browser senza evento: toggle hint con animazione
@@ -1775,14 +1789,14 @@ function handleQuickUpdate() {
   if (pwaBtnLater) {
     pwaBtnLater.addEventListener('click', () => {
       hideBanner();
-      try { localStorage.setItem('tpl.pwa.dismissTs', String(Date.now())); } catch {}
+      try { localStorage.setItem('tpl.pwa.dismissTs', String(Date.now())); } catch { }
     });
   }
 
   // Evento installata
   window.addEventListener('appinstalled', () => {
     hideBanner();
-    try { localStorage.removeItem('tpl.pwa.dismissTs'); } catch {}
+    try { localStorage.removeItem('tpl.pwa.dismissTs'); } catch { }
   });
 
   // iOS: mostra banner con hint per istruzioni manuali
@@ -1798,7 +1812,7 @@ function handleQuickUpdate() {
     if (pwaBtnInstall) pwaBtnInstall.style.display = 'inline-block';
     showBanner();
   }
-  
+
   // Listener per visibilità pagina (nasconde banner quando app va in background)
   document.addEventListener('visibilitychange', () => {
     if (document.hidden && isStandalone()) {
@@ -1831,7 +1845,7 @@ let offlineBanner = null;
 // Funzione per creare banner offline
 function createOfflineBanner() {
   if (offlineBanner) return;
-  
+
   offlineBanner = document.createElement('div');
   offlineBanner.id = 'offline-banner';
   offlineBanner.className = 'offline-banner';
@@ -1842,9 +1856,9 @@ function createOfflineBanner() {
       <button class="offline-close" onclick="hideOfflineBanner()">×</button>
     </div>
   `;
-  
+
   document.body.appendChild(offlineBanner);
-  
+
   // Animazione di entrata
   setTimeout(() => {
     offlineBanner.classList.add('show');
@@ -1868,10 +1882,10 @@ function hideOfflineBanner() {
 // Funzione per mostrare notifica offline
 function showOfflineNotification() {
   if (offlineNotificationShown) return;
-  
+
   createOfflineBanner();
   offlineNotificationShown = true;
-  
+
   // Auto-hide dopo 5 secondi se online
   if (isOnline) {
     setTimeout(() => {
@@ -1886,7 +1900,7 @@ function showOfflineNotification() {
 window.addEventListener('online', () => {
   console.log('🌐 Connessione ripristinata');
   isOnline = true;
-  
+
   if (offlineBanner) {
     // Aggiorna testo e stile quando torna online
     offlineBanner.classList.add('online');
@@ -1898,7 +1912,7 @@ window.addEventListener('online', () => {
     if (iconElement) {
       iconElement.textContent = '✅';
     }
-    
+
     // Nasconde automaticamente dopo 2 secondi
     setTimeout(() => {
       hideOfflineBanner();
@@ -1909,7 +1923,7 @@ window.addEventListener('online', () => {
 window.addEventListener('offline', () => {
   console.log('📡 Connessione persa');
   isOnline = false;
-  
+
   if (!offlineNotificationShown) {
     showOfflineNotification();
   }
@@ -1921,7 +1935,7 @@ if ('serviceWorker' in navigator) {
     if (event.data && event.data.type === 'OFFLINE_MODE') {
       console.log('📡 Service Worker: Modalità offline attivata');
       isOnline = false;
-      
+
       if (!offlineNotificationShown) {
         showOfflineNotification();
       }
@@ -1945,280 +1959,280 @@ if (!navigator.onLine) {
 // La gestione del modal impostazioni (UI) è in js/components/modals.js
 // Viene inizializzato in initializeModalsModules() dopo il caricamento dei dati
 
-  // ========================================
-  // PWA BOTTOM NAVIGATION
-  // Gestione della barra di navigazione inferiore in modalità PWA
-  // ========================================
-  
-  (function initPWABottomNav() {
-    const bottomNav = document.getElementById('pwa-bottom-nav');
-    const brandHeader = document.getElementById('pwa-brand-header');
-    if (!bottomNav && !brandHeader) return; // Pagina senza PWA elements
-    
-    // Verifica se siamo in modalità PWA
-    function isStandalone() {
-      // Controlla se è attiva la modalità test
-      const isTestMode = localStorage.getItem('tpl.pwaTestMode') === 'true';
-      if (isTestMode) {
-        return true; // Forza modalità PWA per testing
+// ========================================
+// PWA BOTTOM NAVIGATION
+// Gestione della barra di navigazione inferiore in modalità PWA
+// ========================================
+
+(function initPWABottomNav() {
+  const bottomNav = document.getElementById('pwa-bottom-nav');
+  const brandHeader = document.getElementById('pwa-brand-header');
+  if (!bottomNav && !brandHeader) return; // Pagina senza PWA elements
+
+  // Verifica se siamo in modalità PWA
+  function isStandalone() {
+    // Controlla se è attiva la modalità test
+    const isTestMode = localStorage.getItem('tpl.pwaTestMode') === 'true';
+    if (isTestMode) {
+      return true; // Forza modalità PWA per testing
+    }
+
+    // Controlla la modalità reale PWA
+    return (
+      window.matchMedia('(display-mode: standalone)').matches ||
+      window.navigator.standalone === true
+    );
+  }
+
+  // Mostra/nasconde PWA elements (brand header + bottom nav)
+  function toggleBottomNav() {
+    const isPWA = isStandalone();
+
+    if (isPWA) {
+      if (brandHeader) {
+        brandHeader.style.display = 'flex';
+        brandHeader.classList.add('show');
       }
-      
-      // Controlla la modalità reale PWA
-      return (
-        window.matchMedia('(display-mode: standalone)').matches ||
-        window.navigator.standalone === true
-      );
-    }
-    
-    // Mostra/nasconde PWA elements (brand header + bottom nav)
-    function toggleBottomNav() {
-      const isPWA = isStandalone();
-      
-      if (isPWA) {
-        if (brandHeader) {
-          brandHeader.style.display = 'flex';
-          brandHeader.classList.add('show');
-        }
-        if (bottomNav) {
-          bottomNav.style.display = 'flex';
-          bottomNav.classList.add('show');
-        }
-        document.body.classList.add('pwa-mode');
-        console.log('📱 PWA Mode: ATTIVA (Brand Header + Bottom Nav)');
-      } else {
-        if (brandHeader) {
-          brandHeader.style.display = 'none';
-          brandHeader.classList.remove('show');
-        }
-        if (bottomNav) {
-          bottomNav.style.display = 'none';
-          bottomNav.classList.remove('show');
-        }
-        document.body.classList.remove('pwa-mode');
-        console.log('🌐 PWA Mode: nascosta (modalità browser)');
+      if (bottomNav) {
+        bottomNav.style.display = 'flex';
+        bottomNav.classList.add('show');
       }
+      document.body.classList.add('pwa-mode');
+      console.log('📱 PWA Mode: ATTIVA (Brand Header + Bottom Nav)');
+    } else {
+      if (brandHeader) {
+        brandHeader.style.display = 'none';
+        brandHeader.classList.remove('show');
+      }
+      if (bottomNav) {
+        bottomNav.style.display = 'none';
+        bottomNav.classList.remove('show');
+      }
+      document.body.classList.remove('pwa-mode');
+      console.log('🌐 PWA Mode: nascosta (modalità browser)');
     }
-    
-    // Evidenzia la tab attiva in base alla pagina corrente
-    function highlightActiveTab() {
-      const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-      const items = bottomNav.querySelectorAll('.pwa-nav-item');
-      
-      items.forEach(item => {
-        item.classList.remove('active');
-        
-        const page = item.getAttribute('data-page');
-        if (
-          (page === 'home' && (currentPage === 'index.html' || currentPage === '')) ||
-          (page === 'fermate' && currentPage === 'fermate.html') ||
-          (page === 'prezzi' && currentPage === 'prezzi.html')
-        ) {
-          item.classList.add('active');
-        }
-      });
-    }
-    
-    // Gestisce il click sul pulsante impostazioni
-    function setupSettingsButton() {
-      const settingsBtn = document.getElementById('pwa-settings-btn');
-      const settingsModal = document.getElementById('settings-modal');
-      
-      console.log('🔧 Setup pulsante impostazioni:', {
-        btn: !!settingsBtn,
-        modal: !!settingsModal
-      });
-      
-      if (settingsBtn && settingsModal) {
-        settingsBtn.addEventListener('click', (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          console.log('⚙️ Click su pulsante impostazioni!');
-          
-          // Apri il modal con animazione
-          settingsModal.style.display = 'flex';
-          setTimeout(() => {
-            settingsModal.classList.add('show');
-          }, 10);
-          
-          console.log('✅ Modal impostazioni aperto', {
-            display: settingsModal.style.display,
-            classList: settingsModal.classList.toString()
-          });
+  }
+
+  // Evidenzia la tab attiva in base alla pagina corrente
+  function highlightActiveTab() {
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    const items = bottomNav.querySelectorAll('.pwa-nav-item');
+
+    items.forEach(item => {
+      item.classList.remove('active');
+
+      const page = item.getAttribute('data-page');
+      if (
+        (page === 'home' && (currentPage === 'index.html' || currentPage === '')) ||
+        (page === 'fermate' && currentPage === 'fermate.html') ||
+        (page === 'prezzi' && currentPage === 'prezzi.html')
+      ) {
+        item.classList.add('active');
+      }
+    });
+  }
+
+  // Gestisce il click sul pulsante impostazioni
+  function setupSettingsButton() {
+    const settingsBtn = document.getElementById('pwa-settings-btn');
+    const settingsModal = document.getElementById('settings-modal');
+
+    console.log('🔧 Setup pulsante impostazioni:', {
+      btn: !!settingsBtn,
+      modal: !!settingsModal
+    });
+
+    if (settingsBtn && settingsModal) {
+      settingsBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('⚙️ Click su pulsante impostazioni!');
+
+        // Apri il modal con animazione
+        settingsModal.style.display = 'flex';
+        setTimeout(() => {
+          settingsModal.classList.add('show');
+        }, 10);
+
+        console.log('✅ Modal impostazioni aperto', {
+          display: settingsModal.style.display,
+          classList: settingsModal.classList.toString()
         });
-        console.log('✅ Event listener aggiunto al pulsante impostazioni');
-      } else {
-        console.warn('⚠️ Pulsante o modal impostazioni non trovato!');
-      }
+      });
+      console.log('✅ Event listener aggiunto al pulsante impostazioni');
+    } else {
+      console.warn('⚠️ Pulsante o modal impostazioni non trovato!');
     }
-    
-    // Inizializza al caricamento
+  }
+
+  // Inizializza al caricamento
+  toggleBottomNav();
+  highlightActiveTab();
+  setupSettingsButton();
+
+  // Listener per cambio modalità test (da localStorage)
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'tpl.pwaTestMode') {
+      console.log('🧪 Modalità test PWA cambiata:', e.newValue);
+      toggleBottomNav();
+    }
+  });
+
+  // Listener per aggiornamenti forzati (da test.html)
+  window.addEventListener('pwaTestModeChanged', () => {
+    console.log('🧪 Evento pwaTestModeChanged ricevuto');
+    toggleBottomNav();
+  });
+
+  // ===== GESTIONE SIMULAZIONE OFFLINE GLOBALE =====
+  // Controlla se la modalità offline test è attiva e trigger l'evento
+  (function checkOfflineTestMode() {
+    const isOfflineTestMode = localStorage.getItem('tpl.offlineTestMode') === 'true';
+
+    if (isOfflineTestMode) {
+      console.log('🔴 Modalità offline test attiva - triggering evento offline');
+      // Trigger evento offline al caricamento della pagina
+      setTimeout(() => {
+        window.dispatchEvent(new Event('offline'));
+      }, 100);
+    }
+
+    // Listener per cambio stato offline test mode
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'tpl.offlineTestMode') {
+        const isOffline = e.newValue === 'true';
+        console.log('🌐 Modalità offline test cambiata:', isOffline ? 'OFFLINE' : 'ONLINE');
+
+        if (isOffline) {
+          window.dispatchEvent(new Event('offline'));
+        } else {
+          window.dispatchEvent(new Event('online'));
+        }
+      }
+    });
+  })();
+
+  // Espone funzione refresh globale per la pagina test
+  window.refreshPWABottomNav = function () {
     toggleBottomNav();
     highlightActiveTab();
-    setupSettingsButton();
-    
-    // Listener per cambio modalità test (da localStorage)
-    window.addEventListener('storage', (e) => {
-      if (e.key === 'tpl.pwaTestMode') {
-        console.log('🧪 Modalità test PWA cambiata:', e.newValue);
-        toggleBottomNav();
+  };
+})();
+
+// ========================================
+// PULSANTE "VEDI TUTTI GLI AGGIORNAMENTI"
+// ========================================
+(function () {
+  const showAllBtn = document.getElementById('show-all-updates-btn');
+
+  if (showAllBtn) {
+    showAllBtn.addEventListener('click', function () {
+      const hiddenItems = document.querySelectorAll('.update-item-hidden');
+      const isExpanded = this.classList.contains('active');
+
+      if (isExpanded) {
+        // Nascondi
+        hiddenItems.forEach(item => {
+          item.classList.remove('show');
+          setTimeout(() => {
+            item.style.display = 'none';
+          }, 300);
+        });
+        this.classList.remove('active');
+        this.querySelector('.show-updates-text').textContent = 'Vedi tutti gli aggiornamenti';
+      } else {
+        // Mostra
+        hiddenItems.forEach((item, index) => {
+          item.style.display = 'block';
+          setTimeout(() => {
+            item.classList.add('show');
+          }, index * 50);
+        });
+        this.classList.add('active');
+        this.querySelector('.show-updates-text').textContent = 'Mostra';
       }
     });
-    
-    // Listener per aggiornamenti forzati (da test.html)
-    window.addEventListener('pwaTestModeChanged', () => {
-      console.log('🧪 Evento pwaTestModeChanged ricevuto');
-      toggleBottomNav();
-    });
-    
-    // ===== GESTIONE SIMULAZIONE OFFLINE GLOBALE =====
-    // Controlla se la modalità offline test è attiva e trigger l'evento
-    (function checkOfflineTestMode() {
-      const isOfflineTestMode = localStorage.getItem('tpl.offlineTestMode') === 'true';
-      
-      if (isOfflineTestMode) {
-        console.log('🔴 Modalità offline test attiva - triggering evento offline');
-        // Trigger evento offline al caricamento della pagina
-        setTimeout(() => {
-          window.dispatchEvent(new Event('offline'));
-        }, 100);
-      }
-      
-      // Listener per cambio stato offline test mode
-      window.addEventListener('storage', (e) => {
-        if (e.key === 'tpl.offlineTestMode') {
-          const isOffline = e.newValue === 'true';
-          console.log('🌐 Modalità offline test cambiata:', isOffline ? 'OFFLINE' : 'ONLINE');
-          
-          if (isOffline) {
-            window.dispatchEvent(new Event('offline'));
-          } else {
-            window.dispatchEvent(new Event('online'));
-          }
-        }
-      });
-    })();
-    
-    // Espone funzione refresh globale per la pagina test
-    window.refreshPWABottomNav = function() {
-      toggleBottomNav();
-      highlightActiveTab();
-    };
-  })();
-  
-  // ========================================
-  // PULSANTE "VEDI TUTTI GLI AGGIORNAMENTI"
-  // ========================================
-  (function() {
-    const showAllBtn = document.getElementById('show-all-updates-btn');
-    
-    if (showAllBtn) {
-      showAllBtn.addEventListener('click', function() {
-        const hiddenItems = document.querySelectorAll('.update-item-hidden');
-        const isExpanded = this.classList.contains('active');
-        
-        if (isExpanded) {
-          // Nascondi
-          hiddenItems.forEach(item => {
-            item.classList.remove('show');
-            setTimeout(() => {
-              item.style.display = 'none';
-            }, 300);
-          });
-          this.classList.remove('active');
-          this.querySelector('.show-updates-text').textContent = 'Vedi tutti gli aggiornamenti';
-        } else {
-          // Mostra
-          hiddenItems.forEach((item, index) => {
-            item.style.display = 'block';
-            setTimeout(() => {
-              item.classList.add('show');
-            }, index * 50);
-          });
-          this.classList.add('active');
-          this.querySelector('.show-updates-text').textContent = 'Mostra';
-        }
-      });
-    }
-  })();
-  
-  // ========================================
-  // PULSANTE "RIAVVIA APP"
-  // ========================================
-  (function() {
-    const restartBtn = document.getElementById('restart-app-btn');
-    
-    if (restartBtn) {
-      restartBtn.addEventListener('click', function() {
-        console.log('🔄 Riavvio app...');
-        
-        // Feedback visivo
-        this.textContent = 'Riavvio...';
-        this.style.opacity = '0.6';
-        this.style.cursor = 'wait';
-        
-        // Riavvia dopo 300ms
-        setTimeout(() => {
-          location.reload();
-        }, 300);
-      });
-    }
-  })();
-  
-  // ========================================
-  // PWA SCROLL PROGRESS BAR
-  // Barra di progresso che indica quanto si è scrollato
-  // ========================================
-  
-  (function initScrollProgress() {
-    const brandHeader = document.getElementById('pwa-brand-header');
-    if (!brandHeader) return;
-    
-    function updateScrollProgress() {
-      // Calcola la percentuale di scroll
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const scrollPercentage = (scrollTop / scrollHeight) * 100;
-      
-      // Aggiorna la larghezza della barra ::after tramite CSS custom property
-      brandHeader.style.setProperty('--scroll-progress', scrollPercentage + '%');
-    }
-    
-    // Listener per lo scroll
-    window.addEventListener('scroll', updateScrollProgress, { passive: true });
-    
-    // Inizializza al caricamento
-    updateScrollProgress();
-  })();
-  
-  // ========================================
-  // PWA UPDATE CHECK BUTTON
-  // Pulsante per verificare aggiornamenti nel modal Impostazioni
-  // ========================================
-  
-  (function initPWAUpdateButton() {
-    const updateBtn = document.getElementById('pwa-cache-reset');
-    if (!updateBtn) return;
-    
-    updateBtn.addEventListener('click', function() {
-      console.log('🔄 Pulsante PWA Update cliccato');
-      
-      // Chiudi il modal Impostazioni prima
-      if (typeof SettingsModal !== 'undefined' && SettingsModal.close) {
-        SettingsModal.close();
-      }
-      
-      // Aspetta un attimo e poi verifica aggiornamenti
+  }
+})();
+
+// ========================================
+// PULSANTE "RIAVVIA APP"
+// ========================================
+(function () {
+  const restartBtn = document.getElementById('restart-app-btn');
+
+  if (restartBtn) {
+    restartBtn.addEventListener('click', function () {
+      console.log('🔄 Riavvio app...');
+
+      // Feedback visivo
+      this.textContent = 'Riavvio...';
+      this.style.opacity = '0.6';
+      this.style.cursor = 'wait';
+
+      // Riavvia dopo 300ms
       setTimeout(() => {
-        if (typeof Updates !== 'undefined' && typeof Updates.checkForUpdates === 'function') {
-          console.log('✅ Chiamata a Updates.checkForUpdates()');
-          Updates.checkForUpdates();
-        } else if (typeof checkForUpdates === 'function') {
-          // Fallback per compatibilità
-          console.log('✅ Chiamata a checkForUpdates() (fallback)');
-          checkForUpdates();
-        } else {
-          console.error('❌ Updates.checkForUpdates non è disponibile');
-        }
-      }, 400);
+        location.reload();
+      }, 300);
     });
-  })();
+  }
+})();
+
+// ========================================
+// PWA SCROLL PROGRESS BAR
+// Barra di progresso che indica quanto si è scrollato
+// ========================================
+
+(function initScrollProgress() {
+  const brandHeader = document.getElementById('pwa-brand-header');
+  if (!brandHeader) return;
+
+  function updateScrollProgress() {
+    // Calcola la percentuale di scroll
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrollPercentage = (scrollTop / scrollHeight) * 100;
+
+    // Aggiorna la larghezza della barra ::after tramite CSS custom property
+    brandHeader.style.setProperty('--scroll-progress', scrollPercentage + '%');
+  }
+
+  // Listener per lo scroll
+  window.addEventListener('scroll', updateScrollProgress, { passive: true });
+
+  // Inizializza al caricamento
+  updateScrollProgress();
+})();
+
+// ========================================
+// PWA UPDATE CHECK BUTTON
+// Pulsante per verificare aggiornamenti nel modal Impostazioni
+// ========================================
+
+(function initPWAUpdateButton() {
+  const updateBtn = document.getElementById('pwa-cache-reset');
+  if (!updateBtn) return;
+
+  updateBtn.addEventListener('click', function () {
+    console.log('🔄 Pulsante PWA Update cliccato');
+
+    // Chiudi il modal Impostazioni prima
+    if (typeof SettingsModal !== 'undefined' && SettingsModal.close) {
+      SettingsModal.close();
+    }
+
+    // Aspetta un attimo e poi verifica aggiornamenti
+    setTimeout(() => {
+      if (typeof Updates !== 'undefined' && typeof Updates.checkForUpdates === 'function') {
+        console.log('✅ Chiamata a Updates.checkForUpdates()');
+        Updates.checkForUpdates();
+      } else if (typeof checkForUpdates === 'function') {
+        // Fallback per compatibilità
+        console.log('✅ Chiamata a checkForUpdates() (fallback)');
+        checkForUpdates();
+      } else {
+        console.error('❌ Updates.checkForUpdates non è disponibile');
+      }
+    }, 400);
+  });
+})();

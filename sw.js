@@ -31,6 +31,8 @@ const STATIC_ASSETS = [
   './changelog.js', // Changelog dinamico
   './js/features/updates.js', // Verifica aggiornamenti
   './js/features/settings.js', // Gestione impostazioni
+  './js/features/prezzi.js', // Calcolo prezzi
+  './js/tests/test-prezzi.js', // Test suite prezzi (solo per test.html)
   './js/components/modals.js', // Modal fermate
   './database.json', // DATI CRITICI per offline
   './manifest.json', // PWA

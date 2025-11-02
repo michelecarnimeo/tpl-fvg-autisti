@@ -9,7 +9,7 @@
  */
 function generateFooterHTML(version) {
   const currentYear = new Date().getFullYear();
-  
+
   return `
     <p>© <span id="footer-year">${currentYear}</span> Michele Carnimeo. Tutti i diritti riservati.<br>TPL FVG è un marchio di TPL FVG S.C. a R.L. · <a href="test.html" style="color: inherit; text-decoration: none; transition: text-decoration 0.3s ease;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">TPL Autisti ${version}</a></p>
     <div class="footer-links" style="display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center;">
@@ -32,7 +32,7 @@ function updateFooterVersion(version) {
   if (!footerElement) {
     return;
   }
-  
+
   // Trova il link "TPL Autisti" nel footer e aggiorna la versione
   const footerLink = footerElement.querySelector('a[href="test.html"]');
   if (footerLink) {
@@ -49,9 +49,9 @@ async function initializeFooter() {
     console.warn('Footer element non trovato');
     return;
   }
-  
-  let version = '1.5.8'; // Fallback default
-  
+
+  let version = '1.6.0'; // Fallback default
+
   // Prova prima a leggere dal changelog (se già caricato)
   if (typeof changelogData !== 'undefined' && changelogData && changelogData.length > 0) {
     version = changelogData[0].version;
@@ -61,16 +61,16 @@ async function initializeFooter() {
     try {
       const response = await fetch('version.json');
       const versionData = await response.json();
-      version = versionData.version || '1.5.8';
+      version = versionData.version || '1.6.0';
       console.log('✅ Versione letta da version.json - v' + version);
     } catch (error) {
       console.warn('⚠️ Impossibile caricare version.json, uso versione fallback');
     }
   }
-  
+
   // Genera e inserisci il footer
   footerElement.innerHTML = generateFooterHTML(version);
-  
+
   console.log('✅ Footer caricato correttamente - v' + version);
 }
 

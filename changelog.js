@@ -4,6 +4,38 @@
 
 const changelogData = [
   {
+    version: '1.6.0',
+    date: '2 Novembre 2025',
+    time: '20:30',
+    title: 'Modularizzazione Prezzi + Test Suite Completa',
+    hidden: false,
+    changes: [
+      '📦 Nuovi Moduli JavaScript:',
+      '  • js/features/prezzi.js - Calcolo prezzi biglietti (logica pura, zero dipendenze DOM)',
+      '  • js/tests/test-prezzi.js - Suite completa con 26 test automatici',
+      '  • js/tests/test-utils.js - Utility per logging e gestione test',
+      '🔧 Miglioramenti Modulo Prezzi:',
+      '  • Modularizzato modulo prezzi: estratto prezzi.js con API pubblica',
+      '  • Creata suite test prezzi.js (26 test) con test-utils.js condiviso',
+      '  • Risolti test falliti: isValidSelection hardened, gestione matrici mancanti',
+      '  • Cache-busting su prezzi.js per forzare reload post-fix',
+      '  • Calcolo prezzi ora usa logica modulare e testabile (tutti passati ✅)',
+      '🧭 UX Test Page:',
+      '  • Aggiunto indice rapido con smooth scroll e sticky current section indicator',
+      '  • Sticky card sotto navbar mostra sezione corrente durante scroll',
+      '  • Migliorata tipografia sezione prezzi: scala gradualmente come home',
+      '  • Layout mobile ottimizzato: card flatte, bordi sottili, hover disabilitati',
+      '  • Miglioramenti sezione Info Device & Browser',
+      '📚 Documentazione:',
+      '  • Aggiornata architettura CSS e JS documentazione',
+      '  • Creati documenti analisi per future modularizzazioni',
+      '⚡ Ottimizzazioni:',
+      '  • Service Worker aggiornato per cache nuovi moduli',
+      '  • Zero dipendenze DOM nel modulo prezzi (logica pura)',
+      '  • Moduli totalmente testabili in isolamento'
+    ]
+  },
+  {
     version: '1.5.9',
     date: '1 Novembre 2025',
     time: '18:00',
@@ -281,20 +313,20 @@ const changelogData = [
 
 function renderChangelog(containerId = 'changelog-container') {
   const container = document.getElementById(containerId);
-  
+
   if (!container) {
     console.error(`❌ Container con ID "${containerId}" non trovato!`);
     return;
   }
-  
+
   let html = '';
-  
+
   // Genera l'HTML per ogni versione
   // Mostra solo l'ultima versione inizialmente, nascondi le altre
   changelogData.forEach((version, index) => {
     // Solo la prima versione (ultima) è visibile, tutte le altre sono nascoste
     const hiddenClass = index === 0 ? '' : ' update-item-hidden';
-    
+
     html += `
       <div class="update-item${hiddenClass}">
         <div class="update-version">
@@ -305,18 +337,18 @@ function renderChangelog(containerId = 'changelog-container') {
           <p class="update-title">${version.title}</p>
           <ul class="update-list">
 `;
-    
+
     // Aggiungi ogni change come <li>
     version.changes.forEach(change => {
       html += `            <li>${change}</li>\n`;
     });
-    
+
     html += `          </ul>
         </div>
       </div>
 `;
   });
-  
+
   // Aggiungi il pulsante "Vedi tutti gli aggiornamenti" solo se ci sono più versioni
   if (changelogData.length > 1) {
     html += `
@@ -326,10 +358,10 @@ function renderChangelog(containerId = 'changelog-container') {
       </button>
 `;
   }
-  
+
   // Inserisci l'HTML nel container
   container.innerHTML = html;
-  
+
   // Event listener per il pulsante "Vedi tutti gli aggiornamenti"
   const showAllBtn = document.getElementById('show-all-updates-btn');
   if (showAllBtn) {
@@ -337,13 +369,13 @@ function renderChangelog(containerId = 'changelog-container') {
       const hiddenItems = container.querySelectorAll('.update-item-hidden');
       const btnIcon = showAllBtn.querySelector('.show-updates-icon');
       const btnText = showAllBtn.querySelector('.show-updates-text');
-      
+
       if (hiddenItems.length > 0) {
         // Mostra tutte le versioni nascoste
         hiddenItems.forEach(item => {
           item.classList.remove('update-item-hidden');
         });
-        
+
         // Cambia testo del pulsante
         if (btnIcon) btnIcon.textContent = '🔽';
         if (btnText) btnText.textContent = 'Nascondi altri aggiornamenti';
@@ -355,14 +387,14 @@ function renderChangelog(containerId = 'changelog-container') {
             item.classList.add('update-item-hidden');
           }
         });
-        
+
         // Cambia testo del pulsante
         if (btnIcon) btnIcon.textContent = '📋';
         if (btnText) btnText.textContent = 'Vedi tutti gli aggiornamenti';
       }
     });
   }
-  
+
   console.log('✅ Changelog renderizzato con successo!');
 }
 
@@ -377,7 +409,7 @@ function getChangelogVersion() {
   if (!changelogData || changelogData.length === 0) {
     return null;
   }
-  
+
   const latest = changelogData[0];
   return {
     version: latest.version,
@@ -388,7 +420,7 @@ function getChangelogVersion() {
 
 /**
  * Ottiene solo la stringa della versione corrente
- * @returns {string} Versione corrente (es. "1.5.8") o stringa vuota se non disponibile
+ * @returns {string} Versione corrente (es. "1.5.9") o stringa vuota se non disponibile
  */
 function getChangelogVersionString() {
   const versionData = getChangelogVersion();
@@ -401,26 +433,26 @@ function getChangelogVersionString() {
 function updateAppVersion() {
   // Leggi la versione più recente dal changelog
   const versionData = getChangelogVersion();
-  
+
   if (!versionData) {
     console.warn('⚠️ changelogData non disponibile, impossibile aggiornare versione');
     return;
   }
-  
+
   const latestVersion = versionData.version;
   const latestDate = versionData.date;
   const latestTime = versionData.time;
-  
+
   // Trova tutti gli elementi con classe .info-version e aggiorna il testo
   const versionElements = document.querySelectorAll('.info-version');
-  
+
   versionElements.forEach(element => {
     element.textContent = `Versione ${latestVersion}`;
   });
-  
+
   // Trova tutti gli elementi con classe .info-date e aggiorna data e ora
   const dateElements = document.querySelectorAll('.info-date');
-  
+
   if (latestDate && latestTime) {
     dateElements.forEach(element => {
       element.textContent = `${latestDate} - ${latestTime}`;
@@ -430,12 +462,12 @@ function updateAppVersion() {
       element.textContent = latestDate;
     });
   }
-  
+
   // Aggiorna anche il footer se esiste
   if (typeof updateFooterVersion === 'function') {
     updateFooterVersion(latestVersion);
   }
-  
+
   if (versionElements.length > 0 || dateElements.length > 0) {
     console.log(`✅ Versione aggiornata automaticamente a ${latestVersion} in ${versionElements.length} elemento/i versione e ${dateElements.length} elemento/i data`);
   }

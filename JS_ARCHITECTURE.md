@@ -21,14 +21,17 @@ tpl-fvg-autisti/
 │   │
 │   ├── features/
 │   │   ├── updates.js          ✅ FATTO - Verifica aggiornamenti
-│   │   ├── settings.js         ⏳ TODO - Logica impostazioni (tema, font, accessibilità)
+│   │   ├── settings.js         ✅ FATTO - Logica impostazioni (tema, font, accessibilità)
+│   │   ├── prezzi.js           ✅ FATTO - Calcolo prezzi (funzioni pure)
 │   │   ├── animations.js       ← Logica animazioni JS ⏳ TODO
-│   │   ├── location.js         ← Geolocalizzazione ⏳ TODO
-│   │   └── pricing.js          ← Calcolo prezzi ⏳ TODO
+│   │   └── location.js         ← Geolocalizzazione ⏳ TODO
 │   │
 │   ├── data/
 │   │   ├── tariffario.js       ← Gestione dati tariffario ⏳ TODO
 │   │   └── database.js         ← Gestione database.json ⏳ TODO
+│   │
+│   ├── tests/
+│   │   └── test-prezzi.js      ← Suite test per prezzi.js ✅ FATTO
 │   │
 │   └── main.js                 ← Entry point, orchestra tutto ⏳ TODO
 │
@@ -58,7 +61,7 @@ I file JavaScript devono essere caricati in questo ordine preciso:
 <script src="js/features/updates.js"></script>
 <script src="js/features/settings.js"></script>
 <script src="js/features/location.js"></script>
-<script src="js/features/pricing.js"></script>
+<script src="js/features/prezzi.js"></script>
 <script src="js/features/animations.js"></script>
 
 <!-- 4. COMPONENTI (in qualsiasi ordine) -->
@@ -68,7 +71,10 @@ I file JavaScript devono essere caricati in questo ordine preciso:
 <script src="js/components/modals.js"></script>
 <script src="js/components/pwa.js"></script>
 
-<!-- 5. MAIN (sempre ultimo!) -->
+<!-- 5. TEST (solo per test.html, opzionali) -->
+<script src="js/tests/test-prezzi.js"></script>
+
+<!-- 6. MAIN (sempre ultimo!) -->
 <script src="js/main.js"></script>
 ```
 
@@ -287,7 +293,7 @@ export function getFermata(lineaIndex, fermataIndex) {
 ```
 
 **Dipendenze:** `data/database.js`  
-**Usato da:** Features (pricing.js)
+**Usato da:** Features (prezzi.js)
 
 ---
 
@@ -380,35 +386,278 @@ export function calculateDistance(lat1, lon1, lat2, lon2) {
 
 ---
 
-#### **features/pricing.js** ⏳
+#### **features/prezzi.js** ✅ FATTO
 
 **Contenuto:**
 
-- Calcolo prezzi biglietti
-- Validazione tratte
-- Gestione codici biglietto
-- Calcolo andata/ritorno
+- **Logica pura di calcolo prezzi** (senza dipendenze DOM)
+- Calcolo prezzo dalla matrice `tariffario[lineaIdx].prezzi[partenzaIdx][arrivoIdx]`
+- Recupero codice biglietto da `tariffario[lineaIdx].codici[partenzaIdx][arrivoIdx]`
+- Fallback su `tariffarioAggiornato` per codici mancanti
+- Validazione tratte e selezioni
+- Formattazione prezzi per display
+- **Futuro**: Calcolo andata/ritorno
 
-**Esempio:**
+**Completato:** 1 Novembre 2025
+
+**API Pubblica:**
 
 ```javascript
-// Calcolo prezzi
-import { getTariffario } from "../data/tariffario.js";
+window.Pricing = {
+  // Calcola prezzo per una tratta
+  calculatePrice(lineaIdx, partenzaIdx, arrivoIdx, tariffario, tariffarioAggiornato = null) {
+    // Ritorna: { prezzo: number|null, codice: string, valido: boolean }
+  },
+  
+  // Recupera solo il codice biglietto
+  getTicketCode(lineaIdx, partenzaIdx, arrivoIdx, tariffario, tariffarioAggiornato = null) {
+    // Ritorna: string (codice o '')
+  },
+  
+  // Valida selezione (linea, partenza, arrivo)
+  isValidSelection(lineaIdx, partenzaIdx, arrivoIdx, tariffario) {
+    // Ritorna: boolean
+  },
+  
+  // Valida se tratta esiste nella matrice
+  isRouteAvailable(lineaIdx, partenzaIdx, arrivoIdx, tariffario) {
+    // Ritorna: boolean
+  },
+  
+  // Formatta prezzo per display
+  formatPrice(prezzo) {
+    // Ritorna: string "X.XX €" o "-"
+  }
+  
+  // FUTURO: Calcolo andata + ritorno
+  // calculateRoundTrip(...) { ... }
+};
+```
 
-export function calculatePrice(lineaIndex, partenzaIndex, arrivoIndex) {
-  const tariffario = getTariffario();
-  const linea = tariffario[lineaIndex];
+**Principi di Design:**
 
-  // Logica calcolo prezzo...
-  return {
-    prezzo: 2.5,
-    codice: "ABC123",
-  };
+- **Funzioni pure**: Stesso input → stesso output, nessun effetto collaterale
+- **Nessuna dipendenza DOM**: Logica completamente separata dall'UI
+- **Parametri espliciti**: `tariffario` passato come parametro (non globale) per testabilità
+- **Gestione errori**: Ritorna oggetti con flag `valido` invece di lanciare eccezioni
+- **Fallback opzionale**: `tariffarioAggiornato` come parametro opzionale
+
+**Esempio d'uso:**
+
+```javascript
+// In script.js
+const result = Pricing.calculatePrice(
+  lineaIdx, 
+  partenzaIdx, 
+  arrivoIdx, 
+  tariffario, 
+  tariffarioAggiornato
+);
+
+if (result.valido) {
+  summaryPrezzo.textContent = Pricing.formatPrice(result.prezzo);
+  summaryCodice.textContent = result.codice || '-';
+} else {
+  // Gestisci errore...
 }
 ```
 
-**Dipendenze:** `data/tariffario.js`, `core/utils.js`  
-**Usato da:** Componenti, main.js
+**Dipendenze:** Nessuna (logica pura)  
+**Usato da:** `script.js` (orchestrazione UI), future pagine che necessitano calcolo prezzi
+
+**Responsabilità Dettagliate:**
+
+`prezzi.js` gestisce **TUTTE** le responsabilità relative al calcolo prezzi:
+
+1. **Gestione Parametri** (validazione/normalizzazione):
+   - `isValidSelection()` - Valida che selezione sia corretta (indici validi, non uguali, ecc.)
+   - `isRouteAvailable()` - Verifica che la tratta esista nella matrice
+   - Normalizzazione indici (parseInt, controlli bounds)
+
+2. **Calcolo Prezzo** (logica matematica):
+   - `calculatePrice()` - Legge dalla matrice `prezzi[][]`
+   - Gestione errori (try/catch, controlli tipo)
+   - Fallback su `tariffarioAggiornato` se codice non trovato
+
+3. **Recupero Codice**:
+   - `getTicketCode()` - Legge dalla matrice `codici[][]`
+   - Fallback su `tariffarioAggiornato` per codici mancanti
+
+4. **Formattazione**:
+   - `formatPrice()` - Formatta numero in "X.XX €" o "-"
+
+**Architettura e Flusso Dati:**
+
+```
+┌─────────────────────────────────────────┐
+│          prezzi.js                      │
+│      (COMPLETAMENTE INDIPENDENTE)       │
+├─────────────────────────────────────────┤
+│ 1. Gestione Parametri                   │
+│    - isValidSelection()                 │
+│    - isRouteAvailable()                 │
+│                                         │
+│ 2. Calcolo Prezzo                       │
+│    - calculatePrice()                   │
+│      → Legge matrice prezzi[][]         │
+│      → Gestisce errori                  │
+│                                         │
+│ 3. Recupero Codice                      │
+│    - getTicketCode()                    │
+│      → Legge matrice codici[][]         │
+│      → Fallback tariffarioAggiornato     │
+│                                         │
+│ 4. Formattazione                        │
+│    - formatPrice()                      │
+└─────────────────────────────────────────┘
+         ↑
+         │ riceve parametri (NO variabili globali)
+         │
+┌─────────────┐
+│ script.js   │ ← Carica tariffario (fetch)
+│             │ ← Passa dati a Pricing.calculatePrice()
+│             │ ← Aggiorna DOM con risultati
+└─────────────┘
+```
+
+**Indipendenza da script.js:**
+
+- ✅ `prezzi.js` NON importa nulla da `script.js`
+- ✅ `prezzi.js` NON legge variabili globali di `script.js`
+- ✅ `prezzi.js` riceve TUTTO come parametri (funzioni pure)
+- ✅ `script.js` dipende da `prezzi.js` (chiama le funzioni)
+- ✅ Separazione netta: Logica (`prezzi.js`) vs UI (`script.js`)
+
+**Esempio Test Isolato:**
+
+```javascript
+// Test completamente isolato (senza script.js)
+const tariffario = [{ 
+  fermate: ['A', 'B', 'C'],
+  prezzi: [[0, 2.5, 3.5], [2.5, 0, 2.0], [3.5, 2.0, 0]],
+  codici: [['', 'E1', 'E2'], ['E1', '', 'E1'], ['E2', 'E1', '']]
+}];
+
+const result = Pricing.calculatePrice(0, 0, 1, tariffario);
+// { prezzo: 2.5, codice: 'E1', valido: true }
+```
+
+**Futuro - Integrazione con tariffario.js:**
+
+Quando sarà creato `data/tariffario.js`, `prezzi.js` potrà usarlo direttamente:
+
+```javascript
+// FUTURO (quando tariffario.js esisterà)
+window.Pricing = {
+  calculatePrice(lineaIdx, partenzaIdx, arrivoIdx) {
+    // Non riceve più tariffario come parametro!
+    const tariffario = window.Tariffario.get(); // ← Legge da tariffario.js
+    // ... resto della logica ...
+  }
+};
+```
+
+Attualmente `prezzi.js` riceve `tariffario` come parametro per mantenere l'indipendenza e la testabilità.
+
+---
+
+### **5. tests/** (Test Suite)
+
+#### **tests/test-prezzi.js** ✅ FATTO
+
+**Contenuto:**
+
+- Suite completa di test per `prezzi.js` (26 test)
+- Test unitari: tutte le funzioni di `Pricing.*`
+- Test edge cases: stessa fermata, indici fuori range, dati malformati
+- Test robustezza: null, undefined, stringhe, NaN, Infinity
+- Test performance: misura velocità calcoli
+- Mock data helpers: creazione tariffari di test
+- Logica test separata da HTML
+
+**API Pubblica:**
+
+```javascript
+window.PrezziTests = {
+  // Esegue tutti i test (26 test)
+  async runAll(tariffario, tariffarioAggiornato, callbacks) {
+    // callbacks: { 
+    //   log: (message, type) => void, 
+    //   updateStatus: (id, status) => void 
+    // }
+    // Ritorna: Promise<void>
+  },
+  
+  // Helper per mock data (opzionale)
+  createMockTariffario(options) {
+    // Crea tariffario mock per test specifici
+  }
+}
+```
+
+**Esempio d'uso in `test.html`:**
+
+```javascript
+async function testPriceCalculation() {
+  const output = 'output-price';
+  document.getElementById(output).innerHTML = '';
+  
+  // Callbacks per integrazione con test.html
+  await PrezziTests.runAll(tariffario, tariffarioAggiornato, {
+    log: (message, type) => log(output, message, type),
+    updateStatus: (id, status) => updateTestStatus(id, status)
+  });
+}
+```
+
+**Test Inclusi (26 totali):**
+
+1. **Test Base (5)**:
+   - `calculatePrice()` - Calcolo prezzo base
+   - `getTicketCode()` - Recupero codice biglietto
+   - `formatPrice()` - Formattazione prezzo
+   - `isValidSelection()` - Validazione selezione
+   - `isRouteAvailable()` - Verifica tratta disponibile
+
+2. **Edge Cases (3)**:
+   - Stessa fermata (partenza = arrivo)
+   - Indici fuori range
+   - Fallback `tariffarioAggiornato`
+
+3. **Test Avanzati (7)**:
+   - Tariffario vuoto/null
+   - Indici negativi
+   - Indici come stringhe ("0", "5")
+   - Prezzo zero (gratuito)
+   - Matrici prezzi/codici mancanti
+   - Test con più linee diverse
+   - Performance (1000 calcoli)
+
+4. **Test Robusteza Dati (6)**:
+   - Prezzo null nella matrice
+   - Prezzo undefined nella matrice
+   - Prezzo come stringa ("3.50")
+   - Linea non esistente (indice 999)
+   - Struttura risultato corretta
+   - Prezzo NaN nella matrice
+
+5. **Test Dati Malformati (5)**:
+   - Prezzo Infinity nella matrice
+   - Prezzo negativo
+   - `fermate` non array
+   - Codice con spazi
+   - Solo codice senza prezzo
+
+**Completato:** 1 Novembre 2025
+
+**Dipendenze:** `features/prezzi.js` (usa `window.Pricing`)  
+**Usato da:** `test.html` (pagina test applicazione)
+
+**Note:**
+- I test sono completamente separati dalla logica HTML
+- Usa pattern callback per logging e aggiornamento status
+- Mock data creati dinamicamente per isolare test
+- Test eseguibili anche programmaticamente (non solo in `test.html`)
 
 ---
 
@@ -598,6 +847,9 @@ if (document.readyState === "loading") {
 - [x] **changelog.js** ✅ - Dati e visualizzazione changelog
 - [x] **features/updates.js** ✅ - Verifica aggiornamenti
 - [x] **components/modals.js** ✅ - UI modali (Fermate, Linee, Settings)
+- [x] **features/settings.js** ✅ - Logica impostazioni (tema, font, accessibilità)
+- [x] **features/prezzi.js** ✅ - Calcolo prezzi (funzioni pure, logica business)
+- [x] **tests/test-prezzi.js** ✅ - Suite test completa per prezzi.js (26 test)
 - [ ] core/config.js
 - [ ] core/utils.js
 - [ ] core/storage.js
@@ -605,7 +857,7 @@ if (document.readyState === "loading") {
 - [ ] data/tariffario.js
 - [ ] features/settings.js
 - [ ] features/location.js
-- [ ] features/pricing.js
+- [ ] features/prezzi.js
 - [ ] features/animations.js
 - [ ] components/navbar.js
 - [ ] components/pwa.js
@@ -628,7 +880,7 @@ const STATIC_ASSETS = [
   "./js/features/updates.js",
   "./js/features/settings.js",
   "./js/features/location.js",
-  "./js/features/pricing.js",
+  "./js/features/prezzi.js",
   "./js/features/animations.js",
   "./js/components/footer.js",
   "./js/components/changelog.js",
@@ -653,7 +905,7 @@ const STATIC_ASSETS = [
 
 - **Named exports**: `export function calculatePrice() { ... }`
 - **Default exports**: `export default function init() { ... }` (solo per entry points)
-- **Import**: `import { calculatePrice } from './features/pricing.js'`
+- **Import**: `import { calculatePrice } from './features/prezzi.js'`
 
 ### **Organizzazione:**
 
@@ -704,5 +956,5 @@ Ogni componente CSS ha il suo corrispondente JavaScript per la logica.
 
 ---
 
-**Ultimo aggiornamento**: 31 Ottobre 2025  
-**Versione progetto**: 1.5.8 (in sviluppo)
+**Ultimo aggiornamento**: 1 Novembre 2025  
+**Versione progetto**: 1.5.9 (in sviluppo)
