@@ -10,8 +10,6 @@
     <link rel="stylesheet" href="css/animations.css">
     <link rel="stylesheet" href="css/components/footer.css">
     <link rel="stylesheet" href="css/components/modals.css">
-    <!-- Test Modules (sticky headers) -->
-    <link rel="stylesheet" href="css/components/tests.css">
     <!-- Settings (struttura modale) -->
     <link rel="stylesheet" href="css/components/settings/impostazioni.css">
     <link rel="stylesheet" href="css/components/settings/accessibilita.css">
@@ -29,7 +27,7 @@
 
     <style>
         .test-container {
-            max-width: 600px;
+            max-width: 1400px;
             width: 95%;
             margin: 1.5rem auto;
             padding: 1rem;
@@ -84,6 +82,37 @@
         .test-status.pending {
             background: #fff3cd;
             color: #856404;
+        }
+
+        /* Ottimizzazione per schermi grandi */
+        @media (min-width: 1200px) {
+            .test-container {
+                max-width: 1500px;
+                width: 90%;
+                padding: 1.5rem;
+            }
+
+            .test-section {
+                padding: 2.5rem;
+                margin-bottom: 2rem;
+            }
+
+            .test-item {
+                padding: 2rem;
+                margin: 1rem 0;
+            }
+        }
+
+        @media (min-width: 1600px) {
+            .test-container {
+                max-width: 1600px;
+                width: 85%;
+                padding: 2rem;
+            }
+
+            .test-section {
+                padding: 3rem;
+            }
         }
 
         .test-button {
@@ -943,6 +972,65 @@
                 });
             </script>
         </div>
+
+        <!-- Card Bianca Sticky: mostra sezione corrente -->
+        <div id="sticky-current-section" class="toc-link"
+            style="position: sticky; top: 75px; z-index: 50; margin-bottom: 1rem; display:block; padding:0.5rem 0.75rem; background:white; border:2px solid #0ea5e9; border-radius:8px; text-decoration:none; color:inherit; transition: all 0.2s; opacity: 0; transform: translateY(-10px); pointer-events: none; box-shadow: 0 2px 8px rgba(14, 165, 233, 0.2);">
+            <span id="sticky-section-text">📊 Statistiche</span>
+        </div>
+
+        <script>
+            // Aggiorna card bianca sticky con sezione corrente
+            document.addEventListener('DOMContentLoaded', () => {
+                const stickyContainer = document.getElementById('sticky-current-section');
+                const stickyText = document.getElementById('sticky-section-text');
+                const sections = document.querySelectorAll('.test-section[id^="section-"]');
+                const tocLinks = document.querySelectorAll('.toc-link[data-section]');
+
+                if (!stickyContainer || !stickyText) return;
+
+                const observerOptions = {
+                    root: null,
+                    rootMargin: '-10% 0px -80% 0px',
+                    threshold: 0
+                };
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const id = entry.target.id;
+
+                            // Trova il link corrispondente nell'indice
+                            const matchingLink = Array.from(tocLinks).find(link => link.dataset.section === id);
+                            if (matchingLink && matchingLink.dataset.label && id !== 'section-index') {
+                                // Aggiorna il testo della card bianca (ora è span)
+                                stickyText.textContent = matchingLink.dataset.label;
+
+                                // Mostra la card
+                                stickyContainer.style.opacity = '1';
+                                stickyContainer.style.transform = 'translateY(0)';
+                            } else {
+                                // Nascondi se siamo nell'indice
+                                stickyContainer.style.opacity = '0';
+                                stickyContainer.style.transform = 'translateY(-10px)';
+                            }
+                        }
+                    });
+                }, observerOptions);
+
+                sections.forEach(section => {
+                    observer.observe(section);
+                });
+
+                // Nascondi quando sei in cima
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY < 200) {
+                        stickyContainer.style.opacity = '0';
+                        stickyContainer.style.transform = 'translateY(-10px)';
+                    }
+                });
+            });
+        </script>
 
         <!-- Statistiche -->
         <div id="section-stats" class="test-section">
@@ -1953,52 +2041,64 @@
         </div>
 
         <!-- Test 1: Caricamento Database -->
-        <div id="section-database" class="test-section has-module-header">
-            <!-- Nuovo header modulo: Database -->
-            <div class="test-header" data-module="database">
-                <div class="test-header-top">
-                    <div class="test-title">📦 Test Database</div>
-                    <div class="test-progress" id="db-header-progress">0/12</div>
-                    <span class="test-header-status status-pending" id="db-header-status">In attesa</span>
+        <div id="section-database" class="test-section">
+            <h2>📦 Test Caricamento Database</h2>
+
+            <!-- Header Colorato Gradient (Mobile 1 style) -->
+            <div
+                style="background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: white; padding: 1.25rem; border-radius: 16px; margin-bottom: 1rem; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);">
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                    <div style="font-size: 1rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem;">
+                        <span>🧪</span>
+                        <span>Test Database</span>
+                    </div>
+                    <div id="db-test-progress-text" style="font-size: 1.5rem; font-weight: 700;">0/12</div>
                 </div>
-                <div class="test-stats">
-                    <span>✅ <span id="db-header-passed">0</span></span>
-                    <span>❌ <span id="db-header-failed">0</span></span>
-                    <span>⏱️ <span id="db-header-time">0ms</span></span>
+                <div style="display: flex; gap: 1rem; font-size: 0.85rem; opacity: 0.95; margin-bottom: 0.75rem;">
+                    <span>✅ <span id="db-stats-passed">0</span></span>
+                    <span>❌ <span id="db-stats-failed">0</span></span>
+                    <span>⏱️ <span id="db-stats-time">0ms</span></span>
                 </div>
-                <div class="test-timestamp" id="db-header-timestamp" data-ts="">-</div>
-                <div class="test-bar">
-                    <div class="test-bar-fill" id="db-header-bar" data-progress="0"></div>
+                <div
+                    style="background: rgba(255, 255, 255, 0.25); height: 4px; border-radius: 999px; overflow: hidden;">
+                    <div id="db-test-progress-bar"
+                        style="background: white; height: 100%; width: 0%; border-radius: 999px; transition: width 0.3s ease; box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);">
+                    </div>
                 </div>
             </div>
 
-            <!-- CARD UNICA che contiene tutti i gruppi (stile Mobile 3) -->
-            <div
-                style="background: white; border-radius: 12px; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); overflow: hidden;">
+            <!-- Card Gruppi Test (Mobile 3 style + espandibile) -->
+            <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1rem;">
 
                 <!-- Gruppo 1: Caricamento & Struttura -->
-                <div style="border-bottom: 1px solid #f3f4f6; transition: background-color 0.2s, transform 0.2s;">
+                <div
+                    style="background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); overflow: hidden;">
                     <div onclick="toggleDbGroup('group1')"
-                        style="padding: 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.75rem;">
+                        style="padding: 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.75rem; user-select: none; transition: background 0.2s;">
+                        <!-- Icon Gradient (Mobile 3 style) -->
                         <div
-                            style="width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
+                            style="width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0; box-shadow: 0 2px 8px rgba(59, 130, 246, 0.25);">
                             📥
                         </div>
+                        <!-- Content -->
                         <div style="flex: 1; min-width: 0;">
                             <div style="font-weight: 600; font-size: 0.9rem; margin-bottom: 0.25rem;">Caricamento &
                                 Struttura</div>
-                            <div id="db-group1-subtitle" style="font-size: 0.75rem; color: #6b7280;">3 test da
-                                completare</div>
+                            <div id="db-group1-subtitle" style="font-size: 0.75rem; color: #6b7280;">3 test • In
+                                attesa...</div>
                         </div>
+                        <!-- Badge -->
                         <div id="db-group1-badge"
-                            style="background: #f3f4f6; color: #6b7280; padding: 0.25rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; flex-shrink: 0;">
+                            style="background: #dcfce7; color: #16a34a; padding: 0.25rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; flex-shrink: 0;">
                             0/3</div>
+                        <!-- Chevron -->
                         <div id="db-group1-icon"
-                            style="font-size: 0.75rem; color: #9ca3af; transition: transform 0.3s; flex-shrink: 0;">▶
+                            style="font-size: 0.75rem; color: #9ca3af; transition: transform 0.3s; flex-shrink: 0;">▼
                         </div>
                     </div>
                     <div id="db-group1-content"
-                        style="display: none; padding: 0 1rem 1rem 1rem; border-top: 1px solid #f3f4f6;">
+                        style="display: block; padding: 0 1rem 1rem 1rem; border-top: 1px solid #f3f4f6;">
                         <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.75rem;">
                             <div class="test-item" id="test-database-load">
                                 <span>📄 Caricamento database.json</span>
@@ -2017,21 +2117,22 @@
                 </div>
 
                 <!-- Gruppo 2: Validazione Dati -->
-                <div style="border-bottom: 1px solid #f3f4f6; transition: background-color 0.2s, transform 0.2s;">
+                <div
+                    style="background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); overflow: hidden;">
                     <div onclick="toggleDbGroup('group2')"
-                        style="padding: 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.75rem;">
+                        style="padding: 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.75rem; user-select: none; transition: background 0.2s;">
                         <div
-                            style="width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
+                            style="width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0; box-shadow: 0 2px 8px rgba(59, 130, 246, 0.25);">
                             ✅
                         </div>
                         <div style="flex: 1; min-width: 0;">
                             <div style="font-weight: 600; font-size: 0.9rem; margin-bottom: 0.25rem;">Validazione Dati
                             </div>
-                            <div id="db-group2-subtitle" style="font-size: 0.75rem; color: #6b7280;">3 test da
-                                completare</div>
+                            <div id="db-group2-subtitle" style="font-size: 0.75rem; color: #6b7280;">3 test • In
+                                attesa...</div>
                         </div>
                         <div id="db-group2-badge"
-                            style="background: #f3f4f6; color: #6b7280; padding: 0.25rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; flex-shrink: 0;">
+                            style="background: #dcfce7; color: #16a34a; padding: 0.25rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; flex-shrink: 0;">
                             0/3</div>
                         <div id="db-group2-icon"
                             style="font-size: 0.75rem; color: #9ca3af; transition: transform 0.3s; flex-shrink: 0;">▶
@@ -2057,21 +2158,22 @@
                 </div>
 
                 <!-- Gruppo 3: Analisi Qualità -->
-                <div style="border-bottom: 1px solid #f3f4f6; transition: background-color 0.2s, transform 0.2s;">
+                <div
+                    style="background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); overflow: hidden;">
                     <div onclick="toggleDbGroup('group3')"
-                        style="padding: 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.75rem;">
+                        style="padding: 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.75rem; user-select: none; transition: background 0.2s;">
                         <div
-                            style="width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
+                            style="width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0; box-shadow: 0 2px 8px rgba(59, 130, 246, 0.25);">
                             🔍
                         </div>
                         <div style="flex: 1; min-width: 0;">
                             <div style="font-weight: 600; font-size: 0.9rem; margin-bottom: 0.25rem;">Analisi Qualità
                             </div>
-                            <div id="db-group3-subtitle" style="font-size: 0.75rem; color: #6b7280;">5 test da
-                                completare</div>
+                            <div id="db-group3-subtitle" style="font-size: 0.75rem; color: #6b7280;">5 test • In
+                                attesa...</div>
                         </div>
                         <div id="db-group3-badge"
-                            style="background: #f3f4f6; color: #6b7280; padding: 0.25rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; flex-shrink: 0;">
+                            style="background: #dcfce7; color: #16a34a; padding: 0.25rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; flex-shrink: 0;">
                             0/5</div>
                         <div id="db-group3-icon"
                             style="font-size: 0.75rem; color: #9ca3af; transition: transform 0.3s; flex-shrink: 0;">▶
@@ -2105,20 +2207,21 @@
                 </div>
 
                 <!-- Gruppo 4: Performance -->
-                <div style="transition: background-color 0.2s, transform 0.2s;">
+                <div
+                    style="background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); overflow: hidden;">
                     <div onclick="toggleDbGroup('group4')"
-                        style="padding: 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.75rem;">
+                        style="padding: 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.75rem; user-select: none; transition: background 0.2s;">
                         <div
-                            style="width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
+                            style="width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0; box-shadow: 0 2px 8px rgba(59, 130, 246, 0.25);">
                             ⚡
                         </div>
                         <div style="flex: 1; min-width: 0;">
                             <div style="font-weight: 600; font-size: 0.9rem; margin-bottom: 0.25rem;">Performance</div>
-                            <div id="db-group4-subtitle" style="font-size: 0.75rem; color: #6b7280;">1 test da
-                                completare</div>
+                            <div id="db-group4-subtitle" style="font-size: 0.75rem; color: #6b7280;">1 test • In
+                                attesa...</div>
                         </div>
                         <div id="db-group4-badge"
-                            style="background: #f3f4f6; color: #6b7280; padding: 0.25rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; flex-shrink: 0;">
+                            style="background: #dcfce7; color: #16a34a; padding: 0.25rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; flex-shrink: 0;">
                             0/1</div>
                         <div id="db-group4-icon"
                             style="font-size: 0.75rem; color: #9ca3af; transition: transform 0.3s; flex-shrink: 0;">▶
@@ -2136,25 +2239,8 @@
                 </div>
             </div>
 
-            <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; margin-top: 1rem;">
-                <button class="test-button" onclick="testDatabaseLoad()" style="flex: 1; min-width: 150px;">🧪 Esegui
-                    Tutti i Test</button>
-                <button class="test-button" onclick="toggleAllDbGroups(true)" style="background: #6b7280;">📂 Apri
-                    Tutti</button>
-                <button class="test-button" onclick="toggleAllDbGroups(false)" style="background: #6b7280;">📁 Chiudi
-                    Tutti</button>
-            </div>
+            <button class="test-button" onclick="testDatabaseLoad()">🧪 Esegui Tutti i Test</button>
             <div class="test-output" id="output-database" style="display:none;"></div>
-            <div id="db-log-buttons" style="display: none; gap: 0.5rem; margin-top: 0.5rem;">
-                <button class="test-button" onclick="copyDatabaseLog()" style="background: #0d9488;">📋 Copia
-                    log</button>
-                <button class="test-button" onclick="downloadDatabaseLog()" style="background: #3b82f6;">💾 Scarica
-                    log</button>
-                <button class="test-button" onclick="clearDatabaseLog()" style="background: #ef4444;">🗑️ Cancella
-                    log</button>
-                <button class="test-button" onclick="resetDatabaseTests()" style="background: #f59e0b;">🔄 Reset
-                    Test</button>
-            </div>
         </div>
 
         <!-- Test 2: LocalStorage -->
@@ -2241,264 +2327,123 @@
         </style>
 
         <!-- Test 4: Calcolo Prezzi (Modulo prezzi.js) -->
-        <div id="section-prezzi" class="test-section has-module-header">
-            <!-- Nuovo header modulo: Prezzi -->
-            <div class="test-header" data-module="prezzi">
-                <div class="test-header-top">
-                    <div class="test-title">💰 Test Prezzi</div>
-                    <div class="test-progress" id="price-header-progress">0/26</div>
-                    <span class="test-header-status status-pending" id="price-header-status">In attesa</span>
-                </div>
-                <div class="test-stats">
-                    <span>✅ <span id="price-header-passed">0</span></span>
-                    <span>❌ <span id="price-header-failed">0</span></span>
-                    <span>⏱️ <span id="price-header-time">0ms</span></span>
-                </div>
-                <div class="test-timestamp" id="price-header-timestamp" data-ts="">-</div>
-                <div class="test-bar">
-                    <div class="test-bar-fill" id="price-header-bar" data-progress="0"></div>
-                </div>
+        <div id="section-prezzi" class="test-section">
+            <h2>💰 Test Calcolo Prezzi - prezzi.js</h2>
+
+            <!-- Test Unitari Pricing -->
+            <div class="test-item" id="test-pricing-calculate">
+                <span>Pricing.calculatePrice()</span>
+                <span class="test-status pending">In attesa</span>
+            </div>
+            <div class="test-item" id="test-pricing-ticket-code">
+                <span>Pricing.getTicketCode()</span>
+                <span class="test-status pending">In attesa</span>
+            </div>
+            <div class="test-item" id="test-pricing-format">
+                <span>Pricing.formatPrice()</span>
+                <span class="test-status pending">In attesa</span>
+            </div>
+            <div class="test-item" id="test-pricing-validation">
+                <span>Pricing.isValidSelection()</span>
+                <span class="test-status pending">In attesa</span>
+            </div>
+            <div class="test-item" id="test-pricing-route">
+                <span>Pricing.isRouteAvailable()</span>
+                <span class="test-status pending">In attesa</span>
             </div>
 
-            <!-- CARD UNICA che contiene tutti i gruppi (stile Mobile 3) -->
-            <div
-                style="background: white; border-radius: 12px; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); overflow: hidden;">
-
-                <!-- Gruppo 1: Test Unitari -->
-                <div style="border-bottom: 1px solid #f3f4f6; transition: background-color 0.2s, transform 0.2s;">
-                    <div onclick="togglePriceGroup('group1')"
-                        style="padding: 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.75rem;">
-                        <div
-                            style="width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #f59e0b, #d97706); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
-                            🧪
-                        </div>
-                        <div style="flex: 1; min-width: 0;">
-                            <div style="font-weight: 600; font-size: 0.9rem; margin-bottom: 0.25rem;">Test Unitari</div>
-                            <div id="price-group1-subtitle" style="font-size: 0.75rem; color: #6b7280;">5 test da
-                                completare</div>
-                        </div>
-                        <div id="price-group1-badge"
-                            style="background: #f3f4f6; color: #6b7280; padding: 0.25rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; flex-shrink: 0;">
-                            0/5</div>
-                        <div id="price-group1-icon"
-                            style="font-size: 0.75rem; color: #9ca3af; transition: transform 0.3s; flex-shrink: 0;">▶
-                        </div>
-                    </div>
-                    <div id="price-group1-content"
-                        style="display: none; padding: 0 1rem 1rem 1rem; border-top: 1px solid #f3f4f6;">
-                        <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.75rem;">
-                            <div class="test-item" id="test-pricing-calculate">
-                                <span>Pricing.calculatePrice()</span>
-                                <span class="test-status pending">In attesa</span>
-                            </div>
-                            <div class="test-item" id="test-pricing-ticket-code">
-                                <span>Pricing.getTicketCode()</span>
-                                <span class="test-status pending">In attesa</span>
-                            </div>
-                            <div class="test-item" id="test-pricing-format">
-                                <span>Pricing.formatPrice()</span>
-                                <span class="test-status pending">In attesa</span>
-                            </div>
-                            <div class="test-item" id="test-pricing-validation">
-                                <span>Pricing.isValidSelection()</span>
-                                <span class="test-status pending">In attesa</span>
-                            </div>
-                            <div class="test-item" id="test-pricing-route">
-                                <span>Pricing.isRouteAvailable()</span>
-                                <span class="test-status pending">In attesa</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Gruppo 2: Edge Cases -->
-                <div style="border-bottom: 1px solid #f3f4f6; transition: background-color 0.2s, transform 0.2s;">
-                    <div onclick="togglePriceGroup('group2')"
-                        style="padding: 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.75rem;">
-                        <div
-                            style="width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #f59e0b, #d97706); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
-                            ⚠️
-                        </div>
-                        <div style="flex: 1; min-width: 0;">
-                            <div style="font-weight: 600; font-size: 0.9rem; margin-bottom: 0.25rem;">Edge Cases</div>
-                            <div id="price-group2-subtitle" style="font-size: 0.75rem; color: #6b7280;">3 test da
-                                completare</div>
-                        </div>
-                        <div id="price-group2-badge"
-                            style="background: #f3f4f6; color: #6b7280; padding: 0.25rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; flex-shrink: 0;">
-                            0/3</div>
-                        <div id="price-group2-icon"
-                            style="font-size: 0.75rem; color: #9ca3af; transition: transform 0.3s; flex-shrink: 0;">▶
-                        </div>
-                    </div>
-                    <div id="price-group2-content"
-                        style="display: none; padding: 0 1rem 1rem 1rem; border-top: 1px solid #f3f4f6;">
-                        <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.75rem;">
-                            <div class="test-item" id="test-pricing-same-stop">
-                                <span>Stessa fermata (partenza = arrivo)</span>
-                                <span class="test-status pending">In attesa</span>
-                            </div>
-                            <div class="test-item" id="test-pricing-out-of-range">
-                                <span>Indici fuori range</span>
-                                <span class="test-status pending">In attesa</span>
-                            </div>
-                            <div class="test-item" id="test-pricing-fallback">
-                                <span>Fallback tariffarioAggiornato</span>
-                                <span class="test-status pending">In attesa</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Gruppo 3: Test Avanzati -->
-                <div style="border-bottom: 1px solid #f3f4f6; transition: background-color 0.2s, transform 0.2s;">
-                    <div onclick="togglePriceGroup('group3')"
-                        style="padding: 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.75rem;">
-                        <div
-                            style="width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #f59e0b, #d97706); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
-                            🚀
-                        </div>
-                        <div style="flex: 1; min-width: 0;">
-                            <div style="font-weight: 600; font-size: 0.9rem; margin-bottom: 0.25rem;">Test Avanzati
-                            </div>
-                            <div id="price-group3-subtitle" style="font-size: 0.75rem; color: #6b7280;">5 test da
-                                completare</div>
-                        </div>
-                        <div id="price-group3-badge"
-                            style="background: #f3f4f6; color: #6b7280; padding: 0.25rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; flex-shrink: 0;">
-                            0/5</div>
-                        <div id="price-group3-icon"
-                            style="font-size: 0.75rem; color: #9ca3af; transition: transform 0.3s; flex-shrink: 0;">▶
-                        </div>
-                    </div>
-                    <div id="price-group3-content"
-                        style="display: none; padding: 0 1rem 1rem 1rem; border-top: 1px solid #f3f4f6;">
-                        <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.75rem;">
-                            <div class="test-item" id="test-pricing-empty-tariffario">
-                                <span>Tariffario vuoto/null</span>
-                                <span class="test-status pending">In attesa</span>
-                            </div>
-                            <div class="test-item" id="test-pricing-negative-indices">
-                                <span>Indici negativi</span>
-                                <span class="test-status pending">In attesa</span>
-                            </div>
-                            <div class="test-item" id="test-pricing-string-indices">
-                                <span>Indici come stringhe ("0", "5")</span>
-                                <span class="test-status pending">In attesa</span>
-                            </div>
-                            <div class="test-item" id="test-pricing-zero-price">
-                                <span>Prezzo zero (gratuito)</span>
-                                <span class="test-status pending">In attesa</span>
-                            </div>
-                            <div class="test-item" id="test-pricing-missing-matrices">
-                                <span>Matrici prezzi/codici mancanti</span>
-                                <span class="test-status pending">In attesa</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Gruppo 4: Robustezza Dati -->
-                <div style="transition: background-color 0.2s, transform 0.2s;">
-                    <div onclick="togglePriceGroup('group4')"
-                        style="padding: 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.75rem;">
-                        <div
-                            style="width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #f59e0b, #d97706); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
-                            🛡️
-                        </div>
-                        <div style="flex: 1; min-width: 0;">
-                            <div style="font-weight: 600; font-size: 0.9rem; margin-bottom: 0.25rem;">Robustezza Dati
-                            </div>
-                            <div id="price-group4-subtitle" style="font-size: 0.75rem; color: #6b7280;">13 test da
-                                completare</div>
-                        </div>
-                        <div id="price-group4-badge"
-                            style="background: #f3f4f6; color: #6b7280; padding: 0.25rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; flex-shrink: 0;">
-                            0/13</div>
-                        <div id="price-group4-icon"
-                            style="font-size: 0.75rem; color: #9ca3af; transition: transform 0.3s; flex-shrink: 0;">▶
-                        </div>
-                    </div>
-                    <div id="price-group4-content"
-                        style="display: none; padding: 0 1rem 1rem 1rem; border-top: 1px solid #f3f4f6;">
-                        <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.75rem;">
-                            <div class="test-item" id="test-pricing-null-price">
-                                <span>Prezzo null nella matrice</span>
-                                <span class="test-status pending">In attesa</span>
-                            </div>
-                            <div class="test-item" id="test-pricing-undefined-price">
-                                <span>Prezzo undefined nella matrice</span>
-                                <span class="test-status pending">In attesa</span>
-                            </div>
-                            <div class="test-item" id="test-pricing-string-price">
-                                <span>Prezzo come stringa ("3.50")</span>
-                                <span class="test-status pending">In attesa</span>
-                            </div>
-                            <div class="test-item" id="test-pricing-line-not-exists">
-                                <span>Linea non esistente (indice 999)</span>
-                                <span class="test-status pending">In attesa</span>
-                            </div>
-                            <div class="test-item" id="test-pricing-result-structure">
-                                <span>Struttura risultato corretta</span>
-                                <span class="test-status pending">In attesa</span>
-                            </div>
-                            <div class="test-item" id="test-pricing-nan-price">
-                                <span>Prezzo NaN nella matrice</span>
-                                <span class="test-status pending">In attesa</span>
-                            </div>
-                            <div class="test-item" id="test-pricing-infinity-price">
-                                <span>Prezzo Infinity nella matrice</span>
-                                <span class="test-status pending">In attesa</span>
-                            </div>
-                            <div class="test-item" id="test-pricing-negative-price">
-                                <span>Prezzo negativo</span>
-                                <span class="test-status pending">In attesa</span>
-                            </div>
-                            <div class="test-item" id="test-pricing-fermate-not-array">
-                                <span>fermate non array</span>
-                                <span class="test-status pending">In attesa</span>
-                            </div>
-                            <div class="test-item" id="test-pricing-code-with-spaces">
-                                <span>Codice con spazi</span>
-                                <span class="test-status pending">In attesa</span>
-                            </div>
-                            <div class="test-item" id="test-pricing-price-code-only">
-                                <span>Solo codice senza prezzo</span>
-                                <span class="test-status pending">In attesa</span>
-                            </div>
-                            <div class="test-item" id="test-pricing-multiple-lines">
-                                <span>Test con più linee diverse</span>
-                                <span class="test-status pending">In attesa</span>
-                            </div>
-                            <div class="test-item" id="test-pricing-performance">
-                                <span>Performance (1000 calcoli)</span>
-                                <span class="test-status pending">In attesa</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+            <!-- Test Edge Cases -->
+            <div class="test-item" id="test-pricing-same-stop">
+                <span>Stessa fermata (partenza = arrivo)</span>
+                <span class="test-status pending">In attesa</span>
             </div>
-            <!-- Fine Card Gruppi Test Prezzi -->
-
-            <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; margin-top: 1rem;">
-                <button class="test-button" onclick="testPriceCalculation()" style="flex: 1; min-width: 150px;">🧪 Test
-                    Modulo Prezzi</button>
-                <button class="test-button" onclick="toggleAllPriceGroups(true)" style="background: #6b7280;">📂 Apri
-                    Tutti</button>
-                <button class="test-button" onclick="toggleAllPriceGroups(false)" style="background: #6b7280;">📁 Chiudi
-                    Tutti</button>
+            <div class="test-item" id="test-pricing-out-of-range">
+                <span>Indici fuori range</span>
+                <span class="test-status pending">In attesa</span>
             </div>
+            <div class="test-item" id="test-pricing-fallback">
+                <span>Fallback tariffarioAggiornato</span>
+                <span class="test-status pending">In attesa</span>
+            </div>
+
+            <!-- Test Avanzati -->
+            <div class="test-item" id="test-pricing-empty-tariffario">
+                <span>Tariffario vuoto/null</span>
+                <span class="test-status pending">In attesa</span>
+            </div>
+            <div class="test-item" id="test-pricing-negative-indices">
+                <span>Indici negativi</span>
+                <span class="test-status pending">In attesa</span>
+            </div>
+            <div class="test-item" id="test-pricing-string-indices">
+                <span>Indici come stringhe ("0", "5")</span>
+                <span class="test-status pending">In attesa</span>
+            </div>
+            <div class="test-item" id="test-pricing-zero-price">
+                <span>Prezzo zero (gratuito)</span>
+                <span class="test-status pending">In attesa</span>
+            </div>
+            <div class="test-item" id="test-pricing-missing-matrices">
+                <span>Matrici prezzi/codici mancanti</span>
+                <span class="test-status pending">In attesa</span>
+            </div>
+            <div class="test-item" id="test-pricing-multiple-lines">
+                <span>Test con più linee diverse</span>
+                <span class="test-status pending">In attesa</span>
+            </div>
+            <div class="test-item" id="test-pricing-performance">
+                <span>Performance (1000 calcoli)</span>
+                <span class="test-status pending">In attesa</span>
+            </div>
+
+            <!-- Test Robusteza Dati -->
+            <div class="test-item" id="test-pricing-null-price">
+                <span>Prezzo null nella matrice</span>
+                <span class="test-status pending">In attesa</span>
+            </div>
+            <div class="test-item" id="test-pricing-undefined-price">
+                <span>Prezzo undefined nella matrice</span>
+                <span class="test-status pending">In attesa</span>
+            </div>
+            <div class="test-item" id="test-pricing-string-price">
+                <span>Prezzo come stringa ("3.50")</span>
+                <span class="test-status pending">In attesa</span>
+            </div>
+            <div class="test-item" id="test-pricing-line-not-exists">
+                <span>Linea non esistente (indice 999)</span>
+                <span class="test-status pending">In attesa</span>
+            </div>
+            <div class="test-item" id="test-pricing-result-structure">
+                <span>Struttura risultato corretta</span>
+                <span class="test-status pending">In attesa</span>
+            </div>
+            <div class="test-item" id="test-pricing-nan-price">
+                <span>Prezzo NaN nella matrice</span>
+                <span class="test-status pending">In attesa</span>
+            </div>
+            <div class="test-item" id="test-pricing-infinity-price">
+                <span>Prezzo Infinity nella matrice</span>
+                <span class="test-status pending">In attesa</span>
+            </div>
+            <div class="test-item" id="test-pricing-negative-price">
+                <span>Prezzo negativo</span>
+                <span class="test-status pending">In attesa</span>
+            </div>
+            <div class="test-item" id="test-pricing-fermate-not-array">
+                <span>fermate non array</span>
+                <span class="test-status pending">In attesa</span>
+            </div>
+            <div class="test-item" id="test-pricing-code-with-spaces">
+                <span>Codice con spazi</span>
+                <span class="test-status pending">In attesa</span>
+            </div>
+            <div class="test-item" id="test-pricing-price-code-only">
+                <span>Solo codice senza prezzo</span>
+                <span class="test-status pending">In attesa</span>
+            </div>
+
+            <button class="test-button" onclick="testPriceCalculation()">🧪 Test Modulo Prezzi</button>
             <div class="test-output" id="output-price" style="display:none;" data-no-copy="true"></div>
-            <div id="price-log-buttons" style="display: none; gap: 0.5rem; margin-top: 0.5rem;">
-                <button class="test-button" onclick="copyPriceLog()" style="background: #0d9488;">📋 Copia log</button>
-                <button class="test-button" onclick="downloadPriceLog()" style="background: #3b82f6;">💾 Scarica
-                    log</button>
-                <button class="test-button" onclick="clearPriceLog()" style="background: #ef4444;">🗑️ Cancella
-                    log</button>
-                <button class="test-button" onclick="resetPriceTests()" style="background: #f59e0b;">🔄 Reset
-                    Test</button>
-            </div>
         </div>
 
         <!-- Test 5: Service Worker -->
@@ -3123,7 +3068,6 @@
     <script src="changelog.js"></script>
     <script src="js/features/updates.js"></script>
     <script src="js/features/settings.js"></script>
-    <script src="js/features/tests-ui.js"></script>
     <script src="js/features/prezzi.js?v=20251102-2"></script>
     <script src="js/tests/test-prezzi.js"></script>
     <!-- Modulo utility per test - Step 1 modularizzazione (02/11/2025) -->
@@ -3141,7 +3085,11 @@
     <script src="test-config.js"></script>
     <script>
         // ===== ATTIVA PULSANTI COPIA LOG =====
-        // Rimosso: i pulsanti vengono ora aggiunti solo quando si esegue il test
+        document.addEventListener('DOMContentLoaded', function () {
+            if (typeof TestUtils !== 'undefined' && TestUtils.enableCopyButtonsForAllOutputs) {
+                TestUtils.enableCopyButtonsForAllOutputs();
+            }
+        });
 
         // ===== WRAPPER LEGACY COMPATIBILITY =====
         // Manteniamo le funzioni globali per retrocompatibilità, ma delegano a TestUtils
@@ -3193,306 +3141,6 @@
                 icon.textContent = '▶';
                 icon.style.transform = 'rotate(-90deg)';
             }
-        }
-
-        function togglePriceGroup(groupId) {
-            const content = document.getElementById(`price-${groupId}-content`);
-            const icon = document.getElementById(`price-${groupId}-icon`);
-
-            if (content.style.display === 'none') {
-                content.style.display = 'block';
-                icon.textContent = '▼';
-                icon.style.transform = 'rotate(0deg)';
-            } else {
-                content.style.display = 'none';
-                icon.textContent = '▶';
-                icon.style.transform = 'rotate(-90deg)';
-            }
-        }
-
-        function toggleAllDbGroups(open) {
-            const groups = ['group1', 'group2', 'group3', 'group4'];
-            groups.forEach(groupId => {
-                const content = document.getElementById(`db-${groupId}-content`);
-                const icon = document.getElementById(`db-${groupId}-icon`);
-
-                if (open) {
-                    content.style.display = 'block';
-                    icon.textContent = '▼';
-                    icon.style.transform = 'rotate(0deg)';
-                } else {
-                    content.style.display = 'none';
-                    icon.textContent = '▶';
-                    icon.style.transform = 'rotate(-90deg)';
-                }
-            });
-        }
-
-        function toggleAllPriceGroups(open) {
-            const groups = ['group1', 'group2', 'group3', 'group4'];
-            groups.forEach(groupId => {
-                const content = document.getElementById(`price-${groupId}-content`);
-                const icon = document.getElementById(`price-${groupId}-icon`);
-
-                if (open) {
-                    content.style.display = 'block';
-                    icon.textContent = '▼';
-                    icon.style.transform = 'rotate(0deg)';
-                } else {
-                    content.style.display = 'none';
-                    icon.textContent = '▶';
-                    icon.style.transform = 'rotate(-90deg)';
-                }
-            });
-        }
-
-        // ===== FUNZIONI GESTIONE LOG =====
-        function copyDatabaseLog() {
-            const output = document.getElementById('output-database');
-            if (output && output.textContent) {
-                navigator.clipboard.writeText(output.textContent).then(() => {
-                    alert('Log Database copiato negli appunti!');
-                }).catch(err => {
-                    console.error('Errore copia log:', err);
-                });
-            }
-        }
-
-        function downloadDatabaseLog() {
-            const output = document.getElementById('output-database');
-            if (output && output.textContent) {
-                const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
-                const filename = `test-database-${timestamp}.txt`;
-                const blob = new Blob([output.textContent], { type: 'text/plain' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = filename;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-            }
-        }
-
-        function clearDatabaseLog() {
-            const output = document.getElementById('output-database');
-            const buttons = document.getElementById('db-log-buttons');
-            if (output) {
-                output.innerHTML = '';
-                output.style.display = 'none';
-            }
-            if (buttons) {
-                buttons.style.display = 'none';
-            }
-        }
-
-        function copyPriceLog() {
-            const output = document.getElementById('output-price');
-            if (output && output.textContent) {
-                navigator.clipboard.writeText(output.textContent).then(() => {
-                    alert('Log Prezzi copiato negli appunti!');
-                }).catch(err => {
-                    console.error('Errore copia log:', err);
-                });
-            }
-        }
-
-        function downloadPriceLog() {
-            const output = document.getElementById('output-price');
-            if (output && output.textContent) {
-                const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
-                const filename = `test-prezzi-${timestamp}.txt`;
-                const blob = new Blob([output.textContent], { type: 'text/plain' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = filename;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-            }
-        }
-
-        function clearPriceLog() {
-            const output = document.getElementById('output-price');
-            const buttons = document.getElementById('price-log-buttons');
-            if (output) {
-                output.innerHTML = '';
-                output.style.display = 'none';
-            }
-            if (buttons) {
-                buttons.style.display = 'none';
-            }
-        }
-
-        function resetDatabaseTests() {
-            // Resetta il log
-            clearDatabaseLog();
-
-            // Resetta l'header
-            const progressEl = document.getElementById('db-header-progress');
-            const statusEl = document.getElementById('db-header-status');
-            const passedEl = document.getElementById('db-header-passed');
-            const failedEl = document.getElementById('db-header-failed');
-            const timeEl = document.getElementById('db-header-time');
-            const timestampEl = document.getElementById('db-header-timestamp');
-            const barEl = document.getElementById('db-header-bar');
-
-            if (progressEl) progressEl.textContent = '0/12';
-            if (statusEl) {
-                statusEl.className = 'test-header-status status-pending';
-                statusEl.textContent = 'In attesa';
-            }
-            if (passedEl) passedEl.textContent = '0';
-            if (failedEl) failedEl.textContent = '0';
-            if (timeEl) timeEl.textContent = '0ms';
-            if (timestampEl) {
-                timestampEl.textContent = '-';
-                timestampEl.setAttribute('data-ts', '');
-            }
-            if (barEl) barEl.setAttribute('data-progress', '0');
-
-            // Resetta i badge e subtitle dei gruppi
-            const groups = [
-                { id: 'group1', total: 3, text: '3 test' },
-                { id: 'group2', total: 3, text: '3 test' },
-                { id: 'group3', total: 5, text: '5 test' },
-                { id: 'group4', total: 1, text: '1 test' }
-            ];
-
-            groups.forEach(group => {
-                const badge = document.getElementById(`db-${group.id}-badge`);
-                const subtitle = document.getElementById(`db-${group.id}-subtitle`);
-                if (badge) {
-                    badge.textContent = `0/${group.total}`;
-                    badge.style.background = '#f3f4f6';
-                    badge.style.color = '#6b7280';
-                }
-                if (subtitle) {
-                    subtitle.textContent = `${group.text} da completare`;
-                }
-            });
-
-            // Resetta tutti gli status dei test a "pending"
-            const testIds = [
-                // Gruppo 1: Caricamento & Struttura
-                'test-database-load', 'test-database-structure', 'test-database-lines',
-                // Gruppo 2: Validazione Dati
-                'test-database-prices', 'test-database-stops', 'test-database-codes',
-                // Gruppo 3: Analisi Qualità
-                'test-database-duplicates', 'test-database-range', 'test-database-progression',
-                'test-database-format', 'test-database-consistency',
-                // Gruppo 4: Performance
-                'test-database-performance'
-            ];
-
-            testIds.forEach(id => {
-                const testElement = document.getElementById(id);
-                if (testElement) {
-                    const statusSpan = testElement.querySelector('.test-status');
-                    if (statusSpan) {
-                        statusSpan.className = 'test-status pending';
-                        statusSpan.textContent = 'In attesa';
-                    }
-                }
-            });
-
-            // Chiudi tutti i gruppi
-            toggleAllDbGroups(false);
-        }
-
-        function resetPriceTests() {
-            // Resetta il log
-            clearPriceLog();
-
-            // Resetta l'header
-            const progressEl = document.getElementById('price-header-progress');
-            const statusEl = document.getElementById('price-header-status');
-            const passedEl = document.getElementById('price-header-passed');
-            const failedEl = document.getElementById('price-header-failed');
-            const timeEl = document.getElementById('price-header-time');
-            const timestampEl = document.getElementById('price-header-timestamp');
-            const barEl = document.getElementById('price-header-bar');
-
-            if (progressEl) progressEl.textContent = '0/26';
-            if (statusEl) {
-                statusEl.className = 'test-header-status status-pending';
-                statusEl.textContent = 'In attesa';
-            }
-            if (passedEl) passedEl.textContent = '0';
-            if (failedEl) failedEl.textContent = '0';
-            if (timeEl) timeEl.textContent = '0ms';
-            if (timestampEl) {
-                timestampEl.textContent = '-';
-                timestampEl.setAttribute('data-ts', '');
-            }
-            if (barEl) barEl.setAttribute('data-progress', '0');
-
-            // Resetta i badge e subtitle dei gruppi
-            const groups = [
-                { id: 'group1', total: 5, text: '5 test' },
-                { id: 'group2', total: 3, text: '3 test' },
-                { id: 'group3', total: 5, text: '5 test' },
-                { id: 'group4', total: 13, text: '13 test' }
-            ];
-
-            groups.forEach(group => {
-                const badge = document.getElementById(`price-${group.id}-badge`);
-                const subtitle = document.getElementById(`price-${group.id}-subtitle`);
-                if (badge) {
-                    badge.textContent = `0/${group.total}`;
-                    badge.style.background = '#f3f4f6';
-                    badge.style.color = '#6b7280';
-                }
-                if (subtitle) {
-                    subtitle.textContent = `${group.text} da completare`;
-                }
-            });
-
-            // Resetta tutti gli status dei test a "pending"
-            // Gruppo 1: Test Unitari (5 test)
-            const group1Tests = [
-                'test-price-zona1', 'test-price-zona2', 'test-price-zona3',
-                'test-price-zona4', 'test-price-zona5'
-            ];
-
-            // Gruppo 2: Edge Cases (3 test)
-            const group2Tests = [
-                'test-price-boundary-z1z2', 'test-price-boundary-z2z3', 'test-price-boundary-z4z5'
-            ];
-
-            // Gruppo 3: Test Avanzati (5 test)
-            const group3Tests = [
-                'test-price-validation', 'test-price-consistency', 'test-price-progressive',
-                'test-price-zone-logic', 'test-price-roundtrip'
-            ];
-
-            // Gruppo 4: Robustezza Dati (13 test)
-            const group4Tests = [
-                'test-price-null-zona', 'test-price-undefined-zona', 'test-price-empty-zona',
-                'test-price-invalid-zona', 'test-price-negative-zona', 'test-price-zero-zona',
-                'test-price-float-zona', 'test-price-string-zona', 'test-price-large-zona',
-                'test-price-null-tariffario', 'test-price-empty-tariffario',
-                'test-price-malformed-tariffario', 'test-price-missing-keys'
-            ];
-
-            const allTests = [...group1Tests, ...group2Tests, ...group3Tests, ...group4Tests];
-
-            allTests.forEach(id => {
-                const testElement = document.getElementById(id);
-                if (testElement) {
-                    const statusSpan = testElement.querySelector('.test-status');
-                    if (statusSpan) {
-                        statusSpan.className = 'test-status pending';
-                        statusSpan.textContent = 'In attesa';
-                    }
-                }
-            });
-
-            // Chiudi tutti i gruppi
-            toggleAllPriceGroups(false);
         }
 
         // ===== GESTIONE MODALITÀ PWA TEST =====
@@ -3762,6 +3410,10 @@
         async function testPriceCalculation() {
             const output = 'output-price';
             document.getElementById(output).innerHTML = '';
+            // Mostra il pulsante "Copia log" solo quando parte il test prezzi
+            if (typeof TestUtils !== 'undefined' && TestUtils.addCopyButton) {
+                TestUtils.addCopyButton(output, 'Copia log Prezzi');
+            }
 
             try {
                 // Verifica che PrezziTests sia disponibile
@@ -3813,12 +3465,6 @@
                 log(output, `✗ Errore fatale: ${error.message}`, 'error');
                 log(output, `Stack: ${error.stack}`, 'info');
                 console.error('Errore test prezzi:', error);
-            }
-
-            // Mostra i pulsanti log dopo l'esecuzione
-            const logButtons = document.getElementById('price-log-buttons');
-            if (logButtons) {
-                logButtons.style.display = 'flex';
             }
         }
 

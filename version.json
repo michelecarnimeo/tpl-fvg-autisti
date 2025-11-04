@@ -1,6 +1,6 @@
 {
-  "version": "1.6.0",
-  "versionDate": "2 Novembre 2025",
-  "versionTime": "20:30",
-  "updateNotes": "Modularizzazione Prezzi + Test Suite Completa"
+  "version": "1.6.1",
+  "versionDate": "4 Novembre 2025",
+  "versionTime": "16:30",
+  "updateNotes": "UI Test Migliorata: Header Sticky + Controlli Avanzati"
 }

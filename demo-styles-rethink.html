@@ -1,0 +1,1591 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UI Ripensate - Test Database</title>
+    <style>
+        :root {
+            --primario: #3b82f6;
+            --secondario: #8b5cf6;
+            --verde: #22c55e;
+            --rosso: #ef4444;
+            --arancione: #f59e0b;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f3f4f6;
+            padding: 2rem;
+            margin: 0;
+        }
+
+        .demo-section {
+            margin-bottom: 5rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .demo-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #1f2937;
+        }
+
+        .demo-desc {
+            color: #6b7280;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* ==================== CONCEPT 1: Timeline Progress ==================== */
+        .timeline-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .timeline-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .timeline-stats-circle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: conic-gradient(#3b82f6 0% 60%, #e5e7eb 60% 100%);
+            padding: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .timeline-stats-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .timeline-percentage {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #3b82f6;
+        }
+
+        .timeline-label {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+
+        .timeline-mini-stats {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .timeline-mini-stat {
+            text-align: center;
+        }
+
+        .timeline-mini-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: block;
+        }
+
+        .timeline-mini-label {
+            font-size: 0.7rem;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 19px;
+            top: 40px;
+            bottom: -20px;
+            width: 2px;
+            background: #e5e7eb;
+        }
+
+        .timeline-item:last-child::before {
+            display: none;
+        }
+
+        .timeline-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            z-index: 1;
+        }
+
+        .timeline-content {
+            flex: 1;
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            border-left: 3px solid #3b82f6;
+        }
+
+        .timeline-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .timeline-badge {
+            padding: 0.25rem 0.6rem;
+            background: #3b82f6;
+            color: white;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        /* ==================== CONCEPT 2: Kanban Board Style ==================== */
+        .kanban-container {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding-bottom: 1rem;
+        }
+
+        .kanban-column {
+            flex: 1;
+            min-width: 250px;
+            background: #f9fafb;
+            border-radius: 16px;
+            padding: 1rem;
+        }
+
+        .kanban-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .kanban-title {
+            font-weight: 700;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .kanban-count {
+            background: white;
+            padding: 0.25rem 0.6rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .kanban-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .kanban-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .kanban-card-title {
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .kanban-card-meta {
+            display: flex;
+            gap: 0.5rem;
+            font-size: 0.7rem;
+            color: #6b7280;
+        }
+
+        .kanban-stats {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 16px;
+            color: white;
+        }
+
+        .kanban-stat {
+            flex: 1;
+            text-align: center;
+        }
+
+        .kanban-stat-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            display: block;
+        }
+
+        .kanban-stat-label {
+            font-size: 0.7rem;
+            opacity: 0.9;
+        }
+
+        /* ==================== CONCEPT 3: Circular Progress Rings ==================== */
+        .rings-container {
+            text-align: center;
+        }
+
+        .rings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .ring-item {
+            text-align: center;
+        }
+
+        .ring-svg {
+            width: 120px;
+            height: 120px;
+            transform: rotate(-90deg);
+        }
+
+        .ring-bg {
+            fill: none;
+            stroke: #e5e7eb;
+            stroke-width: 8;
+        }
+
+        .ring-progress {
+            fill: none;
+            stroke: url(#gradient);
+            stroke-width: 8;
+            stroke-linecap: round;
+            stroke-dasharray: 283;
+            stroke-dashoffset: 113;
+            /* 60% progress */
+            transition: stroke-dashoffset 1s ease;
+        }
+
+        .ring-text {
+            transform: rotate(90deg);
+            font-size: 1.5rem;
+            font-weight: 700;
+            fill: #1f2937;
+        }
+
+        .ring-label {
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: #6b7280;
+            font-weight: 600;
+        }
+
+        .rings-groups {
+            display: grid;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .ring-group {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: #f9fafb;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .ring-group:hover {
+            background: #f3f4f6;
+            transform: translateX(4px);
+        }
+
+        .ring-group-icon {
+            width: 50px;
+            height: 50px;
+            flex-shrink: 0;
+        }
+
+        .ring-group-info {
+            flex: 1;
+            text-align: left;
+        }
+
+        .ring-group-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .ring-group-progress {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+
+        /* ==================== CONCEPT 4: Horizontal Stepper ==================== */
+        .stepper-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .stepper-progress {
+            display: flex;
+            align-items: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .stepper-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .stepper-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.75rem;
+            color: white;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            position: relative;
+            z-index: 2;
+        }
+
+        .stepper-step.pending .stepper-circle {
+            background: #e5e7eb;
+            color: #9ca3af;
+            box-shadow: none;
+        }
+
+        .stepper-line {
+            position: absolute;
+            top: 25px;
+            left: 50%;
+            right: -50%;
+            height: 3px;
+            background: #e5e7eb;
+            z-index: 1;
+        }
+
+        .stepper-step:last-child .stepper-line {
+            display: none;
+        }
+
+        .stepper-step.completed .stepper-line {
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+        }
+
+        .stepper-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .stepper-count {
+            font-size: 0.7rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
+        }
+
+        .stepper-content {
+            background: #f9fafb;
+            border-radius: 16px;
+            padding: 2rem;
+            border: 2px solid #e5e7eb;
+        }
+
+        .stepper-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 2rem;
+        }
+
+        .stepper-stat {
+            text-align: center;
+        }
+
+        .stepper-stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            display: block;
+        }
+
+        .stepper-stat-label {
+            font-size: 0.75rem;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* ==================== CONCEPT 5: Metric Cards Grid ==================== */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+        }
+
+        .metric-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.2);
+        }
+
+        .metric-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+        }
+
+        .metrics-list {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .metric-list-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #f3f4f6;
+            transition: background 0.2s ease;
+            cursor: pointer;
+        }
+
+        .metric-list-item:hover {
+            background: #f9fafb;
+        }
+
+        .metric-list-item:last-child {
+            border-bottom: none;
+        }
+
+        .metric-list-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        .metric-list-content {
+            flex: 1;
+        }
+
+        .metric-list-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .metric-list-subtitle {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+
+        .metric-list-badge {
+            padding: 0.35rem 0.75rem;
+            background: #f3f4f6;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #3b82f6;
+        }
+
+        .metric-list-badge.success {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        /* ==================== CONCEPT 6: Hybrid Best of All ==================== */
+        .hybrid-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hybrid-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 24px;
+            padding: 2rem;
+            color: white;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hybrid-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
+        }
+
+        .hybrid-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .hybrid-rings-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .hybrid-ring {
+            text-align: center;
+        }
+
+        .hybrid-ring-svg {
+            width: 80px;
+            height: 80px;
+            transform: rotate(-90deg);
+            margin-bottom: 0.5rem;
+        }
+
+        .hybrid-ring-bg {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.2);
+            stroke-width: 6;
+        }
+
+        .hybrid-ring-progress {
+            fill: none;
+            stroke: white;
+            stroke-width: 6;
+            stroke-linecap: round;
+            stroke-dasharray: 220;
+            transition: stroke-dashoffset 1s ease;
+        }
+
+        .hybrid-ring-text {
+            transform: rotate(90deg);
+            font-size: 1.2rem;
+            font-weight: 700;
+            fill: white;
+        }
+
+        .hybrid-ring-label {
+            font-size: 0.7rem;
+            opacity: 0.9;
+            font-weight: 600;
+        }
+
+        .hybrid-progress-bar-container {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 999px;
+            height: 8px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .hybrid-progress-bar {
+            height: 100%;
+            background: white;
+            width: 100%;
+            border-radius: 999px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            transition: width 0.8s ease;
+        }
+
+        .hybrid-stepper {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+
+        .hybrid-step {
+            flex: 1;
+            min-width: 150px;
+            background: white;
+            border-radius: 16px;
+            padding: 1.25rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            border-top: 4px solid #3b82f6;
+        }
+
+        .hybrid-step:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.2);
+        }
+
+        .hybrid-step-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-bottom: 0.75rem;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .hybrid-step-title {
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+            color: #1f2937;
+        }
+
+        .hybrid-step-count {
+            font-size: 0.75rem;
+            color: #6b7280;
+            margin-bottom: 0.75rem;
+        }
+
+        .hybrid-step-mini-progress {
+            background: #e5e7eb;
+            height: 4px;
+            border-radius: 999px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .hybrid-step-mini-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            width: 100%;
+            border-radius: 999px;
+            transition: width 0.6s ease;
+        }
+
+        .hybrid-step-badge {
+            display: inline-block;
+            padding: 0.25rem 0.6rem;
+            background: #dcfce7;
+            color: #16a34a;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+
+        .hybrid-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .hybrid-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border-left: 4px solid transparent;
+        }
+
+        .hybrid-card:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 16px rgba(59, 130, 246, 0.15);
+            border-left-color: #3b82f6;
+        }
+
+        .hybrid-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .hybrid-card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+        }
+
+        .hybrid-card-ring {
+            width: 48px;
+            height: 48px;
+        }
+
+        .hybrid-card-ring-svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .hybrid-card-ring-bg {
+            fill: none;
+            stroke: #e5e7eb;
+            stroke-width: 4;
+        }
+
+        .hybrid-card-ring-progress {
+            fill: none;
+            stroke: url(#cardGradient);
+            stroke-width: 4;
+            stroke-linecap: round;
+            stroke-dasharray: 120;
+            stroke-dashoffset: 0;
+        }
+
+        .hybrid-card-ring-text {
+            transform: rotate(90deg);
+            font-size: 0.75rem;
+            font-weight: 700;
+            fill: #1f2937;
+        }
+
+        .hybrid-card-content {
+            margin-bottom: 1rem;
+        }
+
+        .hybrid-card-title {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            color: #1f2937;
+        }
+
+        .hybrid-card-subtitle {
+            font-size: 0.75rem;
+            color: #6b7280;
+            line-height: 1.5;
+        }
+
+        .hybrid-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid #f3f4f6;
+        }
+
+        .hybrid-card-stat {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+
+        .hybrid-card-stat strong {
+            color: #1f2937;
+            font-weight: 700;
+        }
+
+        .hybrid-card-badge {
+            padding: 0.3rem 0.7rem;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- CONCEPT 1: Timeline Progress -->
+    <div class="demo-section">
+        <div class="demo-title">📅 Concept 1: Timeline Progress</div>
+        <div class="demo-desc">
+            <strong>Approccio:</strong> Timeline verticale stile "story" - ogni gruppo è un checkpoint<br>
+            <strong>Innovazione:</strong> Progress circular centrale, flow narrativo, senso di completamento
+            progressivo<br>
+            <strong>Vantaggi:</strong> Intuitivo, mobile-first, racconta una storia ("prima carico, poi valido, poi
+            analizzo...")
+        </div>
+
+        <div class="timeline-container">
+            <div class="timeline-header">
+                <div class="timeline-stats-circle">
+                    <div class="timeline-stats-inner">
+                        <span class="timeline-percentage">100%</span>
+                        <span class="timeline-label">Complete</span>
+                    </div>
+                </div>
+                <div class="timeline-mini-stats">
+                    <div class="timeline-mini-stat">
+                        <span class="timeline-mini-value" style="color: #22c55e;">✅ 12</span>
+                        <span class="timeline-mini-label">Passed</span>
+                    </div>
+                    <div class="timeline-mini-stat">
+                        <span class="timeline-mini-value" style="color: #ef4444;">❌ 0</span>
+                        <span class="timeline-mini-label">Failed</span>
+                    </div>
+                    <div class="timeline-mini-stat">
+                        <span class="timeline-mini-value" style="color: #f59e0b;">⏱️ 45ms</span>
+                        <span class="timeline-mini-label">Time</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-icon">1</div>
+                <div class="timeline-content">
+                    <div class="timeline-title">
+                        <span>📥 Caricamento & Struttura</span>
+                        <span class="timeline-badge">3/3</span>
+                    </div>
+                    <div style="font-size: 0.75rem; color: #6b7280;">
+                        Database caricato, struttura validata, campi verificati
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-icon">2</div>
+                <div class="timeline-content">
+                    <div class="timeline-title">
+                        <span>✅ Validazione Dati</span>
+                        <span class="timeline-badge">3/3</span>
+                    </div>
+                    <div style="font-size: 0.75rem; color: #6b7280;">
+                        Prezzi, fermate e codici validati con successo
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-icon">3</div>
+                <div class="timeline-content">
+                    <div class="timeline-title">
+                        <span>🔍 Analisi Qualità</span>
+                        <span class="timeline-badge">5/5</span>
+                    </div>
+                    <div style="font-size: 0.75rem; color: #6b7280;">
+                        Duplicati, range, progressività e consistenza OK
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-icon">4</div>
+                <div class="timeline-content">
+                    <div class="timeline-title">
+                        <span>⚡ Performance</span>
+                        <span class="timeline-badge">1/1</span>
+                    </div>
+                    <div style="font-size: 0.75rem; color: #6b7280;">
+                        Caricamento completato in 45ms
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONCEPT 2: Kanban Board Style -->
+    <div class="demo-section">
+        <div class="demo-title">📋 Concept 2: Kanban Board Style</div>
+        <div class="demo-desc">
+            <strong>Approccio:</strong> Colonne tipo Trello/Jira - ogni colonna è un gruppo di test<br>
+            <strong>Innovazione:</strong> Layout orizzontale, drag-and-drop feeling (anche se statico), vista d'insieme
+            immediata<br>
+            <strong>Vantaggi:</strong> Familiare per developer, ottimo per vedere status multipli, compatto
+        </div>
+
+        <div class="kanban-stats">
+            <div class="kanban-stat">
+                <span class="kanban-stat-value">12/12</span>
+                <span class="kanban-stat-label">Progress</span>
+            </div>
+            <div class="kanban-stat">
+                <span class="kanban-stat-value">✅ 12</span>
+                <span class="kanban-stat-label">Passed</span>
+            </div>
+            <div class="kanban-stat">
+                <span class="kanban-stat-value">❌ 0</span>
+                <span class="kanban-stat-label">Failed</span>
+            </div>
+            <div class="kanban-stat">
+                <span class="kanban-stat-value">⏱️ 45ms</span>
+                <span class="kanban-stat-label">Time</span>
+            </div>
+        </div>
+
+        <div class="kanban-container">
+            <div class="kanban-column">
+                <div class="kanban-header">
+                    <div class="kanban-title">
+                        📥 Caricamento
+                    </div>
+                    <div class="kanban-count">3</div>
+                </div>
+                <div class="kanban-card">
+                    <div class="kanban-card-title">✅ Database Load</div>
+                    <div class="kanban-card-meta">
+                        <span>⏱️ 15ms</span>
+                    </div>
+                </div>
+                <div class="kanban-card">
+                    <div class="kanban-card-title">✅ Array Structure</div>
+                    <div class="kanban-card-meta">
+                        <span>⏱️ 5ms</span>
+                    </div>
+                </div>
+                <div class="kanban-card">
+                    <div class="kanban-card-title">✅ Required Fields</div>
+                    <div class="kanban-card-meta">
+                        <span>⏱️ 3ms</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="kanban-column">
+                <div class="kanban-header">
+                    <div class="kanban-title">
+                        ✅ Validazione
+                    </div>
+                    <div class="kanban-count">3</div>
+                </div>
+                <div class="kanban-card">
+                    <div class="kanban-card-title">✅ Validate Prices</div>
+                    <div class="kanban-card-meta">
+                        <span>⏱️ 8ms</span>
+                    </div>
+                </div>
+                <div class="kanban-card">
+                    <div class="kanban-card-title">✅ Validate Stops</div>
+                    <div class="kanban-card-meta">
+                        <span>⏱️ 4ms</span>
+                    </div>
+                </div>
+                <div class="kanban-card">
+                    <div class="kanban-card-title">✅ Validate Codes</div>
+                    <div class="kanban-card-meta">
+                        <span>⏱️ 3ms</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="kanban-column">
+                <div class="kanban-header">
+                    <div class="kanban-title">
+                        🔍 Analisi
+                    </div>
+                    <div class="kanban-count">5</div>
+                </div>
+                <div class="kanban-card">
+                    <div class="kanban-card-title">✅ Check Duplicates</div>
+                    <div class="kanban-card-meta">
+                        <span>⏱️ 2ms</span>
+                    </div>
+                </div>
+                <div class="kanban-card">
+                    <div class="kanban-card-title">✅ Price Range</div>
+                    <div class="kanban-card-meta">
+                        <span>⏱️ 3ms</span>
+                    </div>
+                </div>
+                <div class="kanban-card">
+                    <div class="kanban-card-title">✅ +3 tests</div>
+                    <div class="kanban-card-meta">
+                        <span>⏱️ 7ms</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="kanban-column">
+                <div class="kanban-header">
+                    <div class="kanban-title">
+                        ⚡ Performance
+                    </div>
+                    <div class="kanban-count">1</div>
+                </div>
+                <div class="kanban-card">
+                    <div class="kanban-card-title">✅ Load Performance</div>
+                    <div class="kanban-card-meta">
+                        <span>⏱️ 45ms total</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONCEPT 3: Circular Progress Rings -->
+    <div class="demo-section">
+        <div class="demo-title">⭕ Concept 3: Circular Progress Rings</div>
+        <div class="demo-desc">
+            <strong>Approccio:</strong> Circular progress per ogni metrica principale, rings colorati<br>
+            <strong>Innovazione:</strong> Visual molto impattante, progress immediato a colpo d'occhio, estetica
+            moderna<br>
+            <strong>Vantaggi:</strong> Bellissimo visivamente, stats evidenti, sensazione di completamento forte
+        </div>
+
+        <div class="rings-container">
+            <div class="rings-grid">
+                <div class="ring-item">
+                    <svg class="ring-svg" viewBox="0 0 100 100">
+                        <defs>
+                            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <circle class="ring-bg" cx="50" cy="50" r="45" />
+                        <circle class="ring-progress" cx="50" cy="50" r="45" />
+                        <text class="ring-text" x="50" y="55" text-anchor="middle">12</text>
+                    </svg>
+                    <div class="ring-label">Total Tests</div>
+                </div>
+
+                <div class="ring-item">
+                    <svg class="ring-svg" viewBox="0 0 100 100">
+                        <defs>
+                            <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#22c55e;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#16a34a;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <circle class="ring-bg" cx="50" cy="50" r="45" />
+                        <circle class="ring-progress" cx="50" cy="50" r="45" stroke="url(#gradient2)"
+                            stroke-dashoffset="0" />
+                        <text class="ring-text" x="50" y="55" text-anchor="middle">12</text>
+                    </svg>
+                    <div class="ring-label" style="color: #22c55e;">✅ Passed</div>
+                </div>
+
+                <div class="ring-item">
+                    <svg class="ring-svg" viewBox="0 0 100 100">
+                        <circle class="ring-bg" cx="50" cy="50" r="45" />
+                        <circle class="ring-progress" cx="50" cy="50" r="45" stroke="#ef4444" stroke-dashoffset="283" />
+                        <text class="ring-text" x="50" y="55" text-anchor="middle">0</text>
+                    </svg>
+                    <div class="ring-label" style="color: #ef4444;">❌ Failed</div>
+                </div>
+
+                <div class="ring-item">
+                    <svg class="ring-svg" viewBox="0 0 100 100">
+                        <defs>
+                            <linearGradient id="gradient3" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <circle class="ring-bg" cx="50" cy="50" r="45" />
+                        <circle class="ring-progress" cx="50" cy="50" r="45" stroke="url(#gradient3)"
+                            stroke-dashoffset="226" />
+                        <text class="ring-text" x="50" y="52" text-anchor="middle" font-size="0.8rem">45ms</text>
+                    </svg>
+                    <div class="ring-label" style="color: #f59e0b;">⏱️ Time</div>
+                </div>
+            </div>
+
+            <div class="rings-groups">
+                <div class="ring-group">
+                    <svg class="ring-group-icon" viewBox="0 0 100 100">
+                        <circle class="ring-bg" cx="50" cy="50" r="45" stroke-width="6" />
+                        <circle class="ring-progress" cx="50" cy="50" r="45" stroke-width="6" stroke-dashoffset="0" />
+                        <text class="ring-text" x="50" y="55" text-anchor="middle" font-size="1.2rem">3</text>
+                    </svg>
+                    <div class="ring-group-info">
+                        <div class="ring-group-title">📥 Caricamento & Struttura</div>
+                        <div class="ring-group-progress">3/3 completati • 100%</div>
+                    </div>
+                </div>
+
+                <div class="ring-group">
+                    <svg class="ring-group-icon" viewBox="0 0 100 100">
+                        <circle class="ring-bg" cx="50" cy="50" r="45" stroke-width="6" />
+                        <circle class="ring-progress" cx="50" cy="50" r="45" stroke-width="6" stroke-dashoffset="0" />
+                        <text class="ring-text" x="50" y="55" text-anchor="middle" font-size="1.2rem">3</text>
+                    </svg>
+                    <div class="ring-group-info">
+                        <div class="ring-group-title">✅ Validazione Dati</div>
+                        <div class="ring-group-progress">3/3 completati • 100%</div>
+                    </div>
+                </div>
+
+                <div class="ring-group">
+                    <svg class="ring-group-icon" viewBox="0 0 100 100">
+                        <circle class="ring-bg" cx="50" cy="50" r="45" stroke-width="6" />
+                        <circle class="ring-progress" cx="50" cy="50" r="45" stroke-width="6" stroke-dashoffset="0" />
+                        <text class="ring-text" x="50" y="55" text-anchor="middle" font-size="1.2rem">5</text>
+                    </svg>
+                    <div class="ring-group-info">
+                        <div class="ring-group-title">🔍 Analisi Qualità</div>
+                        <div class="ring-group-progress">5/5 completati • 100%</div>
+                    </div>
+                </div>
+
+                <div class="ring-group">
+                    <svg class="ring-group-icon" viewBox="0 0 100 100">
+                        <circle class="ring-bg" cx="50" cy="50" r="45" stroke-width="6" />
+                        <circle class="ring-progress" cx="50" cy="50" r="45" stroke-width="6" stroke-dashoffset="0" />
+                        <text class="ring-text" x="50" y="55" text-anchor="middle" font-size="1.2rem">1</text>
+                    </svg>
+                    <div class="ring-group-info">
+                        <div class="ring-group-title">⚡ Performance</div>
+                        <div class="ring-group-progress">1/1 completati • 100%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONCEPT 4: Horizontal Stepper -->
+    <div class="demo-section">
+        <div class="demo-title">➡️ Concept 4: Horizontal Stepper</div>
+        <div class="demo-desc">
+            <strong>Approccio:</strong> Stepper orizzontale tipo wizard/checkout - senso di avanzamento<br>
+            <strong>Innovazione:</strong> Flow lineare da sinistra a destra, checkpoint visivi, linee di connessione<br>
+            <strong>Vantaggi:</strong> Intuitivo per processo sequenziale, progress visivo chiaro, familiare agli utenti
+        </div>
+
+        <div class="stepper-container">
+            <div class="stepper-progress">
+                <div class="stepper-step completed">
+                    <div class="stepper-circle">✓</div>
+                    <div class="stepper-label">Caricamento</div>
+                    <div class="stepper-count">3/3 test</div>
+                    <div class="stepper-line"></div>
+                </div>
+                <div class="stepper-step completed">
+                    <div class="stepper-circle">✓</div>
+                    <div class="stepper-label">Validazione</div>
+                    <div class="stepper-count">3/3 test</div>
+                    <div class="stepper-line"></div>
+                </div>
+                <div class="stepper-step completed">
+                    <div class="stepper-circle">✓</div>
+                    <div class="stepper-label">Analisi</div>
+                    <div class="stepper-count">5/5 test</div>
+                    <div class="stepper-line"></div>
+                </div>
+                <div class="stepper-step completed">
+                    <div class="stepper-circle">✓</div>
+                    <div class="stepper-label">Performance</div>
+                    <div class="stepper-count">1/1 test</div>
+                </div>
+            </div>
+
+            <div class="stepper-content">
+                <div class="stepper-stats">
+                    <div class="stepper-stat">
+                        <span class="stepper-stat-value">12</span>
+                        <span class="stepper-stat-label">Total Tests</span>
+                    </div>
+                    <div class="stepper-stat">
+                        <span class="stepper-stat-value" style="color: #22c55e;">12</span>
+                        <span class="stepper-stat-label">Passed</span>
+                    </div>
+                    <div class="stepper-stat">
+                        <span class="stepper-stat-value" style="color: #ef4444;">0</span>
+                        <span class="stepper-stat-label">Failed</span>
+                    </div>
+                    <div class="stepper-stat">
+                        <span class="stepper-stat-value" style="color: #f59e0b;">45ms</span>
+                        <span class="stepper-stat-label">Time</span>
+                    </div>
+                </div>
+                <div style="text-align: center; color: #22c55e; font-weight: 600;">
+                    ✅ Tutti i test completati con successo!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONCEPT 5: Metric Cards Grid -->
+    <div class="demo-section">
+        <div class="demo-title">📊 Concept 5: Metric Cards Grid</div>
+        <div class="demo-desc">
+            <strong>Approccio:</strong> Grid di card per metriche + lista dettagliata sotto - stile dashboard
+            analytics<br>
+            <strong>Innovazione:</strong> Due livelli di informazione (overview + dettaglio), cards interattive<br>
+            <strong>Vantaggi:</strong> Scalabile, facile aggiungere metriche, ottimo per analytics, molto pulito
+        </div>
+
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-icon">📊</div>
+                <span class="metric-value">12/12</span>
+                <span class="metric-label">Progress</span>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon">✅</div>
+                <span class="metric-value" style="color: #22c55e;">12</span>
+                <span class="metric-label">Passed</span>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon">❌</div>
+                <span class="metric-value" style="color: #ef4444;">0</span>
+                <span class="metric-label">Failed</span>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon">⏱️</div>
+                <span class="metric-value" style="color: #f59e0b;">45ms</span>
+                <span class="metric-label">Time</span>
+            </div>
+        </div>
+
+        <div class="metrics-list">
+            <div class="metric-list-item">
+                <div class="metric-list-icon">📥</div>
+                <div class="metric-list-content">
+                    <div class="metric-list-title">Caricamento & Struttura</div>
+                    <div class="metric-list-subtitle">Database, array e campi validati</div>
+                </div>
+                <div class="metric-list-badge success">3/3</div>
+            </div>
+            <div class="metric-list-item">
+                <div class="metric-list-icon">✅</div>
+                <div class="metric-list-content">
+                    <div class="metric-list-title">Validazione Dati</div>
+                    <div class="metric-list-subtitle">Prezzi, fermate e codici verificati</div>
+                </div>
+                <div class="metric-list-badge success">3/3</div>
+            </div>
+            <div class="metric-list-item">
+                <div class="metric-list-icon">🔍</div>
+                <div class="metric-list-content">
+                    <div class="metric-list-title">Analisi Qualità</div>
+                    <div class="metric-list-subtitle">Duplicati, range, progressività, consistenza</div>
+                </div>
+                <div class="metric-list-badge success">5/5</div>
+            </div>
+            <div class="metric-list-item">
+                <div class="metric-list-icon">⚡</div>
+                <div class="metric-list-content">
+                    <div class="metric-list-title">Performance</div>
+                    <div class="metric-list-subtitle">Caricamento veloce e ottimizzato</div>
+                </div>
+                <div class="metric-list-badge success">1/1</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONCEPT 6: Hybrid Best of All -->
+    <div class="demo-section">
+        <div class="demo-title">🌟 Concept 6: Hybrid Best of All</div>
+        <div class="demo-desc">
+            <strong>Approccio:</strong> Combinazione dei migliori elementi di tutti i concept precedenti<br>
+            <strong>Mix di:</strong> Circular rings (Concept 3) + Stepper cards (Concept 4) + Metric cards (Concept 5) +
+            Dashboard header (Concept 2)<br>
+            <strong>Innovazione:</strong> Header con rings, stepper orizzontale interattivo, cards con mini rings e
+            hover effects<br>
+            <strong>Vantaggi:</strong> Massimo impatto visivo + massima funzionalità + versatile per ogni contesto
+        </div>
+
+        <div class="hybrid-container">
+            <!-- Header Dashboard con Circular Rings -->
+            <div class="hybrid-header">
+                <div class="hybrid-title">
+                    <span>🧪</span>
+                    <span>Test Database - Dashboard</span>
+                </div>
+
+                <div class="hybrid-rings-row">
+                    <div class="hybrid-ring">
+                        <svg class="hybrid-ring-svg" viewBox="0 0 60 60">
+                            <circle class="hybrid-ring-bg" cx="30" cy="30" r="26" />
+                            <circle class="hybrid-ring-progress" cx="30" cy="30" r="26" stroke-dashoffset="0" />
+                            <text class="hybrid-ring-text" x="30" y="35" text-anchor="middle">12</text>
+                        </svg>
+                        <div class="hybrid-ring-label">Total Tests</div>
+                    </div>
+
+                    <div class="hybrid-ring">
+                        <svg class="hybrid-ring-svg" viewBox="0 0 60 60">
+                            <circle class="hybrid-ring-bg" cx="30" cy="30" r="26" />
+                            <circle class="hybrid-ring-progress" cx="30" cy="30" r="26" stroke-dashoffset="0" />
+                            <text class="hybrid-ring-text" x="30" y="35" text-anchor="middle">12</text>
+                        </svg>
+                        <div class="hybrid-ring-label">✅ Passed</div>
+                    </div>
+
+                    <div class="hybrid-ring">
+                        <svg class="hybrid-ring-svg" viewBox="0 0 60 60">
+                            <circle class="hybrid-ring-bg" cx="30" cy="30" r="26" />
+                            <circle class="hybrid-ring-progress" cx="30" cy="30" r="26" stroke-dashoffset="220" />
+                            <text class="hybrid-ring-text" x="30" y="35" text-anchor="middle">0</text>
+                        </svg>
+                        <div class="hybrid-ring-label">❌ Failed</div>
+                    </div>
+
+                    <div class="hybrid-ring">
+                        <svg class="hybrid-ring-svg" viewBox="0 0 60 60">
+                            <circle class="hybrid-ring-bg" cx="30" cy="30" r="26" />
+                            <circle class="hybrid-ring-progress" cx="30" cy="30" r="26" stroke-dashoffset="44" />
+                            <text class="hybrid-ring-text" x="30" y="33" text-anchor="middle"
+                                font-size="0.7rem">45ms</text>
+                        </svg>
+                        <div class="hybrid-ring-label">⏱️ Time</div>
+                    </div>
+                </div>
+
+                <div class="hybrid-progress-bar-container">
+                    <div class="hybrid-progress-bar"></div>
+                </div>
+            </div>
+
+            <!-- Horizontal Stepper (da Concept 4) -->
+            <div class="hybrid-stepper">
+                <div class="hybrid-step">
+                    <div class="hybrid-step-number">1</div>
+                    <div class="hybrid-step-title">📥 Caricamento</div>
+                    <div class="hybrid-step-count">3 test completati</div>
+                    <div class="hybrid-step-mini-progress">
+                        <div class="hybrid-step-mini-bar"></div>
+                    </div>
+                    <div class="hybrid-step-badge">✓ 100%</div>
+                </div>
+
+                <div class="hybrid-step">
+                    <div class="hybrid-step-number">2</div>
+                    <div class="hybrid-step-title">✅ Validazione</div>
+                    <div class="hybrid-step-count">3 test completati</div>
+                    <div class="hybrid-step-mini-progress">
+                        <div class="hybrid-step-mini-bar"></div>
+                    </div>
+                    <div class="hybrid-step-badge">✓ 100%</div>
+                </div>
+
+                <div class="hybrid-step">
+                    <div class="hybrid-step-number">3</div>
+                    <div class="hybrid-step-title">🔍 Analisi</div>
+                    <div class="hybrid-step-count">5 test completati</div>
+                    <div class="hybrid-step-mini-progress">
+                        <div class="hybrid-step-mini-bar"></div>
+                    </div>
+                    <div class="hybrid-step-badge">✓ 100%</div>
+                </div>
+
+                <div class="hybrid-step">
+                    <div class="hybrid-step-number">4</div>
+                    <div class="hybrid-step-title">⚡ Performance</div>
+                    <div class="hybrid-step-count">1 test completato</div>
+                    <div class="hybrid-step-mini-progress">
+                        <div class="hybrid-step-mini-bar"></div>
+                    </div>
+                    <div class="hybrid-step-badge">✓ 100%</div>
+                </div>
+            </div>
+
+            <!-- Metric Cards con mini rings (da Concept 5 + Concept 3) -->
+            <div class="hybrid-cards-grid">
+                <div class="hybrid-card">
+                    <div class="hybrid-card-header">
+                        <div class="hybrid-card-icon">📥</div>
+                        <div class="hybrid-card-ring">
+                            <svg class="hybrid-card-ring-svg" viewBox="0 0 40 40">
+                                <defs>
+                                    <linearGradient id="cardGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+                                        <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+                                    </linearGradient>
+                                </defs>
+                                <circle class="hybrid-card-ring-bg" cx="20" cy="20" r="18" />
+                                <circle class="hybrid-card-ring-progress" cx="20" cy="20" r="18" />
+                                <text class="hybrid-card-ring-text" x="20" y="23" text-anchor="middle">3</text>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="hybrid-card-content">
+                        <div class="hybrid-card-title">Caricamento & Struttura</div>
+                        <div class="hybrid-card-subtitle">
+                            Database caricato con successo. Struttura array validata. Campi obbligatori verificati.
+                        </div>
+                    </div>
+                    <div class="hybrid-card-footer">
+                        <div class="hybrid-card-stat">
+                            <strong>23ms</strong> • 3 test
+                        </div>
+                        <div class="hybrid-card-badge">3/3</div>
+                    </div>
+                </div>
+
+                <div class="hybrid-card">
+                    <div class="hybrid-card-header">
+                        <div class="hybrid-card-icon">✅</div>
+                        <div class="hybrid-card-ring">
+                            <svg class="hybrid-card-ring-svg" viewBox="0 0 40 40">
+                                <circle class="hybrid-card-ring-bg" cx="20" cy="20" r="18" />
+                                <circle class="hybrid-card-ring-progress" cx="20" cy="20" r="18" />
+                                <text class="hybrid-card-ring-text" x="20" y="23" text-anchor="middle">3</text>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="hybrid-card-content">
+                        <div class="hybrid-card-title">Validazione Dati</div>
+                        <div class="hybrid-card-subtitle">
+                            Matrice prezzi simmetrica. Fermate valide senza duplicati. Codici correttamente formattati.
+                        </div>
+                    </div>
+                    <div class="hybrid-card-footer">
+                        <div class="hybrid-card-stat">
+                            <strong>15ms</strong> • 3 test
+                        </div>
+                        <div class="hybrid-card-badge">3/3</div>
+                    </div>
+                </div>
+
+                <div class="hybrid-card">
+                    <div class="hybrid-card-header">
+                        <div class="hybrid-card-icon">🔍</div>
+                        <div class="hybrid-card-ring">
+                            <svg class="hybrid-card-ring-svg" viewBox="0 0 40 40">
+                                <circle class="hybrid-card-ring-bg" cx="20" cy="20" r="18" />
+                                <circle class="hybrid-card-ring-progress" cx="20" cy="20" r="18" />
+                                <text class="hybrid-card-ring-text" x="20" y="23" text-anchor="middle">5</text>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="hybrid-card-content">
+                        <div class="hybrid-card-title">Analisi Qualità</div>
+                        <div class="hybrid-card-subtitle">
+                            Nessun duplicato rilevato. Range prezzi 0-100€ OK. Progressività e consistenza verificate.
+                        </div>
+                    </div>
+                    <div class="hybrid-card-footer">
+                        <div class="hybrid-card-stat">
+                            <strong>17ms</strong> • 5 test
+                        </div>
+                        <div class="hybrid-card-badge">5/5</div>
+                    </div>
+                </div>
+
+                <div class="hybrid-card">
+                    <div class="hybrid-card-header">
+                        <div class="hybrid-card-icon">⚡</div>
+                        <div class="hybrid-card-ring">
+                            <svg class="hybrid-card-ring-svg" viewBox="0 0 40 40">
+                                <circle class="hybrid-card-ring-bg" cx="20" cy="20" r="18" />
+                                <circle class="hybrid-card-ring-progress" cx="20" cy="20" r="18" />
+                                <text class="hybrid-card-ring-text" x="20" y="23" text-anchor="middle">1</text>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="hybrid-card-content">
+                        <div class="hybrid-card-title">Performance</div>
+                        <div class="hybrid-card-subtitle">
+                            Caricamento completato in 45ms. Performance ottimale rispetto al target di 100ms.
+                        </div>
+                    </div>
+                    <div class="hybrid-card-footer">
+                        <div class="hybrid-card-stat">
+                            <strong>45ms</strong> • 1 test
+                        </div>
+                        <div class="hybrid-card-badge">1/1</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
