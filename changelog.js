@@ -4,6 +4,55 @@
 
 const changelogData = [
   {
+    version: '1.6.2',
+    date: '4 Novembre 2025',
+    time: '23:45',
+    title: 'Modularizzazione CSS Test e Rimozione Stili Inline',
+    hidden: false,
+    changes: [
+      '📦 Struttura CSS Modulare Test:',
+      '  • css/components/tests/header.css - Header sticky, colori moduli, thin mode, mobile',
+      '  • css/components/tests/groups.css - Card gruppi, dark mode, stati badge/subtitle',
+      '  • css/components/tests/test-animations.css - Animazioni test',
+      '🗑️ Rimozione Stili Inline:',
+      '  • Rimossi ~130 righe di stili inline da test.html',
+      '  • Sostituiti con classi semantiche (test-header-left, test-header-right, ecc.)',
+      '  • HTML più leggero e leggibile (-75 righe)',
+      '🔧 JavaScript Ottimizzato:',
+      '  • js/tests/test-database.js usa classList invece di .style',
+      '  • Funzioni reset aggiornate per usare classi CSS',
+      '✨ Benefici:',
+      '  • CSS centralizzato e manutenibile',
+      '  • Scalabile per nuovi test (template pronti)',
+      '  • Consistenza visiva garantita',
+      '  • Performance migliorata (CSS cacheable)'
+    ]
+  },
+  {
+    version: '1.6.1',
+    date: '4 Novembre 2025',
+    time: '16:30',
+    title: 'UI Test Migliorata: Header Sticky + Controlli Avanzati',
+    hidden: false,
+    changes: [
+      '🎨 Header Sticky Test:',
+      '  • Implementati header sticky per ogni modulo test',
+      '  • Animazione thin mode con hysteresis (shrink/expand)',
+      '  • Header si riducono automaticamente durante lo scroll',
+      '  • Sistema di colori per modulo (database, prezzi, ecc.)',
+      '🔧 Controlli Avanzati:',
+      '  • Progress bar animata con data-progress',
+      '  • Timestamp relativi per ogni test',
+      '  • Gestione stato hiding per header sovrapposti',
+      '📦 Nuovo Modulo:',
+      '  • js/features/tests-ui.js - Gestione comportamento header sticky',
+      '✨ Miglioramenti UX:',
+      '  • Header sempre visibili durante scroll',
+      '  • Transizioni fluide e performanti',
+      '  • Indicatori visivi chiari per ogni modulo test'
+    ]
+  },
+  {
     version: '1.6.0',
     date: '2 Novembre 2025',
     time: '20:30',

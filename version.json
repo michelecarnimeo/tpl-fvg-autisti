@@ -1,6 +1,6 @@
 {
-  "version": "1.6.1",
+  "version": "1.6.2",
   "versionDate": "4 Novembre 2025",
-  "versionTime": "16:30",
-  "updateNotes": "UI Test Migliorata: Header Sticky + Controlli Avanzati"
+  "versionTime": "23:45",
+  "updateNotes": "Modularizzazione CSS test e rimozione stili inline"
 }

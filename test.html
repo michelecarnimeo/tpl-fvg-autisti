@@ -11,7 +11,9 @@
     <link rel="stylesheet" href="css/components/footer.css">
     <link rel="stylesheet" href="css/components/modals.css">
     <!-- Test Modules (sticky headers) -->
-    <link rel="stylesheet" href="css/components/tests.css">
+    <link rel="stylesheet" href="css/components/tests/header.css">
+    <link rel="stylesheet" href="css/components/tests/groups.css">
+    <link rel="stylesheet" href="css/components/tests/test-animations.css">
     <!-- Settings (struttura modale) -->
     <link rel="stylesheet" href="css/components/settings/impostazioni.css">
     <link rel="stylesheet" href="css/components/settings/accessibilita.css">
@@ -99,6 +101,21 @@
 
         .test-button:hover {
             background: var(--turchese-scuro);
+        }
+
+        .test-button:active {
+            transform: scale(0.98);
+            opacity: 0.9;
+        }
+
+        /* Reset button specific styles */
+        .test-button[onclick*="resetDatabaseTests"]:hover {
+            background: #dc2626 !important;
+        }
+
+        .test-button[onclick*="resetDatabaseTests"]:active {
+            background: #b91c1c !important;
+            transform: scale(0.95);
         }
 
         .test-output {
@@ -1957,14 +1974,18 @@
             <!-- Nuovo header modulo: Database -->
             <div class="test-header" data-module="database">
                 <div class="test-header-top">
-                    <div class="test-title">📦 Test Database</div>
-                    <div class="test-progress" id="db-header-progress">0/12</div>
-                    <span class="test-header-status status-pending" id="db-header-status">In attesa</span>
-                </div>
-                <div class="test-stats">
-                    <span>✅ <span id="db-header-passed">0</span></span>
-                    <span>❌ <span id="db-header-failed">0</span></span>
-                    <span>⏱️ <span id="db-header-time">0ms</span></span>
+                    <div class="test-header-left">
+                        <div class="test-title">Test Database</div>
+                        <div class="test-stats">
+                            <span>✅ <span id="db-header-passed">0</span></span>
+                            <span>❌ <span id="db-header-failed">0</span></span>
+                            <span>⏱️ <span id="db-header-time">0ms</span></span>
+                        </div>
+                    </div>
+                    <div class="test-header-right">
+                        <div class="test-progress" id="db-header-progress">0/17</div>
+                        <span class="test-header-status status-pending status-pending-small" id="db-header-status">In attesa</span>
+                    </div>
                 </div>
                 <div class="test-timestamp" id="db-header-timestamp" data-ts="">-</div>
                 <div class="test-bar">
@@ -1973,33 +1994,21 @@
             </div>
 
             <!-- CARD UNICA che contiene tutti i gruppi (stile Mobile 3) -->
-            <div
-                style="background: white; border-radius: 12px; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); overflow: hidden;">
+            <div class="test-groups-card">
 
                 <!-- Gruppo 1: Caricamento & Struttura -->
-                <div style="border-bottom: 1px solid #f3f4f6; transition: background-color 0.2s, transform 0.2s;">
-                    <div onclick="toggleDbGroup('group1')"
-                        style="padding: 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.75rem;">
-                        <div
-                            style="width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
-                            📥
+                <div class="test-group-separator">
+                    <div class="test-group-header" onclick="toggleDbGroup('group1')">
+                        <div class="test-group-bar group-db-1"></div>
+                        <div class="test-group-title-container">
+                            <div class="test-group-title">Caricamento & Struttura</div>
+                            <div id="db-group1-subtitle" class="test-group-subtitle state-pending">5 test da completare</div>
                         </div>
-                        <div style="flex: 1; min-width: 0;">
-                            <div style="font-weight: 600; font-size: 0.9rem; margin-bottom: 0.25rem;">Caricamento &
-                                Struttura</div>
-                            <div id="db-group1-subtitle" style="font-size: 0.75rem; color: #6b7280;">3 test da
-                                completare</div>
-                        </div>
-                        <div id="db-group1-badge"
-                            style="background: #f3f4f6; color: #6b7280; padding: 0.25rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; flex-shrink: 0;">
-                            0/3</div>
-                        <div id="db-group1-icon"
-                            style="font-size: 0.75rem; color: #9ca3af; transition: transform 0.3s; flex-shrink: 0;">▶
-                        </div>
+                        <div id="db-group1-badge" class="test-group-badge badge-pending">0/5</div>
+                        <div id="db-group1-icon" class="test-group-icon">▶</div>
                     </div>
-                    <div id="db-group1-content"
-                        style="display: none; padding: 0 1rem 1rem 1rem; border-top: 1px solid #f3f4f6;">
-                        <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.75rem;">
+                    <div id="db-group1-content" class="test-group-content">
+                        <div class="test-group-items-container">
                             <div class="test-item" id="test-database-load">
                                 <span>📄 Caricamento database.json</span>
                                 <span class="test-status pending">In attesa</span>
@@ -2012,34 +2021,31 @@
                                 <span>📋 Campi obbligatori</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
+                            <div class="test-item" id="test-database-types">
+                                <span>🔍 Tipi rigorosi</span>
+                                <span class="test-status pending">In attesa</span>
+                            </div>
+                            <div class="test-item" id="test-database-null-undefined">
+                                <span>🚫 Valori null/undefined</span>
+                                <span class="test-status pending">In attesa</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Gruppo 2: Validazione Dati -->
-                <div style="border-bottom: 1px solid #f3f4f6; transition: background-color 0.2s, transform 0.2s;">
-                    <div onclick="toggleDbGroup('group2')"
-                        style="padding: 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.75rem;">
-                        <div
-                            style="width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
-                            ✅
+                <div class="test-group-separator">
+                    <div class="test-group-header" onclick="toggleDbGroup('group2')">
+                        <div class="test-group-bar group-db-2"></div>
+                        <div class="test-group-title-container">
+                            <div class="test-group-title">Validazione Dati</div>
+                            <div id="db-group2-subtitle" class="test-group-subtitle state-pending">4 test da completare</div>
                         </div>
-                        <div style="flex: 1; min-width: 0;">
-                            <div style="font-weight: 600; font-size: 0.9rem; margin-bottom: 0.25rem;">Validazione Dati
-                            </div>
-                            <div id="db-group2-subtitle" style="font-size: 0.75rem; color: #6b7280;">3 test da
-                                completare</div>
-                        </div>
-                        <div id="db-group2-badge"
-                            style="background: #f3f4f6; color: #6b7280; padding: 0.25rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; flex-shrink: 0;">
-                            0/3</div>
-                        <div id="db-group2-icon"
-                            style="font-size: 0.75rem; color: #9ca3af; transition: transform 0.3s; flex-shrink: 0;">▶
-                        </div>
+                        <div id="db-group2-badge" class="test-group-badge badge-pending">0/4</div>
+                        <div id="db-group2-icon" class="test-group-icon">▶</div>
                     </div>
-                    <div id="db-group2-content"
-                        style="display: none; padding: 0 1rem 1rem 1rem; border-top: 1px solid #f3f4f6;">
-                        <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.75rem;">
+                    <div id="db-group2-content" class="test-group-content">
+                        <div class="test-group-items-container">
                             <div class="test-item" id="test-database-prices">
                                 <span>💰 Validazione prezzi</span>
                                 <span class="test-status pending">In attesa</span>
@@ -2052,34 +2058,27 @@
                                 <span>🏷️ Validazione codici</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
+                            <div class="test-item" id="test-database-encoding">
+                                <span>🌐 Encoding e caratteri speciali</span>
+                                <span class="test-status pending">In attesa</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Gruppo 3: Analisi Qualità -->
-                <div style="border-bottom: 1px solid #f3f4f6; transition: background-color 0.2s, transform 0.2s;">
-                    <div onclick="toggleDbGroup('group3')"
-                        style="padding: 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.75rem;">
-                        <div
-                            style="width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
-                            🔍
+                <div class="test-group-separator">
+                    <div class="test-group-header" onclick="toggleDbGroup('group3')">
+                        <div class="test-group-bar group-db-3"></div>
+                        <div class="test-group-title-container">
+                            <div class="test-group-title">Analisi Qualità</div>
+                            <div id="db-group3-subtitle" class="test-group-subtitle state-pending">7 test da completare</div>
                         </div>
-                        <div style="flex: 1; min-width: 0;">
-                            <div style="font-weight: 600; font-size: 0.9rem; margin-bottom: 0.25rem;">Analisi Qualità
-                            </div>
-                            <div id="db-group3-subtitle" style="font-size: 0.75rem; color: #6b7280;">5 test da
-                                completare</div>
-                        </div>
-                        <div id="db-group3-badge"
-                            style="background: #f3f4f6; color: #6b7280; padding: 0.25rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; flex-shrink: 0;">
-                            0/5</div>
-                        <div id="db-group3-icon"
-                            style="font-size: 0.75rem; color: #9ca3af; transition: transform 0.3s; flex-shrink: 0;">▶
-                        </div>
+                        <div id="db-group3-badge" class="test-group-badge badge-pending">0/7</div>
+                        <div id="db-group3-icon" class="test-group-icon">▶</div>
                     </div>
-                    <div id="db-group3-content"
-                        style="display: none; padding: 0 1rem 1rem 1rem; border-top: 1px solid #f3f4f6;">
-                        <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.75rem;">
+                    <div id="db-group3-content" class="test-group-content">
+                        <div class="test-group-items-container">
                             <div class="test-item" id="test-database-duplicates">
                                 <span>🔄 Nomi linee duplicati</span>
                                 <span class="test-status pending">In attesa</span>
@@ -2100,33 +2099,31 @@
                                 <span>🔗 Consistenza dati</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
+                            <div class="test-item" id="test-database-edge-cases">
+                                <span>⚠️ Edge cases estremi</span>
+                                <span class="test-status pending">In attesa</span>
+                            </div>
+                            <div class="test-item" id="test-database-size-limit">
+                                <span>📏 Dimensioni massime</span>
+                                <span class="test-status pending">In attesa</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Gruppo 4: Performance -->
-                <div style="transition: background-color 0.2s, transform 0.2s;">
-                    <div onclick="toggleDbGroup('group4')"
-                        style="padding: 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.75rem;">
-                        <div
-                            style="width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
-                            ⚡
+                <div class="test-group-separator">
+                    <div class="test-group-header" onclick="toggleDbGroup('group4')">
+                        <div class="test-group-bar group-db-4"></div>
+                        <div class="test-group-title-container">
+                            <div class="test-group-title">Performance</div>
+                            <div id="db-group4-subtitle" class="test-group-subtitle state-pending">1 test da completare</div>
                         </div>
-                        <div style="flex: 1; min-width: 0;">
-                            <div style="font-weight: 600; font-size: 0.9rem; margin-bottom: 0.25rem;">Performance</div>
-                            <div id="db-group4-subtitle" style="font-size: 0.75rem; color: #6b7280;">1 test da
-                                completare</div>
-                        </div>
-                        <div id="db-group4-badge"
-                            style="background: #f3f4f6; color: #6b7280; padding: 0.25rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; flex-shrink: 0;">
-                            0/1</div>
-                        <div id="db-group4-icon"
-                            style="font-size: 0.75rem; color: #9ca3af; transition: transform 0.3s; flex-shrink: 0;">▶
-                        </div>
+                        <div id="db-group4-badge" class="test-group-badge badge-pending">0/1</div>
+                        <div id="db-group4-icon" class="test-group-icon">▶</div>
                     </div>
-                    <div id="db-group4-content"
-                        style="display: none; padding: 0 1rem 0.85rem 1rem; border-top: 1px solid var(--bordo);">
-                        <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.75rem;">
+                    <div id="db-group4-content" class="test-group-content">
+                        <div class="test-group-items-container">
                             <div class="test-item" id="test-database-performance">
                                 <span>🚀 Misurazione velocità</span>
                                 <span class="test-status pending">In attesa</span>
@@ -2137,12 +2134,14 @@
             </div>
 
             <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; margin-top: 1rem;">
-                <button class="test-button" onclick="testDatabaseLoad()" style="flex: 1; min-width: 150px;">🧪 Esegui
+                <button class="test-button" onclick="testDatabaseLoad()" style="flex: 1; min-width: 120px;">🧪 Esegui
                     Tutti i Test</button>
-                <button class="test-button" onclick="toggleAllDbGroups(true)" style="background: #6b7280;">📂 Apri
+                <button class="test-button" onclick="toggleAllDbGroups(true)" style="background: #6b7280; min-width: 100px;">📂 Espandi
                     Tutti</button>
-                <button class="test-button" onclick="toggleAllDbGroups(false)" style="background: #6b7280;">📁 Chiudi
+                <button class="test-button" onclick="toggleAllDbGroups(false)" style="background: #6b7280; min-width: 100px;">📁 Comprimi
                     Tutti</button>
+                <button class="test-button" onclick="resetDatabaseTests()" style="background: #ef4444; transition: background-color 0.2s ease; min-width: 100px;">🔄 Reset
+                    Test</button>
             </div>
             <div class="test-output" id="output-database" style="display:none;"></div>
             <div id="db-log-buttons" style="display: none; gap: 0.5rem; margin-top: 0.5rem;">
@@ -2152,8 +2151,6 @@
                     log</button>
                 <button class="test-button" onclick="clearDatabaseLog()" style="background: #ef4444;">🗑️ Cancella
                     log</button>
-                <button class="test-button" onclick="resetDatabaseTests()" style="background: #f59e0b;">🔄 Reset
-                    Test</button>
             </div>
         </div>
 
@@ -2261,32 +2258,21 @@
             </div>
 
             <!-- CARD UNICA che contiene tutti i gruppi (stile Mobile 3) -->
-            <div
-                style="background: white; border-radius: 12px; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); overflow: hidden;">
+            <div class="test-groups-card">
 
                 <!-- Gruppo 1: Test Unitari -->
-                <div style="border-bottom: 1px solid #f3f4f6; transition: background-color 0.2s, transform 0.2s;">
-                    <div onclick="togglePriceGroup('group1')"
-                        style="padding: 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.75rem;">
-                        <div
-                            style="width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #f59e0b, #d97706); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
-                            🧪
+                <div class="test-group-separator">
+                    <div class="test-group-header" onclick="togglePriceGroup('group1')">
+                        <div class="test-group-bar group-price-1"></div>
+                        <div class="test-group-title-container">
+                            <div class="test-group-title">Test Unitari</div>
+                            <div id="price-group1-subtitle" class="test-group-subtitle state-pending">5 test da completare</div>
                         </div>
-                        <div style="flex: 1; min-width: 0;">
-                            <div style="font-weight: 600; font-size: 0.9rem; margin-bottom: 0.25rem;">Test Unitari</div>
-                            <div id="price-group1-subtitle" style="font-size: 0.75rem; color: #6b7280;">5 test da
-                                completare</div>
-                        </div>
-                        <div id="price-group1-badge"
-                            style="background: #f3f4f6; color: #6b7280; padding: 0.25rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; flex-shrink: 0;">
-                            0/5</div>
-                        <div id="price-group1-icon"
-                            style="font-size: 0.75rem; color: #9ca3af; transition: transform 0.3s; flex-shrink: 0;">▶
-                        </div>
+                        <div id="price-group1-badge" class="test-group-badge badge-pending">0/5</div>
+                        <div id="price-group1-icon" class="test-group-icon">▶</div>
                     </div>
-                    <div id="price-group1-content"
-                        style="display: none; padding: 0 1rem 1rem 1rem; border-top: 1px solid #f3f4f6;">
-                        <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.75rem;">
+                    <div id="price-group1-content" class="test-group-content">
+                        <div class="test-group-items-container">
                             <div class="test-item" id="test-pricing-calculate">
                                 <span>Pricing.calculatePrice()</span>
                                 <span class="test-status pending">In attesa</span>
@@ -2312,28 +2298,18 @@
                 </div>
 
                 <!-- Gruppo 2: Edge Cases -->
-                <div style="border-bottom: 1px solid #f3f4f6; transition: background-color 0.2s, transform 0.2s;">
-                    <div onclick="togglePriceGroup('group2')"
-                        style="padding: 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.75rem;">
-                        <div
-                            style="width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #f59e0b, #d97706); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
-                            ⚠️
+                <div class="test-group-separator">
+                    <div class="test-group-header" onclick="togglePriceGroup('group2')">
+                        <div class="test-group-bar group-price-2"></div>
+                        <div class="test-group-title-container">
+                            <div class="test-group-title">Edge Cases</div>
+                            <div id="price-group2-subtitle" class="test-group-subtitle state-pending">3 test da completare</div>
                         </div>
-                        <div style="flex: 1; min-width: 0;">
-                            <div style="font-weight: 600; font-size: 0.9rem; margin-bottom: 0.25rem;">Edge Cases</div>
-                            <div id="price-group2-subtitle" style="font-size: 0.75rem; color: #6b7280;">3 test da
-                                completare</div>
-                        </div>
-                        <div id="price-group2-badge"
-                            style="background: #f3f4f6; color: #6b7280; padding: 0.25rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; flex-shrink: 0;">
-                            0/3</div>
-                        <div id="price-group2-icon"
-                            style="font-size: 0.75rem; color: #9ca3af; transition: transform 0.3s; flex-shrink: 0;">▶
-                        </div>
+                        <div id="price-group2-badge" class="test-group-badge badge-pending">0/3</div>
+                        <div id="price-group2-icon" class="test-group-icon">▶</div>
                     </div>
-                    <div id="price-group2-content"
-                        style="display: none; padding: 0 1rem 1rem 1rem; border-top: 1px solid #f3f4f6;">
-                        <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.75rem;">
+                    <div id="price-group2-content" class="test-group-content">
+                        <div class="test-group-items-container">
                             <div class="test-item" id="test-pricing-same-stop">
                                 <span>Stessa fermata (partenza = arrivo)</span>
                                 <span class="test-status pending">In attesa</span>
@@ -2351,29 +2327,18 @@
                 </div>
 
                 <!-- Gruppo 3: Test Avanzati -->
-                <div style="border-bottom: 1px solid #f3f4f6; transition: background-color 0.2s, transform 0.2s;">
-                    <div onclick="togglePriceGroup('group3')"
-                        style="padding: 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.75rem;">
-                        <div
-                            style="width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #f59e0b, #d97706); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
-                            🚀
+                <div class="test-group-separator">
+                    <div class="test-group-header" onclick="togglePriceGroup('group3')">
+                        <div class="test-group-bar group-price-3"></div>
+                        <div class="test-group-title-container">
+                            <div class="test-group-title">Test Avanzati</div>
+                            <div id="price-group3-subtitle" class="test-group-subtitle state-pending">5 test da completare</div>
                         </div>
-                        <div style="flex: 1; min-width: 0;">
-                            <div style="font-weight: 600; font-size: 0.9rem; margin-bottom: 0.25rem;">Test Avanzati
-                            </div>
-                            <div id="price-group3-subtitle" style="font-size: 0.75rem; color: #6b7280;">5 test da
-                                completare</div>
-                        </div>
-                        <div id="price-group3-badge"
-                            style="background: #f3f4f6; color: #6b7280; padding: 0.25rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; flex-shrink: 0;">
-                            0/5</div>
-                        <div id="price-group3-icon"
-                            style="font-size: 0.75rem; color: #9ca3af; transition: transform 0.3s; flex-shrink: 0;">▶
-                        </div>
+                        <div id="price-group3-badge" class="test-group-badge badge-pending">0/5</div>
+                        <div id="price-group3-icon" class="test-group-icon">▶</div>
                     </div>
-                    <div id="price-group3-content"
-                        style="display: none; padding: 0 1rem 1rem 1rem; border-top: 1px solid #f3f4f6;">
-                        <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.75rem;">
+                    <div id="price-group3-content" class="test-group-content">
+                        <div class="test-group-items-container">
                             <div class="test-item" id="test-pricing-empty-tariffario">
                                 <span>Tariffario vuoto/null</span>
                                 <span class="test-status pending">In attesa</span>
@@ -2399,29 +2364,18 @@
                 </div>
 
                 <!-- Gruppo 4: Robustezza Dati -->
-                <div style="transition: background-color 0.2s, transform 0.2s;">
-                    <div onclick="togglePriceGroup('group4')"
-                        style="padding: 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.75rem;">
-                        <div
-                            style="width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #f59e0b, #d97706); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
-                            🛡️
+                <div class="test-group-separator">
+                    <div class="test-group-header" onclick="togglePriceGroup('group4')">
+                        <div class="test-group-bar group-price-4"></div>
+                        <div class="test-group-title-container">
+                            <div class="test-group-title">Robustezza Dati</div>
+                            <div id="price-group4-subtitle" class="test-group-subtitle state-pending">13 test da completare</div>
                         </div>
-                        <div style="flex: 1; min-width: 0;">
-                            <div style="font-weight: 600; font-size: 0.9rem; margin-bottom: 0.25rem;">Robustezza Dati
-                            </div>
-                            <div id="price-group4-subtitle" style="font-size: 0.75rem; color: #6b7280;">13 test da
-                                completare</div>
-                        </div>
-                        <div id="price-group4-badge"
-                            style="background: #f3f4f6; color: #6b7280; padding: 0.25rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; flex-shrink: 0;">
-                            0/13</div>
-                        <div id="price-group4-icon"
-                            style="font-size: 0.75rem; color: #9ca3af; transition: transform 0.3s; flex-shrink: 0;">▶
-                        </div>
+                        <div id="price-group4-badge" class="test-group-badge badge-pending">0/13</div>
+                        <div id="price-group4-icon" class="test-group-icon">▶</div>
                     </div>
-                    <div id="price-group4-content"
-                        style="display: none; padding: 0 1rem 1rem 1rem; border-top: 1px solid #f3f4f6;">
-                        <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.75rem;">
+                    <div id="price-group4-content" class="test-group-content">
+                        <div class="test-group-items-container">
                             <div class="test-item" id="test-pricing-null-price">
                                 <span>Prezzo null nella matrice</span>
                                 <span class="test-status pending">In attesa</span>
@@ -3184,14 +3138,12 @@
             const content = document.getElementById(`db-${groupId}-content`);
             const icon = document.getElementById(`db-${groupId}-icon`);
 
-            if (content.style.display === 'none') {
-                content.style.display = 'block';
-                icon.textContent = '▼';
-                icon.style.transform = 'rotate(0deg)';
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                icon.classList.remove('expanded');
             } else {
-                content.style.display = 'none';
-                icon.textContent = '▶';
-                icon.style.transform = 'rotate(-90deg)';
+                content.classList.add('expanded');
+                icon.classList.add('expanded');
             }
         }
 
@@ -3199,14 +3151,12 @@
             const content = document.getElementById(`price-${groupId}-content`);
             const icon = document.getElementById(`price-${groupId}-icon`);
 
-            if (content.style.display === 'none') {
-                content.style.display = 'block';
-                icon.textContent = '▼';
-                icon.style.transform = 'rotate(0deg)';
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                icon.classList.remove('expanded');
             } else {
-                content.style.display = 'none';
-                icon.textContent = '▶';
-                icon.style.transform = 'rotate(-90deg)';
+                content.classList.add('expanded');
+                icon.classList.add('expanded');
             }
         }
 
@@ -3217,13 +3167,11 @@
                 const icon = document.getElementById(`db-${groupId}-icon`);
 
                 if (open) {
-                    content.style.display = 'block';
-                    icon.textContent = '▼';
-                    icon.style.transform = 'rotate(0deg)';
+                    content.classList.add('expanded');
+                    icon.classList.add('expanded');
                 } else {
-                    content.style.display = 'none';
-                    icon.textContent = '▶';
-                    icon.style.transform = 'rotate(-90deg)';
+                    content.classList.remove('expanded');
+                    icon.classList.remove('expanded');
                 }
             });
         }
@@ -3235,13 +3183,11 @@
                 const icon = document.getElementById(`price-${groupId}-icon`);
 
                 if (open) {
-                    content.style.display = 'block';
-                    icon.textContent = '▼';
-                    icon.style.transform = 'rotate(0deg)';
+                    content.classList.add('expanded');
+                    icon.classList.add('expanded');
                 } else {
-                    content.style.display = 'none';
-                    icon.textContent = '▶';
-                    icon.style.transform = 'rotate(-90deg)';
+                    content.classList.remove('expanded');
+                    icon.classList.remove('expanded');
                 }
             });
         }
@@ -3340,7 +3286,7 @@
             const timestampEl = document.getElementById('db-header-timestamp');
             const barEl = document.getElementById('db-header-bar');
 
-            if (progressEl) progressEl.textContent = '0/12';
+            if (progressEl) progressEl.textContent = '0/17';
             if (statusEl) {
                 statusEl.className = 'test-header-status status-pending';
                 statusEl.textContent = 'In attesa';
@@ -3356,9 +3302,9 @@
 
             // Resetta i badge e subtitle dei gruppi
             const groups = [
-                { id: 'group1', total: 3, text: '3 test' },
-                { id: 'group2', total: 3, text: '3 test' },
-                { id: 'group3', total: 5, text: '5 test' },
+                { id: 'group1', total: 5, text: '5 test' },
+                { id: 'group2', total: 4, text: '4 test' },
+                { id: 'group3', total: 7, text: '7 test' },
                 { id: 'group4', total: 1, text: '1 test' }
             ];
 
@@ -3367,11 +3313,13 @@
                 const subtitle = document.getElementById(`db-${group.id}-subtitle`);
                 if (badge) {
                     badge.textContent = `0/${group.total}`;
-                    badge.style.background = '#f3f4f6';
-                    badge.style.color = '#6b7280';
+                    badge.classList.remove('badge-partial', 'badge-complete');
+                    badge.classList.add('badge-pending');
                 }
                 if (subtitle) {
                     subtitle.textContent = `${group.text} da completare`;
+                    subtitle.classList.remove('state-partial', 'state-complete');
+                    subtitle.classList.add('state-pending');
                 }
             });
 
@@ -3379,11 +3327,14 @@
             const testIds = [
                 // Gruppo 1: Caricamento & Struttura
                 'test-database-load', 'test-database-structure', 'test-database-lines',
+                'test-database-types', 'test-database-null-undefined',
                 // Gruppo 2: Validazione Dati
                 'test-database-prices', 'test-database-stops', 'test-database-codes',
+                'test-database-encoding',
                 // Gruppo 3: Analisi Qualità
                 'test-database-duplicates', 'test-database-range', 'test-database-progression',
                 'test-database-format', 'test-database-consistency',
+                'test-database-edge-cases', 'test-database-size-limit',
                 // Gruppo 4: Performance
                 'test-database-performance'
             ];
@@ -3443,11 +3394,13 @@
                 const subtitle = document.getElementById(`price-${group.id}-subtitle`);
                 if (badge) {
                     badge.textContent = `0/${group.total}`;
-                    badge.style.background = '#f3f4f6';
-                    badge.style.color = '#6b7280';
+                    badge.classList.remove('badge-partial', 'badge-complete');
+                    badge.classList.add('badge-pending');
                 }
                 if (subtitle) {
                     subtitle.textContent = `${group.text} da completare`;
+                    subtitle.classList.remove('state-partial', 'state-complete');
+                    subtitle.classList.add('state-pending');
                 }
             });
 

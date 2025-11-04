@@ -1,0 +1,246 @@
+/* ========================================
+   TEST GROUPS CARD MODULE
+   Stili per le card dei gruppi test
+   ======================================== */
+
+/* ========================================
+   CARD BASE
+   ======================================== */
+
+.test-groups-card {
+    background: white;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+/* ========================================
+   GROUP SEPARATOR
+   ======================================== */
+
+.test-group-separator {
+    border-bottom: 1px solid #f3f4f6;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.test-group-separator:last-child {
+    border-bottom: none;
+}
+
+/* ========================================
+   GROUP HEADER (CLICCABILE)
+   ======================================== */
+
+.test-group-header {
+    padding: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: background-color 0.2s;
+}
+
+.test-group-header:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+/* ========================================
+   GROUP BAR (BARRA VERTICALE COLORATA)
+   ======================================== */
+
+.test-group-bar {
+    width: 4px;
+    height: 40px;
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+/* Database groups */
+.test-group-bar.group-db-1 {
+    background: #3b82f6;
+}
+
+.test-group-bar.group-db-2 {
+    background: #10b981;
+}
+
+.test-group-bar.group-db-3 {
+    background: #f59e0b;
+}
+
+.test-group-bar.group-db-4 {
+    background: #8b5cf6;
+}
+
+/* Price groups */
+.test-group-bar.group-price-1 {
+    background: #f59e0b;
+}
+
+.test-group-bar.group-price-2 {
+    background: #ef4444;
+}
+
+.test-group-bar.group-price-3 {
+    background: #6366f1;
+}
+
+.test-group-bar.group-price-4 {
+    background: #14b8a6;
+}
+
+/* Template per nuovi moduli:
+.test-group-bar.group-nuovomodulo-1 { background: #colore; }
+*/
+
+/* ========================================
+   GROUP TITLE CONTAINER
+   ======================================== */
+
+.test-group-title-container {
+    flex: 1;
+    min-width: 0;
+}
+
+.test-group-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+}
+
+.test-group-subtitle {
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+/* Subtitle states (modificati da JS) */
+.test-group-subtitle.state-pending {
+    color: #6b7280;
+}
+
+.test-group-subtitle.state-partial {
+    color: #d97706;
+}
+
+.test-group-subtitle.state-complete {
+    color: #16a34a;
+}
+
+/* ========================================
+   GROUP BADGE
+   ======================================== */
+
+.test-group-badge {
+    background: #f3f4f6;
+    color: #6b7280;
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+/* Badge states (modificati da JS) */
+.test-group-badge.badge-pending {
+    background: #f3f4f6;
+    color: #6b7280;
+}
+
+.test-group-badge.badge-partial {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+.test-group-badge.badge-complete {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+/* ========================================
+   GROUP CONTENT CONTAINER
+   ======================================== */
+
+.test-group-items-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+/* ========================================
+   DARK MODE
+   ======================================== */
+
+.dark .test-groups-card {
+    background: #1f2937 !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+}
+
+.dark .test-group-separator {
+    border-bottom-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.dark .test-group-header {
+    color: #f3f4f6;
+}
+
+.dark .test-group-header:hover {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.dark .test-group-title {
+    color: #f3f4f6 !important;
+}
+
+.dark .test-group-subtitle.state-pending {
+    color: #9ca3af !important;
+}
+
+.dark .test-group-subtitle.state-partial {
+    color: #fde047 !important;
+}
+
+.dark .test-group-subtitle.state-complete {
+    color: #86efac !important;
+}
+
+.dark .test-group-badge.badge-pending {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #d1d5db !important;
+}
+
+.dark .test-group-badge.badge-partial {
+    background: rgba(251, 191, 36, 0.2) !important;
+    color: #fde047 !important;
+}
+
+.dark .test-group-badge.badge-complete {
+    background: rgba(34, 197, 94, 0.2) !important;
+    color: #86efac !important;
+}
+
+.dark .test-groups-card .test-item {
+    color: #e5e7eb !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.dark .test-groups-card .test-item span:first-child {
+    color: #f3f4f6 !important;
+}
+
+.dark .test-groups-card .test-status.pass {
+    background: rgba(34, 197, 94, 0.2) !important;
+    color: #86efac !important;
+}
+
+.dark .test-groups-card .test-status.fail {
+    background: rgba(239, 68, 68, 0.2) !important;
+    color: #fca5a5 !important;
+}
+
+.dark .test-groups-card .test-status.pending {
+    background: rgba(251, 191, 36, 0.2) !important;
+    color: #fde047 !important;
+}
+

@@ -1,0 +1,85 @@
+/* ========================================
+   TEST ANIMATIONS MODULE
+   Animazioni specifiche per i moduli di test
+   ======================================== */
+
+/* ========================================
+   SEZIONE 1: ANIMAZIONI HEADER THIN MODE
+   ======================================== */
+
+/* Animazione per header che si riduce (thin mode) */
+@keyframes shrinkIn {
+    from {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateY(-1.5px) scale(1);
+        opacity: 1;
+    }
+}
+
+/* Animazione per header che si espande (da thin mode) */
+@keyframes expandOut {
+    from {
+        transform: translateY(-1.5px) scale(1);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+/* Classe applicata quando header si riduce */
+.test-header.animating-shrink {
+    animation: shrinkIn 0.35s ease both;
+}
+
+/* Classe applicata quando header si espande */
+.test-header.animating-expand {
+    animation: expandOut 0.35s ease both;
+}
+
+/* Stato quando il prossimo header si avvicina (fade) */
+.test-header.hiding {
+    opacity: 0.45;
+    transform: translateY(-4px);
+}
+
+/* ========================================
+   SEZIONE 2: ANIMAZIONI GRUPPI TEST
+   ======================================== */
+
+/* Contenuto gruppo (collapsed di default) */
+.test-group-content {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease-out,
+                transform 0.3s ease-out;
+    padding: 0 1rem !important;
+}
+
+/* Contenuto gruppo espanso */
+.test-group-content.expanded {
+    max-height: 2000px;
+    opacity: 1;
+    transform: translateY(0);
+    padding: 0 1rem 1rem 1rem !important;
+}
+
+/* Icona gruppo (rotazione) */
+.test-group-icon {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Icona gruppo quando espanso (ruota 90°) */
+.test-group-icon.expanded {
+    transform: rotate(90deg);
+}
+
