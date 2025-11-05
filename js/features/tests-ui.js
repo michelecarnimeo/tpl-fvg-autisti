@@ -22,6 +22,8 @@
         const isThin = header.dataset.thin === 'true';
         if (shouldThin === isThin) return; // no state change
 
+        console.log('🎬 setThinState:', shouldThin ? 'SHRINK' : 'EXPAND', header.dataset.module || 'unknown');
+
         if (shouldThin) {
             applyThinPresetToHeader(header);
             header.dataset.thin = 'true';
@@ -120,6 +122,11 @@
     }
 
     function bootstrap() {
+        console.log('✅ tests-ui.js: Bootstrap inizializzato');
+        
+        const headers = document.querySelectorAll('.test-header');
+        console.log('📋 tests-ui.js: Trovati', headers.length, 'header');
+        
         // Initial pass
         hideScrolledHeaders();
         initProgressBars();
@@ -128,6 +135,8 @@
         // Listeners
         window.addEventListener('scroll', onScroll, { passive: true });
         window.addEventListener('resize', onScroll);
+        
+        console.log('🎧 tests-ui.js: Event listener scroll registrati');
     }
 
     if (document.readyState === 'loading') {

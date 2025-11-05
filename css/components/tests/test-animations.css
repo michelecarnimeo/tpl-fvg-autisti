@@ -50,7 +50,7 @@
 }
 
 /* ========================================
-   SEZIONE 2: ANIMAZIONI GRUPPI TEST
+   SEZIONE 2: ANIMAZIONI GRUPPI TEST (Sobrie e Professionali)
    ======================================== */
 
 /* Contenuto gruppo (collapsed di default) */
@@ -58,10 +58,10 @@
     max-height: 0;
     overflow: hidden;
     opacity: 0;
-    transform: translateY(-10px);
-    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-                opacity 0.3s ease-out,
-                transform 0.3s ease-out;
+    transform: translateY(-6px);
+    transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.25s ease-out,
+                transform 0.25s ease-out;
     padding: 0 1rem !important;
 }
 
@@ -71,15 +71,105 @@
     opacity: 1;
     transform: translateY(0);
     padding: 0 1rem 1rem 1rem !important;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease-in,
+                transform 0.3s ease-in;
 }
 
 /* Icona gruppo (rotazione) */
 .test-group-icon {
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Icona gruppo quando espanso (ruota 90°) */
 .test-group-icon.expanded {
     transform: rotate(90deg);
 }
+
+/* ========================================
+   ANIMAZIONE CLICK GRUPPO (Sobria)
+   ======================================== */
+
+/* Animazione leggera quando si clicca sul gruppo */
+.test-group-separator.clicking {
+    animation: subtle-press 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes subtle-press {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    
+    50% {
+        transform: scale(0.99);
+        opacity: 0.95;
+    }
+    
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Leggero highlight quando si apre */
+.test-group-separator.opening {
+    animation: subtle-highlight 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes subtle-highlight {
+    0% {
+        background-color: transparent;
+    }
+    
+    50% {
+        background-color: rgba(59, 130, 246, 0.04);
+    }
+    
+    100% {
+        background-color: transparent;
+    }
+}
+
+/* ========================================
+   SEZIONE 3: ANIMAZIONE HEADER (dalla demo-finale.html)
+   ======================================== */
+
+/* Animazioni per cambio stato header (applicate via JS) */
+@keyframes shrinkIn {
+    0% {
+        transform: translateY(0) scale(1);
+    }
+
+    50% {
+        transform: translateY(-3px) scale(0.98);
+    }
+
+    100% {
+        /* Mantiene valori finali del preset */
+    }
+}
+
+@keyframes expandOut {
+    0% {
+        transform: scale(0.98);
+    }
+
+    50% {
+        transform: translateY(-2px) scale(1.02);
+    }
+
+    100% {
+        transform: translateY(0) scale(1);
+    }
+}
+
+.test-header.animating-shrink {
+    animation: shrinkIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.test-header.animating-expand {
+    animation: expandOut 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
 

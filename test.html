@@ -10,10 +10,20 @@
     <link rel="stylesheet" href="css/animations.css">
     <link rel="stylesheet" href="css/components/footer.css">
     <link rel="stylesheet" href="css/components/modals.css">
-    <!-- Test Modules (sticky headers) -->
+    <!-- Test Modules (sticky headers, groups, animations) -->
     <link rel="stylesheet" href="css/components/tests/header.css">
     <link rel="stylesheet" href="css/components/tests/groups.css">
     <link rel="stylesheet" href="css/components/tests/test-animations.css">
+    <!-- Test Modules (base styles, status, effects) -->
+    <link rel="stylesheet" href="css/components/tests/test-base.css">
+    <link rel="stylesheet" href="css/components/tests/test-status.css">
+    <link rel="stylesheet" href="css/components/tests/test-effects.css">
+    <!-- Test Page Specific (settings dropdown, distance, leaflet) -->
+    <link rel="stylesheet" href="css/components/tests/test-page-specific.css">
+    <!-- Test Device Info (device info cards) -->
+    <link rel="stylesheet" href="css/components/tests/test-device-info.css">
+    <!-- Test Prezzi Adaptive (tipografia adattiva) -->
+    <link rel="stylesheet" href="css/components/tests/test-prezzi-adaptive.css">
     <!-- Settings (struttura modale) -->
     <link rel="stylesheet" href="css/components/settings/impostazioni.css">
     <link rel="stylesheet" href="css/components/settings/accessibilita.css">
@@ -28,686 +38,6 @@
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-
-    <style>
-        .test-container {
-            max-width: 600px;
-            width: 95%;
-            margin: 1.5rem auto;
-            padding: 1rem;
-        }
-
-        .test-section {
-            background: var(--bianco);
-            border-radius: 12px;
-            padding: 2rem;
-            margin-bottom: 1.5rem;
-            border: 2px solid var(--bordo);
-            width: 100%;
-        }
-
-        .test-section h2 {
-            color: var(--turchese);
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .test-item {
-            padding: 1.5rem;
-            margin: 0.75rem 0;
-            border-radius: 8px;
-            border: 1px solid var(--bordo);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        .test-status {
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 0.875rem;
-        }
-
-        .test-status.pass {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .test-status.fail {
-            background: #f8d7da;
-            color: #721c24;
-        }
-
-        .test-status.pending {
-            background: #fff3cd;
-            color: #856404;
-        }
-
-        .test-button {
-            background: var(--turchese);
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.875rem;
-            margin: 0.25rem;
-        }
-
-        .test-button:hover {
-            background: var(--turchese-scuro);
-        }
-
-        .test-button:active {
-            transform: scale(0.98);
-            opacity: 0.9;
-        }
-
-        /* Reset button specific styles */
-        .test-button[onclick*="resetDatabaseTests"]:hover {
-            background: #dc2626 !important;
-        }
-
-        .test-button[onclick*="resetDatabaseTests"]:active {
-            background: #b91c1c !important;
-            transform: scale(0.95);
-        }
-
-        .test-output {
-            background: var(--grigio-chiaro);
-            padding: 1rem;
-            border-radius: 8px;
-            margin-top: 1rem;
-            font-family: monospace;
-            font-size: 0.875rem;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .test-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .test-card {
-            background: var(--grigio-medio);
-            padding: 1rem;
-            border-radius: 8px;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .stat-card {
-            background: var(--grigio-medio);
-            padding: 1rem;
-            border-radius: 8px;
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 2rem;
-            font-weight: bold;
-            color: var(--turchese);
-        }
-
-        .stat-label {
-            font-size: 0.875rem;
-            color: var(--testo-secondario);
-            margin-top: 0.25rem;
-        }
-
-        .run-all-btn {
-            background: #28a745;
-            color: white;
-            border: none;
-            padding: 1rem 2rem;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: bold;
-            width: 100%;
-            margin-bottom: 1rem;
-        }
-
-        .run-all-btn:hover {
-            background: #218838;
-        }
-
-        .console-log {
-            margin: 0.25rem 0;
-            padding: 0.25rem;
-        }
-
-        .console-log.info {
-            color: #0066cc;
-        }
-
-        .console-log.success {
-            color: #28a745;
-        }
-
-        .console-log.error {
-            color: #dc3545;
-        }
-
-        .console-log.warning {
-            color: #ffc107;
-        }
-
-        /* Stili per la griglia degli effetti */
-        .effects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .effect-card {
-            background: var(--grigio-medio);
-            padding: 1.5rem;
-            border-radius: 12px;
-            border: 2px solid var(--bordo);
-            transition: all 0.3s ease;
-        }
-
-        .effect-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .effect-header {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .effect-icon {
-            font-size: 1.5rem;
-        }
-
-        .effect-title {
-            font-weight: bold;
-            color: var(--turchese);
-            font-size: 1.1rem;
-        }
-
-        .effect-status {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            margin-left: auto;
-        }
-
-        .effect-status.active {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .effect-status.inactive {
-            background: #f8d7da;
-            color: #721c24;
-        }
-
-        .effect-status.conditional {
-            background: #fff3cd;
-            color: #856404;
-        }
-
-        .effect-details {
-            font-size: 0.9rem;
-            color: var(--testo-secondario);
-            line-height: 1.4;
-        }
-
-        .effect-details ul {
-            margin: 0.5rem 0;
-            padding-left: 1.2rem;
-        }
-
-        .effect-details li {
-            margin: 0.25rem 0;
-        }
-
-        /* Mobile: rimuovi card per layout flat */
-        @media (max-width: 768px) {
-            .test-section {
-                background: transparent !important;
-                border: none !important;
-                box-shadow: none !important;
-                backdrop-filter: none !important;
-                -webkit-backdrop-filter: none !important;
-                padding: 1rem 0 !important;
-                margin-bottom: 1rem !important;
-            }
-
-            .test-section::before {
-                content: '';
-                display: block;
-                height: 1px;
-                background: rgba(0, 0, 0, 0.1);
-                margin-bottom: 1rem;
-            }
-
-            .dark .test-section::before {
-                background: rgba(255, 255, 255, 0.1);
-            }
-
-            .test-item {
-                background: transparent !important;
-                border: none !important;
-                box-shadow: none !important;
-                backdrop-filter: none !important;
-                -webkit-backdrop-filter: none !important;
-                padding: 0.75rem 0 !important;
-                margin: 0.5rem 0 !important;
-                border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
-            }
-
-            .dark .test-item {
-                border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-            }
-
-            .test-item:last-child {
-                border-bottom: none !important;
-            }
-
-            .effect-card {
-                background: transparent !important;
-                border: none !important;
-                box-shadow: none !important;
-                backdrop-filter: none !important;
-                -webkit-backdrop-filter: none !important;
-                padding: 0.75rem 0 !important;
-                margin-bottom: 1rem !important;
-                border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
-            }
-
-            .dark .effect-card {
-                border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-            }
-
-            .effect-card:last-child {
-                border-bottom: none !important;
-            }
-
-            .stat-card {
-                background: transparent !important;
-                border: none !important;
-                box-shadow: none !important;
-                backdrop-filter: none !important;
-                -webkit-backdrop-filter: none !important;
-                padding: 0.75rem 0 !important;
-                margin-bottom: 0.5rem !important;
-                border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
-            }
-
-            .dark .stat-card {
-                border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-            }
-
-            .stat-card:last-child {
-                border-bottom: none !important;
-            }
-
-            /* Disabilita effetti hover su mobile */
-            .test-section:hover,
-            .test-item:hover,
-            .effect-card:hover,
-            .stat-card:hover {
-                transform: none !important;
-                box-shadow: none !important;
-            }
-
-            /* Disabilita effetti rifrazione su mobile */
-            .test-section::before,
-            .test-item::before,
-            .effect-card::before,
-            .stat-card::before {
-                display: none !important;
-            }
-        }
-
-        /* ===== MEGA DROPDOWN IMPOSTAZIONI (OPZIONE C) ===== */
-        .settings-dropdown-container {
-            position: relative;
-        }
-
-        .nav-settings-dropdown-btn {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.6rem 1.2rem;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.15));
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            border-radius: 10px;
-            color: rgba(255, 255, 255, 0.95);
-            font-weight: 500;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-            margin-left: 0.5rem;
-        }
-
-        .nav-settings-dropdown-btn:hover {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.25));
-            border-color: rgba(255, 255, 255, 0.6);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-            transform: translateY(-2px);
-        }
-
-        .nav-settings-dropdown-btn.active {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.3));
-            border-color: rgba(255, 255, 255, 0.7);
-        }
-
-        .nav-settings-dropdown-btn .dropdown-arrow {
-            font-size: 0.7rem;
-            transition: transform 0.3s ease;
-        }
-
-        .nav-settings-dropdown-btn.active .dropdown-arrow {
-            transform: rotate(180deg);
-        }
-
-        /* Mega Dropdown */
-        .settings-mega-dropdown {
-            position: absolute;
-            top: calc(100% + 0.5rem);
-            right: 0;
-            min-width: 600px;
-            max-width: 700px;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.95));
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(0, 123, 138, 0.3);
-            border-radius: 16px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1);
-            padding: 1.5rem;
-            display: none;
-            opacity: 0;
-            transform: translateY(-10px);
-            transition: all 0.3s ease;
-            z-index: 1000;
-        }
-
-        .settings-mega-dropdown.show {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .dropdown-section {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .dropdown-section-title {
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--turchese);
-            margin: 0 0 0.5rem 0;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid rgba(23, 183, 177, 0.2);
-        }
-
-        .dropdown-item {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .dropdown-label {
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: var(--testo);
-        }
-
-        /* Theme Options */
-        .dropdown-theme-options {
-            display: flex;
-            flex-direction: column;
-            gap: 0.4rem;
-        }
-
-        .theme-radio {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            border: 1px solid transparent;
-        }
-
-        .theme-radio:hover {
-            background: rgba(23, 183, 177, 0.05);
-            border-color: rgba(23, 183, 177, 0.2);
-        }
-
-        .theme-radio input[type="radio"] {
-            cursor: pointer;
-        }
-
-        .theme-radio input[type="radio"]:checked+span {
-            font-weight: 600;
-            color: var(--turchese);
-        }
-
-        .theme-radio span {
-            font-size: 0.9rem;
-            color: var(--testo);
-        }
-
-        /* Toggle Switch */
-        .dropdown-toggle {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            position: relative;
-            width: 48px;
-            height: 24px;
-        }
-
-        .dropdown-toggle input[type="checkbox"] {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .toggle-slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: 0.3s;
-            border-radius: 24px;
-        }
-
-        .toggle-slider:before {
-            position: absolute;
-            content: "";
-            height: 18px;
-            width: 18px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
-            transition: 0.3s;
-            border-radius: 50%;
-        }
-
-        .dropdown-toggle input:checked+.toggle-slider {
-            background-color: var(--turchese);
-        }
-
-        .dropdown-toggle input:checked+.toggle-slider:before {
-            transform: translateX(24px);
-        }
-
-        /* Font Buttons */
-        .dropdown-font-buttons {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .dropdown-font-btn {
-            padding: 0.5rem 0.75rem;
-            background: rgba(23, 183, 177, 0.1);
-            border: 1px solid rgba(23, 183, 177, 0.3);
-            border-radius: 8px;
-            color: var(--testo);
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            min-width: 40px;
-        }
-
-        .dropdown-font-btn:hover {
-            background: rgba(23, 183, 177, 0.2);
-            border-color: var(--turchese);
-        }
-
-        .dropdown-font-btn.active {
-            background: var(--turchese);
-            color: white;
-            border-color: var(--turchese);
-            font-weight: 600;
-        }
-
-        /* Action Buttons */
-        .dropdown-action-btn {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem;
-            background: rgba(23, 183, 177, 0.1);
-            border: 1px solid rgba(23, 183, 177, 0.3);
-            border-radius: 10px;
-            color: var(--testo);
-            font-weight: 500;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            width: 100%;
-            text-align: left;
-        }
-
-        .dropdown-action-btn:hover {
-            background: rgba(23, 183, 177, 0.2);
-            border-color: var(--turchese);
-            transform: translateX(4px);
-        }
-
-        /* Dark Mode */
-        .dark .settings-mega-dropdown {
-            background: linear-gradient(135deg, rgba(30, 30, 30, 0.98), rgba(20, 20, 20, 0.95));
-            border-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .dark .nav-settings-dropdown-btn {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-
-        .dark .nav-settings-dropdown-btn:hover {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.15));
-            border-color: rgba(255, 255, 255, 0.5);
-        }
-
-        /* Mobile */
-        @media (max-width: 768px) {
-            .settings-dropdown-container {
-                display: none !important;
-            }
-        }
-
-        @media (max-width: 1024px) {
-            .settings-mega-dropdown.show {
-                grid-template-columns: 1fr;
-                min-width: 400px;
-            }
-        }
-
-        /* Stili per calcolo distanza */
-        .distance-preset-btn {
-            padding: 0.5rem 1rem;
-            background: linear-gradient(135deg, #fbbf24, #f59e0b);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-        }
-
-        .distance-preset-btn:hover {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
-        }
-
-        .distance-preset-btn:active {
-            transform: translateY(0);
-        }
-
-        #calculate-distance-btn:hover {
-            background: #d97706;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
-        }
-
-        #calculate-distance-btn:active {
-            transform: translateY(0);
-        }
-
-        /* Stili per mappa */
-        #recenter-map-btn:hover {
-            background: #059669;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-        }
-
-        #recenter-map-btn:active {
-            transform: translateY(0);
-        }
-
-        /* Fix per Leaflet su mobile */
-        .leaflet-container {
-            font-family: inherit;
-        }
-
-        .leaflet-popup-content-wrapper {
-            border-radius: 8px;
-        }
-
-        .leaflet-popup-content {
-            margin: 0.75rem;
-            font-size: 0.9rem;
-        }
-    </style>
 </head>
 
 <body class="bg-background-light text-foreground-light">
@@ -1405,250 +735,6 @@
                 </div>
             </div>
 
-            <style>
-                @keyframes fadeIn {
-                    from {
-                        opacity: 0;
-                    }
-
-                    to {
-                        opacity: 1;
-                    }
-                }
-
-                @keyframes slideUp {
-                    from {
-                        opacity: 0;
-                        transform: translateY(20px) scale(0.95);
-                    }
-
-                    to {
-                        opacity: 1;
-                        transform: translateY(0) scale(1);
-                    }
-                }
-
-                #reset-modal-cancel:hover {
-                    background: #f3f4f6;
-                    border-color: #9ca3af;
-                }
-
-                #reset-modal-confirm:hover {
-                    transform: translateY(-2px);
-                    box-shadow: 0 4px 16px rgba(239, 68, 68, 0.4);
-                }
-
-                #reset-modal-confirm:active,
-                #reset-modal-cancel:active {
-                    transform: translateY(0);
-                }
-
-                /* ========================================
-                   DEVICE INFO CARDS - RESPONSIVE
-                   ======================================== */
-
-                /* Desktop: Grid con card colorate */
-                @media (min-width: 769px) {
-                    #device-info-container {
-                        display: grid;
-                        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-                        gap: 1rem;
-                        margin-bottom: 1rem;
-                    }
-
-                    .device-info-card {
-                        padding: 1rem;
-                        border-radius: 12px;
-                        color: white;
-                        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-                        display: flex;
-                        flex-direction: column;
-                        transition: transform 0.3s, box-shadow 0.3s;
-                    }
-
-                    .device-info-card:hover {
-                        transform: translateY(-4px);
-                        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-                    }
-
-                    .device-info-card[data-color="purple"] {
-                        background: linear-gradient(135deg, #667eea, #764ba2);
-                    }
-
-                    .device-info-card[data-color="pink"] {
-                        background: linear-gradient(135deg, #f093fb, #f5576c);
-                    }
-
-                    .device-info-card[data-color="blue"] {
-                        background: linear-gradient(135deg, #4facfe, #00f2fe);
-                    }
-
-                    .device-info-card[data-color="green"] {
-                        background: linear-gradient(135deg, #43e97b, #38f9d7);
-                    }
-
-                    .device-info-card[data-color="orange"] {
-                        background: linear-gradient(135deg, #fa709a, #fee140);
-                    }
-
-                    .device-info-card[data-color="amber"] {
-                        background: linear-gradient(135deg, #ffa726, #fb8c00);
-                    }
-
-                    .device-info-card[data-color="cyan"] {
-                        background: linear-gradient(135deg, #06b6d4, #0891b2);
-                    }
-
-                    .device-info-card[data-color="indigo"] {
-                        background: linear-gradient(135deg, #6366f1, #4f46e5);
-                    }
-
-                    .device-info-card[data-color="gray"] {
-                        background: linear-gradient(135deg, #9ca3af, #6b7280);
-                    }
-
-                    .device-info-card[data-color="red"] {
-                        background: linear-gradient(135deg, #ef4444, #dc2626);
-                    }
-
-                    .device-info-icon {
-                        font-size: 2rem;
-                        margin-bottom: 0.5rem;
-                    }
-
-                    .device-info-content {
-                        display: flex;
-                        flex-direction: column;
-                    }
-
-                    .device-info-label {
-                        font-size: 0.85rem;
-                        opacity: 0.9;
-                        margin-bottom: 0.25rem;
-                    }
-
-                    .device-info-value {
-                        font-size: 1.3rem;
-                        font-weight: 600;
-                    }
-                }
-
-                /* Mobile: Lista compatta senza colori invasivi */
-                @media (max-width: 768px) {
-                    #device-info-container {
-                        display: flex;
-                        flex-direction: column;
-                        gap: 0.5rem;
-                        margin-bottom: 1rem;
-                    }
-
-                    .device-info-card {
-                        display: flex;
-                        align-items: center;
-                        gap: 0.75rem;
-                        padding: 0.75rem 1rem;
-                        background: white;
-                        border-radius: 8px;
-                        border-left: 4px solid #d1d5db;
-                        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-                    }
-
-                    .device-info-card[data-color="purple"] {
-                        border-left-color: #8b5cf6;
-                    }
-
-                    .device-info-card[data-color="pink"] {
-                        border-left-color: #ec4899;
-                    }
-
-                    .device-info-card[data-color="blue"] {
-                        border-left-color: #3b82f6;
-                    }
-
-                    .device-info-card[data-color="green"] {
-                        border-left-color: #10b981;
-                    }
-
-                    .device-info-card[data-color="orange"] {
-                        border-left-color: #f59e0b;
-                    }
-
-                    .device-info-card[data-color="amber"] {
-                        border-left-color: #f97316;
-                    }
-
-                    .device-info-card[data-color="red"] {
-                        border-left-color: #ef4444;
-                    }
-
-                    .device-info-icon {
-                        font-size: 1.5rem;
-                        flex-shrink: 0;
-                        min-width: 2rem;
-                        width: 2rem;
-                        text-align: center;
-                        line-height: 1.2;
-                        white-space: nowrap;
-                        overflow: hidden;
-                    }
-
-                    .device-info-content {
-                        flex: 1;
-                        display: flex;
-                        flex-direction: column;
-                        min-width: 0;
-                        overflow: hidden;
-                    }
-
-                    .device-info-label {
-                        font-size: 0.75rem;
-                        color: #9ca3af;
-                        text-transform: uppercase;
-                        letter-spacing: 0.05em;
-                        font-weight: 600;
-                        margin-bottom: 0.15rem;
-                        word-break: break-word;
-                    }
-
-                    .device-info-value {
-                        font-size: 0.95rem;
-                        font-weight: 600;
-                        color: #374151;
-                        word-break: break-word;
-                        overflow-wrap: break-word;
-                    }
-
-                    /* Stato Connessione: layout verticale su mobile per evitare sovrapposizioni */
-                    .device-info-card[data-color="green"] {
-                        flex-direction: column !important;
-                        align-items: flex-start !important;
-                        gap: 1rem !important;
-                    }
-
-                    .device-info-card[data-color="green"]>div {
-                        flex-direction: column !important;
-                        width: 100% !important;
-                    }
-
-                    .device-info-card[data-color="green"]>div>div:first-child {
-                        width: 100% !important;
-                        margin-bottom: 0.5rem;
-                    }
-
-                    .device-info-card[data-color="green"]>div>div:last-child {
-                        width: 100% !important;
-                        display: flex !important;
-                        justify-content: flex-start !important;
-                        gap: 0.5rem !important;
-                    }
-
-                    .device-info-card[data-color="green"] button {
-                        flex: 1 !important;
-                        min-width: auto !important;
-                    }
-                }
-            </style>
-
             <!-- Status Permessi -->
             <div id="geo-permission-status"
                 style="margin-bottom: 1rem; padding: 0.75rem; background: var(--grigio-chiaro); border-radius: 8px; border-left: 4px solid gray;">
@@ -2155,21 +1241,252 @@
         </div>
 
         <!-- Test 2: LocalStorage -->
-        <div id="section-localstorage" class="test-section">
-            <h2>💾 Test LocalStorage</h2>
-            <div class="test-item" id="test-localstorage-write">
-                <span>Scrittura localStorage</span>
-                <span class="test-status pending">In attesa</span>
+        <div id="section-localstorage" class="test-section has-module-header">
+            <!-- Header modulo: LocalStorage -->
+            <div class="test-header" data-module="localstorage">
+                <div class="test-header-content">
+                    <div class="test-header-left">
+                        <div class="test-title">💾 Test LocalStorage</div>
+                        <div class="test-stats">
+                            <span>✅ <span id="storage-header-passed">0</span></span>
+                            <span>❌ <span id="storage-header-failed">0</span></span>
+                            <span>⏱️ <span id="storage-header-time">0ms</span></span>
+                        </div>
+                    </div>
+                    <div class="test-header-right">
+                        <div class="test-progress" id="storage-header-progress">0/22</div>
+                        <span class="test-header-status status-pending status-pending-small" id="storage-header-status">In attesa</span>
+                    </div>
+                </div>
+                <div class="test-timestamp" id="storage-header-timestamp" data-ts="">-</div>
+                <div class="test-bar">
+                    <div class="test-bar-fill" id="storage-header-bar" data-progress="0"></div>
+                </div>
             </div>
-            <div class="test-item" id="test-localstorage-read">
-                <span>Lettura localStorage</span>
-                <span class="test-status pending">In attesa</span>
+
+            <!-- CARD UNICA che contiene tutti i gruppi -->
+            <div class="test-groups-card">
+
+                <!-- Gruppo 1: Test Base -->
+                <div class="test-group-separator">
+                    <div class="test-group-header" onclick="toggleStorageGroup('group1')">
+                        <div class="test-group-bar group-storage-1"></div>
+                        <div class="test-group-title-container">
+                            <div class="test-group-title">Test Base</div>
+                            <div id="storage-group1-subtitle" class="test-group-subtitle state-pending">3 test da completare</div>
+                        </div>
+                        <div id="storage-group1-badge" class="test-group-badge badge-pending">0/3</div>
+                        <div id="storage-group1-icon" class="test-group-icon">▶</div>
+                    </div>
+                    <div id="storage-group1-content" class="test-group-content">
+                        <div class="test-group-items-container">
+                            <div class="test-item" id="test-localstorage-write">
+                                <button class="test-run-single" onclick="runSingleStorageTest(1)" title="Esegui solo questo test">▶</button>
+                                <span>Scrittura localStorage</span>
+                                <span class="test-status pending">In attesa</span>
+                            </div>
+                            <div class="test-item" id="test-localstorage-read">
+                                <button class="test-run-single" onclick="runSingleStorageTest(2)" title="Esegui solo questo test">▶</button>
+                                <span>Lettura localStorage</span>
+                                <span class="test-status pending">In attesa</span>
+                            </div>
+                            <div class="test-item" id="test-localstorage-clear">
+                                <button class="test-run-single" onclick="runSingleStorageTest(3)" title="Esegui solo questo test">▶</button>
+                                <span>Cancellazione localStorage</span>
+                                <span class="test-status pending">In attesa</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gruppo 2: Test Dati Complessi -->
+                <div class="test-group-separator">
+                    <div class="test-group-header" onclick="toggleStorageGroup('group2')">
+                        <div class="test-group-bar group-storage-2"></div>
+                        <div class="test-group-title-container">
+                            <div class="test-group-title">Test Dati Complessi</div>
+                            <div id="storage-group2-subtitle" class="test-group-subtitle state-pending">5 test da completare</div>
+                        </div>
+                        <div id="storage-group2-badge" class="test-group-badge badge-pending">0/5</div>
+                        <div id="storage-group2-icon" class="test-group-icon">▶</div>
+                    </div>
+                    <div id="storage-group2-content" class="test-group-content">
+                        <div class="test-group-items-container">
+                            <div class="test-item" id="test-localstorage-json">
+                                <button class="test-run-single" onclick="runSingleStorageTest(4)" title="Esegui solo questo test">▶</button>
+                                <span>Salvataggio oggetto JSON</span>
+                                <span class="test-status pending">In attesa</span>
+                            </div>
+                            <div class="test-item" id="test-localstorage-array">
+                                <button class="test-run-single" onclick="runSingleStorageTest(5)" title="Esegui solo questo test">▶</button>
+                                <span>Salvataggio array</span>
+                                <span class="test-status pending">In attesa</span>
+                            </div>
+                            <div class="test-item" id="test-localstorage-numbers">
+                                <button class="test-run-single" onclick="runSingleStorageTest(6)" title="Esegui solo questo test">▶</button>
+                                <span>Salvataggio numeri</span>
+                                <span class="test-status pending">In attesa</span>
+                            </div>
+                            <div class="test-item" id="test-localstorage-booleans">
+                                <button class="test-run-single" onclick="runSingleStorageTest(7)" title="Esegui solo questo test">▶</button>
+                                <span>Salvataggio booleani</span>
+                                <span class="test-status pending">In attesa</span>
+                            </div>
+                            <div class="test-item" id="test-localstorage-complex">
+                                <button class="test-run-single" onclick="runSingleStorageTest(8)" title="Esegui solo questo test">▶</button>
+                                <span>Dati complessi annidati</span>
+                                <span class="test-status pending">In attesa</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gruppo 3: Test Edge Cases -->
+                <div class="test-group-separator">
+                    <div class="test-group-header" onclick="toggleStorageGroup('group3')">
+                        <div class="test-group-bar group-storage-3"></div>
+                        <div class="test-group-title-container">
+                            <div class="test-group-title">Test Edge Cases</div>
+                            <div id="storage-group3-subtitle" class="test-group-subtitle state-pending">6 test da completare</div>
+                        </div>
+                        <div id="storage-group3-badge" class="test-group-badge badge-pending">0/6</div>
+                        <div id="storage-group3-icon" class="test-group-icon">▶</div>
+                    </div>
+                    <div id="storage-group3-content" class="test-group-content">
+                        <div class="test-group-items-container">
+                            <div class="test-item" id="test-localstorage-null">
+                                <button class="test-run-single" onclick="runSingleStorageTest(9)" title="Esegui solo questo test">▶</button>
+                                <span>Valori null e undefined</span>
+                                <span class="test-status pending">In attesa</span>
+                            </div>
+                            <div class="test-item" id="test-localstorage-empty">
+                                <button class="test-run-single" onclick="runSingleStorageTest(10)" title="Esegui solo questo test">▶</button>
+                                <span>Stringhe vuote</span>
+                                <span class="test-status pending">In attesa</span>
+                            </div>
+                            <div class="test-item" id="test-localstorage-special">
+                                <button class="test-run-single" onclick="runSingleStorageTest(11)" title="Esegui solo questo test">▶</button>
+                                <span>Caratteri speciali (emoji, unicode)</span>
+                                <span class="test-status pending">In attesa</span>
+                            </div>
+                            <div class="test-item" id="test-localstorage-long">
+                                <button class="test-run-single" onclick="runSingleStorageTest(12)" title="Esegui solo questo test">▶</button>
+                                <span>Valori molto lunghi (10KB)</span>
+                                <span class="test-status pending">In attesa</span>
+                            </div>
+                            <div class="test-item" id="test-localstorage-multiple">
+                                <button class="test-run-single" onclick="runSingleStorageTest(13)" title="Esegui solo questo test">▶</button>
+                                <span>Chiavi multiple</span>
+                                <span class="test-status pending">In attesa</span>
+                            </div>
+                            <div class="test-item" id="test-localstorage-available">
+                                <button class="test-run-single" onclick="runSingleStorageTest(14)" title="Esegui solo questo test">▶</button>
+                                <span>Disponibilità localStorage</span>
+                                <span class="test-status pending">In attesa</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gruppo 4: Test Avanzati -->
+                <div class="test-group-separator">
+                    <div class="test-group-header" onclick="toggleStorageGroup('group4')">
+                        <div class="test-group-bar group-storage-4"></div>
+                        <div class="test-group-title-container">
+                            <div class="test-group-title">Test Avanzati</div>
+                            <div id="storage-group4-subtitle" class="test-group-subtitle state-pending">2 test da completare</div>
+                        </div>
+                        <div id="storage-group4-badge" class="test-group-badge badge-pending">0/2</div>
+                        <div id="storage-group4-icon" class="test-group-icon">▶</div>
+                    </div>
+                    <div id="storage-group4-content" class="test-group-content">
+                        <div class="test-group-items-container">
+                            <div class="test-item" id="test-localstorage-quota">
+                                <button class="test-run-single" onclick="runSingleStorageTest(15)" title="Esegui solo questo test">▶</button>
+                                <span>Quota Storage (Simulazione)</span>
+                                <span class="test-status pending">In attesa</span>
+                            </div>
+                            <div class="test-item" id="test-localstorage-performance">
+                                <button class="test-run-single" onclick="runSingleStorageTest(16)" title="Esegui solo questo test">▶</button>
+                                <span>Performance (Scrittura/Lettura 100KB x100)</span>
+                                <span class="test-status pending">In attesa</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gruppo 5: Test Robustezza -->
+                <div class="test-group-separator">
+                    <div class="test-group-header" onclick="toggleStorageGroup('group5')">
+                        <div class="test-group-bar group-storage-5"></div>
+                        <div class="test-group-title-container">
+                            <div class="test-group-title">Test Robustezza</div>
+                            <div id="storage-group5-subtitle" class="test-group-subtitle state-pending">3 test da completare</div>
+                        </div>
+                        <div id="storage-group5-badge" class="test-group-badge badge-pending">0/3</div>
+                        <div id="storage-group5-icon" class="test-group-icon">▶</div>
+                    </div>
+                    <div id="storage-group5-content" class="test-group-content">
+                        <div class="test-group-items-container">
+                            <div class="test-item" id="test-localstorage-iterate">
+                                <button class="test-run-single" onclick="runSingleStorageTest(17)" title="Esegui solo questo test">▶</button>
+                                <span>Iterazione Chiavi (localStorage.key())</span>
+                                <span class="test-status pending">In attesa</span>
+                            </div>
+                            <div class="test-item" id="test-localstorage-invalid-json">
+                                <button class="test-run-single" onclick="runSingleStorageTest(18)" title="Esegui solo questo test">▶</button>
+                                <span>Lettura JSON Invalido</span>
+                                <span class="test-status pending">In attesa</span>
+                            </div>
+                            <div class="test-item" id="test-localstorage-non-string">
+                                <button class="test-run-single" onclick="runSingleStorageTest(19)" title="Esegui solo questo test">▶</button>
+                                <span>Scrittura Valori Non-Stringa</span>
+                                <span class="test-status pending">In attesa</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gruppo 6: Test PWA Specifici -->
+                <div class="test-group-separator">
+                    <div class="test-group-header" onclick="toggleStorageGroup('group6')">
+                        <div class="test-group-bar group-storage-6"></div>
+                        <div class="test-group-title-container">
+                            <div class="test-group-title">Test PWA Specifici</div>
+                            <div id="storage-group6-subtitle" class="test-group-subtitle state-pending">3 test da completare</div>
+                        </div>
+                        <div id="storage-group6-badge" class="test-group-badge badge-pending">0/3</div>
+                        <div id="storage-group6-icon" class="test-group-icon">▶</div>
+                    </div>
+                    <div id="storage-group6-content" class="test-group-content">
+                        <div class="test-group-items-container">
+                            <div class="test-item" id="test-localstorage-namespace">
+                                <button class="test-run-single" onclick="runSingleStorageTest(20)" title="Esegui solo questo test">▶</button>
+                                <span>Validazione Namespace (tpl.*)</span>
+                                <span class="test-status pending">In attesa</span>
+                            </div>
+                            <div class="test-item" id="test-localstorage-migration">
+                                <button class="test-run-single" onclick="runSingleStorageTest(21)" title="Esegui solo questo test">▶</button>
+                                <span>Migrazione isDark → themeMode</span>
+                                <span class="test-status pending">In attesa</span>
+                            </div>
+                            <div class="test-item" id="test-localstorage-timestamp">
+                                <button class="test-run-single" onclick="runSingleStorageTest(22)" title="Esegui solo questo test">▶</button>
+                                <span>Gestione Timestamp (pwa.dismissTs)</span>
+                                <span class="test-status pending">In attesa</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-            <div class="test-item" id="test-localstorage-clear">
-                <span>Cancellazione localStorage</span>
-                <span class="test-status pending">In attesa</span>
+            <!-- Fine Card Gruppi Test LocalStorage -->
+            
+            <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; margin-top: 1rem;">
+                <button class="test-button" onclick="testLocalStorage()" style="flex: 1; min-width: 150px;">🧪 Test LocalStorage (22 test)</button>
+                <button class="test-button" onclick="toggleAllStorageGroups(true)" style="background: #6b7280;">📂 Apri Tutti</button>
+                <button class="test-button" onclick="toggleAllStorageGroups(false)" style="background: #6b7280;">📁 Chiudi Tutti</button>
             </div>
-            <button class="test-button" onclick="testLocalStorage()">🧪 Test LocalStorage</button>
             <div class="test-output" id="output-localstorage" style="display:none;"></div>
         </div>
 
@@ -2187,55 +1504,6 @@
             <button class="test-button" onclick="testDarkMode()">🧪 Test Dark Mode</button>
             <div class="test-output" id="output-darkmode" style="display:none;"></div>
         </div>
-
-        <!-- Stili adattivi per la sezione Prezzi (tipografia e spaziatura che scalano bene)
-             Nota: usiamo em invece di rem così i valori rispettano il moltiplicatore globale
-             (--font-size-multiplier) applicato al body, replicando il comportamento della home. -->
-        <style>
-            /* Tipografia e spaziatura adattiva per evitare crescita sproporzionata */
-            #section-prezzi h2 {
-                font-size: clamp(1.05em, 1em + 0.6vw, 1.35em);
-                margin-bottom: 0.75rem;
-            }
-
-            #section-prezzi .test-item {
-                padding: clamp(0.75em, 0.6em + 0.6vw, 1.1em);
-                gap: 0.75rem;
-            }
-
-            #section-prezzi .test-item>span:first-child {
-                font-size: clamp(0.95em, 0.9em + 0.3vw, 1.05em);
-                line-height: 1.35;
-            }
-
-            #section-prezzi .test-status {
-                font-size: clamp(0.78em, 0.72em + 0.2vw, 0.95em);
-            }
-
-            #section-prezzi .test-button {
-                font-size: clamp(0.9em, 0.82em + 0.25vw, 1em);
-                padding: 0.6em 1em;
-                border-radius: 10px;
-            }
-
-            #section-prezzi .test-output,
-            #output-price {
-                font-size: clamp(0.85em, 0.78em + 0.18vw, 1em);
-                line-height: 1.45;
-            }
-
-            /* Su schermi stretti o con testo grande, impila label e stato per evitare overflow */
-            @media (max-width: 520px) {
-                #section-prezzi .test-item {
-                    flex-direction: column;
-                    align-items: stretch;
-                }
-
-                #section-prezzi .test-status {
-                    align-self: flex-start;
-                }
-            }
-        </style>
 
         <!-- Test 4: Calcolo Prezzi (Modulo prezzi.js) -->
         <div id="section-prezzi" class="test-section has-module-header">
@@ -3085,11 +2353,13 @@
     <!-- Moduli test per categoria - Step 2 modularizzazione (02/11/2025) -->
     <script src="js/tests/test-database.js"></script>
     <script src="js/tests/test-localstorage.js"></script>
+    <!-- File test non ancora creati - da implementare:
     <script src="js/tests/test-darkmode.js"></script>
     <script src="js/tests/test-sw.js"></script>
     <script src="js/tests/test-ui.js"></script>
     <script src="js/tests/test-manifest.js"></script>
     <script src="js/tests/test-performance.js"></script>
+    -->
     <script src="js/components/modals.js"></script>
     <script src="script.js"></script>
     <script src="test-config.js"></script>
@@ -3137,11 +2407,36 @@
         function toggleDbGroup(groupId) {
             const content = document.getElementById(`db-${groupId}-content`);
             const icon = document.getElementById(`db-${groupId}-icon`);
+            // Trova il separator partendo dal contenuto (più affidabile)
+            const separator = content?.closest('.test-group-separator');
 
             if (content.classList.contains('expanded')) {
                 content.classList.remove('expanded');
                 icon.classList.remove('expanded');
             } else {
+                // Aggiungi animazione bounce PRIMA di espandere
+                if (separator) {
+                    // Rimuovi eventuali classi precedenti
+                    separator.classList.remove('expanding');
+                    
+                    // Forza un reflow per assicurarsi che l'animazione parta
+                    separator.offsetHeight;
+                    
+                    // Aggiungi la classe expanding
+                    separator.classList.add('expanding');
+                    
+                    // Debug: verifica che la classe sia stata aggiunta
+                    console.log('✅ Animazione applicata a:', separator, 'Classe expanding:', separator.classList.contains('expanding'));
+                    
+                    // Rimuovi dopo l'animazione
+                    setTimeout(() => {
+                        separator.classList.remove('expanding');
+                    }, 500);
+                } else {
+                    console.warn('⚠️ Separator non trovato per gruppo:', groupId, 'Content:', content);
+                }
+                
+                // Poi espandi il contenuto
                 content.classList.add('expanded');
                 icon.classList.add('expanded');
             }
@@ -3165,6 +2460,48 @@
             groups.forEach(groupId => {
                 const content = document.getElementById(`db-${groupId}-content`);
                 const icon = document.getElementById(`db-${groupId}-icon`);
+
+                if (open) {
+                    content.classList.add('expanded');
+                    icon.classList.add('expanded');
+                } else {
+                    content.classList.remove('expanded');
+                    icon.classList.remove('expanded');
+                }
+            });
+        }
+
+        // ===== FUNZIONI TOGGLE PER LOCALSTORAGE =====
+        function toggleStorageGroup(groupId) {
+            const content = document.getElementById(`storage-${groupId}-content`);
+            const icon = document.getElementById(`storage-${groupId}-icon`);
+            const separator = content?.closest('.test-group-separator');
+
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                icon.classList.remove('expanded');
+            } else {
+                // Aggiungi animazione bounce PRIMA di espandere
+                if (separator) {
+                    separator.classList.remove('expanding');
+                    separator.offsetHeight;
+                    separator.classList.add('expanding');
+                    
+                    setTimeout(() => {
+                        separator.classList.remove('expanding');
+                    }, 600);
+                }
+                
+                content.classList.add('expanded');
+                icon.classList.add('expanded');
+            }
+        }
+
+        function toggleAllStorageGroups(open) {
+            const groups = ['group1', 'group2', 'group3', 'group4', 'group5', 'group6'];
+            groups.forEach(groupId => {
+                const content = document.getElementById(`storage-${groupId}-content`);
+                const icon = document.getElementById(`storage-${groupId}-icon`);
 
                 if (open) {
                     content.classList.add('expanded');
@@ -5792,40 +5129,6 @@ ${JSON.stringify(reportData.gps.fakePositionData, null, 2)}
         })();
     </script>
 
-    <!-- Stile Card Display -->
-    <style>
-        .display-info-card {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 1.25rem;
-            box-shadow: var(--glass-shadow);
-            transition: all 0.3s ease;
-            cursor: default;
-        }
-
-        .display-info-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-            border-color: var(--turchese);
-        }
-
-        #test-display-refresh:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0, 123, 138, 0.4);
-        }
-
-        #test-display-refresh:active {
-            transform: translateY(0);
-        }
-
-        @media (max-width: 768px) {
-            .display-info-card {
-                padding: 1rem;
-            }
-        }
-    </style>
-
     <!-- Render del Changelog -->
     <script>
         // Aspetta che il DOM sia pronto
@@ -6119,6 +5422,54 @@ ${JSON.stringify(reportData.gps.fakePositionData, null, 2)}
                 initConnectionMonitoring();
             }
         })();
+
+        // ===== ANIMAZIONE HEADER (Database & LocalStorage) =====
+        // L'animazione shrink/expand dell'header è gestita automaticamente da js/features/tests-ui.js
+        console.log('ℹ️ Animazione header gestita da tests-ui.js');
+
+        // ===== ANIMAZIONE SOBRIA GRUPPI TEST =====
+        // Animazione subtile quando si clicca per aprire/chiudere i gruppi
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🎨 Inizializzazione animazioni sobrie gruppi test');
+            
+            // Seleziona tutti i gruppi
+            document.querySelectorAll('.test-group-separator').forEach(group => {
+                const header = group.querySelector('.test-group-header');
+                if (!header) return;
+                
+                header.addEventListener('click', function(e) {
+                    // Non animare se si clicca sul pulsante test singolo
+                    if (e.target.closest('.test-run-single')) {
+                        return;
+                    }
+                    
+                    const content = group.querySelector('.test-group-content');
+                    const isExpanding = !content.classList.contains('expanded');
+                    
+                    // Animazione press (sempre)
+                    group.classList.remove('clicking');
+                    void group.offsetHeight; // Forza reflow
+                    group.classList.add('clicking');
+                    
+                    setTimeout(() => {
+                        group.classList.remove('clicking');
+                    }, 200);
+                    
+                    // Animazione highlight (solo quando si apre)
+                    if (isExpanding) {
+                        group.classList.remove('opening');
+                        void group.offsetHeight;
+                        group.classList.add('opening');
+                        
+                        setTimeout(() => {
+                            group.classList.remove('opening');
+                        }, 300);
+                    }
+                });
+            });
+            
+            console.log('✅ Animazioni sobrie applicate a', document.querySelectorAll('.test-group-separator').length, 'gruppi');
+        });
     </script>
 
 </body>

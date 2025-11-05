@@ -1,0 +1,59 @@
+/* ========================================
+   TEST PREZZI ADAPTIVE MODULE
+   Tipografia e spaziatura adattiva per la sezione Prezzi
+   ======================================== */
+
+/* Nota: usiamo em invece di rem così i valori rispettano il moltiplicatore globale
+   (--font-size-multiplier) applicato al body, replicando il comportamento della home. */
+
+/* ========================================
+   TIPOGRAFIA ADATTIVA
+   ======================================== */
+
+#section-prezzi h2 {
+    font-size: clamp(1.05em, 1em + 0.6vw, 1.35em);
+    margin-bottom: 0.75rem;
+}
+
+#section-prezzi .test-item {
+    padding: clamp(0.75em, 0.6em + 0.6vw, 1.1em);
+    gap: 0.75rem;
+}
+
+#section-prezzi .test-item>span:first-child {
+    font-size: clamp(0.95em, 0.9em + 0.3vw, 1.05em);
+    line-height: 1.35;
+}
+
+#section-prezzi .test-status {
+    font-size: clamp(0.78em, 0.72em + 0.2vw, 0.95em);
+}
+
+#section-prezzi .test-button {
+    font-size: clamp(0.9em, 0.82em + 0.25vw, 1em);
+    padding: 0.6em 1em;
+    border-radius: 10px;
+}
+
+#section-prezzi .test-output,
+#output-price {
+    font-size: clamp(0.85em, 0.78em + 0.18vw, 1em);
+    line-height: 1.45;
+}
+
+/* ========================================
+   RESPONSIVE - MOBILE
+   ======================================== */
+
+/* Su schermi stretti o con testo grande, impila label e stato per evitare overflow */
+@media (max-width: 520px) {
+    #section-prezzi .test-item {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #section-prezzi .test-status {
+        align-self: flex-start;
+    }
+}
+

@@ -21,11 +21,21 @@
 
 .test-group-separator {
     border-bottom: 1px solid #f3f4f6;
-    transition: background-color 0.2s, transform 0.2s;
+    transition: background-color 0.2s;
 }
 
 .test-group-separator:last-child {
     border-bottom: none;
+}
+
+/* Effetto active quando si clicca (come nella demo) */
+.test-group-separator:active:not(.expanding) {
+    background: #f9fafb;
+    transform: scale(0.98);
+}
+
+.dark .test-group-separator:active:not(.expanding) {
+    background: rgba(255, 255, 255, 0.05);
 }
 
 /* ========================================
@@ -88,6 +98,31 @@
 
 .test-group-bar.group-price-4 {
     background: #14b8a6;
+}
+
+/* Storage Groups */
+.test-group-bar.group-storage-1 {
+    background: #ec4899;
+}
+
+.test-group-bar.group-storage-2 {
+    background: #8b5cf6;
+}
+
+.test-group-bar.group-storage-3 {
+    background: #f59e0b;
+}
+
+.test-group-bar.group-storage-4 {
+    background: #dc2626;
+}
+
+.test-group-bar.group-storage-5 {
+    background: #06b6d4;
+}
+
+.test-group-bar.group-storage-6 {
+    background: #10b981;
 }
 
 /* Template per nuovi moduli:

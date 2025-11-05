@@ -1,0 +1,363 @@
+/* ========================================
+   TEST BASE MODULE
+   Stili base per le sezioni test
+   ======================================== */
+
+/* ========================================
+   CONTAINER
+   ======================================== */
+
+.test-container {
+    max-width: 600px;
+    width: 95%;
+    margin: 1.5rem auto;
+    padding: 1rem;
+}
+
+/* ========================================
+   SECTION
+   ======================================== */
+
+.test-section {
+    background: var(--bianco);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    border: 2px solid var(--bordo);
+    width: 100%;
+}
+
+.test-section h2 {
+    color: var(--turchese);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* ========================================
+   TEST ITEM
+   ======================================== */
+
+.test-item {
+    padding: 1.5rem;
+    margin: 0.75rem 0;
+    border-radius: 8px;
+    border: 1px solid var(--bordo);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+    position: relative;
+}
+
+/* Pulsante singolo test */
+.test-run-single {
+    position: absolute;
+    left: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--turchese);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    transition: background-color 0.2s, transform 0.1s;
+    z-index: 10;
+}
+
+.test-run-single:hover {
+    background: var(--turchese-scuro);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.test-run-single:active {
+    transform: translateY(-50%) scale(0.95);
+}
+
+/* Offset del testo per lasciare spazio al pulsante */
+.test-item > span:first-of-type {
+    padding-left: 2.5rem;
+}
+
+/* ========================================
+   TEST BUTTON
+   ======================================== */
+
+.test-button {
+    background: var(--turchese);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    margin: 0.25rem;
+}
+
+.test-button:hover {
+    background: var(--turchese-scuro);
+}
+
+.test-button:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+}
+
+/* Reset button specific styles */
+.test-button[onclick*="resetDatabaseTests"]:hover {
+    background: #dc2626 !important;
+}
+
+.test-button[onclick*="resetDatabaseTests"]:active {
+    background: #b91c1c !important;
+    transform: scale(0.95);
+}
+
+/* ========================================
+   TEST OUTPUT
+   ======================================== */
+
+.test-output {
+    background: var(--grigio-chiaro);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+    font-family: monospace;
+    font-size: 0.875rem;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+/* ========================================
+   GRID LAYOUTS
+   ======================================== */
+
+.test-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.test-card {
+    background: var(--grigio-medio);
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.stat-card {
+    background: var(--grigio-medio);
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--turchese);
+}
+
+.stat-label {
+    font-size: 0.875rem;
+    color: var(--testo-secondario);
+    margin-top: 0.25rem;
+}
+
+/* ========================================
+   RUN ALL BUTTON
+   ======================================== */
+
+.run-all-btn {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.run-all-btn:hover {
+    background: #218838;
+}
+
+/* ========================================
+   CONSOLE LOG
+   ======================================== */
+
+.console-log {
+    margin: 0.25rem 0;
+    padding: 0.25rem;
+}
+
+.console-log.info {
+    color: #0066cc;
+}
+
+.console-log.success {
+    color: #28a745;
+}
+
+.console-log.error {
+    color: #dc3545;
+}
+
+.console-log.warning {
+    color: #ffc107;
+}
+
+/* ========================================
+   DARK MODE
+   ======================================== */
+
+.dark .test-section {
+    background: #1f2937 !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.dark .test-section h2 {
+    color: #10b981 !important;
+}
+
+.dark .test-item {
+    background: #374151 !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    color: #f3f4f6 !important;
+}
+
+.dark .test-output {
+    background: #1f2937 !important;
+    color: #e5e7eb !important;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dark .test-card,
+.dark .stat-card {
+    background: #374151 !important;
+    color: #f3f4f6 !important;
+}
+
+.dark .stat-number {
+    color: #10b981 !important;
+}
+
+.dark .stat-label {
+    color: #9ca3af !important;
+}
+
+/* ========================================
+   RESPONSIVE - MOBILE FLAT LAYOUT
+   ======================================== */
+
+@media (max-width: 768px) {
+    .test-container {
+        width: 100%;
+        padding: 0.5rem;
+        margin: 1rem auto;
+    }
+
+    /* Mobile: rimuovi card per layout flat */
+    .test-section {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        padding: 1rem 0 !important;
+        margin-bottom: 1rem !important;
+    }
+
+    .test-section::before {
+        content: '';
+        display: block;
+        height: 1px;
+        background: rgba(0, 0, 0, 0.1);
+        margin-bottom: 1rem;
+    }
+
+    .dark .test-section::before {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .test-item {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        padding: 0.75rem 0 !important;
+        margin: 0.5rem 0 !important;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .dark .test-item {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+
+    .test-item:last-child {
+        border-bottom: none !important;
+    }
+
+    .stat-card {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        padding: 0.75rem 0 !important;
+        margin-bottom: 0.5rem !important;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .dark .stat-card {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+
+    .stat-card:last-child {
+        border-bottom: none !important;
+    }
+
+    /* Disabilita effetti hover su mobile */
+    .test-section:hover,
+    .test-item:hover,
+    .stat-card:hover {
+        transform: none !important;
+        box-shadow: none !important;
+    }
+
+    /* Disabilita effetti rifrazione su mobile */
+    .test-section::before,
+    .test-item::before,
+    .stat-card::before {
+        display: none !important;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .test-grid {
+        grid-template-columns: 1fr;
+    }
+}
+

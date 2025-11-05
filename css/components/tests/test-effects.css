@@ -1,0 +1,152 @@
+/* ========================================
+   TEST EFFECTS MODULE
+   Stili per la griglia degli effetti
+   ======================================== */
+
+/* ========================================
+   EFFECTS GRID
+   ======================================== */
+
+.effects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+/* ========================================
+   EFFECT CARD
+   ======================================== */
+
+.effect-card {
+    background: var(--grigio-medio);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 2px solid var(--bordo);
+    transition: all 0.3s ease;
+}
+
+.effect-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.effect-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.effect-icon {
+    font-size: 1.5rem;
+}
+
+.effect-title {
+    font-weight: bold;
+    color: var(--turchese);
+    font-size: 1.1rem;
+}
+
+/* ========================================
+   EFFECT STATUS
+   ======================================== */
+
+.effect-status {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-left: auto;
+}
+
+.effect-status.active {
+    background: #d4edda;
+    color: #155724;
+}
+
+.effect-status.inactive {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.effect-status.conditional {
+    background: #fff3cd;
+    color: #856404;
+}
+
+/* ========================================
+   EFFECT DETAILS
+   ======================================== */
+
+.effect-details {
+    font-size: 0.9rem;
+    color: var(--testo-secondario);
+    line-height: 1.4;
+}
+
+.effect-details ul {
+    margin: 0.5rem 0;
+    padding-left: 1.2rem;
+}
+
+.effect-details li {
+    margin: 0.25rem 0;
+}
+
+/* ========================================
+   DARK MODE
+   ======================================== */
+
+.dark .effect-status.active {
+    background: rgba(34, 197, 94, 0.2) !important;
+    color: #86efac !important;
+}
+
+.dark .effect-status.inactive {
+    background: rgba(239, 68, 68, 0.2) !important;
+    color: #fca5a5 !important;
+}
+
+.dark .effect-status.conditional {
+    background: rgba(251, 191, 36, 0.2) !important;
+    color: #fde047 !important;
+}
+
+/* ========================================
+   RESPONSIVE - MOBILE FLAT LAYOUT
+   ======================================== */
+
+@media (max-width: 768px) {
+    .effect-card {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        padding: 0.75rem 0 !important;
+        margin-bottom: 1rem !important;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .dark .effect-card {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+
+    .effect-card:last-child {
+        border-bottom: none !important;
+    }
+
+    /* Disabilita effetti hover su mobile */
+    .effect-card:hover {
+        transform: none !important;
+        box-shadow: none !important;
+    }
+
+    /* Disabilita effetti rifrazione su mobile */
+    .effect-card::before {
+        display: none !important;
+    }
+}
+

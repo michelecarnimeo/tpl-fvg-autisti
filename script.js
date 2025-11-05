@@ -1542,7 +1542,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 // Event listeners per controllo animazione
 window.addEventListener('DOMContentLoaded', function () {
   // Carica preferenza all'avvio
-  loadAnimationPreference();
+  // loadAnimationPreference(); // TODO: Funzione non ancora implementata
 
   // Inizializza la mini card versione
   initMobileVersionCard();

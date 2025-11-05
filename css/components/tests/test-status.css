@@ -1,0 +1,55 @@
+/* ========================================
+   TEST STATUS MODULE
+   Stati dei test (pass, fail, pending)
+   ======================================== */
+
+/* ========================================
+   BASE STATUS
+   ======================================== */
+
+.test-status {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.875rem;
+    transition: all 0.3s ease;
+}
+
+/* ========================================
+   STATUS VARIANTS
+   ======================================== */
+
+.test-status.pass {
+    background: #d4edda;
+    color: #155724;
+}
+
+.test-status.fail {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.test-status.pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+/* ========================================
+   DARK MODE
+   ======================================== */
+
+.dark .test-status.pass {
+    background: rgba(34, 197, 94, 0.2) !important;
+    color: #86efac !important;
+}
+
+.dark .test-status.fail {
+    background: rgba(239, 68, 68, 0.2) !important;
+    color: #fca5a5 !important;
+}
+
+.dark .test-status.pending {
+    background: rgba(251, 191, 36, 0.2) !important;
+    color: #fde047 !important;
+}
+
