@@ -1,6 +1,6 @@
 {
-  "version": "1.6.5",
+  "version": "1.6.6",
   "versionDate": "6 Novembre 2025",
-  "versionTime": "16:30",
-  "updateNotes": "Modularizzazione completa codice + Rimozione codice inline + Ottimizzazioni performance"
+  "versionTime": "23:00",
+  "updateNotes": "Modularizzazione funzioni accordion + Esposizione globale funzioni onclick"
 }

@@ -422,3 +422,118 @@
     }
 }
 
+/* ========================================
+   SEZIONI TEST COLORATE
+   Stili per sezioni con bordi e background colorati
+   ======================================== */
+
+/* Sezione PWA - Turchese */
+#section-pwa.test-section {
+    border: 3px solid var(--turchese);
+    background: linear-gradient(135deg, rgba(23, 183, 177, 0.05), rgba(0, 153, 170, 0.05));
+}
+
+#section-pwa .test-btn {
+    background: var(--turchese);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+#section-pwa #pwa-mode-status {
+    display: none;
+    margin-top: 1rem;
+    padding: 1.5rem;
+    background: var(--grigio-chiaro);
+    border-radius: 12px;
+    border-left: 5px solid var(--turchese);
+}
+
+#section-pwa #pwa-mode-status h4 {
+    margin-top: 0;
+    color: var(--turchese);
+}
+
+/* Sezione Quick Links - Viola */
+#section-quick-links.test-section {
+    border: 3px solid #9333ea;
+    background: linear-gradient(135deg, rgba(147, 51, 234, 0.05), rgba(168, 85, 247, 0.05));
+}
+
+#section-quick-links .test-btn {
+    background: #9333ea;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Sezione Connectivity - Rosso */
+#section-connectivity.test-section {
+    border: 3px solid #ef4444;
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.05), rgba(220, 38, 38, 0.05));
+}
+
+#section-connectivity .test-btn {
+    background: #10b981;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+#section-connectivity #offline-mode-status {
+    display: none;
+    margin-top: 1rem;
+    padding: 1.5rem;
+    background: var(--grigio-chiaro);
+    border-radius: 12px;
+    border-left: 5px solid #ef4444;
+}
+
+#section-connectivity #offline-mode-status h4 {
+    margin-top: 0;
+    color: #ef4444;
+}
+
+/* Sezione Device - Viola Scuro */
+#section-device.test-section {
+    border: 3px solid #8b5cf6;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.05), rgba(124, 58, 237, 0.05));
+}
+
+/* Dark mode per sezioni colorate */
+.dark #section-pwa.test-section {
+    border-color: var(--turchese);
+    background: linear-gradient(135deg, rgba(23, 183, 177, 0.1), rgba(0, 153, 170, 0.1));
+}
+
+.dark #section-quick-links.test-section {
+    border-color: #a855f7;
+    background: linear-gradient(135deg, rgba(147, 51, 234, 0.1), rgba(168, 85, 247, 0.1));
+}
+
+.dark #section-connectivity.test-section {
+    border-color: #f87171;
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.1));
+}
+
+.dark #section-device.test-section {
+    border-color: #a78bfa;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(124, 58, 237, 0.1));
+}
+

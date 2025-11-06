@@ -725,3 +725,8 @@ async function testDatabaseLoad() {
         logButtons.style.display = 'flex';
     }
 }
+
+// Esponi la funzione globalmente per compatibilità con onclick
+if (typeof window !== 'undefined') {
+    window.testDatabaseLoad = testDatabaseLoad;
+}

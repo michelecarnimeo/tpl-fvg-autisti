@@ -342,3 +342,704 @@
     }
 }
 
+/* ========================================
+   PULSANTI CON GRADIENTI
+   Pulsanti con background gradient per azioni specifiche
+   ======================================== */
+
+/* Container Test Rapido GPS */
+#section-geolocation > div:first-of-type {
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1));
+    border-radius: 12px;
+    border: 2px solid #10b981;
+}
+
+/* Container flex interno */
+#section-geolocation > div:first-of-type > div:first-child {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+/* Titolo test rapido */
+#section-geolocation > div:first-of-type h3 {
+    margin: 0 0 0.5rem 0;
+    color: #059669;
+}
+
+/* Descrizione test rapido */
+#section-geolocation > div:first-of-type p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Pulsante Test Rapido GPS */
+#quick-gps-test-btn {
+    padding: 0.875rem 2rem;
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+#quick-gps-test-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+}
+
+#quick-gps-test-btn:active {
+    transform: translateY(0);
+}
+
+/* Container risultati test rapido */
+#quick-test-results {
+    display: none;
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 10px;
+    border: 2px solid #d1d5db;
+}
+
+#quick-test-results h4 {
+    margin: 0 0 1rem 0;
+    color: #374151;
+}
+
+#quick-test-items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+#quick-test-summary {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+/* Container pulsanti export */
+#section-geolocation > div:first-of-type > div:nth-of-type(2) {
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+/* Pulsante Export JSON */
+#export-json-btn {
+    flex: 1;
+    min-width: 200px;
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+}
+
+#export-json-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+}
+
+#export-json-btn:active {
+    transform: translateY(0);
+}
+
+/* Pulsante Export TXT */
+#export-txt-btn {
+    flex: 1;
+    min-width: 200px;
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+}
+
+#export-txt-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+}
+
+#export-txt-btn:active {
+    transform: translateY(0);
+}
+
+/* Container Reset GPS */
+#section-geolocation > div:first-of-type > div:nth-of-type(3) {
+    margin-top: 0.75rem;
+    padding: 1rem;
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.05), rgba(220, 38, 38, 0.05));
+    border-radius: 8px;
+    border: 2px dashed #ef4444;
+}
+
+#section-geolocation > div:first-of-type > div:nth-of-type(3) > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+#section-geolocation > div:first-of-type > div:nth-of-type(3) strong {
+    color: #dc2626;
+    display: block;
+}
+
+#section-geolocation > div:first-of-type > div:nth-of-type(3) p {
+    margin: 0.25rem 0 0 0;
+    color: #666;
+    font-size: 0.85rem;
+}
+
+/* Pulsante Reset GPS */
+#reset-gps-btn {
+    padding: 0.65rem 1.5rem;
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+
+#reset-gps-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+
+#reset-gps-btn:active {
+    transform: translateY(0);
+}
+
+/* Modal Reset Overlay */
+#reset-modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 9999;
+    animation: fadeIn 0.2s;
+}
+
+#reset-modal-overlay > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 1rem;
+}
+
+/* Modal Reset */
+#reset-modal {
+    background: white;
+    border-radius: 16px;
+    max-width: 450px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.3s;
+    overflow: hidden;
+}
+
+/* Header Modal Reset */
+#reset-modal > div:first-child {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+}
+
+#reset-modal > div:first-child > div {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+#reset-modal > div:first-child > div > div:first-child {
+    font-size: 2rem;
+}
+
+#reset-modal > div:first-child h3 {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+#reset-modal > div:first-child p {
+    margin: 0.25rem 0 0 0;
+    font-size: 0.9rem;
+    opacity: 0.95;
+}
+
+/* Body Modal Reset */
+#reset-modal > div:nth-child(2) {
+    padding: 1.5rem;
+}
+
+#reset-modal > div:nth-child(2) > p {
+    margin: 0 0 1rem 0;
+    color: #374151;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+#reset-modal > div:nth-child(2) > ul {
+    margin: 0 0 1.5rem 0;
+    padding-left: 1.25rem;
+    color: #6b7280;
+    line-height: 1.8;
+}
+
+#reset-modal > div:nth-child(2) > div:first-child {
+    padding: 1rem;
+    background: #fef3c7;
+    border-radius: 8px;
+    border-left: 4px solid #f59e0b;
+}
+
+#reset-modal > div:nth-child(2) > div:first-child strong {
+    color: #92400e;
+    font-size: 0.9rem;
+}
+
+#reset-modal > div:nth-child(2) > div:first-child p {
+    margin: 0.25rem 0 0 0;
+    color: #78350f;
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+/* Footer Modal Reset */
+#reset-modal > div:last-child {
+    padding: 1rem 1.5rem;
+    background: #f9fafb;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+}
+
+/* Pulsante Annulla Modal */
+#reset-modal-cancel {
+    padding: 0.75rem 1.5rem;
+    background: white;
+    color: #374151;
+    border: 2px solid #d1d5db;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 0.95rem;
+}
+
+#reset-modal-cancel:hover {
+    background: #f9fafb;
+    border-color: #9ca3af;
+}
+
+/* Pulsante Conferma Modal */
+#reset-modal-confirm {
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+    font-size: 0.95rem;
+}
+
+#reset-modal-confirm:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+
+#reset-modal-confirm:active {
+    transform: translateY(0);
+}
+
+/* Dark mode per pulsanti gradienti */
+.dark #quick-test-results {
+    background: #1f2937;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark #quick-test-results h4 {
+    color: #e5e7eb;
+}
+
+.dark #reset-modal {
+    background: #1f2937;
+    color: #e5e7eb;
+}
+
+.dark #reset-modal > div:last-child {
+    background: #111827;
+    border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark #reset-modal-cancel {
+    background: #374151;
+    color: #e5e7eb;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.dark #reset-modal-cancel:hover {
+    background: #4b5563;
+}
+
+/* ========================================
+   ALTRI ELEMENTI CON GRADIENTI
+   Banner, sezioni e badge
+   ======================================== */
+
+/* Banner HTTPS Warning */
+#https-warning-banner {
+    display: none;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    border-radius: 8px;
+    border-left: 4px solid #f59e0b;
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.2);
+}
+
+#https-warning-banner > div {
+    display: flex;
+    align-items: start;
+    gap: 0.75rem;
+}
+
+#https-warning-banner > div > div:first-child {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+#https-warning-banner strong {
+    color: #92400e;
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+#https-warning-banner p {
+    margin: 0;
+    color: #78350f;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+#https-warning-banner code {
+    background: rgba(0, 0, 0, 0.1);
+    padding: 0.1rem 0.3rem;
+    border-radius: 3px;
+}
+
+/* Risultato test location */
+#test-location-result {
+    display: none;
+    margin-top: 1rem;
+    padding: 1rem;
+    background: var(--grigio-chiaro);
+    border-radius: 8px;
+    border-left: 4px solid var(--turchese);
+}
+
+/* Badge "OFFLINE OK" */
+.test-item span[style*="d1fae5"],
+#fake-position-section h4 span,
+#watch-position-section h4 span {
+    display: inline-block;
+    margin-left: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+    color: #065f46;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+/* Sezione Fake Position */
+#fake-position-section {
+    margin-top: 1rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(147, 51, 234, 0.1));
+    border-radius: 12px;
+    border: 2px solid #a855f7;
+}
+
+#fake-position-section > div:first-child {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+#fake-position-section h4 {
+    margin: 0;
+    color: #7e22ce;
+}
+
+#fake-position-section > div:first-child p {
+    margin: 0.25rem 0 0 0;
+    color: #666;
+    font-size: 0.85rem;
+}
+
+#fake-position-section label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+#use-fake-position {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+#fake-position-section label span {
+    font-weight: 600;
+    color: #7e22ce;
+}
+
+/* Contenuto fake position */
+#fake-position-content {
+    display: none;
+}
+
+#fake-position-content > div:first-child {
+    padding: 0.75rem;
+    background: #fef3c7;
+    border-radius: 8px;
+    border-left: 4px solid #f59e0b;
+    margin-bottom: 1rem;
+}
+
+#fake-position-content > div:first-child strong {
+    color: #92400e;
+}
+
+#fake-position-content > div:first-child p {
+    margin: 0.25rem 0 0 0;
+    color: #78350f;
+    font-size: 0.85rem;
+}
+
+/* Preset città */
+#fake-position-content > div:nth-child(2) {
+    margin-bottom: 1rem;
+}
+
+#fake-position-content > div:nth-child(2) strong {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #374151;
+}
+
+#fake-position-content > div:nth-child(2) > div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+/* Input coordinate */
+#fake-position-content > div:nth-child(3) {
+    margin-bottom: 1rem;
+}
+
+#fake-position-content > div:nth-child(3) strong {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #374151;
+}
+
+#fake-position-content > div:nth-child(3) > div {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.5rem;
+}
+
+#fake-lat,
+#fake-lng,
+#fake-accuracy,
+#fake-altitude,
+#fake-speed,
+#fake-heading {
+    flex: 1;
+    min-width: 150px;
+    padding: 0.5rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+/* Pulsante Applica Fake Position */
+#apply-fake-position {
+    width: 100%;
+    padding: 0.75rem;
+    background: #a855f7;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+#apply-fake-position:hover {
+    background: #9333ea;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.4);
+}
+
+#apply-fake-position:active {
+    transform: translateY(0);
+}
+
+/* Info posizione fake */
+#fake-position-info {
+    display: none;
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background: white;
+    border-radius: 8px;
+    border-left: 4px solid #a855f7;
+}
+
+#fake-position-info strong {
+    color: #7e22ce;
+}
+
+#fake-position-details {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Sezione Watch Position */
+#watch-position-section {
+    display: none;
+    margin-top: 1rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.1));
+    border-radius: 12px;
+    border: 2px solid #3b82f6;
+}
+
+#watch-position-section > div:first-child {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+#watch-position-section h4 {
+    margin: 0;
+    color: #1e40af;
+}
+
+#watch-position-section > div:first-child p {
+    margin: 0.25rem 0 0 0;
+    color: #666;
+    font-size: 0.85rem;
+}
+
+/* Pulsante Toggle Watch */
+#toggle-watch-btn {
+    padding: 0.75rem 1.5rem;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s;
+}
+
+#toggle-watch-btn:hover {
+    background: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+#toggle-watch-btn:active {
+    transform: translateY(0);
+}
+
+/* Status permessi */
+#geo-permission-status {
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    background: var(--grigio-chiaro);
+    border-radius: 8px;
+    border-left: 4px solid gray;
+}
+
+#geo-permission-text {
+    margin-left: 0.5rem;
+    font-weight: 500;
+}
+
+/* Dark mode per elementi aggiuntivi */
+.dark #https-warning-banner {
+    background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(245, 158, 11, 0.2));
+    border-left-color: #f59e0b;
+}
+
+.dark #fake-position-info {
+    background: #1f2937;
+    border-left-color: #a855f7;
+}
+
+.dark #fake-position-info strong {
+    color: #c084fc;
+}
+
+.dark #fake-position-details {
+    color: #9ca3af;
+}
+
+.dark #fake-lat,
+.dark #fake-lng,
+.dark #fake-accuracy,
+.dark #fake-altitude,
+.dark #fake-speed,
+.dark #fake-heading {
+    background: #374151;
+    border-color: rgba(255, 255, 255, 0.2);
+    color: #e5e7eb;
+}
+

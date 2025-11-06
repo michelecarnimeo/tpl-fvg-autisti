@@ -946,6 +946,8 @@
     loadHTML: loadSettingsModalHTML
   };
 
+  console.log('✅ js/components/modals.js caricato - SettingsModal disponibile');
+
   // ===== FUNZIONE PER GESTIRE LE TAB =====
   // Funzione riutilizzabile per gestire il click sulle tab
   function setupTabsListeners() {

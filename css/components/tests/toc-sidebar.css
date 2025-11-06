@@ -217,3 +217,110 @@
     }
 }
 
+/* ========================================
+   TOC MOBILE (Indice Rapido)
+   Sezione indice mobile visibile solo su schermi piccoli
+   ======================================== */
+
+/* Sezione indice mobile */
+#section-index {
+    border: 3px solid #0ea5e9;
+    background: linear-gradient(135deg, rgba(14, 165, 233, 0.06), rgba(2, 132, 199, 0.06));
+}
+
+/* Grid container per link TOC mobile */
+.toc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.5rem 0.75rem;
+}
+
+/* Link TOC mobile base */
+.toc-link {
+    display: block;
+    padding: 0.5rem 0.75rem;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.2s;
+}
+
+.toc-link:hover {
+    background: #f9fafb;
+    border-color: #d1d5db;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Varianti per test completati */
+.toc-link[data-section="section-database"] {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
+    border: 2px solid #3b82f6;
+    color: #1e40af;
+    font-weight: 600;
+}
+
+.toc-link[data-section="section-localstorage"] {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1));
+    border: 2px solid #10b981;
+    color: #065f46;
+    font-weight: 600;
+}
+
+.toc-link[data-section="section-prezzi"] {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.1));
+    border: 2px solid #f59e0b;
+    color: #92400e;
+    font-weight: 600;
+}
+
+.toc-link[data-section="section-settings"] {
+    background: linear-gradient(135deg, rgba(251, 146, 60, 0.1), rgba(234, 88, 12, 0.1));
+    border: 2px solid #fb923c;
+    color: #c2410c;
+    font-weight: 600;
+}
+
+/* Dark mode TOC mobile */
+.dark #section-index {
+    border-color: #3b82f6;
+    background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(2, 132, 199, 0.1));
+}
+
+.dark .toc-link {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #e5e7eb;
+}
+
+.dark .toc-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.dark .toc-link[data-section="section-database"] {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(139, 92, 246, 0.15));
+    border-color: #3b82f6;
+    color: #93c5fd;
+}
+
+.dark .toc-link[data-section="section-localstorage"] {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(5, 150, 105, 0.15));
+    border-color: #10b981;
+    color: #6ee7b7;
+}
+
+.dark .toc-link[data-section="section-prezzi"] {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(217, 119, 6, 0.15));
+    border-color: #f59e0b;
+    color: #fcd34d;
+}
+
+.dark .toc-link[data-section="section-settings"] {
+    background: linear-gradient(135deg, rgba(251, 146, 60, 0.15), rgba(234, 88, 12, 0.15));
+    border-color: #fb923c;
+    color: #fdba74;
+}
+

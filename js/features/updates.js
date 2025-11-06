@@ -207,34 +207,63 @@ function resetCache() {
 /**
  * Conferma il reset della cache e aggiornamento dell'app
  */
-function confirmResetCache() {
-  // Cancella la cache del Service Worker
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.getRegistrations().then(function (registrations) {
-      for (let registration of registrations) {
-        registration.unregister();
-      }
-    });
-  }
-
-  // Cancella la cache del browser
-  if ('caches' in window) {
-    caches.keys().then(function (names) {
-      for (let name of names) {
-        caches.delete(name);
-      }
-    });
-  }
-
-  // Cancella il LocalStorage
+async function confirmResetCache() {
+  console.log('🔄 Inizio reset cache e riavvio app...');
+  
   try {
-    localStorage.clear();
-  } catch { }
+    // Cancella la cache del Service Worker
+    if ('serviceWorker' in navigator) {
+      const registrations = await navigator.serviceWorker.getRegistrations();
+      for (let registration of registrations) {
+        await registration.unregister();
+        console.log('✅ Service Worker disregistrato');
+      }
+    }
 
-  // Torna alla pagina di benvenuto
-  setTimeout(() => {
-    window.location.href = 'benvenuto.html';
-  }, 500);
+    // Cancella la cache del browser
+    if ('caches' in window) {
+      const names = await caches.keys();
+      await Promise.all(names.map(name => caches.delete(name)));
+      console.log('✅ Cache cancellata');
+    }
+
+    // Cancella il LocalStorage
+    try {
+      localStorage.clear();
+      console.log('✅ LocalStorage cancellato');
+    } catch (error) {
+      console.warn('⚠️ Errore nel cancellare LocalStorage:', error);
+    }
+
+    // Determina la destinazione in base alla pagina corrente
+    const currentPage = window.location.pathname.split('/').pop() || window.location.href;
+    const isTestPage = currentPage.includes('test.html');
+    
+    console.log('🔄 Riavvio app...', { currentPage, isTestPage });
+    
+    // Se siamo su test.html, ricarica la pagina invece di andare a benvenuto.html
+    if (isTestPage) {
+      setTimeout(() => {
+        window.location.reload();
+      }, 300);
+    } else {
+      // Altrimenti vai a benvenuto.html
+      setTimeout(() => {
+        window.location.href = 'benvenuto.html';
+      }, 300);
+    }
+  } catch (error) {
+    console.error('❌ Errore durante il reset cache:', error);
+    // Fallback: riavvia comunque la pagina
+    setTimeout(() => {
+      const isTestPage = window.location.pathname.includes('test.html');
+      if (isTestPage) {
+        window.location.reload();
+      } else {
+        window.location.href = 'benvenuto.html';
+      }
+    }, 300);
+  }
 }
 
 /**

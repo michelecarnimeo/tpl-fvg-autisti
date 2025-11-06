@@ -53,3 +53,34 @@
     color: #fde047 !important;
 }
 
+/* ========================================
+   STATISTICHE COLORI
+   Colori per i numeri delle statistiche
+   ======================================== */
+
+/* Colori statistiche */
+#stat-pass {
+    color: #28a745;
+}
+
+#stat-fail {
+    color: #dc3545;
+}
+
+#stat-pending {
+    color: #ffc107;
+}
+
+/* Dark mode statistiche */
+.dark #stat-pass {
+    color: #86efac;
+}
+
+.dark #stat-fail {
+    color: #fca5a5;
+}
+
+.dark #stat-pending {
+    color: #fde047;
+}
+
