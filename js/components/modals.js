@@ -544,12 +544,28 @@
   /**
    * Apre il modal impostazioni
    */
-  function openSettingsModal() {
+  async function openSettingsModal() {
     console.log('🚀 Apertura modal impostazioni...', settingsModal ? 'Modal trovato' : 'Modal NON trovato!');
+
+    // Assicurati che l'HTML del modal sia caricato
+    await loadSettingsModalHTML();
+
+    // Aggiorna il riferimento al modal (potrebbe essere cambiato dopo il caricamento)
+    settingsModal = document.getElementById('settings-modal');
 
     if (!settingsModal) {
       console.error('❌ Impossibile aprire modal: settingsModal è null');
       return;
+    }
+
+    // Aggiorna la versione nel modal se la funzione è disponibile
+    if (typeof updateAppVersion === 'function') {
+      updateAppVersion();
+    }
+    
+    // Renderizza il changelog nel modal se la funzione è disponibile
+    if (typeof renderChangelog === 'function') {
+      renderChangelog('changelog-container');
     }
 
     settingsModal.style.display = 'flex';
@@ -573,10 +589,82 @@
   }
 
   /**
+   * Carica dinamicamente l'HTML del modal impostazioni da un file esterno
+   * @returns {Promise<void>}
+   */
+  async function loadSettingsModalHTML() {
+    // Se il modal esiste già nel DOM, non fare nulla
+    if (document.getElementById('settings-modal')) {
+      console.log('✅ Modal impostazioni già presente nel DOM');
+      return;
+    }
+
+    try {
+      console.log('📥 Caricamento HTML modal impostazioni da components/settings-modal.html...');
+      const response = await fetch('components/settings-modal.html');
+      
+      if (!response.ok) {
+        throw new Error(`Errore nel caricamento: ${response.status} ${response.statusText}`);
+      }
+
+      const html = await response.text();
+      
+      // Crea un container temporaneo per inserire l'HTML
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = html.trim();
+      
+      // Inserisci il modal nel body (prima del footer se esiste, altrimenti alla fine)
+      const footer = document.querySelector('footer');
+      if (footer) {
+        footer.insertAdjacentElement('beforebegin', tempDiv.firstElementChild);
+      } else {
+        document.body.appendChild(tempDiv.firstElementChild);
+      }
+
+      console.log('✅ HTML modal impostazioni caricato e inserito nel DOM');
+      
+      // Aggiorna il riferimento al modal
+      settingsModal = document.getElementById('settings-modal');
+      
+      // Aggiorna la versione nel modal se la funzione è disponibile
+      if (typeof updateAppVersion === 'function') {
+        updateAppVersion();
+      }
+      
+      // Renderizza il changelog nel modal se la funzione è disponibile
+      if (typeof renderChangelog === 'function') {
+        renderChangelog('changelog-container');
+      }
+    } catch (error) {
+      console.error('❌ Errore nel caricamento del modal impostazioni:', error);
+      // Fallback: crea un modal minimale
+      const fallbackModal = document.createElement('div');
+      fallbackModal.id = 'settings-modal';
+      fallbackModal.className = 'settings-modal';
+      fallbackModal.innerHTML = `
+        <div class="settings-modal-content">
+          <div class="settings-modal-header">
+            <h3>⚙️ Impostazioni</h3>
+            <button id="settings-modal-close" class="settings-modal-close" aria-label="Chiudi">×</button>
+          </div>
+          <div class="settings-content">
+            <p>Errore nel caricamento delle impostazioni. Ricarica la pagina.</p>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(fallbackModal);
+      settingsModal = fallbackModal;
+    }
+  }
+
+  /**
    * Inizializza il modal impostazioni con i callback necessari
    * @param {Object} config - Configurazione con callback
    */
-  function initializeSettingsModal(config) {
+  async function initializeSettingsModal(config) {
+    // Assicurati che l'HTML del modal sia caricato
+    await loadSettingsModalHTML();
+    
     console.log('🔧 Inizializzazione SettingsModal...', config ? 'Config presente' : 'Config mancante');
 
     if (!config) {
@@ -817,7 +905,8 @@
   window.SettingsModal = {
     open: openSettingsModal,
     close: closeSettingsModal,
-    initialize: initializeSettingsModal
+    initialize: initializeSettingsModal,
+    loadHTML: loadSettingsModalHTML
   };
 
   // ===== FUNZIONE PER GESTIRE LE TAB =====
@@ -882,28 +971,84 @@
         e.stopPropagation();
         console.log('🔘 Click diretto su open-settings');
 
-        // Leggi il modal al momento del click (in caso non fosse ancora stato inizializzato)
-        const modal = document.getElementById('settings-modal');
-        if (modal) {
-          console.log('✅ Modal trovato, apertura...');
-
-          modal.style.display = 'flex';
-          setTimeout(() => {
-            modal.classList.add('show');
-            console.log('✅ Modal aperto');
-
-            // Configura le tab DOPO aver aperto il modal (per assicurarsi che tutti gli elementi siano nel DOM)
-            setupTabsListeners();
-
-            // Chiama openSettingsModal se disponibile (per sincronizzare lo stato)
-            if (typeof openSettingsModal === 'function' && settingsModal) {
-              // Usa la funzione già inizializzata
-              openSettingsModal();
-            }
-          }, 10);
-        } else {
-          console.error('❌ Modal settings-modal non trovato nel DOM!');
+        // Chiudi menu mobile se aperto
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+        const hamburgerToggle = document.getElementById('hamburger-toggle');
+        
+        if (mobileMenu && mobileMenu.classList.contains('active')) {
+          console.log('📱 Chiusura menu mobile...');
+          mobileMenu.classList.remove('active');
+          if (mobileMenuOverlay) {
+            mobileMenuOverlay.classList.remove('active');
+          }
+          if (hamburgerToggle) {
+            hamburgerToggle.classList.remove('active');
+          }
+          document.body.style.overflow = '';
         }
+
+        // Carica e apri il modal usando la funzione pubblica
+        (async () => {
+          try {
+            // Carica l'HTML del modal se necessario
+            if (typeof SettingsModal !== 'undefined' && SettingsModal.loadHTML) {
+              await SettingsModal.loadHTML();
+            }
+
+            // Assicurati che il modal sia inizializzato prima di aprirlo
+            if (typeof SettingsModal !== 'undefined' && SettingsModal.initialize && typeof window.Settings !== 'undefined') {
+              const modal = document.getElementById('settings-modal');
+              if (modal && !modal.dataset.initialized) {
+                console.log('🔧 Inizializzazione SettingsModal dal listener diretto...');
+                await SettingsModal.initialize({
+                  setThemeMode: window.Settings.setThemeMode || null,
+                  toggleAnimation: window.Settings.toggleAnimation || null,
+                  setHighContrast: window.Settings.setHighContrast || null,
+                  setTouchFriendly: window.Settings.setTouchFriendly || null,
+                  setHapticFeedback: window.Settings.setHapticFeedback || null,
+                  setReduceMotion: window.Settings.setReduceMotion || null,
+                  setKeepScreenOn: window.Settings.setKeepScreenOn || null,
+                  setExtraSpacing: window.Settings.setExtraSpacing || null,
+                  setCompactLayout: window.Settings.setCompactLayout || null,
+                  setBlueLightFilter: window.Settings.setBlueLightFilter || null,
+                  setInterfaceScale: window.Settings.setInterfaceScale || null,
+                  setFontSize: window.Settings.setFontSize || null,
+                  triggerHaptic: window.Settings.triggerHaptic || null,
+                  onCloseMobileMenu: () => {
+                    const mobileMenu = document.getElementById('mobile-menu');
+                    const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+                    const hamburgerToggle = document.getElementById('hamburger-toggle');
+                    if (mobileMenu) mobileMenu.classList.remove('active');
+                    if (mobileMenuOverlay) mobileMenuOverlay.classList.remove('active');
+                    if (hamburgerToggle) hamburgerToggle.classList.remove('active');
+                    document.body.style.overflow = '';
+                  }
+                });
+              }
+            }
+
+            // Apri il modal usando la funzione pubblica
+            if (typeof SettingsModal !== 'undefined' && SettingsModal.open) {
+              await SettingsModal.open();
+            } else {
+              // Fallback: apri manualmente
+              const modal = document.getElementById('settings-modal');
+              if (modal) {
+                modal.style.display = 'flex';
+                setTimeout(() => {
+                  modal.classList.add('show');
+                  console.log('✅ Modal aperto');
+                  setupTabsListeners();
+                }, 10);
+              } else {
+                console.error('❌ Modal settings-modal non trovato nel DOM!');
+              }
+            }
+          } catch (error) {
+            console.error('❌ Errore nell\'apertura del modal:', error);
+          }
+        })();
       });
       console.log('✅ Event listener diretto aggiunto a open-settings');
     }

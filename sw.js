@@ -40,7 +40,8 @@ const STATIC_ASSETS = [
   './src/logo.png', // Logo
   './src/benvenuto.jpg', // Immagine benvenuto
   './test.html', // Pagina test (utile offline)
-  './test-config.js' // Config test
+  './test-config.js', // Config test
+  './css/components/tests/toc-sidebar.css' // TOC Sidebar (indice rapido desktop)
   // NOTA: version.json NON è in cache per permettere verifica aggiornamenti
 ];
 

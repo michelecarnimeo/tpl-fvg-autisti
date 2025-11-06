@@ -125,6 +125,44 @@
     background: #10b981;
 }
 
+/* Settings groups */
+.test-group-bar.group-settings-1 {
+    background: #fb923c;
+}
+
+.test-group-bar.group-settings-2 {
+    background: #f97316;
+}
+
+.test-group-bar.group-settings-3 {
+    background: #ea580c;
+}
+
+.test-group-bar.group-settings-4 {
+    background: #c2410c;
+}
+
+.test-group-bar.group-settings-5 {
+    background: #9a3412;
+}
+
+/* Service Worker groups */
+.test-group-bar.group-sw-1 {
+    background: #6366f1;
+}
+
+.test-group-bar.group-sw-2 {
+    background: #8b5cf6;
+}
+
+.test-group-bar.group-sw-3 {
+    background: #a855f7;
+}
+
+.test-group-bar.group-sw-4 {
+    background: #c084fc;
+}
+
 /* Template per nuovi moduli:
 .test-group-bar.group-nuovomodulo-1 { background: #colore; }
 */

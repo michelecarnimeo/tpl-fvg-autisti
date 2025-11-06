@@ -47,70 +47,6 @@
       }
     }
     
-    /* Stili per messaggio mobile */
-    .mobile-only-message {
-      display: none;
-      width: 100%;
-      padding: 1rem;
-    }
-    
-    @media (max-width: 768px) {
-      .mobile-only-message {
-        display: block !important;
-      }
-    }
-    
-    @media (min-width: 769px) {
-      .mobile-only-message {
-        display: none !important;
-      }
-    }
-    
-    .message-card {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      border-radius: 16px;
-      padding: 2rem;
-      text-align: center;
-      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
-      animation: fadeIn 0.5s ease-in;
-    }
-    
-    .message-icon {
-      font-size: 4rem;
-      margin-bottom: 1rem;
-      animation: bounce 2s infinite;
-    }
-    
-    .message-title {
-      color: white;
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin-bottom: 1rem;
-    }
-    
-    .message-text {
-      color: rgba(255, 255, 255, 0.95);
-      font-size: 1rem;
-      line-height: 1.6;
-      margin-bottom: 1.5rem;
-    }
-    
-    .message-button {
-      display: inline-block;
-      background: white;
-      color: #667eea;
-      padding: 0.875rem 2rem;
-      border-radius: 50px;
-      font-weight: 600;
-      text-decoration: none;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    }
-    
-    .message-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-    }
     
     @keyframes bounce {
       0%, 100% {
@@ -249,19 +185,6 @@
             <input type="text" id="search-input" class="search-input" placeholder="Cerca Fermata" />
             <button id="clear-search" class="clear-btn" style="display: none;">✕</button>
           </div>
-        </div>
-      </div>
-
-      <!-- Messaggio mobile (visibile solo su mobile) -->
-      <div id="mobile-fermate-message" class="mobile-only-message" style="display: none;">
-        <div class="message-card">
-          <div class="message-icon">📱</div>
-          <h3 class="message-title">Visualizzazione mobile</h3>
-          <p class="message-text">
-            L'elenco dettagliato delle fermate è disponibile su desktop.<br>
-            Su mobile puoi utilizzare la pagina <strong>Home</strong> per calcolare il prezzo del biglietto selezionando partenza e destinazione.
-          </p>
-          <a href="index.html" class="message-button">Vai alla Home</a>
         </div>
       </div>
 

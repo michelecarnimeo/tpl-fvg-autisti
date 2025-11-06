@@ -62,9 +62,9 @@
     color: white;
     border: none;
     border-radius: 50%;
-    width: 28px;
-    height: 28px;
-    font-size: 0.75rem;
+    width: 32px;
+    height: 32px;
+    font-size: 0.85rem;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -72,6 +72,7 @@
     opacity: 1;
     transition: background-color 0.2s, transform 0.1s;
     z-index: 10;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .test-run-single:hover {
@@ -85,7 +86,16 @@
 
 /* Offset del testo per lasciare spazio al pulsante */
 .test-item > span:first-of-type {
-    padding-left: 2.5rem;
+    padding-left: 3rem;
+    flex: 1;
+    min-width: 0;
+}
+
+/* Stato sempre a destra */
+.test-item > .test-status {
+    margin-left: auto;
+    flex-shrink: 0;
+    white-space: nowrap;
 }
 
 /* ========================================
@@ -305,9 +315,10 @@
         box-shadow: none !important;
         backdrop-filter: none !important;
         -webkit-backdrop-filter: none !important;
-        padding: 0.75rem 0 !important;
+        padding: 0.75rem 0 0.75rem 3.5rem !important;
         margin: 0.5rem 0 !important;
         border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+        position: relative !important;
     }
 
     .dark .test-item {
@@ -337,6 +348,28 @@
         border-bottom: none !important;
     }
 
+    /* Pulsanti play su mobile */
+    .test-run-single {
+        width: 28px !important;
+        height: 28px !important;
+        font-size: 0.75rem !important;
+        left: 0.25rem !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+    }
+
+    .test-item > span:first-of-type {
+        padding-left: 0 !important;
+        flex: 1 !important;
+        min-width: 0 !important;
+    }
+
+    .test-item > .test-status {
+        margin-left: auto !important;
+        flex-shrink: 0 !important;
+        white-space: nowrap !important;
+    }
+
     /* Disabilita effetti hover su mobile */
     .test-section:hover,
     .test-item:hover,
@@ -358,6 +391,34 @@
 
     .test-grid {
         grid-template-columns: 1fr;
+    }
+}
+
+/* Schermi molto piccoli (max-width: 480px) */
+@media (max-width: 480px) {
+    .test-item {
+        padding: 0.75rem 0 0.75rem 3rem !important;
+    }
+
+    .test-run-single {
+        width: 24px !important;
+        height: 24px !important;
+        font-size: 0.7rem !important;
+        left: 0.2rem !important;
+    }
+
+    .test-item > span:first-of-type {
+        flex: 1 !important;
+        min-width: 0 !important;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding-right: 0.5rem !important;
+    }
+
+    .test-item > .test-status {
+        margin-left: auto !important;
+        flex-shrink: 0 !important;
+        white-space: nowrap !important;
     }
 }
 

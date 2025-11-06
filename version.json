@@ -1,6 +1,6 @@
 {
-  "version": "1.6.2",
-  "versionDate": "4 Novembre 2025",
-  "versionTime": "23:45",
-  "updateNotes": "Modularizzazione CSS test e rimozione stili inline"
+  "version": "1.6.4",
+  "versionDate": "6 Novembre 2025",
+  "versionTime": "15:00",
+  "updateNotes": "Modularizzazione completa test suite + Fix fermate + Settings modal centralizzato"
 }

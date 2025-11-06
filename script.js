@@ -932,8 +932,22 @@ function renderFermate(lineaIndex = 0, sortByDistance = false) {
   }
 
   // Mostra griglia e ricerca
-  if (gridContainer) gridContainer.style.display = 'grid';
-  if (searchContainer) searchContainer.style.display = 'flex';
+  console.log('Mostro griglia e ricerca...');
+  if (gridContainer) {
+    gridContainer.style.display = 'grid';
+    console.log('✅ gridContainer mostrato, display:', gridContainer.style.display);
+  } else {
+    console.error('❌ gridContainer non trovato!');
+  }
+  
+  if (searchContainer) {
+    searchContainer.style.display = 'flex';
+    console.log('✅ searchContainer mostrato, display:', searchContainer.style.display);
+  } else {
+    console.error('❌ searchContainer non trovato!');
+  }
+  
+  console.log('✅ renderFermate completata. Fermate andata:', andataList.children.length, 'Fermate ritorno:', ritornoList.children.length);
 }
 
 // --- TARIFFE LOGIC ---
@@ -1015,10 +1029,21 @@ function renderPrezzi(lineaIndex = 0) {
 
 // Popola modal linee per pagina fermate
 function populateLineeTratte() {
+  console.log('populateLineeTratte chiamata, tariffario.length:', tariffario ? tariffario.length : 0);
+  
   const lineeModalList = document.getElementById('linee-fermate-modal-list');
   const lineaBtn = document.getElementById('linea-fermate-btn');
 
-  if (!lineeModalList) return;
+  if (!lineeModalList) {
+    console.warn('⚠️ linee-fermate-modal-list non trovato');
+    return;
+  }
+  
+  // Verifica che tariffario sia caricato
+  if (!tariffario || tariffario.length === 0) {
+    console.error('❌ Tariffario non ancora caricato in populateLineeTratte!');
+    return;
+  }
 
   // Popola modal con le linee
   lineeModalList.innerHTML = '';
@@ -1053,17 +1078,56 @@ function populateLineeTratte() {
 
   // Event listener per apertura modal
   if (lineaBtn) {
-    lineaBtn.addEventListener('click', openLineeModalFermate);
+    // Rimuovi listener esistenti per evitare duplicati
+    lineaBtn.replaceWith(lineaBtn.cloneNode(true));
+    const newLineaBtn = document.getElementById('linea-fermate-btn');
+    newLineaBtn.addEventListener('click', openLineeModalFermate);
+  }
+  
+  // Event listener per chiusura modal
+  const closeBtn = document.getElementById('linee-fermate-modal-close');
+  if (closeBtn) {
+    // Rimuovi listener esistenti per evitare duplicati
+    closeBtn.replaceWith(closeBtn.cloneNode(true));
+    const newCloseBtn = document.getElementById('linee-fermate-modal-close');
+    newCloseBtn.addEventListener('click', closeLineeModalFermate);
+  }
+  
+  // Chiudi modal quando si clicca fuori
+  const lineeModal = document.getElementById('linee-fermate-modal');
+  if (lineeModal) {
+    lineeModal.addEventListener('click', (e) => {
+      if (e.target === lineeModal) {
+        closeLineeModalFermate();
+      }
+    });
   }
 }
 
 // Apri modal linee per fermate
 function openLineeModalFermate() {
+  console.log('openLineeModalFermate chiamata');
   const lineeModal = document.getElementById('linee-fermate-modal');
-  if (!lineeModal) return;
+  if (!lineeModal) {
+    console.error('❌ linee-fermate-modal non trovato!');
+    return;
+  }
+  
+  // Verifica che il modal sia popolato
+  const lineeModalList = document.getElementById('linee-fermate-modal-list');
+  if (!lineeModalList || lineeModalList.children.length === 0) {
+    console.warn('⚠️ Modal non ancora popolato, richiamo populateLineeTratte...');
+    if (tariffario && tariffario.length > 0) {
+      populateLineeTratte();
+    } else {
+      console.error('❌ Tariffario non ancora caricato!');
+      return;
+    }
+  }
 
   lineeModal.style.display = 'flex';
   setTimeout(() => lineeModal.classList.add('show'), 10);
+  console.log('✅ Modal linee aperto');
 }
 
 // Chiudi modal linee per fermate
@@ -1079,11 +1143,27 @@ function closeLineeModalFermate() {
 
 // Seleziona linea da modal fermate
 function selectLineaFermate(idx, nome) {
+  console.log('selectLineaFermate chiamata con idx:', idx, 'nome:', nome);
+  
+  // Converti idx a numero se necessario
+  const lineaIndex = typeof idx === 'string' ? parseInt(idx, 10) : idx;
+  
+  // Verifica che tariffario sia caricato
+  if (!tariffario || tariffario.length === 0) {
+    console.error('❌ Tariffario non ancora caricato!');
+    return;
+  }
+  
+  // Verifica che l'indice sia valido
+  if (lineaIndex < 0 || lineaIndex >= tariffario.length) {
+    console.error('❌ Indice linea non valido:', lineaIndex, 'tariffario.length:', tariffario.length);
+    return;
+  }
+  
   const lineaBtn = document.getElementById('linea-fermate-btn');
   const lineaText = document.getElementById('linea-fermate-text');
   const gridContainer = document.getElementById('fermate-grid-container');
   const searchContainer = document.getElementById('search-container-fermate');
-  const mobileMessage = document.getElementById('mobile-fermate-message');
   const andataTitle = document.getElementById('andata-title');
   const ritornoTitle = document.getElementById('ritorno-title');
 
@@ -1092,11 +1172,17 @@ function selectLineaFermate(idx, nome) {
     lineaText.textContent = nome;
   }
   if (lineaBtn) {
-    lineaBtn.dataset.selectedIndex = idx;
+    lineaBtn.dataset.selectedIndex = lineaIndex;
   }
 
   // Aggiorna titoli e mostra fermate
-  const linea = tariffario[idx];
+  const linea = tariffario[lineaIndex];
+  
+  if (!linea || !linea.fermate) {
+    console.error('❌ Linea non valida o fermate mancanti:', linea);
+    return;
+  }
+  
   const fermate = linea.fermate;
 
   // Aggiorna titoli
@@ -1106,20 +1192,30 @@ function selectLineaFermate(idx, nome) {
   if (ritornoTitle) ritornoTitle.textContent = `(${lastStop} → ${firstStop})`;
 
   // Mostra griglia e ricerca
+  console.log('Mostro elementi UI...');
   if (gridContainer) {
     gridContainer.style.display = 'grid';
-    gridContainer.classList.add('show-on-mobile'); // Classe per nascondere su mobile
+    // NON aggiungere show-on-mobile perché nasconde su mobile - rimuovila se presente
+    gridContainer.classList.remove('show-on-mobile');
+    console.log('✅ gridContainer mostrato, display:', gridContainer.style.display, 'classList:', gridContainer.classList.toString());
+  } else {
+    console.error('❌ gridContainer non trovato in selectLineaFermate!');
   }
+  
   if (searchContainer) {
     searchContainer.style.display = 'flex';
-    searchContainer.classList.add('show-on-mobile'); // Classe per nascondere su mobile
+    // NON aggiungere show-on-mobile perché nasconde su mobile - rimuovila se presente
+    searchContainer.classList.remove('show-on-mobile');
+    console.log('✅ searchContainer mostrato, display:', searchContainer.style.display);
+  } else {
+    console.error('❌ searchContainer non trovato in selectLineaFermate!');
   }
 
-  // Mostra messaggio mobile
-  if (mobileMessage) mobileMessage.style.display = 'block';
+  // Messaggio mobile rimosso
 
   // Renderizza tratte con l'indice selezionato
-  renderFermate(idx);
+  console.log('Chiamata renderFermate con indice:', lineaIndex);
+  renderFermate(lineaIndex);
 
   // Chiudi modal
   closeLineeModalFermate();
@@ -1658,7 +1754,8 @@ window.addEventListener('DOMContentLoaded', function () {
   }
 
   // Chiudi menu quando si clicca su un link (supporta sia .mobile-nav-link che .mobile-menu-link)
-  const mobileNavLinks = document.querySelectorAll('.mobile-nav-link, .mobile-menu-link');
+  // Escludi il pulsante Impostazioni che ha comportamento speciale (apre modal)
+  const mobileNavLinks = document.querySelectorAll('.mobile-nav-link:not(#open-settings), .mobile-menu-link');
   mobileNavLinks.forEach(link => {
     link.addEventListener('click', closeMenu);
   });

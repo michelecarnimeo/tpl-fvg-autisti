@@ -1191,6 +1191,7 @@ async function runSingleStorageTest(testNumber) {
                 } else {
                     throw new Error(`Valore scritto non corrisponde`);
                 }
+                localStorage.removeItem(TEST_KEY);
                 break;
 
             case 2: // Test Lettura
@@ -1204,6 +1205,7 @@ async function runSingleStorageTest(testNumber) {
                 } else {
                     throw new Error('Valore letto non corrisponde');
                 }
+                localStorage.removeItem(TEST_KEY);
                 break;
 
             case 3: // Test Cancellazione
@@ -1219,10 +1221,546 @@ async function runSingleStorageTest(testNumber) {
                 }
                 break;
 
-            // Per i test 4-22, rimanda alla funzione completa
+            case 4: // Test Salvataggio Oggetto JSON
+                log('📦 Test 4: Salvataggio oggetto JSON', 'info');
+                const testObject = {
+                    nome: 'Test',
+                    valore: 123,
+                    attivo: true,
+                    data: new Date().toISOString(),
+                    nested: { chiave: 'valore' }
+                };
+                const TEST_JSON_KEY = 'tpl-test-json';
+                localStorage.setItem(TEST_JSON_KEY, JSON.stringify(testObject));
+                const retrievedJson = localStorage.getItem(TEST_JSON_KEY);
+                const parsed = JSON.parse(retrievedJson);
+                if (parsed.nome === testObject.nome && 
+                    parsed.valore === testObject.valore && 
+                    parsed.attivo === testObject.attivo &&
+                    parsed.nested.chiave === testObject.nested.chiave) {
+                    log('✓ Salvataggio oggetto JSON riuscito', 'success');
+                    log(`  Oggetto: ${JSON.stringify(testObject)}`, 'info');
+                    updateStatus('test-localstorage-json', 'pass');
+                } else {
+                    throw new Error('Oggetto recuperato non corrisponde');
+                }
+                localStorage.removeItem(TEST_JSON_KEY);
+                break;
+
+            case 5: // Test Salvataggio Array
+                log('📋 Test 5: Salvataggio array', 'info');
+                const testArray = ['elemento1', 'elemento2', 'elemento3', 123, true, null];
+                const TEST_ARRAY_KEY = 'tpl-test-array';
+                localStorage.setItem(TEST_ARRAY_KEY, JSON.stringify(testArray));
+                const retrievedArray = localStorage.getItem(TEST_ARRAY_KEY);
+                const parsedArray = JSON.parse(retrievedArray);
+                if (Array.isArray(parsedArray) && 
+                    parsedArray.length === testArray.length &&
+                    parsedArray[0] === testArray[0] &&
+                    parsedArray[3] === testArray[3] &&
+                    parsedArray[4] === testArray[4]) {
+                    log('✓ Salvataggio array riuscito', 'success');
+                    log(`  Array: [${testArray.length} elementi]`, 'info');
+                    updateStatus('test-localstorage-array', 'pass');
+                } else {
+                    throw new Error('Array recuperato non corrisponde');
+                }
+                localStorage.removeItem(TEST_ARRAY_KEY);
+                break;
+
+            case 6: // Test Salvataggio Numeri
+                log('🔢 Test 6: Salvataggio numeri', 'info');
+                const TEST_NUMBER_KEY = 'tpl-test-number';
+                const testNumbers = [0, 42, -15, 3.14159, 1e10, Number.MAX_SAFE_INTEGER];
+                let numbersPassed = 0;
+                for (const num of testNumbers) {
+                    localStorage.setItem(TEST_NUMBER_KEY, num.toString());
+                    const retrievedNum = localStorage.getItem(TEST_NUMBER_KEY);
+                    const parsedNum = Number(retrievedNum);
+                    if (parsedNum === num) {
+                        numbersPassed++;
+                    } else {
+                        throw new Error(`Numero ${num} non corrisponde: ottenuto ${parsedNum}`);
+                    }
+                }
+                if (numbersPassed === testNumbers.length) {
+                    log('✓ Salvataggio numeri riuscito', 'success');
+                    log(`  Testati: ${testNumbers.length} numeri diversi`, 'info');
+                    updateStatus('test-localstorage-numbers', 'pass');
+                }
+                localStorage.removeItem(TEST_NUMBER_KEY);
+                break;
+
+            case 7: // Test Salvataggio Booleani
+                log('✔️ Test 7: Salvataggio booleani', 'info');
+                const TEST_BOOL_KEY = 'tpl-test-boolean';
+                localStorage.setItem(TEST_BOOL_KEY, 'true');
+                let retrievedBool = localStorage.getItem(TEST_BOOL_KEY);
+                if (retrievedBool !== 'true' || JSON.parse(retrievedBool) !== true) {
+                    throw new Error('Booleano true non salvato correttamente');
+                }
+                localStorage.setItem(TEST_BOOL_KEY, 'false');
+                retrievedBool = localStorage.getItem(TEST_BOOL_KEY);
+                if (retrievedBool !== 'false' || JSON.parse(retrievedBool) !== false) {
+                    throw new Error('Booleano false non salvato correttamente');
+                }
+                log('✓ Salvataggio booleani riuscito', 'success');
+                log('  Testati: true, false', 'info');
+                updateStatus('test-localstorage-booleans', 'pass');
+                localStorage.removeItem(TEST_BOOL_KEY);
+                break;
+
+            case 8: // Test Dati Complessi Annidati
+                log('🎯 Test 8: Dati complessi annidati', 'info');
+                const complexData = {
+                    utente: {
+                        id: 12345,
+                        nome: 'Mario Rossi',
+                        email: 'mario@example.com',
+                        preferenze: {
+                            tema: 'dark',
+                            lingua: 'it',
+                            notifiche: true
+                        }
+                    },
+                    sessione: {
+                        token: 'abc123xyz',
+                        scadenza: Date.now() + 3600000,
+                        attiva: true
+                    },
+                    cronologia: [
+                        { id: 1, azione: 'login', timestamp: Date.now() },
+                        { id: 2, azione: 'ricerca', timestamp: Date.now() + 1000 },
+                        { id: 3, azione: 'acquisto', timestamp: Date.now() + 2000 }
+                    ]
+                };
+                const TEST_COMPLEX_KEY = 'tpl-test-complex';
+                localStorage.setItem(TEST_COMPLEX_KEY, JSON.stringify(complexData));
+                const retrievedComplex = localStorage.getItem(TEST_COMPLEX_KEY);
+                const parsedComplex = JSON.parse(retrievedComplex);
+                if (parsedComplex.utente.nome === complexData.utente.nome &&
+                    parsedComplex.utente.preferenze.tema === complexData.utente.preferenze.tema &&
+                    parsedComplex.sessione.token === complexData.sessione.token &&
+                    Array.isArray(parsedComplex.cronologia) &&
+                    parsedComplex.cronologia.length === 3 &&
+                    parsedComplex.cronologia[0].azione === 'login') {
+                    log('✓ Salvataggio dati complessi riuscito', 'success');
+                    log(`  Struttura: 3 livelli di annidamento, ${parsedComplex.cronologia.length} elementi array`, 'info');
+                    updateStatus('test-localstorage-complex', 'pass');
+                } else {
+                    throw new Error('Dati complessi non corrispondono');
+                }
+                localStorage.removeItem(TEST_COMPLEX_KEY);
+                break;
+
+            case 9: // Test Valori Null e Undefined
+                log('⚠️ Test 9: Valori null e undefined', 'info');
+                const TEST_NULL_KEY = 'tpl-test-null';
+                localStorage.setItem(TEST_NULL_KEY, 'null');
+                let retrievedNull = localStorage.getItem(TEST_NULL_KEY);
+                if (retrievedNull !== 'null') {
+                    throw new Error('Valore null non salvato come stringa');
+                }
+                localStorage.setItem(TEST_NULL_KEY, undefined);
+                retrievedNull = localStorage.getItem(TEST_NULL_KEY);
+                if (retrievedNull !== 'undefined') {
+                    throw new Error('Valore undefined non gestito correttamente');
+                }
+                const nonExistent = localStorage.getItem('tpl-test-non-existent-key-12345');
+                if (nonExistent !== null) {
+                    throw new Error('Chiave inesistente non ritorna null');
+                }
+                log('✓ Gestione null/undefined riuscita', 'success');
+                log('  null → "null", undefined → "undefined", inesistente → null', 'info');
+                updateStatus('test-localstorage-null', 'pass');
+                localStorage.removeItem(TEST_NULL_KEY);
+                break;
+
+            case 10: // Test Stringhe Vuote
+                log('📄 Test 10: Stringhe vuote', 'info');
+                const TEST_EMPTY_KEY = 'tpl-test-empty';
+                localStorage.setItem(TEST_EMPTY_KEY, '');
+                const retrievedEmpty = localStorage.getItem(TEST_EMPTY_KEY);
+                if (retrievedEmpty !== '') {
+                    throw new Error(`Stringa vuota non salvata: ottenuto "${retrievedEmpty}"`);
+                }
+                if (retrievedEmpty === null) {
+                    throw new Error('Stringa vuota confusa con null');
+                }
+                log('✓ Salvataggio stringa vuota riuscito', 'success');
+                log('  "" salvato correttamente (diverso da null)', 'info');
+                updateStatus('test-localstorage-empty', 'pass');
+                localStorage.removeItem(TEST_EMPTY_KEY);
+                break;
+
+            case 11: // Test Caratteri Speciali
+                log('🎭 Test 11: Caratteri speciali', 'info');
+                const TEST_SPECIAL_KEY = 'tpl-test-special';
+                const specialStrings = [
+                    '🚀 Emoji test 🎉',
+                    'Àccénti è ùnìcödé',
+                    'Line\nBreak\tTab',
+                    'Quote "test" \'test\'',
+                    'Symbols: @#$%^&*()',
+                    '中文 日本語 한국어',
+                    'Math: ∑∫√π∞'
+                ];
+                let specialPassed = 0;
+                for (const str of specialStrings) {
+                    localStorage.setItem(TEST_SPECIAL_KEY, str);
+                    const retrievedSpecial = localStorage.getItem(TEST_SPECIAL_KEY);
+                    if (retrievedSpecial === str) {
+                        specialPassed++;
+                    } else {
+                        throw new Error(`Stringa speciale non corrisponde: "${str}"`);
+                    }
+                }
+                if (specialPassed === specialStrings.length) {
+                    log('✓ Caratteri speciali salvati correttamente', 'success');
+                    log(`  Testati: emoji, unicode, newline, tab, quotes, simboli, lingue`, 'info');
+                    updateStatus('test-localstorage-special', 'pass');
+                }
+                localStorage.removeItem(TEST_SPECIAL_KEY);
+                break;
+
+            case 12: // Test Valori Molto Lunghi
+                log('📏 Test 12: Valori molto lunghi', 'info');
+                const TEST_LONG_KEY = 'tpl-test-long';
+                const longString = 'A'.repeat(10 * 1024);
+                localStorage.setItem(TEST_LONG_KEY, longString);
+                const retrievedLong = localStorage.getItem(TEST_LONG_KEY);
+                if (retrievedLong.length === longString.length && retrievedLong === longString) {
+                    log('✓ Salvataggio valore lungo riuscito', 'success');
+                    log(`  Salvati: ${(longString.length / 1024).toFixed(1)} KB`, 'info');
+                    updateStatus('test-localstorage-long', 'pass');
+                } else {
+                    throw new Error(`Valore lungo non corrisponde: ${retrievedLong.length} vs ${longString.length}`);
+                }
+                localStorage.removeItem(TEST_LONG_KEY);
+                break;
+
+            case 13: // Test Chiavi Multiple
+                log('🔑 Test 13: Chiavi multiple', 'info');
+                const TEST_KEYS = [
+                    'tpl-test-multi-1',
+                    'tpl-test-multi-2',
+                    'tpl-test-multi-3',
+                    'tpl-test-multi-4',
+                    'tpl-test-multi-5'
+                ];
+                TEST_KEYS.forEach((key, index) => {
+                    localStorage.setItem(key, `value-${index}`);
+                });
+                let allPresent = true;
+                TEST_KEYS.forEach((key, index) => {
+                    const value = localStorage.getItem(key);
+                    if (value !== `value-${index}`) {
+                        allPresent = false;
+                        throw new Error(`Chiave ${key} non corrisponde`);
+                    }
+                });
+                if (allPresent) {
+                    log('✓ Gestione chiavi multiple riuscita', 'success');
+                    log(`  Salvate e verificate: ${TEST_KEYS.length} chiavi`, 'info');
+                    updateStatus('test-localstorage-multiple', 'pass');
+                }
+                TEST_KEYS.forEach(key => localStorage.removeItem(key));
+                break;
+
+            case 14: // Test Disponibilità localStorage
+                log('🔒 Test 14: Disponibilità localStorage', 'info');
+                if (typeof localStorage === 'undefined') {
+                    throw new Error('localStorage non disponibile');
+                }
+                if (!(localStorage instanceof Storage)) {
+                    throw new Error('localStorage non è un oggetto Storage');
+                }
+                const methods = ['getItem', 'setItem', 'removeItem', 'clear', 'key'];
+                const missingMethods = methods.filter(method => typeof localStorage[method] !== 'function');
+                if (missingMethods.length > 0) {
+                    throw new Error(`Metodi mancanti: ${missingMethods.join(', ')}`);
+                }
+                if (typeof localStorage.length !== 'number') {
+                    throw new Error('Proprietà length non disponibile');
+                }
+                log('✓ localStorage disponibile e funzionante', 'success');
+                log(`  Metodi: ${methods.join(', ')}`, 'info');
+                log(`  Chiavi presenti: ${localStorage.length}`, 'info');
+                updateStatus('test-localstorage-available', 'pass');
+                break;
+
+            case 15: // Test Quota Storage (Simulazione)
+                log('💾 Test 15: Quota Storage (Simulazione)', 'info');
+                const TEST_QUOTA_KEY = 'tpl-test-quota';
+                let largeValue = '';
+                let passedQuotaTest = false;
+                for (let i = 0; i < 5000; i++) {
+                    largeValue += 'a'.repeat(10 * 1024);
+                    try {
+                        localStorage.setItem(TEST_QUOTA_KEY, largeValue);
+                    } catch (e) {
+                        if (e.name === 'QuotaExceededError') {
+                            log('✓ QuotaExceededError generato come previsto', 'success');
+                            log(`  Superata quota dopo ${i * 10} KB circa`, 'info');
+                            passedQuotaTest = true;
+                            break;
+                        } else {
+                            throw e;
+                        }
+                    }
+                }
+                if (passedQuotaTest) {
+                    updateStatus('test-localstorage-quota', 'pass');
+                } else {
+                    throw new Error('QuotaExceededError non generato o non catturato');
+                }
+                localStorage.removeItem(TEST_QUOTA_KEY);
+                break;
+
+            case 16: // Test Performance (Scrittura/Lettura)
+                log('⚡ Test 16: Performance (Scrittura/Lettura)', 'info');
+                const PERF_KEY = 'tpl-perf-data';
+                const DATA_SIZE = 100 * 1024;
+                const ITERATIONS = 100;
+                const randomData = Array.from({ length: DATA_SIZE }, () =>
+                    String.fromCharCode(Math.floor(Math.random() * 26) + 97)
+                ).join('');
+                let writeTimes = [];
+                let readTimes = [];
+                for (let i = 0; i < ITERATIONS; i++) {
+                    const writeStart = performance.now();
+                    localStorage.setItem(PERF_KEY, randomData);
+                    writeTimes.push(performance.now() - writeStart);
+                    const readStart = performance.now();
+                    const retrievedPerf = localStorage.getItem(PERF_KEY);
+                    readTimes.push(performance.now() - readStart);
+                    if (retrievedPerf !== randomData) {
+                        throw new Error('Dati non corrispondenti durante il test di performance');
+                    }
+                }
+                const avgWrite = writeTimes.reduce((a, b) => a + b, 0) / ITERATIONS;
+                const avgRead = readTimes.reduce((a, b) => a + b, 0) / ITERATIONS;
+                log('✓ Test performance riuscito', 'success');
+                log(`  Dati per scrittura/lettura: ${(DATA_SIZE / 1024).toFixed(1)} KB`, 'info');
+                log(`  Iterazioni: ${ITERATIONS}`, 'info');
+                log(`  Tempo medio scrittura: ${avgWrite.toFixed(2)} ms`, 'info');
+                log(`  Tempo medio lettura: ${avgRead.toFixed(2)} ms`, 'info');
+                if (avgWrite < 50 && avgRead < 50) {
+                    updateStatus('test-localstorage-performance', 'pass');
+                } else {
+                    log('⚠ I tempi di performance superano le soglie consigliate.', 'warning');
+                    updateStatus('test-localstorage-performance', 'pass');
+                }
+                localStorage.removeItem(PERF_KEY);
+                break;
+
+            case 17: // Test Iterazione Chiavi
+                log('🔑 Test 17: Iterazione chiavi', 'info');
+                const TEST_ITERATE_KEYS = [
+                    'tpl-iter-test-1',
+                    'tpl-iter-test-2',
+                    'tpl-iter-test-3'
+                ];
+                TEST_ITERATE_KEYS.forEach((key, index) => {
+                    localStorage.setItem(key, `value-${index}`);
+                });
+                let foundKeys = [];
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key && key.startsWith('tpl-iter-test-')) {
+                        foundKeys.push(key);
+                    }
+                }
+                const allFound = TEST_ITERATE_KEYS.every(key => foundKeys.includes(key));
+                if (allFound && foundKeys.length === TEST_ITERATE_KEYS.length) {
+                    log('✓ Iterazione chiavi riuscita', 'success');
+                    log(`  Trovate ${foundKeys.length} chiavi usando localStorage.key()`, 'info');
+                    updateStatus('test-localstorage-iterate', 'pass');
+                } else {
+                    throw new Error(`Chiavi non trovate correttamente: ${foundKeys.length}/${TEST_ITERATE_KEYS.length}`);
+                }
+                TEST_ITERATE_KEYS.forEach(key => localStorage.removeItem(key));
+                break;
+
+            case 18: // Test Lettura JSON Invalido
+                log('⚠️ Test 18: Lettura JSON invalido', 'info');
+                const TEST_INVALID_JSON_KEY = 'tpl-test-invalid-json';
+                const invalidJsonStrings = [
+                    'ciao mondo',
+                    '123abc',
+                    '{broken json',
+                    'undefined',
+                    'NaN'
+                ];
+                let errorsCaught = 0;
+                for (const invalidStr of invalidJsonStrings) {
+                    localStorage.setItem(TEST_INVALID_JSON_KEY, invalidStr);
+                    try {
+                        JSON.parse(localStorage.getItem(TEST_INVALID_JSON_KEY));
+                    } catch (e) {
+                        if (e instanceof SyntaxError) {
+                            errorsCaught++;
+                        }
+                    }
+                }
+                if (errorsCaught >= 2) {
+                    log('✓ Gestione JSON invalido riuscita', 'success');
+                    log(`  Catturati ${errorsCaught} SyntaxError su ${invalidJsonStrings.length} tentativi`, 'info');
+                    updateStatus('test-localstorage-invalid-json', 'pass');
+                } else {
+                    throw new Error(`Solo ${errorsCaught} errori catturati, attesi almeno 2`);
+                }
+                localStorage.removeItem(TEST_INVALID_JSON_KEY);
+                break;
+
+            case 19: // Test Scrittura Valori Non-Stringa
+                log('🔄 Test 19: Scrittura valori non-stringa', 'info');
+                const TEST_NON_STRING_KEY = 'tpl-test-non-string';
+                localStorage.setItem(TEST_NON_STRING_KEY, 123);
+                let retrievedNonString = localStorage.getItem(TEST_NON_STRING_KEY);
+                if (retrievedNonString !== '123') {
+                    throw new Error(`Numero non convertito: ottenuto "${retrievedNonString}"`);
+                }
+                localStorage.setItem(TEST_NON_STRING_KEY, true);
+                retrievedNonString = localStorage.getItem(TEST_NON_STRING_KEY);
+                if (retrievedNonString !== 'true') {
+                    throw new Error(`Booleano non convertito: ottenuto "${retrievedNonString}"`);
+                }
+                localStorage.setItem(TEST_NON_STRING_KEY, { test: 'value' });
+                retrievedNonString = localStorage.getItem(TEST_NON_STRING_KEY);
+                if (retrievedNonString !== '[object Object]') {
+                    throw new Error(`Oggetto non convertito: ottenuto "${retrievedNonString}"`);
+                }
+                localStorage.setItem(TEST_NON_STRING_KEY, [1, 2, 3]);
+                retrievedNonString = localStorage.getItem(TEST_NON_STRING_KEY);
+                if (retrievedNonString !== '1,2,3') {
+                    throw new Error(`Array non convertito: ottenuto "${retrievedNonString}"`);
+                }
+                log('✓ Conversione valori non-stringa riuscita', 'success');
+                log('  123 → "123", true → "true", {} → "[object Object]", [1,2,3] → "1,2,3"', 'info');
+                updateStatus('test-localstorage-non-string', 'pass');
+                localStorage.removeItem(TEST_NON_STRING_KEY);
+                break;
+
+            case 20: // Test Namespace Prefix Validation
+                log('🏷️ Test 20: Validazione prefisso namespace', 'info');
+                const validKeys = [
+                    'tpl.lineaIdx',
+                    'tpl.partenzaIdx',
+                    'tpl.arrivoIdx',
+                    'tpl.themeMode',
+                    'tpl.locationEnabled',
+                    'tpl.pwa.dismissTs'
+                ];
+                validKeys.forEach(key => {
+                    localStorage.setItem(key, 'test-value');
+                    const retrievedNamespace = localStorage.getItem(key);
+                    if (retrievedNamespace !== 'test-value') {
+                        throw new Error(`Chiave valida ${key} non salvata correttamente`);
+                    }
+                });
+                const allKeys = [];
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key && key.startsWith('tpl.')) {
+                        allKeys.push(key);
+                    }
+                }
+                const allFoundNamespace = validKeys.every(key => allKeys.includes(key));
+                if (allFoundNamespace) {
+                    log('✓ Validazione namespace riuscita', 'success');
+                    log(`  Trovate ${allKeys.length} chiavi con prefisso 'tpl.'`, 'info');
+                    updateStatus('test-localstorage-namespace', 'pass');
+                } else {
+                    throw new Error('Non tutte le chiavi con prefisso sono state trovate');
+                }
+                validKeys.forEach(key => localStorage.removeItem(key));
+                break;
+
+            case 21: // Test Migration isDark → themeMode
+                log('🔄 Test 21: Migrazione isDark → themeMode', 'info');
+                localStorage.removeItem('tpl.isDark');
+                localStorage.removeItem('tpl.themeMode');
+                localStorage.setItem('tpl.isDark', '1');
+                const oldDarkMode1 = localStorage.getItem('tpl.isDark');
+                const existingThemeMode1 = localStorage.getItem('tpl.themeMode');
+                if (!existingThemeMode1 && oldDarkMode1 !== null) {
+                    const newMode = oldDarkMode1 === '1' ? 'dark' : 'light';
+                    localStorage.setItem('tpl.themeMode', newMode);
+                    localStorage.removeItem('tpl.isDark');
+                }
+                const migratedMode1 = localStorage.getItem('tpl.themeMode');
+                const oldKeyRemoved1 = localStorage.getItem('tpl.isDark');
+                if (migratedMode1 !== 'dark') {
+                    throw new Error(`Migrazione fallita: atteso 'dark', ottenuto '${migratedMode1}'`);
+                }
+                if (oldKeyRemoved1 !== null) {
+                    throw new Error('Vecchia chiave tpl.isDark non rimossa');
+                }
+                localStorage.removeItem('tpl.themeMode');
+                localStorage.setItem('tpl.isDark', '0');
+                const oldDarkMode2 = localStorage.getItem('tpl.isDark');
+                const existingThemeMode2 = localStorage.getItem('tpl.themeMode');
+                if (!existingThemeMode2 && oldDarkMode2 !== null) {
+                    const newMode2 = oldDarkMode2 === '1' ? 'dark' : 'light';
+                    localStorage.setItem('tpl.themeMode', newMode2);
+                    localStorage.removeItem('tpl.isDark');
+                }
+                const migratedMode2 = localStorage.getItem('tpl.themeMode');
+                if (migratedMode2 !== 'light') {
+                    throw new Error(`Migrazione fallita: atteso 'light', ottenuto '${migratedMode2}'`);
+                }
+                log('✓ Migrazione tema riuscita', 'success');
+                log('  isDark="1" → themeMode="dark" ✓', 'info');
+                log('  isDark="0" → themeMode="light" ✓', 'info');
+                log('  Vecchia chiave rimossa ✓', 'info');
+                updateStatus('test-localstorage-migration', 'pass');
+                localStorage.removeItem('tpl.isDark');
+                localStorage.removeItem('tpl.themeMode');
+                break;
+
+            case 22: // Test Timestamp Handling
+                log('⏱️ Test 22: Gestione timestamp', 'info');
+                const TEST_TIMESTAMP_KEY = 'tpl.pwa.dismissTs';
+                const now = Date.now();
+                localStorage.setItem(TEST_TIMESTAMP_KEY, String(now));
+                const storedStr = localStorage.getItem(TEST_TIMESTAMP_KEY);
+                const parsedNum = Number(storedStr);
+                if (isNaN(parsedNum)) {
+                    throw new Error('Timestamp convertito non è un numero valido');
+                }
+                if (parsedNum !== now) {
+                    throw new Error(`Timestamp non corrisponde: atteso ${now}, ottenuto ${parsedNum}`);
+                }
+                const oneDayMs = 24 * 60 * 60 * 1000;
+                const yesterday = now - oneDayMs;
+                localStorage.setItem(TEST_TIMESTAMP_KEY, String(yesterday));
+                const storedYesterday = Number(localStorage.getItem(TEST_TIMESTAMP_KEY));
+                const diff = now - storedYesterday;
+                if (Math.abs(diff - oneDayMs) > 100) {
+                    throw new Error(`Differenza tempo errata: atteso ~${oneDayMs}, ottenuto ${diff}`);
+                }
+                localStorage.setItem(TEST_TIMESTAMP_KEY, 'invalid-timestamp');
+                const invalidParsed = Number(localStorage.getItem(TEST_TIMESTAMP_KEY));
+                if (!isNaN(invalidParsed)) {
+                    throw new Error('Timestamp invalido non rilevato');
+                }
+                localStorage.removeItem(TEST_TIMESTAMP_KEY);
+                const nullTimestamp = localStorage.getItem(TEST_TIMESTAMP_KEY);
+                if (nullTimestamp !== null) {
+                    throw new Error('Chiave rimossa dovrebbe restituire null');
+                }
+                log('✓ Gestione timestamp riuscita', 'success');
+                log('  Salvataggio Date.now() → String ✓', 'info');
+                log('  Conversione String → Number ✓', 'info');
+                log('  Calcolo differenza tempo ✓', 'info');
+                log('  Gestione timestamp invalidi ✓', 'info');
+                updateStatus('test-localstorage-timestamp', 'pass');
+                break;
+
             default:
-                log('⚠️ Per questo test, usa il pulsante "Test LocalStorage" principale', 'warn');
-                log('   (L\'esecuzione singola dei test 4-22 richiede refactoring completo)', 'info');
+                log(`⚠️ Test #${testNumber} non riconosciuto`, 'warn');
+                log('   I test disponibili sono da 1 a 22', 'info');
                 return;
         }
 
@@ -1237,7 +1775,14 @@ async function runSingleStorageTest(testNumber) {
         
         // Update status based on test number
         const testIds = [
-            '', 'test-localstorage-write', 'test-localstorage-read', 'test-localstorage-clear'
+            '', 'test-localstorage-write', 'test-localstorage-read', 'test-localstorage-clear',
+            'test-localstorage-json', 'test-localstorage-array', 'test-localstorage-numbers',
+            'test-localstorage-booleans', 'test-localstorage-complex',
+            'test-localstorage-null', 'test-localstorage-empty', 'test-localstorage-special',
+            'test-localstorage-long', 'test-localstorage-multiple', 'test-localstorage-available',
+            'test-localstorage-quota', 'test-localstorage-performance',
+            'test-localstorage-iterate', 'test-localstorage-invalid-json', 'test-localstorage-non-string',
+            'test-localstorage-namespace', 'test-localstorage-migration', 'test-localstorage-timestamp'
         ];
         if (testIds[testNumber]) {
             updateStatus(testIds[testNumber], 'fail');

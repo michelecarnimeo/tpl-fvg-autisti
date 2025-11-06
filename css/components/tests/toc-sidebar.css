@@ -1,0 +1,219 @@
+/* ========================================
+   TOC SIDEBAR - Indice Rapido Desktop
+   ======================================== */
+
+/* Sidebar fissa a sinistra (solo desktop) */
+.toc-sidebar {
+    position: fixed;
+    left: 0;
+    top: 70px; /* Sotto la navbar */
+    width: 240px;
+    height: calc(100vh - 70px);
+    background: var(--grigio-chiaro, #f0f4f8);
+    border-right: 1px solid var(--grigio-medio, #e5e7eb);
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 100;
+    padding: 1rem 0;
+    display: none; /* Nascosta di default, visibile solo su desktop */
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Mostra sidebar solo su desktop */
+@media (min-width: 1024px) {
+    .toc-sidebar {
+        display: block;
+    }
+    
+    /* Aggiungi padding sinistro al contenuto quando sidebar è visibile */
+    .test-container-with-sidebar {
+        margin-left: 240px;
+        padding-left: 2rem; /* Spazio aggiuntivo tra sidebar e contenuto */
+        max-width: calc(100% - 240px - 2rem); /* Evita che il contenuto si espanda troppo */
+    }
+    
+    /* Aumenta la larghezza massima del contenitore quando sidebar è visibile */
+    .test-container-with-sidebar.test-container {
+        max-width: min(calc(100% - 240px - 2rem), 1200px); /* Più largo, max 1200px */
+    }
+}
+
+/* Header sidebar */
+.toc-sidebar-header {
+    padding: 0 1.25rem 1rem;
+    border-bottom: 1px solid var(--grigio-medio, #e5e7eb);
+    margin-bottom: 0.75rem;
+}
+
+.toc-sidebar-header h3 {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--testo-principale, #1f2937);
+}
+
+/* Navigazione sidebar */
+.toc-sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0 0.75rem;
+}
+
+/* Link sidebar */
+.toc-sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.625rem 0.875rem;
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--testo-principale, #374151);
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+    position: relative;
+    background: transparent;
+    border: 1px solid transparent;
+}
+
+.toc-sidebar-link:hover {
+    background: rgba(0, 0, 0, 0.03);
+    color: var(--turchese, #17b7b1);
+}
+
+/* Icona */
+.toc-icon {
+    font-size: 1.125rem;
+    flex-shrink: 0;
+    width: 24px;
+    text-align: center;
+}
+
+.toc-label {
+    flex: 1;
+    font-weight: 500;
+}
+
+/* Link attivo (sezione visibile) */
+.toc-sidebar-link.active {
+    background: linear-gradient(135deg, rgba(23, 183, 177, 0.1), rgba(0, 153, 170, 0.1));
+    border-color: var(--turchese, #17b7b1);
+    color: var(--turchese, #17b7b1);
+    font-weight: 600;
+    box-shadow: 0 2px 4px rgba(23, 183, 177, 0.1);
+}
+
+.toc-sidebar-link.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--turchese, #17b7b1);
+    border-radius: 0 2px 2px 0;
+}
+
+/* Card completate (Database, LocalStorage, Prezzi) */
+.toc-sidebar-link.toc-completed[data-color="blue"] {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    color: #1e40af;
+}
+
+.toc-sidebar-link.toc-completed[data-color="blue"].active {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2));
+    border-color: #3b82f6;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+}
+
+.toc-sidebar-link.toc-completed[data-color="blue"].active::before {
+    background: #3b82f6;
+}
+
+.toc-sidebar-link.toc-completed[data-color="green"] {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1));
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: #065f46;
+}
+
+.toc-sidebar-link.toc-completed[data-color="green"].active {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.2));
+    border-color: #10b981;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
+}
+
+.toc-sidebar-link.toc-completed[data-color="green"].active::before {
+    background: #10b981;
+}
+
+.toc-sidebar-link.toc-completed[data-color="yellow"] {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.1));
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    color: #92400e;
+}
+
+.toc-sidebar-link.toc-completed[data-color="yellow"].active {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.2));
+    border-color: #f59e0b;
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.2);
+}
+
+.toc-sidebar-link.toc-completed[data-color="yellow"].active::before {
+    background: #f59e0b;
+}
+
+/* Dark mode */
+.dark .toc-sidebar {
+    background: #1f2937;
+    border-right-color: #374151;
+}
+
+.dark .toc-sidebar-header {
+    border-bottom-color: #374151;
+}
+
+.dark .toc-sidebar-header h3 {
+    color: #f3f4f6;
+}
+
+.dark .toc-sidebar-link {
+    color: #d1d5db;
+}
+
+.dark .toc-sidebar-link:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--turchese, #17b7b1);
+}
+
+.dark .toc-sidebar-link.active {
+    background: linear-gradient(135deg, rgba(23, 183, 177, 0.15), rgba(0, 153, 170, 0.15));
+    border-color: var(--turchese, #17b7b1);
+    color: var(--turchese, #17b7b1);
+}
+
+/* Scrollbar personalizzata */
+.toc-sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.toc-sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.toc-sidebar::-webkit-scrollbar-thumb {
+    background: var(--grigio-scuro, #9ca3af);
+    border-radius: 3px;
+}
+
+.toc-sidebar::-webkit-scrollbar-thumb:hover {
+    background: var(--turchese, #17b7b1);
+}
+
+/* Nascondi sezione indice originale su desktop */
+@media (min-width: 1024px) {
+    #section-index {
+        display: none;
+    }
+}
+
