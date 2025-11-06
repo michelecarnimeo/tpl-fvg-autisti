@@ -18,27 +18,8 @@
   <link rel="stylesheet" href="css/components/settings/accessibilita.css">
   <link rel="stylesheet" href="css/components/settings/aspetto.css">
   <link rel="stylesheet" href="css/components/settings/info.css">
-  <link rel="manifest" href="manifest.json">
+  <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="src/tpl.jpg" type="image/jpeg">
-  <style>
-    body {
-      font-family: 'Roboto', Arial, sans-serif;
-    }
-
-    /* Nascondi card su mobile e aggiungi padding */
-    @media (max-width: 768px) {
-      .main-card {
-        background: transparent !important;
-        border: none !important;
-        box-shadow: none !important;
-        backdrop-filter: none !important;
-        -webkit-backdrop-filter: none !important;
-        padding: 1rem !important;
-        margin: 0 !important;
-        border-radius: 0 !important;
-      }
-    }
-  </style>
 </head>
 
 <body>
@@ -176,7 +157,7 @@
               <span class="route-arrow">▼</span>
             </button>
             <!-- Pulsante inversione fermate (nascosto inizialmente) -->
-            <button id="swap-btn" class="swap-btn-small" type="button" title="Inverte partenza e arrivo" onclick="swapRoutes()" style="display: none;">
+            <button id="swap-btn" class="swap-btn-small" type="button" title="Inverte partenza e arrivo" style="display: none;">
               <span>⇅</span>
             </button>
           </div>
@@ -385,22 +366,7 @@
   <script src="js/features/prezzi.js"></script>
   <script src="js/components/modals.js"></script>
   <script src="script.js"></script>
-  
-  <!-- Render del Changelog -->
-  <script>
-    // Aspetta che il DOM sia pronto
-    document.addEventListener('DOMContentLoaded', () => {
-      renderChangelog('changelog-container');
-    });
-  </script>
-  
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js').catch(err => console.error('SW registration failed', err));
-      });
-    }
-  </script>
+  <script src="js/utils/app-init.js"></script>
 
 </body>
 </html>

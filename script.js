@@ -1629,6 +1629,40 @@ function toggleScrollToTopButton() {
 // Event listener per lo scroll
 window.addEventListener('scroll', toggleScrollToTopButton);
 
+// Event listeners per pulsanti (sostituiscono onclick inline)
+// Sostituisce onclick inline per migliorare separazione HTML/JS
+(function initButtonListeners() {
+  function setupButtonListeners() {
+    // Event listener per il click sul pulsante scroll-to-top
+    const scrollToTopButtons = document.querySelectorAll('.scroll-to-top');
+    scrollToTopButtons.forEach(button => {
+      // Aggiungi listener solo se non è già stato aggiunto
+      if (!button.hasAttribute('data-listener-added')) {
+        button.setAttribute('data-listener-added', 'true');
+        button.addEventListener('click', scrollToTop);
+      }
+    });
+    
+    // Event listener per il pulsante swap (solo se presente nella pagina)
+    const swapBtn = document.getElementById('swap-btn');
+    if (swapBtn && !swapBtn.hasAttribute('data-listener-added')) {
+      swapBtn.setAttribute('data-listener-added', 'true');
+      swapBtn.addEventListener('click', () => {
+        if (typeof window.swapRoutes === 'function') {
+          window.swapRoutes();
+        }
+      });
+    }
+  }
+  
+  // Esegui quando il DOM è pronto
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupButtonListeners);
+  } else {
+    setupButtonListeners();
+  }
+})();
+
 window.addEventListener('DOMContentLoaded', async () => {
   await loadData();
   // Inizializza modali dopo il caricamento dei dati

@@ -34,8 +34,14 @@ const STATIC_ASSETS = [
   './js/features/prezzi.js', // Calcolo prezzi
   './js/tests/test-prezzi.js', // Test suite prezzi (solo per test.html)
   './js/components/modals.js', // Modal fermate
+  './js/utils/app-init.js', // Inizializzazione app comune (SW registration, changelog)
+  './js/utils/interface-scale.js', // Sistema scala interfaccia
+  './js/pages/benvenuto.js', // Logica specifica pagina benvenuto
+  './components/settings-modal.html', // Settings modal HTML centralizzato
+  './css/pages/benvenuto.css', // Stili specifici pagina benvenuto
+  './css/pages/fermate.css', // Stili specifici pagina fermate
   './database.json', // DATI CRITICI per offline
-  './manifest.json', // PWA
+  './manifest.webmanifest', // PWA
   './src/tpl.jpg', // Icona app
   './src/logo.png', // Logo
   './src/benvenuto.jpg', // Immagine benvenuto

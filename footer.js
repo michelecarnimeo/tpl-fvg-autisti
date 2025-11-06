@@ -50,7 +50,7 @@ async function initializeFooter() {
     return;
   }
 
-  let version = '1.6.4'; // Fallback default
+  let version = '1.6.5'; // Fallback default
 
   // Prova prima a leggere dal changelog (se già caricato)
   if (typeof changelogData !== 'undefined' && changelogData && changelogData.length > 0) {

@@ -898,6 +898,43 @@
       });
     }
 
+    // Pulsante "Verifica Aggiornamenti"
+    const updateCheckBtn = document.getElementById('pwa-cache-reset');
+    if (updateCheckBtn) {
+      updateCheckBtn.addEventListener('click', () => {
+        console.log('🔄 Pulsante "Verifica Aggiornamenti" cliccato');
+        
+        // Chiudi il modal Impostazioni prima
+        closeSettingsModal();
+        
+        // Aspetta un attimo e poi verifica aggiornamenti
+        setTimeout(() => {
+          if (typeof Updates !== 'undefined' && typeof Updates.checkForUpdates === 'function') {
+            console.log('✅ Chiamata a Updates.checkForUpdates()');
+            Updates.checkForUpdates();
+          } else {
+            console.error('❌ Updates.checkForUpdates non è disponibile');
+          }
+        }, 400);
+      });
+    }
+
+    // Pulsante "Riavvia Ora"
+    const restartAppBtn = document.getElementById('restart-app-btn');
+    if (restartAppBtn) {
+      restartAppBtn.addEventListener('click', () => {
+        console.log('🔄 Pulsante "Riavvia Ora" cliccato');
+        
+        // Chiudi il modal Impostazioni prima
+        closeSettingsModal();
+        
+        // Riavvia l'app dopo un breve delay
+        setTimeout(() => {
+          window.location.reload();
+        }, 300);
+      });
+    }
+
     console.log('✅ Modal Impostazioni inizializzato');
   }
 

@@ -157,9 +157,10 @@ p, span, div, a, button, input, select, textarea, label, li {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;  /* Font di sistema per compatibilità offline */
     
     /* SOTTOSEZIONE 5.2: Gradiente di sfondo bianco sfumato */
-    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 25%, #cbd5e1 50%, #94a3b8 75%, #64748b 100%);
-    background-size: 400% 400%;        /* Dimensione del gradiente per animazione */
-    /* Animazione rimossa - controllata da JavaScript */
+    /* Background base (fallback) */
+    background: #f8fafc;
+    position: relative;               /* Posizionamento relativo per pseudo-elemento */
+    overflow-x: hidden;              /* Nasconde scroll orizzontale */
     
     /* SOTTOSEZIONE 5.3: Testo e layout base */
     color: var(--testo-principale);    /* Colore del testo principale */
@@ -168,8 +169,6 @@ p, span, div, a, button, input, select, textarea, label, li {
     
     /* SOTTOSEZIONE 5.4: Transizioni e posizionamento */
     transition: all 0.3s ease;        /* Transizioni smooth per tutti gli elementi */
-    position: relative;               /* Posizionamento relativo per elementi assoluti */
-    overflow-x: hidden;              /* Nasconde scroll orizzontale */
     
     /* SOTTOSEZIONE 5.5: Layout flexbox */
     margin: 0;                       /* Rimuove margini default */
@@ -185,22 +184,44 @@ p, span, div, a, button, input, select, textarea, label, li {
   /* SOTTOSEZIONE 5.6.1: Animazione controllata da JavaScript */
   /* L'animazione è disabilitata di default per migliorare le performance */
   
-  /* SOTTOSEZIONE 5.6.2: Abilita animazione quando richiesta */
-  body.animation-enabled {
-    animation: gradientShift 20s ease infinite !important;
+  /* SOTTOSEZIONE 5.5: Pseudo-elemento per gradiente animato (ottimizzato) */
+  /* Usa pseudo-elemento con transform invece di background-position per evitare repaint */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 25%, #cbd5e1 50%, #94a3b8 75%, #64748b 100%);
+    background-size: 50% 50%;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
   }
   
-  .dark body.animation-enabled {
-    animation: gradientShift 20s ease infinite !important;
+  body.animation-enabled::before {
+    opacity: 1;
+    animation: gradientShift 20s ease infinite;
+    will-change: transform; /* Ottimizza il rendering dell'animazione */
   }
   
-  /* SOTTOSEZIONE 5.7: Background per modalità scura */
+  /* SOTTOSEZIONE 5.6: Background per modalità scura */
   /* Override del gradiente quando la classe .dark è attiva */
   .dark body {
+    background: #1a202c; /* Fallback colore scuro */
+  }
+  
+  .dark body::before {
     background: linear-gradient(135deg, #1a202c 0%, #2d3748 25%, #4a5568 50%, #718096 75%, #a0aec0 100%);
-    /* Gradiente scuro: grigio scuro → grigio → grigio chiaro */
-    background-size: 400% 400%;        /* Stessa dimensione per animazione */
-    /* Animazione rimossa - controllata da JavaScript */
+    background-size: 50% 50%;
+  }
+  
+  .dark body.animation-enabled::before {
+    opacity: 1;
+    animation: gradientShift 20s ease infinite;
+    will-change: transform; /* Ottimizza il rendering dell'animazione */
   }
   
   /* ========================================
@@ -844,6 +865,20 @@ p, span, div, a, button, input, select, textarea, label, li {
     background: var(--glass-bg-dark);                /* Sfondo scuro */
     border-color: var(--glass-border-dark);          /* Bordo scuro */
     box-shadow: var(--glass-shadow-dark);            /* Ombra scura */
+  }
+  
+  /* SOTTOSEZIONE 8.4.1: Media query mobile - Nascondi card su mobile e aggiungi padding */
+  @media (max-width: 768px) {
+    .main-card {
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      padding: 1rem !important;
+      margin: 0 !important;
+      border-radius: 0 !important;
+    }
   }
   
   /* SOTTOSEZIONE 8.5: Titolo della card */

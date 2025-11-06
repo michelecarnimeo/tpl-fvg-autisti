@@ -14,23 +14,23 @@
     ];
   }
 
-  // Test 1: Caricamento manifest.json
+  // Test 1: Caricamento manifest.webmanifest
   async function testManifestLoad(callbacks) {
     callbacks.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'info');
-    callbacks.log('📱 Test: Caricamento manifest.json', 'info');
+    callbacks.log('📱 Test: Caricamento manifest.webmanifest', 'info');
     callbacks.log('', 'info');
 
     try {
-      callbacks.log('Caricamento manifest.json...', 'info');
-
-      const response = await fetch('manifest.json');
+      callbacks.log('Caricamento manifest.webmanifest...', 'info');
+      
+      const response = await fetch('manifest.webmanifest');
       
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
 
       const manifest = await response.json();
-      callbacks.log('✓ manifest.json caricato con successo', 'success');
+      callbacks.log('✓ manifest.webmanifest caricato con successo', 'success');
 
       // Verifica campi obbligatori
       const requiredFields = ['name', 'short_name', 'start_url', 'display', 'icons'];
@@ -90,9 +90,9 @@
 
     try {
       // Carica manifest
-      const response = await fetch('manifest.json');
+      const response = await fetch('manifest.webmanifest');
       if (!response.ok) {
-        throw new Error(`Impossibile caricare manifest.json: HTTP ${response.status}`);
+        throw new Error(`Impossibile caricare manifest.webmanifest: HTTP ${response.status}`);
       }
 
       const manifest = await response.json();

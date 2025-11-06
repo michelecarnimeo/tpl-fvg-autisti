@@ -1,0 +1,124 @@
+/* ========================================
+   PAGINA: BENVENUTO
+   Stili specifici per la pagina di benvenuto
+   ======================================== */
+
+/* Font principale per la pagina benvenuto */
+body {
+  font-family: 'Roboto', Arial, sans-serif;
+}
+
+/* Stili per l'immagine di benvenuto */
+.welcome-image-container {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.welcome-image {
+  max-width: 100%;
+  height: auto;
+  max-height: 420px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  object-fit: cover;
+}
+
+/* Responsive per mobile */
+@media (max-width: 768px) {
+  .welcome-image {
+    max-height: 320px;
+  }
+  
+  /* Nascondi card su mobile e aggiungi padding */
+  .main-card {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    padding: 1rem !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+  }
+}
+
+/* Spaziatura pulsanti benvenuto */
+.calculate-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+/* Titoli benvenuto con testo opaco */
+.card-title h1 {
+  color: var(--testo-principale);
+  font-weight: 700;
+}
+
+.card-title p {
+  color: var(--testo-principale);
+}
+
+/* Descrizione benvenuto */
+.welcome-description {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin-top: 16px;
+}
+
+/* Dark mode per titoli */
+.dark .card-title h1,
+.dark .card-title p {
+  color: rgba(255, 255, 255, 1) !important;
+}
+
+/* Pulsante Impostazioni in alto a destra */
+.settings-btn-corner {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1000;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--testo-principale);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-size: 1.5rem;
+}
+
+.settings-btn-corner:hover {
+  transform: scale(1.1) rotate(90deg);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.dark .settings-btn-corner {
+  background: var(--glass-bg-dark);
+  border-color: var(--glass-border-dark);
+  color: rgba(255, 255, 255, 1);
+}
+
+@media (max-width: 768px) {
+  .settings-btn-corner {
+    width: 45px;
+    height: 45px;
+    font-size: 1.3rem;
+    top: 0.75rem;
+    right: 0.75rem;
+  }
+}
+
+/* Mostra il modal quando è attivo */
+.settings-modal.active {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+

@@ -209,7 +209,7 @@
       const criticalAssets = [
         './index.html',
         './database.json',
-        './manifest.json',
+        './manifest.webmanifest',
         './style1.css'
       ];
 
@@ -536,7 +536,7 @@
       const criticalAssets = [
         './index.html',
         './database.json',
-        './manifest.json',
+        './manifest.webmanifest',
         './style1.css',
         './script.js'
       ];

@@ -1,6 +1,6 @@
 {
-  "version": "1.6.4",
+  "version": "1.6.5",
   "versionDate": "6 Novembre 2025",
-  "versionTime": "15:00",
-  "updateNotes": "Modularizzazione completa test suite + Fix fermate + Settings modal centralizzato"
+  "versionTime": "16:30",
+  "updateNotes": "Modularizzazione completa codice + Rimozione codice inline + Ottimizzazioni performance"
 }

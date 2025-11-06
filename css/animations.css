@@ -35,16 +35,18 @@
    SEZIONE 2: KEYFRAMES ANIMATIONS
    ======================================== */
 
-/* Animazione gradiente sfondo */
+/* Animazione gradiente sfondo - OTTIMIZZATA per performance */
+/* Usa transform su pseudo-elemento invece di background-position per evitare repaint */
+/* Questa versione è gestita dal compositor layer e non causa repaint */
 @keyframes gradientShift {
   0% {
-    background-position: 0% 50%;
+    transform: translateX(0) translateY(0);
   }
   50% {
-    background-position: 100% 50%;
+    transform: translateX(-50%) translateY(0);
   }
   100% {
-    background-position: 0% 50%;
+    transform: translateX(0) translateY(0);
   }
 }
 

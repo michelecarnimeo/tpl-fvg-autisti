@@ -1,0 +1,803 @@
+﻿<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>TPL FVG - Calcolo Biglietto</title>
+  <!-- Font locali per PWA offline -->
+  <!-- CSS personalizzati -->
+  <link rel="stylesheet" href="style1.css">
+  <!-- Animazioni e transizioni globali -->
+  <link rel="stylesheet" href="css/animations.css">
+  <!-- Componenti CSS modulari -->
+  <link rel="stylesheet" href="css/components/footer.css">
+  <link rel="stylesheet" href="css/components/modals.css">
+  <!-- Settings (struttura modale) -->
+  <link rel="stylesheet" href="css/components/settings/impostazioni.css">
+  <link rel="stylesheet" href="css/components/settings/accessibilita.css">
+  <link rel="stylesheet" href="css/components/settings/aspetto.css">
+  <link rel="stylesheet" href="css/components/settings/info.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="src/tpl.jpg" type="image/jpeg">
+  <style>
+    body {
+      font-family: 'Roboto', Arial, sans-serif;
+    }
+
+    /* Nascondi card su mobile e aggiungi padding */
+    @media (max-width: 768px) {
+      .main-card {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        padding: 1rem !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="container">
+      <div class="navbar-content">
+        <a href="index.html" class="navbar-brand-link">
+          <div class="navbar-brand">
+            <div class="navbar-logo-wrapper">
+              <img src="src/logo.png" alt="TPL" class="navbar-logo navbar-logo-default" />
+              <img src="src/logo1.png" alt="TPL" class="navbar-logo navbar-logo-hover" />
+            </div>
+            <div class="navbar-title">
+              <div class="logo-acronym">
+                <div>tpl</div>
+                <div>fvg</div>
+              </div>
+              <div class="logo-text">
+                <div>trasporto</div>
+                <div>pubblico</div>
+                <div>locale</div>
+              </div>
+            </div>
+          </div>
+        </a>
+        <!-- Hamburger button (mobile only) -->
+        <button id="hamburger-toggle" class="hamburger-toggle" aria-label="Menu">
+          <span class="hamburger-icon"></span>
+        </button>
+        
+        <nav class="navbar-nav">
+          <a href="index.html" class="nav-link active">Home</a>
+          <a href="fermate.html" class="nav-link">Fermate</a>
+          <a href="prezzi.html" class="nav-link">Prezzi</a>
+          <button id="desktop-settings-btn" class="nav-settings-btn" title="Impostazioni">
+            <span class="settings-icon">⚙️</span>
+            <span class="settings-text">Impostazioni</span>
+          </button>
+          
+          <!-- Pulsanti individuali (nascosti su desktop, usati solo via JS per compatibilità) -->
+          <button id="darkmode-toggle" class="dark-mode-toggle navbar-legacy-btn" title="Darkmode" style="display: none;">
+            <span>🌙</span>
+          </button>
+          <button class="animation-toggle navbar-legacy-btn" id="animationToggle" title="Toggle animazione sfondo" style="display: none;">
+            🎬
+          </button>
+          <button id="cache-reset" class="cache-reset-btn navbar-legacy-btn" title="Aggiorna o Riavvia" style="display: none;">
+            <span id="cache-icon">🔄</span>
+          </button>
+          <div class="font-size-group navbar-legacy-btn" style="display: none;">
+            <button id="font-size-small" class="font-size-btn active" data-size="normal" title="Testo normale">
+              <span>A</span>
+            </button>
+            <button id="font-size-medium" class="font-size-btn" data-size="large" title="Testo grande">
+              <span>A</span>
+            </button>
+            <button id="font-size-large" class="font-size-btn" data-size="xlarge" title="Testo molto grande">
+              <span>A</span>
+            </button>
+          </div>
+        </nav>
+      </div>
+    </div>
+    
+    <!-- Mobile menu overlay -->
+    <div id="mobile-menu-overlay" class="mobile-menu-overlay"></div>
+    
+    <!-- Mobile menu drawer -->
+    <div id="mobile-menu" class="mobile-menu">
+      <div class="mobile-menu-header">
+        <span class="mobile-menu-title">Menu</span>
+        <button id="mobile-menu-close" class="mobile-menu-close" aria-label="Chiudi menu">×</button>
+      </div>
+      <nav class="mobile-menu-nav">
+        <a href="index.html" class="mobile-nav-link">
+          <span class="mobile-nav-icon">🏠</span>
+          <span>Home</span>
+        </a>
+        <a href="fermate.html" class="mobile-nav-link">
+          <span class="mobile-nav-icon">🚌</span>
+          <span>Fermate</span>
+        </a>
+        <a href="prezzi.html" class="mobile-nav-link">
+          <span class="mobile-nav-icon">💰</span>
+          <span>Prezzi</span>
+        </a>
+        <button id="open-settings" class="mobile-nav-link">
+          <span class="mobile-nav-icon">⚙️</span>
+          <span>Impostazioni</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+
+  <!-- Main App -->
+  <main id="main-app" class="main-content">
+    <div class="container">
+      <div class="main-card">
+        <div class="card-title">
+          <p class="subtitle">Seleziona una linea per iniziare</p>
+        </div>
+
+      <div class="form-group">
+        <button id="linea-btn" class="route-button linea-select-btn">
+          <span id="linea-text">Seleziona una linea</span>
+          <span class="route-arrow">▼</span>
+        </button>
+      </div>
+      
+      <!-- Divisore tra select e route -->
+      <hr class="route-divider">
+      
+      <div class="route-section">
+        <div class="route-label">
+          <div class="route-icon"><span>Partenza</span></div>
+          <div class="route-button-container">
+            <button id="partenza-btn" class="route-button" disabled>
+              <span id="partenza-text">Seleziona la partenza</span>
+              <span class="route-arrow">▼</span>
+            </button>
+            <!-- Pulsante geolocalizzazione (nascosto inizialmente) -->
+            <button id="location-btn" class="location-btn-small" style="display: none;" title="Rileva posizione e ordina fermate per distanza">
+              <span id="location-icon">📍</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="route-label">
+          <div class="route-icon"><span>Destinazione</span></div>
+          <div class="route-button-container">
+            <button id="arrivo-btn" class="route-button" disabled>
+              <span id="arrivo-text">Seleziona la destinazione</span>
+              <span class="route-arrow">▼</span>
+            </button>
+            <!-- Pulsante inversione fermate (nascosto inizialmente) -->
+            <button id="swap-btn" class="swap-btn-small" type="button" title="Inverte partenza e arrivo" onclick="swapRoutes()" style="display: none;">
+              <span>⇅</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pulsante reset -->
+      <div class="reset-section">
+        <button id="reset-btn" class="reset-btn" type="button" title="Resetta tutto e riparti da capo">
+          Riparti da capo
+        </button>
+      </div>
+
+      <!-- Divisore tra reset e price card -->
+      <hr class="reset-divider">
+
+      <!-- Sezione prezzo divisa in due parti con colori distinti -->
+      <div class="price-card inactive" id="price-card">
+        <!-- Codice biglietto -->
+        <div class="price-section">
+          <div class="price-label">Codice biglietto</div>
+          <div id="summary-codice" class="price-code">-</div>
+        </div>
+        
+        <!-- Divisore -->
+        <div class="price-divider"></div>
+        
+        <!-- Costo biglietto -->
+        <div class="price-section">
+          <div class="price-label">Costo del biglietto</div>
+          <div id="summary-prezzo" class="price-value">-</div>
+        </div>
+        
+        <div id="prezzo-errore" class="price-error" style="display: none;">
+          ⚠️ Prezzo non disponibile per questa tratta
+        </div>
+      </div>
+
+      <!-- Banner installazione PWA posizionato sotto la card prezzi -->
+      <div id="pwa-install-banner" class="pwa-install-banner" style="display: none;">
+        <div class="pwa-install-content">
+          <div class="pwa-install-text">
+            <span class="pwa-install-title">📱 Installa l'app</span>
+            <span class="pwa-install-subtitle">Accedi più velocemente e offline</span>
+          </div>
+          <div class="pwa-install-actions">
+            <button id="pwa-install-later" class="pwa-btn pwa-btn-secondary" type="button">Più tardi</button>
+            <button id="pwa-install-button" class="pwa-btn pwa-btn-primary" type="button">Installa</button>
+          </div>
+        </div>
+        <div id="pwa-ios-hint" class="pwa-ios-hint" style="display: none;">
+          <div class="ios-hint-title">📲 Come installare su iPhone/iPad:</div>
+          <ol class="ios-hint-steps">
+            <li><span class="step-number">1.</span> Tocca il pulsante <strong>Condividi</strong> <span class="ios-share-icon">📤</span> in basso (Safari)</li>
+            <li><span class="step-number">2.</span> Scorri e seleziona <strong>"Aggiungi a Home"</strong> <span class="ios-plus-icon">➕</span></li>
+            <li><span class="step-number">3.</span> Tocca <strong>"Aggiungi"</strong> in alto a destra ✅</li>
+          </ol>
+          <div class="ios-hint-note">💡 L'app apparirà sulla tua schermata Home come un'app nativa</div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- PWA Brand Header (in alto) -->
+  <div id="pwa-brand-header" class="pwa-brand-header" style="display: none;">
+    <div class="pwa-logo-wrapper">
+      <img src="src/logo.png" alt="TPL" class="pwa-logo-img pwa-logo-default">
+      <img src="src/logo1.png" alt="TPL" class="pwa-logo-img pwa-logo-hover">
+    </div>
+    <div class="pwa-brand-title">
+      <div class="pwa-logo-acronym">
+        <div>tpl</div>
+        <div>fvg</div>
+      </div>
+      <div class="pwa-logo-text">
+        <div>trasporto</div>
+        <div>pubblico</div>
+        <div>locale</div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- PWA Bottom Navigation (in basso) -->
+  <nav id="pwa-bottom-nav" class="pwa-bottom-nav" style="display: none;">
+    <a href="index.html" class="pwa-nav-item active" data-page="home">
+      <svg class="pwa-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+      </svg>
+      <span class="pwa-nav-label">Home</span>
+    </a>
+    
+    <a href="fermate.html" class="pwa-nav-item" data-page="fermate">
+      <svg class="pwa-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+        <circle cx="15.5" cy="8.5" r="1.5"></circle>
+        <path d="M6 16h12"></path>
+      </svg>
+      <span class="pwa-nav-label">Fermate</span>
+    </a>
+    
+    <a href="prezzi.html" class="pwa-nav-item" data-page="prezzi">
+      <svg class="pwa-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="1" x2="12" y2="23"></line>
+        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+      </svg>
+      <span class="pwa-nav-label">Prezzi</span>
+    </a>
+    
+    <button class="pwa-nav-item" data-page="settings" id="pwa-settings-btn">
+      <svg class="pwa-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="3"></circle>
+        <path d="M12 1v6m0 6v6m5.2-13.2l-4.2 4.2m0 6l4.2 4.2M1 12h6m6 0h6m-13.2 5.2l4.2-4.2m0-6l-4.2-4.2"></path>
+      </svg>
+      <span class="pwa-nav-label">Impostazioni</span>
+    </button>
+  </nav>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <!-- Footer generato dinamicamente da footer.js -->
+  </footer>
+
+  <!-- Modal selezione fermate -->
+  <div id="fermate-modal" class="fermate-modal">
+    <div class="fermate-modal-content">
+      <div class="fermate-modal-header">
+        <h3 id="fermate-modal-title">Seleziona fermata</h3>
+        <div class="fermate-modal-actions">
+          <button id="fermate-modal-close" class="fermate-modal-close" aria-label="Chiudi">×</button>
+        </div>
+      </div>
+      <div class="fermate-modal-body">
+        <!-- Barra di ricerca -->
+        <div class="fermate-search-container">
+          <div class="fermate-search-box">
+            <span class="fermate-search-icon">🔍</span>
+            <input type="text" id="fermate-search-input" class="fermate-search-input" placeholder="Cerca per nome..." />
+            <button id="fermate-clear-search" class="fermate-clear-btn" style="display: none;">✕</button>
+          </div>
+        </div>
+        
+        <!-- Pulsante geolocalizzazione -->
+        <button id="fermate-location-btn" class="fermate-location-btn-inline" title="Rileva fermata più vicina">
+          <span id="fermate-location-icon">📍</span>
+          <span id="fermate-location-text">Rileva fermata più vicina</span>
+        </button>
+        
+        <!-- Lista fermate -->
+        <div class="fermate-list-container">
+          <ul id="fermate-modal-list" class="fermate-modal-list">
+            <!-- Fermate generate dinamicamente -->
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal selezione linee -->
+  <div id="linee-modal" class="fermate-modal">
+    <div class="fermate-modal-content">
+      <div class="fermate-modal-header">
+        <h3 id="linee-modal-title">Seleziona linea</h3>
+        <div class="fermate-modal-actions">
+          <button id="linee-modal-close" class="fermate-modal-close" aria-label="Chiudi">×</button>
+        </div>
+      </div>
+      <div class="fermate-modal-body">
+        <!-- Lista linee (senza ricerca, solo 10 linee) -->
+        <div class="fermate-list-container">
+          <ul id="linee-modal-list" class="fermate-modal-list">
+            <!-- Linee generate dinamicamente -->
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal conferma riavvio app -->
+  <div id="cache-modal" class="cache-modal">
+    <div class="cache-modal-content">
+      <div class="cache-modal-header">
+        <h3 id="modal-title">🔄 Verifica Aggiornamenti</h3>
+      </div>
+      <div class="cache-modal-body">
+        <p id="modal-message">Verifico se ci sono aggiornamenti disponibili...</p>
+        <p class="cache-modal-warning" id="modal-warning" style="display: none;"></p>
+      </div>
+      <div class="cache-modal-footer">
+        <button id="cache-cancel" class="cache-modal-btn cache-modal-cancel">Annulla</button>
+        <button id="cache-confirm" class="cache-modal-btn cache-modal-confirm" style="display: none;">Riavvia e Aggiorna (v1.2)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Impostazioni -->
+  <div id="settings-modal" class="settings-modal">
+    <div class="settings-modal-content">
+      <!-- Header -->
+      <div class="settings-modal-header">
+        <h3>⚙️ Impostazioni</h3>
+        <button id="settings-modal-close" class="settings-modal-close" aria-label="Chiudi">×</button>
+      </div>
+      
+      <!-- Tabs -->
+      <div class="settings-tabs">
+        <button class="settings-tab active" data-tab="appearance">
+          <span class="tab-icon">👁️</span>
+          <span>Aspetto</span>
+        </button>
+        <button class="settings-tab" data-tab="accessibility">
+          <span class="tab-icon">♿</span>
+          <span>Accessibilità</span>
+        </button>
+        <button class="settings-tab" data-tab="info">
+          <span class="tab-icon">ℹ️</span>
+          <span>Info</span>
+        </button>
+      </div>
+      
+      <!-- Tab Content -->
+      <div class="settings-content">
+        
+        <!-- Tab Aspetto -->
+        <div class="settings-tab-content active fade-in" data-content="appearance">
+          <div class="settings-section">
+            
+            <!-- Theme Mode -->
+            <div class="settings-item settings-item-vertical">
+              <div class="settings-item-info">
+                <span class="settings-item-icon">🌓</span>
+                <div class="settings-item-text">
+                  <div class="settings-item-label">Tema</div>
+                  <div class="settings-item-description">Scegli l'aspetto dell'app</div>
+                </div>
+              </div>
+              <div class="settings-theme-options">
+                <label class="settings-theme-option">
+                  <input type="radio" name="theme-mode" value="system" id="theme-system" checked>
+                  <span class="theme-option-card">
+                    <span class="theme-option-icon">⚙️</span>
+                    <span class="theme-option-label">Sistema</span>
+                    <span class="theme-option-description">Segue il dispositivo</span>
+                  </span>
+                </label>
+                <label class="settings-theme-option">
+                  <input type="radio" name="theme-mode" value="light" id="theme-light">
+                  <span class="theme-option-card">
+                    <span class="theme-option-icon">☀️</span>
+                    <span class="theme-option-label">Chiara</span>
+                    <span class="theme-option-description">Sempre chiara</span>
+                  </span>
+                </label>
+                <label class="settings-theme-option">
+                  <input type="radio" name="theme-mode" value="dark" id="theme-dark">
+                  <span class="theme-option-card">
+                    <span class="theme-option-icon">🌙</span>
+                    <span class="theme-option-label">Scura</span>
+                    <span class="theme-option-description">Sempre scura</span>
+                  </span>
+                </label>
+              </div>
+            </div>
+            
+            <!-- Animazione Sfondo -->
+            <div class="settings-item">
+              <div class="settings-item-info">
+                <span class="settings-item-icon">🎬</span>
+                <div class="settings-item-text">
+                  <div class="settings-item-label">Animazione sfondo</div>
+                  <div class="settings-item-description">Gradiente animato nello sfondo</div>
+                </div>
+              </div>
+              <label class="settings-toggle">
+                <input type="checkbox" id="settings-animation">
+                <span class="settings-toggle-slider"></span>
+              </label>
+            </div>
+            
+            <!-- Contrasto Alto -->
+            <div class="settings-item">
+              <div class="settings-item-info">
+                <span class="settings-item-icon">👁️</span>
+                <div class="settings-item-text">
+                  <div class="settings-item-label">Contrasto elevato</div>
+                  <div class="settings-item-description">Migliora leggibilità in pieno sole</div>
+                </div>
+              </div>
+              <label class="settings-toggle">
+                <input type="checkbox" id="settings-high-contrast">
+                <span class="settings-toggle-slider"></span>
+              </label>
+            </div>
+            
+            <!-- Riduci Animazioni -->
+            <div class="settings-item">
+              <div class="settings-item-info">
+                <span class="settings-item-icon">⚡</span>
+                <div class="settings-item-text">
+                  <div class="settings-item-label">Riduci animazioni</div>
+                  <div class="settings-item-description">Disabilita transizioni ed effetti visivi</div>
+                </div>
+              </div>
+              <label class="settings-toggle">
+                <input type="checkbox" id="settings-reduce-motion" aria-label="Attiva/disattiva riduzione animazioni">
+                <span class="settings-toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Tab Accessibilità -->
+        <div class="settings-tab-content" data-content="accessibility">
+          <div class="settings-section">
+            
+            <!-- Dimensione Testo -->
+            <div class="settings-item settings-item-vertical">
+              <div class="settings-item-info">
+                <span class="settings-item-icon">A</span>
+                <div class="settings-item-text">
+                  <div class="settings-item-label">Dimensione testo</div>
+                  <div class="settings-item-description">Scegli la dimensione più comoda</div>
+                </div>
+              </div>
+              <div class="settings-font-buttons">
+                <button class="settings-font-btn active" data-size="normal">
+                  <span class="font-sample">A</span>
+                  <span class="font-label">Normale</span>
+                </button>
+                <button class="settings-font-btn" data-size="large">
+                  <span class="font-sample">A</span>
+                  <span class="font-label">Grande</span>
+                </button>
+                <button class="settings-font-btn" data-size="xlarge">
+                  <span class="font-sample">A</span>
+                  <span class="font-label">Molto Grande</span>
+                </button>
+              </div>
+            </div>
+            
+            <!-- Pulsanti Grandi -->
+            <div class="settings-item">
+              <div class="settings-item-info">
+                <span class="settings-item-icon">👆</span>
+                <div class="settings-item-text">
+                  <div class="settings-item-label">Modalità touch</div>
+                  <div class="settings-item-description">Pulsanti più grandi e spaziati</div>
+                </div>
+              </div>
+              <label class="settings-toggle">
+                <input type="checkbox" id="settings-touch-friendly">
+                <span class="settings-toggle-slider"></span>
+              </label>
+            </div>
+            
+            <!-- Feedback Aptico -->
+            <div class="settings-item">
+              <div class="settings-item-info">
+                <span class="settings-item-icon">📳</span>
+                <div class="settings-item-text">
+                  <div class="settings-item-label">Feedback aptico</div>
+                  <div class="settings-item-description">Vibrazione su azioni e conferme</div>
+                </div>
+              </div>
+              <label class="settings-toggle">
+                <input type="checkbox" id="settings-haptic-feedback" aria-label="Attiva/disattiva feedback aptico">
+                <span class="settings-toggle-slider"></span>
+              </label>
+            </div>
+            
+            <!-- Keep Screen On -->
+            <div class="settings-item">
+              <div class="settings-item-info">
+                <span class="settings-item-icon">☀️</span>
+                <div class="settings-item-text">
+                  <div class="settings-item-label">Schermo sempre attivo</div>
+                  <div class="settings-item-description">Impedisce lo spegnimento automatico</div>
+                </div>
+              </div>
+              <label class="settings-toggle">
+                <input type="checkbox" id="settings-keep-screen-on" aria-label="Attiva/disattiva schermo sempre attivo">
+                <span class="settings-toggle-slider"></span>
+              </label>
+            </div>
+            
+            <!-- Spaziatura Extra -->
+            <div class="settings-item">
+              <div class="settings-item-info">
+                <span class="settings-item-icon">📏</span>
+                <div class="settings-item-text">
+                  <div class="settings-item-label">Spaziatura extra</div>
+                  <div class="settings-item-description">Pulsanti più grandi e spaziati</div>
+                </div>
+              </div>
+              <label class="settings-toggle">
+                <input type="checkbox" id="settings-extra-spacing" aria-label="Attiva/disattiva spaziatura extra">
+                <span class="settings-toggle-slider"></span>
+              </label>
+            </div>
+            
+            <!-- Layout Compatto -->
+            <div class="settings-item">
+              <div class="settings-item-info">
+                <span class="settings-item-icon">📐</span>
+                <div class="settings-item-text">
+                  <div class="settings-item-label">Layout compatto</div>
+                  <div class="settings-item-description">Riduce spazi per mostrare più contenuto</div>
+                </div>
+              </div>
+              <label class="settings-toggle">
+                <input type="checkbox" id="settings-compact-layout" aria-label="Attiva/disattiva layout compatto">
+                <span class="settings-toggle-slider"></span>
+              </label>
+            </div>
+            
+            <!-- Filtro Luce Blu -->
+            <div class="settings-item">
+              <div class="settings-item-info">
+                <span class="settings-item-icon">🔵</span>
+                <div class="settings-item-text">
+                  <div class="settings-item-label">Filtro luce blu</div>
+                  <div class="settings-item-description">Riduce affaticamento occhi (uso notturno)</div>
+                </div>
+              </div>
+              <label class="settings-toggle">
+                <input type="checkbox" id="settings-blue-light-filter" aria-label="Attiva/disattiva filtro luce blu">
+                <span class="settings-toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+          
+          <!-- Sezione Dimensione Interfaccia -->
+          <div class="settings-section">
+            <h4 class="settings-section-title">🔍 Dimensione Interfaccia</h4>
+            
+            <div class="scale-preset-selector">
+              <div class="scale-preset-description">
+                Scala l'intera interfaccia della web app
+              </div>
+              
+              <div class="scale-preset-options">
+                <label class="scale-preset-option">
+                  <input type="radio" name="interface-scale" value="75" id="scale-75">
+                  <div class="scale-preset-card">
+                    <div class="scale-preset-info">
+                      <div class="scale-preset-name">Molto Compatta</div>
+                      <div class="scale-preset-percent">75%</div>
+                    </div>
+                  </div>
+                </label>
+                
+                <label class="scale-preset-option">
+                  <input type="radio" name="interface-scale" value="85" id="scale-85">
+                  <div class="scale-preset-card">
+                    <div class="scale-preset-info">
+                      <div class="scale-preset-name">Compatta</div>
+                      <div class="scale-preset-percent">85%</div>
+                    </div>
+                  </div>
+                </label>
+                
+                <label class="scale-preset-option">
+                  <input type="radio" name="interface-scale" value="100" id="scale-100" checked>
+                  <div class="scale-preset-card">
+                    <div class="scale-preset-info">
+                      <div class="scale-preset-name">Normale</div>
+                      <div class="scale-preset-percent">100%</div>
+                    </div>
+                  </div>
+                </label>
+                
+                <label class="scale-preset-option">
+                  <input type="radio" name="interface-scale" value="115" id="scale-115">
+                  <div class="scale-preset-card">
+                    <div class="scale-preset-info">
+                      <div class="scale-preset-name">Grande</div>
+                      <div class="scale-preset-percent">115%</div>
+                    </div>
+                  </div>
+                </label>
+                
+                <label class="scale-preset-option">
+                  <input type="radio" name="interface-scale" value="125" id="scale-125">
+                  <div class="scale-preset-card">
+                    <div class="scale-preset-info">
+                      <div class="scale-preset-name">Molto Grande</div>
+                      <div class="scale-preset-percent">125%</div>
+                    </div>
+                  </div>
+                </label>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+        
+        <!-- Tab Info e Aggiornamenti -->
+        <div class="settings-tab-content" data-content="info">
+          <div class="settings-section">
+            
+            <!-- Informazioni App -->
+            <div class="info-card">
+              <div class="info-header">
+                <img src="src/logo.png" alt="TPL FVG" class="info-logo">
+                <div class="info-title">
+                  <h3>TPL FVG Autisti</h3>
+                  <p class="info-version">Versione ...</p>
+                  <p class="info-date">30 Ottobre 2025 - 15:45</p>
+                </div>
+              </div>
+              
+              <div class="info-description">
+                <p>App per calcolare i prezzi dei biglietti e visualizzare le fermate del trasporto pubblico locale del Friuli Venezia Giulia.</p>
+              </div>
+              
+              <div class="info-features">
+                <div class="info-feature">
+                  <span class="info-feature-icon">💰</span>
+                  <span>Calcolo prezzi biglietti</span>
+                </div>
+                <div class="info-feature">
+                  <span class="info-feature-icon">🚌</span>
+                  <span>Elenco fermate per linea</span>
+                </div>
+                <div class="info-feature">
+                  <span class="info-feature-icon">📱</span>
+                  <span>Installabile come PWA</span>
+                </div>
+                <div class="info-feature">
+                  <span class="info-feature-icon">🌙</span>
+                  <span>Modalità scura</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Verifica Aggiornamenti -->
+            <div class="info-card update-check-card">
+              <div class="update-check-header">
+                <div class="update-check-icon rotate-slow">🔄</div>
+                <div class="update-check-text">
+                  <h4 class="update-check-title">Verifica Aggiornamenti</h4>
+                  <p class="update-check-description">Controlla se è disponibile una nuova versione dell'app</p>
+                </div>
+              </div>
+              <button id="pwa-cache-reset" class="update-check-btn">
+                Verifica Aggiornamenti
+              </button>
+            </div>
+            
+            <!-- Riavvia App -->
+            <div class="info-card update-check-card">
+              <div class="update-check-header">
+                <div class="update-check-icon rotate-slow">📲</div>
+                <div class="update-check-text">
+                  <h4 class="update-check-title">Riavvia App</h4>
+                  <p class="update-check-description">Riavvia l'applicazione per applicare le modifiche</p>
+                </div>
+              </div>
+              <button id="restart-app-btn" class="update-check-btn restart-app-btn">
+                Riavvia Ora
+              </button>
+            </div>
+            
+            <!-- Aggiornamenti Recenti -->
+            <div class="info-card">
+              <h4 class="info-card-title">📋 Aggiornamenti Recenti</h4>
+              
+              <!-- Contenitore dinamico per il changelog -->
+              <div id="changelog-container">
+                <!-- Il changelog verrà inserito qui da changelog.js -->
+              </div>
+            </div>
+            
+            <!-- Link Utili -->
+            <div class="info-card">
+              <h4 class="info-card-title">🔗 Link Utili</h4>
+              
+              <a href="https://t.me/+eoJ9nYFFrjphMzVk" target="_blank" class="info-link external-link">
+                <span class="info-link-icon">📢</span>
+                <span>Canale Telegram - Avvisi & Aggiornamenti</span>
+                <span>↗</span>
+              </a>
+              
+              <a href="test.html" class="info-link">
+                <span class="info-link-icon">🧪</span>
+                <span>Pagina Test Funzionalità</span>
+                <span>→</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Script principale -->
+  <script src="footer.js"></script>
+  <script src="changelog.js"></script>
+  <script src="js/features/updates.js"></script>
+  <script src="js/features/settings.js"></script>
+  <script src="js/features/prezzi.js"></script>
+  <script src="js/components/modals.js"></script>
+  <script src="script.js"></script>
+  
+  <!-- Render del Changelog -->
+  <script>
+    // Aspetta che il DOM sia pronto
+    document.addEventListener('DOMContentLoaded', () => {
+      renderChangelog('changelog-container');
+    });
+  </script>
+  
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(err => console.error('SW registration failed', err));
+      });
+    }
+  </script>
+
+</body>
+</html>

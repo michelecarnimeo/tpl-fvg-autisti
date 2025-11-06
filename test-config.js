@@ -72,7 +72,7 @@ const TEST_CONFIG = {
     // Endpoint da testare
     endpoints: {
         database: './database.json',
-        manifest: './manifest.json',
+        manifest: './manifest.webmanifest',
         tariffarioAggiornato: './tariffario aggiornato.json' // opzionale
     }
 };
