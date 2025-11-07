@@ -50,7 +50,7 @@ async function initializeFooter() {
     return;
   }
 
-  let version = '1.6.5'; // Fallback default
+  let version = '1.6.7'; // Fallback default
 
   // Prova prima a leggere dal changelog (se già caricato)
   if (typeof changelogData !== 'undefined' && changelogData && changelogData.length > 0) {
@@ -61,7 +61,7 @@ async function initializeFooter() {
     try {
       const response = await fetch('version.json');
       const versionData = await response.json();
-      version = versionData.version || '1.6.0';
+      version = versionData.version || '1.6.7';
       console.log('✅ Versione letta da version.json - v' + version);
     } catch (error) {
       console.warn('⚠️ Impossibile caricare version.json, uso versione fallback');

@@ -286,6 +286,7 @@ body {
 - Modal cache (verifica aggiornamenti)
 - Modal fermate (selezione fermate)
 - Modal linee (selezione linee)
+- **Modal notifica** (`.notification-modal`) - Modal riutilizzabile per messaggi e conferme
 - Modal overlay, content, header, body, footer (struttura base)
 - Animazioni apertura/chiusura
 - Stili per barra ricerca, liste, toggle switch
@@ -295,7 +296,10 @@ body {
 **Dipendenze:** `variables.css`, `animations.css`  
 **Usato da:** Tutte le pagine (index.html, fermate.html, prezzi.html, benvenuto.html, test.html)
 
-**Note:** Il modal impostazioni è stato modularizzato in `components/settings/` (vedi sotto)
+**Note:**
+
+- Il modal impostazioni è stato modularizzato in `components/settings/` (vedi sotto)
+- Il modal notifica (`notification-modal`) sostituisce `alert()` nativo del browser
 
 ---
 
@@ -536,5 +540,5 @@ const STATIC_ASSETS = [
 
 ---
 
-**Ultimo aggiornamento**: 1 Novembre 2025  
-**Versione progetto**: 1.5.9 (modularizzazione test completata)
+**Ultimo aggiornamento**: 6 Novembre 2025  
+**Versione progetto**: 1.6.7 (modularizzazione test completata)

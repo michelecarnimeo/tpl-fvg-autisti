@@ -255,13 +255,13 @@
                 <span class="toc-icon">📦</span>
                 <span class="toc-label">Database</span>
             </a>
-            <a href="#section-localstorage" class="toc-sidebar-link toc-completed" data-section="section-localstorage" data-color="green">
-                <span class="toc-icon">💾</span>
-                <span class="toc-label">LocalStorage</span>
-            </a>
             <a href="#section-darkmode" class="toc-sidebar-link" data-section="section-darkmode">
                 <span class="toc-icon">🌙</span>
                 <span class="toc-label">Dark Mode</span>
+            </a>
+            <a href="#section-storage" class="toc-sidebar-link toc-completed" data-section="section-storage" data-color="green">
+                <span class="toc-icon">💾</span>
+                <span class="toc-label">Storage Module</span>
             </a>
             <a href="#section-prezzi" class="toc-sidebar-link toc-completed" data-section="section-prezzi" data-color="yellow">
                 <span class="toc-icon">💰</span>
@@ -314,11 +314,10 @@
                     Geolocalizzazione</a>
                 <a href="#section-database" class="toc-link" data-section="section-database" data-label="📦 Database">📦
                     Database</a>
-                <a href="#section-localstorage" class="toc-link" data-section="section-localstorage"
-                    data-label="💾 LocalStorage">💾
-                    LocalStorage</a>
                 <a href="#section-darkmode" class="toc-link" data-section="section-darkmode" data-label="🌙 Dark Mode">🌙
                     Dark Mode</a>
+                <a href="#section-storage" class="toc-link" data-section="section-storage" data-label="💾 Storage Module">💾
+                    Storage Module</a>
                 <a href="#section-prezzi" class="toc-link" data-section="section-prezzi" data-label="💰 Prezzi">💰
                     Prezzi</a>
                 <a href="#section-settings" class="toc-link" data-section="section-settings" data-label="⚙️ Settings">⚙️
@@ -1176,22 +1175,34 @@
         </div>
 
         <!-- Test 2: LocalStorage -->
-        <div id="section-localstorage" class="test-section has-module-header">
-            <!-- Header modulo: LocalStorage -->
-            <div class="test-header" data-module="localstorage">
-                <div class="test-header-content">
-                    <div class="test-header-left">
-                        <div class="test-title">💾 Test LocalStorage</div>
-                        <div class="test-stats">
-                            <span>✅ <span id="storage-header-passed">0</span></span>
-                            <span>❌ <span id="storage-header-failed">0</span></span>
-                            <span>⏱️ <span id="storage-header-time">0ms</span></span>
-                        </div>
-                    </div>
-                    <div class="test-header-right">
-                        <div class="test-progress" id="storage-header-progress">0/22</div>
-                        <span class="test-header-status status-pending status-pending-small" id="storage-header-status">In attesa</span>
-                    </div>
+        <!-- Test 3: Dark Mode -->
+        <div id="section-darkmode" class="test-section">
+            <h2>🌙 Test Dark Mode</h2>
+            <div class="test-item" id="test-darkmode-toggle">
+                <span>Toggle dark mode</span>
+                <span class="test-status pending">In attesa</span>
+            </div>
+            <div class="test-item" id="test-darkmode-persistence">
+                <span>Persistenza preferenza</span>
+                <span class="test-status pending">In attesa</span>
+            </div>
+            <button class="test-button" onclick="testDarkMode()">🧪 Test Dark Mode</button>
+            <div class="test-output" id="output-darkmode" style="display:none;"></div>
+        </div>
+
+        <!-- Test 3.5: Storage Module (js/core/storage.js) -->
+        <div id="section-storage" class="test-section has-module-header">
+            <!-- Header modulo: Storage -->
+            <div class="test-header" data-module="storage">
+                    <div class="test-header-top">
+                    <div class="test-title">💾 Test Storage Module</div>
+                    <div class="test-progress" id="storage-header-progress">0/24</div>
+                    <span class="test-header-status status-pending" id="storage-header-status">In attesa</span>
+                </div>
+                <div class="test-stats">
+                    <span>✅ <span id="storage-header-passed">0</span></span>
+                    <span>❌ <span id="storage-header-failed">0</span></span>
+                    <span>⏱️ <span id="storage-header-time">0ms</span></span>
                 </div>
                 <div class="test-timestamp" id="storage-header-timestamp" data-ts="">-</div>
                 <div class="test-bar">
@@ -1211,203 +1222,196 @@
                             <div id="storage-group1-subtitle" class="test-group-subtitle state-pending">3 test da completare</div>
                         </div>
                         <div id="storage-group1-badge" class="test-group-badge badge-pending">0/3</div>
-                        <div id="storage-group1-icon" class="test-group-icon expanded">▼</div>
+                        <div id="storage-group1-icon" class="test-group-icon">▶</div>
                     </div>
-                    <div id="storage-group1-content" class="test-group-content expanded">
+                    <div id="storage-group1-content" class="test-group-content">
                         <div class="test-group-items-container">
-                            <div class="test-item" id="test-localstorage-write">
-                                <button class="test-run-single" onclick="runSingleStorageTest(1)" title="Esegui solo questo test">▶</button>
-                                <span>Scrittura localStorage</span>
+                            <div class="test-item" id="test-storage-set-get">
+                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-set-get')" title="Esegui solo questo test">▶</button>
+                                <span>Storage.setItem() e Storage.getItem()</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
-                            <div class="test-item" id="test-localstorage-read">
-                                <button class="test-run-single" onclick="runSingleStorageTest(2)" title="Esegui solo questo test">▶</button>
-                                <span>Lettura localStorage</span>
+                            <div class="test-item" id="test-storage-remove">
+                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-remove')" title="Esegui solo questo test">▶</button>
+                                <span>Storage.removeItem()</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
-                            <div class="test-item" id="test-localstorage-clear">
-                                <button class="test-run-single" onclick="runSingleStorageTest(3)" title="Esegui solo questo test">▶</button>
-                                <span>Cancellazione localStorage</span>
+                            <div class="test-item" id="test-storage-default-value">
+                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-default-value')" title="Esegui solo questo test">▶</button>
+                                <span>Storage.getItem() con defaultValue</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Gruppo 2: Test Dati Complessi -->
+                <!-- Gruppo 2: Test JSON -->
                 <div class="test-group-separator">
                     <div class="test-group-header" onclick="toggleStorageGroup('group2')">
                         <div class="test-group-bar group-storage-2"></div>
                         <div class="test-group-title-container">
-                            <div class="test-group-title">Test Dati Complessi</div>
-                            <div id="storage-group2-subtitle" class="test-group-subtitle state-pending">5 test da completare</div>
+                            <div class="test-group-title">Test JSON</div>
+                            <div id="storage-group2-subtitle" class="test-group-subtitle state-pending">4 test da completare</div>
                         </div>
-                        <div id="storage-group2-badge" class="test-group-badge badge-pending">0/5</div>
+                        <div id="storage-group2-badge" class="test-group-badge badge-pending">0/4</div>
                         <div id="storage-group2-icon" class="test-group-icon">▶</div>
                     </div>
                     <div id="storage-group2-content" class="test-group-content">
                         <div class="test-group-items-container">
-                            <div class="test-item" id="test-localstorage-json">
-                                <button class="test-run-single" onclick="runSingleStorageTest(4)" title="Esegui solo questo test">▶</button>
-                                <span>Salvataggio oggetto JSON</span>
+                            <div class="test-item" id="test-storage-json-object">
+                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-json-object')" title="Esegui solo questo test">▶</button>
+                                <span>Oggetti JSON</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
-                            <div class="test-item" id="test-localstorage-array">
-                                <button class="test-run-single" onclick="runSingleStorageTest(5)" title="Esegui solo questo test">▶</button>
-                                <span>Salvataggio array</span>
+                            <div class="test-item" id="test-storage-json-array">
+                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-json-array')" title="Esegui solo questo test">▶</button>
+                                <span>Array JSON</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
-                            <div class="test-item" id="test-localstorage-numbers">
-                                <button class="test-run-single" onclick="runSingleStorageTest(6)" title="Esegui solo questo test">▶</button>
-                                <span>Salvataggio numeri</span>
+                            <div class="test-item" id="test-storage-boolean">
+                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-boolean')" title="Esegui solo questo test">▶</button>
+                                <span>Valori boolean</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
-                            <div class="test-item" id="test-localstorage-booleans">
-                                <button class="test-run-single" onclick="runSingleStorageTest(7)" title="Esegui solo questo test">▶</button>
-                                <span>Salvataggio booleani</span>
-                                <span class="test-status pending">In attesa</span>
-                            </div>
-                            <div class="test-item" id="test-localstorage-complex">
-                                <button class="test-run-single" onclick="runSingleStorageTest(8)" title="Esegui solo questo test">▶</button>
-                                <span>Dati complessi annidati</span>
+                            <div class="test-item" id="test-storage-number">
+                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-number')" title="Esegui solo questo test">▶</button>
+                                <span>Valori numerici</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Gruppo 3: Test Edge Cases -->
+                <!-- Gruppo 3: Test Funzioni Avanzate -->
                 <div class="test-group-separator">
                     <div class="test-group-header" onclick="toggleStorageGroup('group3')">
                         <div class="test-group-bar group-storage-3"></div>
                         <div class="test-group-title-container">
-                            <div class="test-group-title">Test Edge Cases</div>
-                            <div id="storage-group3-subtitle" class="test-group-subtitle state-pending">6 test da completare</div>
+                            <div class="test-group-title">Funzioni Avanzate</div>
+                            <div id="storage-group3-subtitle" class="test-group-subtitle state-pending">5 test da completare</div>
                         </div>
-                        <div id="storage-group3-badge" class="test-group-badge badge-pending">0/6</div>
+                        <div id="storage-group3-badge" class="test-group-badge badge-pending">0/5</div>
                         <div id="storage-group3-icon" class="test-group-icon">▶</div>
                     </div>
                     <div id="storage-group3-content" class="test-group-content">
                         <div class="test-group-items-container">
-                            <div class="test-item" id="test-localstorage-null">
-                                <button class="test-run-single" onclick="runSingleStorageTest(9)" title="Esegui solo questo test">▶</button>
-                                <span>Valori null e undefined</span>
+                            <div class="test-item" id="test-storage-clear">
+                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-clear')" title="Esegui solo questo test">▶</button>
+                                <span>Storage.clear()</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
-                            <div class="test-item" id="test-localstorage-empty">
-                                <button class="test-run-single" onclick="runSingleStorageTest(10)" title="Esegui solo questo test">▶</button>
-                                <span>Stringhe vuote</span>
+                            <div class="test-item" id="test-storage-prefix-get">
+                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-prefix-get')" title="Esegui solo questo test">▶</button>
+                                <span>Storage.getItemsByPrefix()</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
-                            <div class="test-item" id="test-localstorage-special">
-                                <button class="test-run-single" onclick="runSingleStorageTest(11)" title="Esegui solo questo test">▶</button>
-                                <span>Caratteri speciali (emoji, unicode)</span>
+                            <div class="test-item" id="test-storage-prefix-remove">
+                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-prefix-remove')" title="Esegui solo questo test">▶</button>
+                                <span>Storage.removeItemsByPrefix()</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
-                            <div class="test-item" id="test-localstorage-long">
-                                <button class="test-run-single" onclick="runSingleStorageTest(12)" title="Esegui solo questo test">▶</button>
-                                <span>Valori molto lunghi (10KB)</span>
+                            <div class="test-item" id="test-storage-has-item">
+                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-has-item')" title="Esegui solo questo test">▶</button>
+                                <span>Storage.hasItem()</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
-                            <div class="test-item" id="test-localstorage-multiple">
-                                <button class="test-run-single" onclick="runSingleStorageTest(13)" title="Esegui solo questo test">▶</button>
-                                <span>Chiavi multiple</span>
-                                <span class="test-status pending">In attesa</span>
-                            </div>
-                            <div class="test-item" id="test-localstorage-available">
-                                <button class="test-run-single" onclick="runSingleStorageTest(14)" title="Esegui solo questo test">▶</button>
-                                <span>Disponibilità localStorage</span>
+                            <div class="test-item" id="test-storage-size">
+                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-size')" title="Esegui solo questo test">▶</button>
+                                <span>Storage.getSize()</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Gruppo 4: Test Avanzati -->
+                <!-- Gruppo 4: Test Edge Cases -->
                 <div class="test-group-separator">
                     <div class="test-group-header" onclick="toggleStorageGroup('group4')">
                         <div class="test-group-bar group-storage-4"></div>
                         <div class="test-group-title-container">
-                            <div class="test-group-title">Test Avanzati</div>
-                            <div id="storage-group4-subtitle" class="test-group-subtitle state-pending">2 test da completare</div>
+                            <div class="test-group-title">Edge Cases</div>
+                            <div id="storage-group4-subtitle" class="test-group-subtitle state-pending">4 test da completare</div>
                         </div>
-                        <div id="storage-group4-badge" class="test-group-badge badge-pending">0/2</div>
+                        <div id="storage-group4-badge" class="test-group-badge badge-pending">0/4</div>
                         <div id="storage-group4-icon" class="test-group-icon">▶</div>
                     </div>
                     <div id="storage-group4-content" class="test-group-content">
                         <div class="test-group-items-container">
-                            <div class="test-item" id="test-localstorage-quota">
-                                <button class="test-run-single" onclick="runSingleStorageTest(15)" title="Esegui solo questo test">▶</button>
-                                <span>Quota Storage (Simulazione)</span>
+                            <div class="test-item" id="test-storage-retrocompatibility">
+                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-retrocompatibility')" title="Esegui solo questo test">▶</button>
+                                <span>Retrocompatibilità localStorage</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
-                            <div class="test-item" id="test-localstorage-performance">
-                                <button class="test-run-single" onclick="runSingleStorageTest(16)" title="Esegui solo questo test">▶</button>
-                                <span>Performance (Scrittura/Lettura 100KB x100)</span>
+                            <div class="test-item" id="test-storage-null-undefined">
+                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-null-undefined')" title="Esegui solo questo test">▶</button>
+                                <span>Valori null e undefined</span>
+                                <span class="test-status pending">In attesa</span>
+                            </div>
+                            <div class="test-item" id="test-storage-special-chars">
+                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-special-chars')" title="Esegui solo questo test">▶</button>
+                                <span>Caratteri speciali</span>
+                                <span class="test-status pending">In attesa</span>
+                            </div>
+                            <div class="test-item" id="test-storage-large-value">
+                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-large-value')" title="Esegui solo questo test">▶</button>
+                                <span>Valore grande (10KB)</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Gruppo 5: Test Robustezza -->
+                <!-- Gruppo 5: Test Avanzati -->
                 <div class="test-group-separator">
                     <div class="test-group-header" onclick="toggleStorageGroup('group5')">
                         <div class="test-group-bar group-storage-5"></div>
                         <div class="test-group-title-container">
-                            <div class="test-group-title">Test Robustezza</div>
-                            <div id="storage-group5-subtitle" class="test-group-subtitle state-pending">3 test da completare</div>
+                            <div class="test-group-title">Test Avanzati</div>
+                            <div id="storage-group5-subtitle" class="test-group-subtitle state-pending">8 test da completare</div>
                         </div>
-                        <div id="storage-group5-badge" class="test-group-badge badge-pending">0/3</div>
+                        <div id="storage-group5-badge" class="test-group-badge badge-pending">0/8</div>
                         <div id="storage-group5-icon" class="test-group-icon">▶</div>
                     </div>
                     <div id="storage-group5-content" class="test-group-content">
                         <div class="test-group-items-container">
-                            <div class="test-item" id="test-localstorage-iterate">
-                                <button class="test-run-single" onclick="runSingleStorageTest(17)" title="Esegui solo questo test">▶</button>
-                                <span>Iterazione Chiavi (localStorage.key())</span>
+                            <div class="test-item" id="test-storage-multiple-operations">
+                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-multiple-operations')" title="Esegui solo questo test">▶</button>
+                                <span>Operazioni multiple</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
-                            <div class="test-item" id="test-localstorage-invalid-json">
-                                <button class="test-run-single" onclick="runSingleStorageTest(18)" title="Esegui solo questo test">▶</button>
-                                <span>Lettura JSON Invalido</span>
+                            <div class="test-item" id="test-storage-performance">
+                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-performance')" title="Esegui solo questo test">▶</button>
+                                <span>Performance (100KB x100)</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
-                            <div class="test-item" id="test-localstorage-non-string">
-                                <button class="test-run-single" onclick="runSingleStorageTest(19)" title="Esegui solo questo test">▶</button>
-                                <span>Scrittura Valori Non-Stringa</span>
+                            <div class="test-item" id="test-storage-iterate-keys">
+                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-iterate-keys')" title="Esegui solo questo test">▶</button>
+                                <span>Iterazione chiavi</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Gruppo 6: Test PWA Specifici -->
-                <div class="test-group-separator">
-                    <div class="test-group-header" onclick="toggleStorageGroup('group6')">
-                        <div class="test-group-bar group-storage-6"></div>
-                        <div class="test-group-title-container">
-                            <div class="test-group-title">Test PWA Specifici</div>
-                            <div id="storage-group6-subtitle" class="test-group-subtitle state-pending">3 test da completare</div>
-                        </div>
-                        <div id="storage-group6-badge" class="test-group-badge badge-pending">0/3</div>
-                        <div id="storage-group6-icon" class="test-group-icon">▶</div>
-                    </div>
-                    <div id="storage-group6-content" class="test-group-content">
-                        <div class="test-group-items-container">
-                            <div class="test-item" id="test-localstorage-namespace">
-                                <button class="test-run-single" onclick="runSingleStorageTest(20)" title="Esegui solo questo test">▶</button>
-                                <span>Validazione Namespace (tpl.*)</span>
+                            <div class="test-item" id="test-storage-invalid-json">
+                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-invalid-json')" title="Esegui solo questo test">▶</button>
+                                <span>JSON invalido</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
-                            <div class="test-item" id="test-localstorage-migration">
-                                <button class="test-run-single" onclick="runSingleStorageTest(21)" title="Esegui solo questo test">▶</button>
+                            <div class="test-item" id="test-storage-non-string">
+                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-non-string')" title="Esegui solo questo test">▶</button>
+                                <span>Valori non-stringa</span>
+                                <span class="test-status pending">In attesa</span>
+                            </div>
+                            <div class="test-item" id="test-storage-namespace">
+                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-namespace')" title="Esegui solo questo test">▶</button>
+                                <span>Namespace prefix (tpl.*)</span>
+                                <span class="test-status pending">In attesa</span>
+                            </div>
+                            <div class="test-item" id="test-storage-migration">
+                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-migration')" title="Esegui solo questo test">▶</button>
                                 <span>Migrazione isDark → themeMode</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
-                            <div class="test-item" id="test-localstorage-timestamp">
-                                <button class="test-run-single" onclick="runSingleStorageTest(22)" title="Esegui solo questo test">▶</button>
-                                <span>Gestione Timestamp (pwa.dismissTs)</span>
+                            <div class="test-item" id="test-storage-timestamp">
+                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-timestamp')" title="Esegui solo questo test">▶</button>
+                                <span>Gestione timestamp</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                         </div>
@@ -1415,30 +1419,20 @@
                 </div>
 
             </div>
-            <!-- Fine Card Gruppi Test LocalStorage -->
-            
+            <!-- Fine Card Gruppi Test Storage -->
+
             <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; margin-top: 1rem;">
-                <button class="test-button" onclick="testLocalStorage()" style="flex: 1; min-width: 150px;">🧪 Test LocalStorage (22 test)</button>
+                <button class="test-button" onclick="testStorage()" style="flex: 1; min-width: 150px;">🧪 Test Storage (24 test)</button>
                 <button class="test-button" onclick="toggleAllStorageGroups(true)" style="background: #6b7280;">📂 Apri Tutti</button>
                 <button class="test-button" onclick="toggleAllStorageGroups(false)" style="background: #6b7280;">📁 Chiudi Tutti</button>
-                <button class="test-button" onclick="resetStorageTests()" style="background: #ef4444; transition: background-color 0.2s ease; min-width: 100px;">🔄 Reset Test</button>
+                <button class="test-button" onclick="resetStorageModuleTests()" style="background: #ef4444; transition: background-color 0.2s ease; min-width: 100px;">🔄 Reset Test</button>
             </div>
-            <div class="test-output" id="output-localstorage" style="display:none;"></div>
-        </div>
-
-        <!-- Test 3: Dark Mode -->
-        <div id="section-darkmode" class="test-section">
-            <h2>🌙 Test Dark Mode</h2>
-            <div class="test-item" id="test-darkmode-toggle">
-                <span>Toggle dark mode</span>
-                <span class="test-status pending">In attesa</span>
+            <div class="test-output" id="output-storage" style="display:none;"></div>
+            <div id="storage-log-buttons" style="display: none; gap: 0.5rem; margin-top: 0.5rem;">
+                <button class="test-button" onclick="copyStorageLog()" style="background: #0d9488;">📋 Copia log</button>
+                <button class="test-button" onclick="downloadStorageLog()" style="background: #3b82f6;">💾 Scarica log</button>
+                <button class="test-button" onclick="clearStorageLog()" style="background: #ef4444;">🗑️ Cancella log</button>
             </div>
-            <div class="test-item" id="test-darkmode-persistence">
-                <span>Persistenza preferenza</span>
-                <span class="test-status pending">In attesa</span>
-            </div>
-            <button class="test-button" onclick="testDarkMode()">🧪 Test Dark Mode</button>
-            <div class="test-output" id="output-darkmode" style="display:none;"></div>
         </div>
 
         <!-- Test 4: Calcolo Prezzi (Modulo prezzi.js) -->
@@ -1473,9 +1467,9 @@
                             <div id="price-group1-subtitle" class="test-group-subtitle state-pending">5 test da completare</div>
                         </div>
                         <div id="price-group1-badge" class="test-group-badge badge-pending">0/5</div>
-                        <div id="price-group1-icon" class="test-group-icon expanded">▼</div>
+                        <div id="price-group1-icon" class="test-group-icon">▶</div>
                     </div>
-                    <div id="price-group1-content" class="test-group-content expanded">
+                    <div id="price-group1-content" class="test-group-content">
                         <div class="test-group-items-container">
                             <div class="test-item" id="test-pricing-calculate">
                                 <button class="test-run-single" onclick="runSinglePriceTest('test-pricing-calculate')" title="Esegui solo questo test">▶</button>
@@ -1731,9 +1725,9 @@
                             <div id="settings-group1-subtitle" class="test-group-subtitle state-pending">3 test da completare</div>
                         </div>
                         <div id="settings-group1-badge" class="test-group-badge badge-pending">0/3</div>
-                        <div id="settings-group1-icon" class="test-group-icon expanded">▼</div>
+                        <div id="settings-group1-icon" class="test-group-icon">▶</div>
                     </div>
-                    <div id="settings-group1-content" class="test-group-content expanded">
+                    <div id="settings-group1-content" class="test-group-content">
                         <div class="test-group-items-container">
                             <div class="test-item" id="test-settings-font-size-normal">
                                 <button class="test-run-single" onclick="runSingleSettingsTest('test-settings-font-size-normal')" title="Esegui solo questo test">▶</button>
@@ -1927,6 +1921,11 @@
                 <button class="test-button" onclick="resetSettingsTests()" style="background: #ef4444; transition: background-color 0.2s ease; min-width: 100px;">🔄 Reset Test</button>
             </div>
             <div class="test-output" id="output-settings" style="display:none;" data-no-copy="true"></div>
+            <div id="settings-log-buttons" style="display: none; gap: 0.5rem; margin-top: 0.5rem;">
+                <button class="test-button" onclick="copySettingsLog()" style="background: #0d9488;">📋 Copia log</button>
+                <button class="test-button" onclick="downloadSettingsLog()" style="background: #3b82f6;">💾 Scarica log</button>
+                <button class="test-button" onclick="clearSettingsLog()" style="background: #ef4444;">🗑️ Cancella log</button>
+            </div>
         </div>
 
         <!-- Test 5: Service Worker (Modulo sw.js) -->
@@ -2100,6 +2099,11 @@
                 <button class="test-button" onclick="resetSwTests()" style="background: #ef4444; transition: background-color 0.2s ease; min-width: 100px;">🔄 Reset Test</button>
             </div>
             <div class="test-output" id="output-sw" style="display:none;" data-no-copy="true"></div>
+            <div id="sw-log-buttons" style="display: none; gap: 0.5rem; margin-top: 0.5rem;">
+                <button class="test-button" onclick="copySwLog()" style="background: #0d9488;">📋 Copia log</button>
+                <button class="test-button" onclick="downloadSwLog()" style="background: #3b82f6;">💾 Scarica log</button>
+                <button class="test-button" onclick="clearSwLog()" style="background: #ef4444;">🗑️ Cancella log</button>
+            </div>
         </div>
 
         <!-- Test 6: UI Components -->
@@ -2176,6 +2180,21 @@
         </div>
     </div>
 
+    <!-- Modal Notifica (per conferme e messaggi) -->
+    <div id="notification-modal" class="notification-modal">
+        <div class="notification-modal-content">
+            <div class="notification-modal-header">
+                <h3 id="notification-modal-title">✓ Operazione completata</h3>
+            </div>
+            <div class="notification-modal-body">
+                <p id="notification-modal-message"></p>
+            </div>
+            <div class="notification-modal-footer">
+                <button id="notification-modal-ok" class="notification-modal-btn">OK</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal Impostazioni -->
     <!-- L'HTML del modal viene caricato dinamicamente da components/settings-modal.html -->
     <!-- Vedi js/components/modals.js per la funzione loadSettingsModalHTML() -->
@@ -2187,28 +2206,42 @@
     </footer>
 
     <!-- Script di test -->
+    <!-- CORE: Storage (deve essere caricato PRIMA di features che lo usano) -->
+    <script src="js/core/storage.js"></script>
     <script src="footer.js"></script>
     <script src="changelog.js"></script>
     <script src="js/features/updates.js"></script>
     <script src="js/features/settings.js"></script>
     <!-- modals.js caricato subito dopo settings.js perché SettingsModal dipende da Settings -->
     <script src="js/components/modals.js"></script>
+    <script src="js/components/notification-modal.js"></script>
     <script src="js/features/tests-ui.js"></script>
     <script src="js/features/prezzi.js?v=20251102-2"></script>
     <script src="js/tests/test-prezzi.js"></script>
+    <!-- Wrapper funzioni Prezzi test - IMPORTANTE: Deve essere caricato PRIMA del DOM per essere disponibile agli onclick -->
+    <script src="js/tests/test-prezzi-wrappers.js"></script>
     <!-- Modulo utility per test - Step 1 modularizzazione (02/11/2025) -->
     <script src="js/tests/test-utils.js"></script>
+    <!-- Funzioni gestione log - Step 2 modularizzazione (06/11/2025) -->
+    <!-- IMPORTANTE: Deve essere caricato PRIMA del DOM per essere disponibile agli onclick -->
+    <script src="js/tests/test-log-helpers.js"></script>
     <!-- Wrapper funzioni accordion - Step 3 modularizzazione (06/11/2025) -->
     <!-- IMPORTANTE: Deve essere caricato PRIMA del DOM per essere disponibile agli onclick -->
     <script src="js/tests/test-accordion-wrappers.js"></script>
+    <!-- Wrapper funzioni Storage test - Deve essere caricato PRIMA del DOM per essere disponibile agli onclick -->
+    <script src="js/tests/test-storage-wrappers.js"></script>
     <!-- Modulo accordion per gruppi test - Step 3 modularizzazione (06/11/2025) -->
     <script src="js/tests/test-accordion.js"></script>
     <!-- Moduli test per categoria - Step 2 modularizzazione (02/11/2025) -->
     <script src="js/tests/test-database.js"></script>
-    <script src="js/tests/test-localstorage.js"></script>
+    <!-- test-localstorage.js DEPRECATO - usa test-storage.js -->
+    <script src="js/tests/test-storage.js"></script>
     <script src="js/tests/test-settings.js"></script>
+    <script src="js/tests/test-settings-wrappers.js"></script>
     <script src="js/tests/test-darkmode.js"></script>
     <script src="js/tests/test-sw.js"></script>
+    <script src="js/tests/test-sw-wrappers.js"></script>
+    <script src="js/tests/test-all-wrappers.js"></script>
     <!-- File test non ancora creati - da implementare:
     <script src="js/tests/test-ui.js"></script>
     <script src="js/tests/test-manifest.js"></script>
@@ -2227,409 +2260,28 @@
         // Rimosso: i pulsanti vengono ora aggiunti solo quando si esegue il test
 
         // ===== WRAPPER LEGACY COMPATIBILITY =====
-        // Manteniamo le funzioni globali per retrocompatibilità, ma delegano a TestUtils
-        function log(outputId, message, type = 'info') {
-            if (typeof TestUtils !== 'undefined' && TestUtils.log) {
-                TestUtils.log(outputId, message, type);
-            } else {
-                console.error('TestUtils non disponibile! Assicurati che test-utils.js sia caricato.');
-                // Fallback base per non bloccare completamente
-                const output = document.getElementById(outputId);
-                if (output) {
-                    output.style.display = 'block';
-                    const logDiv = document.createElement('div');
-                    logDiv.className = `console-log ${type}`;
-                    logDiv.textContent = `[${new Date().toLocaleTimeString('it-IT')}] ${message}`;
-                    output.appendChild(logDiv);
-                    output.scrollTop = output.scrollHeight;
-                }
-            }
-        }
-
-        function updateTestStatus(testId, status) {
-            if (typeof TestUtils !== 'undefined' && TestUtils.updateTestStatus) {
-                TestUtils.updateTestStatus(testId, status);
-            } else {
-                console.error('TestUtils non disponibile!');
-            }
-        }
-
-        function updateStats() {
-            if (typeof TestUtils !== 'undefined' && TestUtils.updateStats) {
-                TestUtils.updateStats();
-            } else {
-                console.error('TestUtils non disponibile!');
-            }
-        }
+        // RIMOSSO: Le funzioni wrapper legacy sono state eliminate.
+        // Ora si usa direttamente TestUtils.log(), TestUtils.updateTestStatus(), TestUtils.updateStats()
 
         // ===== TOGGLE ACCORDION GROUPS =====
         // Le funzioni sono già definite all'inizio dello script per essere disponibili immediatamente
         // Questo blocco è solo un commento di riferimento
 
         // ===== FUNZIONI GESTIONE LOG =====
-        // Esposte nello scope globale per essere disponibili agli onclick
-        window.copyDatabaseLog = function() {
-            const output = document.getElementById('output-database');
-            if (output && output.textContent) {
-                navigator.clipboard.writeText(output.textContent).then(() => {
-                    alert('Log Database copiato negli appunti!');
-                }).catch(err => {
-                    console.error('Errore copia log:', err);
-                });
-            }
-        }
+        // RIMOSSO: Le funzioni gestione log sono state spostate in js/tests/test-log-helpers.js
+        // Le funzioni sono ancora disponibili globalmente (window.copyDatabaseLog, ecc.)
 
-        window.downloadDatabaseLog = function() {
-            const output = document.getElementById('output-database');
-            if (output && output.textContent) {
-                const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
-                const filename = `test-database-${timestamp}.txt`;
-                const blob = new Blob([output.textContent], { type: 'text/plain' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = filename;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-            }
-        }
+        // ===== FUNZIONI HEADER =====
+        // RIMOSSO: Le funzioni header sono state spostate nei rispettivi moduli:
+        // - resetDatabaseTests() → js/tests/test-database.js
+        // - resetPriceTests() e updatePriceHeader() → js/tests/test-prezzi.js
+        // - resetSettingsTests() e updateSettingsHeader() → js/tests/test-settings.js
+        // - resetSwTests() e updateSwHeader() → js/tests/test-sw.js
+        // Le funzioni sono ancora disponibili globalmente (window.resetDatabaseTests, ecc.)
 
-        window.clearDatabaseLog = function() {
-            const output = document.getElementById('output-database');
-            const buttons = document.getElementById('db-log-buttons');
-            if (output) {
-                output.innerHTML = '';
-                output.style.display = 'none';
-            }
-            if (buttons) {
-                buttons.style.display = 'none';
-            }
-        }
-
-        window.copyPriceLog = function() {
-            const output = document.getElementById('output-price');
-            if (output && output.textContent) {
-                navigator.clipboard.writeText(output.textContent).then(() => {
-                    alert('Log Prezzi copiato negli appunti!');
-                }).catch(err => {
-                    console.error('Errore copia log:', err);
-                });
-            }
-        }
-
-        window.downloadPriceLog = function() {
-            const output = document.getElementById('output-price');
-            if (output && output.textContent) {
-                const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
-                const filename = `test-prezzi-${timestamp}.txt`;
-                const blob = new Blob([output.textContent], { type: 'text/plain' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = filename;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-            }
-        }
-
-        window.clearPriceLog = function() {
-            const output = document.getElementById('output-price');
-            const buttons = document.getElementById('price-log-buttons');
-            if (output) {
-                output.innerHTML = '';
-                output.style.display = 'none';
-            }
-            if (buttons) {
-                buttons.style.display = 'none';
-            }
-        }
-
-        window.resetDatabaseTests = function() {
-            // Resetta il log
-            clearDatabaseLog();
-
-            // Resetta l'header
-            const progressEl = document.getElementById('db-header-progress');
-            const statusEl = document.getElementById('db-header-status');
-            const passedEl = document.getElementById('db-header-passed');
-            const failedEl = document.getElementById('db-header-failed');
-            const timeEl = document.getElementById('db-header-time');
-            const timestampEl = document.getElementById('db-header-timestamp');
-            const barEl = document.getElementById('db-header-bar');
-
-            if (progressEl) progressEl.textContent = '0/17';
-            if (statusEl) {
-                statusEl.className = 'test-header-status status-pending';
-                statusEl.textContent = 'In attesa';
-            }
-            if (passedEl) passedEl.textContent = '0';
-            if (failedEl) failedEl.textContent = '0';
-            if (timeEl) timeEl.textContent = '0ms';
-            if (timestampEl) {
-                timestampEl.textContent = '-';
-                timestampEl.setAttribute('data-ts', '');
-            }
-            if (barEl) barEl.setAttribute('data-progress', '0');
-
-            // Resetta i badge e subtitle dei gruppi
-            const groups = [
-                { id: 'group1', total: 5, text: '5 test' },
-                { id: 'group2', total: 4, text: '4 test' },
-                { id: 'group3', total: 7, text: '7 test' },
-                { id: 'group4', total: 1, text: '1 test' }
-            ];
-
-            groups.forEach(group => {
-                const badge = document.getElementById(`db-${group.id}-badge`);
-                const subtitle = document.getElementById(`db-${group.id}-subtitle`);
-                if (badge) {
-                    badge.textContent = `0/${group.total}`;
-                    badge.classList.remove('badge-partial', 'badge-complete');
-                    badge.classList.add('badge-pending');
-                }
-                if (subtitle) {
-                    subtitle.textContent = `${group.text} da completare`;
-                    subtitle.classList.remove('state-partial', 'state-complete');
-                    subtitle.classList.add('state-pending');
-                }
-            });
-
-            // Resetta tutti gli status dei test a "pending"
-            const testIds = [
-                // Gruppo 1: Caricamento & Struttura
-                'test-database-load', 'test-database-structure', 'test-database-lines',
-                'test-database-types', 'test-database-null-undefined',
-                // Gruppo 2: Validazione Dati
-                'test-database-prices', 'test-database-stops', 'test-database-codes',
-                'test-database-encoding',
-                // Gruppo 3: Analisi Qualità
-                'test-database-duplicates', 'test-database-range', 'test-database-progression',
-                'test-database-format', 'test-database-consistency',
-                'test-database-edge-cases', 'test-database-size-limit',
-                // Gruppo 4: Performance
-                'test-database-performance'
-            ];
-
-            testIds.forEach(id => {
-                const testElement = document.getElementById(id);
-                if (testElement) {
-                    const statusSpan = testElement.querySelector('.test-status');
-                    if (statusSpan) {
-                        statusSpan.className = 'test-status pending';
-                        statusSpan.textContent = 'In attesa';
-                    }
-                }
-            });
-
-            // Chiudi tutti i gruppi
-            toggleAllDbGroups(false);
-        }
-
-        window.resetPriceTests = function() {
-            // Resetta il log
-            clearPriceLog();
-
-            // Resetta l'header
-            const progressEl = document.getElementById('price-header-progress');
-            const statusEl = document.getElementById('price-header-status');
-            const passedEl = document.getElementById('price-header-passed');
-            const failedEl = document.getElementById('price-header-failed');
-            const timeEl = document.getElementById('price-header-time');
-            const timestampEl = document.getElementById('price-header-timestamp');
-            const barEl = document.getElementById('price-header-bar');
-
-            if (progressEl) progressEl.textContent = '0/29';
-            if (statusEl) {
-                statusEl.className = 'test-header-status status-pending';
-                statusEl.textContent = 'In attesa';
-            }
-            if (passedEl) passedEl.textContent = '0';
-            if (failedEl) failedEl.textContent = '0';
-            if (timeEl) timeEl.textContent = '0ms';
-            if (timestampEl) {
-                timestampEl.textContent = '-';
-                timestampEl.setAttribute('data-ts', '');
-            }
-            if (barEl) barEl.setAttribute('data-progress', '0');
-
-            // Resetta i badge e subtitle dei gruppi
-            const groups = [
-                { id: 'group1', total: 5, text: '5 test' },
-                { id: 'group2', total: 3, text: '3 test' },
-                { id: 'group3', total: 5, text: '5 test' },
-                { id: 'group4', total: 16, text: '16 test' }
-            ];
-
-            groups.forEach(group => {
-                const badge = document.getElementById(`price-${group.id}-badge`);
-                const subtitle = document.getElementById(`price-${group.id}-subtitle`);
-                if (badge) {
-                    badge.textContent = `0/${group.total}`;
-                    badge.classList.remove('badge-partial', 'badge-complete');
-                    badge.classList.add('badge-pending');
-                }
-                if (subtitle) {
-                    subtitle.textContent = `${group.text} da completare`;
-                    subtitle.classList.remove('state-partial', 'state-complete');
-                    subtitle.classList.add('state-pending');
-                }
-            });
-
-            // Resetta tutti gli status dei test a "pending"
-            // Gruppo 1: Test Unitari (5 test)
-            const group1Tests = [
-                'test-pricing-calculate',
-                'test-pricing-ticket-code',
-                'test-pricing-format',
-                'test-pricing-validation',
-                'test-pricing-route'
-            ];
-
-            // Gruppo 2: Edge Cases (3 test)
-            const group2Tests = [
-                'test-pricing-same-stop',
-                'test-pricing-out-of-range',
-                'test-pricing-fallback'
-            ];
-
-            // Gruppo 3: Test Avanzati (5 test)
-            const group3Tests = [
-                'test-pricing-empty-tariffario',
-                'test-pricing-negative-indices',
-                'test-pricing-string-indices',
-                'test-pricing-zero-price',
-                'test-pricing-missing-matrices'
-            ];
-
-            // Gruppo 4: Robustezza Dati (13 test)
-            const group4Tests = [
-                'test-pricing-null-price',
-                'test-pricing-undefined-price',
-                'test-pricing-string-price',
-                'test-pricing-line-not-exists',
-                'test-pricing-result-structure',
-                'test-pricing-nan-price',
-                'test-pricing-infinity-price',
-                'test-pricing-negative-price',
-                'test-pricing-fermate-not-array',
-                'test-pricing-code-with-spaces',
-                'test-pricing-price-code-only',
-                'test-pricing-fallback-actual',
-                'test-pricing-extreme-values',
-                'test-pricing-symmetry',
-                'test-pricing-multiple-lines',
-                'test-pricing-performance'
-            ];
-
-            const allTests = [...group1Tests, ...group2Tests, ...group3Tests, ...group4Tests];
-
-            allTests.forEach(id => {
-                const testElement = document.getElementById(id);
-                if (testElement) {
-                    const statusSpan = testElement.querySelector('.test-status');
-                    if (statusSpan) {
-                        statusSpan.className = 'test-status pending';
-                        statusSpan.textContent = 'In attesa';
-                    }
-                }
-            });
-
-            // Chiudi tutti i gruppi
-            toggleAllPriceGroups(false);
-        }
-
-        window.resetStorageTests = function() {
-            // Resetta il log
-            const outputEl = document.getElementById('output-localstorage');
-            if (outputEl) {
-                outputEl.innerHTML = '';
-                outputEl.style.display = 'none';
-            }
-
-            // Resetta l'header
-            const progressEl = document.getElementById('storage-header-progress');
-            const statusEl = document.getElementById('storage-header-status');
-            const passedEl = document.getElementById('storage-header-passed');
-            const failedEl = document.getElementById('storage-header-failed');
-            const timeEl = document.getElementById('storage-header-time');
-            const timestampEl = document.getElementById('storage-header-timestamp');
-            const barEl = document.getElementById('storage-header-bar');
-
-            if (progressEl) progressEl.textContent = '0/22';
-            if (statusEl) {
-                statusEl.className = 'test-header-status status-pending status-pending-small';
-                statusEl.textContent = 'In attesa';
-            }
-            if (passedEl) passedEl.textContent = '0';
-            if (failedEl) failedEl.textContent = '0';
-            if (timeEl) timeEl.textContent = '0ms';
-            if (timestampEl) {
-                timestampEl.textContent = '-';
-                timestampEl.setAttribute('data-ts', '');
-            }
-            if (barEl) barEl.setAttribute('data-progress', '0');
-
-            // Resetta i badge e subtitle dei gruppi
-            const groups = [
-                { id: 'group1', total: 3, text: '3 test' },
-                { id: 'group2', total: 5, text: '5 test' },
-                { id: 'group3', total: 6, text: '6 test' },
-                { id: 'group4', total: 2, text: '2 test' },
-                { id: 'group5', total: 3, text: '3 test' },
-                { id: 'group6', total: 3, text: '3 test' }
-            ];
-
-            groups.forEach(group => {
-                const badge = document.getElementById(`storage-${group.id}-badge`);
-                const subtitle = document.getElementById(`storage-${group.id}-subtitle`);
-                if (badge) {
-                    badge.textContent = `0/${group.total}`;
-                    badge.classList.remove('badge-partial', 'badge-complete');
-                    badge.classList.add('badge-pending');
-                }
-                if (subtitle) {
-                    subtitle.textContent = `${group.text} da completare`;
-                    subtitle.classList.remove('state-partial', 'state-complete');
-                    subtitle.classList.add('state-pending');
-                }
-            });
-
-            // Resetta tutti gli status dei test a "pending"
-            const testIds = [
-                // Gruppo 1: Test Base (3 test)
-                'test-localstorage-write', 'test-localstorage-read', 'test-localstorage-clear',
-                // Gruppo 2: Test JSON & Tipi (5 test)
-                'test-localstorage-json', 'test-localstorage-array', 'test-localstorage-numbers',
-                'test-localstorage-booleans', 'test-localstorage-complex',
-                // Gruppo 3: Test Edge Cases (6 test)
-                'test-localstorage-null', 'test-localstorage-empty', 'test-localstorage-special',
-                'test-localstorage-long', 'test-localstorage-multiple', 'test-localstorage-available',
-                // Gruppo 4: Test Performance (2 test)
-                'test-localstorage-quota', 'test-localstorage-performance',
-                // Gruppo 5: Test Errori (3 test)
-                'test-localstorage-iterate', 'test-localstorage-invalid-json', 'test-localstorage-non-string',
-                // Gruppo 6: Test PWA Specifici (3 test)
-                'test-localstorage-namespace', 'test-localstorage-migration', 'test-localstorage-timestamp'
-            ];
-
-            testIds.forEach(id => {
-                const testElement = document.getElementById(id);
-                if (testElement) {
-                    const statusSpan = testElement.querySelector('.test-status');
-                    if (statusSpan) {
-                        statusSpan.className = 'test-status pending';
-                        statusSpan.textContent = 'In attesa';
-                    }
-                }
-            });
-
-            // Chiudi tutti i gruppi
-            toggleAllStorageGroups(false);
-        }
+        // resetStorageTests DEPRECATO - funzione rimossa perché test-localstorage.js è deprecato
+        // NOTA: testStorage, resetStorageModuleTests e runSingleStorageTest sono ora definite
+        // in js/tests/test-storage-wrappers.js per essere disponibili agli onclick
 
         // ===== GESTIONE MODALITÀ PWA TEST =====
         window.togglePWATestMode = function() {
@@ -2748,7 +2400,7 @@
 
         // Test 1: Database - spostato in js/tests/test-database.js
 
-        // Test 2: LocalStorage - spostato in js/tests/test-localstorage.js
+        // Test 2: LocalStorage - DEPRECATO - ora usa test-storage.js
 
         // Test 3: Dark Mode - spostato in js/tests/test-darkmode.js
         window.testDarkMode = async function() {
@@ -2761,1151 +2413,64 @@
 
             try {
                 if (typeof DarkModeTests === 'undefined') {
-                    log(output, '✗ DarkModeTests non disponibile! Assicurati che test-darkmode.js sia caricato.', 'error');
+                    TestUtils.log(output, '✗ DarkModeTests non disponibile! Assicurati che test-darkmode.js sia caricato.', 'error');
                     return;
                 }
 
                 if (typeof Settings === 'undefined') {
-                    log(output, '✗ Settings non disponibile! Assicurati che settings.js sia caricato.', 'error');
+                    TestUtils.log(output, '✗ Settings non disponibile! Assicurati che settings.js sia caricato.', 'error');
                     return;
                 }
 
-                log(output, '✓ DarkModeTests e Settings disponibili', 'success');
+                TestUtils.log(output, '✓ DarkModeTests e Settings disponibili', 'success');
 
                 const results = await DarkModeTests.runAll({
-                    log: (message, type) => log(output, message, type),
-                    updateStatus: (id, status) => updateTestStatus(id, status)
+                    log: (message, type) => TestUtils.log(output, message, type),
+                    updateStatus: (id, status) => TestUtils.updateTestStatus(id, status)
                 });
 
                 if (results) {
-                    log(output, `✅ Test completati: ${results.passed} passati, ${results.failed} falliti`, results.failed > 0 ? 'error' : 'success');
+                    TestUtils.log(output, `✅ Test completati: ${results.passed} passati, ${results.failed} falliti`, results.failed > 0 ? 'error' : 'success');
                 }
             } catch (error) {
-                log(output, `✗ Errore fatale: ${error.message}`, 'error');
+                TestUtils.log(output, `✗ Errore fatale: ${error.message}`, 'error');
                 console.error('Errore test dark mode:', error);
             }
         }
 
-        // Test 4: Calcolo Prezzi (Modulo prezzi.js)
-        window.testPriceCalculation = async function() {
-            const output = 'output-price';
-            document.getElementById(output).innerHTML = '';
+        // Test 3.5: Storage Module (js/core/storage.js)
+        // NOTA: testStorage, resetStorageModuleTests, runSingleStorageTest e updateStorageHeader
+        // sono ora definite in js/tests/test-storage-wrappers.js per essere disponibili agli onclick
 
-            try {
-                // Verifica che PrezziTests sia disponibile
-                if (typeof PrezziTests === 'undefined') {
-                    log(output, '✗ PrezziTests non disponibile! Assicurati che test-prezzi.js sia caricato.', 'error');
-                    log(output, 'Verifica che lo script sia incluso: js/tests/test-prezzi.js', 'info');
-                    return;
-                }
+        // RIMOSSO: testPriceCalculation() e runSinglePriceTest() spostate in js/tests/test-prezzi-wrappers.js
+        // Le funzioni sono ancora disponibili globalmente (window.testPriceCalculation, window.runSinglePriceTest)
+        // IMPORTANTE: js/tests/test-prezzi-wrappers.js deve essere caricato PRIMA del DOM per essere disponibile agli onclick
 
-                log(output, '✓ PrezziTests disponibile', 'success');
-
-                // Verifica che Pricing sia disponibile
-                if (typeof Pricing === 'undefined') {
-                    log(output, '✗ Pricing non disponibile! Assicurati che prezzi.js sia caricato PRIMA di test-prezzi.js.', 'error');
-                    log(output, 'Ordine script corretto: prezzi.js → test-prezzi.js', 'info');
-                    return;
-                }
-
-                log(output, '✓ Pricing disponibile', 'success');
-
-                // Ottieni tariffario da window (esposto da script.js dopo loadData) o usa array vuoto
-                const tariffario = (typeof window !== 'undefined' && window.tariffario && Array.isArray(window.tariffario))
-                    ? window.tariffario
-                    : [];
-                const tariffarioAggiornato = (typeof window !== 'undefined' && window.tariffarioAggiornato)
-                    ? window.tariffarioAggiornato
-                    : null;
-
-                log(output, `Tariffario: ${tariffario.length > 0 ? 'disponibile (' + tariffario.length + ' linee)' : 'vuoto - verrà caricato'}`, 'info');
-
-                // Verifica se loadData è disponibile (da script.js)
-                const loadDataFn = (typeof loadData === 'function') ? loadData : null;
-
-                if (!loadDataFn) {
-                    log(output, '⚠ loadData non disponibile. Il tariffario deve essere già caricato.', 'info');
-                }
-
-                // Esegui tutti i test usando il modulo modulare
-                const results = await PrezziTests.runAll(
-                    tariffario,
-                    tariffarioAggiornato,
-                    {
-                        log: (message, type) => log(output, message, type),
-                        updateStatus: (id, status) => updateTestStatus(id, status)
-                    },
-                    loadDataFn // Callback per caricamento dati se necessario
-                );
-
-                // Aggiorna l'header con le statistiche
-                if (results) {
-                    updatePriceHeader(results.passed, results.failed, results.duration);
-                }
-            } catch (error) {
-                log(output, `✗ Errore fatale: ${error.message}`, 'error');
-                log(output, `Stack: ${error.stack}`, 'info');
-                console.error('Errore test prezzi:', error);
-            }
-
-            // Mostra i pulsanti log dopo l'esecuzione
-            const logButtons = document.getElementById('price-log-buttons');
-            if (logButtons) {
-                logButtons.style.display = 'flex';
-            }
-        }
-
-        // Funzione per aggiornare l'header con statistiche Prezzi
-        function updatePriceHeader(passed, failed, duration) {
-            const total = passed + failed;
-            
-            // Aggiorna contatori
-            const passedEl = document.getElementById('price-header-passed');
-            const failedEl = document.getElementById('price-header-failed');
-            const timeEl = document.getElementById('price-header-time');
-            const progressEl = document.getElementById('price-header-progress');
-            const statusEl = document.getElementById('price-header-status');
-            const barEl = document.getElementById('price-header-bar');
-            const timestampEl = document.getElementById('price-header-timestamp');
-            
-            if (passedEl) passedEl.textContent = passed;
-            if (failedEl) failedEl.textContent = failed;
-            if (timeEl) timeEl.textContent = `${duration}ms`;
-            if (progressEl) progressEl.textContent = `${total}/26`;
-            
-            // Aggiorna barra progresso
-            if (barEl) {
-                const progress = Math.round((total / 26) * 100);
-                barEl.setAttribute('data-progress', progress);
-                barEl.style.width = `${progress}%`;
-            }
-            
-            // Aggiorna status
-            if (statusEl) {
-                statusEl.classList.remove('status-pending', 'status-running', 'status-success', 'status-error');
-                
-                if (failed > 0) {
-                    statusEl.classList.add('status-error');
-                    statusEl.textContent = 'Errori';
-                } else if (total === 26) {
-                    statusEl.classList.add('status-success');
-                    statusEl.textContent = 'Completato';
-                } else {
-                    statusEl.classList.add('status-running');
-                    statusEl.textContent = 'In esecuzione';
-                }
-            }
-            
-            // Aggiorna timestamp
-            if (timestampEl) {
-                const now = new Date();
-                const timeStr = now.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-                timestampEl.textContent = `Ultimo aggiornamento: ${timeStr}`;
-                timestampEl.setAttribute('data-ts', now.toISOString());
-            }
-        }
-
-        // Funzione per eseguire un singolo test Prezzi
-        window.runSinglePriceTest = async function(testId) {
-            const output = 'output-price';
-            const outputEl = document.getElementById(output);
-            
-            if (!outputEl) {
-                console.error('Elemento output non trovato:', output);
-                return;
-            }
-
-            // Mostra output
-            outputEl.innerHTML = '';
-            outputEl.style.display = 'block';
-
-            // Utility functions
-            const log = (message, type = 'info') => {
-                if (typeof TestUtils !== 'undefined' && TestUtils.log) {
-                    TestUtils.log(output, message, type);
-                } else {
-                    const logDiv = document.createElement('div');
-                    logDiv.className = `console-log ${type}`;
-                    logDiv.textContent = message;
-                    outputEl.appendChild(logDiv);
-                    console.log(`[${type}] ${message}`);
-                }
-            };
-
-            const updateStatus = (id, status) => {
-                if (typeof TestUtils !== 'undefined' && TestUtils.updateStatus) {
-                    TestUtils.updateStatus(id, status);
-                } else if (typeof updateTestStatus === 'function') {
-                    updateTestStatus(id, status);
-                }
-            };
-
-            log(`🧪 Esecuzione Test: ${testId}...`, 'info');
-            log('', 'info');
-
-            const startTime = performance.now();
-
-            try {
-                // Verifica che PrezziTests sia disponibile
-                if (typeof PrezziTests === 'undefined') {
-                    throw new Error('PrezziTests non disponibile! Assicurati che test-prezzi.js sia caricato.');
-                }
-
-                // Verifica che Pricing sia disponibile
-                if (typeof Pricing === 'undefined') {
-                    throw new Error('Pricing non disponibile! Assicurati che prezzi.js sia caricato.');
-                }
-
-                // Ottieni tariffario
-                let tariffario = (typeof window !== 'undefined' && window.tariffario && Array.isArray(window.tariffario))
-                    ? window.tariffario
-                    : [];
-                const tariffarioAggiornato = (typeof window !== 'undefined' && window.tariffarioAggiornato)
-                    ? window.tariffarioAggiornato
-                    : null;
-
-                // Se tariffario è vuoto, prova a caricarlo
-                if ((!tariffario || tariffario.length === 0) && typeof loadData === 'function') {
-                    log('Caricamento tariffario...', 'info');
-                    await loadData();
-                    tariffario = (typeof window !== 'undefined' && window.tariffario && Array.isArray(window.tariffario))
-                        ? window.tariffario
-                        : [];
-                }
-
-                // Verifica che tariffario sia valido
-                if (!tariffario || !Array.isArray(tariffario) || tariffario.length === 0) {
-                    throw new Error('Tariffario non disponibile. Esegui prima "Test Modulo Prezzi" per caricare i dati.');
-                }
-
-                const linea = tariffario[0];
-                if (!linea || !linea.fermate || !Array.isArray(linea.fermate) || linea.fermate.length === 0) {
-                    throw new Error('Struttura linea non valida');
-                }
-
-                const lineaIdx = 0;
-                const partenzaIdx = 0;
-                const arrivoIdx = Math.min(5, linea.fermate.length - 1);
-
-                const callbacks = {
-                    log: log,
-                    updateStatus: updateStatus
-                };
-
-                // Helper per creare mock tariffario (usa quello esposto se disponibile)
-                const createMockTariffario = (typeof PrezziTests !== 'undefined' && typeof PrezziTests.createMockTariffario === 'function')
-                    ? PrezziTests.createMockTariffario
-                    : (options = {}) => {
-                        const linea = {};
-                        if ('nome' in options) linea.nome = options.nome; else linea.nome = 'Linea Test';
-                        if ('fermate' in options) linea.fermate = options.fermate; else linea.fermate = ['A', 'B', 'C'];
-                        if ('prezzi' in options) linea.prezzi = options.prezzi; else linea.prezzi = [[0, 3.5, 3.5], [3.5, 0, 2.0], [3.5, 2.0, 0]];
-                        if ('codici' in options) linea.codici = options.codici; else linea.codici = [['', 'E1', 'E2'], ['E1', '', 'E1'], ['E2', 'E1', '']];
-                        return [linea];
-                    };
-
-                // Mappatura testId -> funzione di test
-                const testMap = {
-                    'test-pricing-calculate': () => {
-                        log('Test Pricing.calculatePrice()...', 'info');
-                        const result = Pricing.calculatePrice(lineaIdx, partenzaIdx, arrivoIdx, tariffario, tariffarioAggiornato);
-                        if (result.prezzo === linea.prezzi[partenzaIdx][arrivoIdx] && result.valido === true) {
-                            updateStatus('test-pricing-calculate', 'pass');
-                            log(`✓ Prezzo calcolato: €${result.prezzo?.toFixed(2)}`, 'success');
-                            log(`  ${linea.fermate[partenzaIdx]} → ${linea.fermate[arrivoIdx]}`, 'info');
-                        } else {
-                            throw new Error('calculatePrice() non funziona correttamente');
-                        }
-                    },
-                    'test-pricing-ticket-code': () => {
-                        log('Test Pricing.getTicketCode()...', 'info');
-                        const codice = Pricing.getTicketCode(lineaIdx, partenzaIdx, arrivoIdx, tariffario, tariffarioAggiornato);
-                        if (codice === linea.codici[partenzaIdx][arrivoIdx]) {
-                            updateStatus('test-pricing-ticket-code', 'pass');
-                            log(`✓ Codice recuperato: ${codice || '(vuoto - normale)'}`, 'success');
-                        } else {
-                            throw new Error('getTicketCode() non funziona correttamente');
-                        }
-                    },
-                    'test-pricing-format': () => {
-                        log('Test Pricing.formatPrice()...', 'info');
-                        const formatted = Pricing.formatPrice(3.50);
-                        const formattedNull = Pricing.formatPrice(null);
-                        const formattedZero = Pricing.formatPrice(0);
-                        if (formatted === '3.50 €' && formattedNull === '-' && formattedZero === '0.00 €') {
-                            updateStatus('test-pricing-format', 'pass');
-                            log(`✓ Formattazione: ${formatted}`, 'success');
-                            log(`✓ Formattazione null: ${formattedNull}`, 'success');
-                            log(`✓ Formattazione zero: ${formattedZero}`, 'success');
-                        } else {
-                            throw new Error('formatPrice() non funziona correttamente');
-                        }
-                    },
-                    'test-pricing-validation': () => {
-                        log('Test Pricing.isValidSelection()...', 'info');
-                        const valid = Pricing.isValidSelection(lineaIdx, partenzaIdx, arrivoIdx, tariffario);
-                        const invalid1 = Pricing.isValidSelection('', partenzaIdx, arrivoIdx, tariffario);
-                        const invalid2 = Pricing.isValidSelection(lineaIdx, partenzaIdx, partenzaIdx, tariffario);
-                        if (valid === true && invalid1 === false && invalid2 === false) {
-                            updateStatus('test-pricing-validation', 'pass');
-                            log('✓ Validazione selezioni funziona', 'success');
-                            log(`  Valida: ${valid}, Linea mancante: ${invalid1}, Stessa fermata: ${invalid2}`, 'info');
-                        } else {
-                            throw new Error('isValidSelection() non funziona correttamente');
-                        }
-                    },
-                    'test-pricing-route': () => {
-                        log('Test Pricing.isRouteAvailable()...', 'info');
-                        const available = Pricing.isRouteAvailable(lineaIdx, partenzaIdx, arrivoIdx, tariffario);
-                        const notAvailable = Pricing.isRouteAvailable(lineaIdx, 0, 999, tariffario);
-                        if (available === true && notAvailable === false) {
-                            updateStatus('test-pricing-route', 'pass');
-                            log('✓ Verifica tratta disponibile funziona', 'success');
-                        } else {
-                            throw new Error('isRouteAvailable() non funziona correttamente');
-                        }
-                    },
-                    'test-pricing-same-stop': () => {
-                        log('Test stessa fermata (edge case)...', 'info');
-                        const sameStop = Pricing.calculatePrice(lineaIdx, 2, 2, tariffario);
-                        if (sameStop.valido === false && sameStop.prezzo === null) {
-                            updateStatus('test-pricing-same-stop', 'pass');
-                            log('✓ Stessa fermata gestita correttamente', 'success');
-                        } else {
-                            throw new Error('Stessa fermata non gestita correttamente');
-                        }
-                    },
-                    'test-pricing-out-of-range': () => {
-                        log('Test indici fuori range (edge case)...', 'info');
-                        const outOfRange = Pricing.calculatePrice(lineaIdx, 999, 1000, tariffario);
-                        if (outOfRange.valido === false) {
-                            updateStatus('test-pricing-out-of-range', 'pass');
-                            log('✓ Indici fuori range gestiti correttamente', 'success');
-                        } else {
-                            throw new Error('Indici fuori range non gestiti correttamente');
-                        }
-                    },
-                    'test-pricing-fallback': () => {
-                        log('Test fallback tariffarioAggiornato...', 'info');
-                        if (tariffarioAggiornato && Array.isArray(tariffarioAggiornato) && tariffarioAggiornato.length > 0) {
-                            updateStatus('test-pricing-fallback', 'pass');
-                            log('✓ Gestione fallback tariffarioAggiornato presente', 'success');
-                        } else {
-                            updateStatus('test-pricing-fallback', 'pass');
-                            log('✓ Fallback tariffarioAggiornato: non disponibile (normale)', 'success');
-                        }
-                    },
-                    'test-pricing-empty-tariffario': () => {
-                        log('Test tariffario vuoto/null...', 'info');
-                        const emptyResult = Pricing.calculatePrice(0, 0, 5, [], null);
-                        const nullResult = Pricing.calculatePrice(0, 0, 5, null, null);
-                        if (emptyResult.valido === false && nullResult.valido === false) {
-                            updateStatus('test-pricing-empty-tariffario', 'pass');
-                            log('✓ Tariffario vuoto/null gestito correttamente', 'success');
-                        } else {
-                            throw new Error('Tariffario vuoto/null non gestito correttamente');
-                        }
-                    },
-                    'test-pricing-negative-indices': () => {
-                        log('Test indici negativi...', 'info');
-                        const negativeResult = Pricing.calculatePrice(0, -1, -5, tariffario);
-                        if (negativeResult.valido === false) {
-                            updateStatus('test-pricing-negative-indices', 'pass');
-                            log('✓ Indici negativi gestiti correttamente', 'success');
-                        } else {
-                            throw new Error('Indici negativi non gestiti correttamente');
-                        }
-                    },
-                    'test-pricing-string-indices': () => {
-                        log('Test indici come stringhe ("0", "5")...', 'info');
-                        const stringResult = Pricing.calculatePrice('0', '0', '5', tariffario);
-                        const numberResult = Pricing.calculatePrice(0, 0, 5, tariffario);
-                        if (stringResult.prezzo === numberResult.prezzo && stringResult.valido === numberResult.valido) {
-                            updateStatus('test-pricing-string-indices', 'pass');
-                            log('✓ Indici stringa convertiti correttamente', 'success');
-                            log(`  Stringa: €${stringResult.prezzo?.toFixed(2)}, Numero: €${numberResult.prezzo?.toFixed(2)}`, 'info');
-                        } else {
-                            throw new Error('Indici stringa non gestiti correttamente');
-                        }
-                    },
-                    'test-pricing-zero-price': () => {
-                        log('Test prezzo zero (gratuito)...', 'info');
-                        const zeroFormatted = Pricing.formatPrice(0);
-                        if (zeroFormatted === '0.00 €') {
-                            updateStatus('test-pricing-zero-price', 'pass');
-                            log(`✓ Formattazione prezzo zero: ${zeroFormatted}`, 'success');
-                        } else {
-                            throw new Error('Formattazione prezzo zero non corretta');
-                        }
-                    },
-                    'test-pricing-missing-matrices': () => {
-                        log('Test matrici prezzi/codici mancanti...', 'info');
-                        const mockTariffarioIncomplete = createMockTariffario({
-                            nome: 'Linea Test Incompleta',
-                            fermate: ['A', 'B', 'C'],
-                            prezzi: undefined,
-                            codici: undefined
-                        });
-                        const incompleteResult = Pricing.calculatePrice(0, 0, 1, mockTariffarioIncomplete);
-                        if (incompleteResult.valido === false || incompleteResult.prezzo === null) {
-                            updateStatus('test-pricing-missing-matrices', 'pass');
-                            log('✓ Matrici mancanti gestite correttamente', 'success');
-                        } else {
-                            throw new Error('Matrici mancanti non gestite correttamente');
-                        }
-                    },
-                    'test-pricing-multiple-lines': () => {
-                        log('Test con più linee diverse...', 'info');
-                        if (tariffario.length > 1) {
-                            const resultLinea1 = Pricing.calculatePrice(0, 0, 1, tariffario);
-                            const resultLinea2 = Pricing.calculatePrice(1, 0, 1, tariffario);
-                            if (resultLinea1.valido && resultLinea2.valido) {
-                                updateStatus('test-pricing-multiple-lines', 'pass');
-                                log('✓ Test con più linee completato', 'success');
-                                log(`  Linea 1: €${resultLinea1.prezzo?.toFixed(2)}, Linea 2: €${resultLinea2.prezzo?.toFixed(2)}`, 'info');
-                            } else {
-                                throw new Error('Test con più linee fallito');
-                            }
-                        } else {
-                            updateStatus('test-pricing-multiple-lines', 'pass');
-                            log('✓ Solo una linea disponibile (normale)', 'success');
-                        }
-                    },
-                    'test-pricing-performance': () => {
-                        log('Test performance (1000 calcoli)...', 'info');
-                        const perfStart = performance.now();
-                        for (let i = 0; i < 1000; i++) {
-                            const p = i % (linea.fermate.length - 1);
-                            const a = (i + 1) % linea.fermate.length;
-                            if (p !== a) {
-                                Pricing.calculatePrice(lineaIdx, p, a, tariffario);
-                            }
-                        }
-                        const perfEnd = performance.now();
-                        const perfTime = perfEnd - perfStart;
-                        const avgTime = perfTime / 1000;
-                        if (perfTime < 100) {
-                            updateStatus('test-pricing-performance', 'pass');
-                            log(`✓ Performance: ${perfTime.toFixed(2)}ms per 1000 calcoli`, 'success');
-                            log(`  Media: ${avgTime.toFixed(4)}ms per calcolo`, 'info');
-                        } else {
-                            updateStatus('test-pricing-performance', 'pass');
-                            log(`⚠ Performance: ${perfTime.toFixed(2)}ms (potrebbe essere lento)`, 'info');
-                        }
-                    },
-                    'test-pricing-null-price': () => {
-                        log('Test prezzo null nella matrice...', 'info');
-                        const mockTariffarioNull = createMockTariffario({
-                            nome: 'Linea Test Null',
-                            fermate: ['A', 'B', 'C'],
-                            prezzi: [[0, null, 3.5], [null, 0, 2.0], [3.5, 2.0, 0]],
-                            codici: [['', '', 'E2'], ['E1', '', 'E1'], ['E2', 'E1', '']]
-                        });
-                        const nullPriceResult = Pricing.calculatePrice(0, 0, 1, mockTariffarioNull);
-                        if (nullPriceResult.prezzo === null && nullPriceResult.valido === false) {
-                            updateStatus('test-pricing-null-price', 'pass');
-                            log('✓ Prezzo null gestito correttamente', 'success');
-                        } else {
-                            throw new Error('Prezzo null non gestito correttamente');
-                        }
-                    },
-                    'test-pricing-undefined-price': () => {
-                        log('Test prezzo undefined nella matrice...', 'info');
-                        const mockTariffarioUndefined = createMockTariffario({
-                            nome: 'Linea Test Undefined',
-                            fermate: ['A', 'B', 'C'],
-                            prezzi: [[0, undefined, 3.5], [undefined, 0, 2.0], [3.5, 2.0, 0]],
-                            codici: [['', '', 'E2'], ['E1', '', 'E1'], ['E2', 'E1', '']]
-                        });
-                        const undefinedPriceResult = Pricing.calculatePrice(0, 0, 1, mockTariffarioUndefined);
-                        if (undefinedPriceResult.prezzo === null && undefinedPriceResult.valido === false) {
-                            updateStatus('test-pricing-undefined-price', 'pass');
-                            log('✓ Prezzo undefined gestito correttamente', 'success');
-                        } else {
-                            throw new Error('Prezzo undefined non gestito correttamente');
-                        }
-                    },
-                    'test-pricing-string-price': () => {
-                        log('Test prezzo come stringa ("3.50")...', 'info');
-                        const mockTariffarioString = createMockTariffario({
-                            nome: 'Linea Test String',
-                            fermate: ['A', 'B', 'C'],
-                            prezzi: [[0, '3.50', 3.5], ['3.50', 0, 2.0], [3.5, 2.0, 0]]
-                        });
-                        const stringPriceResult = Pricing.calculatePrice(0, 0, 1, mockTariffarioString);
-                        if (stringPriceResult.prezzo === null) {
-                            updateStatus('test-pricing-string-price', 'pass');
-                            log('✓ Prezzo stringa rifiutato correttamente', 'success');
-                        } else {
-                            throw new Error('Prezzo stringa non rifiutato correttamente');
-                        }
-                    },
-                    'test-pricing-line-not-exists': () => {
-                        log('Test linea non esistente (indice 999)...', 'info');
-                        const nonExistentLineResult = Pricing.calculatePrice(999, 0, 1, tariffario);
-                        if (nonExistentLineResult.valido === false && nonExistentLineResult.prezzo === null) {
-                            updateStatus('test-pricing-line-not-exists', 'pass');
-                            log('✓ Linea non esistente gestita correttamente', 'success');
-                        } else {
-                            throw new Error('Linea non esistente non gestita correttamente');
-                        }
-                    },
-                    'test-pricing-result-structure': () => {
-                        log('Test struttura risultato corretta...', 'info');
-                        const testResult = Pricing.calculatePrice(lineaIdx, partenzaIdx, arrivoIdx, tariffario);
-                        const hasPrezzo = 'prezzo' in testResult;
-                        const hasCodice = 'codice' in testResult;
-                        const hasValido = 'valido' in testResult;
-                        const hasCorrectTypes =
-                            (testResult.prezzo === null || typeof testResult.prezzo === 'number') &&
-                            typeof testResult.codice === 'string' &&
-                            typeof testResult.valido === 'boolean';
-                        if (hasPrezzo && hasCodice && hasValido && hasCorrectTypes) {
-                            updateStatus('test-pricing-result-structure', 'pass');
-                            log('✓ Struttura risultato corretta', 'success');
-                            log(`  {prezzo: ${typeof testResult.prezzo}, codice: ${typeof testResult.codice}, valido: ${typeof testResult.valido}}`, 'info');
-                        } else {
-                            throw new Error('Struttura risultato non corretta');
-                        }
-                    },
-                    'test-pricing-nan-price': () => {
-                        log('Test prezzo NaN nella matrice...', 'info');
-                        const mockTariffarioNaN = createMockTariffario({
-                            nome: 'Linea Test NaN',
-                            fermate: ['A', 'B', 'C'],
-                            prezzi: [[0, NaN, 3.5], [NaN, 0, 2.0], [3.5, 2.0, 0]]
-                        });
-                        const nanPriceResult = Pricing.calculatePrice(0, 0, 1, mockTariffarioNaN);
-                        if (nanPriceResult.prezzo === null) {
-                            updateStatus('test-pricing-nan-price', 'pass');
-                            log('✓ Prezzo NaN rifiutato correttamente', 'success');
-                        } else {
-                            throw new Error('Prezzo NaN non rifiutato correttamente');
-                        }
-                    },
-                    'test-pricing-infinity-price': () => {
-                        log('Test prezzo Infinity nella matrice...', 'info');
-                        const mockTariffarioInfinity = createMockTariffario({
-                            nome: 'Linea Test Infinity',
-                            fermate: ['A', 'B', 'C'],
-                            prezzi: [[0, Infinity, 3.5], [Infinity, 0, 2.0], [3.5, 2.0, 0]]
-                        });
-                        const infinityPriceResult = Pricing.calculatePrice(0, 0, 1, mockTariffarioInfinity);
-                        const infinityFormatted = Pricing.formatPrice(Infinity);
-                        if (infinityFormatted === '-' || infinityPriceResult.prezzo === null) {
-                            updateStatus('test-pricing-infinity-price', 'pass');
-                            log('✓ Prezzo Infinity gestito correttamente', 'success');
-                            log(`  Formattazione: ${infinityFormatted}`, 'info');
-                        } else {
-                            throw new Error('Prezzo Infinity non gestito correttamente');
-                        }
-                    },
-                    'test-pricing-negative-price': () => {
-                        log('Test prezzo negativo...', 'info');
-                        const mockTariffarioNegative = createMockTariffario({
-                            nome: 'Linea Test Negativo',
-                            fermate: ['A', 'B', 'C'],
-                            prezzi: [[0, -1.50, 3.5], [-1.50, 0, 2.0], [3.5, 2.0, 0]],
-                            codici: [['', 'E1', 'E2'], ['E1', '', 'E1'], ['E2', 'E1', '']]
-                        });
-                        const negativePriceResult = Pricing.calculatePrice(0, 0, 1, mockTariffarioNegative);
-                        if (typeof negativePriceResult.prezzo === 'number' || negativePriceResult.prezzo === null) {
-                            updateStatus('test-pricing-negative-price', 'pass');
-                            log('✓ Prezzo negativo gestito correttamente', 'success');
-                            log(`  Prezzo: ${negativePriceResult.prezzo !== null ? negativePriceResult.prezzo.toFixed(2) : 'null'}`, 'info');
-                        } else {
-                            throw new Error('Prezzo negativo non gestito correttamente');
-                        }
-                    },
-                    'test-pricing-fermate-not-array': () => {
-                        log('Test fermate non array...', 'info');
-                        const mockTariffarioBadFermate = [{
-                            nome: 'Linea Test Bad Fermate',
-                            fermate: 'non è un array',
-                            prezzi: [[0, 3.5], [3.5, 0]]
-                        }];
-                        const badFermateResult = Pricing.calculatePrice(0, 0, 1, mockTariffarioBadFermate);
-                        if (badFermateResult.valido === false) {
-                            updateStatus('test-pricing-fermate-not-array', 'pass');
-                            log('✓ fermate non array gestito correttamente', 'success');
-                        } else {
-                            throw new Error('fermate non array non gestito correttamente');
-                        }
-                    },
-                    'test-pricing-code-with-spaces': () => {
-                        log('Test codice con spazi...', 'info');
-                        const mockTariffarioSpaces = createMockTariffario({
-                            nome: 'Linea Test Spazi',
-                            fermate: ['A', 'B', 'C'],
-                            prezzi: [[0, 3.5, 3.5], [3.5, 0, 2.0], [3.5, 2.0, 0]],
-                            codici: [['', 'E 1', 'E2'], ['E 1', '', 'E1'], ['E2', 'E1', '']]
-                        });
-                        const codeWithSpaces = Pricing.getTicketCode(0, 0, 1, mockTariffarioSpaces);
-                        if (codeWithSpaces === 'E 1') {
-                            updateStatus('test-pricing-code-with-spaces', 'pass');
-                            log(`✓ Codice con spazi gestito: "${codeWithSpaces}"`, 'success');
-                        } else {
-                            throw new Error('Codice con spazi non gestito correttamente');
-                        }
-                    },
-                    'test-pricing-price-code-only': () => {
-                        log('Test solo codice senza prezzo...', 'info');
-                        const mockTariffarioCodeOnly = createMockTariffario({
-                            nome: 'Linea Test Solo Codice',
-                            fermate: ['A', 'B', 'C'],
-                            prezzi: [[0, null, 3.5], [null, 0, 2.0], [3.5, 2.0, 0]],
-                            codici: [['', 'E1', 'E2'], ['E1', '', 'E1'], ['E2', 'E1', '']]
-                        });
-                        const codeOnlyResult = Pricing.calculatePrice(0, 0, 1, mockTariffarioCodeOnly);
-                        if (codeOnlyResult.codice === 'E1' && codeOnlyResult.valido === true) {
-                            updateStatus('test-pricing-price-code-only', 'pass');
-                            log('✓ Solo codice senza prezzo gestito correttamente', 'success');
-                            log(`  Codice: ${codeOnlyResult.codice}, Valido: ${codeOnlyResult.valido}`, 'info');
-                        } else {
-                            throw new Error('Solo codice senza prezzo non gestito correttamente');
-                        }
-                    },
-                    'test-pricing-fallback-actual': () => {
-                        log('Test funzionamento effettivo fallback tariffarioAggiornato...', 'info');
-                        const mockTariffario = createMockTariffario({
-                            nome: 'Linea Test Fallback',
-                            fermate: ['A', 'B', 'C'],
-                            prezzi: [[0, 3.5, 3.5], [3.5, 0, 2.0], [3.5, 2.0, 0]],
-                            codici: [['', '', 'E2'], ['', '', 'E1'], ['E2', 'E1', '']]
-                        });
-                        const mockTariffarioAggiornato = [
-                            { partenza: 'A', arrivo: 'B', codice_biglietto: 'FALLBACK_CODE' }
-                        ];
-                        const codiceFromFallback = Pricing.getTicketCode(0, 0, 1, mockTariffario, mockTariffarioAggiornato);
-                        const resultWithFallback = Pricing.calculatePrice(0, 0, 1, mockTariffario, mockTariffarioAggiornato);
-                        if (codiceFromFallback === 'FALLBACK_CODE' && resultWithFallback.codice === 'FALLBACK_CODE') {
-                            updateStatus('test-pricing-fallback-actual', 'pass');
-                            log('✓ Fallback tariffarioAggiornato funziona correttamente', 'success');
-                            log(`  Codice recuperato dal fallback: ${codiceFromFallback}`, 'info');
-                        } else {
-                            throw new Error('Fallback tariffarioAggiornato non funziona correttamente');
-                        }
-                    },
-                    'test-pricing-extreme-values': () => {
-                        log('Test valori estremi (grande/piccolo/decimali)...', 'info');
-                        const largePrice = 999999.99;
-                        const largeFormatted = Pricing.formatPrice(largePrice);
-                        if (largeFormatted !== '999999.99 €') {
-                            throw new Error(`Formattazione prezzo grande fallita: ${largeFormatted}`);
-                        }
-                        const smallPrice = 0.01;
-                        const smallFormatted = Pricing.formatPrice(smallPrice);
-                        if (smallFormatted !== '0.01 €') {
-                            throw new Error(`Formattazione prezzo piccolo fallita: ${smallFormatted}`);
-                        }
-                        const manyDecimalsPrice = 3.9999999;
-                        const manyDecimalsFormatted = Pricing.formatPrice(manyDecimalsPrice);
-                        if (!manyDecimalsFormatted.match(/^4\.00 €$/)) {
-                            throw new Error(`Formattazione prezzo con molti decimali fallita: ${manyDecimalsFormatted}`);
-                        }
-                        const mockTariffarioLarge = createMockTariffario({
-                            nome: 'Linea Test Prezzo Grande',
-                            fermate: ['A', 'B'],
-                            prezzi: [[0, largePrice], [largePrice, 0]]
-                        });
-                        const largeResult = Pricing.calculatePrice(0, 0, 1, mockTariffarioLarge);
-                        if (largeResult.prezzo !== largePrice || !largeResult.valido) {
-                            throw new Error('Calcolo con prezzo grande fallito');
-                        }
-                        const mockTariffarioSmall = createMockTariffario({
-                            nome: 'Linea Test Prezzo Piccolo',
-                            fermate: ['A', 'B'],
-                            prezzi: [[0, smallPrice], [smallPrice, 0]]
-                        });
-                        const smallResult = Pricing.calculatePrice(0, 0, 1, mockTariffarioSmall);
-                        if (smallResult.prezzo !== smallPrice || !smallResult.valido) {
-                            throw new Error('Calcolo con prezzo piccolo fallito');
-                        }
-                        updateStatus('test-pricing-extreme-values', 'pass');
-                        log('✓ Valori estremi gestiti correttamente', 'success');
-                        log(`  Grande: ${largeFormatted}, Piccolo: ${smallFormatted}, Decimali: ${manyDecimalsFormatted}`, 'info');
-                    },
-                    'test-pricing-symmetry': () => {
-                        log('Test simmetria andata/ritorno...', 'info');
-                        if (!tariffario || !Array.isArray(tariffario) || tariffario.length === 0) {
-                            updateStatus('test-pricing-symmetry', 'pass');
-                            log('✓ Tariffario non disponibile (test saltato)', 'info');
-                            return;
-                        }
-                        const linea = tariffario[0];
-                        if (!linea || !linea.fermate || linea.fermate.length < 2) {
-                            updateStatus('test-pricing-symmetry', 'pass');
-                            log('✓ Linea non valida per test simmetria (test saltato)', 'info');
-                            return;
-                        }
-                        const partenzaIdx = 0;
-                        const arrivoIdx = Math.min(1, linea.fermate.length - 1);
-                        if (partenzaIdx === arrivoIdx) {
-                            updateStatus('test-pricing-symmetry', 'pass');
-                            log('✓ Non ci sono fermate sufficienti per test simmetria (test saltato)', 'info');
-                            return;
-                        }
-                        const resultAndata = Pricing.calculatePrice(0, partenzaIdx, arrivoIdx, tariffario);
-                        const resultRitorno = Pricing.calculatePrice(0, arrivoIdx, partenzaIdx, tariffario);
-                        if (resultAndata.valido && resultRitorno.valido) {
-                            updateStatus('test-pricing-symmetry', 'pass');
-                            log('✓ Simmetria andata/ritorno verificata', 'success');
-                            log(`  Andata (${linea.fermate[partenzaIdx]}→${linea.fermate[arrivoIdx]}): €${resultAndata.prezzo?.toFixed(2) || 'N/A'}`, 'info');
-                            log(`  Ritorno (${linea.fermate[arrivoIdx]}→${linea.fermate[partenzaIdx]}): €${resultRitorno.prezzo?.toFixed(2) || 'N/A'}`, 'info');
-                        } else {
-                            updateStatus('test-pricing-symmetry', 'pass');
-                            log('✓ Test simmetria completato (dati possono essere asimmetrici)', 'info');
-                            log(`  Andata valida: ${resultAndata.valido}, Ritorno valido: ${resultRitorno.valido}`, 'info');
-                        }
-                    }
-                };
-
-                // Esegui il test specifico
-                if (testMap[testId]) {
-                    testMap[testId]();
-                } else {
-                    log(`⚠️ Test "${testId}" non riconosciuto`, 'warn');
-                    log('   I test disponibili sono tutti quelli elencati nella sezione Prezzi', 'info');
-                    return;
-                }
-
-                const endTime = performance.now();
-                const duration = Math.round(endTime - startTime);
-                
-                log('', 'info');
-                log(`✅ Test ${testId} completato in ${duration}ms`, 'success');
-
-            } catch (error) {
-                log(`✗ Test ${testId} fallito: ${error.message}`, 'error');
-                updateStatus(testId, 'fail');
-            }
-        }
+        // RIMOSSO: updatePriceHeader() spostata in js/tests/test-prezzi.js
+        // La funzione è ancora disponibile globalmente (window.updatePriceHeader)
 
         // ===== FUNZIONI TOGGLE PER SETTINGS =====
         // Le funzioni sono già definite all'inizio dello script
 
-        window.resetSettingsTests = function() {
-            const outputEl = document.getElementById('output-settings');
-            if (outputEl) {
-                outputEl.innerHTML = '';
-                outputEl.style.display = 'none';
-            }
+        // RIMOSSO: resetSettingsTests() spostata in js/tests/test-settings.js
+        // La funzione è ancora disponibile globalmente (window.resetSettingsTests)
 
-            const progressEl = document.getElementById('settings-header-progress');
-            const statusEl = document.getElementById('settings-header-status');
-            const passedEl = document.getElementById('settings-header-passed');
-            const failedEl = document.getElementById('settings-header-failed');
-            const timeEl = document.getElementById('settings-header-time');
-            const timestampEl = document.getElementById('settings-header-timestamp');
-            const barEl = document.getElementById('settings-header-bar');
+        // RIMOSSO: testSettings() e runSingleSettingsTest() spostate in js/tests/test-settings-wrappers.js
+        // Le funzioni sono ancora disponibili globalmente (window.testSettings, window.runSingleSettingsTest)
+        // IMPORTANTE: js/tests/test-settings-wrappers.js deve essere caricato PRIMA del DOM per essere disponibile agli onclick
 
-            if (progressEl) progressEl.textContent = '0/19';
-            if (statusEl) {
-                statusEl.className = 'test-header-status status-pending';
-                statusEl.textContent = 'In attesa';
-            }
-            if (passedEl) passedEl.textContent = '0';
-            if (failedEl) failedEl.textContent = '0';
-            if (timeEl) timeEl.textContent = '0ms';
-            if (timestampEl) {
-                timestampEl.textContent = '-';
-                timestampEl.setAttribute('data-ts', '');
-            }
-            if (barEl) barEl.setAttribute('data-progress', '0');
+        // RIMOSSO: testServiceWorker() spostata in js/tests/test-sw-wrappers.js
+        // La funzione è ancora disponibile globalmente (window.testServiceWorker)
+        // IMPORTANTE: js/tests/test-sw-wrappers.js deve essere caricato PRIMA del DOM per essere disponibile agli onclick
 
-            const groups = [
-                { id: 'group1', total: 3, text: '3 test' },
-                { id: 'group2', total: 3, text: '3 test' },
-                { id: 'group3', total: 6, text: '6 test' },
-                { id: 'group4', total: 5, text: '5 test' },
-                { id: 'group5', total: 5, text: '5 test' }
-            ];
-
-            groups.forEach(group => {
-                const badge = document.getElementById(`settings-${group.id}-badge`);
-                const subtitle = document.getElementById(`settings-${group.id}-subtitle`);
-                if (badge) {
-                    badge.textContent = `0/${group.total}`;
-                    badge.classList.remove('badge-partial', 'badge-complete');
-                    badge.classList.add('badge-pending');
-                }
-                if (subtitle) {
-                    subtitle.textContent = `${group.text} da completare`;
-                    subtitle.classList.remove('state-partial', 'state-complete');
-                    subtitle.classList.add('state-pending');
-                }
-            });
-
-            const allTestIds = [
-                'test-settings-font-size-normal',
-                'test-settings-font-size-large',
-                'test-settings-font-size-xlarge',
-                'test-settings-theme-light',
-                'test-settings-theme-dark',
-                'test-settings-theme-system',
-                'test-settings-high-contrast',
-                'test-settings-touch-friendly',
-                'test-settings-reduce-motion',
-                'test-settings-extra-spacing',
-                'test-settings-compact-layout',
-                'test-settings-blue-light-filter',
-                'test-settings-interface-scale-75',
-                'test-settings-interface-scale-85',
-                'test-settings-interface-scale-100',
-                'test-settings-interface-scale-115',
-                'test-settings-interface-scale-125',
-                'test-settings-haptic-feedback',
-                'test-settings-animation-toggle',
-                'test-settings-keep-screen-on',
-                'test-settings-localstorage-persistence',
-                'test-settings-css-classes'
-            ];
-
-            allTestIds.forEach(id => {
-                const testElement = document.getElementById(id);
-                if (testElement) {
-                    const statusSpan = testElement.querySelector('.test-status');
-                    if (statusSpan) {
-                        statusSpan.className = 'test-status pending';
-                        statusSpan.textContent = 'In attesa';
-                    }
-                }
-            });
-
-            toggleAllSettingsGroups(false);
-        }
-
-        window.testSettings = async function() {
-            const output = 'output-settings';
-            document.getElementById(output).innerHTML = '';
-            document.getElementById(output).style.display = 'block';
-
-            try {
-                if (typeof SettingsTests === 'undefined') {
-                    log(output, '✗ SettingsTests non disponibile! Assicurati che test-settings.js sia caricato.', 'error');
-                    return;
-                }
-
-                if (typeof Settings === 'undefined') {
-                    log(output, '✗ Settings non disponibile! Assicurati che settings.js sia caricato.', 'error');
-                    return;
-                }
-
-                log(output, '✓ SettingsTests e Settings disponibili', 'success');
-
-                const results = await SettingsTests.runAll({
-                    log: (message, type) => log(output, message, type),
-                    updateStatus: (id, status) => updateTestStatus(id, status)
-                });
-
-                if (results) {
-                    updateSettingsHeader(results.passed, results.failed, results.duration);
-                }
-            } catch (error) {
-                log(output, `✗ Errore fatale: ${error.message}`, 'error');
-                console.error('Errore test settings:', error);
-            }
-        }
-
-        function updateSettingsHeader(passed, failed, duration) {
-            const total = passed + failed;
-            
-            const passedEl = document.getElementById('settings-header-passed');
-            const failedEl = document.getElementById('settings-header-failed');
-            const timeEl = document.getElementById('settings-header-time');
-            const progressEl = document.getElementById('settings-header-progress');
-            const statusEl = document.getElementById('settings-header-status');
-            const barEl = document.getElementById('settings-header-bar');
-            const timestampEl = document.getElementById('settings-header-timestamp');
-            
-            if (passedEl) passedEl.textContent = passed;
-            if (failedEl) failedEl.textContent = failed;
-            if (timeEl) timeEl.textContent = `${duration}ms`;
-            if (progressEl) progressEl.textContent = `${total}/22`;
-            
-            if (barEl) {
-                const progress = Math.round((total / 22) * 100);
-                barEl.setAttribute('data-progress', progress);
-                barEl.style.width = `${progress}%`;
-            }
-            
-            if (statusEl) {
-                statusEl.classList.remove('status-pending', 'status-running', 'status-success', 'status-error');
-                
-                if (failed > 0) {
-                    statusEl.classList.add('status-error');
-                    statusEl.textContent = 'Errori';
-                } else if (total === 22) {
-                    statusEl.classList.add('status-success');
-                    statusEl.textContent = 'Completato';
-                } else {
-                    statusEl.classList.add('status-running');
-                    statusEl.textContent = 'In esecuzione';
-                }
-            }
-            
-            if (timestampEl) {
-                const now = new Date();
-                const timeStr = now.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-                timestampEl.textContent = `Ultimo aggiornamento: ${timeStr}`;
-                timestampEl.setAttribute('data-ts', now.toISOString());
-            }
-        }
-
-        window.runSingleSettingsTest = async function(testId) {
-            const output = 'output-settings';
-            const outputEl = document.getElementById(output);
-            
-            if (!outputEl) {
-                console.error('Elemento output non trovato:', output);
-                return;
-            }
-
-            outputEl.innerHTML = '';
-            outputEl.style.display = 'block';
-
-            const log = (message, type = 'info') => {
-                if (typeof TestUtils !== 'undefined' && TestUtils.log) {
-                    TestUtils.log(output, message, type);
-                } else {
-                    const logDiv = document.createElement('div');
-                    logDiv.className = `console-log ${type}`;
-                    logDiv.textContent = message;
-                    outputEl.appendChild(logDiv);
-                    console.log(`[${type}] ${message}`);
-                }
-            };
-
-            const updateStatus = (id, status) => {
-                if (typeof TestUtils !== 'undefined' && TestUtils.updateStatus) {
-                    TestUtils.updateStatus(id, status);
-                } else if (typeof updateTestStatus === 'function') {
-                    updateTestStatus(id, status);
-                }
-            };
-
-            log(`🧪 Esecuzione Test: ${testId}...`, 'info');
-            log('', 'info');
-
-            const startTime = performance.now();
-
-            try {
-                if (typeof SettingsTests === 'undefined') {
-                    throw new Error('SettingsTests non disponibile! Assicurati che test-settings.js sia caricato.');
-                }
-
-                if (typeof Settings === 'undefined') {
-                    throw new Error('Settings non disponibile! Assicurati che settings.js sia caricato.');
-                }
-
-                const testMap = {
-                    'test-settings-font-size-normal': () => SettingsTests.testFontSizeNormal({ log, updateStatus }),
-                    'test-settings-font-size-large': () => SettingsTests.testFontSizeLarge({ log, updateStatus }),
-                    'test-settings-font-size-xlarge': () => SettingsTests.testFontSizeXLarge({ log, updateStatus }),
-                    'test-settings-theme-light': () => SettingsTests.testThemeLight({ log, updateStatus }),
-                    'test-settings-theme-dark': () => SettingsTests.testThemeDark({ log, updateStatus }),
-                    'test-settings-theme-system': () => SettingsTests.testThemeSystem({ log, updateStatus }),
-                    'test-settings-high-contrast': () => SettingsTests.testHighContrast({ log, updateStatus }),
-                    'test-settings-touch-friendly': () => SettingsTests.testTouchFriendly({ log, updateStatus }),
-                    'test-settings-reduce-motion': () => SettingsTests.testReduceMotion({ log, updateStatus }),
-                    'test-settings-extra-spacing': () => SettingsTests.testExtraSpacing({ log, updateStatus }),
-                    'test-settings-compact-layout': () => SettingsTests.testCompactLayout({ log, updateStatus }),
-                    'test-settings-blue-light-filter': () => SettingsTests.testBlueLightFilter({ log, updateStatus }),
-                    'test-settings-interface-scale-75': () => SettingsTests.testInterfaceScale75({ log, updateStatus }),
-                    'test-settings-interface-scale-85': () => SettingsTests.testInterfaceScale85({ log, updateStatus }),
-                    'test-settings-interface-scale-100': () => SettingsTests.testInterfaceScale100({ log, updateStatus }),
-                    'test-settings-interface-scale-115': () => SettingsTests.testInterfaceScale115({ log, updateStatus }),
-                    'test-settings-interface-scale-125': () => SettingsTests.testInterfaceScale125({ log, updateStatus }),
-                    'test-settings-haptic-feedback': () => SettingsTests.testHapticFeedback({ log, updateStatus }),
-                    'test-settings-animation-toggle': () => SettingsTests.testAnimationToggle({ log, updateStatus }),
-                    'test-settings-keep-screen-on': () => SettingsTests.testKeepScreenOn({ log, updateStatus }),
-                    'test-settings-localstorage-persistence': () => SettingsTests.testLocalStoragePersistence({ log, updateStatus }),
-                    'test-settings-css-classes': () => SettingsTests.testCssClasses({ log, updateStatus })
-                };
-
-                if (testMap[testId]) {
-                    testMap[testId]();
-                } else {
-                    log(`⚠️ Test "${testId}" non riconosciuto`, 'warn');
-                    return;
-                }
-
-                const endTime = performance.now();
-                const duration = Math.round(endTime - startTime);
-                
-                log('', 'info');
-                log(`✅ Test ${testId} completato in ${duration}ms`, 'success');
-
-            } catch (error) {
-                log(`✗ Test ${testId} fallito: ${error.message}`, 'error');
-                updateStatus(testId, 'fail');
-            }
-        }
-
-        // Test 5: Service Worker - spostato in js/tests/test-sw.js
-        window.testServiceWorker = async function() {
-            const output = 'output-sw';
-            const outputEl = document.getElementById(output);
-            if (outputEl) {
-                outputEl.innerHTML = '';
-                outputEl.style.display = 'block';
-            }
-
-            try {
-                if (typeof ServiceWorkerTests === 'undefined') {
-                    log(output, '✗ ServiceWorkerTests non disponibile! Assicurati che test-sw.js sia caricato.', 'error');
-                    return;
-                }
-
-                log(output, '✓ ServiceWorkerTests disponibile', 'success');
-
-                const results = await ServiceWorkerTests.runAll({
-                    log: (message, type) => log(output, message, type),
-                    updateStatus: (id, status) => updateTestStatus(id, status)
-                });
-
-                if (results) {
-                    updateSwHeader(results.passed, results.failed, results.duration);
-                }
-            } catch (error) {
-                log(output, `✗ Errore fatale: ${error.message}`, 'error');
-                console.error('Errore test service worker:', error);
-            }
-        }
-
-        function updateSwHeader(passed, failed, duration) {
-            const total = passed + failed;
-            
-            const passedEl = document.getElementById('sw-header-passed');
-            const failedEl = document.getElementById('sw-header-failed');
-            const timeEl = document.getElementById('sw-header-time');
-            const progressEl = document.getElementById('sw-header-progress');
-            const statusEl = document.getElementById('sw-header-status');
-            const barEl = document.getElementById('sw-header-bar');
-            const timestampEl = document.getElementById('sw-header-timestamp');
-            
-            if (passedEl) passedEl.textContent = passed;
-            if (failedEl) failedEl.textContent = failed;
-            if (timeEl) timeEl.textContent = `${duration}ms`;
-            if (progressEl) progressEl.textContent = `${total}/14`;
-            
-            if (barEl) {
-                const progress = Math.round((total / 14) * 100);
-                barEl.setAttribute('data-progress', progress);
-                barEl.style.width = `${progress}%`;
-            }
-            
-            if (statusEl) {
-                statusEl.classList.remove('status-pending', 'status-running', 'status-success', 'status-error');
-                
-                if (failed > 0) {
-                    statusEl.classList.add('status-error');
-                    statusEl.textContent = 'Errori';
-                } else if (total === 14) {
-                    statusEl.classList.add('status-success');
-                    statusEl.textContent = 'Completato';
-                } else {
-                    statusEl.classList.add('status-running');
-                    statusEl.textContent = 'In esecuzione';
-                }
-            }
-            
-            if (timestampEl) {
-                const now = new Date();
-                const timeStr = now.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-                timestampEl.textContent = `Ultimo aggiornamento: ${timeStr}`;
-                timestampEl.setAttribute('data-ts', now.toISOString());
-            }
-        }
+        // RIMOSSO: updateSwHeader() spostata in js/tests/test-sw.js
+        // La funzione è ancora disponibile globalmente (window.updateSwHeader)
 
         // ===== FUNZIONI TOGGLE PER SERVICE WORKER =====
         // Le funzioni sono già definite all'inizio dello script
 
-        window.resetSwTests = function() {
-            const outputEl = document.getElementById('output-sw');
-            if (outputEl) {
-                outputEl.innerHTML = '';
-                outputEl.style.display = 'none';
-            }
-
-            const progressEl = document.getElementById('sw-header-progress');
-            const statusEl = document.getElementById('sw-header-status');
-            const passedEl = document.getElementById('sw-header-passed');
-            const failedEl = document.getElementById('sw-header-failed');
-            const timeEl = document.getElementById('sw-header-time');
-            const timestampEl = document.getElementById('sw-header-timestamp');
-            const barEl = document.getElementById('sw-header-bar');
-
-            if (progressEl) progressEl.textContent = '0/14';
-            if (statusEl) {
-                statusEl.className = 'test-header-status status-pending';
-                statusEl.textContent = 'In attesa';
-            }
-            if (passedEl) passedEl.textContent = '0';
-            if (failedEl) failedEl.textContent = '0';
-            if (timeEl) timeEl.textContent = '0ms';
-            if (timestampEl) {
-                timestampEl.textContent = '-';
-                timestampEl.setAttribute('data-ts', '');
-            }
-            if (barEl) {
-                barEl.setAttribute('data-progress', '0');
-                barEl.style.width = '0%';
-            }
-
-            // Resetta i badge e subtitle dei gruppi
-            const groups = [
-                { id: 'group1', total: 3, text: '3 test' },
-                { id: 'group2', total: 4, text: '4 test' },
-                { id: 'group3', total: 4, text: '4 test' },
-                { id: 'group4', total: 3, text: '3 test' }
-            ];
-
-            groups.forEach(group => {
-                const badge = document.getElementById(`sw-${group.id}-badge`);
-                const subtitle = document.getElementById(`sw-${group.id}-subtitle`);
-                if (badge) {
-                    badge.textContent = `0/${group.total}`;
-                    badge.classList.remove('badge-partial', 'badge-complete');
-                    badge.classList.add('badge-pending');
-                }
-                if (subtitle) {
-                    subtitle.textContent = `${group.text} da completare`;
-                    subtitle.classList.remove('state-partial', 'state-complete');
-                    subtitle.classList.add('state-pending');
-                }
-            });
-
-            const allTestIds = [
-                'test-sw-registration',
-                'test-sw-cache',
-                'test-sw-version-not-cached',
-                'test-sw-cache-size',
-                'test-sw-messages',
-                'test-sw-offline-fallback',
-                'test-sw-update-mechanism',
-                'test-sw-cache-cleanup',
-                'test-sw-static-assets',
-                'test-sw-fetch-strategy',
-                'test-sw-clear-cache-message',
-                'test-sw-skip-waiting-message',
-                'test-sw-github-pages-patterns',
-                'test-sw-error-handling'
-            ];
-
-            allTestIds.forEach(id => {
-                const testElement = document.getElementById(id);
-                if (testElement) {
-                    const statusSpan = testElement.querySelector('.test-status');
-                    if (statusSpan) {
-                        statusSpan.className = 'test-status pending';
-                        statusSpan.textContent = 'In attesa';
-                    }
-                }
-            });
-
-            toggleAllSwGroups(false);
-        }
+        // RIMOSSO: resetSwTests() spostata in js/tests/test-sw.js
+        // La funzione è ancora disponibile globalmente (window.resetSwTests)
 
         window.runSingleSwTest = async function(testId) {
             const output = 'output-sw';
@@ -3936,8 +2501,8 @@
             const updateStatus = (id, status) => {
                 if (typeof TestUtils !== 'undefined' && TestUtils.updateStatus) {
                     TestUtils.updateStatus(id, status);
-                } else if (typeof updateTestStatus === 'function') {
-                    updateTestStatus(id, status);
+                } else if (typeof TestUtils !== 'undefined' && TestUtils.updateTestStatus) {
+                    TestUtils.updateTestStatus(id, status);
                 }
             };
 
@@ -4005,22 +2570,22 @@
 
             try {
                 if (typeof UITests === 'undefined') {
-                    log(output, '✗ UITests non disponibile! Assicurati che test-ui.js sia caricato.', 'error');
+                    TestUtils.log(output, '✗ UITests non disponibile! Assicurati che test-ui.js sia caricato.', 'error');
                     return;
                 }
 
-                log(output, '✓ UITests disponibile', 'success');
+                TestUtils.log(output, '✓ UITests disponibile', 'success');
 
                 const results = await UITests.runAll({
-                    log: (message, type) => log(output, message, type),
-                    updateStatus: (id, status) => updateTestStatus(id, status)
+                    log: (message, type) => TestUtils.log(output, message, type),
+                    updateStatus: (id, status) => TestUtils.updateTestStatus(id, status)
                 });
 
                 if (results) {
-                    log(output, `✅ Test completati: ${results.passed} passati, ${results.failed} falliti`, results.failed > 0 ? 'error' : 'success');
+                    TestUtils.log(output, `✅ Test completati: ${results.passed} passati, ${results.failed} falliti`, results.failed > 0 ? 'error' : 'success');
                 }
             } catch (error) {
-                log(output, `✗ Errore fatale: ${error.message}`, 'error');
+                TestUtils.log(output, `✗ Errore fatale: ${error.message}`, 'error');
                 console.error('Errore test UI components:', error);
             }
         }
@@ -4036,22 +2601,22 @@
 
             try {
                 if (typeof ManifestTests === 'undefined') {
-                    log(output, '✗ ManifestTests non disponibile! Assicurati che test-manifest.js sia caricato.', 'error');
+                    TestUtils.log(output, '✗ ManifestTests non disponibile! Assicurati che test-manifest.js sia caricato.', 'error');
                     return;
                 }
 
-                log(output, '✓ ManifestTests disponibile', 'success');
+                TestUtils.log(output, '✓ ManifestTests disponibile', 'success');
 
                 const results = await ManifestTests.runAll({
-                    log: (message, type) => log(output, message, type),
-                    updateStatus: (id, status) => updateTestStatus(id, status)
+                    log: (message, type) => TestUtils.log(output, message, type),
+                    updateStatus: (id, status) => TestUtils.updateTestStatus(id, status)
                 });
 
                 if (results) {
-                    log(output, `✅ Test completati: ${results.passed} passati, ${results.failed} falliti`, results.failed > 0 ? 'error' : 'success');
+                    TestUtils.log(output, `✅ Test completati: ${results.passed} passati, ${results.failed} falliti`, results.failed > 0 ? 'error' : 'success');
                 }
             } catch (error) {
-                log(output, `✗ Errore fatale: ${error.message}`, 'error');
+                TestUtils.log(output, `✗ Errore fatale: ${error.message}`, 'error');
                 console.error('Errore test manifest:', error);
             }
         }
@@ -4067,22 +2632,22 @@
 
             try {
                 if (typeof PerformanceTests === 'undefined') {
-                    log(output, '✗ PerformanceTests non disponibile! Assicurati che test-performance.js sia caricato.', 'error');
+                    TestUtils.log(output, '✗ PerformanceTests non disponibile! Assicurati che test-performance.js sia caricato.', 'error');
                     return;
                 }
 
-                log(output, '✓ PerformanceTests disponibile', 'success');
+                TestUtils.log(output, '✓ PerformanceTests disponibile', 'success');
 
                 const results = await PerformanceTests.runAll({
-                    log: (message, type) => log(output, message, type),
-                    updateStatus: (id, status) => updateTestStatus(id, status)
+                    log: (message, type) => TestUtils.log(output, message, type),
+                    updateStatus: (id, status) => TestUtils.updateTestStatus(id, status)
                 });
 
                 if (results) {
-                    log(output, `✅ Test completati: ${results.passed} passati, ${results.failed} falliti`, results.failed > 0 ? 'error' : 'success');
+                    TestUtils.log(output, `✅ Test completati: ${results.passed} passati, ${results.failed} falliti`, results.failed > 0 ? 'error' : 'success');
                 }
             } catch (error) {
-                log(output, `✗ Errore fatale: ${error.message}`, 'error');
+                TestUtils.log(output, `✗ Errore fatale: ${error.message}`, 'error');
                 console.error('Errore test performance:', error);
             }
         }
@@ -5168,26 +3733,9 @@
             }, 100);
         }
 
-        // Esegui tutti i test
-        window.runAllTests = async function() {
-            console.log('Esecuzione di tutti i test...');
-            await testDatabaseLoad();
-            await new Promise(resolve => setTimeout(resolve, 500));
-            testLocalStorage();
-            await new Promise(resolve => setTimeout(resolve, 500));
-            testDarkMode();
-            await new Promise(resolve => setTimeout(resolve, 500));
-            await testPriceCalculation();
-            await new Promise(resolve => setTimeout(resolve, 500));
-            await testServiceWorker();
-            await new Promise(resolve => setTimeout(resolve, 500));
-            await testUIComponents();
-            await new Promise(resolve => setTimeout(resolve, 500));
-            await testManifest();
-            await new Promise(resolve => setTimeout(resolve, 500));
-            await testPerformance();
-            console.log('Tutti i test completati!');
-        }
+        // RIMOSSO: runAllTests() spostata in js/tests/test-all-wrappers.js
+        // La funzione è ancora disponibile globalmente (window.runAllTests)
+        // IMPORTANTE: js/tests/test-all-wrappers.js deve essere caricato PRIMA del DOM per essere disponibile agli onclick
 
         // Funzione per aggiornare lo status degli effetti
         window.updateEffectsStatus = function() {
@@ -5876,7 +4424,7 @@ ${JSON.stringify(reportData.gps.fakePositionData, null, 2)}
             detectDeviceInfo();
 
             // Inizializza statistiche e effetti
-            updateStats();
+            TestUtils.updateStats();
             updateEffectsStatus();
 
             // Event listener per test geolocalizzazione
@@ -6146,7 +4694,6 @@ ${JSON.stringify(reportData.gps.fakePositionData, null, 2)}
         })();
     </script>
 
-    <!-- Render del Changelog -->
     <script>
         // Aspetta che il DOM sia pronto
         document.addEventListener('DOMContentLoaded', () => {

@@ -29,11 +29,24 @@ const STATIC_ASSETS = [
   './script.js', // Funzionalità app
   './footer.js', // Footer modulare JS
   './changelog.js', // Changelog dinamico
+  './js/core/storage.js', // Core: Storage wrapper (deve essere caricato per primo!)
   './js/features/updates.js', // Verifica aggiornamenti
   './js/features/settings.js', // Gestione impostazioni
   './js/features/prezzi.js', // Calcolo prezzi
   './js/tests/test-prezzi.js', // Test suite prezzi (solo per test.html)
+  './js/tests/test-prezzi-wrappers.js', // Wrapper funzioni Prezzi test (solo per test.html)
+  './js/tests/test-storage.js', // Test suite storage (solo per test.html)
+  './js/tests/test-storage-wrappers.js', // Wrapper funzioni Storage test (solo per test.html)
+  './js/tests/test-log-helpers.js', // Funzioni gestione log (solo per test.html)
+  './js/tests/test-utils.js', // Utility funzioni test (solo per test.html)
+  './js/tests/test-settings.js', // Test suite settings (solo per test.html)
+  './js/tests/test-settings-wrappers.js', // Wrapper funzioni Settings test (solo per test.html)
+  './js/tests/test-sw.js', // Test suite service worker (solo per test.html)
+  './js/tests/test-sw-wrappers.js', // Wrapper funzioni Service Worker test (solo per test.html)
+  './js/tests/test-all-wrappers.js', // Wrapper funzione runAllTests (solo per test.html)
+  './js/tests/test-database.js', // Test suite database (solo per test.html)
   './js/components/modals.js', // Modal fermate
+  './js/components/notification-modal.js', // Modal notifica
   './js/utils/app-init.js', // Inizializzazione app comune (SW registration, changelog)
   './js/utils/interface-scale.js', // Sistema scala interfaccia
   './js/pages/benvenuto.js', // Logica specifica pagina benvenuto

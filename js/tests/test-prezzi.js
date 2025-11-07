@@ -878,6 +878,149 @@
     testSymmetry: testSymmetry
   };
 
+  // ===== FUNZIONI HEADER =====
+  // Gestione header e reset per il modulo Prezzi
+
+  /**
+   * Aggiorna l'header con statistiche dei test Prezzi
+   * @param {number} passed - Numero di test passati
+   * @param {number} failed - Numero di test falliti
+   * @param {number} duration - Durata in millisecondi
+   */
+  function updatePriceHeader(passed, failed, duration) {
+    const total = passed + failed;
+    const totalTests = getAllTestIds().length; // Usa il numero reale di test
+    
+    // Aggiorna contatori
+    const passedEl = document.getElementById('price-header-passed');
+    const failedEl = document.getElementById('price-header-failed');
+    const timeEl = document.getElementById('price-header-time');
+    const progressEl = document.getElementById('price-header-progress');
+    const statusEl = document.getElementById('price-header-status');
+    const barEl = document.getElementById('price-header-bar');
+    const timestampEl = document.getElementById('price-header-timestamp');
+    
+    if (passedEl) passedEl.textContent = passed;
+    if (failedEl) failedEl.textContent = failed;
+    if (timeEl) timeEl.textContent = `${duration}ms`;
+    if (progressEl) progressEl.textContent = `${total}/${totalTests}`;
+    
+    // Aggiorna barra progresso
+    if (barEl) {
+      const progress = Math.round((total / totalTests) * 100);
+      barEl.setAttribute('data-progress', progress);
+      barEl.style.width = `${progress}%`;
+    }
+    
+    // Aggiorna status
+    if (statusEl) {
+      statusEl.classList.remove('status-pending', 'status-running', 'status-success', 'status-error');
+      
+      if (failed > 0) {
+        statusEl.classList.add('status-error');
+        statusEl.textContent = 'Errori';
+      } else if (total === totalTests) {
+        statusEl.classList.add('status-success');
+        statusEl.textContent = 'Completato';
+      } else {
+        statusEl.classList.add('status-running');
+        statusEl.textContent = 'In esecuzione';
+      }
+    }
+    
+    // Aggiorna timestamp
+    if (timestampEl) {
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      timestampEl.textContent = `Ultimo aggiornamento: ${timeStr}`;
+      timestampEl.setAttribute('data-ts', now.toISOString());
+    }
+  }
+
+  /**
+   * Resetta tutti i test Prezzi e l'header
+   */
+  function resetPriceTests() {
+    // Resetta il log (usa la funzione da test-log-helpers.js)
+    if (typeof window.clearPriceLog === 'function') {
+      window.clearPriceLog();
+    }
+
+    // Resetta l'header
+    const totalTests = getAllTestIds().length;
+    const progressEl = document.getElementById('price-header-progress');
+    const statusEl = document.getElementById('price-header-status');
+    const passedEl = document.getElementById('price-header-passed');
+    const failedEl = document.getElementById('price-header-failed');
+    const timeEl = document.getElementById('price-header-time');
+    const timestampEl = document.getElementById('price-header-timestamp');
+    const barEl = document.getElementById('price-header-bar');
+
+    if (progressEl) progressEl.textContent = `0/${totalTests}`;
+    if (statusEl) {
+      statusEl.className = 'test-header-status status-pending';
+      statusEl.textContent = 'In attesa';
+    }
+    if (passedEl) passedEl.textContent = '0';
+    if (failedEl) failedEl.textContent = '0';
+    if (timeEl) timeEl.textContent = '0ms';
+    if (timestampEl) {
+      timestampEl.textContent = '-';
+      timestampEl.setAttribute('data-ts', '');
+    }
+    if (barEl) {
+      barEl.setAttribute('data-progress', '0');
+      barEl.style.width = '0%';
+    }
+
+    // Resetta i badge e subtitle dei gruppi
+    const groups = [
+      { id: 'group1', total: 5, text: '5 test' },
+      { id: 'group2', total: 3, text: '3 test' },
+      { id: 'group3', total: 5, text: '5 test' },
+      { id: 'group4', total: 15, text: '15 test' } // Totale: 28 test
+    ];
+
+    groups.forEach(group => {
+      const badge = document.getElementById(`price-${group.id}-badge`);
+      const subtitle = document.getElementById(`price-${group.id}-subtitle`);
+      if (badge) {
+        badge.textContent = `0/${group.total}`;
+        badge.classList.remove('badge-partial', 'badge-complete');
+        badge.classList.add('badge-pending');
+      }
+      if (subtitle) {
+        subtitle.textContent = `${group.text} da completare`;
+        subtitle.classList.remove('state-partial', 'state-complete');
+        subtitle.classList.add('state-pending');
+      }
+    });
+
+    // Resetta tutti gli status dei test a "pending"
+    const allTestIds = getAllTestIds();
+    allTestIds.forEach(id => {
+      const testElement = document.getElementById(id);
+      if (testElement) {
+        const statusSpan = testElement.querySelector('.test-status');
+        if (statusSpan) {
+          statusSpan.className = 'test-status pending';
+          statusSpan.textContent = 'In attesa';
+        }
+      }
+    });
+
+    // Chiudi tutti i gruppi (usa la funzione accordion se disponibile)
+    if (typeof window.toggleAllPriceGroups === 'function') {
+      window.toggleAllPriceGroups(false);
+    } else if (typeof TestAccordion !== 'undefined' && TestAccordion.toggleAllGroups) {
+      TestAccordion.toggleAllGroups('price', false);
+    }
+  }
+
+  // Esponi le funzioni header globalmente per compatibilità con onclick
+  window.updatePriceHeader = updatePriceHeader;
+  window.resetPriceTests = resetPriceTests;
+
   console.log('✅ Modulo test test-prezzi.js caricato');
 
 })();

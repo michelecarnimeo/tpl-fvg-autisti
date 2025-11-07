@@ -1,6 +1,37 @@
 // script.js - Gestione logica TPL FVG
 
 // ========================================
+// STORAGE HELPER
+// ========================================
+// Usa Storage se disponibile, altrimenti fallback su localStorage
+const Storage = window.Storage || {
+  getItem: (key, defaultValue = null) => {
+    try {
+      const item = localStorage.getItem(key);
+      return item !== null ? item : defaultValue;
+    } catch {
+      return defaultValue;
+    }
+  },
+  setItem: (key, value) => {
+    try {
+      localStorage.setItem(key, value);
+      return true;
+    } catch {
+      return false;
+    }
+  },
+  removeItem: (key) => {
+    try {
+      localStorage.removeItem(key);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+};
+
+// ========================================
 // SEZIONE 0: FEEDBACK APTICO (VIBRAZIONE)
 // ========================================
 // Le funzioni di feedback aptico sono ora in js/features/settings.js
@@ -223,9 +254,7 @@ let deferredInstallPrompt = null; // beforeinstallprompt event
 // Utility dark mode
 function setDarkMode(isDark) {
   document.documentElement.classList.toggle('dark', isDark);
-  try {
-    localStorage.setItem('tpl.isDark', isDark ? '1' : '0');
-  } catch { }
+  Storage.setItem('tpl.isDark', isDark ? '1' : '0');
   // Aggiorna i colori del body per tutte le pagine
   if (window.Settings && window.Settings.updateBodyColors) {
     window.Settings.updateBodyColors(isDark);
@@ -242,7 +271,7 @@ function toggleDark() {
     window.Settings.setThemeMode(newMode);
   } else {
     // Fallback
-    localStorage.setItem('tpl.themeMode', newMode);
+    Storage.setItem('tpl.themeMode', newMode);
     document.documentElement.classList.toggle('dark', isDark);
     if (window.Settings && window.Settings.updateBodyColors) {
       window.Settings.updateBodyColors(isDark);
@@ -357,10 +386,8 @@ function selectLinea(idx, nome) {
   calcolaPrezzo();
   updatePriceCardState();
 
-  // Salva in localStorage
-  try {
-    localStorage.setItem('tpl.lineaIdx', lineaIdx);
-  } catch { }
+  // Salva usando Storage
+  Storage.setItem('tpl.lineaIdx', lineaIdx);
 
   closeLineeModal();
 }
@@ -511,12 +538,10 @@ function resetFilters() {
     swapBtn.style.cursor = 'not-allowed';
   }
 
-  // Reset tutto nel LocalStorage
-  try {
-    localStorage.removeItem('tpl.lineaIdx');
-    localStorage.removeItem('tpl.partenzaIdx');
-    localStorage.removeItem('tpl.arrivoIdx');
-  } catch { }
+  // Reset tutto usando Storage
+  Storage.removeItem('tpl.lineaIdx');
+  Storage.removeItem('tpl.partenzaIdx');
+  Storage.removeItem('tpl.arrivoIdx');
 
   // Feedback visivo e aptico
   const resetBtn = document.getElementById('reset-btn');
@@ -686,13 +711,11 @@ function initializeModalsModules() {
         updatePriceCardState();
 
         // Salva nello storage
-        try {
-          if (type === 'partenza') {
-            localStorage.setItem('tpl.partenzaIdx', partenzaIdx);
-          } else {
-            localStorage.setItem('tpl.arrivoIdx', arrivoIdx);
-          }
-        } catch { }
+        if (type === 'partenza') {
+          Storage.setItem('tpl.partenzaIdx', partenzaIdx);
+        } else {
+          Storage.setItem('tpl.arrivoIdx', arrivoIdx);
+        }
       }
     });
   }
@@ -806,17 +829,17 @@ async function loadData() {
 
   // Notifica che i dati sono pronti
   window.dispatchEvent(new Event('tariffarioLoaded'));
-  // Ripristina selezioni da localStorage
+  // Ripristina selezioni usando Storage
   try {
     // Retrocompatibilità: converti vecchio sistema isDark a themeMode
-    const oldDarkMode = localStorage.getItem('tpl.isDark');
-    const existingThemeMode = localStorage.getItem('tpl.themeMode');
+    const oldDarkMode = Storage.getItem('tpl.isDark');
+    const existingThemeMode = Storage.getItem('tpl.themeMode');
 
     if (!existingThemeMode && oldDarkMode !== null) {
       // Migrazione da vecchio sistema
       const newMode = oldDarkMode === '1' ? 'dark' : 'light';
-      localStorage.setItem('tpl.themeMode', newMode);
-      localStorage.removeItem('tpl.isDark'); // Rimuovi vecchia impostazione
+      Storage.setItem('tpl.themeMode', newMode);
+      Storage.removeItem('tpl.isDark'); // Rimuovi vecchia impostazione
     }
 
     // Il tema verrà caricato dal modal impostazioni con loadTheme()
@@ -827,9 +850,9 @@ async function loadData() {
       window.Settings.initFontSize();
     }
 
-    const sLinea = localStorage.getItem('tpl.lineaIdx');
-    const sPart = localStorage.getItem('tpl.partenzaIdx');
-    const sArr = localStorage.getItem('tpl.arrivoIdx');
+    const sLinea = Storage.getItem('tpl.lineaIdx');
+    const sPart = Storage.getItem('tpl.partenzaIdx');
+    const sArr = Storage.getItem('tpl.arrivoIdx');
     if (sLinea !== null) {
       lineaIdx = sLinea;
       // Ripristina il testo del bottone linea
@@ -1427,9 +1450,7 @@ async function handleLocationClick() {
     locationBtn.classList.add('active');
 
     // Salva preferenza
-    try {
-      localStorage.setItem('tpl.locationEnabled', 'true');
-    } catch { }
+    Storage.setItem('tpl.locationEnabled', 'true');
 
     // Mostra notifica di successo
     showLocationNotification('Posizione rilevata! Le fermate saranno ordinate per distanza.', 'success');
@@ -1490,9 +1511,7 @@ async function handleFermateLocationClick() {
     showLocationNotification('Posizione rilevata! Ordinando fermate per distanza...', 'success');
 
     // Salva preferenza
-    try {
-      localStorage.setItem('tpl.locationEnabled', 'true');
-    } catch { }
+    Storage.setItem('tpl.locationEnabled', 'true');
 
     // Ri-ordina le fermate per distanza
     if (fermateModalList && fermateModalList.children.length > 0) {
@@ -1552,9 +1571,7 @@ function disableLocationSorting() {
   if (locationText) locationText.textContent = 'Rileva posizione';
 
   // Rimuovi preferenza
-  try {
-    localStorage.removeItem('tpl.locationEnabled');
-  } catch { }
+  Storage.removeItem('tpl.locationEnabled');
 }
 
 // Avvia logica tratte/tariffe solo se siamo su tratte.html o tariffe.html
@@ -1843,7 +1860,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
   function canShowAgain() {
     try {
-      const lastDismiss = localStorage.getItem('tpl.pwa.dismissTs');
+      const lastDismiss = Storage.getItem('tpl.pwa.dismissTs');
       if (!lastDismiss) return true;
       const days = 7; // ripropone dopo 7 giorni
       return Date.now() - parseInt(lastDismiss, 10) > days * 24 * 60 * 60 * 1000;
@@ -1896,7 +1913,7 @@ window.addEventListener('DOMContentLoaded', function () {
         deferredInstallPrompt = null;
         hideBanner();
         if (outcome === 'dismissed') {
-          try { localStorage.setItem('tpl.pwa.dismissTs', String(Date.now())); } catch { }
+          Storage.setItem('tpl.pwa.dismissTs', String(Date.now()));
         }
       } else {
         // iOS o browser senza evento: toggle hint con animazione
@@ -1920,14 +1937,14 @@ window.addEventListener('DOMContentLoaded', function () {
   if (pwaBtnLater) {
     pwaBtnLater.addEventListener('click', () => {
       hideBanner();
-      try { localStorage.setItem('tpl.pwa.dismissTs', String(Date.now())); } catch { }
+      Storage.setItem('tpl.pwa.dismissTs', String(Date.now()));
     });
   }
 
   // Evento installata
   window.addEventListener('appinstalled', () => {
     hideBanner();
-    try { localStorage.removeItem('tpl.pwa.dismissTs'); } catch { }
+    Storage.removeItem('tpl.pwa.dismissTs');
   });
 
   // iOS: mostra banner con hint per istruzioni manuali
@@ -2103,7 +2120,7 @@ if (!navigator.onLine) {
   // Verifica se siamo in modalità PWA
   function isStandalone() {
     // Controlla se è attiva la modalità test
-    const isTestMode = localStorage.getItem('tpl.pwaTestMode') === 'true';
+    const isTestMode = Storage.getItem('tpl.pwaTestMode') === 'true';
     if (isTestMode) {
       return true; // Forza modalità PWA per testing
     }
@@ -2218,7 +2235,7 @@ if (!navigator.onLine) {
   // ===== GESTIONE SIMULAZIONE OFFLINE GLOBALE =====
   // Controlla se la modalità offline test è attiva e trigger l'evento
   (function checkOfflineTestMode() {
-    const isOfflineTestMode = localStorage.getItem('tpl.offlineTestMode') === 'true';
+    const isOfflineTestMode = Storage.getItem('tpl.offlineTestMode') === 'true';
 
     if (isOfflineTestMode) {
       console.log('🔴 Modalità offline test attiva - triggering evento offline');

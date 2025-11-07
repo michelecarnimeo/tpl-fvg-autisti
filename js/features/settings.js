@@ -5,6 +5,37 @@
   'use strict';
 
   // ========================================
+  // STORAGE HELPER
+  // ========================================
+  // Usa Storage se disponibile, altrimenti fallback su localStorage
+  const Storage = window.Storage || {
+    getItem: (key, defaultValue = null) => {
+      try {
+        const item = localStorage.getItem(key);
+        return item !== null ? item : defaultValue;
+      } catch {
+        return defaultValue;
+      }
+    },
+    setItem: (key, value) => {
+      try {
+        localStorage.setItem(key, value);
+        return true;
+      } catch {
+        return false;
+      }
+    },
+    removeItem: (key) => {
+      try {
+        localStorage.removeItem(key);
+        return true;
+      } catch {
+        return false;
+      }
+    }
+  };
+
+  // ========================================
   // FEEDBACK APTICO (VIBRAZIONE)
   // ========================================
 
@@ -25,7 +56,7 @@
    */
   function triggerHaptic(pattern = 'light', force = false) {
     // Verifica se il feedback aptico è abilitato (o se forzato)
-    const isEnabled = localStorage.getItem('tpl.hapticFeedback') === 'true';
+    const isEnabled = Storage.getItem('tpl.hapticFeedback') === 'true';
     if (!isEnabled && !force) return;
 
     // Verifica supporto API Vibration
@@ -72,13 +103,13 @@
     }
 
     // Salva la preferenza
-    localStorage.setItem('animationEnabled', animationEnabled);
+    Storage.setItem('animationEnabled', String(animationEnabled));
     console.log('Animation state saved:', animationEnabled);
   }
 
   // Carica la preferenza salvata
   function loadAnimationPreference() {
-    const saved = localStorage.getItem('animationEnabled');
+    const saved = Storage.getItem('animationEnabled');
     if (saved === 'true') {
       animationEnabled = true;
       document.body.classList.add('animation-enabled');
@@ -107,10 +138,8 @@
     // Aggiungi la nuova classe
     document.body.classList.add(`font-size-${level}`);
 
-    // Salva preferenza in localStorage
-    try {
-      localStorage.setItem('tpl.fontSize', level);
-    } catch { }
+    // Salva preferenza usando Storage
+    Storage.setItem('tpl.fontSize', level);
 
     // Aggiorna il pulsante
     updateFontSizeButton(level);
@@ -157,10 +186,10 @@
     // Non più necessaria con i nuovi pulsanti separati
   }
 
-  // Inizializza dimensione testo dal localStorage
+  // Inizializza dimensione testo usando Storage
   function initFontSize() {
     try {
-      const savedFontSize = localStorage.getItem('tpl.fontSize');
+      const savedFontSize = Storage.getItem('tpl.fontSize');
       if (savedFontSize && fontSizeLevels.includes(savedFontSize)) {
         currentFontSizeIndex = fontSizeLevels.indexOf(savedFontSize);
         setFontSize(savedFontSize);
@@ -187,14 +216,14 @@
    * @param {string} mode - Modalità tema: 'system', 'light', 'dark'
    */
   function setThemeMode(mode) {
-    localStorage.setItem('tpl.themeMode', mode);
+    Storage.setItem('tpl.themeMode', mode);
     applyTheme();
     console.log('Tema impostato su:', mode);
     triggerHaptic('medium'); // Feedback al cambio tema
   }
 
   function applyTheme() {
-    const mode = localStorage.getItem('tpl.themeMode') || 'light';
+    const mode = Storage.getItem('tpl.themeMode') || 'light';
     let shouldBeDark = false;
 
     if (mode === 'system') {
@@ -252,7 +281,7 @@
 
     // Listener per cambio tema sistema
     prefersDarkScheme.addEventListener('change', () => {
-      const mode = localStorage.getItem('tpl.themeMode') || 'light';
+      const mode = Storage.getItem('tpl.themeMode') || 'light';
       if (mode === 'system') {
         applyTheme();
       }
@@ -270,16 +299,14 @@
       document.body.classList.remove('high-contrast');
     }
 
-    try {
-      localStorage.setItem('tpl.highContrast', enabled);
-    } catch { }
+    Storage.setItem('tpl.highContrast', String(enabled));
 
     console.log('Contrasto alto:', enabled ? 'attivato' : 'disattivato');
     triggerHaptic('medium'); // Feedback al cambio contrasto
   }
 
   function loadHighContrast() {
-    const saved = localStorage.getItem('tpl.highContrast');
+    const saved = Storage.getItem('tpl.highContrast');
     if (saved === 'true') {
       setHighContrast(true);
     }
@@ -296,16 +323,14 @@
       document.body.classList.remove('touch-friendly');
     }
 
-    try {
-      localStorage.setItem('tpl.touchFriendly', enabled);
-    } catch { }
+    Storage.setItem('tpl.touchFriendly', String(enabled));
 
     console.log('Touch friendly:', enabled ? 'attivato' : 'disattivato');
     triggerHaptic('medium'); // Feedback al cambio modalità touch
   }
 
   function loadTouchFriendly() {
-    const saved = localStorage.getItem('tpl.touchFriendly');
+    const saved = Storage.getItem('tpl.touchFriendly');
     if (saved === 'true') {
       setTouchFriendly(true);
     }
@@ -316,16 +341,15 @@
   // ========================================
 
   function setHapticFeedback(enabled) {
-    try {
-      localStorage.setItem('tpl.hapticFeedback', enabled);
+    if (Storage.setItem('tpl.hapticFeedback', String(enabled))) {
       console.log('Feedback aptico:', enabled ? 'attivato' : 'disattivato');
-    } catch (error) {
-      console.error('Errore salvataggio haptic feedback:', error);
+    } else {
+      console.error('Errore salvataggio haptic feedback');
     }
   }
 
   function loadHapticFeedback() {
-    const saved = localStorage.getItem('tpl.hapticFeedback');
+    const saved = Storage.getItem('tpl.hapticFeedback');
     // Nota: non impostiamo una classe CSS, il feedback è gestito via JavaScript
     if (saved === 'true') {
       console.log('✅ Feedback aptico caricato: attivo');
@@ -343,15 +367,13 @@
       document.body.classList.remove('reduce-motion');
     }
 
-    try {
-      localStorage.setItem('tpl.reduceMotion', enabled);
-    } catch { }
+    Storage.setItem('tpl.reduceMotion', String(enabled));
 
     console.log('Riduci animazioni:', enabled ? 'attivato' : 'disattivato');
   }
 
   function loadReduceMotion() {
-    const saved = localStorage.getItem('tpl.reduceMotion');
+    const saved = Storage.getItem('tpl.reduceMotion');
     if (saved === 'true') {
       setReduceMotion(true);
     }
@@ -368,15 +390,13 @@
       document.body.classList.remove('extra-spacing');
     }
 
-    try {
-      localStorage.setItem('tpl.extraSpacing', enabled);
-    } catch { }
+    Storage.setItem('tpl.extraSpacing', String(enabled));
 
     console.log('Spaziatura extra:', enabled ? 'attivata' : 'disattivata');
   }
 
   function loadExtraSpacing() {
-    const saved = localStorage.getItem('tpl.extraSpacing');
+    const saved = Storage.getItem('tpl.extraSpacing');
     if (saved === 'true') {
       setExtraSpacing(true);
     }
@@ -393,15 +413,13 @@
       document.body.classList.remove('compact-layout');
     }
 
-    try {
-      localStorage.setItem('tpl.compactLayout', enabled);
-    } catch { }
+    Storage.setItem('tpl.compactLayout', String(enabled));
 
     console.log('Layout compatto:', enabled ? 'attivato' : 'disattivato');
   }
 
   function loadCompactLayout() {
-    const saved = localStorage.getItem('tpl.compactLayout');
+    const saved = Storage.getItem('tpl.compactLayout');
     if (saved === 'true') {
       setCompactLayout(true);
     }
@@ -418,15 +436,13 @@
       document.body.classList.remove('blue-light-filter');
     }
 
-    try {
-      localStorage.setItem('tpl.blueLightFilter', enabled);
-    } catch { }
+    Storage.setItem('tpl.blueLightFilter', String(enabled));
 
     console.log('Filtro luce blu:', enabled ? 'attivato' : 'disattivato');
   }
 
   function loadBlueLightFilter() {
-    const saved = localStorage.getItem('tpl.blueLightFilter');
+    const saved = Storage.getItem('tpl.blueLightFilter');
     if (saved === 'true') {
       setBlueLightFilter(true);
     }
@@ -443,16 +459,14 @@
     // Aggiungi la nuova classe di scala
     document.body.classList.add(`interface-scale-${scale}`);
 
-    try {
-      localStorage.setItem('tpl.interfaceScale', scale);
-    } catch { }
+    Storage.setItem('tpl.interfaceScale', scale);
 
     console.log('Dimensione interfaccia:', scale + '%');
     triggerHaptic('medium'); // Feedback al cambio dimensione
   }
 
   function loadInterfaceScale() {
-    const saved = localStorage.getItem('tpl.interfaceScale');
+    const saved = Storage.getItem('tpl.interfaceScale');
     const scale = saved || '100'; // Default 100%
     setInterfaceScale(scale);
   }
@@ -465,10 +479,8 @@
   let wakeLock = null;
 
   async function setKeepScreenOn(enabled) {
-    // Salva preferenza
-    try {
-      localStorage.setItem('tpl.keepScreenOn', enabled);
-    } catch { }
+    // Salva preferenza usando Storage
+    Storage.setItem('tpl.keepScreenOn', String(enabled));
 
     if (!('wakeLock' in navigator)) {
       console.warn('⚠️ Wake Lock API non supportata da questo browser');
@@ -509,7 +521,7 @@
   }
 
   function loadKeepScreenOn() {
-    const saved = localStorage.getItem('tpl.keepScreenOn');
+    const saved = Storage.getItem('tpl.keepScreenOn');
     if (saved === 'true') {
       setKeepScreenOn(true);
     }
@@ -519,7 +531,7 @@
   // Quando la pagina va in background, il Wake Lock viene automaticamente rilasciato
   // Quando torna in foreground, lo riattiviamo se era abilitato
   document.addEventListener('visibilitychange', async () => {
-    const isEnabled = localStorage.getItem('tpl.keepScreenOn') === 'true';
+    const isEnabled = Storage.getItem('tpl.keepScreenOn') === 'true';
 
     if (document.visibilityState === 'visible' && isEnabled) {
       // Pagina tornata visibile e Keep Screen On è attivo

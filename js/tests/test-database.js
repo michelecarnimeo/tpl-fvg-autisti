@@ -91,7 +91,20 @@ function updateDatabaseGroupSubtitle(groupId, passed, total, timeMs) {
 
 // Helper per aggiornare contatori e UI dopo ogni test
 function markTestComplete(testId, passed, stats, startTime) {
-    updateTestStatus(testId, passed ? 'pass' : 'fail');
+    // Usa TestUtils se disponibile, altrimenti fallback
+    if (typeof TestUtils !== 'undefined' && TestUtils.updateTestStatus) {
+        TestUtils.updateTestStatus(testId, passed ? 'pass' : 'fail');
+    } else {
+        // Fallback: aggiorna manualmente
+        const testElement = document.getElementById(testId);
+        if (testElement) {
+            const statusSpan = testElement.querySelector('.test-status');
+            if (statusSpan) {
+                statusSpan.className = `test-status ${passed ? 'pass' : 'fail'}`;
+                statusSpan.textContent = passed ? 'Passato' : 'Fallito';
+            }
+        }
+    }
     if (passed) {
         stats.passed++;
 
@@ -129,8 +142,45 @@ function markTestComplete(testId, passed, stats, startTime) {
 
 async function testDatabaseLoad() {
     const output = 'output-database';
-    document.getElementById(output).innerHTML = '';
-    log(output, '=== Inizio Test Database ===', 'info');
+    const outputEl = document.getElementById(output);
+    if (outputEl) {
+        outputEl.innerHTML = '';
+        outputEl.style.display = 'block';
+    }
+    
+    // Helper per logging (usa TestUtils se disponibile)
+    const log = (message, type = 'info') => {
+        if (typeof TestUtils !== 'undefined' && TestUtils.log) {
+            TestUtils.log(output, message, type);
+        } else {
+            console.log(`[${type}] ${message}`);
+            if (outputEl) {
+                const logDiv = document.createElement('div');
+                logDiv.className = `console-log ${type}`;
+                logDiv.textContent = message;
+                outputEl.appendChild(logDiv);
+            }
+        }
+    };
+    
+    // Helper per updateTestStatus (usa TestUtils se disponibile)
+    const updateTestStatus = (id, status) => {
+        if (typeof TestUtils !== 'undefined' && TestUtils.updateTestStatus) {
+            TestUtils.updateTestStatus(id, status);
+        } else {
+            // Fallback: aggiorna manualmente
+            const testElement = document.getElementById(id);
+            if (testElement) {
+                const statusSpan = testElement.querySelector('.test-status');
+                if (statusSpan) {
+                    statusSpan.className = `test-status ${status}`;
+                    statusSpan.textContent = status === 'pass' ? 'Passato' : status === 'fail' ? 'Fallito' : status === 'running' ? 'In esecuzione' : 'In attesa';
+                }
+            }
+        }
+    };
+    
+    log('=== Inizio Test Database ===', 'info');
 
     let data = null;
     const stats = {
@@ -147,22 +197,29 @@ async function testDatabaseLoad() {
 
     try {
         // Test 1: Caricamento
-        log(output, 'Test 1: Caricamento database.json...', 'info');
+        log('Test 1: Caricamento database.json...', 'info');
         const res = await fetch('database.json');
         if (!res.ok) throw new Error('Errore caricamento database');
         data = await res.json();
+        
+        // Esponi tariffario su window per accesso da altri test (es. test-prezzi.js)
+        if (typeof window !== 'undefined') {
+            window.tariffario = data;
+            window.tariffarioAggiornato = null;
+        }
+        
         markTestComplete('test-database-load', true, stats, startTime);
-        log(output, '✓ Database caricato con successo', 'success');
+        log('✓ Database caricato con successo', 'success');
 
         // Test 2: Struttura base
-        log(output, 'Test 2: Validazione struttura base...', 'info');
+        log('Test 2: Validazione struttura base...', 'info');
         if (!Array.isArray(data)) throw new Error('Database non è un array');
         if (data.length === 0) throw new Error('Database vuoto');
         markTestComplete('test-database-structure', true, stats, startTime);
-        log(output, `✓ Struttura valida: ${data.length} linee`, 'success');
+        log(`✓ Struttura valida: ${data.length} linee`, 'success');
 
         // Test 3: Validazione campi obbligatori
-        log(output, 'Test 3: Validazione campi obbligatori...', 'info');
+        log('Test 3: Validazione campi obbligatori...', 'info');
         const requiredFields = ['nome', 'fermate', 'prezzi'];
         let invalidLines = [];
 
@@ -175,14 +232,14 @@ async function testDatabaseLoad() {
 
         if (invalidLines.length > 0) {
             markTestComplete('test-database-lines', false, stats, startTime);
-            invalidLines.forEach(err => log(output, `✗ ${err}`, 'error'));
+            invalidLines.forEach(err => log(`✗ ${err}`, 'error'));
         } else {
             markTestComplete('test-database-lines', true, stats, startTime);
-            log(output, `✓ Tutte le ${data.length} linee hanno i campi obbligatori`, 'success');
+            log(`✓ Tutte le ${data.length} linee hanno i campi obbligatori`, 'success');
         }
 
         // Test 4: Validazione tipi rigorosi
-        log(output, 'Test 4: Validazione tipi rigorosi...', 'info');
+        log('Test 4: Validazione tipi rigorosi...', 'info');
         updateTestStatus('test-database-types', 'running');
         let typeErrors = [];
 
@@ -210,15 +267,15 @@ async function testDatabaseLoad() {
 
         if (typeErrors.length > 0) {
             markTestComplete('test-database-types', false, stats, startTime);
-            log(output, `✗ Trovati ${typeErrors.length} errori di tipo:`, 'error');
-            typeErrors.forEach(err => log(output, `  - ${err}`, 'error'));
+            log(`✗ Trovati ${typeErrors.length} errori di tipo:`, 'error');
+            typeErrors.forEach(err => log(`  - ${err}`, 'error'));
         } else {
             markTestComplete('test-database-types', true, stats, startTime);
-            log(output, `✓ Tutti i tipi di dati sono corretti`, 'success');
+            log(`✓ Tutti i tipi di dati sono corretti`, 'success');
         }
 
         // Test 5: Validazione null/undefined espliciti
-        log(output, 'Test 5: Verifica valori null/undefined...', 'info');
+        log( 'Test 5: Verifica valori null/undefined...', 'info');
         updateTestStatus('test-database-null-undefined', 'running');
         let nullErrors = [];
 
@@ -257,18 +314,18 @@ async function testDatabaseLoad() {
 
         if (nullErrors.length > 0) {
             markTestComplete('test-database-null-undefined', false, stats, startTime);
-            log(output, `✗ Trovati ${nullErrors.length} valori null/undefined:`, 'error');
-            nullErrors.slice(0, 5).forEach(err => log(output, `  - ${err}`, 'error'));
+            log(`✗ Trovati ${nullErrors.length} valori null/undefined:`, 'error');
+            nullErrors.slice(0, 5).forEach(err => log(`  - ${err}`, 'error'));
             if (nullErrors.length > 5) {
-                log(output, `  ... e altri ${nullErrors.length - 5} errori`, 'error');
+                log(`  ... e altri ${nullErrors.length - 5} errori`, 'error');
             }
         } else {
             markTestComplete('test-database-null-undefined', true, stats, startTime);
-            log(output, `✓ Nessun valore null/undefined trovato`, 'success');
+            log(`✓ Nessun valore null/undefined trovato`, 'success');
         }
 
         // Test 6: Validazione prezzi
-        log(output, 'Test 6: Validazione prezzi...', 'info');
+        log( 'Test 6: Validazione prezzi...', 'info');
         let priceErrors = [];
         updateTestStatus('test-database-prices', 'running');
 
@@ -308,18 +365,18 @@ async function testDatabaseLoad() {
 
         if (priceErrors.length > 0) {
             markTestComplete('test-database-prices', false, stats, startTime);
-            log(output, `✗ Trovati ${priceErrors.length} errori nei prezzi:`, 'error');
-            priceErrors.slice(0, 5).forEach(err => log(output, `  - ${err}`, 'error'));
+            log(`✗ Trovati ${priceErrors.length} errori nei prezzi:`, 'error');
+            priceErrors.slice(0, 5).forEach(err => log(`  - ${err}`, 'error'));
             if (priceErrors.length > 5) {
-                log(output, `  ... e altri ${priceErrors.length - 5} errori`, 'error');
+                log(`  ... e altri ${priceErrors.length - 5} errori`, 'error');
             }
         } else {
             markTestComplete('test-database-prices', true, stats, startTime);
-            log(output, '✓ Tutte le matrici prezzi sono valide e simmetriche', 'success');
+            log( '✓ Tutte le matrici prezzi sono valide e simmetriche', 'success');
         }
 
         // Test 7: Validazione fermate
-        log(output, 'Test 7: Validazione fermate...', 'info');
+        log( 'Test 7: Validazione fermate...', 'info');
         let fermateErrors = [];
         updateTestStatus('test-database-stops', 'running');
 
@@ -349,15 +406,15 @@ async function testDatabaseLoad() {
 
         if (fermateErrors.length > 0) {
             markTestComplete('test-database-stops', false, stats, startTime);
-            log(output, `✗ Trovati ${fermateErrors.length} errori nelle fermate:`, 'error');
-            fermateErrors.forEach(err => log(output, `  - ${err}`, 'error'));
+            log(`✗ Trovati ${fermateErrors.length} errori nelle fermate:`, 'error');
+            fermateErrors.forEach(err => log(`  - ${err}`, 'error'));
         } else {
             markTestComplete('test-database-stops', true, stats, startTime);
-            log(output, '✓ Tutte le fermate sono valide', 'success');
+            log( '✓ Tutte le fermate sono valide', 'success');
         }
 
         // Test 8: Validazione codici (se presenti)
-        log(output, 'Test 8: Validazione codici tariffari...', 'info');
+        log( 'Test 8: Validazione codici tariffari...', 'info');
         const linesWithCodici = data.filter(line => line.codici);
         updateTestStatus('test-database-codes', 'running');
 
@@ -381,19 +438,19 @@ async function testDatabaseLoad() {
 
             if (codiciErrors.length > 0) {
                 markTestComplete('test-database-codes', false, stats, startTime);
-                log(output, `✗ Trovati ${codiciErrors.length} errori nei codici:`, 'error');
-                codiciErrors.forEach(err => log(output, `  - ${err}`, 'error'));
+                log(`✗ Trovati ${codiciErrors.length} errori nei codici:`, 'error');
+                codiciErrors.forEach(err => log(`  - ${err}`, 'error'));
             } else {
                 markTestComplete('test-database-codes', true, stats, startTime);
-                log(output, `✓ Codici validi per ${linesWithCodici.length} linee`, 'success');
+                log(`✓ Codici validi per ${linesWithCodici.length} linee`, 'success');
             }
         } else {
             markTestComplete('test-database-codes', true, stats, startTime);
-            log(output, 'ℹ Nessuna linea con codici tariffari', 'info');
+            log( 'ℹ Nessuna linea con codici tariffari', 'info');
         }
 
         // Test 9: Validazione encoding/caratteri speciali
-        log(output, 'Test 9: Verifica encoding e caratteri speciali...', 'info');
+        log( 'Test 9: Verifica encoding e caratteri speciali...', 'info');
         updateTestStatus('test-database-encoding', 'running');
         let encodingWarnings = [];
 
@@ -433,15 +490,15 @@ async function testDatabaseLoad() {
 
         if (encodingWarnings.length > 0) {
             markTestComplete('test-database-encoding', false, stats, startTime);
-            log(output, `✗ Trovati ${encodingWarnings.length} problemi di encoding:`, 'error');
-            encodingWarnings.slice(0, 5).forEach(warn => log(output, `  - ${warn}`, 'error'));
+            log(`✗ Trovati ${encodingWarnings.length} problemi di encoding:`, 'error');
+            encodingWarnings.slice(0, 5).forEach(warn => log(`  - ${warn}`, 'error'));
         } else {
             markTestComplete('test-database-encoding', true, stats, startTime);
-            log(output, `✓ Encoding e caratteri speciali gestiti correttamente`, 'success');
+            log(`✓ Encoding e caratteri speciali gestiti correttamente`, 'success');
         }
 
         // Test 10: Nomi linee duplicati
-        log(output, 'Test 10: Verifica nomi linee duplicati...', 'info');
+        log( 'Test 10: Verifica nomi linee duplicati...', 'info');
         updateTestStatus('test-database-duplicates', 'running');
         const lineNames = data.map(line => line.nome);
         const uniqueNames = new Set(lineNames);
@@ -449,15 +506,15 @@ async function testDatabaseLoad() {
         if (uniqueNames.size !== lineNames.length) {
             markTestComplete('test-database-duplicates', false, stats, startTime);
             const duplicates = lineNames.filter((name, index) => lineNames.indexOf(name) !== index);
-            log(output, `✗ Trovate ${duplicates.length} linee duplicate:`, 'error');
-            duplicates.forEach(name => log(output, `  - "${name}"`, 'error'));
+            log(`✗ Trovate ${duplicates.length} linee duplicate:`, 'error');
+            duplicates.forEach(name => log(`  - "${name}"`, 'error'));
         } else {
             markTestComplete('test-database-duplicates', true, stats, startTime);
-            log(output, '✓ Nessun nome linea duplicato', 'success');
+            log( '✓ Nessun nome linea duplicato', 'success');
         }
 
         // Test 11: Range prezzi
-        log(output, 'Test 11: Verifica range prezzi...', 'info');
+        log( 'Test 11: Verifica range prezzi...', 'info');
         updateTestStatus('test-database-range', 'running');
         const MIN_PREZZO = 0;
         const MAX_PREZZO = 100; // €100 come limite ragionevole
@@ -479,22 +536,22 @@ async function testDatabaseLoad() {
 
         if (rangeErrors.length > 0) {
             markTestComplete('test-database-range', false, stats, startTime);
-            log(output, `✗ Trovati ${rangeErrors.length} prezzi fuori range:`, 'error');
-            rangeErrors.slice(0, 3).forEach(err => log(output, `  - ${err}`, 'error'));
+            log(`✗ Trovati ${rangeErrors.length} prezzi fuori range:`, 'error');
+            rangeErrors.slice(0, 3).forEach(err => log(`  - ${err}`, 'error'));
             if (rangeErrors.length > 3) {
-                log(output, `  ... e altri ${rangeErrors.length - 3} errori`, 'error');
+                log(`  ... e altri ${rangeErrors.length - 3} errori`, 'error');
             }
         } else {
             markTestComplete('test-database-range', true, stats, startTime);
             const minPrice = Math.min(...allPrices);
             const maxPrice = Math.max(...allPrices);
             const avgPrice = (allPrices.reduce((a, b) => a + b, 0) / allPrices.length).toFixed(2);
-            log(output, `✓ Tutti i prezzi sono nel range ${MIN_PREZZO}-${MAX_PREZZO}€`, 'success');
-            log(output, `  • Min: ${minPrice}€, Max: ${maxPrice}€, Media: ${avgPrice}€`, 'info');
+            log(`✓ Tutti i prezzi sono nel range ${MIN_PREZZO}-${MAX_PREZZO}€`, 'success');
+            log(`  • Min: ${minPrice}€, Max: ${maxPrice}€, Media: ${avgPrice}€`, 'info');
         }
 
         // Test 12: Progressività prezzi
-        log(output, 'Test 12: Verifica progressività prezzi...', 'info');
+        log( 'Test 12: Verifica progressività prezzi...', 'info');
         updateTestStatus('test-database-progression', 'running');
         let progressivityWarnings = [];
 
@@ -524,15 +581,15 @@ async function testDatabaseLoad() {
 
         if (progressivityWarnings.length > 0) {
             markTestComplete('test-database-progression', true, stats, startTime); // Pass comunque, sono solo warning
-            log(output, `⚠ Trovate ${progressivityWarnings.length} possibili anomalie:`, 'info');
-            progressivityWarnings.slice(0, 3).forEach(warn => log(output, `  - ${warn}`, 'info'));
+            log(`⚠ Trovate ${progressivityWarnings.length} possibili anomalie:`, 'info');
+            progressivityWarnings.slice(0, 3).forEach(warn => log(`  - ${warn}`, 'info'));
         } else {
             markTestComplete('test-database-progression', true, stats, startTime);
-            log(output, '✓ Progressività prezzi sembra corretta', 'success');
+            log( '✓ Progressività prezzi sembra corretta', 'success');
         }
 
         // Test 13: Formato codici
-        log(output, 'Test 13: Verifica formato codici...', 'info');
+        log( 'Test 13: Verifica formato codici...', 'info');
         updateTestStatus('test-database-format', 'running');
         const codicePattern = /^(E\d+|[A-Z]\d+)?$/; // Es: E1, E2, A3, o vuoto
         let formatErrors = [];
@@ -549,18 +606,18 @@ async function testDatabaseLoad() {
 
         if (formatErrors.length > 0) {
             markTestComplete('test-database-format', false, stats, startTime);
-            log(output, `✗ Trovati ${formatErrors.length} codici con formato non valido:`, 'error');
-            formatErrors.slice(0, 5).forEach(err => log(output, `  - ${err}`, 'error'));
+            log(`✗ Trovati ${formatErrors.length} codici con formato non valido:`, 'error');
+            formatErrors.slice(0, 5).forEach(err => log(`  - ${err}`, 'error'));
         } else if (linesWithCodici.length > 0) {
             markTestComplete('test-database-format', true, stats, startTime);
-            log(output, '✓ Tutti i codici seguono il formato corretto', 'success');
+            log( '✓ Tutti i codici seguono il formato corretto', 'success');
         } else {
             markTestComplete('test-database-format', true, stats, startTime);
-            log(output, 'ℹ Nessun codice da verificare', 'info');
+            log( 'ℹ Nessun codice da verificare', 'info');
         }
 
         // Test 14: Consistenza dati
-        log(output, 'Test 14: Verifica consistenza dati...', 'info');
+        log( 'Test 14: Verifica consistenza dati...', 'info');
         updateTestStatus('test-database-consistency', 'running');
         let consistencyWarnings = [];
 
@@ -587,18 +644,18 @@ async function testDatabaseLoad() {
 
         if (consistencyWarnings.length > 0) {
             markTestComplete('test-database-consistency', true, stats, startTime); // Pass comunque, sono solo warning
-            log(output, `⚠ Trovate ${consistencyWarnings.length} inconsistenze:`, 'info');
-            consistencyWarnings.slice(0, 3).forEach(warn => log(output, `  - ${warn}`, 'info'));
+            log(`⚠ Trovate ${consistencyWarnings.length} inconsistenze:`, 'info');
+            consistencyWarnings.slice(0, 3).forEach(warn => log(`  - ${warn}`, 'info'));
             if (consistencyWarnings.length > 3) {
-                log(output, `  ... e altre ${consistencyWarnings.length - 3} inconsistenze`, 'info');
+                log(`  ... e altre ${consistencyWarnings.length - 3} inconsistenze`, 'info');
             }
         } else {
             markTestComplete('test-database-consistency', true, stats, startTime);
-            log(output, '✓ Dati consistenti tra prezzi e codici', 'success');
+            log( '✓ Dati consistenti tra prezzi e codici', 'success');
         }
 
         // Test 15: Edge cases estremi
-        log(output, 'Test 15: Verifica edge cases estremi...', 'info');
+        log( 'Test 15: Verifica edge cases estremi...', 'info');
         updateTestStatus('test-database-edge-cases', 'running');
         let edgeCaseWarnings = [];
 
@@ -628,18 +685,18 @@ async function testDatabaseLoad() {
 
         if (edgeCaseWarnings.length > 0) {
             markTestComplete('test-database-edge-cases', true, stats, startTime); // Pass ma con warning
-            log(output, `⚠ Trovati ${edgeCaseWarnings.length} edge cases:`, 'info');
-            edgeCaseWarnings.slice(0, 5).forEach(warn => log(output, `  - ${warn}`, 'info'));
+            log(`⚠ Trovati ${edgeCaseWarnings.length} edge cases:`, 'info');
+            edgeCaseWarnings.slice(0, 5).forEach(warn => log(`  - ${warn}`, 'info'));
             if (edgeCaseWarnings.length > 5) {
-                log(output, `  ... e altri ${edgeCaseWarnings.length - 5} casi`, 'info');
+                log(`  ... e altri ${edgeCaseWarnings.length - 5} casi`, 'info');
             }
         } else {
             markTestComplete('test-database-edge-cases', true, stats, startTime);
-            log(output, `✓ Nessun edge case estremo rilevato`, 'success');
+            log(`✓ Nessun edge case estremo rilevato`, 'success');
         }
 
         // Test 16: Dimensione massima ragionevole
-        log(output, 'Test 16: Verifica dimensioni massime ragionevoli...', 'info');
+        log( 'Test 16: Verifica dimensioni massime ragionevoli...', 'info');
         updateTestStatus('test-database-size-limit', 'running');
         const MAX_FERMATE_PER_LINEA = 150; // Limite ragionevole
         const MIN_FERMATE_PER_LINEA = 2; // Minimo per calcolare tratte
@@ -665,15 +722,15 @@ async function testDatabaseLoad() {
 
         if (sizeWarnings.length > 0) {
             markTestComplete('test-database-size-limit', true, stats, startTime); // Pass ma con warning
-            log(output, `⚠ Trovati ${sizeWarnings.length} avvisi sulle dimensioni:`, 'info');
-            sizeWarnings.slice(0, 5).forEach(warn => log(output, `  - ${warn}`, 'info'));
+            log(`⚠ Trovati ${sizeWarnings.length} avvisi sulle dimensioni:`, 'info');
+            sizeWarnings.slice(0, 5).forEach(warn => log(`  - ${warn}`, 'info'));
         } else {
             markTestComplete('test-database-size-limit', true, stats, startTime);
-            log(output, `✓ Tutte le dimensioni sono ragionevoli`, 'success');
+            log(`✓ Tutte le dimensioni sono ragionevoli`, 'success');
         }
 
         // Test 17: Performance
-        log(output, 'Test 17: Misurazione performance...', 'info');
+        log( 'Test 17: Misurazione performance...', 'info');
         updateTestStatus('test-database-performance', 'running');
         const startParse = performance.now();
 
@@ -691,23 +748,23 @@ async function testDatabaseLoad() {
         const parseTime = (endParse - startParse).toFixed(2);
 
         markTestComplete('test-database-performance', true, stats, startTime);
-        log(output, `✓ Performance: ${parseTime}ms per processare ${totalElements} elementi`, 'success');
+        log(`✓ Performance: ${parseTime}ms per processare ${totalElements} elementi`, 'success');
 
         if (parseTime > 100) {
-            log(output, `⚠ Tempo di parsing elevato (>${parseTime}ms), considera ottimizzazioni`, 'info');
+            log(`⚠ Tempo di parsing elevato (>${parseTime}ms), considera ottimizzazioni`, 'info');
         } else {
-            log(output, `✓ Tempo di parsing ottimale (<100ms)`, 'success');
+            log(`✓ Tempo di parsing ottimale (<100ms)`, 'success');
         }        // Riepilogo finale
-        log(output, '=== Riepilogo Test Database ===', 'info');
+        log( '=== Riepilogo Test Database ===', 'info');
         const totalFermate = data.reduce((sum, line) => sum + line.fermate.length, 0);
-        log(output, `📊 Statistiche:`, 'info');
-        log(output, `  • ${data.length} linee totali`, 'info');
-        log(output, `  • ${totalFermate} fermate totali`, 'info');
-        log(output, `  • ${linesWithCodici.length} linee con codici tariffari`, 'info');
+        log(`📊 Statistiche:`, 'info');
+        log(`  • ${data.length} linee totali`, 'info');
+        log(`  • ${totalFermate} fermate totali`, 'info');
+        log(`  • ${linesWithCodici.length} linee con codici tariffari`, 'info');
 
         const firstLine = data[0];
-        log(output, `📍 Prima linea: ${firstLine.nome}`, 'info');
-        log(output, `  • ${firstLine.fermate.length} fermate: ${firstLine.fermate.join(', ')}`, 'info');
+        log(`📍 Prima linea: ${firstLine.nome}`, 'info');
+        log(`  • ${firstLine.fermate.length} fermate: ${firstLine.fermate.join(', ')}`, 'info');
 
     } catch (error) {
         updateTestStatus('test-database-load', 'fail');
@@ -715,7 +772,7 @@ async function testDatabaseLoad() {
         updateTestStatus('test-database-lines', 'fail');
         updateTestStatus('test-database-types', 'fail');
         updateTestStatus('test-database-null-undefined', 'fail');
-        log(output, `✗ Errore fatale: ${error.message}`, 'error');
+        log(`✗ Errore fatale: ${error.message}`, 'error');
         console.error('Errore test database:', error);
     }
 
@@ -726,7 +783,102 @@ async function testDatabaseLoad() {
     }
 }
 
-// Esponi la funzione globalmente per compatibilità con onclick
+/**
+ * Resetta tutti i test Database e l'header
+ */
+function resetDatabaseTests() {
+    // Resetta il log (usa la funzione da test-log-helpers.js)
+    if (typeof window.clearDatabaseLog === 'function') {
+        window.clearDatabaseLog();
+    }
+
+    // Resetta l'header
+    const totalTests = 17; // Database ha 17 test fissi
+    const progressEl = document.getElementById('db-header-progress');
+    const statusEl = document.getElementById('db-header-status');
+    const passedEl = document.getElementById('db-header-passed');
+    const failedEl = document.getElementById('db-header-failed');
+    const timeEl = document.getElementById('db-header-time');
+    const timestampEl = document.getElementById('db-header-timestamp');
+    const barEl = document.getElementById('db-header-bar');
+
+    if (progressEl) progressEl.textContent = `0/${totalTests}`;
+    if (statusEl) {
+        statusEl.className = 'test-header-status status-pending';
+        statusEl.textContent = 'In attesa';
+    }
+    if (passedEl) passedEl.textContent = '0';
+    if (failedEl) failedEl.textContent = '0';
+    if (timeEl) timeEl.textContent = '0ms';
+    if (timestampEl) {
+        timestampEl.textContent = '-';
+        timestampEl.setAttribute('data-ts', '');
+    }
+    if (barEl) {
+        barEl.setAttribute('data-progress', '0');
+        barEl.style.width = '0%';
+    }
+
+    // Resetta i badge e subtitle dei gruppi
+    const groups = [
+        { id: 'group1', total: 5, text: '5 test' },
+        { id: 'group2', total: 4, text: '4 test' },
+        { id: 'group3', total: 7, text: '7 test' },
+        { id: 'group4', total: 1, text: '1 test' }
+    ];
+
+    groups.forEach(group => {
+        const badge = document.getElementById(`db-${group.id}-badge`);
+        const subtitle = document.getElementById(`db-${group.id}-subtitle`);
+        if (badge) {
+            badge.textContent = `0/${group.total}`;
+            badge.classList.remove('badge-partial', 'badge-complete');
+            badge.classList.add('badge-pending');
+        }
+        if (subtitle) {
+            subtitle.textContent = `${group.text} da completare`;
+            subtitle.classList.remove('state-partial', 'state-complete');
+            subtitle.classList.add('state-pending');
+        }
+    });
+
+    // Resetta tutti gli status dei test a "pending"
+    const testIds = [
+        // Gruppo 1: Caricamento & Struttura
+        'test-database-load', 'test-database-structure', 'test-database-lines',
+        'test-database-types', 'test-database-null-undefined',
+        // Gruppo 2: Validazione Dati
+        'test-database-prices', 'test-database-stops', 'test-database-codes',
+        'test-database-encoding',
+        // Gruppo 3: Analisi Qualità
+        'test-database-duplicates', 'test-database-range', 'test-database-progression',
+        'test-database-format', 'test-database-consistency',
+        'test-database-edge-cases', 'test-database-size-limit',
+        // Gruppo 4: Performance
+        'test-database-performance'
+    ];
+
+    testIds.forEach(id => {
+        const testElement = document.getElementById(id);
+        if (testElement) {
+            const statusSpan = testElement.querySelector('.test-status');
+            if (statusSpan) {
+                statusSpan.className = 'test-status pending';
+                statusSpan.textContent = 'In attesa';
+            }
+        }
+    });
+
+    // Chiudi tutti i gruppi (usa la funzione accordion se disponibile)
+    if (typeof window.toggleAllDbGroups === 'function') {
+        window.toggleAllDbGroups(false);
+    } else if (typeof TestAccordion !== 'undefined' && TestAccordion.toggleAllGroups) {
+        TestAccordion.toggleAllGroups('db', false);
+    }
+}
+
+// Esponi le funzioni globalmente per compatibilità con onclick
 if (typeof window !== 'undefined') {
     window.testDatabaseLoad = testDatabaseLoad;
+    window.resetDatabaseTests = resetDatabaseTests;
 }

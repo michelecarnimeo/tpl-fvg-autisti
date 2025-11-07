@@ -134,7 +134,7 @@ window.toggleAllStorageGroups = function(open) {
     if (typeof TestAccordion !== 'undefined' && TestAccordion.toggleAllGroups) {
         TestAccordion.toggleAllGroups('storage', open);
     } else {
-        const groups = ['group1', 'group2', 'group3', 'group4', 'group5', 'group6'];
+        const groups = ['group1', 'group2', 'group3', 'group4', 'group5'];
         groups.forEach(groupId => {
             const content = document.getElementById(`storage-${groupId}-content`);
             const icon = document.getElementById(`storage-${groupId}-icon`);

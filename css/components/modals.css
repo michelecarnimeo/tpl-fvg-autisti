@@ -193,6 +193,151 @@
   }
 }
 
+/* ========================================
+   MODAL NOTIFICA - CSS Modulare
+   Componente: Modal per messaggi di notifica/conferma
+   ======================================== */
+
+/* SOTTOSEZIONE 17.1: Modal overlay */
+.notification-modal {
+  display: none;                              /* Nascosto di default */
+  position: fixed;                            /* Posizione fissa */
+  top: 0;                                     /* Inizio della pagina */
+  left: 0;                                    /* Inizio della pagina */
+  width: 100%;                                /* Larghezza completa */
+  height: 100%;                               /* Altezza completa */
+  background: rgba(0, 0, 0, 0.5);             /* Sfondo scuro semi-trasparente */
+  z-index: 10001;                             /* Sopra cache-modal */
+  animation: fadeIn 0.2s ease-out;            /* Animazione fade in */
+}
+
+/* SOTTOSEZIONE 17.2: Modal content */
+.notification-modal-content {
+  position: absolute;                          /* Posizione assoluta */
+  top: 50%;                                   /* Centrato verticalmente */
+  left: 50%;                                  /* Centrato orizzontalmente */
+  transform: translate(-50%, -50%);           /* Centrato perfetto */
+  background: #ffffff;                        /* Sfondo bianco puro */
+  border-radius: 12px;                        /* Bordi arrotondati */
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5); /* Ombra profonda */
+  width: 90%;                                 /* Larghezza 90% */
+  max-width: 400px;                           /* Larghezza massima */
+  overflow: hidden;                           /* Nasconde overflow */
+  animation: modalSlideIn 0.3s ease-out;      /* Animazione di entrata */
+}
+
+/* SOTTOSEZIONE 17.3: Header modal */
+.notification-modal-header {
+  background: var(--turchese);                 /* Sfondo turchese */
+  color: white;                               /* Testo bianco */
+  padding: 1.5rem;                            /* Padding interno */
+  text-align: center;                         /* Testo centrato */
+}
+
+.notification-modal-header h3 {
+  margin: 0;                                  /* Nessun margine */
+  font-size: 1.2rem;                          /* Dimensione font */
+  font-weight: 600;                           /* Peso font */
+}
+
+/* SOTTOSEZIONE 17.4: Body modal */
+.notification-modal-body {
+  padding: 2rem;                              /* Padding interno */
+  text-align: center;                         /* Testo centrato */
+}
+
+.notification-modal-body p {
+  margin: 0;                                  /* Nessun margine */
+  color: var(--testo-principale);             /* Colore testo */
+  line-height: 1.5;                           /* Altezza riga */
+  font-size: 1rem;                            /* Dimensione font */
+}
+
+/* SOTTOSEZIONE 17.5: Footer modal */
+.notification-modal-footer {
+  display: flex;                              /* Layout flexbox */
+  justify-content: center;                    /* Centrato */
+  padding: 0 2rem 2rem 2rem;                 /* Padding interno */
+}
+
+/* SOTTOSEZIONE 17.6: Pulsante modal */
+.notification-modal-btn {
+  padding: 0.75rem 2rem;                      /* Padding interno */
+  border: none;                               /* Nessun bordo */
+  border-radius: 8px;                         /* Bordi arrotondati */
+  font-size: 1rem;                            /* Dimensione font */
+  font-weight: 500;                           /* Peso font */
+  cursor: pointer;                            /* Cursore pointer */
+  transition: all 0.3s ease;                  /* Transizione fluida */
+  background: var(--turchese);                /* Sfondo turchese */
+  color: white;                               /* Testo bianco */
+  min-width: 100px;                           /* Larghezza minima */
+}
+
+.notification-modal-btn:hover {
+  background: #0d9488;                        /* Sfondo turchese più scuro */
+  transform: translateY(-2px);                /* Sollevamento leggero */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);  /* Ombra al hover */
+}
+
+.notification-modal-btn:active {
+  transform: translateY(0);                   /* Ritorno alla posizione */
+}
+
+/* SOTTOSEZIONE 17.7: Modalità scura per modal notifica */
+.dark .notification-modal-content {
+  background: rgba(30, 41, 59, 0.98);         /* Sfondo scuro quasi opaco */
+  border: 1px solid rgba(148, 163, 184, 0.2); /* Bordo sottile */
+}
+
+.dark .notification-modal-body p {
+  color: var(--testo-principale);             /* Colore testo scuro */
+}
+
+/* SOTTOSEZIONE 17.8: Animazione fade in */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* SOTTOSEZIONE 17.9: Modal notifica mobile */
+@media (max-width: 480px) {
+  .notification-modal-content {
+    width: 95%;                               /* Larghezza quasi completa */
+    max-width: none;                          /* Nessuna larghezza massima */
+  }
+  
+  .notification-modal-header {
+    padding: 1rem;                            /* Padding ridotto */
+  }
+  
+  .notification-modal-header h3 {
+    font-size: 1.1rem;                        /* Font più piccolo */
+  }
+  
+  .notification-modal-body {
+    padding: 1.5rem;                          /* Padding ridotto */
+  }
+  
+  .notification-modal-body p {
+    font-size: 0.95rem;                       /* Font leggermente più piccolo */
+  }
+  
+  .notification-modal-footer {
+    padding: 0 1rem 1.5rem 1rem;             /* Padding ridotto */
+  }
+  
+  .notification-modal-btn {
+    padding: 0.875rem 1.5rem;                 /* Padding ottimizzato */
+    font-size: 0.95rem;                       /* Font leggermente più piccolo */
+    width: 100%;                              /* Larghezza completa */
+  }
+}
+
 /* SOTTOSEZIONE 16.9: Modal per schermi molto piccoli */
 @media (max-width: 360px) {
   .cache-modal-content {

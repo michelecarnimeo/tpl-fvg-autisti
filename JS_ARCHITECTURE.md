@@ -10,13 +10,14 @@ tpl-fvg-autisti/
 │   ├── core/
 │   │   ├── config.js          ← Configurazione globale ⏳ TODO
 │   │   ├── utils.js           ← Utilities generiche ⏳ TODO
-│   │   └── storage.js         ← Gestione localStorage ⏳ TODO
+│   │   └── storage.js         ← Gestione localStorage ✅ FATTO
 │   │
 │   ├── components/
 │   │   ├── footer.js           ✅ FATTO
 │   │   ├── changelog.js        ✅ FATTO
 │   │   ├── navbar.js           ⏳ TODO
 │   │   ├── modals.js           ✅ FATTO - UI modali (Fermate, Linee, Settings)
+│   │   ├── notification-modal.js ✅ FATTO - Modal notifica riutilizzabile
 │   │   └── pwa.js              ⏳ TODO
 │   │
 │   ├── features/
@@ -31,7 +32,24 @@ tpl-fvg-autisti/
 │   │   └── database.js         ← Gestione database.json ⏳ TODO
 │   │
 │   ├── tests/
-│   │   └── test-prezzi.js      ← Suite test per prezzi.js ✅ FATTO
+│   │   ├── test-accordion.js   ✅ FATTO - Gestione accordion gruppi
+│   │   ├── test-accordion-wrappers.js ✅ FATTO - Wrapper funzioni accordion
+│   │   ├── test-all-wrappers.js ✅ FATTO - Wrapper runAllTests()
+│   │   ├── test-database.js    ✅ FATTO - Suite test database.json
+│   │   ├── test-darkmode.js    ✅ FATTO - Suite test dark mode
+│   │   ├── test-log-helpers.js ✅ FATTO - Funzioni gestione log (copia, download, clear)
+│   │   ├── test-manifest.js    ✅ FATTO - Suite test manifest PWA
+│   │   ├── test-performance.js ✅ FATTO - Suite test performance
+│   │   ├── test-prezzi.js      ✅ FATTO - Suite test per prezzi.js
+│   │   ├── test-prezzi-wrappers.js ✅ FATTO - Wrapper funzioni Prezzi test
+│   │   ├── test-settings.js    ✅ FATTO - Suite test per settings.js
+│   │   ├── test-settings-wrappers.js ✅ FATTO - Wrapper funzioni Settings test
+│   │   ├── test-storage.js     ✅ FATTO - Suite test per storage.js (24 test)
+│   │   ├── test-storage-wrappers.js ✅ FATTO - Wrapper funzioni Storage test
+│   │   ├── test-sw.js          ✅ FATTO - Suite test Service Worker
+│   │   ├── test-sw-wrappers.js ✅ FATTO - Wrapper funzioni Service Worker test
+│   │   ├── test-ui.js          ✅ FATTO - Suite test UI componenti
+│   │   └── test-utils.js       ✅ FATTO - Utility test (logging, status, statistiche)
 │   │
 │   └── main.js                 ← Entry point, orchestra tutto ⏳ TODO
 │
@@ -69,10 +87,25 @@ I file JavaScript devono essere caricati in questo ordine preciso:
 <script src="js/components/changelog.js"></script>
 <script src="js/components/navbar.js"></script>
 <script src="js/components/modals.js"></script>
+<script src="js/components/notification-modal.js"></script>
 <script src="js/components/pwa.js"></script>
 
 <!-- 5. TEST (solo per test.html, opzionali) -->
+<!-- Core test utilities -->
+<script src="js/tests/test-utils.js"></script>
+<script src="js/tests/test-log-helpers.js"></script>
+<!-- Test modules -->
+<script src="js/tests/test-database.js"></script>
+<script src="js/tests/test-storage.js"></script>
 <script src="js/tests/test-prezzi.js"></script>
+<script src="js/tests/test-settings.js"></script>
+<script src="js/tests/test-sw.js"></script>
+<!-- Test wrappers (funzioni globali per onclick) -->
+<script src="js/tests/test-storage-wrappers.js"></script>
+<script src="js/tests/test-prezzi-wrappers.js"></script>
+<script src="js/tests/test-settings-wrappers.js"></script>
+<script src="js/tests/test-sw-wrappers.js"></script>
+<script src="js/tests/test-all-wrappers.js"></script>
 
 <!-- 6. MAIN (sempre ultimo!) -->
 <script src="js/main.js"></script>
@@ -405,30 +438,42 @@ export function calculateDistance(lat1, lon1, lat2, lon2) {
 ```javascript
 window.Pricing = {
   // Calcola prezzo per una tratta
-  calculatePrice(lineaIdx, partenzaIdx, arrivoIdx, tariffario, tariffarioAggiornato = null) {
+  calculatePrice(
+    lineaIdx,
+    partenzaIdx,
+    arrivoIdx,
+    tariffario,
+    tariffarioAggiornato = null
+  ) {
     // Ritorna: { prezzo: number|null, codice: string, valido: boolean }
   },
-  
+
   // Recupera solo il codice biglietto
-  getTicketCode(lineaIdx, partenzaIdx, arrivoIdx, tariffario, tariffarioAggiornato = null) {
+  getTicketCode(
+    lineaIdx,
+    partenzaIdx,
+    arrivoIdx,
+    tariffario,
+    tariffarioAggiornato = null
+  ) {
     // Ritorna: string (codice o '')
   },
-  
+
   // Valida selezione (linea, partenza, arrivo)
   isValidSelection(lineaIdx, partenzaIdx, arrivoIdx, tariffario) {
     // Ritorna: boolean
   },
-  
+
   // Valida se tratta esiste nella matrice
   isRouteAvailable(lineaIdx, partenzaIdx, arrivoIdx, tariffario) {
     // Ritorna: boolean
   },
-  
+
   // Formatta prezzo per display
   formatPrice(prezzo) {
     // Ritorna: string "X.XX €" o "-"
-  }
-  
+  },
+
   // FUTURO: Calcolo andata + ritorno
   // calculateRoundTrip(...) { ... }
 };
@@ -447,16 +492,16 @@ window.Pricing = {
 ```javascript
 // In script.js
 const result = Pricing.calculatePrice(
-  lineaIdx, 
-  partenzaIdx, 
-  arrivoIdx, 
-  tariffario, 
+  lineaIdx,
+  partenzaIdx,
+  arrivoIdx,
+  tariffario,
   tariffarioAggiornato
 );
 
 if (result.valido) {
   summaryPrezzo.textContent = Pricing.formatPrice(result.prezzo);
-  summaryCodice.textContent = result.codice || '-';
+  summaryCodice.textContent = result.codice || "-";
 } else {
   // Gestisci errore...
 }
@@ -470,16 +515,19 @@ if (result.valido) {
 `prezzi.js` gestisce **TUTTE** le responsabilità relative al calcolo prezzi:
 
 1. **Gestione Parametri** (validazione/normalizzazione):
+
    - `isValidSelection()` - Valida che selezione sia corretta (indici validi, non uguali, ecc.)
    - `isRouteAvailable()` - Verifica che la tratta esista nella matrice
    - Normalizzazione indici (parseInt, controlli bounds)
 
 2. **Calcolo Prezzo** (logica matematica):
+
    - `calculatePrice()` - Legge dalla matrice `prezzi[][]`
    - Gestione errori (try/catch, controlli tipo)
    - Fallback su `tariffarioAggiornato` se codice non trovato
 
 3. **Recupero Codice**:
+
    - `getTicketCode()` - Legge dalla matrice `codici[][]`
    - Fallback su `tariffarioAggiornato` per codici mancanti
 
@@ -532,11 +580,21 @@ if (result.valido) {
 
 ```javascript
 // Test completamente isolato (senza script.js)
-const tariffario = [{ 
-  fermate: ['A', 'B', 'C'],
-  prezzi: [[0, 2.5, 3.5], [2.5, 0, 2.0], [3.5, 2.0, 0]],
-  codici: [['', 'E1', 'E2'], ['E1', '', 'E1'], ['E2', 'E1', '']]
-}];
+const tariffario = [
+  {
+    fermate: ["A", "B", "C"],
+    prezzi: [
+      [0, 2.5, 3.5],
+      [2.5, 0, 2.0],
+      [3.5, 2.0, 0],
+    ],
+    codici: [
+      ["", "E1", "E2"],
+      ["E1", "", "E1"],
+      ["E2", "E1", ""],
+    ],
+  },
+];
 
 const result = Pricing.calculatePrice(0, 0, 1, tariffario);
 // { prezzo: 2.5, codice: 'E1', valido: true }
@@ -553,7 +611,7 @@ window.Pricing = {
     // Non riceve più tariffario come parametro!
     const tariffario = window.Tariffario.get(); // ← Legge da tariffario.js
     // ... resto della logica ...
-  }
+  },
 };
 ```
 
@@ -563,101 +621,171 @@ Attualmente `prezzi.js` riceve `tariffario` come parametro per mantenere l'indip
 
 ### **5. tests/** (Test Suite)
 
-#### **tests/test-prezzi.js** ✅ FATTO
+#### **tests/test-utils.js** ✅
 
 **Contenuto:**
 
-- Suite completa di test per `prezzi.js` (26 test)
+- Utility functions per logging, status updates, statistiche nei test
+- `TestUtils.log()` - Logging con colori e tipi
+- `TestUtils.updateTestStatus()` - Aggiornamento status test (pass/fail/running)
+- `TestUtils.updateStats()` - Aggiornamento statistiche test (passed, failed, time)
+
+**Dipendenze:** Nessuna  
+**Usato da:** Tutti i moduli test
+
+---
+
+#### **tests/test-log-helpers.js** ✅
+
+**Contenuto:**
+
+- Funzioni helper per gestione log nei test
+- `copyLog()`, `downloadLog()`, `clearLog()` - Funzioni generiche
+- Wrapper globali per ogni modulo test (es. `copyDatabaseLog`, `downloadPriceLog`, ecc.)
+- Integrazione con `notification-modal.js` per feedback utente
+
+**Dipendenze:** `components/notification-modal.js`  
+**Usato da:** Tutti i moduli test wrapper
+
+---
+
+#### **tests/test-database.js** ✅
+
+**Contenuto:**
+
+- Suite test per `database.json`
+- Test caricamento, struttura, validazione dati, performance
+- Esposizione `window.tariffario` per altri test (es. `test-prezzi.js`)
+- Funzioni header: `updateDatabaseHeader()`, `resetDatabaseTests()`
+
+**Dipendenze:** `tests/test-utils.js`  
+**Usato da:** `test.html`
+
+---
+
+#### **tests/test-storage.js** ✅
+
+**Contenuto:**
+
+- Suite test completa per `storage.js` (24 test)
+- Test base (getItem, setItem, removeItem, clear)
+- Test JSON (boolean, numeric, null, objects, arrays)
+- Funzioni avanzate (hasItem, getItemsByPrefix, removeItemsByPrefix)
+- Edge cases (migration, quota exceeded, invalid JSON)
+- Test retrocompatibilità con localStorage diretto
+
+**Dipendenze:** `core/storage.js`, `tests/test-utils.js`  
+**Usato da:** `test.html`
+
+---
+
+#### **tests/test-prezzi.js** ✅
+
+**Contenuto:**
+
+- Suite test completa per `prezzi.js` (26+ test)
 - Test unitari: tutte le funzioni di `Pricing.*`
 - Test edge cases: stessa fermata, indici fuori range, dati malformati
 - Test robustezza: null, undefined, stringhe, NaN, Infinity
 - Test performance: misura velocità calcoli
 - Mock data helpers: creazione tariffari di test
-- Logica test separata da HTML
+- Funzioni header: `updatePriceHeader()`, `resetPriceTests()`
 
-**API Pubblica:**
+**Dipendenze:** `features/prezzi.js`, `tests/test-utils.js`  
+**Usato da:** `test.html`
 
-```javascript
-window.PrezziTests = {
-  // Esegue tutti i test (26 test)
-  async runAll(tariffario, tariffarioAggiornato, callbacks) {
-    // callbacks: { 
-    //   log: (message, type) => void, 
-    //   updateStatus: (id, status) => void 
-    // }
-    // Ritorna: Promise<void>
-  },
-  
-  // Helper per mock data (opzionale)
-  createMockTariffario(options) {
-    // Crea tariffario mock per test specifici
-  }
-}
-```
+---
 
-**Esempio d'uso in `test.html`:**
+#### **tests/test-settings.js** ✅
 
-```javascript
-async function testPriceCalculation() {
-  const output = 'output-price';
-  document.getElementById(output).innerHTML = '';
-  
-  // Callbacks per integrazione con test.html
-  await PrezziTests.runAll(tariffario, tariffarioAggiornato, {
-    log: (message, type) => log(output, message, type),
-    updateStatus: (id, status) => updateTestStatus(id, status)
-  });
-}
-```
+**Contenuto:**
 
-**Test Inclusi (26 totali):**
+- Suite test per `settings.js`
+- Test impostazioni (theme, font size, accessibilità)
+- Funzioni header: `updateSettingsHeader()`, `resetSettingsTests()`
 
-1. **Test Base (5)**:
-   - `calculatePrice()` - Calcolo prezzo base
-   - `getTicketCode()` - Recupero codice biglietto
-   - `formatPrice()` - Formattazione prezzo
-   - `isValidSelection()` - Validazione selezione
-   - `isRouteAvailable()` - Verifica tratta disponibile
+**Dipendenze:** `features/settings.js`, `tests/test-utils.js`  
+**Usato da:** `test.html`
 
-2. **Edge Cases (3)**:
-   - Stessa fermata (partenza = arrivo)
-   - Indici fuori range
-   - Fallback `tariffarioAggiornato`
+---
 
-3. **Test Avanzati (7)**:
-   - Tariffario vuoto/null
-   - Indici negativi
-   - Indici come stringhe ("0", "5")
-   - Prezzo zero (gratuito)
-   - Matrici prezzi/codici mancanti
-   - Test con più linee diverse
-   - Performance (1000 calcoli)
+#### **tests/test-sw.js** ✅
 
-4. **Test Robusteza Dati (6)**:
-   - Prezzo null nella matrice
-   - Prezzo undefined nella matrice
-   - Prezzo come stringa ("3.50")
-   - Linea non esistente (indice 999)
-   - Struttura risultato corretta
-   - Prezzo NaN nella matrice
+**Contenuto:**
 
-5. **Test Dati Malformati (5)**:
-   - Prezzo Infinity nella matrice
-   - Prezzo negativo
-   - `fermate` non array
-   - Codice con spazi
-   - Solo codice senza prezzo
+- Suite test per Service Worker
+- Test registrazione, cache, offline support
+- Funzioni header: `updateSwHeader()`, `resetSwTests()`
 
-**Completato:** 1 Novembre 2025
+**Dipendenze:** `tests/test-utils.js`  
+**Usato da:** `test.html`
 
-**Dipendenze:** `features/prezzi.js` (usa `window.Pricing`)  
-**Usato da:** `test.html` (pagina test applicazione)
+---
 
-**Note:**
-- I test sono completamente separati dalla logica HTML
-- Usa pattern callback per logging e aggiornamento status
-- Mock data creati dinamicamente per isolare test
-- Test eseguibili anche programmaticamente (non solo in `test.html`)
+#### **tests/test-storage-wrappers.js** ✅
+
+**Contenuto:**
+
+- Wrapper functions globali per test Storage
+- `window.testStorage()` - Esegue tutti i test Storage
+- `window.runSingleStorageTest()` - Esegue un singolo test
+- `window.resetStorageModuleTests()` - Reset completo
+- `window.updateStorageHeader()` - Aggiorna header con statistiche
+- Funzioni log: `copyStorageLog()`, `downloadStorageLog()`, `clearStorageLog()`
+
+**Dipendenze:** `tests/test-storage.js`, `tests/test-log-helpers.js`  
+**Usato da:** `test.html` (onclick attributes)
+
+---
+
+#### **tests/test-prezzi-wrappers.js** ✅
+
+**Contenuto:**
+
+- Wrapper functions globali per test Prezzi
+- `window.testPriceCalculation()` - Esegue tutti i test Prezzi
+- `window.runSinglePriceTest()` - Esegue un singolo test
+- Caricamento automatico tariffario se vuoto (da `window.tariffario` o `database.json`)
+
+**Dipendenze:** `tests/test-prezzi.js`, `tests/test-log-helpers.js`  
+**Usato da:** `test.html` (onclick attributes)
+
+---
+
+#### **tests/test-settings-wrappers.js** ✅
+
+**Contenuto:**
+
+- Wrapper functions globali per test Settings
+- `window.testSettings()` - Esegue tutti i test Settings
+- `window.runSingleSettingsTest()` - Esegue un singolo test
+
+**Dipendenze:** `tests/test-settings.js`, `tests/test-log-helpers.js`  
+**Usato da:** `test.html` (onclick attributes)
+
+---
+
+#### **tests/test-sw-wrappers.js** ✅
+
+**Contenuto:**
+
+- Wrapper functions globali per test Service Worker
+- `window.testServiceWorker()` - Esegue tutti i test SW
+
+**Dipendenze:** `tests/test-sw.js`, `tests/test-log-helpers.js`  
+**Usato da:** `test.html` (onclick attributes)
+
+---
+
+#### **tests/test-all-wrappers.js** ✅
+
+**Contenuto:**
+
+- Wrapper function globale per eseguire tutti i test in sequenza
+- `window.runAllTests()` - Esegue tutti i test (Database, Storage, Dark Mode, Prezzi, Settings, SW, UI, Manifest, Performance)
+
+**Dipendenze:** Tutti i wrapper test  
+**Usato da:** `test.html` (onclick attribute)
 
 ---
 
@@ -703,11 +831,18 @@ export function showLoading(element) {
 **Contenuto:**
 
 - Generazione HTML footer
-- Caricamento versione
-- Gestione link
+- Caricamento versione da `changelogData` o `version.json`
+- Gestione link Telegram
+- Aggiornamento dinamico versione nel footer
 
-**Dipendenze:** `core/utils.js`, `core/storage.js`  
-**Usato da:** Tutte le pagine
+**Dipendenze:** Nessuna (componente completamente indipendente)  
+**Usato da:** Tutte le pagine (index.html, fermate.html, prezzi.html, benvenuto.html, test.html)
+
+**Note:**
+
+- Legge la versione da `changelogData` (se disponibile) o da `version.json` via fetch
+- Versione fallback: `1.6.7`
+- Il footer viene generato dinamicamente al caricamento della pagina
 
 ---
 
@@ -751,17 +886,48 @@ export function showLoading(element) {
 - Modal Settings (UI: tabs, event listeners, sincronizzazione stato)
 - Animazioni modali
 
-**Dipendenze:** 
+**Dipendenze:**
+
 - `data/tariffario.js` (per FermateModal e LineeModal)
 - `features/settings.js` (per SettingsModal - riceve funzioni come callback)
 
 **Usato da:** Pagine principali (index.html, fermate.html, prezzi.html, ecc.)
 
-**Nota:** 
+**Nota:**
+
 - Gestisce solo la **UI** dei modali (apertura/chiusura, tabs, event listeners)
 - La logica di business è delegata:
   - FermateModal/LineeModal → callback verso script.js
   - SettingsModal → callback verso `features/settings.js`
+
+---
+
+#### **components/notification-modal.js** ✅
+
+**Contenuto:**
+
+- Modal notifica riutilizzabile per messaggi e conferme
+- Sostituisce `alert()` nativo del browser
+- API semplice: `showNotificationModal(title, message)`
+- Inizializzazione automatica su `DOMContentLoaded`
+
+**API Pubblica:**
+
+```javascript
+// Mostra modale notifica
+NotificationModal.show("Titolo", "Messaggio");
+
+// O tramite wrapper globale (retrocompatibilità)
+window.showNotificationModal("Titolo", "Messaggio");
+```
+
+**Dipendenze:** Nessuna  
+**Usato da:** Test page (`test.html`), log helpers (`test-log-helpers.js`)
+
+**Note:**
+
+- Fallback a `alert()` se gli elementi DOM non sono trovati
+- Stili CSS in `css/components/modals.css` (sezione `.notification-modal`)
 
 ---
 
@@ -843,21 +1009,42 @@ if (document.readyState === "loading") {
 
 ## ✅ Moduli Completati
 
-- [x] **footer.js** ✅ - Footer dinamico
-- [x] **changelog.js** ✅ - Dati e visualizzazione changelog
-- [x] **features/updates.js** ✅ - Verifica aggiornamenti
+### Core
+
+- [x] **core/storage.js** ✅ - Gestione localStorage con wrapper e utilità
+
+### Components
+
+- [x] **components/footer.js** ✅ - Footer dinamico
+- [x] **components/changelog.js** ✅ - Dati e visualizzazione changelog
 - [x] **components/modals.js** ✅ - UI modali (Fermate, Linee, Settings)
+- [x] **components/notification-modal.js** ✅ - Modal notifica riutilizzabile
+
+### Features
+
+- [x] **features/updates.js** ✅ - Verifica aggiornamenti
 - [x] **features/settings.js** ✅ - Logica impostazioni (tema, font, accessibilità)
 - [x] **features/prezzi.js** ✅ - Calcolo prezzi (funzioni pure, logica business)
-- [x] **tests/test-prezzi.js** ✅ - Suite test completa per prezzi.js (26 test)
+
+### Tests
+
+- [x] **tests/test-utils.js** ✅ - Utility test (logging, status, statistiche)
+- [x] **tests/test-log-helpers.js** ✅ - Funzioni gestione log (copia, download, clear)
+- [x] **tests/test-database.js** ✅ - Suite test database.json
+- [x] **tests/test-storage.js** ✅ - Suite test completa per storage.js (24 test)
+- [x] **tests/test-storage-wrappers.js** ✅ - Wrapper funzioni Storage test
+- [x] **tests/test-prezzi.js** ✅ - Suite test completa per prezzi.js (26+ test)
+- [x] **tests/test-prezzi-wrappers.js** ✅ - Wrapper funzioni Prezzi test
+- [x] **tests/test-settings.js** ✅ - Suite test per settings.js
+- [x] **tests/test-settings-wrappers.js** ✅ - Wrapper funzioni Settings test
+- [x] **tests/test-sw.js** ✅ - Suite test Service Worker
+- [x] **tests/test-sw-wrappers.js** ✅ - Wrapper funzioni Service Worker test
+- [x] **tests/test-all-wrappers.js** ✅ - Wrapper runAllTests()
 - [ ] core/config.js
 - [ ] core/utils.js
-- [ ] core/storage.js
 - [ ] data/database.js
 - [ ] data/tariffario.js
-- [ ] features/settings.js
 - [ ] features/location.js
-- [ ] features/prezzi.js
 - [ ] features/animations.js
 - [ ] components/navbar.js
 - [ ] components/pwa.js
@@ -956,5 +1143,5 @@ Ogni componente CSS ha il suo corrispondente JavaScript per la logica.
 
 ---
 
-**Ultimo aggiornamento**: 1 Novembre 2025  
-**Versione progetto**: 1.5.9 (in sviluppo)
+**Ultimo aggiornamento**: 6 Novembre 2025  
+**Versione progetto**: 1.6.7 (modularizzazione test completata)
