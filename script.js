@@ -41,144 +41,63 @@ const Storage = window.Storage || {
 // SEZIONE 1: RILEVAMENTO POSIZIONE
 // ========================================
 // Sistema di rilevamento posizione per ordinare fermate per distanza
+// Le funzioni di geolocalizzazione sono ora in js/features/geolocation.js
+// Usa window.Geolocation per accedere alle funzioni
+
+// Variabili per retrocompatibilità (delegate al modulo)
 let userPosition = null;
 let locationPermissionGranted = false;
 
-// Funzione per calcolare la distanza tra due coordinate (formula di Haversine)
+// Wrapper per retrocompatibilità
 function calculateDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371; // Raggio della Terra in km
+  if (window.Geolocation && window.Geolocation.calculateDistance) {
+    return window.Geolocation.calculateDistance(lat1, lon1, lat2, lon2);
+  }
+  console.warn('⚠️ Geolocation module not available, using fallback');
+  // Fallback (non dovrebbe essere necessario)
+  const R = 6371;
   const dLat = (lat2 - lat1) * Math.PI / 180;
   const dLon = (lon2 - lon1) * Math.PI / 180;
   const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
     Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
     Math.sin(dLon / 2) * Math.sin(dLon / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c; // Distanza in km
+  return R * c;
 }
 
-// Funzione per richiedere la posizione dell'utente
 function requestUserLocation() {
-  return new Promise((resolve, reject) => {
-    if (!isGeolocationSupported()) {
-      const error = new Error('Geolocalizzazione non supportata dal browser');
-      error.code = 0;
-      reject(error);
-      return;
-    }
-
-    const options = {
-      enableHighAccuracy: true,
-      timeout: 15000, // Aumentato a 15 secondi
-      maximumAge: 300000 // 5 minuti
-    };
-
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        // Verifica che la posizione sia valida
-        if (!position.coords.latitude || !position.coords.longitude) {
-          const error = new Error('Coordinate non valide');
-          error.code = 2;
-          reject(error);
-          return;
-        }
-
-        userPosition = {
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          accuracy: position.coords.accuracy
-        };
-        locationPermissionGranted = true;
-        console.log('Posizione rilevata:', userPosition);
-        resolve(userPosition);
-      },
-      (error) => {
-        console.error('Errore geolocalizzazione:', error);
-        locationPermissionGranted = false;
-
-        // Aggiungi codice errore se non presente
-        if (!error.code) {
-          error.code = 0; // Errore sconosciuto
-        }
-
-        reject(error);
-      },
-      options
-    );
-  });
+  if (window.Geolocation && window.Geolocation.requestUserLocation) {
+    return window.Geolocation.requestUserLocation().then(position => {
+      userPosition = position;
+      locationPermissionGranted = true;
+      return position;
+    });
+  }
+  return Promise.reject(new Error('Geolocation module not available'));
 }
 
-// Funzione per ordinare fermate per distanza dalla posizione utente
 function sortFermateByDistance(fermate, userPos) {
-  if (!userPos) return fermate;
-
-  // Coordinate approssimative delle fermate (da aggiornare con dati reali)
-  const fermateCoordinates = {
-    "Udine": { lat: 46.0625, lon: 13.2354 },
-    "Lauzacco": { lat: 45.9833, lon: 13.2833 },
-    "S. Stefano Udinese": { lat: 45.9667, lon: 13.3000 },
-    "S. Maria La Longa": { lat: 45.9333, lon: 13.3167 },
-    "Mereto Di Capitolo": { lat: 45.9167, lon: 13.3333 },
-    "Palmanova": { lat: 45.9000, lon: 13.3500 },
-    "Sevegliano": { lat: 45.8833, lon: 13.3667 },
-    "Strassoldo": { lat: 45.8667, lon: 13.3833 },
-    "Muscoli": { lat: 45.8500, lon: 13.4000 },
-    "Cervignano SS14": { lat: 45.8333, lon: 13.4167 },
-    "Cervignano FS": { lat: 45.8300, lon: 13.4200 },
-    "Cervignano AUT": { lat: 45.8275, lon: 13.4225 },
-    "Terzo Di Aquileia": { lat: 45.8167, lon: 13.4333 },
-    "Aquileia": { lat: 45.8000, lon: 13.4500 },
-    "Belvedere": { lat: 45.7833, lon: 13.4667 },
-    "Grado": { lat: 45.7667, lon: 13.4833 }
-  };
-
-  return fermate.map((fermata, index) => {
-    const coords = fermateCoordinates[fermata];
-    let distance = null;
-
-    if (coords) {
-      distance = calculateDistance(
-        userPos.latitude,
-        userPos.longitude,
-        coords.lat,
-        coords.lon
-      );
-    }
-
-    return {
-      name: fermata,
-      index: index,
-      distance: distance,
-      coordinates: coords
-    };
-  }).sort((a, b) => {
-    if (a.distance === null && b.distance === null) return 0;
-    if (a.distance === null) return 1;
-    if (b.distance === null) return -1;
-    return a.distance - b.distance;
-  });
+  if (window.Geolocation && window.Geolocation.sortFermateByDistance) {
+    return window.Geolocation.sortFermateByDistance(fermate, userPos);
+  }
+  console.warn('⚠️ Geolocation module not available, returning unsorted fermate');
+  return fermate.map((name, index) => ({ name, index, distance: null, coordinates: null }));
 }
 
-// Funzione per verificare se la geolocalizzazione è supportata
 function isGeolocationSupported() {
+  if (window.Geolocation && window.Geolocation.isGeolocationSupported) {
+    return window.Geolocation.isGeolocationSupported();
+  }
   return 'geolocation' in navigator;
 }
 
-// Funzione per mostrare/nascondere il pulsante di geolocalizzazione
 function toggleLocationButton(show) {
-  const locationBtn = document.getElementById('location-btn');
-  if (locationBtn) {
-    // Mostra solo se la geolocalizzazione è supportata
-    const shouldShow = show && isGeolocationSupported();
-    locationBtn.style.display = shouldShow ? 'flex' : 'none';
-
-    // Se è il pulsante piccolo (index.html), usa display: flex
-    if (locationBtn.classList.contains('location-btn-small')) {
-      locationBtn.style.display = shouldShow ? 'flex' : 'none';
-    }
+  if (window.Geolocation && window.Geolocation.toggleLocationButton) {
+    return window.Geolocation.toggleLocationButton(show);
   }
+  console.warn('⚠️ Geolocation module not available');
 }
 
-// Funzione per mostrare/nascondere il pulsante di inversione
 function toggleSwapButton(show) {
   const swapBtn = document.getElementById('swap-btn');
   if (swapBtn) {
@@ -186,11 +105,12 @@ function toggleSwapButton(show) {
   }
 }
 
-// Funzione per aggiornare l'icona del pulsante geolocalizzazione
 function updateLocationButtonIcon(hasLocation) {
-  const locationIcon = document.getElementById('location-icon');
-  if (locationIcon) {
-    locationIcon.textContent = hasLocation ? '📍' : '📍';
+  if (window.Geolocation && window.Geolocation.updateLocationButtonIcon) {
+    const icon = document.getElementById('location-icon');
+    if (icon) {
+      return window.Geolocation.updateLocationButtonIcon(icon, hasLocation);
+    }
   }
 }
 
@@ -241,8 +161,12 @@ const lineeModalList = document.getElementById('linee-modal-list');
 // DOM Elements loaded successfully
 
 // Stato applicazione
+// Nota: tariffario e tariffarioAggiornato sono ora gestiti da js/data/tariffario.js
+// Nota: lineaIdx, partenzaIdx, arrivoIdx sono ora gestiti da js/features/route-selector.js
+// Queste variabili sono mantenute per retrocompatibilità e vengono sincronizzate con i moduli
 let tariffario = [];
 let tariffarioAggiornato = null;
+// Variabili route mantenute per retrocompatibilità (sincronizzate con RouteSelector)
 let lineaIdx = '';
 let partenzaIdx = '';
 let arrivoIdx = '';
@@ -306,29 +230,12 @@ function populateLinee() {
 }
 
 // Abilita/disabilita pulsanti partenza/arrivo
+// Le funzioni di gestione route sono ora in js/features/route-selector.js
+// Questa funzione è mantenuta per retrocompatibilità
 function updateFermateButtons() {
-  if (!partenzaBtn || !arrivoBtn) return; // Non siamo su index.html
-
-  if (lineaIdx === '' || !tariffario[lineaIdx]) {
-    partenzaText.textContent = 'Prima seleziona una linea';
-    arrivoText.textContent = 'Prima seleziona una linea';
-    partenzaBtn.disabled = true;
-    arrivoBtn.disabled = true;
-
-    // Nascondi pulsanti geolocalizzazione e swap
-    toggleLocationButton(false);
-    toggleSwapButton(false);
-    return;
+  if (typeof window.RouteSelector !== 'undefined' && window.RouteSelector.updateUI) {
+    window.RouteSelector.updateUI();
   }
-
-  partenzaText.textContent = 'Seleziona la partenza';
-  arrivoText.textContent = 'Seleziona la destinazione';
-  partenzaBtn.disabled = false;
-  arrivoBtn.disabled = false;
-
-  // Mostra pulsanti geolocalizzazione e swap
-  toggleLocationButton(true);
-  toggleSwapButton(true);
 }
 
 // ===== MODAL FERMATE =====
@@ -371,23 +278,22 @@ function closeLineeModal() {
 
 function selectLinea(idx, nome) {
   // Questa funzione viene chiamata dal callback di LineeModal
-  lineaIdx = idx;
-  partenzaIdx = '';
-  arrivoIdx = '';
-  hasCalculated = false;
-
-  // Aggiorna il testo del bottone
-  if (lineaText) {
-    lineaText.textContent = nome;
+  // Delega a RouteSelector
+  if (typeof window.RouteSelector !== 'undefined' && window.RouteSelector.selectLinea) {
+    window.RouteSelector.selectLinea(idx, nome);
+    // Sincronizza variabili locali per retrocompatibilità
+    lineaIdx = window.RouteSelector.getLineaIdx();
+    partenzaIdx = window.RouteSelector.getPartenzaIdx();
+    arrivoIdx = window.RouteSelector.getArrivoIdx();
+  } else {
+    // Fallback se il modulo non è disponibile
+    console.warn('⚠️ RouteSelector non disponibile, fallback...');
+    lineaIdx = idx;
+    partenzaIdx = '';
+    arrivoIdx = '';
+    if (lineaText) lineaText.textContent = nome;
+    Storage.setItem('tpl.lineaIdx', lineaIdx);
   }
-
-  updateFermateButtons();
-  updateSummary();
-  calcolaPrezzo();
-  updatePriceCardState();
-
-  // Salva usando Storage
-  Storage.setItem('tpl.lineaIdx', lineaIdx);
 
   closeLineeModal();
 }
@@ -396,168 +302,54 @@ function selectLinea(idx, nome) {
 // sono ora in js/components/modals.js e vengono gestite internamente dal modulo
 
 // Controlla e aggiorna lo stato della card prezzo
+// Le funzioni di gestione route sono ora in js/features/route-selector.js
+// Queste funzioni sono mantenute per retrocompatibilità
 function updatePriceCardState() {
-  const priceCard = document.getElementById('price-card');
-  if (!priceCard) return;
-
-  // Attiva la card solo se entrambi i campi partenza e arrivo sono selezionati
-  const bothSelected = partenzaIdx !== '' && arrivoIdx !== '';
-
-  if (bothSelected) {
-    priceCard.classList.remove('inactive');
-  } else {
-    priceCard.classList.add('inactive');
+  if (typeof window.RouteSelector !== 'undefined' && window.RouteSelector.updateUI) {
+    window.RouteSelector.updateUI();
   }
-
-  // Nota: la card rimane sempre visibile, cambia solo l'opacità con .inactive
 }
 
 // Aggiorna riepilogo selezioni
 function updateSummary() {
-  if (!summaryPartenza || !summaryArrivo) return; // Non siamo su index.html
-  const fermate = (lineaIdx !== '' && tariffario[lineaIdx]) ? tariffario[lineaIdx].fermate : [];
-  summaryPartenza.textContent = partenzaIdx !== '' && fermate[partenzaIdx] ? fermate[partenzaIdx] : '-';
-  summaryArrivo.textContent = arrivoIdx !== '' && fermate[arrivoIdx] ? fermate[arrivoIdx] : '-';
-
-  // Aggiorna lo stato della card prezzo
-  updatePriceCardState();
+  if (typeof window.RouteSelector !== 'undefined' && window.RouteSelector.updateUI) {
+    window.RouteSelector.updateUI();
+  }
 }
 
 // Calcola prezzo e codice automaticamente (usa Pricing.js)
 function calcolaPrezzo() {
-  if (!summaryPrezzo || !summaryCodice || !prezzoErrore) return; // Non siamo su index.html
-
-  // Usa Pricing.js per calcolare prezzo e codice
-  if (typeof Pricing !== 'undefined' && Pricing.calculatePrice) {
-    const result = Pricing.calculatePrice(lineaIdx, partenzaIdx, arrivoIdx, tariffario, tariffarioAggiornato);
-
-    // Aggiorna UI con i risultati
-    summaryPrezzo.textContent = Pricing.formatPrice(result.prezzo);
-    summaryCodice.textContent = result.codice || '-';
-    prezzoErrore.style.display = (result.prezzo === null && !result.valido) ? 'block' : 'none';
-  } else {
-    // Fallback se Pricing.js non è disponibile
-    summaryPrezzo.textContent = '-';
-    summaryCodice.textContent = '-';
-    prezzoErrore.style.display = 'none';
-    console.warn('⚠️ Pricing.js non disponibile, impossibile calcolare prezzo');
-  }
-
-  // Il pulsante swap è abilitato se partenza e arrivo sono selezionati
-  const swapEnabled = lineaIdx !== '' && partenzaIdx !== '' && arrivoIdx !== '';
-  if (swapBtn) {
-    swapBtn.disabled = !swapEnabled;
+  if (typeof window.RouteSelector !== 'undefined' && window.RouteSelector.updateUI) {
+    window.RouteSelector.updateUI();
   }
 }
 
 // Funzione swap globale
-window.swapRoutes = function () {
-  if (lineaIdx !== '' && partenzaIdx !== '' && arrivoIdx !== '') {
-    const tmp = partenzaIdx;
-    partenzaIdx = arrivoIdx;
-    arrivoIdx = tmp;
-    hasCalculated = false;
-
-    // Aggiorna i testi dei pulsanti
-    if (tariffario[lineaIdx]) {
-      partenzaText.textContent = tariffario[lineaIdx].fermate[partenzaIdx];
-      arrivoText.textContent = tariffario[lineaIdx].fermate[arrivoIdx];
-    }
-
-    updateSummary();
-    calcolaPrezzo();
-  }
-};
-
-// Funzione calcola globale
-window.calculatePrice = function () {
-  hasCalculated = true;
-  calcolaPrezzo();
-};
+// Le funzioni swap e calculatePrice sono ora gestite da js/features/route-selector.js
+// Queste funzioni sono esposte globalmente dal modulo per retrocompatibilità (onclick nell'HTML)
+// window.swapRoutes e window.calculatePrice sono definiti in route-selector.js
 
 // Funzione reset filtri (linea, partenza, arrivo e risultati)
+// Le funzioni di gestione route sono ora in js/features/route-selector.js
 function resetFilters() {
-  // Reset tutto: linea, partenza e arrivo
-  lineaIdx = '';
-  partenzaIdx = '';
-  arrivoIdx = '';
-  hasCalculated = false;
-
-  // Reset bottone linea
-  if (lineaText) {
-    lineaText.textContent = 'Seleziona una linea';
-  }
-
-  // Reset pulsanti partenza e arrivo
-  if (partenzaText) {
-    partenzaText.textContent = 'Prima seleziona una linea';
-  }
-  if (arrivoText) {
-    arrivoText.textContent = 'Prima seleziona una linea';
-  }
-  if (partenzaBtn) {
-    partenzaBtn.disabled = true;
-  }
-  if (arrivoBtn) {
-    arrivoBtn.disabled = true;
-  }
-
-  // Reset FORZATO del contenuto (la card rimane visibile ma vuota)
-  if (summaryPrezzo) {
-    summaryPrezzo.textContent = '-';
-    summaryPrezzo.innerHTML = '-';
-  }
-  if (summaryCodice) {
-    summaryCodice.textContent = '-';
-    summaryCodice.innerHTML = '-';
-  }
-  if (summaryPartenza) {
-    summaryPartenza.textContent = '-';
-    summaryPartenza.innerHTML = '-';
-  }
-  if (summaryArrivo) {
-    summaryArrivo.textContent = '-';
-    summaryArrivo.innerHTML = '-';
-  }
-  if (prezzoErrore) {
-    prezzoErrore.style.display = 'none';
-  }
-
-  // NON richiamare updateSummary() e calcolaPrezzo() 
-  // perché potrebbero ri-popolare i campi con vecchi valori in cache
-
-  // Nascondi pulsanti geolocalizzazione e swap
-  toggleLocationButton(false);
-  toggleSwapButton(false);
-
-  // Assicurati che il pulsante swap sia disabilitato
-  const swapBtn = document.getElementById('swap-btn');
-  if (swapBtn) {
-    swapBtn.disabled = true;
-    swapBtn.style.opacity = '0.5';
-    swapBtn.style.cursor = 'not-allowed';
-  }
-
-  // Reset tutto usando Storage
-  Storage.removeItem('tpl.lineaIdx');
-  Storage.removeItem('tpl.partenzaIdx');
-  Storage.removeItem('tpl.arrivoIdx');
-
-  // Feedback visivo e aptico
-  const resetBtn = document.getElementById('reset-btn');
-  if (resetBtn) {
-    resetBtn.style.transform = 'scale(0.95)';
-    setTimeout(() => {
-      resetBtn.style.transform = 'scale(1)';
-    }, 150);
-  }
-
-  // Aggiorna lo stato della card prezzo (torna inactive)
-  updatePriceCardState();
-
-  // Vibrazione di conferma reset
-  if (window.Settings && window.Settings.triggerHaptic) {
-    window.Settings.triggerHaptic('medium');
+  if (typeof window.RouteSelector !== 'undefined' && window.RouteSelector.reset) {
+    window.RouteSelector.reset();
+    // Sincronizza variabili locali per retrocompatibilità
+    const state = window.RouteSelector.getState();
+    lineaIdx = state.lineaIdx;
+    partenzaIdx = state.partenzaIdx;
+    arrivoIdx = state.arrivoIdx;
+    hasCalculated = state.hasCalculated;
+  } else {
+    // Fallback se il modulo non è disponibile
+    console.warn('⚠️ RouteSelector non disponibile, fallback...');
+    lineaIdx = '';
+    partenzaIdx = '';
+    arrivoIdx = '';
+    hasCalculated = false;
+    Storage.removeItem('tpl.lineaIdx');
+    Storage.removeItem('tpl.partenzaIdx');
+    Storage.removeItem('tpl.arrivoIdx');
   }
 }
 
@@ -660,6 +452,7 @@ if (arrivoBtn) {
 }
 
 // Event listener per pulsante geolocalizzazione (sia per index.html che fermate.html)
+// Gestito dal modulo Geolocation, ma manteniamo qui per retrocompatibilità
 const locationBtn = document.getElementById('location-btn');
 if (locationBtn) {
   locationBtn.addEventListener('click', () => {
@@ -689,32 +482,49 @@ function initializeModalsModules() {
   // Inizializza modal fermate
   if (typeof FermateModal !== 'undefined' && FermateModal.initialize) {
     FermateModal.initialize({
-      getCurrentLineaIdx: () => lineaIdx,
-      getTariffario: () => tariffario,
-      onFermataSelected: (index, type) => {
-        // Questa funzione viene chiamata quando viene selezionata una fermata
-        if (type === 'partenza') {
-          partenzaIdx = index;
-          if (partenzaText) {
-            partenzaText.textContent = tariffario[lineaIdx].fermate[index];
-          }
-        } else if (type === 'arrivo') {
-          arrivoIdx = index;
-          if (arrivoText) {
-            arrivoText.textContent = tariffario[lineaIdx].fermate[index];
-          }
+      getCurrentLineaIdx: () => {
+        // Usa RouteSelector se disponibile
+        if (typeof window.RouteSelector !== 'undefined' && window.RouteSelector.getLineaIdx) {
+          return window.RouteSelector.getLineaIdx();
         }
-
-        hasCalculated = false;
-        updateSummary();
-        calcolaPrezzo();
-        updatePriceCardState();
-
-        // Salva nello storage
-        if (type === 'partenza') {
-          Storage.setItem('tpl.partenzaIdx', partenzaIdx);
+        return lineaIdx;
+      },
+      getTariffario: () => {
+        // Usa il modulo Tariffario se disponibile, altrimenti fallback su variabile locale
+        if (typeof window.Tariffario !== 'undefined' && window.Tariffario.getData) {
+          return window.Tariffario.getData();
+        }
+        return tariffario;
+      },
+      onFermataSelected: (index, type) => {
+        // Delega a RouteSelector
+        if (typeof window.RouteSelector !== 'undefined' && window.RouteSelector.selectFermata) {
+          window.RouteSelector.selectFermata(index, type);
+          // Sincronizza variabili locali per retrocompatibilità
+          lineaIdx = window.RouteSelector.getLineaIdx();
+          partenzaIdx = window.RouteSelector.getPartenzaIdx();
+          arrivoIdx = window.RouteSelector.getArrivoIdx();
         } else {
-          Storage.setItem('tpl.arrivoIdx', arrivoIdx);
+          // Fallback se il modulo non è disponibile
+          console.warn('⚠️ RouteSelector non disponibile, fallback...');
+          const tariffarioData = (typeof window.Tariffario !== 'undefined' && window.Tariffario.getData) 
+            ? window.Tariffario.getData() 
+            : tariffario;
+          if (type === 'partenza') {
+            partenzaIdx = index;
+            if (partenzaText && tariffarioData[lineaIdx]) {
+              partenzaText.textContent = tariffarioData[lineaIdx].fermate[index];
+            }
+            Storage.setItem('tpl.partenzaIdx', partenzaIdx);
+          } else if (type === 'arrivo') {
+            arrivoIdx = index;
+            if (arrivoText && tariffarioData[lineaIdx]) {
+              arrivoText.textContent = tariffarioData[lineaIdx].fermate[index];
+            }
+            Storage.setItem('tpl.arrivoIdx', arrivoIdx);
+          }
+          updateSummary();
+          calcolaPrezzo();
         }
       }
     });
@@ -723,7 +533,13 @@ function initializeModalsModules() {
   // Inizializza modal linee
   if (typeof LineeModal !== 'undefined' && LineeModal.initialize) {
     LineeModal.initialize({
-      getTariffario: () => tariffario,
+      getTariffario: () => {
+        // Usa il modulo Tariffario se disponibile, altrimenti fallback su variabile locale
+        if (typeof window.Tariffario !== 'undefined' && window.Tariffario.getData) {
+          return window.Tariffario.getData();
+        }
+        return tariffario;
+      },
       onLineaSelected: (idx, nome) => {
         selectLinea(idx, nome);
       }
@@ -805,31 +621,110 @@ if (lineeModalPrezzi) {
 if (footerYear) footerYear.textContent = new Date().getFullYear();
 
 // Caricamento dati e stato iniziale
+// Le funzioni di caricamento tariffario sono ora in js/data/tariffario.js
+// Questa funzione gestisce solo il ripristino dello stato UI dopo il caricamento
 async function loadData() {
-  try {
-    const res = await fetch('database.json');
-    tariffario = await res.json();
-    console.log('Database caricato, tariffario.length:', tariffario.length);
-  } catch { tariffario = []; }
-
-  // Esponi tariffario su window per accesso da moduli esterni (es. test)
-  if (typeof window !== 'undefined') {
-    window.tariffario = tariffario;
+  // Carica i dati usando il modulo Tariffario
+  if (typeof window.Tariffario !== 'undefined' && window.Tariffario.load) {
+    await window.Tariffario.load();
+    
+    // Sincronizza variabili locali con i dati del modulo
+    tariffario = window.Tariffario.getData();
+    tariffarioAggiornato = window.Tariffario.getAggiornato();
+  } else {
+    // Fallback se il modulo non è disponibile (non dovrebbe succedere)
+    console.warn('⚠️ Modulo Tariffario non disponibile, caricamento fallback...');
+    try {
+      const res = await fetch('database.json');
+      tariffario = await res.json();
+      console.log('Database caricato (fallback), tariffario.length:', tariffario.length);
+    } catch { 
+      tariffario = []; 
+    }
+    tariffarioAggiornato = null;
+    
+    // Esponi su window
+    if (typeof window !== 'undefined') {
+      window.tariffario = tariffario;
+      window.tariffarioAggiornato = tariffarioAggiornato;
+    }
+    
+    // Dispara evento
+    window.dispatchEvent(new Event('tariffarioLoaded'));
   }
 
-  // tariffarioAggiornato rimane null (file opzionale non presente)
-  tariffarioAggiornato = null;
-
-  // Esponi anche tariffarioAggiornato su window
-  if (typeof window !== 'undefined') {
-    window.tariffarioAggiornato = tariffarioAggiornato;
-  }
-
+  // Popola linee (wrapper per modals.js)
   populateLinee();
 
-  // Notifica che i dati sono pronti
-  window.dispatchEvent(new Event('tariffarioLoaded'));
-  // Ripristina selezioni usando Storage
+  // Ripristina selezioni usando RouteSelector
+  // Aspetta che RouteSelector sia completamente inizializzato
+  function restoreRouteState() {
+    if (typeof window.RouteSelector !== 'undefined' && window.RouteSelector.restore) {
+      try {
+        window.RouteSelector.restore();
+        // Sincronizza variabili locali per retrocompatibilità
+        const state = window.RouteSelector.getState();
+        lineaIdx = state.lineaIdx;
+        partenzaIdx = state.partenzaIdx;
+        arrivoIdx = state.arrivoIdx;
+        hasCalculated = state.hasCalculated;
+      } catch (error) {
+        console.warn('⚠️ Errore durante restore RouteSelector:', error);
+        // Fallback se c'è un errore
+        useFallbackRestore();
+      }
+    } else {
+      // Fallback se il modulo non è disponibile
+      useFallbackRestore();
+    }
+  }
+
+  function useFallbackRestore() {
+    console.warn('⚠️ RouteSelector non disponibile, fallback ripristino...');
+    try {
+      const sLinea = Storage.getItem('tpl.lineaIdx');
+      const sPart = Storage.getItem('tpl.partenzaIdx');
+      const sArr = Storage.getItem('tpl.arrivoIdx');
+      // Ottieni tariffario dal modulo
+      const tariffarioData = (typeof window.Tariffario !== 'undefined' && window.Tariffario.getData) 
+        ? window.Tariffario.getData() 
+        : tariffario;
+
+      if (sLinea !== null) {
+        lineaIdx = sLinea;
+        if (lineaText && tariffarioData[lineaIdx]) {
+          lineaText.textContent = tariffarioData[lineaIdx].nome;
+        }
+      }
+      if (sPart !== null) partenzaIdx = sPart;
+      if (sArr !== null) arrivoIdx = sArr;
+      updateFermateButtons();
+      if (partenzaIdx !== '' && tariffarioData[lineaIdx] && partenzaText) {
+        partenzaText.textContent = tariffarioData[lineaIdx].fermate[partenzaIdx];
+      }
+      if (arrivoIdx !== '' && tariffarioData[lineaIdx] && arrivoText) {
+        arrivoText.textContent = tariffarioData[lineaIdx].fermate[arrivoIdx];
+      }
+      updateSummary();
+      calcolaPrezzo();
+    } catch (error) {
+      console.error('❌ Errore durante ripristino fallback:', error);
+    }
+  }
+
+  // Chiama restoreRouteState quando il DOM è pronto
+  if (document.readyState === 'loading') {
+    // Se il DOM non è ancora pronto, aspetta
+    document.addEventListener('DOMContentLoaded', () => {
+      // Piccolo delay per assicurarsi che RouteSelector sia completamente inizializzato
+      setTimeout(restoreRouteState, 100);
+    });
+  } else {
+    // DOM già pronto, aspetta comunque un po' per assicurarsi che RouteSelector sia inizializzato
+    setTimeout(restoreRouteState, 100);
+  }
+
+  // Ripristina tema/dimensione testo (gestito da Settings, ma migrazione qui)
   try {
     // Retrocompatibilità: converti vecchio sistema isDark a themeMode
     const oldDarkMode = Storage.getItem('tpl.isDark');
@@ -849,32 +744,9 @@ async function loadData() {
     if (window.Settings && window.Settings.initFontSize) {
       window.Settings.initFontSize();
     }
-
-    const sLinea = Storage.getItem('tpl.lineaIdx');
-    const sPart = Storage.getItem('tpl.partenzaIdx');
-    const sArr = Storage.getItem('tpl.arrivoIdx');
-    if (sLinea !== null) {
-      lineaIdx = sLinea;
-      // Ripristina il testo del bottone linea
-      if (lineaText && tariffario[lineaIdx]) {
-        lineaText.textContent = tariffario[lineaIdx].nome;
-      }
-    }
-    if (sPart !== null) partenzaIdx = sPart;
-    if (sArr !== null) arrivoIdx = sArr;
-  } catch { }
-  updateFermateButtons();
-
-  // Aggiorna i testi dei pulsanti se ci sono valori salvati
-  if (partenzaIdx !== '' && tariffario[lineaIdx] && partenzaText) {
-    partenzaText.textContent = tariffario[lineaIdx].fermate[partenzaIdx];
+  } catch (error) {
+    console.error('❌ Errore durante ripristino tema/dimensione:', error);
   }
-  if (arrivoIdx !== '' && tariffario[lineaIdx] && arrivoText) {
-    arrivoText.textContent = tariffario[lineaIdx].fermate[arrivoIdx];
-  }
-
-  updateSummary();
-  calcolaPrezzo();
 }
 
 // --- TRATTE LOGIC ---
@@ -885,14 +757,19 @@ function renderFermate(lineaIndex = 0, sortByDistance = false) {
   const gridContainer = document.getElementById('fermate-grid-container');
   const searchContainer = document.getElementById('search-container-fermate');
 
-  console.log('andataList:', !!andataList, 'ritornoList:', !!ritornoList, 'tariffario[lineaIndex]:', !!tariffario[lineaIndex]);
+  // Ottieni tariffario dal modulo
+  const tariffarioData = (typeof window.Tariffario !== 'undefined' && window.Tariffario.getData) 
+    ? window.Tariffario.getData() 
+    : tariffario;
 
-  if (!andataList || !ritornoList || !tariffario[lineaIndex]) {
+  console.log('andataList:', !!andataList, 'ritornoList:', !!ritornoList, 'tariffario[lineaIndex]:', !!tariffarioData[lineaIndex]);
+
+  if (!andataList || !ritornoList || !tariffarioData[lineaIndex]) {
     console.error('Impossibile generare liste tratte');
     return;
   }
 
-  const linea = tariffario[lineaIndex];
+  const linea = tariffarioData[lineaIndex];
   let fermate = linea.fermate;
   console.log('Rendering liste tratte per linea:', linea.nome, 'con', fermate.length, 'fermate');
 
@@ -902,10 +779,17 @@ function renderFermate(lineaIndex = 0, sortByDistance = false) {
 
   // Se richiesto, ordina per distanza
   let sortedFermate = fermate;
-  if (sortByDistance && userPosition) {
-    const sorted = sortFermateByDistance(fermate, userPosition);
-    sortedFermate = sorted.map(item => item.name);
-    console.log('Fermate ordinate per distanza:', sorted);
+  if (sortByDistance) {
+    // Usa posizione dal modulo Geolocation
+    const currentUserPosition = (window.Geolocation && window.Geolocation.getUserPosition) 
+      ? window.Geolocation.getUserPosition() 
+      : userPosition;
+    
+    if (currentUserPosition) {
+      const sorted = sortFermateByDistance(fermate, currentUserPosition);
+      sortedFermate = sorted.map(item => item.name);
+      console.log('Fermate ordinate per distanza:', sorted);
+    }
   }
 
   // Popola lista andata (0 → fine) - INCLUDE TUTTE LE FERMATE
@@ -915,7 +799,11 @@ function renderFermate(lineaIndex = 0, sortByDistance = false) {
 
     // Trova l'indice originale della fermata
     const originalIndex = fermate.indexOf(sortedFermate[i]);
-    const distance = userPosition ? sortFermateByDistance(fermate, userPosition).find(f => f.name === sortedFermate[i])?.distance : null;
+    // Usa posizione dal modulo Geolocation
+    const currentUserPosition = (window.Geolocation && window.Geolocation.getUserPosition) 
+      ? window.Geolocation.getUserPosition() 
+      : userPosition;
+    const distance = currentUserPosition ? sortFermateByDistance(fermate, currentUserPosition).find(f => f.name === sortedFermate[i])?.distance : null;
 
     let distanceText = '';
     if (distance !== null) {
@@ -938,7 +826,11 @@ function renderFermate(lineaIndex = 0, sortByDistance = false) {
 
     // Trova l'indice originale della fermata
     const originalIndex = fermate.indexOf(sortedFermate[i]);
-    const distance = userPosition ? sortFermateByDistance(fermate, userPosition).find(f => f.name === sortedFermate[i])?.distance : null;
+    // Usa posizione dal modulo Geolocation
+    const currentUserPosition = (window.Geolocation && window.Geolocation.getUserPosition) 
+      ? window.Geolocation.getUserPosition() 
+      : userPosition;
+    const distance = currentUserPosition ? sortFermateByDistance(fermate, currentUserPosition).find(f => f.name === sortedFermate[i])?.distance : null;
 
     let distanceText = '';
     if (distance !== null) {
@@ -978,14 +870,19 @@ function renderPrezzi(lineaIndex = 0) {
   console.log('renderPrezzi chiamata con lineaIndex:', lineaIndex);
   const andataTable = document.getElementById('prezzi-andata');
   const ritornoTable = document.getElementById('prezzi-ritorno');
-  console.log('andataTable:', !!andataTable, 'ritornoTable:', !!ritornoTable, 'tariffario[lineaIndex]:', !!tariffario[lineaIndex]);
+  // Ottieni tariffario dal modulo
+  const tariffarioData = (typeof window.Tariffario !== 'undefined' && window.Tariffario.getData) 
+    ? window.Tariffario.getData() 
+    : tariffario;
 
-  if (!andataTable || !ritornoTable || !tariffario[lineaIndex]) {
+  console.log('andataTable:', !!andataTable, 'ritornoTable:', !!ritornoTable, 'tariffario[lineaIndex]:', !!tariffarioData[lineaIndex]);
+
+  if (!andataTable || !ritornoTable || !tariffarioData[lineaIndex]) {
     console.error('Impossibile generare tabelle prezzi');
     return;
   }
 
-  const linea = tariffario[lineaIndex];
+  const linea = tariffarioData[lineaIndex];
   const fermate = linea.fermate;
   console.log('Rendering tabelle prezzi per linea:', linea.nome, 'con', fermate.length, 'fermate');
 
@@ -1062,15 +959,20 @@ function populateLineeTratte() {
     return;
   }
   
+  // Ottieni tariffario dal modulo
+  const tariffarioData = (typeof window.Tariffario !== 'undefined' && window.Tariffario.getData) 
+    ? window.Tariffario.getData() 
+    : tariffario;
+
   // Verifica che tariffario sia caricato
-  if (!tariffario || tariffario.length === 0) {
+  if (!tariffarioData || tariffarioData.length === 0) {
     console.error('❌ Tariffario non ancora caricato in populateLineeTratte!');
     return;
   }
 
   // Popola modal con le linee
   lineeModalList.innerHTML = '';
-  tariffario.forEach((l, i) => {
+  tariffarioData.forEach((l, i) => {
     const li = document.createElement('li');
     li.className = 'linea-modal-item';
     li.dataset.lineaIdx = i;
@@ -1171,15 +1073,20 @@ function selectLineaFermate(idx, nome) {
   // Converti idx a numero se necessario
   const lineaIndex = typeof idx === 'string' ? parseInt(idx, 10) : idx;
   
+  // Ottieni tariffario dal modulo
+  const tariffarioData = (typeof window.Tariffario !== 'undefined' && window.Tariffario.getData) 
+    ? window.Tariffario.getData() 
+    : tariffario;
+  
   // Verifica che tariffario sia caricato
-  if (!tariffario || tariffario.length === 0) {
+  if (!tariffarioData || tariffarioData.length === 0) {
     console.error('❌ Tariffario non ancora caricato!');
     return;
   }
   
   // Verifica che l'indice sia valido
-  if (lineaIndex < 0 || lineaIndex >= tariffario.length) {
-    console.error('❌ Indice linea non valido:', lineaIndex, 'tariffario.length:', tariffario.length);
+  if (lineaIndex < 0 || lineaIndex >= tariffarioData.length) {
+    console.error('❌ Indice linea non valido:', lineaIndex, 'tariffario.length:', tariffarioData.length);
     return;
   }
   
@@ -1199,7 +1106,7 @@ function selectLineaFermate(idx, nome) {
   }
 
   // Aggiorna titoli e mostra fermate
-  const linea = tariffario[lineaIndex];
+  const linea = tariffarioData[lineaIndex];
   
   if (!linea || !linea.fermate) {
     console.error('❌ Linea non valida o fermate mancanti:', linea);
@@ -1246,6 +1153,12 @@ function selectLineaFermate(idx, nome) {
 
 // Popola modal linee per pagina prezzi
 function populateLineePrezzi() {
+  // Ottieni tariffario dal modulo
+  const tariffarioData = (typeof window.Tariffario !== 'undefined' && window.Tariffario.getData) 
+    ? window.Tariffario.getData() 
+    : tariffario;
+  console.log('populateLineePrezzi chiamata, tariffario.length:', tariffarioData ? tariffarioData.length : 0);
+  
   const lineeModalList = document.getElementById('linee-prezzi-modal-list');
   const lineaBtn = document.getElementById('linea-prezzi-btn');
 
@@ -1253,7 +1166,7 @@ function populateLineePrezzi() {
 
   // Popola modal con le linee
   lineeModalList.innerHTML = '';
-  tariffario.forEach((l, i) => {
+  tariffarioData.forEach((l, i) => {
     const li = document.createElement('li');
     li.className = 'linea-modal-item';
     li.dataset.lineaIdx = i;
@@ -1325,8 +1238,13 @@ function selectLineaPrezzi(idx, nome) {
     lineaBtn.dataset.selectedIndex = idx;
   }
 
+  // Ottieni tariffario dal modulo
+  const tariffarioData = (typeof window.Tariffario !== 'undefined' && window.Tariffario.getData) 
+    ? window.Tariffario.getData() 
+    : tariffario;
+
   // Aggiorna titoli e mostra prezzi
-  const linea = tariffario[idx];
+  const linea = tariffarioData[idx];
   const fermate = linea.fermate;
 
   // Aggiorna titoli
@@ -1405,173 +1323,57 @@ function initFermatePrezzi() {
 }
 
 // Funzione per mostrare notifiche all'utente
+// Funzioni geolocalizzazione delegate al modulo
+// Le funzioni sono esposte globalmente dal modulo per retrocompatibilità
+// (handleLocationClick, handleFermateLocationClick, showLocationNotification, disableLocationSorting)
+// Se il modulo non è disponibile, queste funzioni non faranno nulla
 function showLocationNotification(message, type = 'info') {
-  // Crea elemento notifica se non esiste
-  let notification = document.getElementById('location-notification');
-  if (!notification) {
-    notification = document.createElement('div');
-    notification.id = 'location-notification';
-    notification.className = 'location-notification';
-    document.body.appendChild(notification);
+  if (window.Geolocation && window.Geolocation.showLocationNotification) {
+    return window.Geolocation.showLocationNotification(message, type);
   }
-
-  // Aggiorna contenuto e stile
-  notification.textContent = message;
-  notification.className = `location-notification ${type}`;
-  notification.style.display = 'block';
-
-  // Auto-hide dopo 3 secondi
-  setTimeout(() => {
-    if (notification) {
-      notification.style.display = 'none';
-    }
-  }, 3000);
+  console.warn('⚠️ Geolocation module not available');
 }
 
-// Funzione per gestire il click del pulsante geolocalizzazione
 async function handleLocationClick() {
-  const locationBtn = document.getElementById('location-btn');
-  const locationIcon = document.getElementById('location-icon');
-  const locationText = document.getElementById('location-text');
-
-  if (!locationBtn) return;
-
-  // Mostra stato di caricamento
-  if (locationIcon) locationIcon.textContent = '⏳';
-  if (locationText) locationText.textContent = 'Rilevamento...';
-  locationBtn.disabled = true;
-
-  try {
-    await requestUserLocation();
-
-    // Aggiorna UI
-    if (locationIcon) locationIcon.textContent = '📍';
-    if (locationText) locationText.textContent = 'Ordina per distanza';
-    locationBtn.classList.add('active');
-
-    // Salva preferenza
-    Storage.setItem('tpl.locationEnabled', 'true');
-
-    // Mostra notifica di successo
-    showLocationNotification('Posizione rilevata! Le fermate saranno ordinate per distanza.', 'success');
-
-  } catch (error) {
-    console.error('Errore geolocalizzazione:', error);
-
-    // Determina il tipo di errore
-    let errorMessage = 'Errore nel rilevamento della posizione';
-    if (error.code === 1) {
-      errorMessage = 'Permesso di geolocalizzazione negato. Abilita la posizione nelle impostazioni del browser.';
-    } else if (error.code === 2) {
-      errorMessage = 'Posizione non disponibile. Verifica la connessione GPS.';
-    } else if (error.code === 3) {
-      errorMessage = 'Timeout nel rilevamento. Riprova più tardi.';
+  if (window.Geolocation && window.Geolocation.handleLocationClick) {
+    const result = await window.Geolocation.handleLocationClick();
+    // Sincronizza variabili locali per retrocompatibilità
+    if (window.Geolocation.getUserPosition) {
+      userPosition = window.Geolocation.getUserPosition();
     }
-
-    // Mostra errore
-    if (locationIcon) locationIcon.textContent = '❌';
-    if (locationText) locationText.textContent = 'Errore rilevamento';
-
-    // Mostra notifica di errore
-    showLocationNotification(errorMessage, 'error');
-
-    // Reset dopo 3 secondi
-    setTimeout(() => {
-      if (locationIcon) locationIcon.textContent = '📍';
-      if (locationText) locationText.textContent = 'Rileva posizione';
-      locationBtn.disabled = false;
-      locationBtn.classList.remove('active');
-    }, 3000);
+    if (window.Geolocation.isPermissionGranted) {
+      locationPermissionGranted = window.Geolocation.isPermissionGranted();
+    }
+    return result;
   }
+  console.warn('⚠️ Geolocation module not available');
 }
 
-// Funzione per gestire il click del pulsante geolocalizzazione nel modal fermate
 async function handleFermateLocationClick() {
   if (!fermateLocationBtn) return;
-
-  if (!isGeolocationSupported()) {
-    showLocationNotification('Geolocalizzazione non supportata dal browser', 'error');
-    return;
-  }
-
-  try {
-    // Mostra stato di caricamento
-    if (fermateLocationIcon) fermateLocationIcon.textContent = '⏳';
-    if (fermateLocationText) fermateLocationText.textContent = 'Rilevamento...';
-    fermateLocationBtn.disabled = true;
-
-    // Richiedi posizione
-    const position = await requestUserLocation();
-    userPosition = position;
-    locationPermissionGranted = true;
-
-    // Aggiorna UI
-    if (fermateLocationIcon) fermateLocationIcon.textContent = '📍';
-    if (fermateLocationText) fermateLocationText.textContent = 'Rilevata';
-    showLocationNotification('Posizione rilevata! Ordinando fermate per distanza...', 'success');
-
-    // Salva preferenza
-    Storage.setItem('tpl.locationEnabled', 'true');
-
-    // Ri-ordina le fermate per distanza
-    if (fermateModalList && fermateModalList.children.length > 0) {
-      const fermate = Array.from(fermateModalList.children).map(li => li.textContent.trim());
-      const sortedFermate = sortFermateByDistance(fermate, userPosition);
-
-      // Re-renderizza la lista ordinata
-      fermateModalList.innerHTML = '';
-      sortedFermate.forEach((fermata, index) => {
-        const li = document.createElement('li');
-        li.textContent = fermata;
-        li.addEventListener('click', () => selectFermata(fermata));
-        fermateModalList.appendChild(li);
-      });
+  
+  if (window.Geolocation && window.Geolocation.handleFermateLocationClick) {
+    // Il modulo Geolocation gestirà l'ordinamento usando FermateModal.sortByDistance()
+    // Non serve più il callback onSorted, il modal gestisce tutto internamente
+    const result = await window.Geolocation.handleFermateLocationClick();
+    
+    // Sincronizza variabili locali per retrocompatibilità
+    if (window.Geolocation.getUserPosition) {
+      userPosition = window.Geolocation.getUserPosition();
     }
-
-  } catch (error) {
-    console.error('Errore geolocalizzazione modal:', error);
-
-    // Reset UI
-    if (fermateLocationIcon) fermateLocationIcon.textContent = '❌';
-    if (fermateLocationText) fermateLocationText.textContent = 'Errore';
-
-    // Gestisci errori specifici
-    let errorMessage = 'Errore durante il rilevamento della posizione';
-    if (error.code === 1) {
-      errorMessage = 'Permesso di geolocalizzazione negato';
-    } else if (error.code === 2) {
-      errorMessage = 'Posizione non disponibile';
-    } else if (error.code === 3) {
-      errorMessage = 'Timeout durante il rilevamento';
+    if (window.Geolocation.isPermissionGranted) {
+      locationPermissionGranted = window.Geolocation.isPermissionGranted();
     }
-
-    showLocationNotification(errorMessage, 'error');
-
-    // Reset dopo 3 secondi
-    setTimeout(() => {
-      if (fermateLocationIcon) fermateLocationIcon.textContent = '📍';
-      if (fermateLocationText) fermateLocationText.textContent = 'Rileva';
-      fermateLocationBtn.disabled = false;
-    }, 3000);
+    return result;
   }
+  console.warn('⚠️ Geolocation module not available');
 }
 
-// Funzione per disabilitare l'ordinamento per distanza
 function disableLocationSorting() {
-  const locationBtn = document.getElementById('location-btn');
-  const locationIcon = document.getElementById('location-icon');
-  const locationText = document.getElementById('location-text');
-
-  if (locationBtn) {
-    locationBtn.classList.remove('active');
-    locationBtn.disabled = false;
+  if (window.Geolocation && window.Geolocation.disableLocationSorting) {
+    return window.Geolocation.disableLocationSorting();
   }
-
-  if (locationIcon) locationIcon.textContent = '📍';
-  if (locationText) locationText.textContent = 'Rileva posizione';
-
-  // Rimuovi preferenza
-  Storage.removeItem('tpl.locationEnabled');
+  console.warn('⚠️ Geolocation module not available');
 }
 
 // Avvia logica tratte/tariffe solo se siamo su tratte.html o tariffe.html
@@ -1982,123 +1784,9 @@ if (window.location.pathname.endsWith('index.html') || window.location.pathname 
 // ================================
 // SISTEMA NOTIFICHE OFFLINE
 // ================================
-
-// Stato connessione
-let isOnline = navigator.onLine;
-let offlineNotificationShown = false;
-
-// Elementi per notifiche offline
-let offlineBanner = null;
-
-// Funzione per creare banner offline
-function createOfflineBanner() {
-  if (offlineBanner) return;
-
-  offlineBanner = document.createElement('div');
-  offlineBanner.id = 'offline-banner';
-  offlineBanner.className = 'offline-banner';
-  offlineBanner.innerHTML = `
-    <div class="offline-content">
-      <span class="offline-icon pulse">📡</span>
-      <span class="offline-text">Modalità offline - App funzionante</span>
-      <button class="offline-close" onclick="hideOfflineBanner()">×</button>
-    </div>
-  `;
-
-  document.body.appendChild(offlineBanner);
-
-  // Animazione di entrata
-  setTimeout(() => {
-    offlineBanner.classList.add('show');
-  }, 100);
-}
-
-// Funzione per nascondere banner offline
-function hideOfflineBanner() {
-  if (offlineBanner) {
-    offlineBanner.classList.remove('show');
-    setTimeout(() => {
-      if (offlineBanner && offlineBanner.parentNode) {
-        offlineBanner.parentNode.removeChild(offlineBanner);
-        offlineBanner = null;
-      }
-    }, 300);
-  }
-  offlineNotificationShown = false;
-}
-
-// Funzione per mostrare notifica offline
-function showOfflineNotification() {
-  if (offlineNotificationShown) return;
-
-  createOfflineBanner();
-  offlineNotificationShown = true;
-
-  // Auto-hide dopo 5 secondi se online
-  if (isOnline) {
-    setTimeout(() => {
-      if (isOnline) {
-        hideOfflineBanner();
-      }
-    }, 5000);
-  }
-}
-
-// Listener per eventi online/offline del browser
-window.addEventListener('online', () => {
-  console.log('🌐 Connessione ripristinata');
-  isOnline = true;
-
-  if (offlineBanner) {
-    // Aggiorna testo e stile quando torna online
-    offlineBanner.classList.add('online');
-    const textElement = offlineBanner.querySelector('.offline-text');
-    const iconElement = offlineBanner.querySelector('.offline-icon');
-    if (textElement) {
-      textElement.textContent = 'Connessione ripristinata';
-    }
-    if (iconElement) {
-      iconElement.textContent = '✅';
-    }
-
-    // Nasconde automaticamente dopo 2 secondi
-    setTimeout(() => {
-      hideOfflineBanner();
-    }, 2000);
-  }
-});
-
-window.addEventListener('offline', () => {
-  console.log('📡 Connessione persa');
-  isOnline = false;
-
-  if (!offlineNotificationShown) {
-    showOfflineNotification();
-  }
-});
-
-// Listener per messaggi dal Service Worker
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.addEventListener('message', (event) => {
-    if (event.data && event.data.type === 'OFFLINE_MODE') {
-      console.log('📡 Service Worker: Modalità offline attivata');
-      isOnline = false;
-
-      if (!offlineNotificationShown) {
-        showOfflineNotification();
-      }
-    }
-  });
-}
-
-// Verifica stato iniziale
-if (!navigator.onLine) {
-  console.log('📡 App avviata in modalità offline');
-  isOnline = false;
-  setTimeout(() => {
-    showOfflineNotification();
-  }, 1000); // Delay per permettere caricamento app
-}
+// Le funzioni di notifiche offline sono ora in js/utils/offline-notifications.js
+// Usa window.OfflineNotifications.show() e window.OfflineNotifications.hide() per richiamarle
+// La funzione hideOfflineBanner() è esposta globalmente per retrocompatibilità (onclick nell'HTML)
 
 // =====================================
 // MODAL IMPOSTAZIONI
@@ -2183,34 +1871,46 @@ if (!navigator.onLine) {
   // Gestisce il click sul pulsante impostazioni
   function setupSettingsButton() {
     const settingsBtn = document.getElementById('pwa-settings-btn');
-    const settingsModal = document.getElementById('settings-modal');
-
-    console.log('🔧 Setup pulsante impostazioni:', {
-      btn: !!settingsBtn,
-      modal: !!settingsModal
-    });
-
-    if (settingsBtn && settingsModal) {
-      settingsBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        console.log('⚙️ Click su pulsante impostazioni!');
-
-        // Apri il modal con animazione
-        settingsModal.style.display = 'flex';
-        setTimeout(() => {
-          settingsModal.classList.add('show');
-        }, 10);
-
-        console.log('✅ Modal impostazioni aperto', {
-          display: settingsModal.style.display,
-          classList: settingsModal.classList.toString()
-        });
-      });
-      console.log('✅ Event listener aggiunto al pulsante impostazioni');
-    } else {
-      console.warn('⚠️ Pulsante o modal impostazioni non trovato!');
+    
+    // Il modal potrebbe non essere ancora caricato (viene caricato dinamicamente)
+    if (!settingsBtn) {
+      return; // Pulsante non trovato, esci silenziosamente
     }
+
+    // Rimuovi listener precedenti se esistono
+    const newBtn = settingsBtn.cloneNode(true);
+    settingsBtn.parentNode.replaceChild(newBtn, settingsBtn);
+
+    // Aggiungi listener che cerca il modal al momento del click
+    newBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const settingsModal = document.getElementById('settings-modal');
+      
+      if (!settingsModal) {
+        // Se il modal non esiste ancora, prova ad aprire usando SettingsModal se disponibile
+        if (typeof SettingsModal !== 'undefined' && SettingsModal.open) {
+          SettingsModal.open();
+          return;
+        }
+        console.warn('⚠️ Modal impostazioni non trovato. Potrebbe essere ancora in caricamento.');
+        return;
+      }
+
+      console.log('⚙️ Click su pulsante impostazioni!');
+
+      // Apri il modal con animazione
+      settingsModal.style.display = 'flex';
+      setTimeout(function() {
+        settingsModal.classList.add('show');
+      }, 10);
+
+      console.log('✅ Modal impostazioni aperto', {
+        display: settingsModal.style.display,
+        classList: settingsModal.classList.toString()
+      });
+    });
   }
 
   // Inizializza al caricamento

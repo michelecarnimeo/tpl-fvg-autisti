@@ -149,6 +149,19 @@
         clearLog('output-sw', 'sw-log-buttons');
     };
 
+    // Route Selector
+    window.copyRouteLog = function() {
+        copyLog('output-route', 'Route Selector');
+    };
+
+    window.downloadRouteLog = function() {
+        downloadLog('output-route', 'test-route-selector');
+    };
+
+    window.clearRouteLog = function() {
+        clearLog('output-route', 'route-log-buttons');
+    };
+
     console.log('✅ js/tests/test-log-helpers.js caricato - Funzioni gestione log disponibili nello scope globale');
 })();
 

@@ -30,11 +30,16 @@ const STATIC_ASSETS = [
   './footer.js', // Footer modulare JS
   './changelog.js', // Changelog dinamico
   './js/core/storage.js', // Core: Storage wrapper (deve essere caricato per primo!)
+  './js/data/tariffario.js', // Data: Gestione tariffario
   './js/features/updates.js', // Verifica aggiornamenti
   './js/features/settings.js', // Gestione impostazioni
   './js/features/prezzi.js', // Calcolo prezzi
+  './js/features/route-selector.js', // Gestione selezione route (linea/partenza/arrivo)
+  './js/features/geolocation.js', // Gestione geolocalizzazione e ordinamento fermate per distanza
   './js/tests/test-prezzi.js', // Test suite prezzi (solo per test.html)
   './js/tests/test-prezzi-wrappers.js', // Wrapper funzioni Prezzi test (solo per test.html)
+  './js/tests/test-route-selector.js', // Test suite route selector (solo per test.html)
+  './js/tests/test-route-selector-wrappers.js', // Wrapper funzioni Route Selector test (solo per test.html)
   './js/tests/test-storage.js', // Test suite storage (solo per test.html)
   './js/tests/test-storage-wrappers.js', // Wrapper funzioni Storage test (solo per test.html)
   './js/tests/test-log-helpers.js', // Funzioni gestione log (solo per test.html)
@@ -47,6 +52,7 @@ const STATIC_ASSETS = [
   './js/tests/test-database.js', // Test suite database (solo per test.html)
   './js/components/modals.js', // Modal fermate
   './js/components/notification-modal.js', // Modal notifica
+  './js/utils/offline-notifications.js', // Notifiche offline/online
   './js/utils/app-init.js', // Inizializzazione app comune (SW registration, changelog)
   './js/utils/interface-scale.js', // Sistema scala interfaccia
   './js/pages/benvenuto.js', // Logica specifica pagina benvenuto

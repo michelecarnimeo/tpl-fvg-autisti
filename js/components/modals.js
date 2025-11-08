@@ -5,6 +5,34 @@
 (function () {
   'use strict';
 
+  // Usa Storage se disponibile
+  const Storage = window.Storage || {
+    getItem: (key, defaultValue = null) => {
+      try {
+        const item = localStorage.getItem(key);
+        return item !== null ? item : defaultValue;
+      } catch {
+        return defaultValue;
+      }
+    },
+    setItem: (key, value) => {
+      try {
+        localStorage.setItem(key, value);
+        return true;
+      } catch {
+        return false;
+      }
+    },
+    removeItem: (key) => {
+      try {
+        localStorage.removeItem(key);
+        return true;
+      } catch {
+        return false;
+      }
+    }
+  };
+
   // ===== VARIABILI PRIVATE =====
   let currentModalType = ''; // 'partenza' o 'arrivo'
   let filteredFermate = [];
@@ -52,14 +80,69 @@
 
     fermateModalList.innerHTML = '';
 
-    filteredFermate.forEach(({ name, index }) => {
+    filteredFermate.forEach(({ name, index, distance }) => {
       const li = document.createElement('li');
-      li.textContent = name;
+      
+      // Se la distanza è disponibile, mostra anche quella
+      if (distance !== null && distance !== undefined) {
+        const distanceText = distance.toFixed(1);
+        li.innerHTML = `
+          <span class="fermata-name">${name}</span>
+          <span class="fermata-distance">${distanceText} km</span>
+        `;
+      } else {
+        li.textContent = name;
+      }
+      
       li.dataset.index = index;
 
       li.addEventListener('click', () => selectFermata(index));
       fermateModalList.appendChild(li);
     });
+  }
+
+  /**
+   * Riordina le fermate per distanza usando il modulo Geolocation
+   * @param {Object} userPosition - Posizione utente {latitude, longitude}
+   * @returns {boolean} true se l'ordinamento è stato applicato
+   */
+  function sortFermateByDistance(userPosition) {
+    if (!userPosition || !filteredFermate || filteredFermate.length === 0) {
+      return false;
+    }
+
+    // Usa il modulo Geolocation se disponibile
+    if (window.Geolocation && window.Geolocation.sortFermateByDistance) {
+      // Estrai solo i nomi delle fermate per l'ordinamento
+      const fermateNames = filteredFermate.map(f => f.name);
+      
+      // Ordina per distanza
+      const sorted = window.Geolocation.sortFermateByDistance(fermateNames, userPosition);
+      
+      // Ricostruisci filteredFermate mantenendo gli indici originali
+      // Crea una mappa nome -> indice originale
+      const nameToIndexMap = new Map();
+      filteredFermate.forEach(({ name, index }) => {
+        nameToIndexMap.set(name, index);
+      });
+      
+      // Riordina filteredFermate mantenendo gli indici originali
+      filteredFermate = sorted.map(item => {
+        const originalIndex = nameToIndexMap.get(item.name);
+        return {
+          name: item.name,
+          index: originalIndex !== undefined ? originalIndex : item.index,
+          distance: item.distance
+        };
+      });
+      
+      // Ri-renderizza la lista
+      renderFermateList();
+      
+      return true;
+    }
+    
+    return false;
   }
 
   /**
@@ -146,6 +229,8 @@
 
     // Popola la lista delle fermate
     populateFermateList();
+
+    // NON ordinare automaticamente - l'ordinamento avviene solo quando l'utente clicca sul pulsante "Rileva fermata più vicina"
 
     // Mostra il modale
     fermateModal.style.display = 'flex';
@@ -256,7 +341,8 @@
   window.FermateModal = {
     open: openFermateModal,
     close: closeFermateModal,
-    initialize: initializeFermateModal
+    initialize: initializeFermateModal,
+    sortByDistance: sortFermateByDistance // Funzione per ordinare per distanza
   };
 
 })();

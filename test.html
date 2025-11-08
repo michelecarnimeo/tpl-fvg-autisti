@@ -267,6 +267,10 @@
                 <span class="toc-icon">💰</span>
                 <span class="toc-label">Prezzi</span>
             </a>
+            <a href="#section-route" class="toc-sidebar-link toc-completed" data-section="section-route" data-color="blue">
+                <span class="toc-icon">🧭</span>
+                <span class="toc-label">Route Selector</span>
+            </a>
             <a href="#section-settings" class="toc-sidebar-link toc-completed" data-section="section-settings" data-color="orange">
                 <span class="toc-icon">⚙️</span>
                 <span class="toc-label">Settings</span>
@@ -320,6 +324,8 @@
                     Storage Module</a>
                 <a href="#section-prezzi" class="toc-link" data-section="section-prezzi" data-label="💰 Prezzi">💰
                     Prezzi</a>
+                <a href="#section-route" class="toc-link" data-section="section-route" data-label="🧭 Route Selector">🧭
+                    Route Selector</a>
                 <a href="#section-settings" class="toc-link" data-section="section-settings" data-label="⚙️ Settings">⚙️
                     Settings</a>
                 <a href="#section-sw" class="toc-link" data-section="section-sw" data-label="⚙️ Service Worker">⚙️
@@ -1693,6 +1699,169 @@
             </div>
         </div>
 
+        <!-- Test RouteSelector: Route Selector (Modulo route-selector.js) -->
+        <div id="section-route" class="test-section has-module-header">
+            <!-- Header modulo: Route Selector -->
+            <div class="test-header" data-module="route">
+                <div class="test-header-top">
+                    <div class="test-title">🧭 Test Route Selector</div>
+                    <div class="test-progress" id="route-header-progress">0/10</div>
+                    <span class="test-header-status status-pending" id="route-header-status">In attesa</span>
+                </div>
+                <div class="test-stats">
+                    <span>✅ <span id="route-header-passed">0</span></span>
+                    <span>❌ <span id="route-header-failed">0</span></span>
+                    <span>⏱️ <span id="route-header-time">0ms</span></span>
+                </div>
+                <div class="test-timestamp" id="route-header-timestamp" data-ts="">-</div>
+                <div class="test-bar">
+                    <div class="test-bar-fill" id="route-header-bar" data-progress="0"></div>
+                </div>
+            </div>
+
+            <!-- CARD UNICA che contiene tutti i gruppi -->
+            <div class="test-groups-card">
+
+                <!-- Gruppo 1: Test Base -->
+                <div class="test-group-separator">
+                    <div class="test-group-header" onclick="toggleRouteGroup('group1')">
+                        <div class="test-group-bar group-route-1"></div>
+                        <div class="test-group-title-container">
+                            <div class="test-group-title">Test Base</div>
+                            <div id="route-group1-subtitle" class="test-group-subtitle state-pending">2 test da completare</div>
+                        </div>
+                        <div id="route-group1-badge" class="test-group-badge badge-pending">0/2</div>
+                        <div id="route-group1-icon" class="test-group-icon">▶</div>
+                    </div>
+                    <div id="route-group1-content" class="test-group-content">
+                        <div class="test-group-items-container">
+                            <div class="test-item" id="test-route-module">
+                                <button class="test-run-single" onclick="runSingleRouteTest('test-route-module')" title="Esegui solo questo test">▶</button>
+                                <span>Disponibilità modulo</span>
+                                <span class="test-status pending">In attesa</span>
+                            </div>
+                            <div class="test-item" id="test-route-initial-state">
+                                <button class="test-run-single" onclick="runSingleRouteTest('test-route-initial-state')" title="Esegui solo questo test">▶</button>
+                                <span>Stato iniziale</span>
+                                <span class="test-status pending">In attesa</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gruppo 2: Selezione -->
+                <div class="test-group-separator">
+                    <div class="test-group-header" onclick="toggleRouteGroup('group2')">
+                        <div class="test-group-bar group-route-2"></div>
+                        <div class="test-group-title-container">
+                            <div class="test-group-title">Selezione</div>
+                            <div id="route-group2-subtitle" class="test-group-subtitle state-pending">3 test da completare</div>
+                        </div>
+                        <div id="route-group2-badge" class="test-group-badge badge-pending">0/3</div>
+                        <div id="route-group2-icon" class="test-group-icon">▶</div>
+                    </div>
+                    <div id="route-group2-content" class="test-group-content">
+                        <div class="test-group-items-container">
+                            <div class="test-item" id="test-route-select-linea">
+                                <button class="test-run-single" onclick="runSingleRouteTest('test-route-select-linea')" title="Esegui solo questo test">▶</button>
+                                <span>Selezione linea</span>
+                                <span class="test-status pending">In attesa</span>
+                            </div>
+                            <div class="test-item" id="test-route-select-partenza">
+                                <button class="test-run-single" onclick="runSingleRouteTest('test-route-select-partenza')" title="Esegui solo questo test">▶</button>
+                                <span>Selezione partenza</span>
+                                <span class="test-status pending">In attesa</span>
+                            </div>
+                            <div class="test-item" id="test-route-select-arrivo">
+                                <button class="test-run-single" onclick="runSingleRouteTest('test-route-select-arrivo')" title="Esegui solo questo test">▶</button>
+                                <span>Selezione arrivo</span>
+                                <span class="test-status pending">In attesa</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gruppo 3: Funzionalità -->
+                <div class="test-group-separator">
+                    <div class="test-group-header" onclick="toggleRouteGroup('group3')">
+                        <div class="test-group-bar group-route-3"></div>
+                        <div class="test-group-title-container">
+                            <div class="test-group-title">Funzionalità</div>
+                            <div id="route-group3-subtitle" class="test-group-subtitle state-pending">3 test da completare</div>
+                        </div>
+                        <div id="route-group3-badge" class="test-group-badge badge-pending">0/3</div>
+                        <div id="route-group3-icon" class="test-group-icon">▶</div>
+                    </div>
+                    <div id="route-group3-content" class="test-group-content">
+                        <div class="test-group-items-container">
+                            <div class="test-item" id="test-route-swap">
+                                <button class="test-run-single" onclick="runSingleRouteTest('test-route-swap')" title="Esegui solo questo test">▶</button>
+                                <span>Swap partenza/arrivo</span>
+                                <span class="test-status pending">In attesa</span>
+                            </div>
+                            <div class="test-item" id="test-route-reset">
+                                <button class="test-run-single" onclick="runSingleRouteTest('test-route-reset')" title="Esegui solo questo test">▶</button>
+                                <span>Reset selezioni</span>
+                                <span class="test-status pending">In attesa</span>
+                            </div>
+                            <div class="test-item" id="test-route-getters">
+                                <button class="test-run-single" onclick="runSingleRouteTest('test-route-getters')" title="Esegui solo questo test">▶</button>
+                                <span>Metodi getter</span>
+                                <span class="test-status pending">In attesa</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gruppo 4: Storage -->
+                <div class="test-group-separator">
+                    <div class="test-group-header" onclick="toggleRouteGroup('group4')">
+                        <div class="test-group-bar group-route-4"></div>
+                        <div class="test-group-title-container">
+                            <div class="test-group-title">Storage</div>
+                            <div id="route-group4-subtitle" class="test-group-subtitle state-pending">2 test da completare</div>
+                        </div>
+                        <div id="route-group4-badge" class="test-group-badge badge-pending">0/2</div>
+                        <div id="route-group4-icon" class="test-group-icon">▶</div>
+                    </div>
+                    <div id="route-group4-content" class="test-group-content">
+                        <div class="test-group-items-container">
+                            <div class="test-item" id="test-route-storage-save">
+                                <button class="test-run-single" onclick="runSingleRouteTest('test-route-storage-save')" title="Esegui solo questo test">▶</button>
+                                <span>Salvataggio Storage</span>
+                                <span class="test-status pending">In attesa</span>
+                            </div>
+                            <div class="test-item" id="test-route-storage-restore">
+                                <button class="test-run-single" onclick="runSingleRouteTest('test-route-storage-restore')" title="Esegui solo questo test">▶</button>
+                                <span>Ripristino Storage</span>
+                                <span class="test-status pending">In attesa</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- Fine Card Gruppi Test Route Selector -->
+
+            <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; margin-top: 1rem;">
+                <button class="test-button" onclick="testRouteSelector()" style="flex: 1; min-width: 150px;">🧪 Test
+                    Route Selector</button>
+                <button class="test-button" onclick="toggleAllRouteGroups(true)" style="background: #6b7280;">📂 Apri
+                    Tutti</button>
+                <button class="test-button" onclick="toggleAllRouteGroups(false)" style="background: #6b7280;">📁 Chiudi
+                    Tutti</button>
+                <button class="test-button" onclick="resetRouteTests()" style="background: #ef4444; transition: background-color 0.2s ease; min-width: 100px;">🔄 Reset Test</button>
+            </div>
+            <div class="test-output" id="output-route" style="display:none;" data-no-copy="true"></div>
+            <div id="route-log-buttons" style="display: none; gap: 0.5rem; margin-top: 0.5rem;">
+                <button class="test-button" onclick="copyRouteLog()" style="background: #0d9488;">📋 Copia log</button>
+                <button class="test-button" onclick="downloadRouteLog()" style="background: #3b82f6;">💾 Scarica
+                    log</button>
+                <button class="test-button" onclick="clearRouteLog()" style="background: #ef4444;">🗑️ Cancella
+                    log</button>
+            </div>
+        </div>
+
         <!-- Test 5: Settings (Modulo settings.js) -->
         <div id="section-settings" class="test-section has-module-header">
             <!-- Header modulo: Settings -->
@@ -2208,6 +2377,8 @@
     <!-- Script di test -->
     <!-- CORE: Storage (deve essere caricato PRIMA di features che lo usano) -->
     <script src="js/core/storage.js"></script>
+    <!-- DATA: Tariffario (deve essere caricato PRIMA di route-selector.js) -->
+    <script src="js/data/tariffario.js"></script>
     <script src="footer.js"></script>
     <script src="changelog.js"></script>
     <script src="js/features/updates.js"></script>
@@ -2220,6 +2391,11 @@
     <script src="js/tests/test-prezzi.js"></script>
     <!-- Wrapper funzioni Prezzi test - IMPORTANTE: Deve essere caricato PRIMA del DOM per essere disponibile agli onclick -->
     <script src="js/tests/test-prezzi-wrappers.js"></script>
+    <!-- Route Selector (dipende da tariffario.js e Pricing) -->
+    <script src="js/features/route-selector.js"></script>
+    <script src="js/tests/test-route-selector.js"></script>
+    <!-- Wrapper funzioni Route Selector test - IMPORTANTE: Deve essere caricato PRIMA del DOM per essere disponibile agli onclick -->
+    <script src="js/tests/test-route-selector-wrappers.js"></script>
     <!-- Modulo utility per test - Step 1 modularizzazione (02/11/2025) -->
     <script src="js/tests/test-utils.js"></script>
     <!-- Funzioni gestione log - Step 2 modularizzazione (06/11/2025) -->

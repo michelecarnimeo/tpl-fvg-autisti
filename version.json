@@ -1,6 +1,6 @@
 {
-  "version": "1.6.7",
-  "versionDate": "6 Novembre 2025",
-  "versionTime": "21:00",
-  "updateNotes": "Modularizzazione completa wrapper test (Settings, Service Worker, All) + Fix caricamento tariffario automatico + Aggiunti pulsanti log per tutti i moduli test"
+  "version": "1.6.8",
+  "versionDate": "7 Novembre 2025",
+  "versionTime": "17:00",
+  "updateNotes": "Nuove funzionalità GPS: Auto-assegnazione partenza/arrivo per linea Udine-Grado + Ordinamento manuale fermate con distanza nel modal"
 }

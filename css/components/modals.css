@@ -769,9 +769,27 @@
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 12px;
   color: var(--testo-principale);
   font-weight: 500;
+}
+
+.fermate-modal-list li .fermata-name {
+  flex: 1;
+}
+
+.fermate-modal-list li .fermata-distance {
+  color: var(--turchese);
+  font-size: 0.9em;
+  font-weight: 600;
+  opacity: 0.8;
+  white-space: nowrap;
+}
+
+.dark .fermate-modal-list li .fermata-distance {
+  color: var(--turchese);
+  opacity: 0.9;
 }
 
 .fermate-modal-list li:hover {

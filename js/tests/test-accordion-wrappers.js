@@ -109,6 +109,24 @@ window.toggleSwGroup = function(groupId) {
     }
 };
 
+window.toggleRouteGroup = function(groupId) {
+    if (typeof TestAccordion !== 'undefined' && TestAccordion.toggleGroup) {
+        TestAccordion.toggleGroup('route', groupId);
+    } else {
+        const content = document.getElementById(`route-${groupId}-content`);
+        const icon = document.getElementById(`route-${groupId}-icon`);
+        if (content && icon) {
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                icon.classList.remove('expanded');
+            } else {
+                content.classList.add('expanded');
+                icon.classList.add('expanded');
+            }
+        }
+    }
+};
+
 window.toggleAllDbGroups = function(open) {
     if (typeof TestAccordion !== 'undefined' && TestAccordion.toggleAllGroups) {
         TestAccordion.toggleAllGroups('db', open);
@@ -159,6 +177,27 @@ window.toggleAllPriceGroups = function(open) {
         groups.forEach(groupId => {
             const content = document.getElementById(`price-${groupId}-content`);
             const icon = document.getElementById(`price-${groupId}-icon`);
+            if (content && icon) {
+                if (open) {
+                    content.classList.add('expanded');
+                    icon.classList.add('expanded');
+                } else {
+                    content.classList.remove('expanded');
+                    icon.classList.remove('expanded');
+                }
+            }
+        });
+    }
+};
+
+window.toggleAllRouteGroups = function(open) {
+    if (typeof TestAccordion !== 'undefined' && TestAccordion.toggleAllGroups) {
+        TestAccordion.toggleAllGroups('route', open);
+    } else {
+        const groups = ['group1', 'group2', 'group3', 'group4'];
+        groups.forEach(groupId => {
+            const content = document.getElementById(`route-${groupId}-content`);
+            const icon = document.getElementById(`route-${groupId}-icon`);
             if (content && icon) {
                 if (open) {
                     content.classList.add('expanded');
