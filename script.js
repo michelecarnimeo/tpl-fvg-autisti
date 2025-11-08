@@ -1808,7 +1808,9 @@ if (window.location.pathname.endsWith('index.html') || window.location.pathname 
   // Verifica se siamo in modalità PWA
   function isStandalone() {
     // Controlla se è attiva la modalità test
-    const isTestMode = Storage.getItem('tpl.pwaTestMode') === 'true';
+    // Nota: Storage.getItem può restituire booleano (se salvato come JSON) o stringa
+    const pwaTestModeValue = Storage.getItem('tpl.pwaTestMode');
+    const isTestMode = pwaTestModeValue === 'true' || pwaTestModeValue === true;
     if (isTestMode) {
       return true; // Forza modalità PWA per testing
     }
@@ -1881,35 +1883,62 @@ if (window.location.pathname.endsWith('index.html') || window.location.pathname 
     const newBtn = settingsBtn.cloneNode(true);
     settingsBtn.parentNode.replaceChild(newBtn, settingsBtn);
 
-    // Aggiungi listener che cerca il modal al momento del click
-    newBtn.addEventListener('click', function(e) {
+    // Aggiungi listener che usa SettingsModal.open() se disponibile (metodo preferito)
+    newBtn.addEventListener('click', async function(e) {
       e.preventDefault();
       e.stopPropagation();
       
+      console.log('⚙️ Click su pulsante impostazioni PWA!');
+      
+      // Prova prima con SettingsModal.open() (metodo preferito - gestisce tutto correttamente)
+      if (typeof window.SettingsModal !== 'undefined' && 
+          typeof window.SettingsModal.open === 'function') {
+        console.log('✅ Usando SettingsModal.open()');
+        try {
+          await window.SettingsModal.open();
+          return;
+        } catch (error) {
+          console.error('❌ Errore nell\'apertura del modal con SettingsModal.open():', error);
+          // Continua con il fallback
+        }
+      }
+      
+      // Fallback: prova a caricare e aprire il modal manualmente
       const settingsModal = document.getElementById('settings-modal');
       
       if (!settingsModal) {
-        // Se il modal non esiste ancora, prova ad aprire usando SettingsModal se disponibile
-        if (typeof SettingsModal !== 'undefined' && SettingsModal.open) {
-          SettingsModal.open();
-          return;
+        // Se il modal non esiste, prova a caricarlo dinamicamente
+        console.log('📥 Modal non trovato, tentativo di caricamento...');
+        
+        // Prova a chiamare loadHTML se disponibile
+        if (typeof window.SettingsModal !== 'undefined' && 
+            typeof window.SettingsModal.loadHTML === 'function') {
+          try {
+            await window.SettingsModal.loadHTML();
+            // Dopo il caricamento, riprova ad aprire usando open()
+            if (typeof window.SettingsModal.open === 'function') {
+              await window.SettingsModal.open();
+              return;
+            }
+          } catch (error) {
+            console.error('❌ Errore nel caricamento del modal:', error);
+          }
         }
-        console.warn('⚠️ Modal impostazioni non trovato. Potrebbe essere ancora in caricamento.');
+        
+        console.warn('⚠️ Modal impostazioni non trovato e impossibile caricarlo.');
         return;
       }
 
-      console.log('⚙️ Click su pulsante impostazioni!');
-
-      // Apri il modal con animazione
+      // Se il modal esiste, aprilo direttamente
+      console.log('✅ Apertura modal esistente');
       settingsModal.style.display = 'flex';
       setTimeout(function() {
         settingsModal.classList.add('show');
+        console.log('✅ Modal impostazioni aperto', {
+          display: settingsModal.style.display,
+          classList: settingsModal.classList.toString()
+        });
       }, 10);
-
-      console.log('✅ Modal impostazioni aperto', {
-        display: settingsModal.style.display,
-        classList: settingsModal.classList.toString()
-      });
     });
   }
 

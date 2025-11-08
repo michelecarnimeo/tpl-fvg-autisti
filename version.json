@@ -1,6 +1,6 @@
 {
-  "version": "1.6.8",
+  "version": "1.6.8.1",
   "versionDate": "7 Novembre 2025",
-  "versionTime": "17:00",
-  "updateNotes": "Nuove funzionalità GPS: Auto-assegnazione partenza/arrivo per linea Udine-Grado + Ordinamento manuale fermate con distanza nel modal"
+  "versionTime": "22:00",
+  "updateNotes": "Fix bug: Tema default sistema, pulsanti Impostazioni PWA e Verifica Aggiornamenti, GPS auto-assegnazione solo partenza, reset geolocalizzazione, riavvio app"
 }

@@ -223,7 +223,7 @@
   }
 
   function applyTheme() {
-    const mode = Storage.getItem('tpl.themeMode') || 'light';
+    const mode = Storage.getItem('tpl.themeMode') || 'system';
     let shouldBeDark = false;
 
     if (mode === 'system') {
@@ -281,7 +281,7 @@
 
     // Listener per cambio tema sistema
     prefersDarkScheme.addEventListener('change', () => {
-      const mode = Storage.getItem('tpl.themeMode') || 'light';
+      const mode = Storage.getItem('tpl.themeMode') || 'system';
       if (mode === 'system') {
         applyTheme();
       }

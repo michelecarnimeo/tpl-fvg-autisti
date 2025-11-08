@@ -235,33 +235,18 @@ async function confirmResetCache() {
       console.warn('⚠️ Errore nel cancellare LocalStorage:', error);
     }
 
-    // Determina la destinazione in base alla pagina corrente
-    const currentPage = window.location.pathname.split('/').pop() || window.location.href;
-    const isTestPage = currentPage.includes('test.html');
+    // Ricarica sempre la pagina corrente (non reindirizzare a benvenuto.html)
+    console.log('🔄 Riavvio app...', { currentPage: window.location.pathname });
     
-    console.log('🔄 Riavvio app...', { currentPage, isTestPage });
-    
-    // Se siamo su test.html, ricarica la pagina invece di andare a benvenuto.html
-    if (isTestPage) {
-      setTimeout(() => {
-        window.location.reload();
-      }, 300);
-    } else {
-      // Altrimenti vai a benvenuto.html
-      setTimeout(() => {
-        window.location.href = 'benvenuto.html';
-      }, 300);
-    }
+    // Ricarica la pagina corrente (mantiene l'utente sulla stessa pagina)
+    setTimeout(() => {
+      window.location.reload();
+    }, 300);
   } catch (error) {
     console.error('❌ Errore durante il reset cache:', error);
-    // Fallback: riavvia comunque la pagina
+    // Fallback: riavvia comunque la pagina corrente
     setTimeout(() => {
-      const isTestPage = window.location.pathname.includes('test.html');
-      if (isTestPage) {
-        window.location.reload();
-      } else {
-        window.location.href = 'benvenuto.html';
-      }
+      window.location.reload();
     }, 300);
   }
 }

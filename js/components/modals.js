@@ -515,7 +515,110 @@
   let setInterfaceScale = null;
   let setFontSize = null;
   let triggerHaptic = null;
-  let onCloseMobileMenu = null; // Callback per chiudere menu mobile
+  let onCloseMobileMenu = null;
+  
+  // Handler per il pulsante "Verifica Aggiornamenti" (per event delegation)
+  let handleUpdateCheckClick = null;
+  
+  /**
+   * Configura il listener per il pulsante "Verifica Aggiornamenti"
+   * Viene chiamato dopo che il modal HTML è stato caricato
+   */
+  function setupUpdateCheckButton() {
+    console.log('🔧 setupUpdateCheckButton chiamato');
+    
+    // Crea handler per event delegation
+    function createUpdateCheckHandler() {
+      return function(e) {
+        // Verifica se il click è sul pulsante "Verifica Aggiornamenti" o su un elemento interno
+        let updateCheckBtn = null;
+        
+        // Prova diversi modi per trovare il pulsante
+        if (e.target.id === 'pwa-cache-reset') {
+          updateCheckBtn = e.target;
+        } else if (e.target.closest && e.target.closest('#pwa-cache-reset')) {
+          updateCheckBtn = e.target.closest('#pwa-cache-reset');
+        } else if (e.target.parentElement && e.target.parentElement.id === 'pwa-cache-reset') {
+          updateCheckBtn = e.target.parentElement;
+        } else {
+          // Controlla se il pulsante esiste nel DOM
+          const btn = document.getElementById('pwa-cache-reset');
+          if (btn && (btn.contains(e.target) || e.target === btn)) {
+            updateCheckBtn = btn;
+          }
+        }
+        
+        if (!updateCheckBtn) return;
+        
+        console.log('🔄 Pulsante "Verifica Aggiornamenti" cliccato', updateCheckBtn);
+        
+        e.preventDefault();
+        e.stopPropagation();
+        
+        // Chiudi il modal Impostazioni prima
+        if (typeof closeSettingsModal === 'function') {
+          closeSettingsModal();
+        } else if (settingsModal) {
+          settingsModal.classList.remove('show');
+          setTimeout(() => {
+            if (settingsModal) settingsModal.style.display = 'none';
+          }, 300);
+        }
+        
+        // Aspetta un attimo e poi verifica aggiornamenti
+        setTimeout(() => {
+          console.log('🔍 Verifica disponibilità Updates...', {
+            windowUpdates: typeof window.Updates,
+            Updates: typeof Updates,
+            checkForUpdates: typeof window.Updates !== 'undefined' ? typeof window.Updates.checkForUpdates : 'N/A'
+          });
+          
+          if (typeof window.Updates !== 'undefined' && typeof window.Updates.checkForUpdates === 'function') {
+            console.log('✅ Chiamata a window.Updates.checkForUpdates()');
+            window.Updates.checkForUpdates();
+          } else if (typeof Updates !== 'undefined' && typeof Updates.checkForUpdates === 'function') {
+            console.log('✅ Chiamata a Updates.checkForUpdates() (fallback)');
+            Updates.checkForUpdates();
+          } else {
+            console.error('❌ Updates.checkForUpdates non è disponibile');
+            alert('⚠️ Modulo Updates non disponibile. Verifica che js/features/updates.js sia caricato.');
+          }
+        }, 400);
+      };
+    }
+    
+    // Rimuovi listener precedenti se esistono
+    if (handleUpdateCheckClick) {
+      document.body.removeEventListener('click', handleUpdateCheckClick);
+      console.log('🗑️ Rimosso listener precedente');
+    }
+    
+    // Crea nuovo handler
+    handleUpdateCheckClick = createUpdateCheckHandler();
+    
+    // Aggiungi event delegation su document.body (funziona sempre, anche se il modal viene aggiunto dopo)
+    document.body.addEventListener('click', handleUpdateCheckClick, true); // usa capture phase
+    console.log('✅ Event delegation aggiunto su document.body per pulsante pwa-cache-reset (capture phase)');
+    
+    // Aggiungi anche listener diretto se il pulsante esiste già
+    const updateCheckBtn = document.getElementById('pwa-cache-reset');
+    if (updateCheckBtn) {
+      console.log('✅ Pulsante pwa-cache-reset trovato, aggiungo listener diretto');
+      // Rimuovi listener precedenti se esistono (clone pattern)
+      const newBtn = updateCheckBtn.cloneNode(true);
+      updateCheckBtn.parentNode.replaceChild(newBtn, updateCheckBtn);
+      
+      newBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('🔄 Click diretto sul pulsante pwa-cache-reset');
+        handleUpdateCheckClick(e);
+      });
+      console.log('✅ Listener diretto aggiunto al pulsante pwa-cache-reset');
+    } else {
+      console.log('ℹ️ Pulsante pwa-cache-reset non trovato ancora (sarà gestito da event delegation)');
+    }
+  }
 
   // ===== ELEMENTI DOM =====
   // Gli elementi DOM vengono letti all'inizializzazione invece che a livello di modulo
@@ -547,7 +650,7 @@
    */
   function syncSettingsWithState() {
     // Theme Mode
-    const themeMode = localStorage.getItem('tpl.themeMode') || 'light';
+    const themeMode = localStorage.getItem('tpl.themeMode') || 'system';
     if (themeSystem) themeSystem.checked = (themeMode === 'system');
     if (themeLight) themeLight.checked = (themeMode === 'light');
     if (themeDark) themeDark.checked = (themeMode === 'dark');
@@ -658,6 +761,10 @@
     setTimeout(() => {
       settingsModal.classList.add('show');
       console.log('✅ Modal impostazioni aperto');
+      
+      // Assicurati che il listener per "Verifica Aggiornamenti" sia configurato
+      // (nel caso il pulsante sia stato aggiunto dopo l'inizializzazione)
+      setupUpdateCheckButton();
     }, 10);
 
     // Sincronizza valori con stato attuale
@@ -711,6 +818,9 @@
       
       // Aggiorna il riferimento al modal
       settingsModal = document.getElementById('settings-modal');
+      
+      // Aggiungi listener per pulsante "Verifica Aggiornamenti" dopo che il modal è stato caricato
+      setupUpdateCheckButton();
       
       // Aggiorna la versione nel modal se la funzione è disponibile
       if (typeof updateAppVersion === 'function') {
@@ -835,6 +945,21 @@
       desktopSettingsBtn.addEventListener('click', () => {
         openSettingsModal();
       });
+    }
+
+    // PWA settings button (bottom navigation)
+    const pwaSettingsBtn = document.getElementById('pwa-settings-btn');
+    if (pwaSettingsBtn) {
+      // Rimuovi listener precedenti se esistono (clone pattern)
+      const newPwaBtn = pwaSettingsBtn.cloneNode(true);
+      pwaSettingsBtn.parentNode.replaceChild(newPwaBtn, pwaSettingsBtn);
+      
+      newPwaBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        openSettingsModal();
+      });
+      console.log('✅ Pulsante PWA impostazioni inizializzato');
     }
 
     if (closeSettingsBtn) {
@@ -985,25 +1110,8 @@
     }
 
     // Pulsante "Verifica Aggiornamenti"
-    const updateCheckBtn = document.getElementById('pwa-cache-reset');
-    if (updateCheckBtn) {
-      updateCheckBtn.addEventListener('click', () => {
-        console.log('🔄 Pulsante "Verifica Aggiornamenti" cliccato');
-        
-        // Chiudi il modal Impostazioni prima
-        closeSettingsModal();
-        
-        // Aspetta un attimo e poi verifica aggiornamenti
-        setTimeout(() => {
-          if (typeof Updates !== 'undefined' && typeof Updates.checkForUpdates === 'function') {
-            console.log('✅ Chiamata a Updates.checkForUpdates()');
-            Updates.checkForUpdates();
-          } else {
-            console.error('❌ Updates.checkForUpdates non è disponibile');
-          }
-        }, 400);
-      });
-    }
+    // Configura il listener (viene anche chiamato dopo il caricamento del modal HTML)
+    setupUpdateCheckButton();
 
     // Pulsante "Riavvia Ora"
     const restartAppBtn = document.getElementById('restart-app-btn');

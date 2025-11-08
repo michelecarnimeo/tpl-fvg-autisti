@@ -272,6 +272,45 @@
   }
 
   /**
+   * Resetta completamente lo stato della geolocalizzazione
+   * Utile quando si fa "Riparti da capo"
+   */
+  function resetLocationState() {
+    // Reset stato interno
+    userPosition = null;
+    locationPermissionGranted = false;
+
+    // Reset pulsante GPS home page
+    const locationBtn = document.getElementById('location-btn');
+    const locationIcon = document.getElementById('location-icon');
+    const locationText = document.getElementById('location-text');
+
+    if (locationBtn) {
+      locationBtn.classList.remove('active');
+      locationBtn.disabled = false;
+    }
+    if (locationIcon) locationIcon.textContent = '📍';
+    if (locationText) locationText.textContent = 'Rileva posizione';
+
+    // Reset pulsante GPS modal fermate
+    const fermateLocationBtn = document.getElementById('fermate-location-btn');
+    const fermateLocationIcon = document.getElementById('fermate-location-icon');
+    const fermateLocationText = document.getElementById('fermate-location-text');
+
+    if (fermateLocationBtn) {
+      fermateLocationBtn.classList.remove('active');
+      fermateLocationBtn.disabled = false;
+    }
+    if (fermateLocationIcon) fermateLocationIcon.textContent = '📍';
+    if (fermateLocationText) fermateLocationText.textContent = 'Rileva';
+
+    // Rimuovi preferenza (opzionale - commentato per mantenere la preferenza utente)
+    // Storage.removeItem('tpl.locationEnabled');
+
+    console.log('✅ Stato geolocalizzazione resettato');
+  }
+
+  /**
    * Trova la fermata più vicina tra quelle prioritarie per la linea Udine-Grado
    * @param {Object} userPos - Posizione utente {latitude, longitude}
    * @param {Array} fermate - Array di nomi fermate della linea
@@ -369,10 +408,10 @@
   }
 
   /**
-   * Auto-assegna partenza e arrivo basandosi sulla posizione GPS
+   * Auto-assegna solo la partenza basandosi sulla posizione GPS
    * Funziona solo per la linea Udine-Grado
    * @param {Object} userPos - Posizione utente {latitude, longitude}
-   * @returns {Object|null} {partenza, arrivo} con indici, o null se non possibile
+   * @returns {Object|null} {name, index, distance} della fermata più vicina, o null se non possibile
    */
   function autoAssignRoute(userPos) {
     // Verifica che RouteSelector e Tariffario siano disponibili
@@ -426,30 +465,17 @@
       return null;
     }
 
-    // Determina il capolinea opposto
-    const oppositeTerminus = getOppositeTerminus(nearestStop.name, fermate);
-    
-    if (!oppositeTerminus) {
-      console.warn('⚠️ Impossibile determinare capolinea opposto');
-      return null;
-    }
-
+    // Restituisci solo la fermata più vicina (partenza)
     return {
-      partenza: {
-        name: nearestStop.name,
-        index: nearestStop.index,
-        distance: nearestStop.distance
-      },
-      arrivo: {
-        name: oppositeTerminus.name,
-        index: oppositeTerminus.index
-      }
+      name: nearestStop.name,
+      index: nearestStop.index,
+      distance: nearestStop.distance
     };
   }
 
   /**
    * Gestisce il click del pulsante geolocalizzazione (home page)
-   * Ora include auto-assegnazione partenza/arrivo per la linea Udine-Grado
+   * Auto-assegna solo la partenza per la linea Udine-Grado
    * @returns {Promise<void>}
    */
   async function handleLocationClick() {
@@ -470,28 +496,23 @@
       userPosition = position;
       locationPermissionGranted = true;
 
-      // Prova auto-assegnazione partenza/arrivo (solo per linea Udine-Grado)
-      const routeAssignment = autoAssignRoute(position);
+      // Prova auto-assegnazione partenza (solo per linea Udine-Grado)
+      const nearestStop = autoAssignRoute(position);
 
-      if (routeAssignment) {
-        // Auto-assegna partenza e arrivo usando RouteSelector
+      if (nearestStop) {
+        // Auto-assegna solo la partenza usando RouteSelector
         if (window.RouteSelector && window.RouteSelector.selectFermata) {
-          window.RouteSelector.selectFermata(routeAssignment.partenza.index, 'partenza');
-          
-          // Piccolo delay per assicurare che la partenza sia stata assegnata
-          await new Promise(resolve => setTimeout(resolve, 100));
-          
-          window.RouteSelector.selectFermata(routeAssignment.arrivo.index, 'arrivo');
+          window.RouteSelector.selectFermata(nearestStop.index, 'partenza');
 
           // Aggiorna UI
           if (locationIcon) locationIcon.textContent = '✅';
-          if (locationText) locationText.textContent = 'Assegnato';
+          if (locationText) locationText.textContent = 'Partenza assegnata';
           locationBtn.classList.add('active');
 
-          // Mostra notifica di successo
-          const distanceText = routeAssignment.partenza.distance.toFixed(1);
+          // Mostra notifica di successo con solo la partenza
+          const distanceText = nearestStop.distance.toFixed(1);
           showLocationNotification(
-            `Partenza: ${routeAssignment.partenza.name} (${distanceText} km) → Arrivo: ${routeAssignment.arrivo.name}`,
+            `Partenza selezionata: ${nearestStop.name} (${distanceText} km)`,
             'success'
           );
         } else {
@@ -681,6 +702,7 @@
     updateLocationButtonIcon: updateLocationButtonIcon,
     showLocationNotification: showLocationNotification,
     disableLocationSorting: disableLocationSorting,
+    resetLocationState: resetLocationState,
 
     // Gestione eventi
     handleLocationClick: handleLocationClick,
@@ -705,6 +727,7 @@
   window.handleLocationClick = handleLocationClick;
   window.handleFermateLocationClick = handleFermateLocationClick;
   window.disableLocationSorting = disableLocationSorting;
+  window.resetLocationState = resetLocationState;
   window.showLocationNotification = showLocationNotification;
   window.updateLocationButtonIcon = updateLocationButtonIcon;
 

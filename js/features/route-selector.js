@@ -349,6 +349,13 @@
       toggleSwapButton(false);
     }
 
+    // Reset completo stato geolocalizzazione (per permettere nuova localizzazione dopo reset)
+    if (window.Geolocation && typeof window.Geolocation.resetLocationState === 'function') {
+      window.Geolocation.resetLocationState();
+    } else if (typeof window.resetLocationState === 'function') {
+      window.resetLocationState();
+    }
+
     // Assicurati che il pulsante swap sia disabilitato
     const swapBtnEl = document.getElementById('swap-btn');
     if (swapBtnEl) {

@@ -2470,11 +2470,13 @@
             if (!btn || !icon || !text || !statusDiv || !infoDiv) return;
 
             // Leggi lo stato corrente
-            const isTestMode = localStorage.getItem('tpl.pwaTestMode') === 'true';
+            // Nota: Storage.getItem può restituire booleano (se salvato come JSON) o stringa
+            const pwaTestModeValue = localStorage.getItem('tpl.pwaTestMode');
+            const isTestMode = pwaTestModeValue === 'true' || pwaTestModeValue === true;
             const newState = !isTestMode;
 
-            // Salva il nuovo stato
-            localStorage.setItem('tpl.pwaTestMode', newState);
+            // Salva il nuovo stato come stringa (compatibilità con Storage.getItem che fa JSON.parse)
+            localStorage.setItem('tpl.pwaTestMode', String(newState));
 
             // Aggiorna l'UI del pulsante
             if (newState) {
@@ -2548,7 +2550,9 @@
             const btn = document.getElementById('toggle-pwa-mode');
             if (btn) {
                 // Imposta lo stato iniziale del pulsante
-                const isTestMode = localStorage.getItem('tpl.pwaTestMode') === 'true';
+                // Nota: Storage.getItem può restituire booleano (se salvato come JSON) o stringa
+                const pwaTestModeValue = localStorage.getItem('tpl.pwaTestMode');
+                const isTestMode = pwaTestModeValue === 'true' || pwaTestModeValue === true;
                 const icon = document.getElementById('pwa-mode-icon');
                 const text = document.getElementById('pwa-mode-text');
                 const statusDiv = document.getElementById('pwa-mode-status');
