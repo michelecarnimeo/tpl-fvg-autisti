@@ -36,6 +36,7 @@ const STATIC_ASSETS = [
   './js/features/prezzi.js', // Calcolo prezzi
   './js/features/route-selector.js', // Gestione selezione route (linea/partenza/arrivo)
   './js/features/geolocation.js', // Gestione geolocalizzazione e ordinamento fermate per distanza
+  './js/features/page-renderers.js', // Rendering pagine fermate.html e prezzi.html
   './js/tests/test-prezzi.js', // Test suite prezzi (solo per test.html)
   './js/tests/test-prezzi-wrappers.js', // Wrapper funzioni Prezzi test (solo per test.html)
   './js/tests/test-route-selector.js', // Test suite route selector (solo per test.html)
@@ -52,6 +53,7 @@ const STATIC_ASSETS = [
   './js/tests/test-database.js', // Test suite database (solo per test.html)
   './js/components/modals.js', // Modal fermate
   './js/components/notification-modal.js', // Modal notifica
+  './js/utils/ui-helpers.js', // UI Helpers (scroll, swap button, etc.)
   './js/utils/offline-notifications.js', // Notifiche offline/online
   './js/utils/app-init.js', // Inizializzazione app comune (SW registration, changelog)
   './js/utils/interface-scale.js', // Sistema scala interfaccia

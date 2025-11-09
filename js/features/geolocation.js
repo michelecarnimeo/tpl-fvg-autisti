@@ -18,33 +18,42 @@
 (function () {
   'use strict';
 
-  // Usa Storage se disponibile
-  const Storage = window.Storage || {
-    getItem: (key, defaultValue = null) => {
-      try {
-        const item = localStorage.getItem(key);
-        return item !== null ? item : defaultValue;
-      } catch {
-        return defaultValue;
-      }
-    },
-    setItem: (key, value) => {
-      try {
-        localStorage.setItem(key, value);
-        return true;
-      } catch {
-        return false;
-      }
-    },
-    removeItem: (key) => {
-      try {
-        localStorage.removeItem(key);
-        return true;
-      } catch {
-        return false;
-      }
+  // Helper per ottenere Storage (gestisce caricamento asincrono)
+  function getStorage() {
+    if (typeof window.Storage !== 'undefined' && window.Storage.getItem) {
+      return window.Storage;
     }
-  };
+    // Fallback se Storage non è ancora disponibile
+    return {
+      getItem: function(key, defaultValue = null) {
+        try {
+          const item = localStorage.getItem(key);
+          return item !== null ? item : defaultValue;
+        } catch (e) {
+          console.warn('⚠️ Errore nel fallback Storage.getItem:', e);
+          return defaultValue;
+        }
+      },
+      setItem: function(key, value) {
+        try {
+          localStorage.setItem(key, value);
+          return true;
+        } catch (e) {
+          console.warn('⚠️ Errore nel fallback Storage.setItem:', e);
+          return false;
+        }
+      },
+      removeItem: function(key) {
+        try {
+          localStorage.removeItem(key);
+          return true;
+        } catch (e) {
+          console.warn('⚠️ Errore nel fallback Storage.removeItem:', e);
+          return false;
+        }
+      }
+    };
+  }
 
   // Stato geolocalizzazione
   let userPosition = null;
@@ -268,6 +277,7 @@
     if (locationText) locationText.textContent = 'Rileva posizione';
 
     // Rimuovi preferenza
+    const Storage = getStorage();
     Storage.removeItem('tpl.locationEnabled');
   }
 
@@ -534,6 +544,7 @@
       }
 
       // Salva preferenza
+      const Storage = getStorage();
       Storage.setItem('tpl.locationEnabled', 'true');
 
     } catch (error) {
@@ -600,6 +611,7 @@
       showLocationNotification('Posizione rilevata! Ordinando fermate per distanza...', 'success');
 
       // Salva preferenza
+      const Storage = getStorage();
       Storage.setItem('tpl.locationEnabled', 'true');
 
       // Ri-ordina le fermate per distanza usando il modal
@@ -678,6 +690,7 @@
    */
   function init() {
     // Ripristina preferenza se presente
+    const Storage = getStorage();
     const locationEnabled = Storage.getItem('tpl.locationEnabled');
     if (locationEnabled === 'true') {
       // Mostra pulsante geolocalizzazione se supportato

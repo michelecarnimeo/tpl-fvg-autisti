@@ -3337,9 +3337,13 @@ p, span, div, a, button, input, select, textarea, label, li {
   
   /* SOTTOSEZIONE 20.2: Sezione reset */
   .reset-section {
-    text-align: center;              /* Testo centrato */
+    display: flex;                   /* Flexbox per allineare pulsanti */
+    justify-content: center;         /* Centra i pulsanti */
+    align-items: center;             /* Allinea verticalmente */
+    gap: 0.75rem;                    /* Spazio tra i pulsanti */
     margin: 1.5rem 0;               /* Margine verticale */
     padding: 1rem 0;                /* Padding verticale */
+    flex-wrap: wrap;                 /* Wrap su schermi piccoli */
   }
   
   /* ========================================
@@ -3403,7 +3407,30 @@ p, span, div, a, button, input, select, textarea, label, li {
     transform: translateY(-1px);                  /* Solleva leggermente */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);  /* Ombra più profonda */
   }
-  
+
+  /* SOTTOSEZIONE 21.2.1: Pulsante reset percorso */
+  .reset-route-btn {
+    background: var(--glass-bg);                  /* Sfondo glassmorphism */
+    /* backdrop-filter rimosso per performance */
+    /* -webkit-backdrop-filter rimosso per performance */
+    border: 1px solid var(--glass-border);       /* Bordo glassmorphism */
+    color: var(--testo-principale);              /* Colore testo principale */
+    border-radius: 12px;                         /* Bordi arrotondati */
+    padding: 0.6rem 1.5rem;                      /* Padding interno */
+    font-size: 1rem;                             /* Dimensione font standard */
+    font-weight: 500;                            /* Peso font medium */
+    cursor: pointer;                             /* Cursore pointer */
+    transition: all 0.3s ease;                   /* Transizione fluida */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);   /* Ombra leggera */
+  }
+
+  .reset-route-btn:hover {
+    background: rgba(255, 255, 255, 0.4);        /* Sfondo bianco più opaco */
+    border-color: rgba(255, 255, 255, 0.6);      /* Bordo bianco più opaco */
+    transform: translateY(-1px);                  /* Solleva leggermente */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);  /* Ombra più profonda */
+  }
+
   /* SOTTOSEZIONE 21.3: Pulsante route */
   .route-button {
     background: var(--glass-bg);                  /* Sfondo glassmorphism */
@@ -4339,6 +4366,20 @@ p, span, div, a, button, input, select, textarea, label, li {
     color: rgba(255, 255, 255, 1);              /* Testo bianco pieno */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);  /* Ombra scura più profonda */
   }
+
+  .dark .reset-route-btn {
+    background: var(--glass-bg-dark);            /* Sfondo glassmorphism scuro */
+    color: rgba(255, 255, 255, 1);              /* Testo bianco pieno (100% opaco) */
+    border-color: var(--glass-border-dark);      /* Bordo glassmorphism scuro */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);   /* Ombra scura */
+  }
+
+  .dark .reset-route-btn:hover {
+    background: rgba(255, 255, 255, 0.1);       /* Sfondo bianco trasparente al hover */
+    border-color: rgba(255, 255, 255, 0.3);     /* Bordo bianco trasparente */
+    color: rgba(255, 255, 255, 1);              /* Testo bianco pieno */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);  /* Ombra scura più profonda */
+  }
   
   .dark .route-button {
     background: var(--glass-bg-dark);            /* Sfondo glassmorphism scuro */
@@ -5186,6 +5227,7 @@ p, span, div, a, button, input, select, textarea, label, li {
 .touch-friendly button,
 .touch-friendly .route-button,
 .touch-friendly .linea-select-btn,
+.touch-friendly .reset-route-btn,
 .touch-friendly .reset-btn {
   min-height: 56px !important;
   padding: 1rem 1.5rem !important;

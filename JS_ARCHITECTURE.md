@@ -24,12 +24,19 @@ tpl-fvg-autisti/
 │   │   ├── updates.js          ✅ FATTO - Verifica aggiornamenti
 │   │   ├── settings.js         ✅ FATTO - Logica impostazioni (tema, font, accessibilità)
 │   │   ├── prezzi.js           ✅ FATTO - Calcolo prezzi (funzioni pure)
-│   │   ├── animations.js       ← Logica animazioni JS ⏳ TODO
-│   │   └── location.js         ← Geolocalizzazione ⏳ TODO
+│   │   ├── route-selector.js   ✅ FATTO - Gestione selezione linea/partenza/arrivo
+│   │   ├── geolocation.js      ✅ FATTO - Geolocalizzazione e ordinamento fermate
+│   │   ├── page-renderers.js   ✅ FATTO - Rendering pagine fermate/prezzi, selezione linee, ricerca
+│   │   ├── tests-ui.js         ✅ FATTO - UI componenti test
+│   │   └── animations.js       ← Logica animazioni JS ⏳ TODO
 │   │
 │   ├── data/
-│   │   ├── tariffario.js       ← Gestione dati tariffario ⏳ TODO
+│   │   ├── tariffario.js       ✅ FATTO - Gestione dati tariffario (caricamento, cache, eventi)
 │   │   └── database.js         ← Gestione database.json ⏳ TODO
+│   │
+│   ├── utils/
+│   │   ├── ui-helpers.js       ✅ FATTO - Funzioni UI helper (scroll to top, swap button)
+│   │   └── offline-notifications.js ✅ FATTO - Notifiche online/offline
 │   │
 │   ├── tests/
 │   │   ├── test-accordion.js   ✅ FATTO - Gestione accordion gruppi
@@ -72,15 +79,20 @@ I file JavaScript devono essere caricati in questo ordine preciso:
 <script src="js/core/storage.js"></script>
 
 <!-- 2. DATA (dopo core, prima features) -->
-<script src="js/data/database.js"></script>
 <script src="js/data/tariffario.js"></script>
 
-<!-- 3. FEATURES (in qualsiasi ordine) -->
+<!-- 3. FEATURES (ordine importante per dipendenze) -->
 <script src="js/features/updates.js"></script>
 <script src="js/features/settings.js"></script>
-<script src="js/features/location.js"></script>
 <script src="js/features/prezzi.js"></script>
-<script src="js/features/animations.js"></script>
+<script src="js/features/route-selector.js"></script>
+<script src="js/features/geolocation.js"></script>
+<script src="js/features/page-renderers.js"></script>
+<script src="js/features/tests-ui.js"></script>
+
+<!-- 4. UTILS (funzioni helper) -->
+<script src="js/utils/ui-helpers.js"></script>
+<script src="js/utils/offline-notifications.js"></script>
 
 <!-- 4. COMPONENTI (in qualsiasi ordine) -->
 <script src="js/components/footer.js"></script>

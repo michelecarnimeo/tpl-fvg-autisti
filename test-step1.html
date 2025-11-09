@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Step 1 - Wrapper Legacy</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .test-section {
+            background: #f5f5f5;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border-left: 4px solid #3b82f6;
+        }
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .pass {
+            background: #d1fae5;
+            color: #065f46;
+            border-left: 4px solid #10b981;
+        }
+        .fail {
+            background: #fee2e2;
+            color: #991b1b;
+            border-left: 4px solid #ef4444;
+        }
+        .info {
+            background: #dbeafe;
+            color: #1e40af;
+            border-left: 4px solid #3b82f6;
+        }
+        button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        button:hover {
+            background: #2563eb;
+        }
+        #test-output {
+            background: #1f2937;
+            color: #f3f4f6;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        #test-output .log-entry {
+            padding: 5px 0;
+            border-bottom: 1px solid #374151;
+        }
+        #test-output .log-entry:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test Step 1: Rimozione Wrapper Legacy</h1>
+    
+    <div class="test-section">
+        <h2>Verifica TestUtils</h2>
+        <button onclick="testTestUtilsLoaded()">1. Verifica TestUtils caricato</button>
+        <button onclick="testWrapperFunctionsRemoved()">2. Verifica wrapper rimossi</button>
+        <button onclick="testDirectCalls()">3. Test chiamate dirette</button>
+        <button onclick="testCallbackFunctions()">4. Test callback</button>
+        <button onclick="runAllTests()">▶ Esegui tutti i test</button>
+        <div id="test-results"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Output Test</h2>
+        <div id="test-output"></div>
+    </div>
+
+    <!-- Carica TestUtils (simula test.html) -->
+    <script src="js/tests/test-utils.js"></script>
+
+    <script>
+        let testCount = 0;
+        let passCount = 0;
+        let failCount = 0;
+
+        function addResult(message, passed) {
+            testCount++;
+            if (passed) passCount++;
+            else failCount++;
+
+            const resultsDiv = document.getElementById('test-results');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `test-result ${passed ? 'pass' : 'fail'}`;
+            resultDiv.innerHTML = `${passed ? '✅' : '❌'} ${message}`;
+            resultsDiv.appendChild(resultDiv);
+
+            logToOutput(`${passed ? '✅ PASS' : '❌ FAIL'}: ${message}`);
+        }
+
+        function logToOutput(message) {
+            const output = document.getElementById('test-output');
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.textContent = `[${new Date().toLocaleTimeString('it-IT')}] ${message}`;
+            output.appendChild(entry);
+            output.scrollTop = output.scrollHeight;
+        }
+
+        // Test 1: Verifica che TestUtils sia caricato
+        function testTestUtilsLoaded() {
+            logToOutput('🧪 Test 1: Verifica TestUtils caricato...');
+            try {
+                if (typeof TestUtils === 'undefined') {
+                    addResult('TestUtils NON è caricato', false);
+                    return;
+                }
+
+                if (typeof TestUtils.log !== 'function') {
+                    addResult('TestUtils.log non è una funzione', false);
+                    return;
+                }
+
+                if (typeof TestUtils.updateTestStatus !== 'function') {
+                    addResult('TestUtils.updateTestStatus non è una funzione', false);
+                    return;
+                }
+
+                if (typeof TestUtils.updateStats !== 'function') {
+                    addResult('TestUtils.updateStats non è una funzione', false);
+                    return;
+                }
+
+                addResult('TestUtils caricato correttamente con tutte le funzioni', true);
+            } catch (error) {
+                addResult(`Errore: ${error.message}`, false);
+            }
+        }
+
+        // Test 2: Verifica che le funzioni wrapper siano state rimosse
+        function testWrapperFunctionsRemoved() {
+            logToOutput('🧪 Test 2: Verifica wrapper rimossi...');
+            try {
+                // Crea un elemento output di test
+                const testOutput = document.createElement('div');
+                testOutput.id = 'test-wrapper-output';
+                testOutput.style.display = 'none';
+                document.body.appendChild(testOutput);
+
+                // Verifica che le funzioni globali NON esistano più
+                if (typeof window.log === 'function') {
+                    addResult('⚠️ Funzione globale log() ESISTE ANCORA (dovrebbe essere rimossa)', false);
+                    document.body.removeChild(testOutput);
+                    return;
+                }
+
+                if (typeof window.updateTestStatus === 'function') {
+                    addResult('⚠️ Funzione globale updateTestStatus() ESISTE ANCORA (dovrebbe essere rimossa)', false);
+                    document.body.removeChild(testOutput);
+                    return;
+                }
+
+                if (typeof window.updateStats === 'function') {
+                    addResult('⚠️ Funzione globale updateStats() ESISTE ANCORA (dovrebbe essere rimossa)', false);
+                    document.body.removeChild(testOutput);
+                    return;
+                }
+
+                addResult('Funzioni wrapper legacy rimosse correttamente', true);
+                document.body.removeChild(testOutput);
+            } catch (error) {
+                addResult(`Errore: ${error.message}`, false);
+            }
+        }
+
+        // Test 3: Test chiamate dirette a TestUtils
+        function testDirectCalls() {
+            logToOutput('🧪 Test 3: Test chiamate dirette a TestUtils...');
+            try {
+                // Crea un elemento output di test
+                const testOutput = document.createElement('div');
+                testOutput.id = 'test-direct-output';
+                document.body.appendChild(testOutput);
+
+                // Test TestUtils.log()
+                TestUtils.log('test-direct-output', 'Test messaggio info', 'info');
+                if (testOutput.children.length === 0) {
+                    addResult('TestUtils.log() non funziona', false);
+                    document.body.removeChild(testOutput);
+                    return;
+                }
+
+                // Test TestUtils.updateTestStatus() - crea elemento test
+                const testItem = document.createElement('div');
+                testItem.id = 'test-item-1';
+                const statusSpan = document.createElement('span');
+                statusSpan.className = 'test-status';
+                testItem.appendChild(statusSpan);
+                document.body.appendChild(testItem);
+
+                TestUtils.updateTestStatus('test-item-1', 'pass');
+                if (!statusSpan.classList.contains('pass')) {
+                    addResult('TestUtils.updateTestStatus() non funziona', false);
+                    document.body.removeChild(testOutput);
+                    document.body.removeChild(testItem);
+                    return;
+                }
+
+                // Test TestUtils.updateStats()
+                TestUtils.updateStats();
+                // Non possiamo verificare facilmente se funziona, ma almeno non dovrebbe lanciare errori
+                
+                addResult('Tutte le chiamate dirette a TestUtils funzionano', true);
+                document.body.removeChild(testOutput);
+                document.body.removeChild(testItem);
+            } catch (error) {
+                addResult(`Errore: ${error.message}`, false);
+                console.error(error);
+            }
+        }
+
+        // Test 4: Test callback functions (come quelle usate nei moduli test)
+        function testCallbackFunctions() {
+            logToOutput('🧪 Test 4: Test callback functions...');
+            try {
+                // Crea un elemento output di test
+                const testOutput = document.createElement('div');
+                testOutput.id = 'test-callback-output';
+                document.body.appendChild(testOutput);
+
+                // Simula un callback come quello usato nei moduli test
+                const output = 'test-callback-output';
+                const callbacks = {
+                    log: (message, type) => TestUtils.log(output, message, type),
+                    updateStatus: (id, status) => TestUtils.updateTestStatus(id, status)
+                };
+
+                // Test callback log
+                callbacks.log('Test callback log', 'success');
+                if (testOutput.children.length === 0) {
+                    addResult('Callback log non funziona', false);
+                    document.body.removeChild(testOutput);
+                    return;
+                }
+
+                // Test callback updateStatus
+                const testItem = document.createElement('div');
+                testItem.id = 'test-item-callback';
+                const statusSpan = document.createElement('span');
+                statusSpan.className = 'test-status';
+                testItem.appendChild(statusSpan);
+                document.body.appendChild(testItem);
+
+                callbacks.updateStatus('test-item-callback', 'fail');
+                if (!statusSpan.classList.contains('fail')) {
+                    addResult('Callback updateStatus non funziona', false);
+                    document.body.removeChild(testOutput);
+                    document.body.removeChild(testItem);
+                    return;
+                }
+
+                addResult('Callback functions funzionano correttamente', true);
+                document.body.removeChild(testOutput);
+                document.body.removeChild(testItem);
+            } catch (error) {
+                addResult(`Errore: ${error.message}`, false);
+                console.error(error);
+            }
+        }
+
+        // Esegui tutti i test
+        function runAllTests() {
+            document.getElementById('test-results').innerHTML = '';
+            document.getElementById('test-output').innerHTML = '';
+            testCount = 0;
+            passCount = 0;
+            failCount = 0;
+
+            logToOutput('🚀 Avvio tutti i test...');
+            
+            setTimeout(() => {
+                testTestUtilsLoaded();
+                setTimeout(() => {
+                    testWrapperFunctionsRemoved();
+                    setTimeout(() => {
+                        testDirectCalls();
+                        setTimeout(() => {
+                            testCallbackFunctions();
+                            setTimeout(() => {
+                                const summary = `\n📊 Risultati: ${passCount}/${testCount} test passati`;
+                                logToOutput(summary);
+                                if (passCount === testCount) {
+                                    logToOutput('✅ TUTTI I TEST PASSATI!');
+                                } else {
+                                    logToOutput(`❌ ${failCount} test falliti`);
+                                }
+                            }, 500);
+                        }, 500);
+                    }, 500);
+                }, 500);
+            }, 500);
+        }
+
+        // Esegui automaticamente all'avvio
+        window.addEventListener('DOMContentLoaded', () => {
+            logToOutput('📋 Pagina di test Step 1 caricata');
+            logToOutput('Premi "Esegui tutti i test" per verificare');
+        });
+    </script>
+</body>
+</html>
+

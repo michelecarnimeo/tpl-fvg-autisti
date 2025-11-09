@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Quick - Moduli</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .test-section {
+      background: white;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .test-item {
+      padding: 10px;
+      margin: 5px 0;
+      border-left: 4px solid #ddd;
+      background: #f9f9f9;
+    }
+    .test-item.pass {
+      border-left-color: #4caf50;
+      background: #e8f5e9;
+    }
+    .test-item.fail {
+      border-left-color: #f44336;
+      background: #ffebee;
+    }
+    h1 {
+      color: #333;
+    }
+    h2 {
+      color: #666;
+      margin-top: 0;
+    }
+    button {
+      background: #2196F3;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin: 10px 5px;
+    }
+    button:hover {
+      background: #1976D2;
+    }
+    #results {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧪 Test Quick - Verifica Moduli</h1>
+  
+  <div class="test-section">
+    <h2>Test Disponibilità Moduli</h2>
+    <button onclick="testModules()">Esegui Test Moduli</button>
+    <div id="results"></div>
+  </div>
+
+  <!-- Carica i moduli necessari (ordine importante!) -->
+  <script src="js/core/storage.js"></script>
+  <script src="js/data/tariffario.js"></script>
+  <script src="js/features/geolocation.js"></script>
+  <script src="js/features/page-renderers.js"></script>
+  <script src="js/utils/ui-helpers.js"></script>
+
+  <script>
+    function testModules() {
+      const results = document.getElementById('results');
+      results.innerHTML = '<h3>Risultati Test:</h3>';
+      
+      const tests = [
+        {
+          name: 'PageRenderers Module',
+          test: () => typeof window.PageRenderers !== 'undefined',
+          details: 'window.PageRenderers disponibile'
+        },
+        {
+          name: 'PageRenderers.renderFermate',
+          test: () => typeof window.PageRenderers?.renderFermate === 'function',
+          details: 'renderFermate disponibile'
+        },
+        {
+          name: 'PageRenderers.renderPrezzi',
+          test: () => typeof window.PageRenderers?.renderPrezzi === 'function',
+          details: 'renderPrezzi disponibile'
+        },
+        {
+          name: 'PageRenderers.setupRicercaPrezzi',
+          test: () => typeof window.PageRenderers?.setupRicercaPrezzi === 'function',
+          details: 'setupRicercaPrezzi disponibile'
+        },
+        {
+          name: 'PageRenderers.populateLineeTratte',
+          test: () => typeof window.PageRenderers?.populateLineeTratte === 'function',
+          details: 'populateLineeTratte disponibile'
+        },
+        {
+          name: 'PageRenderers.populateLineePrezzi',
+          test: () => typeof window.PageRenderers?.populateLineePrezzi === 'function',
+          details: 'populateLineePrezzi disponibile'
+        },
+        {
+          name: 'PageRenderers.selectLineaFermate',
+          test: () => typeof window.PageRenderers?.selectLineaFermate === 'function',
+          details: 'selectLineaFermate disponibile'
+        },
+        {
+          name: 'PageRenderers.selectLineaPrezzi',
+          test: () => typeof window.PageRenderers?.selectLineaPrezzi === 'function',
+          details: 'selectLineaPrezzi disponibile'
+        },
+        {
+          name: 'UIHelpers Module',
+          test: () => typeof window.UIHelpers !== 'undefined',
+          details: 'window.UIHelpers disponibile'
+        },
+        {
+          name: 'UIHelpers.scrollToTop',
+          test: () => typeof window.UIHelpers?.scrollToTop === 'function',
+          details: 'scrollToTop disponibile'
+        },
+        {
+          name: 'UIHelpers.toggleSwapButton',
+          test: () => typeof window.UIHelpers?.toggleSwapButton === 'function',
+          details: 'toggleSwapButton disponibile'
+        },
+        {
+          name: 'Tariffario Module',
+          test: () => typeof window.Tariffario !== 'undefined',
+          details: 'window.Tariffario disponibile'
+        },
+        {
+          name: 'Tariffario.getData',
+          test: () => typeof window.Tariffario?.getData === 'function',
+          details: 'Tariffario.getData disponibile'
+        },
+        {
+          name: 'Geolocation Module',
+          test: () => typeof window.Geolocation !== 'undefined',
+          details: 'window.Geolocation disponibile'
+        },
+        {
+          name: 'Global Functions (Retrocompatibilità)',
+          test: () => {
+            return typeof window.renderFermate === 'function' &&
+                   typeof window.renderPrezzi === 'function' &&
+                   typeof window.setupRicercaPrezzi === 'function' &&
+                   typeof window.populateLineeTratte === 'function' &&
+                   typeof window.populateLineePrezzi === 'function' &&
+                   typeof window.selectLineaFermate === 'function' &&
+                   typeof window.selectLineaPrezzi === 'function' &&
+                   typeof window.scrollToTop === 'function' &&
+                   typeof window.toggleSwapButton === 'function';
+          },
+          details: 'Tutte le funzioni globali disponibili'
+        }
+      ];
+
+      let passed = 0;
+      let failed = 0;
+
+      tests.forEach(test => {
+        const result = test.test();
+        const item = document.createElement('div');
+        item.className = `test-item ${result ? 'pass' : 'fail'}`;
+        item.innerHTML = `
+          <strong>${result ? '✅' : '❌'} ${test.name}</strong><br>
+          <small>${test.details}</small>
+        `;
+        results.appendChild(item);
+        
+        if (result) {
+          passed++;
+        } else {
+          failed++;
+        }
+      });
+
+      const summary = document.createElement('div');
+      summary.className = 'test-item';
+      summary.style.marginTop = '20px';
+      summary.style.fontWeight = 'bold';
+      summary.innerHTML = `
+        <strong>Riepilogo:</strong><br>
+        ✅ Passati: ${passed}<br>
+        ❌ Falliti: ${failed}<br>
+        📊 Totale: ${tests.length}
+      `;
+      results.appendChild(summary);
+
+      console.log('🧪 Test completati:', { passed, failed, total: tests.length });
+    }
+
+    // Esegui test automaticamente al caricamento
+    window.addEventListener('DOMContentLoaded', () => {
+      console.log('🧪 Test Quick Moduli - Pagina caricata');
+      setTimeout(testModules, 500); // Aspetta che i moduli si carichino
+    });
+  </script>
+</body>
+</html>
+

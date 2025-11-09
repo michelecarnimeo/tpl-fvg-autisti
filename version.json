@@ -1,6 +1,6 @@
 {
-  "version": "1.6.8.1",
-  "versionDate": "7 Novembre 2025",
-  "versionTime": "22:00",
-  "updateNotes": "Fix bug: Tema default sistema, pulsanti Impostazioni PWA e Verifica Aggiornamenti, GPS auto-assegnazione solo partenza, reset geolocalizzazione, riavvio app"
+  "version": "1.6.9",
+  "versionDate": "9 Novembre 2025",
+  "versionTime": "10:30",
+  "updateNotes": "Modularizzazione MODULI 1-5: UI Helpers, Page Renderers, Page Search, Page Lines, Page Initialization. Riduzione script.js -13%, nuovi moduli ui-helpers.js e page-renderers.js"
 }

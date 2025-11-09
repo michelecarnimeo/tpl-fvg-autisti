@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Step 2 - Funzioni Gestione Log</title>
+    <link rel="stylesheet" href="css/components/modals.css">
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .test-section {
+            background: #f5f5f5;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border-left: 4px solid #10b981;
+        }
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .pass {
+            background: #d1fae5;
+            color: #065f46;
+            border-left: 4px solid #10b981;
+        }
+        .fail {
+            background: #fee2e2;
+            color: #991b1b;
+            border-left: 4px solid #ef4444;
+        }
+        .info {
+            background: #dbeafe;
+            color: #1e40af;
+            border-left: 4px solid #3b82f6;
+        }
+        button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        button:hover {
+            background: #2563eb;
+        }
+        .test-output {
+            background: #1f2937;
+            color: #f3f4f6;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            max-height: 200px;
+            overflow-y: auto;
+            margin: 10px 0;
+            display: none;
+        }
+        .test-output.visible {
+            display: block;
+        }
+        .log-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .log-buttons button {
+            flex: 1;
+        }
+        #test-results {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test Step 2: Funzioni Gestione Log</h1>
+    
+    <div class="test-section">
+        <h2>1. Verifica Caricamento Modulo</h2>
+        <button onclick="testModuleLoaded()">Verifica test-log-helpers.js caricato</button>
+        <div id="test-results-1"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>2. Test Funzioni Database Log</h2>
+        <div class="test-output" id="output-database-test">
+            [12:00:00] Test log Database - Messaggio 1
+            [12:00:01] Test log Database - Messaggio 2
+            [12:00:02] Test log Database - Messaggio 3
+        </div>
+        <div class="log-buttons" id="db-log-buttons-test">
+            <button onclick="testCopyDatabaseLog()" style="background: #0d9488;">📋 Copia log</button>
+            <button onclick="testDownloadDatabaseLog()" style="background: #3b82f6;">💾 Scarica log</button>
+            <button onclick="testClearDatabaseLog()" style="background: #ef4444;">🗑️ Cancella log</button>
+        </div>
+        <div id="test-results-2"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>3. Test Funzioni Price Log</h2>
+        <div class="test-output" id="output-price-test">
+            [12:00:00] Test log Prezzi - Messaggio 1
+            [12:00:01] Test log Prezzi - Messaggio 2
+            [12:00:02] Test log Prezzi - Messaggio 3
+        </div>
+        <div class="log-buttons" id="price-log-buttons-test">
+            <button onclick="testCopyPriceLog()" style="background: #0d9488;">📋 Copia log</button>
+            <button onclick="testDownloadPriceLog()" style="background: #3b82f6;">💾 Scarica log</button>
+            <button onclick="testClearPriceLog()" style="background: #ef4444;">🗑️ Cancella log</button>
+        </div>
+        <div id="test-results-3"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>4. Test Integrazione</h2>
+        <button onclick="testIntegration()">Verifica integrazione con resetDatabaseTests</button>
+        <div id="test-results-4"></div>
+    </div>
+
+    <!-- Modal Notifica (per conferme e messaggi) -->
+    <div id="notification-modal" class="notification-modal">
+        <div class="notification-modal-content">
+            <div class="notification-modal-header">
+                <h3 id="notification-modal-title">✓ Operazione completata</h3>
+            </div>
+            <div class="notification-modal-body">
+                <p id="notification-modal-message"></p>
+            </div>
+            <div class="notification-modal-footer">
+                <button id="notification-modal-ok" class="notification-modal-btn">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Carica i moduli necessari -->
+    <script src="js/components/notification-modal.js"></script>
+    <script src="js/tests/test-log-helpers.js"></script>
+
+    <script>
+        let testCount = 0;
+        let passCount = 0;
+        let failCount = 0;
+
+        function addResult(containerId, message, passed) {
+            testCount++;
+            if (passed) passCount++;
+            else failCount++;
+
+            const container = document.getElementById(containerId);
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `test-result ${passed ? 'pass' : 'fail'}`;
+            resultDiv.innerHTML = `${passed ? '✅' : '❌'} ${message}`;
+            container.appendChild(resultDiv);
+        }
+
+        function clearResults(containerId) {
+            const container = document.getElementById(containerId);
+            if (container) {
+                container.innerHTML = '';
+            }
+        }
+
+        // Test 1: Verifica che il modulo sia caricato
+        function testModuleLoaded() {
+            clearResults('test-results-1');
+            testCount = 0;
+            passCount = 0;
+            failCount = 0;
+
+            try {
+                // Verifica che le funzioni siano disponibili
+                if (typeof window.copyDatabaseLog !== 'function') {
+                    addResult('test-results-1', 'copyDatabaseLog non è una funzione', false);
+                    return;
+                }
+
+                if (typeof window.downloadDatabaseLog !== 'function') {
+                    addResult('test-results-1', 'downloadDatabaseLog non è una funzione', false);
+                    return;
+                }
+
+                if (typeof window.clearDatabaseLog !== 'function') {
+                    addResult('test-results-1', 'clearDatabaseLog non è una funzione', false);
+                    return;
+                }
+
+                if (typeof window.copyPriceLog !== 'function') {
+                    addResult('test-results-1', 'copyPriceLog non è una funzione', false);
+                    return;
+                }
+
+                if (typeof window.downloadPriceLog !== 'function') {
+                    addResult('test-results-1', 'downloadPriceLog non è una funzione', false);
+                    return;
+                }
+
+                if (typeof window.clearPriceLog !== 'function') {
+                    addResult('test-results-1', 'clearPriceLog non è una funzione', false);
+                    return;
+                }
+
+                addResult('test-results-1', 'Tutte le funzioni gestione log sono disponibili', true);
+            } catch (error) {
+                addResult('test-results-1', `Errore: ${error.message}`, false);
+            }
+        }
+
+        // Test 2: Test funzioni Database Log
+        function testCopyDatabaseLog() {
+            clearResults('test-results-2');
+            
+            try {
+                // Crea elementi con gli ID corretti che clearDatabaseLog si aspetta
+                let output = document.getElementById('output-database');
+                if (!output) {
+                    output = document.createElement('div');
+                    output.id = 'output-database';
+                    output.className = 'test-output';
+                    output.style.display = 'block';
+                    document.body.appendChild(output);
+                }
+                output.textContent = 'Test log Database - Contenuto di test';
+                
+                // Chiama la funzione
+                window.copyDatabaseLog();
+                
+                // Verifica che showNotificationModal sia stato chiamato (se disponibile)
+                addResult('test-results-2', 'copyDatabaseLog eseguita (verifica manualmente la notifica)', true);
+            } catch (error) {
+                addResult('test-results-2', `Errore: ${error.message}`, false);
+                console.error(error);
+            }
+        }
+
+        function testDownloadDatabaseLog() {
+            clearResults('test-results-2');
+            
+            try {
+                // Crea elementi con gli ID corretti
+                let output = document.getElementById('output-database');
+                if (!output) {
+                    output = document.createElement('div');
+                    output.id = 'output-database';
+                    output.className = 'test-output';
+                    output.style.display = 'block';
+                    document.body.appendChild(output);
+                }
+                output.textContent = 'Test log Database - Contenuto di test per download';
+                
+                // Chiama la funzione
+                window.downloadDatabaseLog();
+                
+                addResult('test-results-2', 'downloadDatabaseLog eseguita (verifica manualmente il download)', true);
+            } catch (error) {
+                addResult('test-results-2', `Errore: ${error.message}`, false);
+                console.error(error);
+            }
+        }
+
+        function testClearDatabaseLog() {
+            clearResults('test-results-2');
+            
+            try {
+                // Crea elementi con gli ID corretti che clearDatabaseLog si aspetta
+                let output = document.getElementById('output-database');
+                if (!output) {
+                    output = document.createElement('div');
+                    output.id = 'output-database';
+                    output.className = 'test-output';
+                    document.body.appendChild(output);
+                }
+                
+                let buttons = document.getElementById('db-log-buttons');
+                if (!buttons) {
+                    buttons = document.createElement('div');
+                    buttons.id = 'db-log-buttons';
+                    buttons.className = 'log-buttons';
+                    document.body.appendChild(buttons);
+                }
+                
+                // Imposta contenuto e visibilità
+                output.textContent = 'Test log Database - Questo dovrebbe essere cancellato';
+                output.style.display = 'block';
+                buttons.style.display = 'flex';
+                
+                // Chiama la funzione
+                window.clearDatabaseLog();
+                
+                // Verifica che l'output sia stato pulito
+                setTimeout(() => {
+                    // Ricarica i riferimenti dal DOM per essere sicuri
+                    const foundOutput = document.getElementById('output-database');
+                    const foundButtons = document.getElementById('db-log-buttons');
+                    
+                    const outputCleared = foundOutput ? foundOutput.innerHTML === '' : false;
+                    const outputHidden = foundOutput ? foundOutput.style.display === 'none' : false;
+                    const buttonsHidden = foundButtons ? foundButtons.style.display === 'none' : false;
+                    
+                    if (outputCleared && outputHidden && buttonsHidden) {
+                        addResult('test-results-2', 'clearDatabaseLog funziona correttamente', true);
+                        // Rimuovi gli elementi dopo il test per non interferire con altri test
+                        if (foundOutput && document.body.contains(foundOutput)) {
+                            document.body.removeChild(foundOutput);
+                        }
+                        if (foundButtons && document.body.contains(foundButtons)) {
+                            document.body.removeChild(foundButtons);
+                        }
+                    } else {
+                        addResult('test-results-2', 
+                            `clearDatabaseLog non ha pulito correttamente (output cleared: ${outputCleared}, output hidden: ${outputHidden}, buttons hidden: ${buttonsHidden})`, 
+                            false);
+                        console.log('Output innerHTML:', foundOutput ? foundOutput.innerHTML : 'N/A');
+                        console.log('Output display:', foundOutput ? foundOutput.style.display : 'N/A');
+                        console.log('Buttons display:', foundButtons ? foundButtons.style.display : 'N/A');
+                    }
+                }, 100);
+            } catch (error) {
+                addResult('test-results-2', `Errore: ${error.message}`, false);
+                console.error(error);
+            }
+        }
+
+        // Test 3: Test funzioni Price Log
+        function testCopyPriceLog() {
+            clearResults('test-results-3');
+            
+            try {
+                // Crea elementi con gli ID corretti che copyPriceLog si aspetta
+                let output = document.getElementById('output-price');
+                if (!output) {
+                    output = document.createElement('div');
+                    output.id = 'output-price';
+                    output.className = 'test-output';
+                    output.style.display = 'block';
+                    document.body.appendChild(output);
+                }
+                output.textContent = 'Test log Prezzi - Contenuto di test';
+                window.copyPriceLog();
+                addResult('test-results-3', 'copyPriceLog eseguita (verifica manualmente la notifica)', true);
+            } catch (error) {
+                addResult('test-results-3', `Errore: ${error.message}`, false);
+                console.error(error);
+            }
+        }
+
+        function testDownloadPriceLog() {
+            clearResults('test-results-3');
+            
+            try {
+                // Crea elementi con gli ID corretti
+                let output = document.getElementById('output-price');
+                if (!output) {
+                    output = document.createElement('div');
+                    output.id = 'output-price';
+                    output.className = 'test-output';
+                    output.style.display = 'block';
+                    document.body.appendChild(output);
+                }
+                output.textContent = 'Test log Prezzi - Contenuto di test per download';
+                window.downloadPriceLog();
+                addResult('test-results-3', 'downloadPriceLog eseguita (verifica manualmente il download)', true);
+            } catch (error) {
+                addResult('test-results-3', `Errore: ${error.message}`, false);
+                console.error(error);
+            }
+        }
+
+        function testClearPriceLog() {
+            clearResults('test-results-3');
+            
+            try {
+                // Crea elementi con gli ID corretti che clearPriceLog si aspetta
+                let output = document.getElementById('output-price');
+                if (!output) {
+                    output = document.createElement('div');
+                    output.id = 'output-price';
+                    output.className = 'test-output';
+                    document.body.appendChild(output);
+                }
+                
+                let buttons = document.getElementById('price-log-buttons');
+                if (!buttons) {
+                    buttons = document.createElement('div');
+                    buttons.id = 'price-log-buttons';
+                    buttons.className = 'log-buttons';
+                    document.body.appendChild(buttons);
+                }
+                
+                // Imposta contenuto e visibilità
+                output.textContent = 'Test log Prezzi - Questo dovrebbe essere cancellato';
+                output.style.display = 'block';
+                buttons.style.display = 'flex';
+                
+                window.clearPriceLog();
+                
+                setTimeout(() => {
+                    // Ricarica i riferimenti dal DOM per essere sicuri
+                    const foundOutput = document.getElementById('output-price');
+                    const foundButtons = document.getElementById('price-log-buttons');
+                    
+                    const outputCleared = foundOutput ? foundOutput.innerHTML === '' : false;
+                    const outputHidden = foundOutput ? foundOutput.style.display === 'none' : false;
+                    const buttonsHidden = foundButtons ? foundButtons.style.display === 'none' : false;
+                    
+                    if (outputCleared && outputHidden && buttonsHidden) {
+                        addResult('test-results-3', 'clearPriceLog funziona correttamente', true);
+                        // Rimuovi gli elementi dopo il test per non interferire con altri test
+                        if (foundOutput && document.body.contains(foundOutput)) {
+                            document.body.removeChild(foundOutput);
+                        }
+                        if (foundButtons && document.body.contains(foundButtons)) {
+                            document.body.removeChild(foundButtons);
+                        }
+                    } else {
+                        addResult('test-results-3', 
+                            `clearPriceLog non ha pulito correttamente (output cleared: ${outputCleared}, output hidden: ${outputHidden}, buttons hidden: ${buttonsHidden})`, 
+                            false);
+                        console.log('Output innerHTML:', foundOutput ? foundOutput.innerHTML : 'N/A');
+                        console.log('Output display:', foundOutput ? foundOutput.style.display : 'N/A');
+                        console.log('Buttons display:', foundButtons ? foundButtons.style.display : 'N/A');
+                    }
+                }, 100);
+            } catch (error) {
+                addResult('test-results-3', `Errore: ${error.message}`, false);
+                console.error(error);
+            }
+        }
+
+        // Test 4: Test integrazione
+        function testIntegration() {
+            clearResults('test-results-4');
+            
+            try {
+                // IMPORTANTE: Rimuovi eventuali elementi esistenti con gli stessi ID
+                // (da test precedenti o da altri test nella pagina)
+                const existingOutput = document.getElementById('output-database');
+                const existingButtons = document.getElementById('db-log-buttons');
+                
+                if (existingOutput && existingOutput.parentNode) {
+                    console.log('Rimozione output esistente dal DOM');
+                    existingOutput.parentNode.removeChild(existingOutput);
+                }
+                if (existingButtons && existingButtons.parentNode) {
+                    console.log('Rimozione buttons esistente dal DOM');
+                    existingButtons.parentNode.removeChild(existingButtons);
+                }
+                
+                // Crea NUOVI elementi con gli ID corretti
+                const output = document.createElement('div');
+                output.id = 'output-database';
+                output.className = 'test-output';
+                output.textContent = 'Test integrazione - Questo dovrebbe essere cancellato';
+                output.style.display = 'block';
+                document.body.appendChild(output);
+
+                const buttons = document.createElement('div');
+                buttons.id = 'db-log-buttons';
+                buttons.className = 'log-buttons';
+                buttons.style.display = 'flex';
+                document.body.appendChild(buttons);
+                
+                console.log('Nuovi elementi creati:', {
+                    output: output,
+                    buttons: buttons,
+                    outputId: output.id,
+                    buttonsId: buttons.id
+                });
+
+                // Verifica che le funzioni siano accessibili
+                // NOTA: In JavaScript, window.functionName NON rende automaticamente la funzione accessibile come functionName
+                // La funzione deve essere esplicitamente assegnata a window per essere globale
+                const canCallWithWindow = typeof window.clearDatabaseLog === 'function';
+                
+                if (!canCallWithWindow) {
+                    addResult('test-results-4', 'window.clearDatabaseLog non è una funzione', false);
+                    if (document.body.contains(output)) document.body.removeChild(output);
+                    if (document.body.contains(buttons)) document.body.removeChild(buttons);
+                    return;
+                }
+
+                // Verifica che gli elementi siano stati creati correttamente PRIMA di chiamare la funzione
+                // Dovrebbero essere i nuovi elementi che abbiamo appena creato
+                const foundOutputBefore = document.getElementById('output-database');
+                const foundButtonsBefore = document.getElementById('db-log-buttons');
+                
+                // Verifica che i nuovi elementi siano gli stessi trovati da getElementById
+                if (foundOutputBefore !== output) {
+                    console.warn('⚠️ ATTENZIONE: getElementById ha trovato un elemento diverso da quello creato!');
+                    console.warn('  output creato:', output);
+                    console.warn('  output trovato:', foundOutputBefore);
+                    addResult('test-results-4', '⚠️ Elementi esistenti interferiscono con il test', false);
+                }
+                
+                console.log('PRIMA di clearDatabaseLog():');
+                console.log('  foundOutputBefore:', foundOutputBefore);
+                console.log('  foundButtonsBefore:', foundButtonsBefore);
+                console.log('  output (riferimento):', output);
+                console.log('  buttons (riferimento):', buttons);
+                console.log('  output.innerHTML:', output.innerHTML);
+                console.log('  output.style.display:', output.style.display);
+                console.log('  buttons.style.display:', buttons.style.display);
+                console.log('  Verifica uguaglianza output:', foundOutputBefore === output);
+                console.log('  Verifica uguaglianza buttons:', foundButtonsBefore === buttons);
+
+                // Chiama clearDatabaseLog con window. (come dovrebbe essere chiamata)
+                // NOTA: In test.html, resetDatabaseTests chiama clearDatabaseLog() senza window.,
+                // ma questo funziona solo se clearDatabaseLog è accessibile nello scope globale
+                // Per sicurezza, proviamo entrambi i modi
+                try {
+                    // Prova prima senza window.
+                    if (typeof clearDatabaseLog === 'function') {
+                        clearDatabaseLog();
+                        console.log('Chiamata clearDatabaseLog() senza window.');
+                    } else {
+                        window.clearDatabaseLog();
+                        console.log('Chiamata window.clearDatabaseLog()');
+                    }
+                } catch (e) {
+                    console.error('Errore chiamando clearDatabaseLog:', e);
+                    // Riprova con window.
+                    window.clearDatabaseLog();
+                }
+
+                setTimeout(() => {
+                    // Ricarica i riferimenti agli elementi dal DOM (in caso siano stati modificati)
+                    const foundOutputAfter = document.getElementById('output-database');
+                    const foundButtonsAfter = document.getElementById('db-log-buttons');
+                    
+                    console.log('DOPO clearDatabaseLog():');
+                    console.log('  foundOutputAfter:', foundOutputAfter);
+                    console.log('  foundButtonsAfter:', foundButtonsAfter);
+                    
+                    if (foundOutputAfter) {
+                        console.log('  foundOutputAfter.innerHTML:', foundOutputAfter.innerHTML);
+                        console.log('  foundOutputAfter.style.display:', foundOutputAfter.style.display);
+                    } else {
+                        console.log('  ⚠️ output non trovato nel DOM dopo clearDatabaseLog()');
+                    }
+                    
+                    if (foundButtonsAfter) {
+                        console.log('  foundButtonsAfter.style.display:', foundButtonsAfter.style.display);
+                    } else {
+                        console.log('  ⚠️ buttons non trovato nel DOM dopo clearDatabaseLog()');
+                    }
+                    
+                    // Verifica usando i riferimenti originali E quelli trovati nel DOM
+                    const outputCleared = foundOutputAfter ? foundOutputAfter.innerHTML === '' : (output.innerHTML === '');
+                    const outputHidden = foundOutputAfter ? foundOutputAfter.style.display === 'none' : (output.style.display === 'none');
+                    const buttonsHidden = foundButtonsAfter ? foundButtonsAfter.style.display === 'none' : (buttons.style.display === 'none');
+                    
+                    if (outputCleared && outputHidden && buttonsHidden) {
+                        addResult('test-results-4', '✅ Integrazione con altre funzioni funziona correttamente', true);
+                    } else {
+                        addResult('test-results-4', 
+                            `❌ Integrazione non funziona correttamente (output cleared: ${outputCleared}, output hidden: ${outputHidden}, buttons hidden: ${buttonsHidden})`, 
+                            false);
+                        if (foundOutputAfter) {
+                            addResult('test-results-4', `  - output.innerHTML: "${foundOutputAfter.innerHTML}"`, false);
+                            addResult('test-results-4', `  - output.style.display: "${foundOutputAfter.style.display}"`, false);
+                        } else {
+                            addResult('test-results-4', `  - ⚠️ output non trovato nel DOM`, false);
+                        }
+                        if (foundButtonsAfter) {
+                            addResult('test-results-4', `  - buttons.style.display: "${foundButtonsAfter.style.display}"`, false);
+                        } else {
+                            addResult('test-results-4', `  - ⚠️ buttons non trovato nel DOM`, false);
+                        }
+                    }
+                    
+                    // Rimuovi elementi solo se ancora presenti
+                    if (foundOutputAfter && document.body.contains(foundOutputAfter)) {
+                        document.body.removeChild(foundOutputAfter);
+                    }
+                    if (foundButtonsAfter && document.body.contains(foundButtonsAfter)) {
+                        document.body.removeChild(foundButtonsAfter);
+                    }
+                }, 100);
+            } catch (error) {
+                addResult('test-results-4', `Errore: ${error.message}`, false);
+                console.error(error);
+            }
+        }
+
+        // Inizializza test output visibili
+        window.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('output-database-test').classList.add('visible');
+            document.getElementById('output-price-test').classList.add('visible');
+        });
+    </script>
+</body>
+</html>
+

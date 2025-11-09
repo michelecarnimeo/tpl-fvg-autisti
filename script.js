@@ -98,12 +98,9 @@ function toggleLocationButton(show) {
   console.warn('⚠️ Geolocation module not available');
 }
 
-function toggleSwapButton(show) {
-  const swapBtn = document.getElementById('swap-btn');
-  if (swapBtn) {
-    swapBtn.style.display = show ? 'flex' : 'none';
-  }
-}
+// toggleSwapButton è ora in js/utils/ui-helpers.js
+// Mantenuto come commento per riferimento - la funzione è esposta globalmente dal modulo
+// window.toggleSwapButton() è disponibile direttamente da ui-helpers.js
 
 function updateLocationButtonIcon(hasLocation) {
   if (window.Geolocation && window.Geolocation.updateLocationButtonIcon) {
@@ -750,576 +747,147 @@ async function loadData() {
 }
 
 // --- TRATTE LOGIC ---
+// ========================================
+// SEZIONE PAGE RENDERERS
+// ========================================
+// Le funzioni di rendering sono ora in js/features/page-renderers.js
+// Usa window.PageRenderers o le funzioni globali (retrocompatibilità):
+// - window.renderFermate(lineaIndex, sortByDistance)
+// - window.renderPrezzi(lineaIndex)
+
+// Wrapper per retrocompatibilità
 function renderFermate(lineaIndex = 0, sortByDistance = false) {
-  console.log('renderFermate chiamata con lineaIndex:', lineaIndex, 'sortByDistance:', sortByDistance);
-  const andataList = document.getElementById('fermate-andata');
-  const ritornoList = document.getElementById('fermate-ritorno');
-  const gridContainer = document.getElementById('fermate-grid-container');
-  const searchContainer = document.getElementById('search-container-fermate');
-
-  // Ottieni tariffario dal modulo
-  const tariffarioData = (typeof window.Tariffario !== 'undefined' && window.Tariffario.getData) 
-    ? window.Tariffario.getData() 
-    : tariffario;
-
-  console.log('andataList:', !!andataList, 'ritornoList:', !!ritornoList, 'tariffario[lineaIndex]:', !!tariffarioData[lineaIndex]);
-
-  if (!andataList || !ritornoList || !tariffarioData[lineaIndex]) {
-    console.error('Impossibile generare liste tratte');
-    return;
+  if (window.PageRenderers && typeof window.PageRenderers.renderFermate === 'function') {
+    return window.PageRenderers.renderFermate(lineaIndex, sortByDistance);
+  } else if (typeof window.renderFermate === 'function' && window.renderFermate !== renderFermate) {
+    // Se esiste già la funzione globale (dal modulo), usala
+    return window.renderFermate(lineaIndex, sortByDistance);
   }
-
-  const linea = tariffarioData[lineaIndex];
-  let fermate = linea.fermate;
-  console.log('Rendering liste tratte per linea:', linea.nome, 'con', fermate.length, 'fermate');
-
-  // Pulisce le liste precedenti
-  andataList.innerHTML = '';
-  ritornoList.innerHTML = '';
-
-  // Se richiesto, ordina per distanza
-  let sortedFermate = fermate;
-  if (sortByDistance) {
-    // Usa posizione dal modulo Geolocation
-    const currentUserPosition = (window.Geolocation && window.Geolocation.getUserPosition) 
-      ? window.Geolocation.getUserPosition() 
-      : userPosition;
-    
-    if (currentUserPosition) {
-      const sorted = sortFermateByDistance(fermate, currentUserPosition);
-      sortedFermate = sorted.map(item => item.name);
-      console.log('Fermate ordinate per distanza:', sorted);
-    }
-  }
-
-  // Popola lista andata (0 → fine) - INCLUDE TUTTE LE FERMATE
-  for (let i = 0; i < sortedFermate.length; i++) {
-    const li = document.createElement('li');
-    li.classList.add('fermate-item');
-
-    // Trova l'indice originale della fermata
-    const originalIndex = fermate.indexOf(sortedFermate[i]);
-    // Usa posizione dal modulo Geolocation
-    const currentUserPosition = (window.Geolocation && window.Geolocation.getUserPosition) 
-      ? window.Geolocation.getUserPosition() 
-      : userPosition;
-    const distance = currentUserPosition ? sortFermateByDistance(fermate, currentUserPosition).find(f => f.name === sortedFermate[i])?.distance : null;
-
-    let distanceText = '';
-    if (distance !== null) {
-      distanceText = `<span class="fermate-distance">${distance.toFixed(1)} km</span>`;
-    }
-
-    li.innerHTML = `
-      <span class="fermate-icon">📍</span>
-      <span class="fermate-number">${originalIndex + 1}</span>
-      <span class="fermate-stop">${sortedFermate[i]}</span>
-      ${distanceText}
-    `;
-    andataList.appendChild(li);
-  }
-
-  // Popola lista ritorno (fine → 0) - INCLUDE TUTTE LE FERMATE
-  for (let i = sortedFermate.length - 1; i >= 0; i--) {
-    const li = document.createElement('li');
-    li.classList.add('tratte-item');
-
-    // Trova l'indice originale della fermata
-    const originalIndex = fermate.indexOf(sortedFermate[i]);
-    // Usa posizione dal modulo Geolocation
-    const currentUserPosition = (window.Geolocation && window.Geolocation.getUserPosition) 
-      ? window.Geolocation.getUserPosition() 
-      : userPosition;
-    const distance = currentUserPosition ? sortFermateByDistance(fermate, currentUserPosition).find(f => f.name === sortedFermate[i])?.distance : null;
-
-    let distanceText = '';
-    if (distance !== null) {
-      distanceText = `<span class="fermate-distance">${distance.toFixed(1)} km</span>`;
-    }
-
-    li.innerHTML = `
-      <span class="tratte-icon">📍</span>
-      <span class="tratte-number">${fermate.length - originalIndex}</span>
-      <span class="tratte-stop">${sortedFermate[i]}</span>
-      ${distanceText}
-    `;
-    ritornoList.appendChild(li);
-  }
-
-  // Mostra griglia e ricerca
-  console.log('Mostro griglia e ricerca...');
-  if (gridContainer) {
-    gridContainer.style.display = 'grid';
-    console.log('✅ gridContainer mostrato, display:', gridContainer.style.display);
-  } else {
-    console.error('❌ gridContainer non trovato!');
-  }
-  
-  if (searchContainer) {
-    searchContainer.style.display = 'flex';
-    console.log('✅ searchContainer mostrato, display:', searchContainer.style.display);
-  } else {
-    console.error('❌ searchContainer non trovato!');
-  }
-  
-  console.log('✅ renderFermate completata. Fermate andata:', andataList.children.length, 'Fermate ritorno:', ritornoList.children.length);
+  console.warn('⚠️ PageRenderers module not available');
 }
 
-// --- TARIFFE LOGIC ---
 function renderPrezzi(lineaIndex = 0) {
-  console.log('renderPrezzi chiamata con lineaIndex:', lineaIndex);
-  const andataTable = document.getElementById('prezzi-andata');
-  const ritornoTable = document.getElementById('prezzi-ritorno');
-  // Ottieni tariffario dal modulo
-  const tariffarioData = (typeof window.Tariffario !== 'undefined' && window.Tariffario.getData) 
-    ? window.Tariffario.getData() 
-    : tariffario;
-
-  console.log('andataTable:', !!andataTable, 'ritornoTable:', !!ritornoTable, 'tariffario[lineaIndex]:', !!tariffarioData[lineaIndex]);
-
-  if (!andataTable || !ritornoTable || !tariffarioData[lineaIndex]) {
-    console.error('Impossibile generare tabelle prezzi');
-    return;
+  if (window.PageRenderers && typeof window.PageRenderers.renderPrezzi === 'function') {
+    return window.PageRenderers.renderPrezzi(lineaIndex);
+  } else if (typeof window.renderPrezzi === 'function' && window.renderPrezzi !== renderPrezzi) {
+    // Se esiste già la funzione globale (dal modulo), usala
+    return window.renderPrezzi(lineaIndex);
   }
-
-  const linea = tariffarioData[lineaIndex];
-  const fermate = linea.fermate;
-  console.log('Rendering tabelle prezzi per linea:', linea.nome, 'con', fermate.length, 'fermate');
-
-  // Helper per tabella (usa Pricing.js)
-  function buildTable(filterFn) {
-    let html = '<thead><tr>';
-    html += '<th>Partenza</th>';
-    html += '<th>Arrivo</th>';
-    html += '<th>Prezzo</th>';
-    html += '<th>Codice</th>';
-    html += '</tr></thead><tbody>';
-    const rows = [];
-
-    // Usa Pricing.js se disponibile, altrimenti fallback diretto
-    const usePricing = typeof Pricing !== 'undefined' && Pricing.getTicketCode && Pricing.formatPrice;
-
-    for (let i = 0; i < fermate.length; i++) {
-      for (let j = 0; j < fermate.length; j++) {
-        if (i === j) continue;
-        if (!filterFn(i, j)) continue;
-
-        let prezzo = null;
-        let codice = '';
-
-        if (usePricing) {
-          // Usa Pricing.js per recuperare codice e prezzo
-          const result = Pricing.calculatePrice(lineaIndex, i, j, tariffario, tariffarioAggiornato);
-          prezzo = result.prezzo;
-          codice = result.codice;
-        } else {
-          // Fallback: accesso diretto alla matrice
-          prezzo = linea.prezzi?.[i]?.[j] ?? null;
-          codice = linea.codici?.[i]?.[j] ?? '';
-          if (!codice && tariffarioAggiornato) {
-            const match = tariffarioAggiornato.find(e => e.partenza === fermate[i] && e.arrivo === fermate[j]);
-            if (match?.codice_biglietto) codice = match.codice_biglietto;
-          }
-        }
-
-        rows.push({ partenza: fermate[i], arrivo: fermate[j], prezzo, codice });
-      }
-    }
-
-    rows.forEach(r => {
-      html += '<tr>';
-      html += `<td>${r.partenza}</td>`;
-      html += `<td>${r.arrivo}</td>`;
-
-      // Usa Pricing.formatPrice() se disponibile
-      const prezzoFormatted = usePricing ? Pricing.formatPrice(r.prezzo) :
-        (typeof r.prezzo === 'number' ? r.prezzo.toFixed(2) + ' €' : '-');
-      html += `<td style="text-align: right;">${prezzoFormatted}</td>`;
-      html += `<td>${r.codice || '—'}</td>`;
-      html += '</tr>';
-    });
-    html += '</tbody>';
-    return html;
-  }
-  // Andata: partenzaIdx < arrivoIdx
-  andataTable.innerHTML = buildTable((i, j) => i < j);
-  // Ritorno: partenzaIdx > arrivoIdx
-  ritornoTable.innerHTML = buildTable((i, j) => i > j);
+  console.warn('⚠️ PageRenderers module not available');
 }
 
-// Popola modal linee per pagina fermate
+// ========================================
+// SEZIONE PAGE LINES
+// ========================================
+// Le funzioni di gestione linee sono ora in js/features/page-renderers.js
+// Usa window.PageRenderers o le funzioni globali (retrocompatibilità)
+
+// Wrapper per retrocompatibilità - Fermate
 function populateLineeTratte() {
-  console.log('populateLineeTratte chiamata, tariffario.length:', tariffario ? tariffario.length : 0);
-  
-  const lineeModalList = document.getElementById('linee-fermate-modal-list');
-  const lineaBtn = document.getElementById('linea-fermate-btn');
-
-  if (!lineeModalList) {
-    console.warn('⚠️ linee-fermate-modal-list non trovato');
-    return;
+  if (window.PageRenderers && typeof window.PageRenderers.populateLineeTratte === 'function') {
+    return window.PageRenderers.populateLineeTratte();
+  } else if (typeof window.populateLineeTratte === 'function' && window.populateLineeTratte !== populateLineeTratte) {
+    return window.populateLineeTratte();
   }
-  
-  // Ottieni tariffario dal modulo
-  const tariffarioData = (typeof window.Tariffario !== 'undefined' && window.Tariffario.getData) 
-    ? window.Tariffario.getData() 
-    : tariffario;
-
-  // Verifica che tariffario sia caricato
-  if (!tariffarioData || tariffarioData.length === 0) {
-    console.error('❌ Tariffario non ancora caricato in populateLineeTratte!');
-    return;
-  }
-
-  // Popola modal con le linee
-  lineeModalList.innerHTML = '';
-  tariffarioData.forEach((l, i) => {
-    const li = document.createElement('li');
-    li.className = 'linea-modal-item';
-    li.dataset.lineaIdx = i;
-
-    // Estrai numero linea dal nome (es: "Linea 400 Udine-Grado" -> "400")
-    const lineaNumMatch = l.nome.match(/\d+/);
-    const lineaNum = lineaNumMatch ? lineaNumMatch[0] : (i + 1);
-
-    // Estrai percorso (es: "Udine-Grado")
-    const percorso = l.nome.replace(/Linea\s+\d+\s*/i, '');
-
-    // Crea struttura HTML con icona e dettagli
-    li.innerHTML = `
-      <div class="linea-badge">
-        <span class="linea-icon">🚌</span>
-        <span class="linea-number">${lineaNum}</span>
-      </div>
-      <div class="linea-details">
-        <span class="linea-route">${percorso}</span>
-        <span class="linea-stops">${l.fermate.length} fermate</span>
-      </div>
-      <span class="linea-arrow">›</span>
-    `;
-
-    li.addEventListener('click', () => selectLineaFermate(i, l.nome));
-    lineeModalList.appendChild(li);
-  });
-
-  // Event listener per apertura modal
-  if (lineaBtn) {
-    // Rimuovi listener esistenti per evitare duplicati
-    lineaBtn.replaceWith(lineaBtn.cloneNode(true));
-    const newLineaBtn = document.getElementById('linea-fermate-btn');
-    newLineaBtn.addEventListener('click', openLineeModalFermate);
-  }
-  
-  // Event listener per chiusura modal
-  const closeBtn = document.getElementById('linee-fermate-modal-close');
-  if (closeBtn) {
-    // Rimuovi listener esistenti per evitare duplicati
-    closeBtn.replaceWith(closeBtn.cloneNode(true));
-    const newCloseBtn = document.getElementById('linee-fermate-modal-close');
-    newCloseBtn.addEventListener('click', closeLineeModalFermate);
-  }
-  
-  // Chiudi modal quando si clicca fuori
-  const lineeModal = document.getElementById('linee-fermate-modal');
-  if (lineeModal) {
-    lineeModal.addEventListener('click', (e) => {
-      if (e.target === lineeModal) {
-        closeLineeModalFermate();
-      }
-    });
-  }
+  console.warn('⚠️ PageRenderers module not available');
 }
 
-// Apri modal linee per fermate
 function openLineeModalFermate() {
-  console.log('openLineeModalFermate chiamata');
-  const lineeModal = document.getElementById('linee-fermate-modal');
-  if (!lineeModal) {
-    console.error('❌ linee-fermate-modal non trovato!');
-    return;
+  if (window.PageRenderers && typeof window.PageRenderers.openLineeModalFermate === 'function') {
+    return window.PageRenderers.openLineeModalFermate();
+  } else if (typeof window.openLineeModalFermate === 'function' && window.openLineeModalFermate !== openLineeModalFermate) {
+    return window.openLineeModalFermate();
   }
-  
-  // Verifica che il modal sia popolato
-  const lineeModalList = document.getElementById('linee-fermate-modal-list');
-  if (!lineeModalList || lineeModalList.children.length === 0) {
-    console.warn('⚠️ Modal non ancora popolato, richiamo populateLineeTratte...');
-    if (tariffario && tariffario.length > 0) {
-      populateLineeTratte();
-    } else {
-      console.error('❌ Tariffario non ancora caricato!');
-      return;
-    }
-  }
-
-  lineeModal.style.display = 'flex';
-  setTimeout(() => lineeModal.classList.add('show'), 10);
-  console.log('✅ Modal linee aperto');
+  console.warn('⚠️ PageRenderers module not available');
 }
 
-// Chiudi modal linee per fermate
 function closeLineeModalFermate() {
-  const lineeModal = document.getElementById('linee-fermate-modal');
-  if (!lineeModal) return;
-
-  lineeModal.classList.remove('show');
-  setTimeout(() => {
-    lineeModal.style.display = 'none';
-  }, 300);
+  if (window.PageRenderers && typeof window.PageRenderers.closeLineeModalFermate === 'function') {
+    return window.PageRenderers.closeLineeModalFermate();
+  } else if (typeof window.closeLineeModalFermate === 'function' && window.closeLineeModalFermate !== closeLineeModalFermate) {
+    return window.closeLineeModalFermate();
+  }
+  console.warn('⚠️ PageRenderers module not available');
 }
 
-// Seleziona linea da modal fermate
 function selectLineaFermate(idx, nome) {
-  console.log('selectLineaFermate chiamata con idx:', idx, 'nome:', nome);
-  
-  // Converti idx a numero se necessario
-  const lineaIndex = typeof idx === 'string' ? parseInt(idx, 10) : idx;
-  
-  // Ottieni tariffario dal modulo
-  const tariffarioData = (typeof window.Tariffario !== 'undefined' && window.Tariffario.getData) 
-    ? window.Tariffario.getData() 
-    : tariffario;
-  
-  // Verifica che tariffario sia caricato
-  if (!tariffarioData || tariffarioData.length === 0) {
-    console.error('❌ Tariffario non ancora caricato!');
-    return;
+  if (window.PageRenderers && typeof window.PageRenderers.selectLineaFermate === 'function') {
+    return window.PageRenderers.selectLineaFermate(idx, nome);
+  } else if (typeof window.selectLineaFermate === 'function' && window.selectLineaFermate !== selectLineaFermate) {
+    return window.selectLineaFermate(idx, nome);
   }
-  
-  // Verifica che l'indice sia valido
-  if (lineaIndex < 0 || lineaIndex >= tariffarioData.length) {
-    console.error('❌ Indice linea non valido:', lineaIndex, 'tariffario.length:', tariffarioData.length);
-    return;
-  }
-  
-  const lineaBtn = document.getElementById('linea-fermate-btn');
-  const lineaText = document.getElementById('linea-fermate-text');
-  const gridContainer = document.getElementById('fermate-grid-container');
-  const searchContainer = document.getElementById('search-container-fermate');
-  const andataTitle = document.getElementById('andata-title');
-  const ritornoTitle = document.getElementById('ritorno-title');
-
-  // Aggiorna testo pulsante e salva indice
-  if (lineaText) {
-    lineaText.textContent = nome;
-  }
-  if (lineaBtn) {
-    lineaBtn.dataset.selectedIndex = lineaIndex;
-  }
-
-  // Aggiorna titoli e mostra fermate
-  const linea = tariffarioData[lineaIndex];
-  
-  if (!linea || !linea.fermate) {
-    console.error('❌ Linea non valida o fermate mancanti:', linea);
-    return;
-  }
-  
-  const fermate = linea.fermate;
-
-  // Aggiorna titoli
-  const firstStop = fermate[0];
-  const lastStop = fermate[fermate.length - 1];
-  if (andataTitle) andataTitle.textContent = `(${firstStop} → ${lastStop})`;
-  if (ritornoTitle) ritornoTitle.textContent = `(${lastStop} → ${firstStop})`;
-
-  // Mostra griglia e ricerca
-  console.log('Mostro elementi UI...');
-  if (gridContainer) {
-    gridContainer.style.display = 'grid';
-    // NON aggiungere show-on-mobile perché nasconde su mobile - rimuovila se presente
-    gridContainer.classList.remove('show-on-mobile');
-    console.log('✅ gridContainer mostrato, display:', gridContainer.style.display, 'classList:', gridContainer.classList.toString());
-  } else {
-    console.error('❌ gridContainer non trovato in selectLineaFermate!');
-  }
-  
-  if (searchContainer) {
-    searchContainer.style.display = 'flex';
-    // NON aggiungere show-on-mobile perché nasconde su mobile - rimuovila se presente
-    searchContainer.classList.remove('show-on-mobile');
-    console.log('✅ searchContainer mostrato, display:', searchContainer.style.display);
-  } else {
-    console.error('❌ searchContainer non trovato in selectLineaFermate!');
-  }
-
-  // Messaggio mobile rimosso
-
-  // Renderizza tratte con l'indice selezionato
-  console.log('Chiamata renderFermate con indice:', lineaIndex);
-  renderFermate(lineaIndex);
-
-  // Chiudi modal
-  closeLineeModalFermate();
+  console.warn('⚠️ PageRenderers module not available');
 }
 
-// Popola modal linee per pagina prezzi
+// Wrapper per retrocompatibilità - Prezzi
 function populateLineePrezzi() {
-  // Ottieni tariffario dal modulo
-  const tariffarioData = (typeof window.Tariffario !== 'undefined' && window.Tariffario.getData) 
-    ? window.Tariffario.getData() 
-    : tariffario;
-  console.log('populateLineePrezzi chiamata, tariffario.length:', tariffarioData ? tariffarioData.length : 0);
-  
-  const lineeModalList = document.getElementById('linee-prezzi-modal-list');
-  const lineaBtn = document.getElementById('linea-prezzi-btn');
-
-  if (!lineeModalList) return;
-
-  // Popola modal con le linee
-  lineeModalList.innerHTML = '';
-  tariffarioData.forEach((l, i) => {
-    const li = document.createElement('li');
-    li.className = 'linea-modal-item';
-    li.dataset.lineaIdx = i;
-
-    // Estrai numero linea dal nome (es: "Linea 400 Udine-Grado" -> "400")
-    const lineaNumMatch = l.nome.match(/\d+/);
-    const lineaNum = lineaNumMatch ? lineaNumMatch[0] : (i + 1);
-
-    // Estrai percorso (es: "Udine-Grado")
-    const percorso = l.nome.replace(/Linea\s+\d+\s*/i, '');
-
-    // Crea struttura HTML con icona e dettagli
-    li.innerHTML = `
-      <div class="linea-badge">
-        <span class="linea-icon">🚌</span>
-        <span class="linea-number">${lineaNum}</span>
-      </div>
-      <div class="linea-details">
-        <span class="linea-route">${percorso}</span>
-        <span class="linea-stops">${l.fermate.length} fermate</span>
-      </div>
-      <span class="linea-arrow">›</span>
-    `;
-
-    li.addEventListener('click', () => selectLineaPrezzi(i, l.nome));
-    lineeModalList.appendChild(li);
-  });
-
-  // Event listener per apertura modal
-  if (lineaBtn) {
-    lineaBtn.addEventListener('click', openLineeModalPrezzi);
+  if (window.PageRenderers && typeof window.PageRenderers.populateLineePrezzi === 'function') {
+    return window.PageRenderers.populateLineePrezzi();
+  } else if (typeof window.populateLineePrezzi === 'function' && window.populateLineePrezzi !== populateLineePrezzi) {
+    return window.populateLineePrezzi();
   }
+  console.warn('⚠️ PageRenderers module not available');
 }
 
-// Apri modal linee per prezzi
 function openLineeModalPrezzi() {
-  const lineeModal = document.getElementById('linee-prezzi-modal');
-  if (!lineeModal) return;
-
-  lineeModal.style.display = 'flex';
-  setTimeout(() => lineeModal.classList.add('show'), 10);
+  if (window.PageRenderers && typeof window.PageRenderers.openLineeModalPrezzi === 'function') {
+    return window.PageRenderers.openLineeModalPrezzi();
+  } else if (typeof window.openLineeModalPrezzi === 'function' && window.openLineeModalPrezzi !== openLineeModalPrezzi) {
+    return window.openLineeModalPrezzi();
+  }
+  console.warn('⚠️ PageRenderers module not available');
 }
 
-// Chiudi modal linee per prezzi
 function closeLineeModalPrezzi() {
-  const lineeModal = document.getElementById('linee-prezzi-modal');
-  if (!lineeModal) return;
-
-  lineeModal.classList.remove('show');
-  setTimeout(() => {
-    lineeModal.style.display = 'none';
-  }, 300);
+  if (window.PageRenderers && typeof window.PageRenderers.closeLineeModalPrezzi === 'function') {
+    return window.PageRenderers.closeLineeModalPrezzi();
+  } else if (typeof window.closeLineeModalPrezzi === 'function' && window.closeLineeModalPrezzi !== closeLineeModalPrezzi) {
+    return window.closeLineeModalPrezzi();
+  }
+  console.warn('⚠️ PageRenderers module not available');
 }
 
-// Seleziona linea da modal prezzi
 function selectLineaPrezzi(idx, nome) {
-  const lineaBtn = document.getElementById('linea-prezzi-btn');
-  const lineaText = document.getElementById('linea-prezzi-text');
-  const gridContainer = document.getElementById('prezzi-grid-container');
-  const searchContainer = document.getElementById('search-container-prezzi');
-  const andataTitle = document.getElementById('andata-title');
-  const ritornoTitle = document.getElementById('ritorno-title');
-
-  // Aggiorna testo pulsante e salva indice
-  if (lineaText) {
-    lineaText.textContent = nome;
+  if (window.PageRenderers && typeof window.PageRenderers.selectLineaPrezzi === 'function') {
+    return window.PageRenderers.selectLineaPrezzi(idx, nome);
+  } else if (typeof window.selectLineaPrezzi === 'function' && window.selectLineaPrezzi !== selectLineaPrezzi) {
+    return window.selectLineaPrezzi(idx, nome);
   }
-  if (lineaBtn) {
-    lineaBtn.dataset.selectedIndex = idx;
-  }
-
-  // Ottieni tariffario dal modulo
-  const tariffarioData = (typeof window.Tariffario !== 'undefined' && window.Tariffario.getData) 
-    ? window.Tariffario.getData() 
-    : tariffario;
-
-  // Aggiorna titoli e mostra prezzi
-  const linea = tariffarioData[idx];
-  const fermate = linea.fermate;
-
-  // Aggiorna titoli
-  const firstStop = fermate[0];
-  const lastStop = fermate[fermate.length - 1];
-  if (andataTitle) andataTitle.textContent = `Prezzi e codici biglietto (${firstStop} → ${lastStop})`;
-  if (ritornoTitle) ritornoTitle.textContent = `Prezzi e codici biglietto (${lastStop} → ${firstStop})`;
-
-  // Mostra griglia e ricerca
-  if (gridContainer) gridContainer.style.display = 'grid';
-  if (searchContainer) searchContainer.style.display = 'flex';
-
-  // Renderizza prezzi con l'indice selezionato
-  renderPrezzi(idx);
-
-  // Chiudi modal
-  closeLineeModalPrezzi();
+  console.warn('⚠️ PageRenderers module not available');
 }
 
-// Funzione di ricerca per tariffe
+// ========================================
+// SEZIONE PAGE SEARCH
+// ========================================
+// La funzione setupRicercaPrezzi è ora in js/features/page-renderers.js
+// Usa window.PageRenderers.setupRicercaPrezzi() o window.setupRicercaPrezzi() (retrocompatibilità)
+
+// Wrapper per retrocompatibilità
 function setupRicercaPrezzi() {
-  const searchInput = document.getElementById('search-input-prezzi');
-  const clearBtn = document.getElementById('clear-search-prezzi');
-
-  if (searchInput && clearBtn) {
-    searchInput.addEventListener('input', (e) => {
-      const searchTerm = e.target.value.toLowerCase();
-      const tables = document.querySelectorAll('.prezzi-table');
-
-      // Mostra/nascondi pulsante clear
-      clearBtn.style.display = searchTerm ? 'flex' : 'none';
-
-      // Filtra righe delle tabelle
-      tables.forEach(table => {
-        const rows = table.querySelectorAll('tbody tr');
-        rows.forEach(row => {
-          const text = row.textContent.toLowerCase();
-          if (text.includes(searchTerm)) {
-            row.style.display = '';
-          } else {
-            row.style.display = 'none';
-          }
-        });
-      });
-    });
-
-    // Pulsante clear
-    clearBtn.addEventListener('click', () => {
-      searchInput.value = '';
-      clearBtn.style.display = 'none';
-      const tables = document.querySelectorAll('.prezzi-table');
-      tables.forEach(table => {
-        const rows = table.querySelectorAll('tbody tr');
-        rows.forEach(row => {
-          row.style.display = '';
-        });
-      });
-      searchInput.focus();
-    });
+  if (window.PageRenderers && typeof window.PageRenderers.setupRicercaPrezzi === 'function') {
+    return window.PageRenderers.setupRicercaPrezzi();
+  } else if (typeof window.setupRicercaPrezzi === 'function' && window.setupRicercaPrezzi !== setupRicercaPrezzi) {
+    // Se esiste già la funzione globale (dal modulo), usala
+    return window.setupRicercaPrezzi();
   }
+  console.warn('⚠️ PageRenderers module not available');
 }
 
-// Modifico initTratteTariffe per includere tariffe
-function initFermatePrezzi() {
-  console.log('initFermatePrezzi chiamata');
+// ========================================
+// SEZIONE PAGE INITIALIZATION
+// ========================================
+// La funzione initFermatePrezzi() e la logica di inizializzazione
+// sono ora in js/features/page-renderers.js
+// Il modulo si inizializza automaticamente quando viene caricato
 
-  // Per pagina tratte, popola il selettore tratte
-  if (window.location.pathname.endsWith('fermate.html')) {
-    populateLineeTratte();
+// Wrapper per retrocompatibilità (se necessario)
+function initFermatePrezzi() {
+  if (window.PageRenderers && typeof window.PageRenderers.initFermatePrezzi === 'function') {
+    return window.PageRenderers.initFermatePrezzi();
+  } else if (typeof window.initFermatePrezzi === 'function' && window.initFermatePrezzi !== initFermatePrezzi) {
+    return window.initFermatePrezzi();
   }
-  // Per pagina prezzi, popola il selettore prezzi
-  else if (window.location.pathname.endsWith('prezzi.html')) {
-    populateLineePrezzi();
-    setupRicercaPrezzi();
-  }
+  console.warn('⚠️ PageRenderers module not available');
 }
 
 // Funzione per mostrare notifiche all'utente
@@ -1376,16 +944,12 @@ function disableLocationSorting() {
   console.warn('⚠️ Geolocation module not available');
 }
 
-// Avvia logica tratte/tariffe solo se siamo su tratte.html o tariffe.html
-if (window.location.pathname.endsWith('fermate.html') || window.location.pathname.endsWith('prezzi.html')) {
-  console.log('Su pagina fermate/prezzi, pathname:', window.location.pathname);
-
-  // Ascolta l'evento di caricamento dati
-  window.addEventListener('tariffarioLoaded', () => {
-    console.log('Evento tariffarioLoaded ricevuto, chiamo initFermatePrezzi');
-    initFermatePrezzi();
-  });
-}
+// ========================================
+// INIZIALIZZAZIONE PAGINE FERMATE/PREZZI
+// ========================================
+// La logica di inizializzazione è ora gestita automaticamente da
+// js/features/page-renderers.js che si inizializza al caricamento
+// Non è più necessario qui - mantenuto per riferimento storico
 
 // Funzionalità di ricerca per tratte
 if (window.location.pathname.endsWith('tratte.html')) {
@@ -1425,44 +989,19 @@ if (window.location.pathname.endsWith('tratte.html')) {
   });
 }
 
-// Funzione per tornare in cima alla pagina
-function scrollToTop() {
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth'
-  });
-}
+// ========================================
+// SEZIONE UI HELPERS
+// ========================================
+// Le funzioni UI helpers sono ora in js/utils/ui-helpers.js
+// Usa window.UIHelpers o le funzioni globali (retrocompatibilità):
+// - window.scrollToTop()
+// - window.toggleScrollToTopButton()
+// - window.toggleSwapButton(show)
 
-// Funzione per mostrare/nascondere il pulsante torna su
-function toggleScrollToTopButton() {
-  const scrollButton = document.querySelector('.scroll-to-top');
-  if (scrollButton) {
-    if (window.pageYOffset > 300) {
-      scrollButton.classList.add('visible');
-    } else {
-      scrollButton.classList.remove('visible');
-    }
-  }
-}
-
-// Event listener per lo scroll
-window.addEventListener('scroll', toggleScrollToTopButton);
-
-// Event listeners per pulsanti (sostituiscono onclick inline)
-// Sostituisce onclick inline per migliorare separazione HTML/JS
-(function initButtonListeners() {
-  function setupButtonListeners() {
-    // Event listener per il click sul pulsante scroll-to-top
-    const scrollToTopButtons = document.querySelectorAll('.scroll-to-top');
-    scrollToTopButtons.forEach(button => {
-      // Aggiungi listener solo se non è già stato aggiunto
-      if (!button.hasAttribute('data-listener-added')) {
-        button.setAttribute('data-listener-added', 'true');
-        button.addEventListener('click', scrollToTop);
-      }
-    });
-    
-    // Event listener per il pulsante swap (solo se presente nella pagina)
+// Event listener per il pulsante swap (solo se presente nella pagina)
+// Questo rimane qui perché dipende da RouteSelector che è caricato dopo ui-helpers
+(function initSwapButtonListener() {
+  function setupSwapButtonListener() {
     const swapBtn = document.getElementById('swap-btn');
     if (swapBtn && !swapBtn.hasAttribute('data-listener-added')) {
       swapBtn.setAttribute('data-listener-added', 'true');
@@ -1476,9 +1015,9 @@ window.addEventListener('scroll', toggleScrollToTopButton);
   
   // Esegui quando il DOM è pronto
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', setupButtonListeners);
+    document.addEventListener('DOMContentLoaded', setupSwapButtonListener);
   } else {
-    setupButtonListeners();
+    setupSwapButtonListener();
   }
 })();
 
@@ -1777,6 +1316,18 @@ if (window.location.pathname.endsWith('index.html') || window.location.pathname 
     const resetBtn = document.getElementById('reset-btn');
     if (resetBtn) {
       resetBtn.addEventListener('click', resetFilters);
+    }
+
+    // Event listener per il pulsante "Resetta percorso"
+    const resetRouteBtn = document.getElementById('reset-route-btn');
+    if (resetRouteBtn) {
+      resetRouteBtn.addEventListener('click', () => {
+        if (window.RouteSelector && typeof window.RouteSelector.resetRoute === 'function') {
+          window.RouteSelector.resetRoute();
+        } else {
+          console.warn('⚠️ RouteSelector.resetRoute non disponibile');
+        }
+      });
     }
   });
 }

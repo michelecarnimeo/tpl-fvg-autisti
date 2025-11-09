@@ -119,6 +119,12 @@
       if (typeof toggleSwapButton === 'function') {
         toggleSwapButton(false);
       }
+      
+      // Nascondi pulsante "Resetta percorso"
+      const resetRouteBtn = document.getElementById('reset-route-btn');
+      if (resetRouteBtn) {
+        resetRouteBtn.style.display = 'none';
+      }
       return;
     }
 
@@ -133,6 +139,12 @@
     }
     if (typeof toggleSwapButton === 'function') {
       toggleSwapButton(true);
+    }
+    
+    // Mostra pulsante "Resetta percorso" quando la linea è selezionata
+    const resetRouteBtn = document.getElementById('reset-route-btn');
+    if (resetRouteBtn) {
+      resetRouteBtn.style.display = 'inline-block';
     }
   }
 
@@ -283,6 +295,13 @@
       if (arrivoText) arrivoText.textContent = tariffario[lineaIdx].fermate[arrivoIdx];
     }
 
+    // Reset stato geolocalizzazione dopo swap
+    if (window.Geolocation && typeof window.Geolocation.resetLocationState === 'function') {
+      window.Geolocation.resetLocationState();
+    } else if (typeof window.resetLocationState === 'function') {
+      window.resetLocationState();
+    }
+
     updateSummary();
     calcolaPrezzo();
 
@@ -364,6 +383,12 @@
       swapBtnEl.style.cursor = 'not-allowed';
     }
 
+    // Nascondi pulsante "Resetta percorso"
+    const resetRouteBtn = document.getElementById('reset-route-btn');
+    if (resetRouteBtn) {
+      resetRouteBtn.style.display = 'none';
+    }
+
     // Reset Storage
     Storage.removeItem('tpl.lineaIdx');
     Storage.removeItem('tpl.partenzaIdx');
@@ -375,6 +400,75 @@
       resetBtn.style.transform = 'scale(0.95)';
       setTimeout(() => {
         resetBtn.style.transform = 'scale(1)';
+      }, 150);
+    }
+
+    updatePriceCardState();
+
+    // Vibrazione di conferma reset
+    if (window.Settings && window.Settings.triggerHaptic) {
+      window.Settings.triggerHaptic('medium');
+    }
+  }
+
+  /**
+   * Resetta solo partenza, arrivo e risultato (mantiene la linea selezionata)
+   */
+  function resetRoute() {
+    // Reset solo partenza e arrivo (mantiene lineaIdx)
+    partenzaIdx = '';
+    arrivoIdx = '';
+    hasCalculated = false;
+
+    const tariffario = getTariffario();
+
+    // Aggiorna pulsanti partenza e arrivo (mantiene la linea selezionata)
+    updateFermateButtons();
+
+    // Reset FORZATO del contenuto (la card rimane visibile ma vuota)
+    if (summaryPrezzo) {
+      summaryPrezzo.textContent = '-';
+      summaryPrezzo.innerHTML = '-';
+    }
+    if (summaryCodice) {
+      summaryCodice.textContent = '-';
+      summaryCodice.innerHTML = '-';
+    }
+    if (summaryPartenza) {
+      summaryPartenza.textContent = '-';
+      summaryPartenza.innerHTML = '-';
+    }
+    if (summaryArrivo) {
+      summaryArrivo.textContent = '-';
+      summaryArrivo.innerHTML = '-';
+    }
+    if (prezzoErrore) {
+      prezzoErrore.style.display = 'none';
+    }
+
+    // Reset completo stato geolocalizzazione
+    if (window.Geolocation && typeof window.Geolocation.resetLocationState === 'function') {
+      window.Geolocation.resetLocationState();
+    } else if (typeof window.resetLocationState === 'function') {
+      window.resetLocationState();
+    }
+
+    // Disabilita pulsante swap (non ci sono partenza/arrivo)
+    const swapBtnEl = document.getElementById('swap-btn');
+    if (swapBtnEl) {
+      swapBtnEl.disabled = true;
+    }
+
+    // Reset Storage solo per partenza e arrivo (mantiene lineaIdx)
+    Storage.removeItem('tpl.partenzaIdx');
+    Storage.removeItem('tpl.arrivoIdx');
+
+    // Feedback visivo e aptico
+    const resetRouteBtn = document.getElementById('reset-route-btn');
+    if (resetRouteBtn) {
+      resetRouteBtn.style.transform = 'scale(0.95)';
+      setTimeout(() => {
+        resetRouteBtn.style.transform = 'scale(1)';
       }, 150);
     }
 
@@ -487,6 +581,11 @@
      * Resetta tutte le selezioni
      */
     reset: resetFilters,
+
+    /**
+     * Resetta solo partenza, arrivo e risultato (mantiene la linea)
+     */
+    resetRoute: resetRoute,
 
     /**
      * Ripristina selezioni da Storage
