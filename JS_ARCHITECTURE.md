@@ -358,6 +358,11 @@ export function getFermata(lineaIndex, fermataIndex) {
 
 **Nota:** Usa solo l'API pubblica di `changelog.js` per ottenere la versione corrente, mantenendo la separazione delle responsabilità.
 
+**Come aggiornare la versione:**
+1. **GitHub Actions** (raccomandato): Vai su Actions → "Aggiorna Versione App" → Inserisci versione e note → Esegui workflow → **Aggiorna manualmente `changelog.js`** dopo l'esecuzione
+2. **Manuale**: Aggiorna `version.json`, `changelog.js`, `manifest.json` → Commit e push
+3. **⚠️ Importante**: Il workflow GitHub Actions cerca di aggiornare costanti in `script.js` che non esistono più. Dopo l'esecuzione, aggiorna manualmente `changelog.js` con la nuova versione.
+
 ---
 
 #### **features/settings.js** ⏳

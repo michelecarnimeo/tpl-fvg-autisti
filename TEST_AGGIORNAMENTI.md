@@ -2,6 +2,13 @@
 
 Guida passo-passo per testare il sistema di verifica aggiornamenti dell'app TPL FVG Autisti.
 
+**⚠️ Nota**: Questo documento è stato aggiornato per riflettere il sistema attuale (v1.6.9+):
+
+- La versione locale viene letta da `changelog.js` (non più da costanti in `script.js`)
+- Il pulsante "Verifica aggiornamenti" si trova nel modal Impostazioni → Tab "Info"
+- Dopo "Aggiorna Ora", l'app ricarica la pagina corrente (non reindirizza a `benvenuto.html`)
+- Il workflow GitHub Actions richiede aggiornamento manuale di `changelog.js`
+
 ## 🧪 Prerequisiti
 
 - App pubblicata su GitHub Pages
@@ -14,23 +21,30 @@ Guida passo-passo per testare il sistema di verifica aggiornamenti dell'app TPL 
 
 ### Passi:
 
-1. ✅ Verifica che `version.json` e `script.js` abbiano la stessa versione
+1. ✅ Verifica che `version.json` e `changelog.js` abbiano la stessa versione
 
    **version.json**:
 
    ```json
-   { "version": "1.3.3" }
+   { "version": "1.6.9" }
    ```
 
-   **script.js**:
+   **changelog.js**:
 
    ```javascript
-   const CURRENT_VERSION = "1.3.3";
+   // La prima entry dell'array changelogData deve avere la stessa versione
+   {
+     version: '1.6.9',
+     date: '9 Novembre 2025',
+     time: '10:30',
+     ...
+   }
    ```
 
 2. ✅ Apri l'app su GitHub Pages
-3. ✅ Clicca sul pulsante 🔄 nella navbar (o menu mobile)
-4. ✅ Attendi 1-2 secondi
+3. ✅ Apri il modal Impostazioni (⚙️) → Tab "Info"
+4. ✅ Clicca sul pulsante "Verifica aggiornamenti"
+5. ✅ Attendi 1-2 secondi
 
 ### Risultato Atteso:
 
@@ -40,8 +54,8 @@ Guida passo-passo per testare il sistema di verifica aggiornamenti dell'app TPL 
 │                                     │
 │   ✨ Stai usando l'ultima versione! │
 │                                     │
-│   Versione: 1.3.3                   │
-│   22 Ottobre 2025 alle 21:30        │
+│   Versione: 1.6.9                   │
+│   9 Novembre 2025 alle 10:30        │
 │                                     │
 │   Vuoi comunque riavviare l'app?    │
 │                                     │
@@ -57,22 +71,25 @@ Guida passo-passo per testare il sistema di verifica aggiornamenti dell'app TPL 
 
 ### Passi:
 
-1. ✅ Modifica **SOLO** `version.json` su GitHub con una versione superiore:
+1. ✅ Modifica `version.json` su GitHub con una versione superiore:
 
    ```json
    {
-     "version": "1.3.4",
-     "versionDate": "23 Ottobre 2025",
-     "versionTime": "10:00",
+     "version": "1.6.10",
+     "versionDate": "10 Novembre 2025",
+     "versionTime": "14:00",
      "updateNotes": "Correzioni bug e miglioramenti prestazioni"
    }
    ```
 
-2. ✅ Commit e push su GitHub
-3. ✅ Attendi 1-2 minuti (deploy GitHub Pages)
-4. ✅ Apri l'app (senza refresh)
-5. ✅ Clicca sul pulsante 🔄
-6. ✅ Attendi la verifica
+2. ✅ **IMPORTANTE**: Aggiorna anche `changelog.js` con la nuova versione (aggiungi entry all'inizio dell'array `changelogData`)
+
+3. ✅ Commit e push su GitHub
+4. ✅ Attendi 1-2 minuti (deploy GitHub Pages)
+5. ✅ Apri l'app (senza refresh)
+6. ✅ Apri il modal Impostazioni (⚙️) → Tab "Info"
+7. ✅ Clicca sul pulsante "Verifica aggiornamenti"
+8. ✅ Attendi la verifica
 
 ### Risultato Atteso:
 
@@ -81,8 +98,8 @@ Guida passo-passo per testare il sistema di verifica aggiornamenti dell'app TPL 
 │   🎉 Aggiornamento Disponibile!     │
 │                                     │
 │   ✨ Nuova versione disponibile!    │
-│   Versione attuale: 1.3.3           │
-│   Nuova versione: 1.3.4             │
+│   Versione attuale: 1.6.9           │
+│   Nuova versione: 1.6.10            │
 │                                     │
 │   📝 Novità:                        │
 │   Correzioni bug e miglioramenti    │
@@ -98,11 +115,13 @@ Guida passo-passo per testare il sistema di verifica aggiornamenti dell'app TPL 
 
 ### Test Aggiornamento:
 
-7. ✅ Clicca su "Aggiorna Ora"
-8. ✅ Verifica che l'app:
-   - Si reindirizza a `benvenuto.html`
-   - Scarica i nuovi asset
-   - Cache viene pulita
+9. ✅ Clicca su "Aggiorna Ora"
+10. ✅ Verifica che l'app:
+
+- Ricarica la pagina corrente (`window.location.reload()`)
+- Scarica i nuovi asset
+- Cache Service Worker viene pulita
+- LocalStorage viene cancellato (opzionale, configurabile)
 
 ---
 
@@ -114,8 +133,9 @@ Guida passo-passo per testare il sistema di verifica aggiornamenti dell'app TPL 
 
 1. ✅ Apri DevTools (F12)
 2. ✅ Network → Throttling → "Offline"
-3. ✅ Clicca sul pulsante 🔄
-4. ✅ Attendi
+3. ✅ Apri il modal Impostazioni (⚙️) → Tab "Info"
+4. ✅ Clicca sul pulsante "Verifica aggiornamenti"
+5. ✅ Attendi
 
 ### Risultato Atteso:
 
@@ -127,8 +147,8 @@ Guida passo-passo per testare il sistema di verifica aggiornamenti dell'app TPL 
 │   gli aggiornamenti                 │
 │   Failed to fetch                   │
 │                                     │
-│   Versione locale: 1.3.3            │
-│   22 Ottobre 2025 alle 21:30        │
+│   Versione locale: 1.6.9            │
+│   9 Novembre 2025 alle 10:30        │
 │                                     │
 │   Verifica la connessione internet  │
 │   e riprova.                        │
@@ -151,16 +171,18 @@ Guida passo-passo per testare il sistema di verifica aggiornamenti dell'app TPL 
 
    ```json
    {
-     "version": "1.3.2",
-     "versionDate": "21 Ottobre 2025",
-     "versionTime": "15:00",
+     "version": "1.6.8",
+     "versionDate": "7 Novembre 2025",
+     "versionTime": "17:00",
      "updateNotes": "Versione precedente"
    }
    ```
 
-2. ✅ Commit e push
-3. ✅ Attendi deploy
-4. ✅ Clicca sul pulsante 🔄
+2. ✅ **IMPORTANTE**: Aggiorna anche `changelog.js` con la versione inferiore (solo per test)
+3. ✅ Commit e push
+4. ✅ Attendi deploy
+5. ✅ Apri il modal Impostazioni (⚙️) → Tab "Info"
+6. ✅ Clicca sul pulsante "Verifica aggiornamenti"
 
 ### Risultato Atteso:
 
@@ -168,8 +190,8 @@ Guida passo-passo per testare il sistema di verifica aggiornamenti dell'app TPL 
 ┌─────────────────────────────────────┐
 │   ℹ️ Versione Diversa Rilevata      │
 │                                     │
-│   Versione server: 1.3.2            │
-│   Versione locale: 1.3.3            │
+│   Versione server: 1.6.8            │
+│   Versione locale: 1.6.9            │
 │                                     │
 │   Vuoi comunque riavviare l'app?    │
 │                                     │
@@ -188,23 +210,23 @@ Guida passo-passo per testare il sistema di verifica aggiornamenti dell'app TPL 
 ```javascript
 // Apri Console (F12) e testa:
 
+// Nota: compareVersions() è una funzione privata in js/features/updates.js
+// Per testarla, usa l'API pubblica di Updates (se esposta) oppure testa tramite checkForUpdates()
+
+// Test tramite Updates module (se esposto):
+// console.log(window.Updates.compareVersions("1.6.10", "1.6.9")); // Dovrebbe essere: 1
+
+// Alternativa: Testa direttamente la logica tramite checkForUpdates()
+// Modifica version.json con versioni diverse e verifica il comportamento del modal
+
 // Test 1: Versione superiore
-console.log(compareVersions("1.3.4", "1.3.3")); // Dovrebbe essere: 1
+// Modifica version.json a "1.6.10" → Dovrebbe mostrare "Aggiornamento Disponibile"
 
 // Test 2: Versione inferiore
-console.log(compareVersions("1.3.2", "1.3.3")); // Dovrebbe essere: -1
+// Modifica version.json a "1.6.8" → Dovrebbe mostrare "Versione Diversa Rilevata"
 
 // Test 3: Versioni uguali
-console.log(compareVersions("1.3.3", "1.3.3")); // Dovrebbe essere: 0
-
-// Test 4: Major version
-console.log(compareVersions("2.0.0", "1.9.9")); // Dovrebbe essere: 1
-
-// Test 5: Minor version
-console.log(compareVersions("1.4.0", "1.3.9")); // Dovrebbe essere: 1
-
-// Test 6: Patch version
-console.log(compareVersions("1.3.10", "1.3.9")); // Dovrebbe essere: 1
+// version.json e changelog.js con "1.6.9" → Dovrebbe mostrare "App Aggiornata"
 ```
 
 ---
@@ -253,9 +275,10 @@ Cache Storage
 
 1. ✅ Installa l'app come PWA
 2. ✅ Apri l'app installata
-3. ✅ Modifica `version.json` su GitHub (versione superiore)
-4. ✅ Nella PWA, clicca su 🔄
-5. ✅ Verifica che rilevi l'aggiornamento
+3. ✅ Modifica `version.json` e `changelog.js` su GitHub (versione superiore)
+4. ✅ Nella PWA, apri Impostazioni (⚙️) → Tab "Info"
+5. ✅ Clicca sul pulsante "Verifica aggiornamenti"
+6. ✅ Verifica che rilevi l'aggiornamento
 
 ### Risultato Atteso:
 
@@ -275,7 +298,7 @@ Cache Storage
 2. ✅ Seleziona "Aggiorna Versione App"
 3. ✅ Clicca "Run workflow"
 4. ✅ Compila:
-   - Versione: `1.3.5`
+   - Versione: `1.6.10`
    - Note: `Test workflow automatico`
 5. ✅ Clicca "Run workflow"
 6. ✅ Attendi completamento (1-2 min)
@@ -284,14 +307,16 @@ Cache Storage
 
 7. ✅ Controlla che siano stati aggiornati:
 
-   - ✅ `version.json` → `"version": "1.3.5"`
-   - ✅ `script.js` → `CURRENT_VERSION = '1.3.5'`
-   - ✅ `manifest.json` → `"version": "1.3.5"`
-   - ✅ `index.html` → `TPL Autisti 1.3.5`
+   - ✅ `version.json` → `"version": "1.6.10"`
+   - ⚠️ `script.js` → Il workflow cerca di aggiornare costanti che non esistono più (può essere ignorato)
+   - ✅ `manifest.json` → `"version": "1.6.10"`
+   - ✅ `index.html` → `TPL Autisti 1.6.10` (se presente nel footer)
 
-8. ✅ Verifica nuovo commit:
-   - Message: `🚀 Release v1.3.5 - Test workflow automatico`
-   - Tag: `v1.3.5`
+8. ✅ **IMPORTANTE**: Dopo l'esecuzione del workflow, aggiorna manualmente `changelog.js` con la nuova versione
+
+9. ✅ Verifica nuovo commit:
+   - Message: `🚀 Release v1.6.10 - Test workflow automatico`
+   - Tag: `v1.6.10`
 
 ---
 
@@ -344,10 +369,12 @@ git push
 
 **Soluzione**:
 
-1. Svuota cache browser: Ctrl+Shift+Del
-2. Disinstalla PWA
-3. Cancella storage: DevTools → Application → Clear Storage
-4. Ricarica: Ctrl+F5
+1. Verifica che `changelog.js` sia aggiornato con la nuova versione
+2. Svuota cache browser: Ctrl+Shift+Del
+3. Disinstalla PWA
+4. Cancella storage: DevTools → Application → Clear Storage
+5. Verifica che `version.json` e `changelog.js` siano sincronizzati
+6. Ricarica: Ctrl+F5
 
 ### "Modal non si apre"
 
@@ -357,10 +384,15 @@ git push
 
 ```javascript
 // Verifica in console:
-console.log(typeof checkForUpdates); // Dovrebbe essere: "function"
+console.log(typeof window.Updates); // Dovrebbe essere: "object"
+console.log(typeof window.Updates.checkForUpdates); // Dovrebbe essere: "function"
 
 // Testa manualmente:
-checkForUpdates();
+if (window.Updates && window.Updates.checkForUpdates) {
+  window.Updates.checkForUpdates();
+} else {
+  console.error("❌ Updates.checkForUpdates non disponibile");
+}
 ```
 
 ---

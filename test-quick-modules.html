@@ -120,6 +120,31 @@
           details: 'selectLineaPrezzi disponibile'
         },
         {
+          name: 'PageRenderers.openLineeModalFermate',
+          test: () => typeof window.PageRenderers?.openLineeModalFermate === 'function',
+          details: 'openLineeModalFermate disponibile'
+        },
+        {
+          name: 'PageRenderers.closeLineeModalFermate',
+          test: () => typeof window.PageRenderers?.closeLineeModalFermate === 'function',
+          details: 'closeLineeModalFermate disponibile'
+        },
+        {
+          name: 'PageRenderers.openLineeModalPrezzi',
+          test: () => typeof window.PageRenderers?.openLineeModalPrezzi === 'function',
+          details: 'openLineeModalPrezzi disponibile'
+        },
+        {
+          name: 'PageRenderers.closeLineeModalPrezzi',
+          test: () => typeof window.PageRenderers?.closeLineeModalPrezzi === 'function',
+          details: 'closeLineeModalPrezzi disponibile'
+        },
+        {
+          name: 'PageRenderers.initFermatePrezzi',
+          test: () => typeof window.PageRenderers?.initFermatePrezzi === 'function',
+          details: 'initFermatePrezzi disponibile'
+        },
+        {
           name: 'UIHelpers Module',
           test: () => typeof window.UIHelpers !== 'undefined',
           details: 'window.UIHelpers disponibile'
@@ -133,6 +158,11 @@
           name: 'UIHelpers.toggleSwapButton',
           test: () => typeof window.UIHelpers?.toggleSwapButton === 'function',
           details: 'toggleSwapButton disponibile'
+        },
+        {
+          name: 'UIHelpers.toggleScrollToTopButton',
+          test: () => typeof window.UIHelpers?.toggleScrollToTopButton === 'function',
+          details: 'toggleScrollToTopButton disponibile'
         },
         {
           name: 'Tariffario Module',
@@ -159,7 +189,13 @@
                    typeof window.populateLineePrezzi === 'function' &&
                    typeof window.selectLineaFermate === 'function' &&
                    typeof window.selectLineaPrezzi === 'function' &&
+                   typeof window.openLineeModalFermate === 'function' &&
+                   typeof window.closeLineeModalFermate === 'function' &&
+                   typeof window.openLineeModalPrezzi === 'function' &&
+                   typeof window.closeLineeModalPrezzi === 'function' &&
+                   typeof window.initFermatePrezzi === 'function' &&
                    typeof window.scrollToTop === 'function' &&
+                   typeof window.toggleScrollToTopButton === 'function' &&
                    typeof window.toggleSwapButton === 'function';
           },
           details: 'Tutte le funzioni globali disponibili'

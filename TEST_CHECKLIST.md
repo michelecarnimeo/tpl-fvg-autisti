@@ -97,7 +97,27 @@
 
 ---
 
-### 7. **Test Compatibilità Generale**
+### 7. **Test Moduli Modularizzati (MODULI 1-5)**
+
+#### Test MODULO 1: UI Helpers (ui-helpers.js)
+- [ ] Test Scroll to Top: Scorri pagina → Verifica pulsante "Torna su" appare → Clicca → Verifica scroll smooth
+- [ ] Test Swap Button (index.html): Seleziona linea, partenza, arrivo → Verifica pulsante swap visibile → Clicca → Verifica scambio
+
+#### Test MODULO 2-5: Page Renderers (page-renderers.js)
+- [ ] Test Rendering Fermate (fermate.html): Seleziona linea → Verifica liste fermate (andata/ritorno) → Verifica distanze se GPS attivo
+- [ ] Test Rendering Prezzi (prezzi.html): Seleziona linea → Verifica tabelle prezzi → Verifica formattazione prezzi
+- [ ] Test Ricerca Prezzi: Digita nome fermata → Verifica filtraggio righe → Clicca clear → Verifica reset
+- [ ] Test Modal Linee: Apri modal linee → Seleziona linea → Verifica rendering automatico
+- [ ] Test Inizializzazione: Verifica caricamento automatico su fermate.html e prezzi.html
+
+#### Test Integrazione Moduli
+- [ ] Console (F12): Verifica caricamento moduli (`✅ Modulo ui-helpers.js caricato`, `✅ Modulo page-renderers.js caricato`)
+- [ ] Verifica funzioni globali disponibili: `window.renderFermate`, `window.renderPrezzi`, `window.scrollToTop`, etc.
+- [ ] Service Worker: Verifica che `ui-helpers.js` e `page-renderers.js` siano in cache
+
+---
+
+### 8. **Test Compatibilità Generale**
 
 #### Test su tutte le pagine:
 - [ ] Verifica che tutte le funzionalità esistenti funzionino ancora:

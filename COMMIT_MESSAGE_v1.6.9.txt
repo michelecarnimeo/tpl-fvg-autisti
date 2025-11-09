@@ -1,0 +1,36 @@
+1.6.9: Modularizzazione MODULI 1-5 completata
+
+MODULO 1: UI Helpers
+- Creato js/utils/ui-helpers.js
+- Funzioni: scrollToTop, toggleScrollToTopButton, toggleSwapButton
+- ~90 righe estratte da script.js
+
+MODULO 2: Page Renderers
+- Creato js/features/page-renderers.js
+- Funzioni: renderFermate, renderPrezzi, setupRicercaPrezzi
+- ~315 righe iniziali
+
+MODULO 3: Page Search (integrato in Page Renderers)
+- Funzione setupRicercaPrezzi integrata in page-renderers.js
+
+MODULO 4: Page Lines (integrato in Page Renderers)
+- Funzioni: populateLineeTratte, populateLineePrezzi, selectLineaFermate, selectLineaPrezzi
+- Modal management: open/close per fermate e prezzi
+- ~280 righe aggiunte a page-renderers.js
+
+MODULO 5: Page Initialization (integrato in Page Renderers)
+- Funzione initFermatePrezzi e logica inizializzazione automatica
+- Gestione evento tariffarioLoaded
+- ~40 righe aggiunte a page-renderers.js
+
+Modifiche:
+- script.js: Rimossi ~252 righe, aggiunti wrapper per retrocompatibilità
+- geolocation.js: Fix Storage.getItem con funzione getStorage() dinamica
+- Aggiornato JS_ARCHITECTURE.md con nuovi moduli
+- Rimossi 13 file di backup (2.91 MB)
+
+Risultato:
+- script.js: ~1654 righe (da ~1906, -13%)
+- page-renderers.js: ~707 righe (nuovo modulo completo)
+- ui-helpers.js: ~90 righe (nuovo modulo)
+- Codice più modulare e manutenibile
