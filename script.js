@@ -1090,98 +1090,29 @@ window.addEventListener('DOMContentLoaded', function () {
         window.Settings.toggleAnimation();
       }
       // Chiudi il menu mobile se esiste
-      if (typeof closeMenu === 'function') {
-        closeMenu();
+      // Usa HamburgerMenu.close() se disponibile
+      if (typeof window.HamburgerMenu !== 'undefined' && typeof window.HamburgerMenu.close === 'function') {
+        window.HamburgerMenu.close();
+      } else {
+        // Fallback: chiudi manualmente
+        const mobileMenu = document.getElementById('mobile-menu');
+        const overlay = document.getElementById('mobile-menu-overlay');
+        const hamburgerToggle = document.getElementById('hamburger-toggle');
+        if (mobileMenu && overlay && hamburgerToggle) {
+          hamburgerToggle.classList.remove('active');
+          mobileMenu.classList.remove('active');
+          overlay.classList.remove('active');
+          document.body.style.overflow = '';
+        }
       }
     }
   });
 });
 
 // --- HAMBURGER MENU LOGIC ---
-(function () {
-  const hamburgerToggle = document.getElementById('hamburger-toggle');
-  const mobileMenu = document.getElementById('mobile-menu');
-  const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
-  const mobileMenuClose = document.getElementById('mobile-menu-close');
-  const mobileDarkmodeToggle = document.getElementById('mobile-darkmode-toggle');
-  const mobileVersionCard = document.getElementById('mobile-version-card');
-
-  if (!hamburgerToggle || !mobileMenu || !mobileMenuOverlay) return;
-
-  // Apri menu
-  function openMenu() {
-    hamburgerToggle.classList.add('active');
-    mobileMenu.classList.add('active');
-    mobileMenuOverlay.classList.add('active');
-    document.body.style.overflow = 'hidden'; // Blocca scroll
-  }
-
-  // Chiudi menu
-  function closeMenu() {
-    hamburgerToggle.classList.remove('active');
-    mobileMenu.classList.remove('active');
-    mobileMenuOverlay.classList.remove('active');
-    document.body.style.overflow = ''; // Ripristina scroll
-  }
-
-  // Click su hamburger
-  if (hamburgerToggle) {
-    hamburgerToggle.addEventListener('click', () => {
-      if (mobileMenu.classList.contains('active')) {
-        closeMenu();
-      } else {
-        openMenu();
-      }
-    });
-  }
-
-  // Click su X per chiudere
-  if (mobileMenuClose) {
-    mobileMenuClose.addEventListener('click', closeMenu);
-  }
-
-  // Click su overlay per chiudere
-  if (mobileMenuOverlay) {
-    mobileMenuOverlay.addEventListener('click', closeMenu);
-  }
-
-  // Chiudi menu quando si clicca su un link (supporta sia .mobile-nav-link che .mobile-menu-link)
-  // Escludi il pulsante Impostazioni che ha comportamento speciale (apre modal)
-  const mobileNavLinks = document.querySelectorAll('.mobile-nav-link:not(#open-settings), .mobile-menu-link');
-  mobileNavLinks.forEach(link => {
-    link.addEventListener('click', closeMenu);
-  });
-
-  // Dark mode toggle da menu mobile
-  if (mobileDarkmodeToggle) {
-    mobileDarkmodeToggle.addEventListener('click', () => {
-      toggleDark();
-      closeMenu();
-    });
-  }
-
-  // Mini card versione (apre modale Verifica Aggiornamenti)
-  if (mobileVersionCard) {
-    mobileVersionCard.addEventListener('click', () => {
-      if (typeof Updates !== 'undefined' && typeof Updates.checkForUpdates === 'function') {
-        Updates.checkForUpdates();
-      } else if (typeof checkForUpdates === 'function') {
-        // Fallback per compatibilità
-        checkForUpdates();
-      } else {
-        console.error('❌ Updates.checkForUpdates non disponibile');
-      }
-      closeMenu();
-    });
-  }
-
-  // Chiudi menu con ESC
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
-      closeMenu();
-    }
-  });
-})();
+// CODICE SPOSTATO IN js/components/hamburger-menu.js (09/11/2025)
+// Il modulo hamburger-menu.js si auto-inizializza e gestisce automaticamente il menu mobile
+// API disponibile: window.HamburgerMenu (open, close, isOpen, init)
 
 // --- PWA Install logic (GLOBALE - funziona su tutte le pagine) ---
 (function initPWAInstallBanner() {

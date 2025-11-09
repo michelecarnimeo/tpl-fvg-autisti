@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="css/components/settings/accessibilita.css">
   <link rel="stylesheet" href="css/components/settings/aspetto.css">
   <link rel="stylesheet" href="css/components/settings/info.css">
+  <link rel="stylesheet" href="css/components/mega-dropdown-settings.css">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="src/tpl.jpg" type="image/jpeg">
 </head>
@@ -55,10 +56,90 @@
           <a href="index.html" class="nav-link active">Home</a>
           <a href="fermate.html" class="nav-link">Fermate</a>
           <a href="prezzi.html" class="nav-link">Prezzi</a>
-          <button id="desktop-settings-btn" class="nav-settings-btn" title="Impostazioni">
-            <span class="settings-icon">⚙️</span>
-            <span class="settings-text">Impostazioni</span>
-          </button>
+          
+          <!-- Mega Dropdown Impostazioni (solo desktop) -->
+          <div class="settings-dropdown-container">
+            <button id="settings-dropdown-btn" class="nav-settings-dropdown-btn" title="Impostazioni">
+              <span class="settings-icon">⚙️</span>
+              <span class="settings-text">Impostazioni</span>
+              <span class="dropdown-arrow">▼</span>
+            </button>
+
+            <div id="settings-dropdown" class="settings-mega-dropdown">
+              <!-- Sezione Aspetto -->
+              <div class="dropdown-section">
+                <h4 class="dropdown-section-title">👁️ Aspetto</h4>
+
+                <div class="dropdown-item">
+                  <span class="dropdown-label">🌓 Tema</span>
+                  <div class="dropdown-theme-options">
+                    <label class="theme-radio">
+                      <input type="radio" name="theme-radio" value="system" checked>
+                      <span>⚙️ Sistema</span>
+                    </label>
+                    <label class="theme-radio">
+                      <input type="radio" name="theme-radio" value="light">
+                      <span>☀️ Chiaro</span>
+                    </label>
+                    <label class="theme-radio">
+                      <input type="radio" name="theme-radio" value="dark">
+                      <span>🌙 Scuro</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="dropdown-item">
+                  <label class="dropdown-label" for="dropdown-animation-toggle">🎬 Animazione Sfondo</label>
+                  <label class="dropdown-toggle">
+                    <input type="checkbox" id="dropdown-animation-toggle" aria-label="Attiva/disattiva animazione sfondo">
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Sezione Accessibilità -->
+              <div class="dropdown-section">
+                <h4 class="dropdown-section-title">♿ Accessibilità</h4>
+
+                <div class="dropdown-item">
+                  <span class="dropdown-label">A Dimensione Testo</span>
+                  <div class="dropdown-font-buttons">
+                    <button class="dropdown-font-btn active" data-size="normal">A</button>
+                    <button class="dropdown-font-btn" data-size="large">A</button>
+                    <button class="dropdown-font-btn" data-size="xlarge">A</button>
+                  </div>
+                </div>
+
+                <div class="dropdown-item">
+                  <label class="dropdown-label" for="dropdown-high-contrast">🎨 Alto Contrasto</label>
+                  <label class="dropdown-toggle">
+                    <input type="checkbox" id="dropdown-high-contrast" aria-label="Attiva/disattiva alto contrasto">
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Sezione Azioni Rapide -->
+              <div class="dropdown-section">
+                <h4 class="dropdown-section-title">⚡ Azioni Rapide</h4>
+
+                <button class="dropdown-action-btn" id="dropdown-open-settings-modal">
+                  <span>⚙️</span>
+                  <span>Apri Impostazioni Complete</span>
+                </button>
+
+                <button class="dropdown-action-btn" id="dropdown-check-updates">
+                  <span>🔄</span>
+                  <span>Verifica Aggiornamenti</span>
+                </button>
+
+                <button class="dropdown-action-btn" id="dropdown-clear-cache">
+                  <span>🗑️</span>
+                  <span>Cancella Cache</span>
+                </button>
+              </div>
+            </div>
+          </div>
           
           <!-- Pulsanti individuali (nascosti su desktop, usati solo via JS per compatibilità) -->
           <button id="darkmode-toggle" class="dark-mode-toggle navbar-legacy-btn" title="Darkmode" style="display: none;">
@@ -379,6 +460,8 @@
   <script src="footer.js"></script>
   <script src="changelog.js"></script>
   <script src="js/components/modals.js"></script>
+  <script src="js/components/mega-dropdown-settings.js"></script>
+  <script src="js/components/hamburger-menu.js"></script>
   <script src="script.js"></script>
   <script src="js/utils/app-init.js"></script>
 

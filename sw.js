@@ -19,6 +19,7 @@ const STATIC_ASSETS = [
   './benvenuto.html', // Pagina benvenuto
   './fermate.html', // Fermate (offline critico)
   './prezzi.html', // Prezzi (offline critico)
+  './404.html', // Pagina errore 404
   './style1.css', // Stili essenziali
   './css/components/footer.css', // Footer modulare CSS
   './css/components/modals.css', // Modals modulare CSS
@@ -26,6 +27,7 @@ const STATIC_ASSETS = [
   './css/components/settings/accessibilita.css', // Settings (tab Accessibilità)
   './css/components/settings/aspetto.css', // Settings (tab Aspetto)
   './css/components/settings/info.css', // Settings (tab Info)
+  './css/components/mega-dropdown-settings.css', // Mega Dropdown Settings (componente condiviso, solo desktop)
   './script.js', // Funzionalità app
   './footer.js', // Footer modulare JS
   './changelog.js', // Changelog dinamico
@@ -51,6 +53,25 @@ const STATIC_ASSETS = [
   './js/tests/test-sw-wrappers.js', // Wrapper funzioni Service Worker test (solo per test.html)
   './js/tests/test-all-wrappers.js', // Wrapper funzione runAllTests (solo per test.html)
   './js/tests/test-database.js', // Test suite database (solo per test.html)
+  './js/tests/test-ui.js', // Test suite UI (solo per test.html)
+  './js/tests/test-manifest.js', // Test suite Manifest (solo per test.html)
+  './js/tests/test-performance.js', // Test suite Performance (solo per test.html)
+  './js/tests/test-ui-manifest-performance-wrappers.js', // Wrapper test UI/Manifest/Performance (solo per test.html)
+  './js/components/mega-dropdown-settings.js', // Mega Dropdown Settings (componente condiviso, solo desktop)
+  './js/components/hamburger-menu.js', // Hamburger Menu (componente condiviso, tutte le pagine)
+  './js/tests/device-detector.js', // Device Detection (solo per test.html)
+  './js/tests/pwa-test-mode.js', // PWA Test Mode (solo per test.html)
+  './js/tests/effects-status.js', // Effects Status (solo per test.html)
+  './js/tests/gps/helpers.js', // GPS Helpers (solo per test.html)
+  './js/tests/gps/fake-position.js', // GPS Fake Position (solo per test.html)
+  './js/tests/gps/reset-data.js', // GPS Reset Data (solo per test.html)
+  './js/tests/gps/distance-calculator.js', // GPS Distance Calculator (solo per test.html)
+  './js/tests/gps/map-leaflet.js', // GPS Map Leaflet (solo per test.html)
+  './js/tests/gps/watch-position.js', // GPS Watch Position (solo per test.html)
+  './js/tests/gps/quick-test.js', // GPS Quick Test (solo per test.html)
+  './js/tests/gps/export-report.js', // GPS Export Report (solo per test.html)
+  './js/tests/gps/test-geolocation.js', // GPS Test Geolocation (solo per test.html)
+  './js/tests/error-404-simulator.js', // Error 404 Simulator (solo per test.html)
   './js/components/modals.js', // Modal fermate
   './js/components/notification-modal.js', // Modal notifica
   './js/utils/ui-helpers.js', // UI Helpers (scroll, swap button, etc.)

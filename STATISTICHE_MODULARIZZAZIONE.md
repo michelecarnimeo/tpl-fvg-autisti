@@ -297,6 +297,114 @@
 
 ---
 
+## 📜 Storico Estrazioni Codice Inline
+
+**Data analisi iniziale:** 6 Novembre 2025  
+**Stato:** ✅ **COMPLETATO** (9 Novembre 2025 - v1.6.9)  
+**Riepilogo:** Tutte le estrazioni raccomandate sono state completate
+
+### 📋 Riepilogo Parti Inline Trovate e Estratte
+
+#### 1. **CSS Inline in `fermate.html`** (~23 righe) ✅ ESTRATTO
+
+**Posizione originale:** Righe 22-44
+
+**Contenuto:**
+- Media query per `.show-on-mobile` su mobile
+- Animazione `@keyframes bounce`
+
+**Risultato:**
+- ✅ **Estratto in:** `css/pages/fermate.css`
+- ✅ **Completato:** v1.6.9
+
+---
+
+#### 2. **JavaScript Inline in `benvenuto.html`** (~23 righe) ✅ ESTRATTO
+
+**Posizione originale:** Righe 71-93
+
+**Contenuto:**
+- Event listener per pulsante "Inizia" (`#start-btn`)
+- Aggiornamento anno nel footer (`#footer-year`)
+
+**Risultato:**
+- ✅ **Estratto in:** `js/pages/benvenuto.js`
+- ✅ **Completato:** v1.6.9
+
+---
+
+#### 3. **Attributo style inline in `benvenuto.html`** (1 riga) ✅ ESTRATTO
+
+**Posizione originale:** Riga 39
+
+**Contenuto:**
+```html
+<p style="font-size: 1.05rem; line-height: 1.6; margin-top: 16px;"></p>
+```
+
+**Risultato:**
+- ✅ **Estratto in:** `css/pages/benvenuto.css`
+- ✅ **Completato:** v1.6.9
+
+---
+
+#### 4. **Attributi `style="display: none;"`** (molti) ✅ MANTENUTI
+
+**Posizione:** Vari file HTML
+
+**Analisi:**
+- ✅ **Gestiti dinamicamente:** Questi sono gestiti da JavaScript per mostrare/nascondere elementi
+- ✅ **OK lasciare:** Sono necessari per lo stato iniziale degli elementi
+- ⚠️ **Alternativa futura:** Potrebbero essere gestiti con classi CSS (es. `.hidden`)
+
+**Raccomandazione:** Lasciare così (sono gestiti dinamicamente da JS)
+
+---
+
+### 🎯 Raccomandazioni Completate
+
+#### Priorità Alta (✅ COMPLETATO)
+
+1. ✅ **Estratto CSS `fermate.html`** → `css/pages/fermate.css` (completato v1.6.9)
+2. ✅ **Estratto JavaScript `benvenuto.html`** → `js/pages/benvenuto.js` (completato v1.6.9)
+3. ✅ **Estratto attributo style inline** → `css/pages/benvenuto.css` (completato v1.6.9)
+
+#### Priorità Bassa (Opzionale - Non implementato)
+
+4. ⚠️ **Sostituire `style="display: none;"` con classi CSS** (es. `.hidden`)
+   - Richiede modifiche a JavaScript per usare classi invece di `style.display`
+   - Beneficio: migliore separazione HTML/CSS
+   - **Stato:** Non implementato (opzionale)
+
+---
+
+### 📊 Statistiche Estrazioni
+
+- **CSS inline estratto:** ~23 righe (`fermate.html`) + 1 attributo (`benvenuto.html`)
+- **JavaScript inline estratto:** ~23 righe (`benvenuto.html`)
+- **Totale estratto:** ~47 righe + 1 attributo style
+- **Attributi `style="display: none;"`:** Mantenuti (gestiti dinamicamente da JS)
+
+---
+
+### ✅ Conclusione Estrazioni
+
+**✅ TUTTE LE ESTRAZIONI COMPLETATE (v1.6.9):**
+
+1. ✅ CSS in `fermate.html` → Estratto in `css/pages/fermate.css`
+2. ✅ JavaScript in `benvenuto.html` → Estratto in `js/pages/benvenuto.js`
+3. ✅ Attributo style inline in `benvenuto.html` → Estratto in `css/pages/benvenuto.css`
+
+**Risultato finale:**
+- ✅ Nessun tag `<style>` inline rimasto
+- ✅ Nessun tag `<script>` inline rimasto (solo `<script src="...">`)
+- ✅ Nessun `onclick` inline rimasto
+- ⚠️ Attributi `style="display: none;"` presenti (OK - gestiti dinamicamente da JavaScript)
+
+**Stato:** ✅ **COMPLETATO** (verificato v1.6.9)
+
+---
+
 ## 📊 Aggiornamento v1.6.9 (9 Novembre 2025 - 10:30)
 
 ### Nuovi Moduli Creati (+698 righe)

@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>404 - Pagina non trovata | TPL FVG Autisti</title>
+  <!-- Font locali per PWA offline -->
+  <!-- CSS personalizzati -->
+  <link rel="stylesheet" href="style1.css">
+  <!-- Animazioni e transizioni globali -->
+  <link rel="stylesheet" href="css/animations.css">
+  <!-- Componenti CSS modulari -->
+  <link rel="stylesheet" href="css/components/footer.css">
+  <link rel="stylesheet" href="css/components/modals.css">
+  <!-- Settings (struttura modale) -->
+  <link rel="stylesheet" href="css/components/settings/impostazioni.css">
+  <link rel="stylesheet" href="css/components/settings/accessibilita.css">
+  <link rel="stylesheet" href="css/components/settings/aspetto.css">
+  <link rel="stylesheet" href="css/components/settings/info.css">
+  <link rel="stylesheet" href="css/components/mega-dropdown-settings.css">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="src/tpl.jpg" type="image/jpeg">
+  <style>
+    /* Stili specifici per pagina 404 */
+    .error-container {
+      min-height: calc(100vh - 200px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .error-content {
+      text-align: center;
+      max-width: 600px;
+      width: 100%;
+    }
+
+    .error-code {
+      font-size: 8rem;
+      font-weight: 700;
+      color: var(--turchese);
+      line-height: 1;
+      margin-bottom: 1rem;
+      text-shadow: 0 4px 12px rgba(0, 123, 138, 0.3);
+    }
+
+    .dark .error-code {
+      color: var(--turchese-light);
+      text-shadow: 0 4px 12px rgba(0, 153, 170, 0.4);
+    }
+
+    .error-title {
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--testo-principale);
+      margin-bottom: 1rem;
+    }
+
+    .dark .error-title {
+      color: rgba(255, 255, 255, 1);
+    }
+
+    .error-message {
+      font-size: 1.1rem;
+      color: var(--testo-secondario);
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+
+    .dark .error-message {
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .error-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+
+    .error-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      color: var(--testo-principale);
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .error-link:hover {
+      background: var(--turchese);
+      color: var(--bianco);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 123, 138, 0.3);
+    }
+
+    .dark .error-link {
+      background: var(--glass-bg-dark);
+      border-color: var(--glass-border-dark);
+      color: rgba(255, 255, 255, 1);
+    }
+
+    .dark .error-link:hover {
+      background: var(--turchese-light);
+      color: var(--bianco);
+    }
+
+    .error-icon {
+      font-size: 1.2rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .error-code {
+        font-size: 5rem;
+      }
+
+      .error-title {
+        font-size: 1.5rem;
+      }
+
+      .error-message {
+        font-size: 1rem;
+      }
+
+      .error-links {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .error-link {
+        justify-content: center;
+      }
+    }
+
+    /* Animazione fade-in */
+    .error-content {
+      animation: fadeIn 0.5s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="container">
+      <div class="navbar-content">
+        <a href="index.html" class="navbar-brand-link">
+          <div class="navbar-brand">
+            <div class="navbar-logo-wrapper">
+              <img src="src/logo.png" alt="TPL" class="navbar-logo navbar-logo-default" />
+              <img src="src/logo1.png" alt="TPL" class="navbar-logo navbar-logo-hover" />
+            </div>
+            <div class="navbar-title">
+              <div class="logo-acronym">
+                <div>tpl</div>
+                <div>fvg</div>
+              </div>
+              <div class="logo-text">
+                <div>trasporto</div>
+                <div>pubblico</div>
+                <div>locale</div>
+              </div>
+            </div>
+          </div>
+        </a>
+        
+        <nav class="navbar-nav">
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="fermate.html" class="nav-link">Fermate</a>
+          <a href="prezzi.html" class="nav-link">Prezzi</a>
+          
+          <!-- Mega Dropdown Impostazioni (solo desktop) -->
+          <div class="settings-dropdown-container">
+            <button id="settings-dropdown-btn" class="nav-settings-dropdown-btn" title="Impostazioni">
+              <span class="settings-icon">⚙️</span>
+              <span class="settings-text">Impostazioni</span>
+              <span class="dropdown-arrow">▼</span>
+            </button>
+
+            <div id="settings-dropdown" class="settings-mega-dropdown">
+              <!-- Sezione Aspetto -->
+              <div class="dropdown-section">
+                <h4 class="dropdown-section-title">👁️ Aspetto</h4>
+
+                <div class="dropdown-item">
+                  <span class="dropdown-label">🌓 Tema</span>
+                  <div class="dropdown-theme-options">
+                    <label class="theme-radio">
+                      <input type="radio" name="theme-radio" value="system" checked>
+                      <span>⚙️ Sistema</span>
+                    </label>
+                    <label class="theme-radio">
+                      <input type="radio" name="theme-radio" value="light">
+                      <span>☀️ Chiaro</span>
+                    </label>
+                    <label class="theme-radio">
+                      <input type="radio" name="theme-radio" value="dark">
+                      <span>🌙 Scuro</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="dropdown-item">
+                  <label class="dropdown-label" for="dropdown-animation-toggle">🎬 Animazione Sfondo</label>
+                  <label class="dropdown-toggle">
+                    <input type="checkbox" id="dropdown-animation-toggle" aria-label="Attiva/disattiva animazione sfondo">
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Sezione Accessibilità -->
+              <div class="dropdown-section">
+                <h4 class="dropdown-section-title">♿ Accessibilità</h4>
+
+                <div class="dropdown-item">
+                  <span class="dropdown-label">A Dimensione Testo</span>
+                  <div class="dropdown-font-buttons">
+                    <button class="dropdown-font-btn active" data-size="normal">A</button>
+                    <button class="dropdown-font-btn" data-size="large">A</button>
+                    <button class="dropdown-font-btn" data-size="xlarge">A</button>
+                  </div>
+                </div>
+
+                <div class="dropdown-item">
+                  <label class="dropdown-label" for="dropdown-high-contrast">🎨 Alto Contrasto</label>
+                  <label class="dropdown-toggle">
+                    <input type="checkbox" id="dropdown-high-contrast" aria-label="Attiva/disattiva alto contrasto">
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Sezione Azioni Rapide -->
+              <div class="dropdown-section">
+                <h4 class="dropdown-section-title">⚡ Azioni Rapide</h4>
+
+                <button class="dropdown-action-btn" id="dropdown-open-settings-modal">
+                  <span>⚙️</span>
+                  <span>Apri Impostazioni Complete</span>
+                </button>
+
+                <button class="dropdown-action-btn" id="dropdown-check-updates">
+                  <span>🔄</span>
+                  <span>Verifica Aggiornamenti</span>
+                </button>
+
+                <button class="dropdown-action-btn" id="dropdown-clear-cache">
+                  <span>🗑️</span>
+                  <span>Cancella Cache</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Pulsanti individuali (nascosti su desktop, usati solo via JS per compatibilità) -->
+          <button id="darkmode-toggle" class="dark-mode-toggle navbar-legacy-btn" title="Darkmode" style="display: none;">
+            <span>🌙</span>
+          </button>
+          <button class="animation-toggle navbar-legacy-btn" id="animationToggle" title="Toggle animazione sfondo" style="display: none;">
+            🎬
+          </button>
+          <button id="cache-reset" class="cache-reset-btn navbar-legacy-btn" title="Verifica aggiornamenti e riavvia app" style="display: none;">
+            <span id="cache-icon">🔄</span>
+          </button>
+          <div class="font-size-group navbar-legacy-btn" style="display: none;">
+            <button id="font-size-small" class="font-size-btn active" data-size="normal" title="Testo normale">
+              <span>A</span>
+            </button>
+            <button id="font-size-medium" class="font-size-btn" data-size="large" title="Testo grande">
+              <span>A</span>
+            </button>
+            <button id="font-size-large" class="font-size-btn" data-size="xlarge" title="Testo molto grande">
+              <span>A</span>
+            </button>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="container">
+      <div class="error-container">
+        <div class="error-content">
+          <div class="error-code">404</div>
+          <h1 class="error-title">Pagina non trovata</h1>
+          <p class="error-message">
+            La pagina che stai cercando non esiste o è stata spostata.<br>
+            Torna alla home o esplora le sezioni disponibili dell'app.
+          </p>
+          
+          <div class="error-links">
+            <a href="index.html" class="error-link">
+              <span class="error-icon">🏠</span>
+              <span>Home</span>
+            </a>
+            <a href="fermate.html" class="error-link">
+              <span class="error-icon">🚌</span>
+              <span>Fermate</span>
+            </a>
+            <a href="prezzi.html" class="error-link">
+              <span class="error-icon">💰</span>
+              <span>Prezzi</span>
+            </a>
+            <a href="benvenuto.html" class="error-link">
+              <span class="error-icon">👋</span>
+              <span>Benvenuto</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <!-- Footer generato dinamicamente da footer.js -->
+  </footer>
+
+  <!-- Script principale -->
+  <!-- CORE (sempre per primo!) -->
+  <script src="js/core/storage.js"></script>
+  <!-- DATA -->
+  <script src="js/data/tariffario.js"></script>
+  <!-- FEATURES -->
+  <script src="js/features/updates.js"></script>
+  <script src="js/features/settings.js"></script>
+  <!-- UTILS -->
+  <script src="js/utils/ui-helpers.js"></script>
+  <script src="js/utils/offline-notifications.js"></script>
+  <!-- Altri moduli -->
+  <script src="footer.js"></script>
+  <script src="changelog.js"></script>
+  <script src="js/components/modals.js"></script>
+  <script src="js/components/mega-dropdown-settings.js"></script>
+  <script src="js/components/hamburger-menu.js"></script>
+  <script src="script.js"></script>
+  <script src="js/utils/app-init.js"></script>
+  <!-- NOTA: Il mega dropdown è gestito automaticamente da js/components/mega-dropdown-settings.js -->
+
+</body>
+</html>
+

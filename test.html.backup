@@ -18,9 +18,7 @@
     <link rel="stylesheet" href="css/components/tests/test-base.css">
     <link rel="stylesheet" href="css/components/tests/test-status.css">
     <link rel="stylesheet" href="css/components/tests/test-effects.css">
-    <!-- Mega Dropdown Settings (componente condiviso, solo desktop) -->
-    <link rel="stylesheet" href="css/components/mega-dropdown-settings.css">
-    <!-- Test Page Specific (distance, leaflet) -->
+    <!-- Test Page Specific (settings dropdown, distance, leaflet) -->
     <link rel="stylesheet" href="css/components/tests/test-page-specific.css">
     <!-- Test Device Info (device info cards) -->
     <link rel="stylesheet" href="css/components/tests/test-device-info.css">
@@ -82,13 +80,13 @@
 
                     <!-- Mega Dropdown Impostazioni (Opzione C) -->
                     <div class="settings-dropdown-container">
-                        <button id="settings-dropdown-btn" class="nav-settings-dropdown-btn" title="Impostazioni">
+                        <button id="test-settings-dropdown-btn" class="nav-settings-dropdown-btn" title="Impostazioni">
                             <span class="settings-icon">⚙️</span>
                             <span class="settings-text">Impostazioni</span>
                             <span class="dropdown-arrow">▼</span>
                         </button>
 
-                        <div id="settings-dropdown" class="settings-mega-dropdown">
+                        <div id="test-settings-dropdown" class="settings-mega-dropdown">
                             <!-- Sezione Aspetto -->
                             <div class="dropdown-section">
                                 <h4 class="dropdown-section-title">👁️ Aspetto</h4>
@@ -97,25 +95,25 @@
                                     <span class="dropdown-label">🌓 Tema</span>
                                     <div class="dropdown-theme-options">
                                         <label class="theme-radio">
-                                            <input type="radio" name="theme-radio" value="system" checked>
+                                            <input type="radio" name="test-theme" value="system" checked>
                                             <span>⚙️ Sistema</span>
                                         </label>
                                         <label class="theme-radio">
-                                            <input type="radio" name="theme-radio" value="light">
+                                            <input type="radio" name="test-theme" value="light">
                                             <span>☀️ Chiaro</span>
                                         </label>
                                         <label class="theme-radio">
-                                            <input type="radio" name="theme-radio" value="dark">
+                                            <input type="radio" name="test-theme" value="dark">
                                             <span>🌙 Scuro</span>
                                         </label>
                                     </div>
                                 </div>
 
                                 <div class="dropdown-item">
-                                    <label class="dropdown-label" for="dropdown-animation-toggle">🎬 Animazione
+                                    <label class="dropdown-label" for="test-animation-toggle">🎬 Animazione
                                         Sfondo</label>
                                     <label class="dropdown-toggle">
-                                        <input type="checkbox" id="dropdown-animation-toggle"
+                                        <input type="checkbox" id="test-animation-toggle"
                                             aria-label="Attiva/disattiva animazione sfondo">
                                         <span class="toggle-slider"></span>
                                     </label>
@@ -136,9 +134,9 @@
                                 </div>
 
                                 <div class="dropdown-item">
-                                    <label class="dropdown-label" for="dropdown-high-contrast">🎨 Alto Contrasto</label>
+                                    <label class="dropdown-label" for="test-high-contrast">🎨 Alto Contrasto</label>
                                     <label class="dropdown-toggle">
-                                        <input type="checkbox" id="dropdown-high-contrast"
+                                        <input type="checkbox" id="test-high-contrast"
                                             aria-label="Attiva/disattiva alto contrasto">
                                         <span class="toggle-slider"></span>
                                     </label>
@@ -149,17 +147,17 @@
                             <div class="dropdown-section">
                                 <h4 class="dropdown-section-title">⚡ Azioni Rapide</h4>
 
-                                <button class="dropdown-action-btn" id="dropdown-open-settings-modal">
+                                <button class="dropdown-action-btn" id="test-open-settings-modal">
                                     <span>⚙️</span>
                                     <span>Apri Impostazioni Complete</span>
                                 </button>
 
-                                <button class="dropdown-action-btn" id="dropdown-check-updates">
+                                <button class="dropdown-action-btn" id="test-check-updates">
                                     <span>🔄</span>
                                     <span>Verifica Aggiornamenti</span>
                                 </button>
 
-                                <button class="dropdown-action-btn" id="dropdown-clear-cache">
+                                <button class="dropdown-action-btn" id="test-clear-cache">
                                     <span>🗑️</span>
                                     <span>Cancella Cache</span>
                                 </button>
@@ -420,19 +418,6 @@
                         <span>👋</span>
                         <span>Vai a Benvenuto</span>
                     </a>
-                </div>
-            </div>
-            <div class="test-item">
-                <div>
-                    <strong>Simula Errore 404</strong>
-                    <br>
-                    <small>Reindirizza alla pagina di errore 404 per test</small>
-                </div>
-                <div>
-                    <button class="test-btn" data-simulate-404="true" title="Simula errore 404">
-                        <span>🔴</span>
-                        <span>Simula 404</span>
-                    </button>
                 </div>
             </div>
         </div>
@@ -2413,12 +2398,6 @@
     <script src="js/tests/test-route-selector-wrappers.js"></script>
     <!-- GPS Modules - Fase 1-3 modularizzazione GPS (09/11/2025) -->
     <!-- IMPORTANTE: Ordine di caricamento importante per dipendenze -->
-    <!-- Device Detection Module (09/11/2025) -->
-    <script src="js/tests/device-detector.js"></script>
-    <!-- PWA Test Mode Module (09/11/2025) -->
-    <script src="js/tests/pwa-test-mode.js"></script>
-    <!-- Effects Status Module (09/11/2025) -->
-    <script src="js/tests/effects-status.js"></script>
     <script src="js/tests/gps/helpers.js"></script>
     <script src="js/tests/gps/fake-position.js"></script>
     <script src="js/tests/gps/reset-data.js"></script>
@@ -2450,23 +2429,14 @@
     <script src="js/tests/test-sw.js"></script>
     <script src="js/tests/test-sw-wrappers.js"></script>
     <script src="js/tests/test-all-wrappers.js"></script>
-    <!-- Test UI, Manifest, Performance -->
+    <!-- File test non ancora creati - da implementare:
     <script src="js/tests/test-ui.js"></script>
     <script src="js/tests/test-manifest.js"></script>
     <script src="js/tests/test-performance.js"></script>
-    <!-- Wrapper funzioni UI, Manifest, Performance test - IMPORTANTE: Deve essere caricato PRIMA del DOM per essere disponibile agli onclick -->
-    <script src="js/tests/test-ui-manifest-performance-wrappers.js"></script>
-    <!-- Mega Dropdown Settings (componente condiviso, solo desktop) -->
-    <script src="js/components/mega-dropdown-settings.js"></script>
     <script src="js/utils/connection-monitor.js"></script>
     <script src="js/utils/offline-simulator.js"></script>
     <script src="js/utils/display-detector.js"></script>
-    <!-- UI Helpers (gestisce scroll-to-top) -->
-    <script src="js/utils/ui-helpers.js"></script>
-    <script src="js/components/hamburger-menu.js"></script>
     <script src="script.js"></script>
-    <!-- Error 404 Simulator (solo per test.html) -->
-    <script src="js/tests/error-404-simulator.js"></script>
     <script src="test-config.js"></script>
     <script>
         // ===== FUNZIONI ACCORDION =====
@@ -2501,11 +2471,120 @@
         // in js/tests/test-storage-wrappers.js per essere disponibili agli onclick
 
         // ===== GESTIONE MODALITÀ PWA TEST =====
+        window.togglePWATestMode = function() {
+            const btn = document.getElementById('toggle-pwa-mode');
+            const icon = document.getElementById('pwa-mode-icon');
+            const text = document.getElementById('pwa-mode-text');
+            const statusDiv = document.getElementById('pwa-mode-status');
+            const infoDiv = document.getElementById('pwa-mode-info');
 
-        // ===== MODALITÀ PWA TEST =====
-        // CODICE SPOSTATO IN js/tests/pwa-test-mode.js (09/11/2025)
-        // Le funzioni sono ora disponibili come window.PWATestMode
-        // Il modulo si auto-inizializza al caricamento
+            if (!btn || !icon || !text || !statusDiv || !infoDiv) return;
+
+            // Leggi lo stato corrente
+            // Nota: Storage.getItem può restituire booleano (se salvato come JSON) o stringa
+            const pwaTestModeValue = localStorage.getItem('tpl.pwaTestMode');
+            const isTestMode = pwaTestModeValue === 'true' || pwaTestModeValue === true;
+            const newState = !isTestMode;
+
+            // Salva il nuovo stato come stringa (compatibilità con Storage.getItem che fa JSON.parse)
+            localStorage.setItem('tpl.pwaTestMode', String(newState));
+
+            // Aggiorna l'UI del pulsante
+            if (newState) {
+                icon.textContent = '✅';
+                text.textContent = 'Disattiva Modalità PWA';
+                btn.style.background = '#dc3545';
+
+                infoDiv.innerHTML = `
+                    <div style="margin-bottom: 1rem; padding: 1rem; background: rgba(34, 197, 94, 0.1); border-radius: 8px;">
+                        <strong style="color: #22c55e; font-size: 1.1rem;">✅ Modalità PWA Test: ATTIVA</strong><br>
+                        <p style="margin: 0.5rem 0; color: var(--testo);">La bottom navigation è ora visibile in tutte le pagine dell'app.</p>
+                    </div>
+                    <div style="margin-bottom: 1rem; padding: 1rem; background: var(--bianco); border-radius: 8px; border: 1px solid var(--bordo);">
+                        <strong style="color: var(--turchese);">📱 Cosa puoi fare ora:</strong>
+                        <ul style="margin: 0.5rem 0; padding-left: 1.5rem; line-height: 1.8;">
+                            <li>Visita <a href="index.html" style="color: var(--turchese); font-weight: 600;">Home</a>, 
+                            <a href="fermate.html" style="color: var(--turchese); font-weight: 600;">Fermate</a> o 
+                            <a href="prezzi.html" style="color: var(--turchese); font-weight: 600;">Prezzi</a></li>
+                            <li>La bottom navigation sarà visibile in basso</li>
+                            <li>La navbar superiore sarà nascosta (solo PWA)</li>
+                            <li>Il footer avrà padding extra per non sovrapporsi</li>
+                        </ul>
+                    </div>
+                    <div style="font-size: 0.9rem; color: var(--testo-secondario); font-style: italic;">
+                        <strong>💡 Nota:</strong> Questa è una simulazione a scopo di test. In produzione, la bottom nav appare solo quando l'app è installata come PWA.
+                    </div>
+                `;
+                statusDiv.style.display = 'block';
+                statusDiv.style.borderLeftColor = '#22c55e';
+                statusDiv.style.background = 'rgba(34, 197, 94, 0.05)';
+            } else {
+                icon.textContent = '📱';
+                text.textContent = 'Attiva Modalità PWA';
+                btn.style.background = 'var(--turchese)';
+
+                infoDiv.innerHTML = `
+                    <div style="margin-bottom: 1rem; padding: 1rem; background: rgba(239, 68, 68, 0.1); border-radius: 8px;">
+                        <strong style="color: #ef4444; font-size: 1.1rem;">❌ Modalità PWA Test: DISATTIVA</strong><br>
+                        <p style="margin: 0.5rem 0; color: var(--testo);">La bottom navigation è nascosta (comportamento normale del browser).</p>
+                    </div>
+                    <div style="margin-bottom: 1rem; padding: 1rem; background: var(--bianco); border-radius: 8px; border: 1px solid var(--bordo);">
+                        <strong style="color: var(--turchese);">🌐 Stato Browser Normale:</strong>
+                        <ul style="margin: 0.5rem 0; padding-left: 1.5rem; line-height: 1.8;">
+                            <li>La bottom navigation NON è visibile</li>
+                            <li>La navbar superiore è visibile normalmente</li>
+                            <li>Il layout è quello standard del browser</li>
+                            <li>Per vederla veramente, installa l'app come PWA</li>
+                        </ul>
+                    </div>
+                    <div style="font-size: 0.9rem; color: var(--testo-secondario); font-style: italic;">
+                        <strong>💡 Suggerimento:</strong> Clicca sul pulsante sopra per simulare l'esperienza PWA senza dover installare l'app.
+                    </div>
+                `;
+                statusDiv.style.display = 'block';
+                statusDiv.style.borderLeftColor = '#ef4444';
+                statusDiv.style.background = 'rgba(239, 68, 68, 0.05)';
+            }
+
+            // Trigger refresh della bottom navigation
+            setTimeout(() => {
+                // Dispatch evento custom per aggiornare altre finestre
+                window.dispatchEvent(new Event('pwaTestModeChanged'));
+
+                // Log per debug
+                console.log('🔄 Modalità PWA test aggiornata a:', newState);
+            }, 100);
+        }
+
+        // Inizializza lo stato del pulsante PWA al caricamento
+        window.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('toggle-pwa-mode');
+            if (btn) {
+                // Imposta lo stato iniziale del pulsante
+                // Nota: Storage.getItem può restituire booleano (se salvato come JSON) o stringa
+                const pwaTestModeValue = localStorage.getItem('tpl.pwaTestMode');
+                const isTestMode = pwaTestModeValue === 'true' || pwaTestModeValue === true;
+                const icon = document.getElementById('pwa-mode-icon');
+                const text = document.getElementById('pwa-mode-text');
+                const statusDiv = document.getElementById('pwa-mode-status');
+
+                if (isTestMode) {
+                    icon.textContent = '✅';
+                    text.textContent = 'Disattiva Modalità PWA';
+                    btn.style.background = '#dc3545';
+                    // Mostra lo status se già attivo
+                    togglePWATestMode();
+                    togglePWATestMode(); // Doppio toggle per mostrare lo status
+                } else {
+                    icon.textContent = '📱';
+                    text.textContent = 'Attiva Modalità PWA';
+                    btn.style.background = 'var(--turchese)';
+                }
+
+                // Aggiungi event listener
+                btn.addEventListener('click', togglePWATestMode);
+            }
+        });
 
         // ===== GESTIONE SIMULAZIONE OFFLINE =====
         // Spostato in js/utils/offline-simulator.js
@@ -2671,84 +2750,1980 @@
             }
         }
 
-        // ===== TEST WRAPPER FUNCTIONS =====
-        // CODICE RIMOSSO: Gestito da js/tests/test-ui-manifest-performance-wrappers.js
-        // Le funzioni testUIComponents(), testManifest(), testPerformance() sono disponibili globalmente
-        // I moduli test-ui.js, test-manifest.js, test-performance.js devono essere caricati prima dei wrapper
+        // Test 6: UI Components - spostato in js/tests/test-ui.js
+        async function testUIComponents() {
+            const output = 'output-ui';
+            const outputEl = document.getElementById(output);
+            if (outputEl) {
+                outputEl.innerHTML = '';
+                outputEl.style.display = 'block';
+            }
+
+            try {
+                if (typeof UITests === 'undefined') {
+                    TestUtils.log(output, '✗ UITests non disponibile! Assicurati che test-ui.js sia caricato.', 'error');
+                    return;
+                }
+
+                TestUtils.log(output, '✓ UITests disponibile', 'success');
+
+                const results = await UITests.runAll({
+                    log: (message, type) => TestUtils.log(output, message, type),
+                    updateStatus: (id, status) => TestUtils.updateTestStatus(id, status)
+                });
+
+                if (results) {
+                    TestUtils.log(output, `✅ Test completati: ${results.passed} passati, ${results.failed} falliti`, results.failed > 0 ? 'error' : 'success');
+                }
+            } catch (error) {
+                TestUtils.log(output, `✗ Errore fatale: ${error.message}`, 'error');
+                console.error('Errore test UI components:', error);
+            }
+        }
+
+        // Test 7: Manifest - spostato in js/tests/test-manifest.js
+        async function testManifest() {
+            const output = 'output-manifest';
+            const outputEl = document.getElementById(output);
+            if (outputEl) {
+                outputEl.innerHTML = '';
+                outputEl.style.display = 'block';
+            }
+
+            try {
+                if (typeof ManifestTests === 'undefined') {
+                    TestUtils.log(output, '✗ ManifestTests non disponibile! Assicurati che test-manifest.js sia caricato.', 'error');
+                    return;
+                }
+
+                TestUtils.log(output, '✓ ManifestTests disponibile', 'success');
+
+                const results = await ManifestTests.runAll({
+                    log: (message, type) => TestUtils.log(output, message, type),
+                    updateStatus: (id, status) => TestUtils.updateTestStatus(id, status)
+                });
+
+                if (results) {
+                    TestUtils.log(output, `✅ Test completati: ${results.passed} passati, ${results.failed} falliti`, results.failed > 0 ? 'error' : 'success');
+                }
+            } catch (error) {
+                TestUtils.log(output, `✗ Errore fatale: ${error.message}`, 'error');
+                console.error('Errore test manifest:', error);
+            }
+        }
+
+        // Test 8: Performance - spostato in js/tests/test-performance.js
+        async function testPerformance() {
+            const output = 'output-performance';
+            const outputEl = document.getElementById(output);
+            if (outputEl) {
+                outputEl.innerHTML = '';
+                outputEl.style.display = 'block';
+            }
+
+            try {
+                if (typeof PerformanceTests === 'undefined') {
+                    TestUtils.log(output, '✗ PerformanceTests non disponibile! Assicurati che test-performance.js sia caricato.', 'error');
+                    return;
+                }
+
+                TestUtils.log(output, '✓ PerformanceTests disponibile', 'success');
+
+                const results = await PerformanceTests.runAll({
+                    log: (message, type) => TestUtils.log(output, message, type),
+                    updateStatus: (id, status) => TestUtils.updateTestStatus(id, status)
+                });
+
+                if (results) {
+                    TestUtils.log(output, `✅ Test completati: ${results.passed} passati, ${results.failed} falliti`, results.failed > 0 ? 'error' : 'success');
+                }
+            } catch (error) {
+                TestUtils.log(output, `✗ Errore fatale: ${error.message}`, 'error');
+                console.error('Errore test performance:', error);
+            }
+        }
 
         // Test 9: Geolocalizzazione (Versione Migliorata)
-        // NOTA: Tutte le funzioni GPS sono state spostate nei moduli in js/tests/gps/
-        // I moduli si auto-inizializzano al caricamento
+
+        // Funzione helper: Controlla permessi geolocalizzazione
+        // FUNZIONE SPOSTATA IN js/tests/gps/helpers.js (Fase 1 modularizzazione GPS - 09/11/2025)
+        // La funzione è ora disponibile come window.GPSHelpers.checkGeolocationPermission()
+        /*
+        async function checkGeolocationPermission() {
+            const statusDiv = document.getElementById('geo-permission-status');
+            const statusText = document.getElementById('geo-permission-text');
+
+            if (!statusDiv || !statusText) return;
+
+            try {
+                if (!navigator.permissions) {
+                    statusText.textContent = 'API Permissions non supportata';
+                    statusDiv.style.borderLeftColor = '#gray';
+                    return;
+                }
+
+                const result = await navigator.permissions.query({ name: 'geolocation' });
+
+                if (result.state === 'granted') {
+                    statusText.innerHTML = '<span style="color: var(--verde);">✅ Concesso</span>';
+                    statusDiv.style.borderLeftColor = 'var(--verde)';
+                    statusDiv.style.background = 'rgba(34, 197, 94, 0.1)';
+                } else if (result.state === 'denied') {
+                    statusText.innerHTML = '<span style="color: var(--rosso);">❌ Negato</span>';
+                    statusDiv.style.borderLeftColor = 'var(--rosso)';
+                    statusDiv.style.background = 'rgba(239, 68, 68, 0.1)';
+                } else if (result.state === 'prompt') {
+                    statusText.innerHTML = '<span style="color: #f59e0b;">⚠️ Richiesta in sospeso</span>';
+                    statusDiv.style.borderLeftColor = '#f59e0b';
+                    statusDiv.style.background = 'rgba(245, 158, 11, 0.1)';
+                }
+
+                // Ascolta cambiamenti permessi
+                result.addEventListener('change', () => {
+                    checkGeolocationPermission();
+                });
+
+            } catch (error) {
+                console.error('Errore verifica permessi:', error);
+                statusText.textContent = 'Impossibile verificare';
+                statusDiv.style.borderLeftColor = '#gray';
+            }
+        }
+        */
 
         // ===== WATCH POSITION - MONITORAGGIO CONTINUO =====
         // CODICE SPOSTATO IN js/tests/gps/watch-position.js (Fase 4 modularizzazione GPS - 09/11/2025)
         // Il modulo si auto-inizializza
+        /*
+
+        // Variabili globali per watch position
+        let watchId = null;
+        let watchActive = false;
+        let watchCount = 0;
+        let watchHistory = [];
+        let watchTotalDistance = 0;
+        let watchLastPosition = null;
+
+        // Setup Watch Position
+        (function setupWatchPosition() {
+            const toggleBtn = document.getElementById('toggle-watch-btn');
+            const statusCard = document.getElementById('watch-status-card');
+            const countElement = document.getElementById('watch-count');
+            const lastPositionData = document.getElementById('watch-last-position-data');
+            const distanceElement = document.getElementById('watch-distance');
+            const distanceValue = document.getElementById('watch-distance-value');
+            const historySection = document.getElementById('watch-history');
+            const historyList = document.getElementById('watch-history-list');
+            const clearHistoryBtn = document.getElementById('clear-watch-history-btn');
+
+            if (!toggleBtn) return;
+
+            // Toggle monitoraggio
+            toggleBtn.addEventListener('click', () => {
+                if (!watchActive) {
+                    startWatchPosition();
+                } else {
+                    stopWatchPosition();
+                }
+            });
+
+            // Avvia monitoraggio
+            function startWatchPosition() {
+                if (!navigator.geolocation) {
+                    alert('❌ Geolocalizzazione non supportata dal browser');
+                    return;
+                }
+
+                // Reset contatori
+                watchCount = 0;
+                watchTotalDistance = 0;
+                watchHistory = [];
+                watchLastPosition = null;
+
+                // Avvia watchPosition
+                watchId = navigator.geolocation.watchPosition(
+                    (position) => {
+                        // Successo - nuova posizione ricevuta
+                        watchCount++;
+
+                        // Aggiorna contatore
+                        if (countElement) {
+                            countElement.textContent = watchCount;
+                            countElement.style.animation = 'pulse 0.3s ease';
+                            setTimeout(() => {
+                                countElement.style.animation = '';
+                            }, 300);
+                        }
+
+                        // Calcola distanza se c'è una posizione precedente
+                        if (watchLastPosition) {
+                            const distance = calculateDistance(
+                                watchLastPosition.coords.latitude,
+                                watchLastPosition.coords.longitude,
+                                position.coords.latitude,
+                                position.coords.longitude
+                            );
+
+                            watchTotalDistance += distance * 1000; // converti km in metri
+
+                            if (distanceElement && distanceValue) {
+                                distanceElement.style.display = 'block';
+                                const distanceText = watchTotalDistance >= 1000
+                                    ? (watchTotalDistance / 1000).toFixed(2) + ' km'
+                                    : Math.round(watchTotalDistance) + ' metri';
+                                distanceValue.textContent = watchTotalDistance >= 1000
+                                    ? (watchTotalDistance / 1000).toFixed(2)
+                                    : Math.round(watchTotalDistance);
+                                distanceValue.parentElement.innerHTML = watchTotalDistance >= 1000
+                                    ? '<span id="watch-distance-value">' + (watchTotalDistance / 1000).toFixed(2) + '</span> km'
+                                    : '<span id="watch-distance-value">' + Math.round(watchTotalDistance) + '</span> metri';
+                            }
+                        }
+
+                        // Salva posizione corrente
+                        watchLastPosition = position;
+
+                        // Aggiorna ultima posizione
+                        if (lastPositionData) {
+                            const coords = position.coords;
+                            const timestamp = new Date(position.timestamp).toLocaleTimeString('it-IT');
+                            const speedKmh = coords.speed !== null ? (coords.speed * 3.6).toFixed(1) : 'N/A';
+
+                            lastPositionData.innerHTML = `
+                                <strong style="color: #3b82f6;">${coords.latitude.toFixed(6)}, ${coords.longitude.toFixed(6)}</strong><br>
+                                <span style="font-size: 0.85rem;">
+                                    ⏰ ${timestamp} | 
+                                    🎯 ±${Math.round(coords.accuracy)}m | 
+                                    🚗 ${speedKmh} km/h
+                                </span>
+                            `;
+                        }
+
+                        // Aggiungi a cronologia (max 5)
+                        watchHistory.unshift({
+                            position: position,
+                            timestamp: Date.now()
+                        });
+                        if (watchHistory.length > 5) {
+                            watchHistory.pop();
+                        }
+
+                        // Aggiorna cronologia UI
+                        updateHistoryUI();
+
+                        // Aggiorna mappa se disponibile (codice inline - da rimuovere)
+                        if (map) {
+                            initializeMap(position.coords.latitude, position.coords.longitude, position.coords.accuracy);
+                        }
+                        
+                        // Aggiorna mappa usando il modulo GPSMap (modulo)
+                        if (typeof window.GPSMap !== 'undefined' && window.GPSMap.updatePosition) {
+                            window.GPSMap.updatePosition(position.coords.latitude, position.coords.longitude, position.coords.accuracy);
+                        }
+
+                        console.log('🧭 Watch Position aggiornamento #' + watchCount, {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude,
+                            accuracy: position.coords.accuracy + 'm'
+                        });
+                    },
+                    (error) => {
+                        // Errore
+                        console.error('❌ Watch Position errore:', error);
+                        stopWatchPosition();
+                        alert('❌ Errore monitoraggio GPS:\n' + error.message);
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        maximumAge: 0,
+                        timeout: 10000
+                    }
+                );
+
+                // Aggiorna UI
+                watchActive = true;
+                toggleBtn.innerHTML = '⏸️ Ferma';
+                toggleBtn.style.background = '#ef4444';
+                if (statusCard) statusCard.style.display = 'block';
+                if (historySection) historySection.style.display = 'block';
+
+                console.log('▶️ Watch Position AVVIATO (ID: ' + watchId + ')');
+            }
+
+            // Ferma monitoraggio
+            function stopWatchPosition() {
+                if (watchId !== null) {
+                    navigator.geolocation.clearWatch(watchId);
+                    watchId = null;
+                }
+
+                watchActive = false;
+                toggleBtn.innerHTML = '▶️ Avvia';
+                toggleBtn.style.background = '#3b82f6';
+
+                console.log('⏹️ Watch Position FERMATO');
+            }
+
+            // Aggiorna UI cronologia
+            function updateHistoryUI() {
+                if (!historyList) return;
+
+                historyList.innerHTML = '';
+
+                watchHistory.forEach((item, index) => {
+                    const coords = item.position.coords;
+                    const time = new Date(item.timestamp).toLocaleTimeString('it-IT');
+
+                    const historyItem = document.createElement('div');
+                    historyItem.style.cssText = 'padding: 0.75rem; background: white; border-radius: 8px; border-left: 3px solid #3b82f6; font-size: 0.9rem;';
+                    historyItem.innerHTML = `
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                            <strong style="color: #1e40af;">#${watchCount - index}</strong>
+                            <span style="color: #666; font-size: 0.85rem;">${time}</span>
+                        </div>
+                        <div style="color: #374151; font-size: 0.85rem;">
+                            📍 ${coords.latitude.toFixed(6)}, ${coords.longitude.toFixed(6)}<br>
+                            🎯 Accuratezza: ±${Math.round(coords.accuracy)}m
+                        </div>
+                    `;
+
+                    historyList.appendChild(historyItem);
+                });
+            }
+
+            // Cancella cronologia
+            if (clearHistoryBtn) {
+                clearHistoryBtn.addEventListener('click', () => {
+                    if (confirm('🗑️ Cancellare la cronologia delle posizioni?')) {
+                        watchHistory = [];
+                        updateHistoryUI();
+                        console.log('🗑️ Cronologia cancellata');
+                    }
+                });
+            }
+        })();
+        */
 
         // ===== SIMULAZIONE POSIZIONE FAKE =====
         // CODICE SPOSTATO IN js/tests/gps/fake-position.js (Fase 2 modularizzazione GPS - 09/11/2025)
         // Il modulo si auto-inizializza
+        /*
+
+        // Variabili globali per fake position
+        let useFakePosition = false;
+        let fakePositionData = null;
+
+        // Setup gestione simulazione posizione
+        (function setupFakePosition() {
+            const toggleCheckbox = document.getElementById('use-fake-position');
+            const content = document.getElementById('fake-position-content');
+            const applyBtn = document.getElementById('apply-fake-position');
+            const presetBtns = document.querySelectorAll('.fake-position-preset');
+
+            if (!toggleCheckbox || !content || !applyBtn) return;
+
+            // Toggle on/off simulazione
+            toggleCheckbox.addEventListener('change', (e) => {
+                useFakePosition = e.target.checked;
+                content.style.display = useFakePosition ? 'block' : 'none';
+
+                if (useFakePosition) {
+                    console.log('🎭 Simulazione posizione ATTIVA');
+                } else {
+                    console.log('✅ GPS reale ATTIVO');
+                    fakePositionData = null;
+                    document.getElementById('fake-position-info').style.display = 'none';
+                }
+            });
+
+            // Preset città
+            presetBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const lat = parseFloat(btn.dataset.lat);
+                    const lng = parseFloat(btn.dataset.lng);
+                    const name = btn.dataset.name;
+
+                    // Popola input
+                    document.getElementById('fake-lat').value = lat;
+                    document.getElementById('fake-lng').value = lng;
+
+                    // Visual feedback
+                    presetBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+
+                    console.log(`🏙️ Preset selezionato: ${name}`);
+                });
+            });
+
+            // Applica posizione fake
+            applyBtn.addEventListener('click', () => {
+                const lat = parseFloat(document.getElementById('fake-lat').value);
+                const lng = parseFloat(document.getElementById('fake-lng').value);
+                const accuracy = parseFloat(document.getElementById('fake-accuracy').value) || 10;
+                const altitude = parseFloat(document.getElementById('fake-altitude').value) || 0;
+
+                // Velocità e direzione (opzionali)
+                const speedKmh = parseFloat(document.getElementById('fake-speed').value);
+                const heading = parseFloat(document.getElementById('fake-heading').value);
+
+                // Converti velocità da km/h a m/s (GPS usa m/s)
+                const speedMs = !isNaN(speedKmh) && speedKmh > 0 ? speedKmh / 3.6 : null;
+                const validHeading = !isNaN(heading) && heading >= 0 && heading <= 360 ? heading : null;
+
+                // Validazione coordinate
+                if (!lat || !lng || isNaN(lat) || isNaN(lng)) {
+                    alert('⚠️ Inserisci coordinate valide!');
+                    return;
+                }
+
+                if (lat < -90 || lat > 90 || lng < -180 || lng > 180) {
+                    alert('⚠️ Coordinate fuori range!\nLatitudine: -90 to 90\nLongitudine: -180 to 180');
+                    return;
+                }
+
+                // Crea oggetto fake position (simula Position API)
+                fakePositionData = {
+                    coords: {
+                        latitude: lat,
+                        longitude: lng,
+                        accuracy: accuracy,
+                        altitude: altitude,
+                        altitudeAccuracy: accuracy * 2,
+                        heading: validHeading,
+                        speed: speedMs
+                    },
+                    timestamp: Date.now()
+                };
+
+                // Mostra info posizione fake
+                const infoDiv = document.getElementById('fake-position-info');
+                const detailsDiv = document.getElementById('fake-position-details');
+
+                if (infoDiv && detailsDiv) {
+                    let infoHTML = `
+                        <strong>Coordinate:</strong> ${lat.toFixed(6)}, ${lng.toFixed(6)}<br>
+                        <strong>Accuratezza:</strong> ±${accuracy}m<br>
+                        <strong>Altitudine:</strong> ${altitude}m
+                    `;
+
+                    // Aggiungi velocità/direzione se impostate
+                    if (speedMs !== null) {
+                        infoHTML += `<br><strong>Velocità:</strong> ${speedKmh.toFixed(1)} km/h`;
+                    }
+                    if (validHeading !== null) {
+                        infoHTML += `<br><strong>Direzione:</strong> ${validHeading}°`;
+                    }
+
+                    detailsDiv.innerHTML = infoHTML;
+                    infoDiv.style.display = 'block';
+                }
+
+                // Visual feedback
+                applyBtn.textContent = '✅ Posizione Applicata';
+                setTimeout(() => {
+                    applyBtn.innerHTML = '🎯 Applica Posizione Fake';
+                }, 2000);
+
+                console.log('🎯 Posizione fake applicata:', {
+                    lat: fakePositionData.coords.latitude,
+                    lng: fakePositionData.coords.longitude,
+                    accuracy: fakePositionData.coords.accuracy + 'm',
+                    altitude: fakePositionData.coords.altitude + 'm',
+                    speed: speedMs ? speedKmh.toFixed(1) + ' km/h' : 'null',
+                    heading: validHeading ? validHeading + '°' : 'null'
+                });
+            });
+        })();
+        */
+
+        // Funzione helper: Copia coordinate negli appunti
+        async function copyCoordinates(lat, lng) {
+            try {
+                const coordsText = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+                await navigator.clipboard.writeText(coordsText);
+                return true;
+            } catch (error) {
+                console.error('Errore copia coordinate:', error);
+                return false;
+            }
+        }
+        */
+
+        // Funzione helper: Reverse Geocoding (OpenStreetMap Nominatim API)
+        // FUNZIONE SPOSTATA IN js/tests/gps/helpers.js (Fase 1 modularizzazione GPS - 09/11/2025)
+        // La funzione è ora disponibile come window.GPSHelpers.reverseGeocode()
+        /*
+        async function reverseGeocode(lat, lng) {
+            try {
+                const response = await fetch(
+                    `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`,
+                    {
+                        headers: {
+                            'Accept-Language': 'it'
+                        }
+                    }
+                );
+
+                if (!response.ok) throw new Error('Errore reverse geocoding');
+
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Errore reverse geocoding:', error);
+                return null;
+            }
+        }
+        */
 
         // ===== TEST GEOLOCALIZZAZIONE BASE =====
         // FUNZIONE SPOSTATA IN js/tests/gps/test-geolocation.js (Fase 4 modularizzazione GPS - 09/11/2025)
         // La funzione è ora disponibile come window.GPSTestGeolocation.run() o window.testGeolocation()
-        
-        // NOTA: checkGeolocationPermission() e checkHttpsRequirement() sono ora in js/tests/gps/helpers.js e si auto-inizializzano
-        // Il modulo helpers.js gestisce automaticamente il controllo permessi e HTTPS
+        /*
+        async function testGeolocation() {
+            console.log('📍 testGeolocation() chiamata');
+            
+            const btn = document.getElementById('test-location-btn');
+            const icon = document.getElementById('test-location-icon');
+            const text = document.getElementById('test-location-text');
+            const result = document.getElementById('test-location-result');
+            const info = document.getElementById('test-location-info');
+
+            if (!btn || !icon || !text || !result || !info) {
+                console.error('❌ Elementi DOM mancanti per testGeolocation');
+                return;
+            }
+
+            // Stato di caricamento
+            try {
+                icon.textContent = '⏳';
+                text.textContent = 'Rilevamento...';
+                btn.disabled = true;
+                result.style.display = 'none';
+            } catch (error) {
+                console.error('❌ Errore aggiornamento UI iniziale:', error);
+            }
+
+            try {
+                console.log('📍 testGeolocation: Inizio try block');
+                let position;
+
+                // ===== CONTROLLA SE USARE FAKE POSITION =====
+                // Usa modulo GPSFakePosition se disponibile, altrimenti fallback a variabili inline
+                let useFake = false;
+                let fakePos = null;
+                
+                try {
+                    console.log('📍 testGeolocation: Verifica fake position');
+                    if (typeof window.GPSFakePosition !== 'undefined' && window.GPSFakePosition.isActive) {
+                        useFake = window.GPSFakePosition.isActive();
+                        fakePos = window.GPSFakePosition.get();
+                        console.log('📍 testGeolocation: Fake position dal modulo:', useFake, fakePos ? 'presente' : 'null');
+                    } else {
+                        // Fallback a variabili inline
+                        useFake = typeof useFakePosition !== 'undefined' ? useFakePosition : false;
+                        fakePos = typeof fakePositionData !== 'undefined' ? fakePositionData : null;
+                        console.log('📍 testGeolocation: Fake position da variabili inline:', useFake, fakePos ? 'presente' : 'null');
+                    }
+                } catch (error) {
+                    console.warn('⚠️ Errore accesso GPSFakePosition, uso variabili inline:', error);
+                    useFake = typeof useFakePosition !== 'undefined' ? useFakePosition : false;
+                    fakePos = typeof fakePositionData !== 'undefined' ? fakePositionData : null;
+                }
+
+                if (useFake && fakePos) {
+                    // Usa posizione fake
+                    console.log('🎭 Uso posizione simulata:', fakePos.coords);
+
+                    // Simula delay realistico (500ms)
+                    await new Promise(resolve => setTimeout(resolve, 500));
+
+                    position = fakePos;
+
+                    // Feedback visivo
+                    icon.textContent = '🎭';
+                    text.textContent = 'Posizione Simulata';
+
+                } else if (useFake && !fakePos) {
+                    // Fake attivato ma nessuna posizione impostata
+                    throw new Error('⚠️ Nessuna posizione fake impostata! Clicca "Applica Posizione Fake" prima.');
+
+                } else {
+                    // Usa GPS reale
+                    // Verifica supporto geolocalizzazione
+                    if (!navigator.geolocation) {
+                        throw new Error('Geolocalizzazione non supportata dal browser');
+                    }
+
+                    // Richiedi posizione con timeout
+                    position = await new Promise((resolve, reject) => {
+                        navigator.geolocation.getCurrentPosition(
+                            resolve,
+                            reject,
+                            {
+                                enableHighAccuracy: true,
+                                timeout: 10000,
+                                maximumAge: 0 // Sempre posizione fresca
+                            }
+                        );
+                    });
+
+                    // Successo
+                    icon.textContent = '✅';
+                    text.textContent = 'Posizione Rilevata';
+                }
+
+                // Salva posizione per calcolo distanza (codice inline - da rimuovere)
+                lastKnownPosition = position;
+                
+                // Salva posizione nel modulo GPSDistanceCalculator (modulo)
+                if (typeof window.GPSDistanceCalculator !== 'undefined' && window.GPSDistanceCalculator.setLastPosition) {
+                    window.GPSDistanceCalculator.setLastPosition(position);
+                }
+
+                // Mostra calcolatore distanza
+                const distanceCalculator = document.getElementById('distance-calculator');
+                if (distanceCalculator) {
+                    distanceCalculator.style.display = 'block';
+                }
+
+                // Mostra sezione Watch Position
+                const watchSection = document.getElementById('watch-position-section');
+                if (watchSection) {
+                    watchSection.style.display = 'block';
+                }
+
+                // Mostra informazioni dettagliate
+                const coords = position.coords;
+
+                // Inizializza mappa con la posizione (codice inline - da rimuovere)
+                initializeMap(coords.latitude, coords.longitude, coords.accuracy);
+                
+                // Inizializza mappa usando il modulo GPSMap (modulo)
+                if (typeof window.GPSMap !== 'undefined' && window.GPSMap.initialize) {
+                    window.GPSMap.initialize(coords.latitude, coords.longitude, coords.accuracy);
+                }
+                const timestamp = new Date(position.timestamp).toLocaleString('it-IT');
+
+                // Velocità e direzione (se disponibili)
+                const speedKmh = coords.speed !== null ? (coords.speed * 3.6).toFixed(1) : null;
+                const heading = coords.heading !== null ? coords.heading.toFixed(0) : null;
+
+                // Badge modalità (GPS reale o fake)
+                // Usa modulo GPSFakePosition se disponibile, altrimenti fallback a variabili inline
+                let isFakeMode = false;
+                try {
+                    if (typeof window.GPSFakePosition !== 'undefined' && window.GPSFakePosition.isActive) {
+                        isFakeMode = window.GPSFakePosition.isActive();
+                    } else {
+                        isFakeMode = useFakePosition;
+                    }
+                } catch (error) {
+                    console.warn('⚠️ Errore accesso GPSFakePosition per badge, uso variabili inline:', error);
+                    isFakeMode = useFakePosition;
+                }
+                const modeBadge = isFakeMode
+                    ? '<span style="display: inline-block; padding: 0.25rem 0.75rem; background: linear-gradient(135deg, #a855f7, #9333ea); color: white; border-radius: 6px; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.75rem;">🎭 MODALITÀ SIMULATA</span>'
+                    : '<span style="display: inline-block; padding: 0.25rem 0.75rem; background: linear-gradient(135deg, #10b981, #059669); color: white; border-radius: 6px; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.75rem;">✅ GPS REALE</span>';
+
+                // Costruisci HTML base
+                let html = `
+                    ${modeBadge}
+                    <div style="margin-bottom: 0.5rem;">
+                        <strong>📍 Coordinate:</strong>
+                        <button id="copy-coords-btn" style="margin-left: 0.5rem; padding: 0.25rem 0.75rem; background: var(--turchese); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 500;">
+                            📋 Copia
+                        </button>
+                        <br>
+                        Latitudine: <code>${coords.latitude.toFixed(6)}</code><br>
+                        Longitudine: <code>${coords.longitude.toFixed(6)}</code>
+                    </div>
+                    <div style="margin-bottom: 0.5rem;">
+                        <strong>🎯 Precisione:</strong><br>
+                        Accuratezza: <code>${Math.round(coords.accuracy)} metri</code><br>
+                        Altitudine: <code>${coords.altitude ? Math.round(coords.altitude) + ' metri' : 'Non disponibile'}</code>${coords.altitudeAccuracy ? ' (±' + Math.round(coords.altitudeAccuracy) + 'm)' : ''}
+                    </div>
+                `;
+
+                // Aggiungi velocità e direzione (sempre, anche se null per debug)
+                html += `
+                    <div style="margin-bottom: 0.5rem;">
+                        <strong>🚗 Movimento:</strong><br>
+                        Velocità: <code>${speedKmh !== null ? speedKmh + ' km/h' : '❌ Non disponibile (dispositivo fermo)'}</code><br>
+                        Direzione: <code>${heading !== null ? heading + '° ' + getCardinalDirection(heading) : '❌ Non disponibile (serve movimento)'}</code>
+                    </div>
+                `;
+
+                html += `
+                    <div style="margin-bottom: 0.5rem;">
+                        <strong>⏰ Timestamp:</strong><br>
+                        <code>${timestamp}</code>
+                    </div>
+                    <div id="address-container" style="margin-bottom: 0.5rem;">
+                        <strong>
+                            📬 Indirizzo 
+                            <span style="display: inline-block; margin-left: 0.5rem; padding: 0.2rem 0.4rem; background: linear-gradient(135deg, #fecaca, #fca5a5); color: #7f1d1d; border-radius: 4px; font-size: 0.65rem; font-weight: 600;">🔴 RICHIEDE INTERNET</span>
+                        </strong>
+                        <div id="address-connection-badge" style="display: inline-block; margin-left: 0.5rem; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.7rem; font-weight: 600; transition: all 0.3s;"></div>
+                        <br>
+                        <span style="color: #666;">🔄 Recupero indirizzo...</span>
+                    </div>
+                    <div style="margin-bottom: 0.5rem;">
+                        <strong>🔗 Link Mappe:</strong><br>
+                        <a href="https://www.google.com/maps?q=${coords.latitude},${coords.longitude}" target="_blank" style="color: var(--turchese); text-decoration: none;">
+                            📍 Apri su Google Maps
+                        </a><br>
+                        <a href="https://www.openstreetmap.org/?mlat=${coords.latitude}&mlon=${coords.longitude}&zoom=15" target="_blank" style="color: var(--turchese); text-decoration: none;">
+                            🗺️ Apri su OpenStreetMap
+                        </a>
+                    </div>
+                `;
+
+                info.innerHTML = html;
+                result.style.display = 'block';
+                result.style.borderLeftColor = 'var(--verde)';
+                result.style.background = 'rgba(34, 197, 94, 0.1)';
+
+                // Setup badge dinamico indirizzo
+                const addressBadge = document.getElementById('address-connection-badge');
+                if (addressBadge) {
+                    // Funzione aggiornamento badge
+                    const updateAddressBadge = () => {
+                        // Controlla sia navigator.onLine che simulazione offline
+                        const offlineTest = localStorage.getItem('tpl.offlineTestMode') === 'true';
+                        const isOnline = navigator.onLine && !offlineTest;
+
+                        if (isOnline) {
+                            addressBadge.style.background = 'linear-gradient(135deg, #d1fae5, #a7f3d0)';
+                            addressBadge.style.color = '#065f46';
+                            addressBadge.textContent = '🟢 Online';
+                            addressBadge.title = '✅ Connessione attiva - Reverse geocoding disponibile';
+                        } else {
+                            addressBadge.style.background = 'linear-gradient(135deg, #fecaca, #fca5a5)';
+                            addressBadge.style.color = '#7f1d1d';
+                            addressBadge.textContent = offlineTest ? '🔴 Offline (simulato)' : '🔴 Offline';
+                            addressBadge.title = '🔴 Nessuna connessione - Indirizzo non disponibile';
+                        }
+                    };
+
+                    // Aggiorna stato iniziale
+                    updateAddressBadge();
+
+                    // Listener eventi online/offline (nativi)
+                    window.addEventListener('online', updateAddressBadge);
+                    window.addEventListener('offline', updateAddressBadge);
+
+                    // Listener evento simulazione offline (custom)
+                    window.addEventListener('offlineTestModeChanged', () => {
+                        console.log('📡 Evento offlineTestModeChanged ricevuto - Aggiorno badge indirizzo');
+                        // Piccolo delay per dare tempo a localStorage di aggiornarsi
+                        setTimeout(updateAddressBadge, 50);
+                    });
+                }
+
+                // Aggiungi event listener al pulsante copia
+                const copyBtn = document.getElementById('copy-coords-btn');
+                if (copyBtn) {
+                    copyBtn.addEventListener('click', async () => {
+                        const success = await copyCoordinates(coords.latitude, coords.longitude);
+                        if (success) {
+                            copyBtn.textContent = '✅ Copiato!';
+                            setTimeout(() => {
+                                copyBtn.textContent = '📋 Copia';
+                            }, 2000);
+                        } else {
+                            copyBtn.textContent = '❌ Errore';
+                            setTimeout(() => {
+                                copyBtn.textContent = '📋 Copia';
+                            }, 2000);
+                        }
+                    });
+                }
+
+                // Reverse Geocoding (asincrono)
+                reverseGeocode(coords.latitude, coords.longitude).then(data => {
+                    const addressContainer = document.getElementById('address-container');
+                    if (addressContainer && data) {
+                        const address = data.address;
+                        let addressText = '';
+
+                        if (address.road) {
+                            addressText += address.road;
+                            if (address.house_number) addressText += ' ' + address.house_number;
+                            addressText += '<br>';
+                        }
+                        if (address.postcode || address.city || address.town || address.village) {
+                            if (address.postcode) addressText += address.postcode + ' ';
+                            addressText += address.city || address.town || address.village || '';
+                            addressText += '<br>';
+                        }
+                        if (address.state) addressText += address.state + '<br>';
+                        if (address.country) addressText += address.country;
+
+                        addressContainer.innerHTML = `
+                            <strong>📬 Indirizzo:</strong><br>
+                            <span style="color: var(--grigio-scuro);">${addressText || data.display_name}</span>
+                        `;
+                    } else if (addressContainer) {
+                        // Distingui tra offline e errore API
+                        const isOffline = !navigator.onLine;
+                        const errorMsg = isOffline
+                            ? '🟠 <span style="color: #92400e;">Modalità offline - Indirizzo non disponibile</span>'
+                            : '❌ <span style="color: #999;">Indirizzo non disponibile</span>';
+
+                        addressContainer.innerHTML = `
+                            <strong>📬 Indirizzo:</strong><br>
+                            ${errorMsg}
+                        `;
+                    }
+                }).catch(error => {
+                    // Gestione errori esplicita
+                    console.error('Errore reverse geocoding:', error);
+                    const addressContainer = document.getElementById('address-container');
+                    if (addressContainer) {
+                        const isOffline = !navigator.onLine;
+                        const errorMsg = isOffline
+                            ? '🟠 <span style="color: #92400e;">Modalità offline - Richiede connessione internet</span>'
+                            : '❌ <span style="color: #999;">Errore recupero indirizzo</span>';
+
+                        addressContainer.innerHTML = `
+                            <strong>📬 Indirizzo:</strong><br>
+                            ${errorMsg}
+                        `;
+                    }
+                });
+
+            } catch (error) {
+                // Errore
+                icon.textContent = '❌';
+                text.textContent = 'Errore Rilevamento';
+
+                let errorMessage = 'Errore sconosciuto';
+                if (error.code === 1) {
+                    errorMessage = 'Permesso di geolocalizzazione negato';
+                } else if (error.code === 2) {
+                    errorMessage = 'Posizione non disponibile';
+                } else if (error.code === 3) {
+                    errorMessage = 'Timeout durante il rilevamento';
+                } else {
+                    errorMessage = error.message;
+                }
+
+                info.innerHTML = `
+                    <div style="color: var(--rosso);">
+                        <strong>❌ Errore:</strong><br>
+                        <code>${errorMessage}</code>
+                    </div>
+                    <div style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--grigio-scuro);">
+                        <strong>Suggerimenti:</strong><br>
+                        • Assicurati di aver concesso il permesso di geolocalizzazione<br>
+                        • Verifica che il GPS sia attivo<br>
+                        • Prova in un'area con buona copertura di rete<br>
+                        • Su HTTPS: verifica le impostazioni del browser
+                    </div>
+                `;
+
+                result.style.display = 'block';
+                result.style.borderLeftColor = 'var(--rosso)';
+                result.style.background = 'rgba(239, 68, 68, 0.1)';
+            }
+
+            // Reset dopo 5 secondi
+            setTimeout(() => {
+                icon.textContent = '📍';
+                text.textContent = 'Rileva Posizione';
+                btn.disabled = false;
+            }, 5000);
+        }
+        */
+
+        // Helper: Converti gradi in direzione cardinale
+        // FUNZIONE SPOSTATA IN js/tests/gps/helpers.js (Fase 1 modularizzazione GPS - 09/11/2025)
+        // La funzione è ora disponibile come window.GPSHelpers.getCardinalDirection()
+        /*
+        function getCardinalDirection(degrees) {
+            const directions = ['⬆️ Nord', '↗️ Nord-Est', '➡️ Est', '↘️ Sud-Est', '⬇️ Sud', '↙️ Sud-Ovest', '⬅️ Ovest', '↖️ Nord-Ovest'];
+            const index = Math.round(degrees / 45) % 8;
+            return directions[index];
+        }
+        */
+
+        // Controlla permessi geolocalizzazione al caricamento
+        // NOTA: checkGeolocationPermission() è ora in js/tests/gps/helpers.js e si auto-inizializza
+        // Il modulo helpers.js gestisce automaticamente il controllo permessi
+
+        // Controlla HTTPS e mostra banner warning se necessario
+        (function checkHttpsRequirement() {
+            const banner = document.getElementById('https-warning-banner');
+            if (!banner) return;
+
+            const protocol = window.location.protocol;
+            const hostname = window.location.hostname;
+
+            // Mostra banner solo se NON è HTTPS e NON è localhost
+            const isSecure = protocol === 'https:';
+            const isLocalhost = hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '[::1]';
+
+            if (!isSecure && !isLocalhost) {
+                banner.style.display = 'block';
+                console.warn('⚠️ Geolocalizzazione richiede HTTPS o localhost. Protocollo attuale:', protocol);
+            } else {
+                console.log('✅ Connessione sicura - Geolocalizzazione disponibile');
+            }
+        })();
 
         // ===== CALCOLO DISTANZA =====
         // CODICE SPOSTATO IN js/tests/gps/distance-calculator.js (Fase 3 modularizzazione GPS - 09/11/2025)
         // Le funzioni sono ora disponibili come window.GPSDistanceCalculator
+        /*
+        // Variabile globale per memorizzare ultima posizione rilevata
+        let lastKnownPosition = null;
+
+        // Formula Haversine per calcolare distanza tra due coordinate (km)
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; // Raggio Terra in km
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a =
+                Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            const distance = R * c;
+            return distance;
+        }
+
+        // Calcola tempo stimato basato su distanza
+        function estimateTime(distanceKm) {
+            const walkingSpeed = 5; // km/h a piedi
+            const carSpeed = 50; // km/h in città
+            const busSpeed = 30; // km/h autobus urbano
+
+            const walkMinutes = Math.round((distanceKm / walkingSpeed) * 60);
+            const carMinutes = Math.round((distanceKm / carSpeed) * 60);
+            const busMinutes = Math.round((distanceKm / busSpeed) * 60);
+
+            return { walk: walkMinutes, car: carMinutes, bus: busMinutes };
+        }
+        */
+
+        // Formatta tempo in ore e minuti
+        // FUNZIONE SPOSTATA IN js/tests/gps/distance-calculator.js (Fase 3 modularizzazione GPS - 09/11/2025)
+        /*
+        function formatTime(minutes) {
+            if (minutes < 60) {
+                return `${minutes} min`;
+            } else {
+                const hours = Math.floor(minutes / 60);
+                const mins = minutes % 60;
+                return mins > 0 ? `${hours}h ${mins}min` : `${hours}h`;
+            }
+        }
+
+        // Setup event listeners per calcolo distanza
+        (function setupDistanceCalculator() {
+            const distanceCalculator = document.getElementById('distance-calculator');
+            const calculateBtn = document.getElementById('calculate-distance-btn');
+            const targetLatInput = document.getElementById('target-lat');
+            const targetLngInput = document.getElementById('target-lng');
+            const presetButtons = document.querySelectorAll('.distance-preset-btn');
+            const distanceResult = document.getElementById('distance-result');
+            const distanceInfo = document.getElementById('distance-info');
+
+            if (!distanceCalculator || !calculateBtn) return;
+
+            // Preset città buttons
+            presetButtons.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const lat = parseFloat(this.getAttribute('data-lat'));
+                    const lng = parseFloat(this.getAttribute('data-lng'));
+                    const name = this.getAttribute('data-name');
+
+                    // Popola inputs
+                    targetLatInput.value = lat;
+                    targetLngInput.value = lng;
+
+                    // Calcola automaticamente
+                    calculateDistanceToTarget(lat, lng, name);
+                });
+            });
+
+            // Pulsante calcola con input manuale
+            calculateBtn.addEventListener('click', function () {
+                const lat = parseFloat(targetLatInput.value);
+                const lng = parseFloat(targetLngInput.value);
+
+                if (isNaN(lat) || isNaN(lng)) {
+                    distanceInfo.innerHTML = `
+                        <div style="color: var(--rosso);">
+                            <strong>❌ Errore:</strong><br>
+                            Inserisci coordinate valide (es. 45.6495 per latitudine)
+                        </div>
+                    `;
+                    distanceResult.style.display = 'block';
+                    return;
+                }
+
+                calculateDistanceToTarget(lat, lng, 'Punto Personalizzato');
+            });
+
+            // Funzione per calcolare e mostrare distanza
+            function calculateDistanceToTarget(targetLat, targetLng, targetName) {
+                if (!lastKnownPosition) {
+                    distanceInfo.innerHTML = `
+                        <div style="color: var(--rosso);">
+                            <strong>❌ Errore:</strong><br>
+                            Devi prima rilevare la tua posizione GPS
+                        </div>
+                    `;
+                    distanceResult.style.display = 'block';
+                    return;
+                }
+
+                const myLat = lastKnownPosition.coords.latitude;
+                const myLng = lastKnownPosition.coords.longitude;
+
+                // Calcola distanza
+                const distanceKm = calculateDistance(myLat, myLng, targetLat, targetLng);
+                const distanceM = distanceKm * 1000;
+
+                // Calcola tempi stimati
+                const times = estimateTime(distanceKm);
+
+                // Formato distanza
+                let distanceText = '';
+                if (distanceKm < 1) {
+                    distanceText = `${Math.round(distanceM)} metri`;
+                } else {
+                    distanceText = `${distanceKm.toFixed(2)} km`;
+                }
+
+                // Mostra risultato
+                distanceInfo.innerHTML = `
+                    <div style="margin-bottom: 1rem;">
+                        <strong style="font-size: 1.2rem; color: #f59e0b;">📏 ${distanceText}</strong>
+                        <br>
+                        <span style="color: #666; font-size: 0.9rem;">distanza in linea d'aria da ${targetName}</span>
+                    </div>
+                    
+                    <div style="background: #fef3c7; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                        <strong style="color: #92400e;">🎯 Da:</strong> ${myLat.toFixed(6)}, ${myLng.toFixed(6)}<br>
+                        <strong style="color: #92400e;">🎯 A:</strong> ${targetLat.toFixed(6)}, ${targetLng.toFixed(6)}
+                    </div>
+                    
+                    <div style="margin-bottom: 0.5rem;">
+                        <strong style="color: #374151;">⏱️ Tempo Stimato:</strong>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 0.75rem;">
+                        <div style="background: #e0f2fe; padding: 0.75rem; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.5rem;">🚶</div>
+                            <div style="font-size: 0.85rem; color: #075985; margin-top: 0.25rem;">
+                                <strong>${formatTime(times.walk)}</strong><br>
+                                <span style="font-size: 0.75rem;">a piedi</span>
+                            </div>
+                        </div>
+                        <div style="background: #dbeafe; padding: 0.75rem; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.5rem;">🚌</div>
+                            <div style="font-size: 0.85rem; color: #1e40af; margin-top: 0.25rem;">
+                                <strong>${formatTime(times.bus)}</strong><br>
+                                <span style="font-size: 0.75rem;">in bus</span>
+                            </div>
+                        </div>
+                        <div style="background: #dcfce7; padding: 0.75rem; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.5rem;">🚗</div>
+                            <div style="font-size: 0.85rem; color: #166534; margin-top: 0.25rem;">
+                                <strong>${formatTime(times.car)}</strong><br>
+                                <span style="font-size: 0.75rem;">in auto</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 1rem; padding: 0.75rem; background: #f3f4f6; border-radius: 6px; font-size: 0.85rem; color: #6b7280;">
+                        💡 <strong>Nota:</strong> I tempi sono stime indicative basate su velocità medie. Il tempo reale può variare per traffico, percorso e condizioni stradali.
+                    </div>
+                `;
+
+                distanceResult.style.display = 'block';
+                distanceResult.style.borderLeftColor = '#10b981';
+                distanceResult.style.background = 'rgba(16, 185, 129, 0.1)';
+            }
+        })();
+
+        // ===== BADGE DINAMICO CONNESSIONE MAPPA =====
+        // CODICE SPOSTATO IN js/tests/gps/map-leaflet.js (Fase 3 modularizzazione GPS - 09/11/2025)
+        // Il modulo map-leaflet.js gestisce automaticamente il badge connessione tramite setupConnectionBadge()
+        /*
+        (function setupMapConnectionBadge() {
+            function updateMapConnectionStatus() {
+                const mapBadge = document.getElementById('map-connection-badge');
+                const mapIcon = document.getElementById('map-connection-icon');
+                const mapText = document.getElementById('map-connection-text');
+
+                // Se elementi non esistono ancora, riprova tra poco
+                if (!mapBadge || !mapIcon || !mapText) {
+                    console.log('⏳ Badge mappa non ancora disponibile, riprovo tra 100ms...');
+                    setTimeout(updateMapConnectionStatus, 100);
+                    return;
+                }
+
+                // Controlla sia navigator.onLine che simulazione offline
+                const offlineTest = localStorage.getItem('tpl.offlineTestMode') === 'true';
+                const isOnline = navigator.onLine && !offlineTest;
+
+                console.log('🔄 Aggiornamento badge mappa:', {
+                    navigatorOnLine: navigator.onLine,
+                    offlineTest,
+                    isOnline
+                });
+
+                if (isOnline) {
+                    // Online
+                    mapBadge.style.background = 'linear-gradient(135deg, #d1fae5, #a7f3d0)';
+                    mapBadge.style.color = '#065f46';
+                    mapBadge.title = '✅ Connessione attiva - Mappa disponibile';
+                    mapIcon.textContent = '🟢';
+                    mapText.textContent = 'Online';
+                } else {
+                    // Offline
+                    mapBadge.style.background = 'linear-gradient(135deg, #fecaca, #fca5a5)';
+                    mapBadge.style.color = '#7f1d1d';
+                    mapBadge.title = '🔴 Nessuna connessione - Tile mappa non disponibili (GPS continua a funzionare)';
+                    mapIcon.textContent = '🔴';
+                    mapText.textContent = offlineTest ? 'Offline (simulato)' : 'Offline';
+                }
+            }
+
+            // Aggiorna stato iniziale
+            updateMapConnectionStatus();
+
+            // Listener eventi online/offline (nativi)
+            window.addEventListener('online', updateMapConnectionStatus);
+            window.addEventListener('offline', updateMapConnectionStatus);
+
+            // Listener evento simulazione offline (custom)
+            window.addEventListener('offlineTestModeChanged', () => {
+                console.log('📡 Evento offlineTestModeChanged ricevuto - Aggiorno badge mappa');
+                // Piccolo delay per dare tempo a localStorage di aggiornarsi
+                setTimeout(updateMapConnectionStatus, 50);
+            });
+        })();
+        */
 
         // ===== MAPPA INTERATTIVA LEAFLET =====
         // CODICE SPOSTATO IN js/tests/gps/map-leaflet.js (Fase 3 modularizzazione GPS - 09/11/2025)
         // Le funzioni sono ora disponibili come window.GPSMap
+        /*
+        // Variabili globali per la mappa
+        let map = null;
+        let marker = null;
+        let accuracyCircle = null;
+        let currentMapPosition = null;
+
+        // Inizializza mappa Leaflet
+        function initializeMap(lat, lng, accuracy) {
+            const mapContainer = document.getElementById('map-container');
+            const mapElement = document.getElementById('map');
+
+            if (!mapContainer || !mapElement) return;
+
+            // Mostra container mappa
+            mapContainer.style.display = 'block';
+
+            // Se la mappa non esiste, creala
+            if (!map) {
+                // Crea mappa centrata sulla posizione
+                map = L.map('map').setView([lat, lng], 15);
+
+                // Aggiungi tile layer OpenStreetMap
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+                    maxZoom: 19,
+                    minZoom: 3
+                }).addTo(map);
+
+                // Aggiungi marker posizione
+                marker = L.marker([lat, lng]).addTo(map);
+                marker.bindPopup(`
+                    <div style="text-align: center;">
+                        <strong style="color: #3b82f6;">📍 La tua posizione</strong><br>
+                        <span style="font-size: 0.85rem; color: #666;">
+                            ${lat.toFixed(6)}, ${lng.toFixed(6)}
+                        </span>
+                    </div>
+                `);
+
+                // Aggiungi cerchio accuratezza
+                accuracyCircle = L.circle([lat, lng], {
+                    radius: accuracy,
+                    color: '#3b82f6',
+                    fillColor: '#3b82f6',
+                    fillOpacity: 0.15,
+                    weight: 2
+                }).addTo(map);
+
+                // Zoom automatico per mostrare tutto il cerchio
+                const bounds = accuracyCircle.getBounds();
+                map.fitBounds(bounds, { padding: [50, 50] });
+
+                // Setup pulsante ricentra
+                const recenterBtn = document.getElementById('recenter-map-btn');
+                if (recenterBtn) {
+                    recenterBtn.addEventListener('click', () => {
+                        if (currentMapPosition) {
+                            map.setView([currentMapPosition.lat, currentMapPosition.lng], 15, {
+                                animate: true,
+                                duration: 0.5
+                            });
+                        }
+                    });
+                }
+
+            } else {
+                // Mappa esiste già, aggiorna posizione
+                map.setView([lat, lng], 15, { animate: true });
+
+                // Aggiorna marker
+                if (marker) {
+                    marker.setLatLng([lat, lng]);
+                    marker.setPopupContent(`
+                        <div style="text-align: center;">
+                            <strong style="color: #3b82f6;">📍 La tua posizione</strong><br>
+                            <span style="font-size: 0.85rem; color: #666;">
+                                ${lat.toFixed(6)}, ${lng.toFixed(6)}
+                            </span>
+                        </div>
+                    `);
+                }
+
+                // Aggiorna cerchio accuratezza
+                if (accuracyCircle) {
+                    accuracyCircle.setLatLng([lat, lng]);
+                    accuracyCircle.setRadius(accuracy);
+                }
+
+                // Zoom automatico
+                if (accuracyCircle) {
+                    const bounds = accuracyCircle.getBounds();
+                    map.fitBounds(bounds, { padding: [50, 50] });
+                }
+            }
+
+            // Salva posizione corrente
+            currentMapPosition = { lat, lng };
+
+            // Fix per render issues (forza ridisegno)
+            setTimeout(() => {
+                if (map) {
+                    map.invalidateSize();
+                }
+            }, 100);
+        }
+        */
 
         // RIMOSSO: runAllTests() spostata in js/tests/test-all-wrappers.js
         // La funzione è ancora disponibile globalmente (window.runAllTests)
         // IMPORTANTE: js/tests/test-all-wrappers.js deve essere caricato PRIMA del DOM per essere disponibile agli onclick
 
-        // ===== EFFECTS STATUS =====
-        // CODICE SPOSTATO IN js/tests/effects-status.js (09/11/2025)
-        // Le funzioni sono ora disponibili come window.EffectsStatus
-        // Il modulo si auto-inizializza al caricamento
+        // Funzione per aggiornare lo status degli effetti
+        window.updateEffectsStatus = function() {
+            const effectsGrid = document.getElementById('effects-grid');
+            if (!effectsGrid) return;
+
+            const isDarkMode = document.documentElement.classList.contains('dark');
+            const isMobile = window.innerWidth <= 768;
+            const hasAnimationSupport = 'animation' in document.documentElement.style;
+            const hasBackdropFilter = CSS.supports('backdrop-filter', 'blur(10px)');
+            const hasServiceWorker = 'serviceWorker' in navigator;
+
+            // Rileva gli effetti attivi
+            const effects = [
+                {
+                    id: 'background-animation',
+                    icon: '🌈',
+                    title: 'Animazione Background',
+                    status: !isMobile ? 'active' : 'inactive',
+                    details: isMobile ?
+                        'Disabilitata su mobile per performance' :
+                        'Gradiente animato (20s) per desktop'
+                },
+                {
+                    id: 'glassmorphism',
+                    icon: '🔮',
+                    title: 'Effetto Glassmorphism',
+                    status: 'active',
+                    details: 'Backdrop-filter e trasparenze su tutte le card'
+                },
+                {
+                    id: 'light-refraction',
+                    icon: '✨',
+                    title: 'Rifrazione Luce',
+                    status: !isMobile ? 'active' : 'inactive',
+                    details: isMobile ?
+                        'Disabilitata su mobile per performance' :
+                        'Effetti luce su navbar, card e pulsanti'
+                },
+                {
+                    id: 'smooth-animations',
+                    icon: '🎭',
+                    title: 'Animazioni Fluide',
+                    status: hasAnimationSupport ? 'active' : 'inactive',
+                    details: 'Transizioni cubic-bezier su elementi interattivi'
+                },
+                {
+                    id: 'dark-mode',
+                    icon: isDarkMode ? '🌙' : '☀️',
+                    title: 'Modalità Scura',
+                    status: isDarkMode ? 'active' : 'inactive',
+                    details: isDarkMode ?
+                        'Tema scuro attivo' :
+                        'Tema chiaro attivo'
+                },
+                {
+                    id: 'responsive-design',
+                    icon: '📱',
+                    title: 'Design Responsive',
+                    status: 'active',
+                    details: `Layout ottimizzato per ${isMobile ? 'mobile' : 'desktop'}`
+                },
+                {
+                    id: 'pwa-features',
+                    icon: '⚙️',
+                    title: 'Funzionalità PWA',
+                    status: hasServiceWorker ? 'conditional' : 'inactive',
+                    details: hasServiceWorker ?
+                        'Service Worker supportato' :
+                        'Service Worker non supportato'
+                },
+                {
+                    id: 'accessibility',
+                    icon: '♿',
+                    title: 'Accessibilità',
+                    status: 'active',
+                    details: 'Font size regolabile, hamburger menu, keyboard navigation'
+                }
+            ];
+
+            // Popola la griglia
+            effectsGrid.innerHTML = effects.map(effect => `
+                <div class="effect-card">
+                    <div class="effect-header">
+                        <span class="effect-icon">${effect.icon}</span>
+                        <span class="effect-title">${effect.title}</span>
+                        <span class="effect-status ${effect.status}">
+                            ${effect.status === 'active' ? '✅ Attivo' :
+                    effect.status === 'inactive' ? '❌ Inattivo' :
+                        '⚠️ Condizionale'}
+                        </span>
+                    </div>
+                    <div class="effect-details">
+                        ${effect.details}
+                    </div>
+                </div>
+            `).join('');
+        }
 
         // ===== RILEVAMENTO INFO DEVICE/BROWSER =====
-        // CODICE SPOSTATO IN js/tests/device-detector.js (09/11/2025)
-        // Le funzioni sono ora disponibili come window.DeviceDetector
-        // Il modulo si auto-inizializza al caricamento
+        function detectDeviceInfo() {
+            const ua = navigator.userAgent;
+
+            // === Device Type ===
+            let deviceType = '💻 Desktop';
+            if (/Mobile|Android|iPhone/i.test(ua)) {
+                deviceType = '📱 Mobile';
+            } else if (/Tablet|iPad/i.test(ua)) {
+                deviceType = '📱 Tablet';
+            }
+            document.getElementById('device-type').textContent = deviceType;
+
+            // === OS ===
+            let os = 'Sconosciuto';
+            if (/Windows NT 10/i.test(ua)) os = '🪟 Windows 10/11';
+            else if (/Windows NT 6.3/i.test(ua)) os = '🪟 Windows 8.1';
+            else if (/Windows NT 6.2/i.test(ua)) os = '🪟 Windows 8';
+            else if (/Windows NT 6.1/i.test(ua)) os = '🪟 Windows 7';
+            else if (/Windows/i.test(ua)) os = '🪟 Windows';
+            else if (/Mac OS X 10[._](\d+)/i.test(ua)) {
+                const version = ua.match(/Mac OS X 10[._](\d+)/i)[1];
+                os = `🍎 macOS 10.${version}`;
+            } else if (/Mac/i.test(ua)) os = '🍎 macOS';
+            else if (/Android (\d+)/i.test(ua)) {
+                const version = ua.match(/Android (\d+)/i)[1];
+                os = `🤖 Android ${version}`;
+            } else if (/Android/i.test(ua)) os = '🤖 Android';
+            else if (/iPhone OS (\d+)/i.test(ua)) {
+                const version = ua.match(/iPhone OS (\d+)/i)[1];
+                os = `📱 iOS ${version}`;
+            } else if (/iPad.*OS (\d+)/i.test(ua)) {
+                const version = ua.match(/iPad.*OS (\d+)/i)[1];
+                os = `📱 iPadOS ${version}`;
+            } else if (/Linux/i.test(ua)) os = '🐧 Linux';
+            document.getElementById('device-os').textContent = os;
+
+            // === Browser ===
+            let browser = 'Sconosciuto';
+            if (/Edg\//i.test(ua)) {
+                const version = ua.match(/Edg\/(\d+)/i)[1];
+                browser = `Edge ${version}`;
+            } else if (/Chrome\//i.test(ua) && !/Edg/i.test(ua)) {
+                const version = ua.match(/Chrome\/(\d+)/i)[1];
+                browser = `Chrome ${version}`;
+            } else if (/Firefox\//i.test(ua)) {
+                const version = ua.match(/Firefox\/(\d+)/i)[1];
+                browser = `Firefox ${version}`;
+            } else if (/Safari\//i.test(ua) && !/Chrome/i.test(ua)) {
+                const version = ua.match(/Version\/(\d+)/i);
+                browser = version ? `Safari ${version[1]}` : 'Safari';
+            } else if (/Opera|OPR\//i.test(ua)) {
+                browser = 'Opera';
+            }
+            document.getElementById('device-browser').textContent = browser;
+
+
+            // Funzione per aggiornare colore card batteria
+            function updateBatteryCardColor(level, isCharging, isSupported) {
+                const batteryCard = document.getElementById('device-battery')?.closest('.device-info-card');
+                if (!batteryCard) return;
+
+                if (!isSupported) {
+                    batteryCard.setAttribute('data-color', 'gray');
+                } else if (isCharging) {
+                    batteryCard.setAttribute('data-color', 'green');
+                } else if (level >= 50) {
+                    batteryCard.setAttribute('data-color', 'green');
+                } else if (level >= 20) {
+                    batteryCard.setAttribute('data-color', 'orange');
+                } else {
+                    batteryCard.setAttribute('data-color', 'red');
+                }
+            }
+
+            // === Battery ===
+            if ('getBattery' in navigator) {
+                navigator.getBattery().then(battery => {
+                    const level = Math.round(battery.level * 100);
+                    const charging = battery.charging ? '🔌 In carica' : '🔋';
+                    const batteryEl = document.getElementById('device-battery');
+                    if (batteryEl) {
+                        batteryEl.textContent = `${charging} ${level}%`;
+                        updateBatteryCardColor(level, battery.charging, true);
+                    }
+
+                    // Aggiorna su cambio batteria
+                    battery.addEventListener('levelchange', () => {
+                        const newLevel = Math.round(battery.level * 100);
+                        const newCharging = battery.charging ? '🔌 In carica' : '🔋';
+                        const batteryEl = document.getElementById('device-battery');
+                        if (batteryEl) {
+                            batteryEl.textContent = `${newCharging} ${newLevel}%`;
+                            updateBatteryCardColor(newLevel, battery.charging, true);
+                        }
+                    });
+
+                    battery.addEventListener('chargingchange', () => {
+                        const currentLevel = Math.round(battery.level * 100);
+                        const isCharging = battery.charging ? '🔌 In carica' : '🔋';
+                        const batteryEl = document.getElementById('device-battery');
+                        if (batteryEl) {
+                            batteryEl.textContent = `${isCharging} ${currentLevel}%`;
+                            updateBatteryCardColor(currentLevel, battery.charging, true);
+                        }
+                    });
+                });
+            } else {
+                const batteryEl = document.getElementById('device-battery');
+                if (batteryEl) {
+                    batteryEl.textContent = 'Non supportato';
+                    updateBatteryCardColor(0, false, false);
+                }
+            }
+
+            // === GPS Support ===
+            const hasGPS = 'geolocation' in navigator;
+            const gpsEl = document.getElementById('device-gps');
+            const gpsCard = gpsEl?.closest('.device-info-card');
+
+            if (gpsEl) {
+                gpsEl.textContent = hasGPS ? '✅ Supportato' : '❌ Non supportato';
+                // Cambia colore card: verde se supportato, grigio se non supportato
+                if (gpsCard) {
+                    gpsCard.setAttribute('data-color', hasGPS ? 'green' : 'gray');
+                }
+            }
+
+            // === Dettagli Tecnici ===
+            // Touch Support
+            const touchSupport = ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+            const touchEl = document.getElementById('device-touch');
+            const touchCard = touchEl?.closest('.device-info-card');
+
+            if (touchEl) {
+                touchEl.textContent = touchSupport ? '✅ Sì' : '❌ No';
+                // Cambia colore card: verde se "Sì", grigio se "No"
+                if (touchCard) {
+                    touchCard.setAttribute('data-color', touchSupport ? 'green' : 'gray');
+                }
+            }
+
+            // PWA Mode - funzione per aggiornare stato PWA
+            function updatePWAMode() {
+                const isPWA = window.matchMedia('(display-mode: standalone)').matches ||
+                    window.matchMedia('(display-mode: minimal-ui)').matches ||
+                    window.matchMedia('(display-mode: fullscreen)').matches ||
+                    (window.navigator.standalone === true);
+                const pwaEl = document.getElementById('device-pwa');
+                const pwaCard = pwaEl?.closest('.device-info-card');
+
+                if (pwaEl) {
+                    pwaEl.textContent = isPWA ? '✅ Sì' : '❌ No';
+                    // Cambia colore card: verde se "Sì", grigio se "No"
+                    if (pwaCard) {
+                        pwaCard.setAttribute('data-color', isPWA ? 'green' : 'gray');
+                    }
+                }
+            }
+
+            // Aggiorna inizialmente
+            updatePWAMode();
+
+            // Listener per aggiornare PWA Mode quando cambia display-mode (installazione/disinstallazione)
+            // Pesatura: praticamente zero - solo ascolto passivo di eventi
+            if (window.matchMedia) {
+                const standaloneQuery = window.matchMedia('(display-mode: standalone)');
+                const minimalUIQuery = window.matchMedia('(display-mode: minimal-ui)');
+                const fullscreenQuery = window.matchMedia('(display-mode: fullscreen)');
+
+                // Ascolta cambiamenti (usando addEventListener se supportato, altrimenti addListener per compatibilità)
+                if (standaloneQuery.addEventListener) {
+                    standaloneQuery.addEventListener('change', updatePWAMode);
+                    minimalUIQuery.addEventListener('change', updatePWAMode);
+                    fullscreenQuery.addEventListener('change', updatePWAMode);
+                } else if (standaloneQuery.addListener) {
+                    // Fallback per browser più vecchi
+                    standaloneQuery.addListener(updatePWAMode);
+                    minimalUIQuery.addListener(updatePWAMode);
+                    fullscreenQuery.addListener(updatePWAMode);
+                }
+            }
+
+            // Ascolta anche eventi di installazione PWA (se supportati)
+            window.addEventListener('appinstalled', () => {
+                console.log('📲 PWA installata - aggiorno stato');
+                setTimeout(updatePWAMode, 100); // Piccolo delay per permettere al browser di aggiornare display-mode
+            });
+        }
 
         // ===== TEST RAPIDO GPS ONE-CLICK =====
         // FUNZIONE SPOSTATA IN js/tests/gps/quick-test.js (Fase 4 modularizzazione GPS - 09/11/2025)
         // La funzione è ora disponibile come window.GPSQuickTest.run()
+        /*
+        async function quickGPSTest() {
+            const btn = document.getElementById('quick-gps-test-btn');
+            const icon = document.getElementById('quick-test-icon');
+            const text = document.getElementById('quick-test-text');
+            const resultsDiv = document.getElementById('quick-test-results');
+            const itemsDiv = document.getElementById('quick-test-items');
+            const summaryDiv = document.getElementById('quick-test-summary');
+
+            // Disabilita button e mostra loading
+            btn.disabled = true;
+            btn.style.opacity = '0.7';
+            icon.textContent = '⏳';
+            text.textContent = 'Test in corso...';
+
+            // Mostra risultati (vuoti per ora)
+            resultsDiv.style.display = 'block';
+            itemsDiv.innerHTML = '<p style="text-align: center; color: #9ca3af;">Esecuzione test in corso...</p>';
+            summaryDiv.innerHTML = '';
+
+            const testResults = [];
+
+            // === TEST 1: Permessi ===
+            try {
+                const permission = await navigator.permissions.query({ name: 'geolocation' });
+                const status = permission.state;
+                testResults.push({
+                    name: 'Permessi Geolocalizzazione',
+                    status: status === 'granted' ? 'success' : (status === 'prompt' ? 'warning' : 'error'),
+                    message: status === 'granted' ? 'Permessi concessi' : (status === 'prompt' ? 'Permessi non richiesti' : 'Permessi negati'),
+                    icon: status === 'granted' ? '🟢' : (status === 'prompt' ? '🟡' : '🔴')
+                });
+            } catch (e) {
+                testResults.push({
+                    name: 'Permessi Geolocalizzazione',
+                    status: 'warning',
+                    message: 'Impossibile verificare permessi',
+                    icon: '🟡'
+                });
+            }
+
+            // === TEST 2: Supporto GPS ===
+            const hasGPS = 'geolocation' in navigator;
+            testResults.push({
+                name: 'Supporto GPS Hardware',
+                status: hasGPS ? 'success' : 'error',
+                message: hasGPS ? 'GPS supportato dal browser' : 'GPS non supportato',
+                icon: hasGPS ? '🟢' : '🔴'
+            });
+
+            // === TEST 3: Rilevamento Posizione ===
+            if (hasGPS) {
+                try {
+                    const position = await new Promise((resolve, reject) => {
+                        navigator.geolocation.getCurrentPosition(resolve, reject, {
+                            enableHighAccuracy: true,
+                            timeout: 10000,
+                            maximumAge: 0
+                        });
+                    });
+
+                    const accuracy = position.coords.accuracy;
+                    const hasSpeed = position.coords.speed !== null;
+                    const hasAltitude = position.coords.altitude !== null;
+
+                    // Valutazione accuratezza
+                    let accuracyStatus = 'success';
+                    let accuracyMsg = `Eccellente (±${accuracy.toFixed(0)}m)`;
+                    if (accuracy > 50 && accuracy <= 100) {
+                        accuracyStatus = 'warning';
+                        accuracyMsg = `Buona (±${accuracy.toFixed(0)}m)`;
+                    } else if (accuracy > 100) {
+                        accuracyStatus = 'warning';
+                        accuracyMsg = `Bassa (±${accuracy.toFixed(0)}m)`;
+                    }
+
+                    testResults.push({
+                        name: 'Rilevamento Posizione',
+                        status: 'success',
+                        message: `Posizione rilevata con successo`,
+                        icon: '🟢'
+                    });
+
+                    testResults.push({
+                        name: 'Accuratezza GPS',
+                        status: accuracyStatus,
+                        message: accuracyMsg,
+                        icon: accuracyStatus === 'success' ? '🟢' : '🟡'
+                    });
+
+                    testResults.push({
+                        name: 'Dati Avanzati (Velocità/Altitudine)',
+                        status: (hasSpeed || hasAltitude) ? 'success' : 'warning',
+                        message: hasSpeed && hasAltitude ? 'Velocità e altitudine disponibili' :
+                            hasSpeed ? 'Solo velocità disponibile' :
+                                hasAltitude ? 'Solo altitudine disponibile' :
+                                    'Dati non disponibili (normale su alcuni device)',
+                        icon: (hasSpeed || hasAltitude) ? '🟢' : '🟡'
+                    });
+
+                    // === TEST 4: Reverse Geocoding ===
+                    try {
+                        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.coords.latitude}&lon=${position.coords.longitude}&zoom=18&addressdetails=1`);
+                        if (response.ok) {
+                            const data = await response.json();
+                            testResults.push({
+                                name: 'Reverse Geocoding (API Nominatim)',
+                                status: 'success',
+                                message: `Indirizzo trovato: ${data.display_name || 'N/A'}`.substring(0, 80) + '...',
+                                icon: '🟢'
+                            });
+                        } else {
+                            testResults.push({
+                                name: 'Reverse Geocoding (API Nominatim)',
+                                status: 'warning',
+                                message: 'API non risponde correttamente',
+                                icon: '🟡'
+                            });
+                        }
+                    } catch (e) {
+                        testResults.push({
+                            name: 'Reverse Geocoding (API Nominatim)',
+                            status: 'warning',
+                            message: navigator.onLine ? 'Errore API' : 'Offline - Funzione non disponibile',
+                            icon: '🟡'
+                        });
+                    }
+
+                    // === TEST 5: Libreria Mappa (Leaflet) ===
+                    const hasLeaflet = typeof L !== 'undefined';
+                    testResults.push({
+                        name: 'Libreria Mappa (Leaflet.js)',
+                        status: hasLeaflet ? 'success' : 'error',
+                        message: hasLeaflet ? 'Leaflet caricato correttamente' : 'Leaflet non disponibile',
+                        icon: hasLeaflet ? '🟢' : '🔴'
+                    });
+
+                } catch (error) {
+                    testResults.push({
+                        name: 'Rilevamento Posizione',
+                        status: 'error',
+                        message: error.code === 1 ? 'Permesso negato dall\'utente' :
+                            error.code === 2 ? 'Posizione non disponibile' :
+                                error.code === 3 ? 'Timeout richiesta' :
+                                    'Errore sconosciuto',
+                        icon: '🔴'
+                    });
+                }
+            }
+
+            // === RENDER RISULTATI ===
+            itemsDiv.innerHTML = testResults.map(result => `
+                <div style="display: flex; align-items: start; gap: 0.75rem; padding: 0.75rem; background: ${result.status === 'success' ? '#f0fdf4' :
+                    result.status === 'warning' ? '#fef3c7' :
+                        '#fee2e2'
+                }; border-radius: 8px; border-left: 4px solid ${result.status === 'success' ? '#10b981' :
+                    result.status === 'warning' ? '#f59e0b' :
+                        '#ef4444'
+                };">
+                    <div style="font-size: 1.5rem; flex-shrink: 0;">${result.icon}</div>
+                    <div style="flex: 1;">
+                        <strong style="color: #374151;">${result.name}</strong>
+                        <p style="margin: 0.25rem 0 0 0; color: #6b7280; font-size: 0.9rem;">${result.message}</p>
+                    </div>
+                </div>
+            `).join('');
+
+            // === SUMMARY ===
+            const successCount = testResults.filter(r => r.status === 'success').length;
+            const warningCount = testResults.filter(r => r.status === 'warning').length;
+            const errorCount = testResults.filter(r => r.status === 'error').length;
+            const total = testResults.length;
+
+            let summaryColor, summaryIcon, summaryText;
+            if (errorCount === 0 && warningCount === 0) {
+                summaryColor = '#10b981';
+                summaryIcon = '✅';
+                summaryText = 'Tutti i test superati! GPS completamente funzionante!';
+            } else if (errorCount === 0) {
+                summaryColor = '#f59e0b';
+                summaryIcon = '⚠️';
+                summaryText = `${successCount}/${total} test superati. Alcune funzioni potrebbero avere limitazioni.`;
+            } else {
+                summaryColor = '#ef4444';
+                summaryIcon = '❌';
+                summaryText = `${errorCount} errori critici. Verifica configurazione GPS.`;
+            }
+
+            summaryDiv.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 0.75rem; color: ${summaryColor};">
+                    <span style="font-size: 1.5rem;">${summaryIcon}</span>
+                    <span>${summaryText}</span>
+                </div>
+                <div style="margin-top: 0.5rem; font-size: 0.9rem; color: #6b7280; font-weight: normal;">
+                    🟢 ${successCount} successi · 🟡 ${warningCount} avvisi · 🔴 ${errorCount} errori
+                </div>
+            `;
+
+            // Ripristina button
+            btn.disabled = false;
+            btn.style.opacity = '1';
+            icon.textContent = '🔄';
+            text.textContent = 'Ripeti Test';
+        }
+        */
 
         // ===== EXPORT REPORT GPS =====
         // FUNZIONE SPOSTATA IN js/tests/gps/export-report.js (Fase 4 modularizzazione GPS - 09/11/2025)
         // La funzione è ora disponibile come window.GPSExportReport.export(format)
+        /*
+        async function exportGPSReport(format) {
+            const reportData = {
+                timestamp: new Date().toISOString(),
+                timestampReadable: new Date().toLocaleString('it-IT'),
+                device: {
+                    type: document.getElementById('device-type')?.textContent || 'N/A',
+                    os: document.getElementById('device-os')?.textContent || 'N/A',
+                    browser: document.getElementById('device-browser')?.textContent || 'N/A',
+                    battery: document.getElementById('device-battery')?.textContent || 'N/A',
+                    gpsSupport: document.getElementById('device-gps')?.textContent || 'N/A',
+                    viewport: document.getElementById('device-viewport')?.textContent || 'N/A',
+                    touchSupport: document.getElementById('device-touch')?.textContent || 'N/A',
+                    pwaMode: document.getElementById('device-pwa')?.textContent || 'N/A',
+                    userAgent: navigator.userAgent
+                },
+                gps: {
+                    permissionStatus: document.getElementById('geo-permission-text')?.textContent || 'N/A',
+                    lastPosition: null,
+                    fakePositionActive: localStorage.getItem('tpl.useFakePosition') === 'true',
+                    fakePositionData: localStorage.getItem('tpl.fakePositionData') ?
+                        JSON.parse(localStorage.getItem('tpl.fakePositionData')) : null
+                }
+            };
+
+            // Prova a ottenere posizione corrente
+            if ('geolocation' in navigator) {
+                try {
+                    const position = await new Promise((resolve, reject) => {
+                        navigator.geolocation.getCurrentPosition(resolve, reject, {
+                            enableHighAccuracy: true,
+                            timeout: 5000,
+                            maximumAge: 60000
+                        });
+                    });
+
+                    reportData.gps.lastPosition = {
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude,
+                        accuracy: position.coords.accuracy,
+                        altitude: position.coords.altitude,
+                        altitudeAccuracy: position.coords.altitudeAccuracy,
+                        heading: position.coords.heading,
+                        speed: position.coords.speed,
+                        timestamp: new Date(position.timestamp).toLocaleString('it-IT')
+                    };
+                } catch (e) {
+                    reportData.gps.lastPosition = { error: 'Impossibile rilevare posizione' };
+                }
+            }
+
+            // Genera file
+            let content, filename, mimeType;
+
+            if (format === 'json') {
+                content = JSON.stringify(reportData, null, 2);
+                filename = `gps-report-${Date.now()}.json`;
+                mimeType = 'application/json';
+            } else {
+                // Formato TXT
+                content = `
+========================================
+  📍 REPORT TEST GPS - TPL FVG
+========================================
+
+Data e Ora: ${reportData.timestampReadable}
+
+========================================
+  📱 INFORMAZIONI DEVICE
+========================================
+
+Device Type:        ${reportData.device.type}
+Sistema Operativo:  ${reportData.device.os}
+Browser:            ${reportData.device.browser}
+Batteria:           ${reportData.device.battery}
+Supporto GPS:       ${reportData.device.gpsSupport}
+
+Screen:             ${reportData.device.screen}
+Viewport:           ${reportData.device.viewport}
+Pixel Ratio:        ${reportData.device.pixelRatio}
+Touch Support:      ${reportData.device.touchSupport}
+PWA Mode:           ${reportData.device.pwaMode}
+
+User Agent:
+${reportData.device.userAgent}
+
+========================================
+  🛰️ INFORMAZIONI GPS
+========================================
+
+Permission Status:  ${reportData.gps.permissionStatus}
+Fake Position:      ${reportData.gps.fakePositionActive ? 'Attiva' : 'Inattiva'}
+
+${reportData.gps.lastPosition && !reportData.gps.lastPosition.error ? `
+--- ULTIMA POSIZIONE ---
+Latitudine:         ${reportData.gps.lastPosition.latitude}°
+Longitudine:        ${reportData.gps.lastPosition.longitude}°
+Accuratezza:        ±${reportData.gps.lastPosition.accuracy}m
+Altitudine:         ${reportData.gps.lastPosition.altitude !== null ? reportData.gps.lastPosition.altitude + 'm' : 'N/A'}
+Velocità:           ${reportData.gps.lastPosition.speed !== null ? (reportData.gps.lastPosition.speed * 3.6).toFixed(1) + ' km/h' : 'N/A'}
+Direzione:          ${reportData.gps.lastPosition.heading !== null ? reportData.gps.lastPosition.heading + '°' : 'N/A'}
+Timestamp:          ${reportData.gps.lastPosition.timestamp}
+` : `
+--- ULTIMA POSIZIONE ---
+${reportData.gps.lastPosition?.error || 'Non disponibile'}
+`}
+
+${reportData.gps.fakePositionActive && reportData.gps.fakePositionData ? `
+--- FAKE POSITION DATA ---
+${JSON.stringify(reportData.gps.fakePositionData, null, 2)}
+` : ''}
+
+========================================
+  📊 FINE REPORT
+========================================
+                `.trim();
+                filename = `gps-report-${Date.now()}.txt`;
+                mimeType = 'text/plain';
+            }
+
+            // Download file
+            const blob = new Blob([content], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            // Feedback visivo
+            const btn = format === 'json' ? document.getElementById('export-json-btn') : document.getElementById('export-txt-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '✅ Scaricato!';
+            btn.disabled = true;
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }, 2000);
+        }
+        */
 
         // ===== RESET DATI GPS =====
         // FUNZIONI SPOSTATE IN js/tests/gps/reset-data.js (Fase 2 modularizzazione GPS - 09/11/2025)
         // Le funzioni sono disponibili come window.GPSResetData e si auto-inizializzano
+        /*
+        function showResetModal() {
+            const modal = document.getElementById('reset-modal-overlay');
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden'; // Previeni scroll durante modal
+        }
+
+        function hideResetModal() {
+            const modal = document.getElementById('reset-modal-overlay');
+            modal.style.display = 'none';
+            document.body.style.overflow = ''; // Ripristina scroll
+        }
+
+        function confirmResetGPS() {
+            // Nascondi modal
+            hideResetModal();
+
+            const btn = document.getElementById('reset-gps-btn');
+            const originalText = btn.innerHTML;
+
+            // Mostra loading
+            btn.innerHTML = '⏳ Reset...';
+            btn.disabled = true;
+
+            // Lista chiavi da cancellare
+            const gpsKeys = [
+                'tpl.useFakePosition',
+                'tpl.fakePositionData',
+                'tpl.offlineTestMode'
+            ];
+
+            // Cancella localStorage
+            gpsKeys.forEach(key => {
+                localStorage.removeItem(key);
+            });
+
+            // Feedback successo
+            btn.innerHTML = '✅ Reset Completato!';
+            btn.style.background = '#10b981';
+
+            // Ricarica pagina dopo 1.5 secondi
+            setTimeout(() => {
+                location.reload();
+            }, 1500);
+        }
+        */
 
         // ===== LISTENER DOM CONTENT LOADED =====
         window.addEventListener('DOMContentLoaded', () => {
-            // Inizializza info device (se non già inizializzato dal modulo)
-            if (typeof window.DeviceDetector !== 'undefined' && window.DeviceDetector.detect) {
-                // Il modulo si auto-inizializza, ma chiamiamo comunque per sicurezza
-                window.DeviceDetector.detect();
-            } else if (typeof detectDeviceInfo === 'function') {
-                // Fallback a funzione globale per retrocompatibilità
-                detectDeviceInfo();
-            }
+            // Inizializza info device
+            detectDeviceInfo();
 
-            // Inizializza statistiche
+            // Inizializza statistiche e effetti
             TestUtils.updateStats();
-            // Effects Status si auto-inizializza dal modulo
-            if (typeof window.EffectsStatus !== 'undefined' && window.EffectsStatus.update) {
-                window.EffectsStatus.update();
-            } else if (typeof updateEffectsStatus === 'function') {
-                // Fallback a funzione globale per retrocompatibilità
-                updateEffectsStatus();
-            }
+            updateEffectsStatus();
 
             // Event listener per test geolocalizzazione
             // Usa event delegation su document.body per evitare problemi con clonazione pulsanti
@@ -2824,19 +4799,210 @@
             const footerYear = document.getElementById('footer-year');
             if (footerYear) footerYear.textContent = new Date().getFullYear();
 
-            // Effects Status gestisce automaticamente i listener per dark mode e resize
-            // I listener sono configurati nel modulo effects-status.js
+            // Aggiorna effetti quando cambia la modalità
+            const darkModeToggle = document.getElementById('darkmode-toggle');
+            if (darkModeToggle) {
+                darkModeToggle.addEventListener('click', () => {
+                    setTimeout(updateEffectsStatus, 100); // Aspetta che il cambio modalità sia completato
+                });
+            }
         });
 
-        // ===== SCROLL TO TOP =====
-        // CODICE RIMOSSO: Gestito da js/utils/ui-helpers.js (comune a tutte le pagine)
-        // Le funzioni scrollToTop() e toggleScrollToTopButton() sono disponibili globalmente
-        // Il modulo si auto-inizializza e gestisce automaticamente il pulsante scroll-to-top
+        // Aggiorna effetti quando cambia la dimensione schermo
+        window.addEventListener('resize', () => {
+            setTimeout(updateEffectsStatus, 100);
+        });
+
+        // Funzione scroll to top
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Mostra/nascondi pulsante scroll to top
+        function toggleScrollToTopButton() {
+            const scrollButton = document.querySelector('.scroll-to-top');
+            if (scrollButton) {
+                if (window.pageYOffset > 300) {
+                    scrollButton.classList.add('visible');
+                } else {
+                    scrollButton.classList.remove('visible');
+                }
+            }
+        }
+
+        // Event listener per lo scroll
+        window.addEventListener('scroll', toggleScrollToTopButton);
+        
+        // Verifica iniziale al caricamento
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', toggleScrollToTopButton);
+        } else {
+            toggleScrollToTopButton();
+        }
 
         // ===== MEGA DROPDOWN IMPOSTAZIONI (OPZIONE C) =====
-        // CODICE SPOSTATO IN js/components/mega-dropdown-settings.js (09/11/2025)
-        // Il modulo si auto-inizializza e gestisce automaticamente il mega dropdown
-        // NOTA: Questo componente è disponibile in tutte le pagine (solo desktop)
+        (function () {
+            const dropdownBtn = document.getElementById('test-settings-dropdown-btn');
+            const dropdown = document.getElementById('test-settings-dropdown');
+
+            if (!dropdownBtn || !dropdown) return;
+
+            // Toggle dropdown
+            dropdownBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isActive = dropdown.classList.contains('show');
+
+                if (isActive) {
+                    closeDropdown();
+                } else {
+                    openDropdown();
+                }
+            });
+
+            function openDropdown() {
+                dropdown.classList.add('show');
+                dropdownBtn.classList.add('active');
+            }
+
+            function closeDropdown() {
+                dropdown.classList.remove('show');
+                dropdownBtn.classList.remove('active');
+            }
+
+            // Chiudi dropdown quando si clicca fuori
+            document.addEventListener('click', (e) => {
+                if (!dropdown.contains(e.target) && !dropdownBtn.contains(e.target)) {
+                    closeDropdown();
+                }
+            });
+
+            // Gestione tema
+            const themeRadios = document.querySelectorAll('input[name="test-theme"]');
+            themeRadios.forEach(radio => {
+                radio.addEventListener('change', () => {
+                    const themeToggle = document.getElementById('darkmode-toggle');
+                    if (themeToggle) {
+                        if (radio.value === 'dark') {
+                            document.body.classList.add('dark');
+                        } else if (radio.value === 'light') {
+                            document.body.classList.remove('dark');
+                        } else {
+                            // Sistema - segue preferenze dispositivo
+                            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                                document.body.classList.add('dark');
+                            } else {
+                                document.body.classList.remove('dark');
+                            }
+                        }
+                    }
+                });
+            });
+
+            // Gestione animazione sfondo
+            const animationToggle = document.getElementById('test-animation-toggle');
+            if (animationToggle) {
+                animationToggle.addEventListener('change', () => {
+                    const realToggle = document.getElementById('animationToggle');
+                    if (realToggle) {
+                        realToggle.click();
+                    }
+                });
+            }
+
+            // Gestione alto contrasto
+            const highContrastToggle = document.getElementById('test-high-contrast');
+            if (highContrastToggle) {
+                highContrastToggle.addEventListener('change', () => {
+                    document.body.classList.toggle('high-contrast', highContrastToggle.checked);
+                });
+            }
+
+            // Gestione font size
+            const fontButtons = dropdown.querySelectorAll('.dropdown-font-btn');
+            fontButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const size = btn.dataset.size;
+
+                    // Rimuovi active da tutti
+                    fontButtons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+
+                    // Applica la dimensione
+                    const realBtns = document.querySelectorAll('.font-size-btn');
+                    realBtns.forEach(realBtn => {
+                        if (realBtn.dataset.size === size) {
+                            realBtn.click();
+                        }
+                    });
+                });
+            });
+
+            // Gestione azioni rapide
+            const openSettingsModalBtn = document.getElementById('test-open-settings-modal');
+            if (openSettingsModalBtn) {
+                openSettingsModalBtn.addEventListener('click', async () => {
+                    closeDropdown();
+                    // Usa la funzione pubblica SettingsModal che gestisce il caricamento dinamico
+                    if (typeof window.SettingsModal !== 'undefined' && window.SettingsModal.open && typeof window.Settings !== 'undefined') {
+                        try {
+                            // Assicurati che il modal sia inizializzato prima di aprirlo
+                            const modal = document.getElementById('settings-modal');
+                            if (modal && !modal.dataset.initialized) {
+                                console.log('🔧 Inizializzazione SettingsModal dal dropdown...');
+                                await window.SettingsModal.initialize({
+                                    setThemeMode: window.Settings.setThemeMode || null,
+                                    toggleAnimation: window.Settings.toggleAnimation || null,
+                                    setHighContrast: window.Settings.setHighContrast || null,
+                                    setTouchFriendly: window.Settings.setTouchFriendly || null,
+                                    setHapticFeedback: window.Settings.setHapticFeedback || null,
+                                    setReduceMotion: window.Settings.setReduceMotion || null,
+                                    setKeepScreenOn: window.Settings.setKeepScreenOn || null,
+                                    setExtraSpacing: window.Settings.setExtraSpacing || null,
+                                    setCompactLayout: window.Settings.setCompactLayout || null,
+                                    setBlueLightFilter: window.Settings.setBlueLightFilter || null,
+                                    setInterfaceScale: window.Settings.setInterfaceScale || null,
+                                    setFontSize: window.Settings.setFontSize || null,
+                                    triggerHaptic: window.Settings.triggerHaptic || null,
+                                    onCloseMobileMenu: () => {}
+                                });
+                            }
+                            
+                            // Apri il modal usando la funzione pubblica
+                            await window.SettingsModal.open();
+                        } catch (error) {
+                            console.error('❌ Errore nell\'apertura del modal:', error);
+                        }
+                    } else {
+                        console.warn('⚠️ SettingsModal o Settings non disponibili!');
+                    }
+                });
+            }
+
+            const checkUpdatesBtn = document.getElementById('test-check-updates');
+            if (checkUpdatesBtn) {
+                checkUpdatesBtn.addEventListener('click', () => {
+                    const cacheResetBtn = document.getElementById('cache-reset');
+                    if (cacheResetBtn) {
+                        cacheResetBtn.click();
+                    }
+                    closeDropdown();
+                });
+            }
+
+            const clearCacheBtn = document.getElementById('test-clear-cache');
+            if (clearCacheBtn) {
+                clearCacheBtn.addEventListener('click', () => {
+                    const cacheResetBtn = document.getElementById('cache-reset');
+                    if (cacheResetBtn) {
+                        cacheResetBtn.click();
+                    }
+                    closeDropdown();
+                });
+            }
+        })();
     </script>
 
     <script>
@@ -2850,19 +5016,345 @@
     <script src="js/utils/display-detector.js"></script>
 
     <!-- Script Monitoraggio Connessione - Spostato in js/utils/connection-monitor.js -->
-    <!-- NOTA: connection-monitor.js è già caricato sopra, non duplicare -->
+    <script src="js/utils/connection-monitor.js"></script>
 
     <script>
-        // ===== INIZIALIZZAZIONE SETTINGS MODAL E CACHE MODAL =====
-        // CODICE RIMOSSO: Gestito da script.js e modals.js (comune a tutte le pagine)
-        // - Settings Modal: inizializzato da script.js (initializeModalsModules) e modals.js (setupDirectEventListener)
-        // - Cache Modal: gestito da script.js (righe 395-437) con Updates da updates.js
-        // Questi moduli sono già caricati in test.html e gestiscono automaticamente i modali
+        // ===== INIZIALIZZAZIONE SETTINGS MODAL =====
+        // Inizializza SettingsModal all'avvio per gestire correttamente il pulsante mobile
+        async function initSettingsModal() {
+            // Funzione per chiudere il menu mobile
+            function closeMobileMenu() {
+                const mobileMenu = document.getElementById('mobile-menu');
+                const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+                const hamburgerToggle = document.getElementById('hamburger-toggle');
+                
+                if (mobileMenu) mobileMenu.classList.remove('active');
+                if (mobileMenuOverlay) mobileMenuOverlay.classList.remove('active');
+                if (hamburgerToggle) hamburgerToggle.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            // Nota: Le funzioni loadSettingsModalHTML() e initializeModalDirectly() sono state rimosse
+            // perché ora usiamo sempre SettingsModal.loadHTML() e SettingsModal.initialize() da modals.js
+
+            // Funzione per aprire il modal (usa sempre SettingsModal se disponibile)
+            async function openSettingsDirect() {
+                console.log('🔘 Click su pulsante Impostazioni');
+                closeMobileMenu();
+                
+                // Assicurati che SettingsModal e Settings siano disponibili
+                if (typeof window.SettingsModal === 'undefined' || typeof window.Settings === 'undefined') {
+                    console.warn('⚠️ SettingsModal o Settings non ancora disponibili, attendo...', {
+                        SettingsModal: typeof window.SettingsModal,
+                        Settings: typeof window.Settings
+                    });
+                    // Attendi fino a 3 secondi (30 tentativi x 100ms)
+                    let attempts = 0;
+                    const maxAttempts = 30;
+                    while ((typeof window.SettingsModal === 'undefined' || typeof window.Settings === 'undefined') && attempts < maxAttempts) {
+                        await new Promise(resolve => setTimeout(resolve, 100));
+                        attempts++;
+                        if (attempts % 5 === 0) {
+                            console.log(`⏳ Attesa... tentativo ${attempts}/${maxAttempts}`, {
+                                SettingsModal: typeof window.SettingsModal,
+                                Settings: typeof window.Settings
+                            });
+                        }
+                    }
+                    
+                    if (typeof window.SettingsModal === 'undefined' || typeof window.Settings === 'undefined') {
+                        console.error('❌ SettingsModal o Settings non disponibili dopo attesa', {
+                            SettingsModal: typeof window.SettingsModal,
+                            Settings: typeof window.Settings
+                        });
+                        return;
+                    }
+                    console.log('✅ SettingsModal e Settings ora disponibili dopo attesa');
+                }
+                
+                // Assicurati che il modal sia inizializzato
+                const modal = document.getElementById('settings-modal');
+                if (modal && !modal.dataset.initialized) {
+                    console.log('🔧 Modal non inizializzato, inizializzo ora...');
+                    try {
+                        await window.SettingsModal.initialize({
+                            setThemeMode: window.Settings.setThemeMode || null,
+                            toggleAnimation: window.Settings.toggleAnimation || null,
+                            setHighContrast: window.Settings.setHighContrast || null,
+                            setTouchFriendly: window.Settings.setTouchFriendly || null,
+                            setHapticFeedback: window.Settings.setHapticFeedback || null,
+                            setReduceMotion: window.Settings.setReduceMotion || null,
+                            setKeepScreenOn: window.Settings.setKeepScreenOn || null,
+                            setExtraSpacing: window.Settings.setExtraSpacing || null,
+                            setCompactLayout: window.Settings.setCompactLayout || null,
+                            setBlueLightFilter: window.Settings.setBlueLightFilter || null,
+                            setInterfaceScale: window.Settings.setInterfaceScale || null,
+                            setFontSize: window.Settings.setFontSize || null,
+                            triggerHaptic: window.Settings.triggerHaptic || null,
+                            onCloseMobileMenu: closeMobileMenu
+                        });
+                        console.log('✅ Modal inizializzato');
+                    } catch (error) {
+                        console.error('❌ Errore nell\'inizializzazione:', error);
+                    }
+                }
+                
+                // Apri il modal usando SettingsModal
+                try {
+                    await window.SettingsModal.open();
+                } catch (error) {
+                    console.error('❌ Errore nell\'apertura del modal:', error);
+                }
+            }
+
+            // Aggiungi listener diretto al pulsante come fallback
+            const openSettingsBtn = document.getElementById('open-settings');
+            if (openSettingsBtn && !openSettingsBtn.dataset.listenerAdded) {
+                console.log('✅ Aggiungo listener diretto al pulsante open-settings');
+                openSettingsBtn.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    await openSettingsDirect();
+                });
+                openSettingsBtn.dataset.listenerAdded = 'true';
+            }
+
+            // Prova ad inizializzare SettingsModal (massimo 10 tentativi per evitare loop infinito)
+            let retryCount = 0;
+            const maxRetries = 10;
+            
+            function tryInitSettingsModal() {
+                if (retryCount >= maxRetries) {
+                    console.warn('⚠️ SettingsModal non disponibile dopo', maxRetries, 'tentativi. Il listener diretto funzionerà comunque.');
+                    return;
+                }
+                
+                if (typeof window.SettingsModal !== 'undefined' && typeof window.Settings !== 'undefined') {
+                    try {
+                        console.log('🔧 Inizializzazione SettingsModal per test.html...');
+                        window.SettingsModal.initialize({
+                            setThemeMode: window.Settings.setThemeMode || null,
+                            toggleAnimation: window.Settings.toggleAnimation || null,
+                            setHighContrast: window.Settings.setHighContrast || null,
+                            setTouchFriendly: window.Settings.setTouchFriendly || null,
+                            setHapticFeedback: window.Settings.setHapticFeedback || null,
+                            setReduceMotion: window.Settings.setReduceMotion || null,
+                            setKeepScreenOn: window.Settings.setKeepScreenOn || null,
+                            setExtraSpacing: window.Settings.setExtraSpacing || null,
+                            setCompactLayout: window.Settings.setCompactLayout || null,
+                            setBlueLightFilter: window.Settings.setBlueLightFilter || null,
+                            setInterfaceScale: window.Settings.setInterfaceScale || null,
+                            setFontSize: window.Settings.setFontSize || null,
+                            triggerHaptic: window.Settings.triggerHaptic || null,
+                            onCloseMobileMenu: closeMobileMenu
+                        }).then(() => {
+                            console.log('✅ SettingsModal inizializzato correttamente');
+                        }).catch((error) => {
+                            console.error('❌ Errore nell\'inizializzazione SettingsModal:', error);
+                        });
+                    } catch (error) {
+                        console.error('❌ Errore nell\'inizializzazione SettingsModal:', error);
+                    }
+                } else {
+                    retryCount++;
+                    if (retryCount < maxRetries) {
+                        setTimeout(tryInitSettingsModal, 200);
+                    }
+                }
+            }
+            
+            tryInitSettingsModal();
+        }
+
+        // ===== INIZIALIZZAZIONE MODALE AGGIORNAMENTI =====
+        function initCacheModal() {
+            const cacheCancelBtn = document.getElementById('cache-cancel');
+            const cacheConfirmBtn = document.getElementById('cache-confirm');
+            const cacheModal = document.getElementById('cache-modal');
+
+            if (!cacheModal) {
+                console.warn('⚠️ Modal cache-modal non trovato');
+                return false;
+            }
+
+            // Listener per pulsante Annulla
+            if (cacheCancelBtn && !cacheCancelBtn.dataset.listenerAdded) {
+                cacheCancelBtn.addEventListener('click', () => {
+                    if (typeof window.Updates !== 'undefined' && typeof window.Updates.cancelResetCache === 'function') {
+                        window.Updates.cancelResetCache();
+                    } else {
+                        // Fallback diretto
+                        cacheModal.style.display = 'none';
+                    }
+                });
+                cacheCancelBtn.dataset.listenerAdded = 'true';
+                console.log('✅ Listener aggiunto a cache-cancel');
+            }
+
+            // Listener per pulsante Conferma
+            if (cacheConfirmBtn && !cacheConfirmBtn.dataset.listenerAdded) {
+                cacheConfirmBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const buttonText = cacheConfirmBtn.textContent.trim();
+                    console.log('🔘 Pulsante cache-confirm cliccato:', buttonText);
+                    
+                    // Sia "Aggiorna Ora" che "Riavvia App" fanno reset completo della cache
+                    if (typeof window.Updates !== 'undefined' && typeof window.Updates.confirmResetCache === 'function') {
+                        console.log('✅ Chiamata a Updates.confirmResetCache()');
+                        try {
+                            window.Updates.confirmResetCache();
+                        } catch (error) {
+                            console.error('❌ Errore in confirmResetCache:', error);
+                            // Fallback: riavvia direttamente
+                            window.location.reload();
+                        }
+                    } else {
+                        console.error('❌ Updates.confirmResetCache non disponibile, uso fallback');
+                        // Fallback: riavvia direttamente
+                        window.location.reload();
+                    }
+                });
+                cacheConfirmBtn.dataset.listenerAdded = 'true';
+                console.log('✅ Listener aggiunto a cache-confirm');
+            }
+
+            // Chiudi modal cliccando fuori
+            if (!cacheModal.dataset.overlayListenerAdded) {
+                cacheModal.addEventListener('click', (e) => {
+                    if (e.target === cacheModal) {
+                        if (typeof window.Updates !== 'undefined' && typeof window.Updates.cancelResetCache === 'function') {
+                            window.Updates.cancelResetCache();
+                        } else {
+                            cacheModal.style.display = 'none';
+                        }
+                    }
+                });
+                cacheModal.dataset.overlayListenerAdded = 'true';
+                console.log('✅ Listener overlay aggiunto a cache-modal');
+            }
+
+            // Chiudi modal con ESC
+            const escHandler = (e) => {
+                if (e.key === 'Escape' && cacheModal && cacheModal.style.display === 'block') {
+                    if (typeof window.Updates !== 'undefined' && typeof window.Updates.cancelResetCache === 'function') {
+                        window.Updates.cancelResetCache();
+                    } else {
+                        cacheModal.style.display = 'none';
+                    }
+                }
+            };
+            document.addEventListener('keydown', escHandler);
+
+            console.log('✅ Modale aggiornamenti inizializzato');
+            return true;
+        }
 
         // ===== INIZIALIZZAZIONE HAMBURGER MENU =====
-        // CODICE RIMOSSO: Gestito da script.js (comune a tutte le pagine)
-        // L'hamburger menu è gestito automaticamente da script.js (righe 1100-1181)
-        // script.js è già caricato in test.html e gestisce l'inizializzazione del menu mobile
+        // Assicura che il hamburger menu funzioni anche se script.js viene caricato prima del DOM
+        function initHamburgerMenu() {
+            const hamburgerToggle = document.getElementById('hamburger-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+            const mobileMenuClose = document.getElementById('mobile-menu-close');
+
+            if (!hamburgerToggle || !mobileMenu || !mobileMenuOverlay) {
+                return false;
+            }
+
+            // Funzioni per aprire/chiudere menu
+            function openMenu() {
+                hamburgerToggle.classList.add('active');
+                mobileMenu.classList.add('active');
+                mobileMenuOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeMenu() {
+                hamburgerToggle.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                mobileMenuOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            // Verifica se gli event listener sono già stati aggiunti (da script.js)
+            // Se il pulsante ha già un listener, non aggiungerne altri per evitare duplicati
+            let hasListener = false;
+            const testEvent = new Event('test');
+            try {
+                hamburgerToggle.dispatchEvent(testEvent);
+                // Se non ci sono errori, potrebbe avere listener, ma non possiamo verificarlo facilmente
+                // Quindi aggiungiamo sempre i listener con { once: false } e gestiamo i duplicati
+            } catch (e) {
+                // Ignora
+            }
+
+            // Aggiungi listener solo se non sono già presenti
+            // Usa una flag per evitare listener multipli
+            if (!hamburgerToggle.dataset.listenerAdded) {
+                hamburgerToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const menu = document.getElementById('mobile-menu');
+                    if (menu && menu.classList.contains('active')) {
+                        closeMenu();
+                    } else {
+                        openMenu();
+                    }
+                }, { once: false });
+                hamburgerToggle.dataset.listenerAdded = 'true';
+            }
+
+            // Click su X per chiudere
+            if (mobileMenuClose && !mobileMenuClose.dataset.listenerAdded) {
+                mobileMenuClose.addEventListener('click', closeMenu, { once: false });
+                mobileMenuClose.dataset.listenerAdded = 'true';
+            }
+
+            // Click su overlay per chiudere
+            if (!mobileMenuOverlay.dataset.listenerAdded) {
+                mobileMenuOverlay.addEventListener('click', closeMenu, { once: false });
+                mobileMenuOverlay.dataset.listenerAdded = 'true';
+            }
+
+            // Chiudi menu quando si clicca su un link (escludi il pulsante Impostazioni che ha comportamento speciale)
+            const mobileNavLinks = document.querySelectorAll('.mobile-nav-link:not(#open-settings)');
+            mobileNavLinks.forEach(link => {
+                if (!link.dataset.listenerAdded) {
+                    link.addEventListener('click', closeMenu, { once: false });
+                    link.dataset.listenerAdded = 'true';
+                }
+            });
+
+            return true;
+        }
+
+        // Prova ad inizializzare immediatamente se il DOM è già pronto
+        function initAll() {
+            if (initHamburgerMenu()) {
+                console.log('✅ Hamburger menu inizializzato');
+            }
+            
+            // Inizializza modale aggiornamenti
+            if (initCacheModal()) {
+                console.log('✅ Modale aggiornamenti inizializzato');
+            }
+            
+            // Inizializza SettingsModal (gestisce automaticamente il pulsante mobile)
+            // Aspetta che modals.js sia caricato
+            setTimeout(() => {
+                initSettingsModal();
+            }, 200);
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                // Delay più lungo per assicurarsi che modals.js sia caricato
+                setTimeout(initAll, 100);
+            });
+        } else {
+            // DOM già pronto, ma aspetta un attimo per gli script
+            setTimeout(initAll, 100);
+        }
 
         // ===== ANIMAZIONE HEADER (Database & LocalStorage) =====
         // L'animazione shrink/expand dell'header è gestita automaticamente da js/features/tests-ui.js

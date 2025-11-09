@@ -1,6 +1,6 @@
 {
-  "version": "1.6.9",
+  "version": "1.7.0",
   "versionDate": "9 Novembre 2025",
-  "versionTime": "10:30",
-  "updateNotes": "Modularizzazione MODULI 1-5: UI Helpers, Page Renderers, Page Search, Page Lines, Page Initialization. Riduzione script.js -13%, nuovi moduli ui-helpers.js e page-renderers.js"
+  "versionTime": "23:15",
+  "updateNotes": "Modularizzazione GPS avanzato (9 moduli), componenti condivisi (hamburger-menu, mega-dropdown-settings), riduzione test.html -28% (da ~5514 a ~3968 righe), 24 file eliminati (pulizia repository), nuova documentazione (SECURITY_ROADMAP.md, ANALISI_MODULARIZZAZIONE_SCRIPT_JS.md)"
 }

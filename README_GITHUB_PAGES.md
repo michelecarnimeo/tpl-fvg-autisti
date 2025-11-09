@@ -41,21 +41,28 @@ https://TUO-USERNAME.github.io/tpl-fvg-autisti/
 1. Vai su **Actions** → **Aggiorna Versione App**
 2. Clicca **Run workflow**
 3. Inserisci:
-   - **Nuova versione**: `1.3.4` (incrementa sempre)
+   - **Nuova versione**: `1.6.10` (incrementa sempre)
    - **Note aggiornamento**: `Correzioni bug`
 4. Clicca **Run workflow**
 
 ✅ **Fatto!** Il workflow automaticamente:
 
-- Aggiorna tutti i file necessari
+- Aggiorna `version.json` e `manifest.json`
 - Crea commit e tag
 - Deploya su GitHub Pages
 
-Attendi 2-3 minuti, poi l'app mostrerà il pulsante di aggiornamento agli utenti.
+⚠️ **Importante**: Dopo l'esecuzione del workflow, **aggiorna manualmente `changelog.js`** con la nuova versione. Il workflow GitHub Actions cerca di aggiornare costanti in `script.js` che non esistono più (v1.6.9+).
 
 ### Metodo Manuale
 
-Se preferisci aggiornare manualmente, segui [AGGIORNAMENTI.md](AGGIORNAMENTI.md).
+Se preferisci aggiornare manualmente:
+
+1. Aggiorna `version.json` (versione, data, ora, note)
+2. Aggiorna `changelog.js` (aggiungi nuova entry all'inizio dell'array `changelogData`)
+3. Aggiorna `manifest.json` (versione)
+4. Commit e push
+
+Per maggiori dettagli, consulta [JS_ARCHITECTURE.md](JS_ARCHITECTURE.md) (sezione "Come aggiornare la versione").
 
 ## 📱 Test dell'App
 
@@ -71,7 +78,8 @@ Dopo il deploy:
    - ✅ PWA installabile
 
 3. Test aggiornamenti:
-   - Clicca su 🔄 (navbar o menu mobile)
+   - Apri il modal **Impostazioni** (⚙️) → Tab **"Info"**
+   - Clicca sul pulsante **"Verifica aggiornamenti"**
    - Verifica lo stato della versione
 
 ## 🎯 URL Importanti
@@ -113,9 +121,9 @@ Dovresti vedere:
 
 ```json
 {
-  "version": "1.3.3",
-  "versionDate": "22 Ottobre 2025",
-  "versionTime": "21:30",
+  "version": "1.6.9",
+  "versionDate": "9 Novembre 2025",
+  "versionTime": "10:30",
   "updateNotes": "..."
 }
 ```
@@ -165,21 +173,23 @@ GitHub Pages automaticamente:
 Il Service Worker gestisce:
 
 - ✅ Cache offline degli asset
-- ✅ Aggiornamenti versione (`version.json` mai in cache)
+- ✅ Aggiornamenti versione (`version.json` e `changelog.js` mai in cache)
 - ✅ Fallback per modalità offline
+
+**Nota**: La versione locale viene letta da `changelog.js` (non più da costanti in `script.js`), quindi assicurati che `changelog.js` sia sempre aggiornato dopo ogni release.
 
 ## 🎉 Best Practices
 
 1. **Versioning Semantico**:
 
-   - Patch: `1.3.3` → `1.3.4` (bug fix)
-   - Minor: `1.3.4` → `1.4.0` (nuove feature)
-   - Major: `1.4.0` → `2.0.0` (breaking changes)
+   - Patch: `1.6.9` → `1.6.10` (bug fix)
+   - Minor: `1.6.9` → `1.7.0` (nuove feature)
+   - Major: `1.6.9` → `2.0.0` (breaking changes)
 
 2. **Commit Messages**:
 
    ```
-   🚀 Release v1.3.4 - Descrizione breve
+   🚀 Release v1.6.10 - Descrizione breve
    🐛 Fix bug calcolo prezzi
    ✨ Aggiungi geolocalizzazione fermate
    📝 Aggiorna documentazione
@@ -198,7 +208,7 @@ Il Service Worker gestisce:
 
 ## 📞 Supporto
 
-- **Documentazione**: [AGGIORNAMENTI.md](AGGIORNAMENTI.md)
+- **Documentazione**: [JS_ARCHITECTURE.md](JS_ARCHITECTURE.md) (sezione "Come aggiornare la versione")
 - **Test**: [TEST_AGGIORNAMENTI.md](TEST_AGGIORNAMENTI.md)
 - **Issues**: Apri un issue su GitHub
 

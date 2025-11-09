@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Moduli GPS - Fase 3</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background: #007bff;
+            color: white;
+        }
+        button:hover { background: #0056b3; }
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        #map {
+            height: 400px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        .distance-preset-btn {
+            padding: 8px 16px;
+            margin: 5px;
+            background: #fbbf24;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .distance-preset-btn:hover { background: #f59e0b; }
+        input {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    </style>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+    <h1>🧪 Test Moduli GPS - Fase 3</h1>
+    <p>Test dei moduli: distance-calculator.js e map-leaflet.js</p>
+
+    <div class="test-section">
+        <h2>1. Verifica Caricamento Moduli</h2>
+        <div id="test-loading"></div>
+        <button onclick="testModuleLoading()">Test Caricamento</button>
+    </div>
+
+    <div class="test-section">
+        <h2>2. Test GPSDistanceCalculator</h2>
+        <div id="test-distance-calculator"></div>
+        <button onclick="testDistanceCalculator()">Test Distance Calculator</button>
+        
+        <h3>Test Interattivo:</h3>
+        <p>1. Imposta una posizione fake prima (usa GPSFakePosition.apply)</p>
+        <p>2. Poi calcola distanza a target:</p>
+        <div>
+            <button class="distance-preset-btn" data-lat="45.6495" data-lng="13.7768" data-name="Trieste">Trieste</button>
+            <button class="distance-preset-btn" data-lat="46.0710" data-lng="13.2345" data-name="Udine">Udine</button>
+        </div>
+        <div>
+            <input type="number" id="target-lat" placeholder="Latitudine" step="0.000001" value="45.6495">
+            <input type="number" id="target-lng" placeholder="Longitudine" step="0.000001" value="13.7768">
+            <button id="calculate-distance-btn">Calcola Distanza</button>
+        </div>
+        <div id="distance-result" style="display: none; margin-top: 10px; padding: 10px; background: #f0f0f0; border-radius: 4px;">
+            <div id="distance-info"></div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>3. Test GPSMap</h2>
+        <div id="test-map"></div>
+        <button onclick="testMap()">Test Map Functions</button>
+        
+        <h3>Test Interattivo:</h3>
+        <div id="map-container" style="display: none; margin-top: 10px; padding: 10px; background: #f0f0f0; border-radius: 4px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <div>
+                    <strong>🗺️ Mappa Posizione</strong>
+                    <div id="map-connection-badge" style="display: inline-block; margin-left: 10px; padding: 5px 10px; background: #d1fae5; border-radius: 4px; font-size: 0.9rem;">
+                        <span id="map-connection-icon">🟢</span>
+                        <span id="map-connection-text">Online</span>
+                    </div>
+                </div>
+                <button id="recenter-map-btn" style="padding: 5px 15px; background: #10b981; color: white; border: none; border-radius: 4px; cursor: pointer;">🎯 Centra</button>
+            </div>
+            <div id="map" style="height: 400px; border-radius: 8px;"></div>
+        </div>
+        <div style="margin-top: 10px;">
+            <button onclick="testInitializeMap()">Inizializza Mappa (45.6495, 13.7768)</button>
+            <button onclick="testUpdateMap()">Aggiorna Mappa (46.0710, 13.2345)</button>
+            <button onclick="testRecenterMap()">Ricentra Mappa</button>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>4. Test Integrazione</h2>
+        <div id="test-integration"></div>
+        <button onclick="testIntegration()">Test Integrazione Moduli</button>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <!-- Carica moduli GPS -->
+    <script src="js/tests/gps/helpers.js"></script>
+    <script src="js/tests/gps/fake-position.js"></script>
+    <script src="js/tests/gps/reset-data.js"></script>
+    <script src="js/tests/gps/distance-calculator.js"></script>
+    <script src="js/tests/gps/map-leaflet.js"></script>
+
+    <script>
+        function log(elementId, message, type = 'info') {
+            const div = document.getElementById(elementId);
+            if (!div) return;
+            
+            const result = document.createElement('div');
+            result.className = `test-result ${type}`;
+            result.innerHTML = message;
+            div.appendChild(result);
+        }
+
+        function clearLog(elementId) {
+            const div = document.getElementById(elementId);
+            if (div) div.innerHTML = '';
+        }
+
+        function testModuleLoading() {
+            clearLog('test-loading');
+            log('test-loading', '<strong>Test caricamento moduli Fase 3...</strong>', 'info');
+
+            // Verifica GPSHelpers (dipendenza)
+            if (typeof window.GPSHelpers !== 'undefined') {
+                log('test-loading', '✅ <code>window.GPSHelpers</code> disponibile', 'success');
+                if (window.GPSHelpers.calculateDistance) {
+                    log('test-loading', '✅ <code>GPSHelpers.calculateDistance</code> disponibile', 'success');
+                } else {
+                    log('test-loading', '❌ <code>GPSHelpers.calculateDistance</code> NON disponibile', 'error');
+                }
+            } else {
+                log('test-loading', '❌ <code>window.GPSHelpers</code> NON disponibile', 'error');
+            }
+
+            // Test GPSDistanceCalculator
+            if (typeof window.GPSDistanceCalculator !== 'undefined') {
+                log('test-loading', '✅ <code>window.GPSDistanceCalculator</code> disponibile', 'success');
+                log('test-loading', `   API: ${Object.keys(window.GPSDistanceCalculator).join(', ')}`, 'info');
+            } else {
+                log('test-loading', '❌ <code>window.GPSDistanceCalculator</code> NON disponibile', 'error');
+                log('test-loading', '   Verifica che helpers.js sia caricato prima di distance-calculator.js', 'info');
+            }
+
+            // Test GPSMap
+            if (typeof window.GPSMap !== 'undefined') {
+                log('test-loading', '✅ <code>window.GPSMap</code> disponibile', 'success');
+                log('test-loading', `   API: ${Object.keys(window.GPSMap).join(', ')}`, 'info');
+            } else {
+                log('test-loading', '❌ <code>window.GPSMap</code> NON disponibile', 'error');
+            }
+
+            // Verifica Leaflet
+            if (typeof L !== 'undefined') {
+                log('test-loading', '✅ <code>Leaflet.js</code> disponibile', 'success');
+            } else {
+                log('test-loading', '❌ <code>Leaflet.js</code> NON disponibile', 'error');
+                log('test-loading', '   Verifica che il CDN Leaflet sia caricato', 'info');
+            }
+        }
+
+        function testDistanceCalculator() {
+            clearLog('test-distance-calculator');
+            log('test-distance-calculator', '<strong>Test GPSDistanceCalculator...</strong>', 'info');
+
+            if (typeof window.GPSDistanceCalculator === 'undefined') {
+                log('test-distance-calculator', '❌ GPSDistanceCalculator non disponibile', 'error');
+                return;
+            }
+
+            // Test estimateTime
+            try {
+                const times = window.GPSDistanceCalculator.estimateTime(10); // 10 km
+                log('test-distance-calculator', `✅ estimateTime(10km): walk=${times.walk}min, bus=${times.bus}min, car=${times.car}min`, 'success');
+            } catch (error) {
+                log('test-distance-calculator', `❌ estimateTime errore: ${error.message}`, 'error');
+            }
+
+            // Test formatTime
+            try {
+                const time1 = window.GPSDistanceCalculator.formatTime(30);
+                const time2 = window.GPSDistanceCalculator.formatTime(90);
+                const time3 = window.GPSDistanceCalculator.formatTime(120);
+                log('test-distance-calculator', `✅ formatTime: 30min=${time1}, 90min=${time2}, 120min=${time3}`, 'success');
+            } catch (error) {
+                log('test-distance-calculator', `❌ formatTime errore: ${error.message}`, 'error');
+            }
+
+            // Test setLastPosition / getLastPosition
+            try {
+                const testPosition = {
+                    coords: {
+                        latitude: 45.6495,
+                        longitude: 13.7768,
+                        accuracy: 10
+                    },
+                    timestamp: Date.now()
+                };
+                window.GPSDistanceCalculator.setLastPosition(testPosition);
+                const saved = window.GPSDistanceCalculator.getLastPosition();
+                if (saved && saved.coords.latitude === testPosition.coords.latitude) {
+                    log('test-distance-calculator', '✅ setLastPosition/getLastPosition: Funzionano correttamente', 'success');
+                } else {
+                    log('test-distance-calculator', '❌ setLastPosition/getLastPosition: Non funzionano correttamente', 'error');
+                }
+            } catch (error) {
+                log('test-distance-calculator', `❌ setLastPosition/getLastPosition errore: ${error.message}`, 'error');
+            }
+
+            // Test calculateToTarget (richiede lastKnownPosition)
+            try {
+                // Imposta posizione
+                const testPosition = {
+                    coords: {
+                        latitude: 45.6495,
+                        longitude: 13.7768,
+                        accuracy: 10
+                    },
+                    timestamp: Date.now()
+                };
+                window.GPSDistanceCalculator.setLastPosition(testPosition);
+                
+                // Calcola distanza
+                const result = window.GPSDistanceCalculator.calculateToTarget(46.0710, 13.2345, 'Udine');
+                if (result && result.distanceKm) {
+                    log('test-distance-calculator', `✅ calculateToTarget: Distanza a Udine = ${result.distanceKm.toFixed(2)} km`, 'success');
+                } else {
+                    log('test-distance-calculator', '⚠️ calculateToTarget: Nessun risultato (elementi DOM mancanti?)', 'info');
+                }
+            } catch (error) {
+                log('test-distance-calculator', `❌ calculateToTarget errore: ${error.message}`, 'error');
+            }
+        }
+
+        function testMap() {
+            clearLog('test-map');
+            log('test-map', '<strong>Test GPSMap...</strong>', 'info');
+
+            if (typeof window.GPSMap === 'undefined') {
+                log('test-map', '❌ GPSMap non disponibile', 'error');
+                return;
+            }
+
+            // Test isInitialized
+            try {
+                const isInit = window.GPSMap.isInitialized();
+                log('test-map', `✅ isInitialized: ${isInit ? 'Inizializzata' : 'Non inizializzata'}`, 'success');
+            } catch (error) {
+                log('test-map', `❌ isInitialized errore: ${error.message}`, 'error');
+            }
+
+            // Test getCurrentPosition
+            try {
+                const pos = window.GPSMap.getCurrentPosition();
+                log('test-map', `✅ getCurrentPosition: ${pos ? `(${pos.lat}, ${pos.lng})` : 'null'}`, 'success');
+            } catch (error) {
+                log('test-map', `❌ getCurrentPosition errore: ${error.message}`, 'error');
+            }
+
+            // Test setupConnectionBadge
+            try {
+                window.GPSMap.setupConnectionBadge();
+                log('test-map', '✅ setupConnectionBadge: Eseguito', 'success');
+            } catch (error) {
+                log('test-map', `❌ setupConnectionBadge errore: ${error.message}`, 'error');
+            }
+
+            // Test updateConnectionStatus
+            try {
+                window.GPSMap.updateConnectionStatus();
+                log('test-map', '✅ updateConnectionStatus: Eseguito', 'success');
+            } catch (error) {
+                log('test-map', `❌ updateConnectionStatus errore: ${error.message}`, 'error');
+            }
+        }
+
+        function testInitializeMap() {
+            clearLog('test-map');
+            log('test-map', '<strong>Test inizializzazione mappa...</strong>', 'info');
+
+            if (typeof window.GPSMap === 'undefined') {
+                log('test-map', '❌ GPSMap non disponibile', 'error');
+                return;
+            }
+
+            if (typeof L === 'undefined') {
+                log('test-map', '❌ Leaflet.js non disponibile', 'error');
+                return;
+            }
+
+            try {
+                window.GPSMap.initialize(45.6495, 13.7768, 10);
+                log('test-map', '✅ initialize: Mappa inizializzata a Trieste (45.6495, 13.7768)', 'success');
+                
+                const isInit = window.GPSMap.isInitialized();
+                log('test-map', `✅ isInitialized: ${isInit ? 'Sì' : 'No'}`, isInit ? 'success' : 'error');
+            } catch (error) {
+                log('test-map', `❌ initialize errore: ${error.message}`, 'error');
+            }
+        }
+
+        function testUpdateMap() {
+            clearLog('test-map');
+            log('test-map', '<strong>Test aggiornamento mappa...</strong>', 'info');
+
+            if (typeof window.GPSMap === 'undefined') {
+                log('test-map', '❌ GPSMap non disponibile', 'error');
+                return;
+            }
+
+            try {
+                if (!window.GPSMap.isInitialized()) {
+                    log('test-map', '⚠️ Mappa non inizializzata, inizializzo prima...', 'info');
+                    window.GPSMap.initialize(45.6495, 13.7768, 10);
+                }
+
+                window.GPSMap.updatePosition(46.0710, 13.2345, 15);
+                log('test-map', '✅ updatePosition: Mappa aggiornata a Udine (46.0710, 13.2345)', 'success');
+            } catch (error) {
+                log('test-map', `❌ updatePosition errore: ${error.message}`, 'error');
+            }
+        }
+
+        function testRecenterMap() {
+            clearLog('test-map');
+            log('test-map', '<strong>Test ricentra mappa...</strong>', 'info');
+
+            if (typeof window.GPSMap === 'undefined') {
+                log('test-map', '❌ GPSMap non disponibile', 'error');
+                return;
+            }
+
+            try {
+                window.GPSMap.recenter();
+                log('test-map', '✅ recenter: Mappa ricentrata', 'success');
+            } catch (error) {
+                log('test-map', `❌ recenter errore: ${error.message}`, 'error');
+            }
+        }
+
+        function testIntegration() {
+            clearLog('test-integration');
+            log('test-integration', '<strong>Test integrazione moduli Fase 3...</strong>', 'info');
+
+            // Test che GPSDistanceCalculator possa usare GPSHelpers
+            try {
+                if (typeof window.GPSHelpers !== 'undefined' && typeof window.GPSDistanceCalculator !== 'undefined') {
+                    // Imposta posizione
+                    const testPosition = {
+                        coords: {
+                            latitude: 45.6495,
+                            longitude: 13.7768,
+                            accuracy: 10
+                        },
+                        timestamp: Date.now()
+                    };
+                    window.GPSDistanceCalculator.setLastPosition(testPosition);
+                    
+                    // Calcola distanza (usa GPSHelpers internamente)
+                    const result = window.GPSDistanceCalculator.calculateToTarget(46.0710, 13.2345, 'Udine');
+                    if (result) {
+                        log('test-integration', `✅ Integrazione: GPSDistanceCalculator usa GPSHelpers - Distanza: ${result.distanceKm.toFixed(2)} km`, 'success');
+                    }
+                }
+            } catch (error) {
+                log('test-integration', `❌ Integrazione GPSDistanceCalculator/GPSHelpers errore: ${error.message}`, 'error');
+            }
+
+            // Test che GPSMap possa essere inizializzata e aggiornata
+            try {
+                if (typeof window.GPSMap !== 'undefined' && typeof L !== 'undefined') {
+                    window.GPSMap.initialize(45.6495, 13.7768, 10);
+                    const isInit = window.GPSMap.isInitialized();
+                    if (isInit) {
+                        log('test-integration', '✅ Integrazione: GPSMap inizializzata correttamente', 'success');
+                        
+                        // Test aggiornamento
+                        window.GPSMap.updatePosition(46.0710, 13.2345, 15);
+                        const pos = window.GPSMap.getCurrentPosition();
+                        if (pos && pos.lat === 46.0710) {
+                            log('test-integration', '✅ Integrazione: GPSMap aggiornata correttamente', 'success');
+                        }
+                    }
+                }
+            } catch (error) {
+                log('test-integration', `❌ Integrazione GPSMap errore: ${error.message}`, 'error');
+            }
+
+            // Test che GPSFakePosition + GPSDistanceCalculator funzionino insieme
+            try {
+                if (typeof window.GPSFakePosition !== 'undefined' && typeof window.GPSDistanceCalculator !== 'undefined') {
+                    // Applica posizione fake
+                    const fakePos = window.GPSFakePosition.apply(45.6495, 13.7768, 10, 0);
+                    if (fakePos) {
+                        // Imposta come lastKnownPosition
+                        window.GPSDistanceCalculator.setLastPosition(fakePos);
+                        
+                        // Calcola distanza
+                        const result = window.GPSDistanceCalculator.calculateToTarget(46.0710, 13.2345, 'Udine');
+                        if (result) {
+                            log('test-integration', `✅ Integrazione: GPSFakePosition + GPSDistanceCalculator - Distanza: ${result.distanceKm.toFixed(2)} km`, 'success');
+                        }
+                    }
+                }
+            } catch (error) {
+                log('test-integration', `❌ Integrazione GPSFakePosition/GPSDistanceCalculator errore: ${error.message}`, 'error');
+            }
+
+            // Test che GPSMap possa essere usata con posizione fake
+            try {
+                if (typeof window.GPSFakePosition !== 'undefined' && typeof window.GPSMap !== 'undefined' && typeof L !== 'undefined') {
+                    const fakePos = window.GPSFakePosition.apply(45.6495, 13.7768, 10, 0);
+                    if (fakePos) {
+                        window.GPSMap.initialize(
+                            fakePos.coords.latitude,
+                            fakePos.coords.longitude,
+                            fakePos.coords.accuracy
+                        );
+                        log('test-integration', '✅ Integrazione: GPSFakePosition + GPSMap - Mappa inizializzata con posizione fake', 'success');
+                    }
+                }
+            } catch (error) {
+                log('test-integration', `❌ Integrazione GPSFakePosition/GPSMap errore: ${error.message}`, 'error');
+            }
+        }
+
+        // Esegui test automatici al caricamento
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log('🧪 Test moduli GPS Fase 3 - Pagina caricata');
+            testModuleLoading();
+        });
+    </script>
+</body>
+</html>
+

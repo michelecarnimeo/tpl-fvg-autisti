@@ -18,7 +18,10 @@ tpl-fvg-autisti/
 │   │   ├── navbar.js           ⏳ TODO
 │   │   ├── modals.js           ✅ FATTO - UI modali (Fermate, Linee, Settings)
 │   │   ├── notification-modal.js ✅ FATTO - Modal notifica riutilizzabile
-│   │   └── pwa.js              ⏳ TODO
+│   │   ├── hamburger-menu.js   ✅ FATTO (09/11/2025) - Menu mobile hamburger
+│   │   ├── mega-dropdown-settings.js ✅ FATTO (09/11/2025) - Mega dropdown impostazioni (desktop)
+│   │   ├── pwa-install.js      ✅ FATTO (09/11/2025) - Banner installazione PWA
+│   │   └── pwa.js              ⏳ TODO (PWA bottom nav da modularizzare)
 │   │
 │   ├── features/
 │   │   ├── updates.js          ✅ FATTO - Verifica aggiornamenti
@@ -36,7 +39,8 @@ tpl-fvg-autisti/
 │   │
 │   ├── utils/
 │   │   ├── ui-helpers.js       ✅ FATTO - Funzioni UI helper (scroll to top, swap button)
-│   │   └── offline-notifications.js ✅ FATTO - Notifiche online/offline
+│   │   ├── offline-notifications.js ✅ FATTO - Notifiche online/offline
+│   │   └── connection-monitor.js ✅ FATTO - Monitor connessione internet
 │   │
 │   ├── tests/
 │   │   ├── test-accordion.js   ✅ FATTO - Gestione accordion gruppi
@@ -56,7 +60,22 @@ tpl-fvg-autisti/
 │   │   ├── test-sw.js          ✅ FATTO - Suite test Service Worker
 │   │   ├── test-sw-wrappers.js ✅ FATTO - Wrapper funzioni Service Worker test
 │   │   ├── test-ui.js          ✅ FATTO - Suite test UI componenti
-│   │   └── test-utils.js       ✅ FATTO - Utility test (logging, status, statistiche)
+│   │   ├── test-ui-manifest-performance-wrappers.js ✅ FATTO (09/11/2025) - Wrapper test UI/Manifest/Performance
+│   │   ├── test-utils.js       ✅ FATTO - Utility test (logging, status, statistiche)
+│   │   ├── device-detector.js  ✅ FATTO (09/11/2025) - Rilevamento informazioni dispositivo
+│   │   ├── effects-status.js   ✅ FATTO (09/11/2025) - Status effetti (dark mode, animazioni, ecc.)
+│   │   ├── error-404-simulator.js ✅ FATTO (09/11/2025) - Simulatore errore 404
+│   │   ├── pwa-test-mode.js    ✅ FATTO (09/11/2025) - Modalità test PWA
+│   │   └── gps/                ✅ FATTO (09/11/2025) - Moduli GPS avanzati
+│   │       ├── helpers.js      ✅ FATTO - Helper funzioni GPS
+│   │       ├── fake-position.js ✅ FATTO - Simulazione posizione GPS
+│   │       ├── reset-data.js   ✅ FATTO - Reset dati GPS
+│   │       ├── distance-calculator.js ✅ FATTO - Calcolo distanze
+│   │       ├── map-leaflet.js  ✅ FATTO - Integrazione mappa Leaflet
+│   │       ├── watch-position.js ✅ FATTO - Monitoraggio continuo posizione
+│   │       ├── quick-test.js   ✅ FATTO - Test rapido GPS
+│   │       ├── export-report.js ✅ FATTO - Esportazione report GPS
+│   │       └── test-geolocation.js ✅ FATTO - Test geolocalizzazione principale
 │   │
 │   └── main.js                 ← Entry point, orchestra tutto ⏳ TODO
 │
@@ -634,6 +653,51 @@ window.Pricing = {
 
 Attualmente `prezzi.js` riceve `tariffario` come parametro per mantenere l'indipendenza e la testabilità.
 
+**Ridondanza Eliminata con la Modularizzazione:**
+
+La modularizzazione di `prezzi.js` ha eliminato la ridondanza JavaScript presente in `script.js`:
+
+**Prima della Modularizzazione:**
+- Logica calcolo prezzo duplicata in 2 funzioni (`calcolaPrezzo()`, `renderPrezzi()`)
+- Logica recupero codice duplicata in 2 posti
+- Formattazione prezzo duplicata in 2 posti
+- Fallback `tariffarioAggiornato` duplicato
+
+**Dopo la Modularizzazione (v1.6.9+):**
+- Logica calcolo centralizzata in `Pricing.calculatePrice()` (-50% duplicazione)
+- Logica codice centralizzata in `Pricing.getTicketCode()` (-50% duplicazione)
+- Formattazione centralizzata in `Pricing.formatPrice()` (-50% duplicazione)
+- Fallback centralizzato in una singola funzione (-50% duplicazione)
+- Rendering estratto in `js/features/page-renderers.js` (usa Pricing)
+- Gestione route estratta in `js/features/route-selector.js` (usa Pricing)
+
+**Ridondanza HTML:**
+- ❌ **NON esiste ridondanza HTML** - Le pagine HTML non contengono logica duplicata
+- Le HTML usano solo riferimenti a funzioni globali (es. `onclick="swapRoutes()"`) che rimangono compatibili
+- `index.html`: 1 riferimento inline (`swapRoutes()`)
+- `prezzi.html`: 0 riferimenti inline, rendering gestito da `page-renderers.js`
+- `fermate.html`: 0 riferimenti inline, rendering gestito da `page-renderers.js`
+
+**Beneficio Futuro:**
+Se in futuro si aggiunge una nuova pagina HTML che deve calcolare prezzi:
+- ❌ **Prima**: Dovremmo duplicare logica in quella pagina
+- ✅ **Dopo**: Usa `Pricing.calculatePrice()` per calcolo - nessuna duplicazione!
+- ✅ Usa `PageRenderers.renderPrezzi()` per rendering - nessuna duplicazione!
+- ✅ Usa `RouteSelector` per gestione stato - nessuna duplicazione!
+- ✅ Tutti i moduli sono riutilizzabili e testabili in isolamento
+
+**Statistiche Ridondanza Eliminata:**
+
+| Tipo Ridondanza                   | Prima                                    | Dopo                                | Risparmio |
+| --------------------------------- | ---------------------------------------- | ----------------------------------- | --------- |
+| **Logica calcolo prezzo**         | 2 funzioni (calcolaPrezzo, renderPrezzi) | 1 funzione (Pricing.calculatePrice) | ✅ -50%   |
+| **Logica recupero codice**        | 2 posti (calcolaPrezzo, renderPrezzi)    | 1 funzione (Pricing.getTicketCode)  | ✅ -50%   |
+| **Logica formattazione prezzo**   | 2 posti                                  | 1 funzione (Pricing.formatPrice)    | ✅ -50%   |
+| **Fallback tariffarioAggiornato** | 2 posti (duplicato)                      | 1 funzione (centralizzato)          | ✅ -50%   |
+| **Codice nelle HTML**             | 0 (non c'era)                            | 0 (non c'è)                         | ✅ 0%     |
+
+**Risultato:** -50% codice duplicato in JavaScript, +3 moduli riutilizzabili (`prezzi.js`, `page-renderers.js`, `route-selector.js`)
+
 ---
 
 ### **5. tests/** (Test Suite)
@@ -803,6 +867,307 @@ Attualmente `prezzi.js` riceve `tariffario` come parametro per mantenere l'indip
 
 **Dipendenze:** Tutti i wrapper test  
 **Usato da:** `test.html` (onclick attribute)
+
+---
+
+#### **tests/test-ui-manifest-performance-wrappers.js** ✅ (09/11/2025)
+
+**Contenuto:**
+
+- Wrapper functions globali per test UI, Manifest e Performance
+- `window.testUIComponents()` - Esegue test UI componenti
+- `window.testManifest()` - Esegue test manifest PWA
+- `window.testPerformance()` - Esegue test performance
+- Delega alle rispettive funzioni `UITests.runAll()`, `ManifestTests.runAll()`, `PerformanceTests.runAll()`
+
+**Dipendenze:** `tests/test-ui.js`, `tests/test-manifest.js`, `tests/test-performance.js`  
+**Usato da:** `test.html` (onclick attributes)
+
+---
+
+#### **tests/device-detector.js** ✅ (09/11/2025)
+
+**Contenuto:**
+
+- Rilevamento informazioni dispositivo (batteria, PWA mode, user agent)
+- `detectDeviceInfo()` - Rileva informazioni dispositivo
+- `updateBatteryCardColor()` - Aggiorna colore card batteria
+- `updatePWAMode()` - Aggiorna modalità PWA
+
+**Dipendenze:** Nessuna  
+**Usato da:** `test.html`
+
+---
+
+#### **tests/effects-status.js** ✅ (09/11/2025)
+
+**Contenuto:**
+
+- Status effetti attivi (dark mode, animazioni, contrasto, ecc.)
+- `updateEffectsStatus()` - Aggiorna status effetti
+- `detectEffects()` - Rileva effetti attivi
+- Auto-inizializza su `DOMContentLoaded` e su eventi `resize`, `darkmode-toggle`
+
+**Dipendenze:** Nessuna (solo DOM)  
+**Usato da:** `test.html`
+
+---
+
+#### **tests/error-404-simulator.js** ✅ (09/11/2025)
+
+**Contenuto:**
+
+- Simulatore errore 404 per test
+- `simulate(options)` - Simula reindirizzamento a 404.html
+- Supporta apertura in nuova tab
+- Auto-inizializza per pulsanti con `data-simulate-404="true"`
+
+**Dipendenze:** Nessuna  
+**Usato da:** `test.html`
+
+---
+
+#### **tests/pwa-test-mode.js** ✅ (09/11/2025)
+
+**Contenuto:**
+
+- Modalità test PWA (simula installazione PWA senza installare)
+- `togglePWATestMode()` - Toggle modalità test
+- `getTestModeState()` - Legge stato modalità test
+- `setTestModeState(state)` - Salva stato modalità test
+- `updateUI(isTestMode)` - Aggiorna UI pulsante e info
+- Dispatch evento `pwaTestModeChanged` per aggiornare altre parti dell'app
+- **Sicurezza:** Usa `createElement` invece di `innerHTML` per prevenire XSS
+
+**Dipendenze:** `window.Storage` (localStorage)  
+**Usato da:** `test.html`, `script.js` (PWA bottom nav)
+
+---
+
+#### **tests/gps/helpers.js** ✅ (09/11/2025)
+
+**Contenuto:**
+
+- Helper functions per funzionalità GPS avanzate
+- `copyCoordinates(lat, lng)` - Copia coordinate negli appunti
+- `reverseGeocode(lat, lng)` - Reverse geocoding (coordinate → indirizzo)
+- `getCardinalDirection(degrees)` - Direzione cardinale da gradi
+- `checkGeolocationPermission()` - Verifica permessi geolocalizzazione
+- `checkHttpsRequirement()` - Verifica requisito HTTPS
+- `calculateDistance(lat1, lon1, lat2, lon2)` - Calcolo distanza (Haversine)
+- Auto-inizializza controlli HTTPS e permessi
+
+**Dipendenze:** Nessuna  
+**Usato da:** Altri moduli GPS
+
+---
+
+#### **tests/gps/fake-position.js** ✅ (09/11/2025)
+
+**Contenuto:**
+
+- Simulazione posizione GPS per test
+- `setFakePosition(lat, lng, name)` - Imposta posizione fake
+- `getFakePosition()` - Legge posizione fake corrente
+- `isActive()` - Verifica se posizione fake è attiva
+- `clearFakePosition()` - Rimuove posizione fake
+- Preset città (Udine, Trieste, Gorizia, Pordenone)
+
+**Dipendenze:** `tests/gps/helpers.js`  
+**Usato da:** `tests/gps/test-geolocation.js`, `tests/gps/watch-position.js`
+
+---
+
+#### **tests/gps/reset-data.js** ✅ (09/11/2025)
+
+**Contenuto:**
+
+- Reset dati GPS in localStorage
+- `showResetModal()` - Mostra modal conferma reset
+- `hideResetModal()` - Nasconde modal
+- `confirmResetGPS()` - Conferma e esegue reset
+- Reset chiavi localStorage GPS-related
+- Reset stato altri moduli GPS
+
+**Dipendenze:** Altri moduli GPS  
+**Usato da:** `test.html`
+
+---
+
+#### **tests/gps/distance-calculator.js** ✅ (09/11/2025)
+
+**Contenuto:**
+
+- Calcolo distanze e tempi stimati
+- `calculateDistanceToTarget(lat, lng, targetLat, targetLng)` - Calcola distanza a target
+- `estimateTime(distance, speed)` - Stima tempo di percorrenza
+- `formatTime(seconds)` - Formatta tempo in formato leggibile
+- `setLastPosition(lat, lng)` - Salva ultima posizione
+- `getLastPosition()` - Legge ultima posizione
+
+**Dipendenze:** `tests/gps/helpers.js`  
+**Usato da:** `tests/gps/test-geolocation.js`, `tests/gps/watch-position.js`
+
+---
+
+#### **tests/gps/map-leaflet.js** ✅ (09/11/2025)
+
+**Contenuto:**
+
+- Integrazione mappa Leaflet per visualizzazione posizione
+- `initializeMap(containerId, initialLat, initialLng)` - Inizializza mappa Leaflet
+- `updatePosition(lat, lng)` - Aggiorna posizione sulla mappa
+- `recenterMap(lat, lng)` - Ricentra mappa su posizione
+- `setupConnectionBadge()` - Setup badge connessione
+- `updateConnectionStatus(isOnline)` - Aggiorna status connessione
+- `isInitialized()` - Verifica se mappa è inizializzata
+- `getCurrentPosition()` - Legge posizione corrente dalla mappa
+
+**Dipendenze:** Leaflet.js (CDN), `tests/gps/helpers.js`  
+**Usato da:** `tests/gps/test-geolocation.js`, `tests/gps/watch-position.js`
+
+---
+
+#### **tests/gps/watch-position.js** ✅ (09/11/2025)
+
+**Contenuto:**
+
+- Monitoraggio continuo posizione GPS
+- `start()` - Avvia monitoraggio continuo
+- `stop()` - Ferma monitoraggio
+- `reset()` - Reset stato monitoraggio
+- `clearHistory()` - Cancella cronologia posizioni
+- `updateUI()` - Aggiorna UI stato monitoraggio
+- `updateHistoryUI()` - Aggiorna UI cronologia
+- `setup()` - Setup iniziale (event listeners)
+
+**Dipendenze:** `tests/gps/helpers.js`, `tests/gps/map-leaflet.js`, `tests/gps/distance-calculator.js`, `tests/gps/fake-position.js`  
+**Usato da:** `test.html`
+
+---
+
+#### **tests/gps/quick-test.js** ✅ (09/11/2025)
+
+**Contenuto:**
+
+- Test rapido GPS (one-click test)
+- `quickGPSTest()` - Esegue 5 test rapidi:
+  1. Verifica permessi geolocalizzazione
+  2. Verifica supporto hardware GPS
+  3. Test rilevamento posizione
+  4. Test reverse geocoding
+  5. Verifica libreria Leaflet
+- Aggiorna UI con risultati
+
+**Dipendenze:** `tests/gps/helpers.js`, `tests/gps/map-leaflet.js`  
+**Usato da:** `test.html`
+
+---
+
+#### **tests/gps/export-report.js** ✅ (09/11/2025)
+
+**Contenuto:**
+
+- Esportazione report test GPS
+- `exportGPSReport(format)` - Esporta report (JSON o TXT)
+- `generateReportData()` - Genera dati report
+- `formatReportJSON(data)` - Formatta report JSON
+- `formatReportTXT(data)` - Formatta report TXT
+- `downloadFile(content, filename, mimeType)` - Download file
+- Include informazioni dispositivo (screen, pixelRatio)
+
+**Dipendenze:** Altri moduli GPS  
+**Usato da:** `test.html`
+
+---
+
+#### **tests/gps/test-geolocation.js** ✅ (09/11/2025)
+
+**Contenuto:**
+
+- Test geolocalizzazione principale
+- `testGeolocation()` - Test rilevamento posizione GPS
+- Gestisce posizione reale e fake
+- Integra con altri moduli GPS (FakePosition, DistanceCalculator, Map)
+- Reverse geocoding automatico
+- Gestione errori e permessi
+- Aggiorna UI con risultati
+
+**Dipendenze:** Tutti gli altri moduli GPS  
+**Usato da:** `test.html`
+
+---
+
+#### **components/hamburger-menu.js** ✅ (09/11/2025)
+
+**Contenuto:**
+
+- Gestione menu mobile hamburger
+- `open()` - Apre menu mobile
+- `close()` - Chiude menu mobile
+- `isOpen()` - Verifica se menu è aperto
+- `init()` - Inizializza listener
+- Chiude menu con tasto ESC
+- Chiude menu al click su link di navigazione
+- Integrazione con dark mode toggle e update checks
+- Auto-inizializza su `DOMContentLoaded`
+
+**Dipendenze:** `window.Settings`, `window.Updates`  
+**Usato da:** Tutte le pagine (index.html, fermate.html, prezzi.html, 404.html, test.html)
+
+---
+
+#### **components/mega-dropdown-settings.js** ✅ (09/11/2025)
+
+**Contenuto:**
+
+- Mega dropdown impostazioni (solo desktop)
+- `initMegaDropdown()` - Inizializza dropdown
+- `testMegaDropdownFunctionality()` - Test verifica funzionamento
+- Gestione tema (Sistema/Chiaro/Scuro)
+- Gestione animazione sfondo
+- Gestione alto contrasto
+- Gestione dimensione testo
+- Azioni rapide (Apri Settings Modal, Verifica Aggiornamenti, Cancella Cache)
+- Auto-inizializza su `DOMContentLoaded`
+- **Nota:** Componente condiviso, disponibile su tutte le pagine desktop
+
+**Dipendenze:** `window.SettingsModal`, `window.Settings`, `window.Updates`  
+**Usato da:** Tutte le pagine desktop (index.html, fermate.html, prezzi.html, 404.html, test.html)
+
+---
+
+#### **components/pwa-install.js** ✅ (09/11/2025)
+
+**Contenuto:**
+
+- Banner installazione PWA
+- Gestione `beforeinstallprompt` event (Android/Chrome)
+- Gestione `appinstalled` event
+- Rilevamento dispositivo (iOS/Android/Safari/Chrome)
+- Gestione frequenza mostra banner (7 giorni)
+- Istruzioni installazione iOS
+- Nasconde banner quando app è in background
+- **Nota:** File già creato, da integrare in script.js
+
+**Dipendenze:** `window.Storage` (localStorage)  
+**Usato da:** Tutte le pagine (da integrare)
+
+---
+
+#### **utils/connection-monitor.js** ✅ (09/11/2025)
+
+**Contenuto:**
+
+- Monitor connessione internet
+- `detectConnectionInfo(showDate)` - Rileva stato connessione
+- `updateUI(isOnline, showDate)` - Aggiorna UI stato connessione
+- Timeout gestito con `Promise.race` e `AbortController`
+- Gestione errori silenziosa per `no-cors` fetch (comportamento atteso del browser)
+- Aggiorna UI con stato online/offline e data ultimo test
+
+**Dipendenze:** Nessuna  
+**Usato da:** `test.html`, altre pagine (se necessario)
 
 ---
 
@@ -1036,6 +1401,9 @@ if (document.readyState === "loading") {
 - [x] **components/changelog.js** ✅ - Dati e visualizzazione changelog
 - [x] **components/modals.js** ✅ - UI modali (Fermate, Linee, Settings)
 - [x] **components/notification-modal.js** ✅ - Modal notifica riutilizzabile
+- [x] **components/hamburger-menu.js** ✅ (09/11/2025) - Menu mobile hamburger
+- [x] **components/mega-dropdown-settings.js** ✅ (09/11/2025) - Mega dropdown impostazioni (desktop, condiviso)
+- [x] **components/pwa-install.js** ✅ (09/11/2025) - Banner installazione PWA (da integrare)
 
 ### Features
 
@@ -1057,15 +1425,36 @@ if (document.readyState === "loading") {
 - [x] **tests/test-sw.js** ✅ - Suite test Service Worker
 - [x] **tests/test-sw-wrappers.js** ✅ - Wrapper funzioni Service Worker test
 - [x] **tests/test-all-wrappers.js** ✅ - Wrapper runAllTests()
+- [x] **tests/test-ui-manifest-performance-wrappers.js** ✅ (09/11/2025) - Wrapper test UI/Manifest/Performance
+- [x] **tests/device-detector.js** ✅ (09/11/2025) - Rilevamento informazioni dispositivo
+- [x] **tests/effects-status.js** ✅ (09/11/2025) - Status effetti (dark mode, animazioni, ecc.)
+- [x] **tests/error-404-simulator.js** ✅ (09/11/2025) - Simulatore errore 404
+- [x] **tests/pwa-test-mode.js** ✅ (09/11/2025) - Modalità test PWA
+- [x] **tests/gps/helpers.js** ✅ (09/11/2025) - Helper funzioni GPS
+- [x] **tests/gps/fake-position.js** ✅ (09/11/2025) - Simulazione posizione GPS
+- [x] **tests/gps/reset-data.js** ✅ (09/11/2025) - Reset dati GPS
+- [x] **tests/gps/distance-calculator.js** ✅ (09/11/2025) - Calcolo distanze
+- [x] **tests/gps/map-leaflet.js** ✅ (09/11/2025) - Integrazione mappa Leaflet
+- [x] **tests/gps/watch-position.js** ✅ (09/11/2025) - Monitoraggio continuo posizione
+- [x] **tests/gps/quick-test.js** ✅ (09/11/2025) - Test rapido GPS
+- [x] **tests/gps/export-report.js** ✅ (09/11/2025) - Esportazione report GPS
+- [x] **tests/gps/test-geolocation.js** ✅ (09/11/2025) - Test geolocalizzazione principale
+
+### Utils
+
+- [x] **utils/connection-monitor.js** ✅ (09/11/2025) - Monitor connessione internet
+
+### Da Completare
+
 - [ ] core/config.js
 - [ ] core/utils.js
 - [ ] data/database.js
-- [ ] data/tariffario.js
-- [ ] features/location.js
 - [ ] features/animations.js
 - [ ] components/navbar.js
-- [ ] components/pwa.js
+- [ ] components/pwa-bottom-nav.js (da modularizzare da script.js)
 - [ ] main.js
+
+**Nota:** `data/tariffario.js` e `features/geolocation.js` sono già completati e documentati sopra nella sezione "Features" e "Data".
 
 ---
 
@@ -1160,5 +1549,5 @@ Ogni componente CSS ha il suo corrispondente JavaScript per la logica.
 
 ---
 
-**Ultimo aggiornamento**: 6 Novembre 2025  
-**Versione progetto**: 1.6.7 (modularizzazione test completata)
+**Ultimo aggiornamento**: 9 Novembre 2025  
+**Versione progetto**: 1.7.0 (modularizzazione GPS, componenti condivisi, test.html completata)

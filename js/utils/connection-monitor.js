@@ -72,24 +72,43 @@
     let isOnline = navigator.onLine;
 
     // Se navigator.onLine dice online, verifica con richiesta reale
+    // NOTA IMPORTANTE: Con mode: 'no-cors', il browser può loggare errori nella console
+    // quando la connessione fallisce. Questo è comportamento normale del browser e
+    // non possiamo sopprimerli completamente. Gli errori sono gestiti correttamente nel codice.
     if (navigator.onLine) {
       try {
         const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 1500);
+        const timeoutId = setTimeout(() => controller.abort(), 2000);
 
-        await fetch('https://www.google.com/favicon.ico?t=' + Date.now(), {
+        // Verifica connessione usando un endpoint semplice
+        // Usiamo mode: 'no-cors' per evitare problemi CORS, ma questo significa che
+        // non possiamo verificare lo status code HTTP. Se la richiesta completa senza
+        // errori di rete, assumiamo che siamo online.
+        const fetchPromise = fetch('https://www.google.com/favicon.ico?t=' + Date.now(), {
           method: 'HEAD',
           mode: 'no-cors',
           cache: 'no-cache',
-          signal: controller.signal
+          signal: controller.signal,
+          referrerPolicy: 'no-referrer'
         });
 
-        clearTimeout(timeout);
+        // Race tra fetch e timeout per gestire timeout espliciti
+        await Promise.race([
+          fetchPromise,
+          new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Connection timeout')), 2000)
+          )
+        ]);
+
+        clearTimeout(timeoutId);
+        // Se la fetch completa senza errori, siamo online
         isOnline = true;
       } catch (e) {
-        // Se la richiesta fallisce, probabilmente offline
+        // Gestione errori: timeout, abort, network error = offline
+        // NOTA: Il browser può loggare errori nella console per richieste fallite.
+        // Questo è normale e previsto quando si è offline o con connessione lenta.
+        // Il nostro codice gestisce correttamente la situazione anche se gli errori appaiono nella console.
         isOnline = false;
-        console.log('🔴 Verifica reale: OFFLINE');
       }
     } else {
       isOnline = false;
