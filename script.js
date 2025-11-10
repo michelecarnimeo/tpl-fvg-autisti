@@ -494,6 +494,20 @@ function initializeModalsModules() {
         }
         return tariffario;
       },
+      getCurrentPartenzaIdx: () => {
+        // Usa RouteSelector se disponibile
+        if (typeof window.RouteSelector !== 'undefined' && window.RouteSelector.getPartenzaIdx) {
+          return window.RouteSelector.getPartenzaIdx();
+        }
+        return partenzaIdx;
+      },
+      getCurrentArrivoIdx: () => {
+        // Usa RouteSelector se disponibile
+        if (typeof window.RouteSelector !== 'undefined' && window.RouteSelector.getArrivoIdx) {
+          return window.RouteSelector.getArrivoIdx();
+        }
+        return arrivoIdx;
+      },
       onFermataSelected: (index, type) => {
         // Delega a RouteSelector
         if (typeof window.RouteSelector !== 'undefined' && window.RouteSelector.selectFermata) {
@@ -514,6 +528,13 @@ function initializeModalsModules() {
               partenzaText.textContent = tariffarioData[lineaIdx].fermate[index];
             }
             Storage.setItem('tpl.partenzaIdx', partenzaIdx);
+            
+            // Se l'utente modifica manualmente la partenza, resetta lo stato UI del pulsante GPS
+            if (window.Geolocation && typeof window.Geolocation.resetLocationButtonUI === 'function') {
+              window.Geolocation.resetLocationButtonUI();
+            } else if (typeof window.resetLocationButtonUI === 'function') {
+              window.resetLocationButtonUI();
+            }
           } else if (type === 'arrivo') {
             arrivoIdx = index;
             if (arrivoText && tariffarioData[lineaIdx]) {

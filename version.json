@@ -1,6 +1,6 @@
 {
-  "version": "1.7.0",
-  "versionDate": "9 Novembre 2025",
-  "versionTime": "23:15",
-  "updateNotes": "Modularizzazione GPS avanzato (9 moduli), componenti condivisi (hamburger-menu, mega-dropdown-settings), riduzione test.html -28% (da ~5514 a ~3968 righe), 24 file eliminati (pulizia repository), nuova documentazione (SECURITY_ROADMAP.md, ANALISI_MODULARIZZAZIONE_SCRIPT_JS.md)"
+  "version": "1.7.1",
+  "versionDate": "10 Novembre 2025",
+  "versionTime": "12:10",
+  "updateNotes": "Fix GPS reset button quando utente modifica manualmente partenza dopo auto-assegnazione, evidenziazione fermata selezionata nel modal, miglioramenti UX per autisti (scenario multi-cliente: GPS auto-assegna → modifica manuale → ri-premere GPS per stazione corrente)"
 }

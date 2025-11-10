@@ -247,14 +247,25 @@
    * Seleziona una fermata (partenza o arrivo)
    * @param {number} index - Indice della fermata
    * @param {string} type - Tipo: 'partenza' o 'arrivo'
+   * @param {boolean} isAutoAssignment - Se true, indica che è un'auto-assegnazione (es. GPS), non resettare il pulsante GPS
    */
-  function selectFermata(index, type) {
+  function selectFermata(index, type, isAutoAssignment = false) {
     const tariffario = getTariffario();
 
     if (type === 'partenza') {
       partenzaIdx = index;
       if (partenzaText && tariffario[lineaIdx]) {
         partenzaText.textContent = tariffario[lineaIdx].fermate[index];
+      }
+      
+      // Se l'utente modifica manualmente la partenza (non è un'auto-assegnazione),
+      // resetta lo stato UI del pulsante GPS per permettere di ri-premere il pulsante
+      if (!isAutoAssignment) {
+        if (window.Geolocation && typeof window.Geolocation.resetLocationButtonUI === 'function') {
+          window.Geolocation.resetLocationButtonUI();
+        } else if (typeof window.resetLocationButtonUI === 'function') {
+          window.resetLocationButtonUI();
+        }
       }
     } else if (type === 'arrivo') {
       arrivoIdx = index;

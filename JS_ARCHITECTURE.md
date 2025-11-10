@@ -1642,5 +1642,5 @@ Tutti i `onclick` inline in `test.html` sono stati sostituiti con **event delega
 
 ---
 
-**Ultimo aggiornamento**: 10 Novembre 2025  
-**Versione progetto**: 1.7.1 (event delegation, TOC navigation module, test.html ottimizzato)
+**Ultimo aggiornamento**: 10 Novembre 2025 ore 12:10  
+**Versione progetto**: 1.7.1 (event delegation, TOC navigation module, test.html ottimizzato, fix GPS reset button, evidenziazione fermata selezionata)

@@ -4,6 +4,35 @@
 
 const changelogData = [
   {
+    version: '1.7.1',
+    date: '10 Novembre 2025',
+    time: '12:10',
+    title: 'Fix GPS reset button, evidenziazione fermata selezionata e miglioramenti modal (v1.7.1)',
+    hidden: false,
+    changes: [
+      '🔧 FIX GPS RESET BUTTON:',
+      '  • Aggiunta funzione resetLocationButtonUI() per resettare solo UI pulsante GPS (preserva stato interno)',
+      '  • Aggiunto parametro isAutoAssignment in selectFermata() per distinguere auto-assegnazione da selezione manuale',
+      '  • Reset automatico pulsante GPS quando utente modifica manualmente partenza dopo auto-assegnazione GPS',
+      '  • Permette di ri-premere pulsante GPS per ri-assegnare rapidamente stazione corrente',
+      '🎯 EVIDENZIAZIONE FERMATA SELEZIONATA:',
+      '  • Evidenziazione fermata già selezionata nel modal delle fermate (partenza/arrivo)',
+      '  • Aggiunti callback getCurrentPartenzaIdx e getCurrentArrivoIdx nel modal',
+      '  • Migliorata UX: utente vede sempre quale fermata è attualmente selezionata',
+      '📱 SCENARIO D\'USO REALE:',
+      '  • Cliente 1: Autista usa GPS → auto-assegna stazione corrente → emette biglietto',
+      '  • Cliente 2: Chiede prezzo stazione diversa → autista modifica manualmente → pulsante GPS si resetta',
+      '  • Cliente 3: Vuole biglietto stazione corrente → autista ri-preme GPS → ri-assegna rapidamente',
+      '🔧 MODIFICHE TECNICHE:',
+      '  • js/features/geolocation.js - Aggiunta resetLocationButtonUI(), esposta in API pubblica',
+      '  • js/features/route-selector.js - Aggiunto parametro isAutoAssignment in selectFermata()',
+      '  • js/components/modals.js - Evidenziazione fermata selezionata in renderFermateList()',
+      '  • script.js - Aggiunti callback getCurrentPartenzaIdx/getCurrentArrivoIdx per modal',
+      '📝 DOCUMENTAZIONE:',
+      '  • Aggiornato JS_ARCHITECTURE.md con nuove modifiche v1.7.1',
+    ]
+  },
+  {
     version: '1.7.0',
     date: '9 Novembre 2025',
     time: '23:15',

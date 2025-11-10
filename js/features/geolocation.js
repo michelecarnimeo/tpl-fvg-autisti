@@ -282,6 +282,27 @@
   }
 
   /**
+   * Resetta solo lo stato UI del pulsante GPS (senza resettare lo stato interno)
+   * Utile quando l'utente modifica manualmente la partenza dopo l'auto-assegnazione GPS
+   * Permette di ri-premere il pulsante GPS per ri-assegnare la partenza
+   */
+  function resetLocationButtonUI() {
+    // Reset pulsante GPS home page
+    const locationBtn = document.getElementById('location-btn');
+    const locationIcon = document.getElementById('location-icon');
+    const locationText = document.getElementById('location-text');
+
+    if (locationBtn) {
+      locationBtn.classList.remove('active');
+      locationBtn.disabled = false;
+    }
+    if (locationIcon) locationIcon.textContent = '📍';
+    if (locationText) locationText.textContent = 'Rileva posizione';
+
+    console.log('✅ UI pulsante GPS resettata (stato interno preservato)');
+  }
+
+  /**
    * Resetta completamente lo stato della geolocalizzazione
    * Utile quando si fa "Riparti da capo"
    */
@@ -511,8 +532,9 @@
 
       if (nearestStop) {
         // Auto-assegna solo la partenza usando RouteSelector
+        // Passa isAutoAssignment=true per non resettare il pulsante GPS
         if (window.RouteSelector && window.RouteSelector.selectFermata) {
-          window.RouteSelector.selectFermata(nearestStop.index, 'partenza');
+          window.RouteSelector.selectFermata(nearestStop.index, 'partenza', true);
 
           // Aggiorna UI
           if (locationIcon) locationIcon.textContent = '✅';
@@ -715,6 +737,7 @@
     updateLocationButtonIcon: updateLocationButtonIcon,
     showLocationNotification: showLocationNotification,
     disableLocationSorting: disableLocationSorting,
+    resetLocationButtonUI: resetLocationButtonUI,
     resetLocationState: resetLocationState,
 
     // Gestione eventi
@@ -740,6 +763,7 @@
   window.handleLocationClick = handleLocationClick;
   window.handleFermateLocationClick = handleFermateLocationClick;
   window.disableLocationSorting = disableLocationSorting;
+  window.resetLocationButtonUI = resetLocationButtonUI;
   window.resetLocationState = resetLocationState;
   window.showLocationNotification = showLocationNotification;
   window.updateLocationButtonIcon = updateLocationButtonIcon;

@@ -41,6 +41,8 @@
   let getCurrentLineaIdx = null; // Callback per ottenere lineaIdx corrente
   let getTariffario = null; // Callback per ottenere tariffario
   let onFermataSelected = null; // Callback quando viene selezionata una fermata
+  let getCurrentPartenzaIdx = null; // Callback per ottenere partenzaIdx corrente
+  let getCurrentArrivoIdx = null; // Callback per ottenere arrivoIdx corrente
 
   // ===== ELEMENTI DOM =====
   const fermateModal = document.getElementById('fermate-modal');
@@ -78,6 +80,25 @@
   function renderFermateList() {
     if (!fermateModalList) return;
 
+    // Ottieni l'indice della fermata già selezionata (se presente)
+    let selectedIndex = null;
+    if (currentModalType === 'partenza' && getCurrentPartenzaIdx) {
+      selectedIndex = getCurrentPartenzaIdx();
+    } else if (currentModalType === 'arrivo' && getCurrentArrivoIdx) {
+      selectedIndex = getCurrentArrivoIdx();
+    }
+
+    // Converti selectedIndex a numero se è una stringa (per compatibilità)
+    if (selectedIndex !== null && selectedIndex !== '' && selectedIndex !== undefined) {
+      selectedIndex = typeof selectedIndex === 'string' ? parseInt(selectedIndex, 10) : selectedIndex;
+      // Verifica che la conversione sia valida
+      if (isNaN(selectedIndex)) {
+        selectedIndex = null;
+      }
+    } else {
+      selectedIndex = null;
+    }
+
     fermateModalList.innerHTML = '';
 
     filteredFermate.forEach(({ name, index, distance }) => {
@@ -95,6 +116,12 @@
       }
       
       li.dataset.index = index;
+
+      // Evidenzia la fermata già selezionata (se presente)
+      // Confronta gli indici (entrambi dovrebbero essere numeri)
+      if (selectedIndex !== null && Number(index) === Number(selectedIndex)) {
+        li.classList.add('selected');
+      }
 
       li.addEventListener('click', () => selectFermata(index));
       fermateModalList.appendChild(li);
@@ -289,6 +316,8 @@
     getCurrentLineaIdx = config.getCurrentLineaIdx || null;
     getTariffario = config.getTariffario || null;
     onFermataSelected = config.onFermataSelected || null;
+    getCurrentPartenzaIdx = config.getCurrentPartenzaIdx || null;
+    getCurrentArrivoIdx = config.getCurrentArrivoIdx || null;
 
     // Event listeners per modal fermate
     if (fermateModalClose) {
