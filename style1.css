@@ -2397,25 +2397,7 @@ p, span, div, a, button, input, select, textarea, label, li {
       font-size: 0.85rem; /* Fermate più piccole */
     }
     
-    /* Ottimizzazione PWA Bottom Navigation */
-    .pwa-nav-item {
-      padding: 0.5rem 0.9rem; /* Padding ridotto */
-      gap: 0.25rem; /* Gap ridotto tra icona e testo */
-    }
-    
-    .pwa-nav-icon {
-      width: 22px; /* Icone più piccole */
-      height: 22px;
-    }
-    
-    .pwa-nav-label {
-      font-size: 0.7rem; /* Label più piccole */
-    }
-    
-    .pwa-bottom-nav {
-      padding: 0.5rem; /* Barra più compatta */
-      gap: 0.25rem;
-    }
+    /* NOTA: Ottimizzazione PWA Bottom Navigation spostata in css/components/pwa-bottom-nav.css */
   }
   
   .fermate-modal.show .fermate-modal-content {
@@ -4075,8 +4057,19 @@ p, span, div, a, button, input, select, textarea, label, li {
     background: linear-gradient(135deg, var(--turchese) 0%, #17b7b1 100%); /* Gradiente turchese */
     box-shadow: 0 8px 24px rgba(0, 123, 138, 0.25); /* Ombra turchese */
     animation: slideUp 0.4s ease-out;         /* Animazione di entrata */
-    transition: all 0.3s ease;                /* Transizione fluida */
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out, margin 0.3s ease-out, max-height 0.3s ease-out, box-shadow 0.3s ease; /* Transizione fluida */
     /* NOTA: @keyframes slideUp spostato in css/animations.css */
+  }
+  
+  /* Banner PWA in chiusura */
+  .pwa-install-banner.closing {
+    transform: translateY(-20px);             /* Sposta verso l'alto */
+    opacity: 0;                               /* Scompare */
+    margin-top: 0 !important;                 /* Riduce margine superiore */
+    margin-bottom: 0 !important;              /* Riduce margine inferiore */
+    max-height: 0 !important;                 /* Riduce altezza */
+    overflow: hidden;                         /* Nasconde overflow */
+    padding: 0;                               /* Rimuove padding */
   }
   
   .pwa-install-banner:hover {
@@ -4178,9 +4171,21 @@ p, span, div, a, button, input, select, textarea, label, li {
     background: rgba(255, 255, 255, 0.15);   /* Sfondo semi-trasparente */
     backdrop-filter: blur(10px);              /* Effetto blur */
     -webkit-backdrop-filter: blur(10px);      /* Safari support */
-    padding: 1.25rem 1.5rem;                  /* Padding interno */
+    padding: 0;                               /* Padding iniziale 0 per animazione */
     border-top: 1px solid rgba(255, 255, 255, 0.2); /* Bordo superiore */
     color: white;                             /* Testo bianco */
+    max-height: 0;                            /* Altezza iniziale 0 per animazione */
+    overflow: hidden;                         /* Nasconde contenuto durante animazione */
+    opacity: 0;                               /* Opacità iniziale 0 per animazione */
+    transition: max-height 0.4s ease-out, opacity 0.4s ease-out, padding 0.4s ease-out; /* Animazione fluida */
+  }
+  
+  /* Hint iOS visibile */
+  .pwa-ios-hint.show,
+  .pwa-ios-hint[style*="display: block"] {
+    max-height: 500px;                        /* Altezza massima (adeguata per contenuto) */
+    opacity: 1;                               /* Opacità piena */
+    padding: 1.25rem 1.5rem;                  /* Padding normale */
   }
   
   /* Titolo hint iOS */
@@ -4234,6 +4239,63 @@ p, span, div, a, button, input, select, textarea, label, li {
   
   /* Nota finale iOS */
   .ios-hint-note {
+    font-size: 0.875rem;                      /* Font leggermente più piccolo */
+    font-style: italic;                       /* Corsivo */
+    color: rgba(255, 255, 255, 0.85);        /* Leggermente trasparente */
+    padding-top: 0.5rem;                      /* Padding sopra */
+    border-top: 1px solid rgba(255, 255, 255, 0.15); /* Bordo superiore */
+  }
+  
+  /* Sezione hint per Android (stile simile a iOS) */
+  .pwa-android-hint {
+    background: rgba(255, 255, 255, 0.15);   /* Sfondo semi-trasparente */
+    backdrop-filter: blur(10px);              /* Effetto blur */
+    -webkit-backdrop-filter: blur(10px);      /* Safari support */
+    padding: 1.25rem 1.5rem;                  /* Padding interno */
+    border-top: 1px solid rgba(255, 255, 255, 0.2); /* Bordo superiore */
+    color: white;                             /* Testo bianco */
+    max-height: 0;                            /* Altezza iniziale 0 per animazione */
+    overflow: hidden;                         /* Nasconde contenuto durante animazione */
+    opacity: 0;                               /* Opacità iniziale 0 per animazione */
+    transition: max-height 0.4s ease-out, opacity 0.4s ease-out, padding 0.4s ease-out; /* Animazione fluida */
+  }
+  
+  /* Hint Android visibile */
+  .pwa-android-hint.show {
+    max-height: 500px;                        /* Altezza massima (adeguata per contenuto) */
+    opacity: 1;                               /* Opacità piena */
+    padding: 1.25rem 1.5rem;                  /* Padding normale */
+  }
+  
+  /* Titolo hint Android */
+  .android-hint-title {
+    font-size: 1rem;                          /* Dimensione font */
+    font-weight: 600;                         /* Semi-grassetto */
+    margin-bottom: 0.75rem;                   /* Spazio sotto */
+    display: flex;                            /* Per allineare icona */
+    align-items: center;                      /* Centra verticalmente */
+    gap: 0.5rem;                              /* Spazio tra emoji e testo */
+  }
+  
+  /* Lista step Android */
+  .android-hint-steps {
+    list-style: none;                         /* Rimuove bullets default */
+    padding: 0;                               /* Reset padding */
+    margin: 0 0 0.75rem 0;                    /* Margine sotto */
+    display: flex;                            /* Layout flex */
+    flex-direction: column;                   /* Disponi in colonna */
+    gap: 0.5rem;                              /* Spazio tra step */
+  }
+  
+  .android-hint-steps li {
+    display: flex;                            /* Layout flex */
+    align-items: flex-start;                  /* Allinea in alto */
+    gap: 0.5rem;                              /* Spazio tra numero e testo */
+    line-height: 1.5;                         /* Altezza linea */
+  }
+  
+  /* Nota finale Android */
+  .android-hint-note {
     font-size: 0.875rem;                      /* Font leggermente più piccolo */
     font-style: italic;                       /* Corsivo */
     color: rgba(255, 255, 255, 0.85);        /* Leggermente trasparente */
@@ -4302,8 +4364,14 @@ p, span, div, a, button, input, select, textarea, label, li {
       font-size: 0.875rem;                    /* Font leggermente più piccolo */
     }
     
-    .pwa-ios-hint {
+    .pwa-ios-hint,
+    .pwa-android-hint {
       padding: 1rem;                          /* Padding ridotto */
+    }
+    
+    .pwa-ios-hint.show,
+    .pwa-android-hint.show {
+      padding: 1rem;                          /* Padding ridotto quando visibile */
     }
     
     .ios-hint-title {
@@ -4653,14 +4721,7 @@ p, span, div, a, button, input, select, textarea, label, li {
     height: 22px;
   }
   
-  .pwa-nav-label {
-    font-size: 0.7rem;
-  }
-  
-  .pwa-bottom-nav {
-    padding: 0.5rem;
-    gap: 0.25rem;
-  }
+  /* NOTA: Stili PWA Bottom Navigation spostati in css/components/pwa-bottom-nav.css */
 }
 
 .settings-modal.show .settings-modal-content {
@@ -5721,10 +5782,11 @@ html.scale-125 {
   }
   
   body.display-optimized .info-card,
-  body.display-optimized .settings-item,
-  body.display-optimized .pwa-bottom-nav {
+  body.display-optimized .settings-item {
     border-width: 0.5px;
   }
+  
+  /* NOTA: body.display-optimized .pwa-bottom-nav spostato in css/components/pwa-bottom-nav.css */
   
   body.display-optimized .card,
   body.display-optimized .info-card {
@@ -5765,584 +5827,9 @@ html.scale-125 {
 
 /* ========================================
    PWA BOTTOM NAVIGATION
-   Barra di navigazione inferiore moderna e sospesa
-   Visibile SOLO in modalità PWA (standalone)
+   NOTA: Gli stili CSS per PWA Bottom Navigation sono stati spostati
+   in css/components/pwa-bottom-nav.css
    ======================================== */
-
-/* Brand Header TPL (stile navbar in alto) */
-.pwa-brand-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  
-  /* Trasparenza glassmorphism come navbar originale */
-  background: linear-gradient(135deg, 
-    rgba(0, 123, 138, 0.9) 0%, 
-    rgba(0, 123, 138, 0.7) 50%, 
-    rgba(0, 123, 138, 0.5) 100%
-  );
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  
-  /* Bordi e ombre */
-  border-bottom: 1px solid rgba(0, 123, 138, 0.3);
-  box-shadow: 0 4px 12px 0 rgba(0, 123, 138, 0.4);
-  
-  /* Layout */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  
-  /* Dimensioni */
-  padding: 9px 2rem !important;
-  padding-top: max(9px, env(safe-area-inset-top)) !important;
-  padding-bottom: 9px !important;
-  
-  /* Animazioni */
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
-  z-index: 999;
-}
-
-/* Effetto rifrazione della luce per brand header */
-.pwa-brand-header::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 60%;
-  background: linear-gradient(180deg, 
-    rgba(255, 255, 255, 0.15) 0%, 
-    transparent 100%
-  );
-  pointer-events: none;
-  z-index: 1;
-  border-radius: inherit;
-}
-
-/* Contenuto brand header sopra rifrazione */
-.pwa-brand-header > * {
-  position: relative;
-  z-index: 2;
-}
-
-/* Barra di progresso scroll sotto brand header */
-.pwa-brand-header {
-  --scroll-progress: 0%;
-}
-
-.pwa-brand-header::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  height: 3px;
-  width: var(--scroll-progress);
-  background: linear-gradient(90deg, 
-    rgba(255, 255, 255, 0.9),
-    rgba(255, 255, 255, 0.7)
-  );
-  transition: width 0.1s ease-out;
-  box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
-  border-radius: 0 3px 3px 0;
-  z-index: 3;
-}
-
-/* Nascosta di default */
-.pwa-brand-header[style*="display: none"] {
-  transform: translateY(-100%);
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* Visibile quando attiva */
-.pwa-brand-header:not([style*="display: none"]) {
-  transform: translateY(0);
-  opacity: 1;
-  pointer-events: all;
-}
-
-/* Barra di navigazione (fisso in basso) */
-.pwa-bottom-nav {
-  position: fixed;
-  bottom: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  
-  /* Trasparenza glassmorphism come navbar originale */
-  background: linear-gradient(135deg, 
-    rgba(0, 123, 138, 0.9) 0%, 
-    rgba(0, 123, 138, 0.7) 50%, 
-    rgba(0, 123, 138, 0.5) 100%
-  );
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  
-  /* Bordi e ombre */
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 20px;
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.3),
-    0 2px 12px rgba(0, 123, 138, 0.4);
-  
-  /* Layout */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
-  
-  /* Dimensioni */
-  padding: 0.75rem 2rem;
-  padding-bottom: max(0.75rem, calc(env(safe-area-inset-bottom) + 0.75rem));
-  max-width: calc(100% - 32px);
-  width: auto;
-  min-width: 450px;
-  
-  /* Animazioni */
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
-  z-index: 999;
-}
-
-/* Effetto rifrazione della luce per bottom nav */
-.pwa-bottom-nav::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 60%;
-  background: linear-gradient(180deg, 
-    rgba(255, 255, 255, 0.15) 0%, 
-    transparent 100%
-  );
-  pointer-events: none;
-  z-index: 1;
-  border-radius: inherit;
-}
-
-/* Contenuto bottom nav sopra rifrazione */
-.pwa-bottom-nav > * {
-  position: relative;
-  z-index: 2;
-}
-
-/* Dark Mode per PWA Brand Header e Bottom Nav */
-body.dark-mode .pwa-brand-header,
-body.dark-mode .pwa-bottom-nav {
-  background: linear-gradient(135deg, 
-    rgba(13, 94, 102, 0.9) 0%, 
-    rgba(10, 77, 84, 0.7) 50%, 
-    rgba(8, 60, 66, 0.5) 100%
-  );
-  border-color: rgba(255, 255, 255, 0.1);
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.5),
-    0 4px 16px rgba(13, 94, 102, 0.4);
-}
-
-body.dark-mode .pwa-brand-header::before,
-body.dark-mode .pwa-bottom-nav::before {
-  background: linear-gradient(180deg, 
-    rgba(255, 255, 255, 0.08) 0%, 
-    transparent 100%
-  );
-}
-
-body.dark-mode .pwa-nav-item {
-  color: rgba(255, 255, 255, 0.8);
-}
-
-body.dark-mode .pwa-nav-item.active {
-  background: rgba(255, 255, 255, 0.12);
-  color: #ffffff;
-}
-
-body.dark-mode .pwa-nav-item:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: #ffffff;
-}
-
-/* Nascosta di default */
-.pwa-bottom-nav[style*="display: none"] {
-  transform: translateX(-50%) translateY(150%);
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* Visibile quando attiva */
-.pwa-bottom-nav:not([style*="display: none"]) {
-  transform: translateX(-50%) translateY(0);
-  opacity: 1;
-  pointer-events: all;
-}
-
-/* Singola tab/icona */
-.pwa-nav-item {
-  flex: 0 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.35rem;
-  
-  padding: 0.625rem 1.25rem;
-  border-radius: 12px;
-  background: transparent;
-  border: none;
-  
-  color: rgba(255, 255, 255, 0.7);
-  text-decoration: none;
-  cursor: pointer;
-  
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  -webkit-tap-highlight-color: transparent;
-}
-
-/* Icona SVG - sottile e moderna */
-.pwa-nav-icon {
-  width: 26px;
-  height: 26px;
-  stroke-width: 1.5;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Label con nomi sotto le icone */
-.pwa-nav-label {
-  display: block;
-  font-size: 0.7rem;
-  font-weight: 500;
-  white-space: nowrap;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Assicura che i pulsanti (settings) siano cliccabili */
-button.pwa-nav-item,
-.pwa-nav-item button {
-  pointer-events: all !important;
-  cursor: pointer !important;
-  background: transparent;
-  border: none;
-  outline: none;
-}
-
-button.pwa-nav-item:focus {
-  outline: 2px solid rgba(255, 255, 255, 0.5);
-  outline-offset: 2px;
-}
-
-/* Logo Wrapper - Ingrandito */
-.pwa-logo-wrapper {
-  position: relative;
-  width: 65px;
-  height: 65px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 14px;
-  perspective: 1000px;
-  transform-style: preserve-3d;
-  flex-shrink: 0;
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);
-}
-
-/* Logo Images con effetto flip 3D (solo desktop) */
-.pwa-logo-img {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  border-radius: 14px;
-  transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55), opacity 0.6s;
-  backface-visibility: hidden;
-  z-index: 1;
-}
-
-.pwa-logo-default {
-  transform: rotateY(0deg);
-  opacity: 1;
-}
-
-.pwa-logo-hover {
-  transform: rotateY(180deg);
-  opacity: 0;
-}
-
-/* Flip 3D solo su desktop (hover) */
-@media (hover: hover) and (pointer: fine) {
-  .pwa-logo-wrapper:hover .pwa-logo-default {
-    transform: rotateY(180deg);
-    opacity: 0;
-  }
-  
-  .pwa-logo-wrapper:hover .pwa-logo-hover {
-    transform: rotateY(360deg);
-    opacity: 1;
-  }
-}
-
-/* Mobile/Touch: nessun flip, logo fisso */
-@media (hover: none) or (pointer: coarse) {
-  .pwa-logo-hover {
-    display: none;
-  }
-  
-  .pwa-logo-default {
-    opacity: 1 !important;
-    transform: rotateY(0deg) !important;
-  }
-}
-
-/* Effetto rifrazione della luce interno (come navbar) */
-.pwa-logo-wrapper::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 60%;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.25) 0%,
-    rgba(255, 255, 255, 0.15) 40%,
-    transparent 70%,
-    transparent 100%
-  );
-  border-radius: 14px 14px 8px 8px;
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* Brand Title Container */
-.pwa-brand-title {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: rgba(255, 255, 255, 0.95);
-}
-
-/* Logo Acronym (TPL FVG) - Minuscolo */
-.pwa-logo-acronym {
-  display: flex;
-  flex-direction: column;
-  text-transform: lowercase;
-  font-family: 'Arial', sans-serif;
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: 0.5px;
-  text-shadow: 0 2px 15px rgba(0, 0, 0, 0.6);
-}
-
-.pwa-logo-acronym div {
-  font-size: 1.4rem;
-}
-
-/* Logo Text (trasporto pubblico locale) - Identico alla navbar */
-.pwa-logo-text {
-  display: flex;
-  flex-direction: column;
-  text-transform: lowercase;
-  font-family: 'Arial', sans-serif;
-  font-weight: 300;
-  line-height: 1.15;
-  font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.9);
-  letter-spacing: 0.3px;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-}
-
-/* Hover (solo desktop) */
-@media (hover: hover) {
-  .pwa-nav-item:hover {
-    background: rgba(255, 255, 255, 0.2);
-    color: #ffffff;
-    transform: scale(1.05);
-  }
-  
-  .pwa-nav-item:hover .pwa-nav-icon {
-    transform: scale(1.15);
-  }
-  
-}
-
-/* Tab attiva */
-.pwa-nav-item.active {
-  background: rgba(255, 255, 255, 0.25);
-  color: #ffffff;
-}
-
-.pwa-nav-item.active .pwa-nav-icon {
-  stroke-width: 2;
-  transform: scale(1.1);
-}
-
-/* Effetto tap */
-.pwa-nav-item:active {
-  transform: scale(0.92);
-}
-
-/* Indicatore tab attiva (pallino animato) */
-.pwa-nav-item.active::after {
-  content: '';
-  position: absolute;
-  bottom: 4px;
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: #ffffff;
-  animation: dotPulse 2s ease-in-out infinite;
-  /* NOTA: @keyframes dotPulse spostato in css/animations.css */
-}
-
-/* Dark mode - stesso colore turchese ma più scuro */
-.dark .pwa-brand-header,
-.dark .pwa-bottom-nav {
-  background: linear-gradient(135deg, rgba(0, 100, 110, 0.95), rgba(0, 123, 138, 0.95));
-  border-color: rgba(255, 255, 255, 0.15);
-  box-shadow: 
-    0 8px 40px rgba(0, 0, 0, 0.5),
-    0 4px 16px rgba(0, 123, 138, 0.3);
-}
-
-.dark .pwa-nav-item {
-  color: rgba(255, 255, 255, 0.65);
-}
-
-.dark .pwa-nav-item.active {
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.dark .pwa-nav-item.active::after {
-  background: #ffffff;
-}
-
-@media (hover: hover) {
-  .dark .pwa-nav-item:hover {
-    background: rgba(255, 255, 255, 0.15);
-    color: #ffffff;
-  }
-}
-
-/* Padding per contenuto quando PWA è attiva */
-body.pwa-mode .main-content {
-  padding-top: 85px; /* Spazio per brand header in alto */
-  padding-bottom: calc(90px + env(safe-area-inset-bottom)); /* Spazio per bottom nav */
-}
-
-body.pwa-mode footer {
-  padding-bottom: calc(90px + env(safe-area-inset-bottom));
-}
-
-/* Nasconde navbar superiore in modalità PWA */
-body.pwa-mode .navbar {
-  display: none;
-}
-
-/* Animazione entrata */
-/* NOTA: @keyframes slideUpNav spostato in css/animations.css */
-
-.pwa-bottom-nav.show {
-  animation: slideUpNav 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-
-/* Responsive - Mobile */
-@media (max-width: 480px) {
-  .pwa-brand-header {
-    padding: 0.75rem 1rem;
-    gap: 0.5rem;
-  }
-  
-  body.pwa-mode .main-content {
-    padding-top: 80px; /* Altezza ridotta brand header mobile */
-  }
-  
-  .pwa-bottom-nav {
-    padding: 0.625rem 1rem;
-    max-width: calc(100% - 24px);
-    bottom: 12px;
-    min-width: 0;
-  }
-  
-  .pwa-nav-item {
-    padding: 0.5rem 0.75rem;
-    gap: 0.25rem;
-  }
-  
-  .pwa-nav-icon {
-    width: 22px;
-    height: 22px;
-  }
-  
-  .pwa-nav-label {
-    font-size: 0.65rem;
-  }
-  
-  .pwa-logo-wrapper {
-    width: 50px;
-    height: 50px;
-  }
-  
-  .pwa-logo-acronym div {
-    font-size: 1.4rem;
-  }
-  
-  .pwa-logo-text {
-    font-size: 0.8rem;
-    line-height: 1.1;
-  }
-}
-
-/* Responsive - Schermi molto piccoli */
-@media (max-width: 360px) {
-  .pwa-brand-header {
-    padding: 0.625rem 0.75rem;
-    gap: 0.4rem;
-  }
-  
-  .pwa-bottom-nav {
-    padding: 0.5rem 0.5rem;
-    max-width: calc(100% - 20px);
-    gap: 0.25rem;
-  }
-  
-  .pwa-nav-item {
-    padding: 0.5rem 0.5rem;
-    gap: 0.2rem;
-  }
-  
-  .pwa-nav-icon {
-    width: 20px;
-    height: 20px;
-  }
-  
-  .pwa-nav-label {
-    font-size: 0.6rem;
-  }
-  
-  .pwa-logo-wrapper {
-    width: 45px;
-    height: 45px;
-  }
-  
-  .pwa-logo-acronym div {
-    font-size: 1.2rem;
-  }
-  
-  .pwa-logo-text {
-    font-size: 0.7rem;
-    line-height: 1;
-  }
-  
-  .pwa-brand-title {
-    gap: 0.4rem;
-  }
-}
 
 /* ========================================
    BANNER OFFLINE

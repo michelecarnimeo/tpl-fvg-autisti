@@ -1,6 +1,6 @@
 {
-  "version": "1.7.1",
+  "version": "1.7.2",
   "versionDate": "10 Novembre 2025",
-  "versionTime": "12:10",
-  "updateNotes": "Fix GPS reset button quando utente modifica manualmente partenza dopo auto-assegnazione, evidenziazione fermata selezionata nel modal, miglioramenti UX per autisti (scenario multi-cliente: GPS auto-assegna → modifica manuale → ri-premere GPS per stazione corrente)"
+  "versionTime": "16:15",
+  "updateNotes": "Modularizzazione PWA Bottom Navigation: estratto componente in js/components/pwa-bottom-nav.js e css/components/pwa-bottom-nav.css. Ridotto script.js di ~278 righe e style1.css di ~599 righe. Migliorata organizzazione codice e manutenibilità."
 }

@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="css/components/settings/aspetto.css">
   <link rel="stylesheet" href="css/components/settings/info.css">
   <link rel="stylesheet" href="css/components/mega-dropdown-settings.css">
+  <link rel="stylesheet" href="css/components/pwa-bottom-nav.css">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="src/tpl.jpg" type="image/jpeg">
   <!-- Stili specifici per la pagina fermate -->
@@ -258,6 +259,16 @@
           </ol>
           <div class="ios-hint-note">💡 L'app apparirà sulla tua schermata Home come un'app nativa</div>
         </div>
+        <div id="pwa-android-hint" class="pwa-android-hint" style="display: none;">
+          <div class="android-hint-title">🤖 Come installare su Android:</div>
+          <ol class="android-hint-steps">
+            <li><span class="step-number">1.</span> Tocca il pulsante <strong>"Installa"</strong> qui sopra (se disponibile) ⬆️</li>
+            <li><span class="step-number">2.</span> Oppure: tocca il menu <strong>⋮</strong> (tre puntini) in alto a destra del browser</li>
+            <li><span class="step-number">3.</span> Seleziona <strong>"Installa app"</strong> o <strong>"Aggiungi alla schermata Home"</strong> 📱</li>
+            <li><span class="step-number">4.</span> Conferma l'installazione toccando <strong>"Installa"</strong> ✅</li>
+          </ol>
+          <div class="android-hint-note">💡 L'app apparirà sulla tua schermata Home e potrai aprirla come un'app nativa</div>
+        </div>
       </div>
     </div>
   </main>
@@ -388,6 +399,8 @@
   <script src="changelog.js"></script>
   <script src="js/components/modals.js"></script>
   <script src="js/components/hamburger-menu.js"></script>
+  <script src="js/components/pwa-install.js"></script>
+  <script src="js/components/pwa-bottom-nav.js"></script>
   <script src="script.js"></script>
   <script src="js/utils/app-init.js"></script>
 

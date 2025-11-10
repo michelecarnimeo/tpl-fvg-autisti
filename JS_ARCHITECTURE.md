@@ -1496,6 +1496,295 @@ const STATIC_ASSETS = [
 
 ---
 
+## 📱 PWA (Progressive Web App) - Architettura e Componenti
+
+### **Cosa è una PWA?**
+
+Una **PWA (Progressive Web App)** è un'applicazione web che usa tecnologie moderne per offrire un'esperienza simile a un'app nativa. Può essere installata sul dispositivo dell'utente e funzionare offline.
+
+### **Componenti Necessari per una PWA Installabile**
+
+Per rendere la tua web app installabile come PWA, sono necessari **4 componenti essenziali**:
+
+#### **1. Manifest (`manifest.webmanifest`)** ✅
+
+**Cosa fa:**
+- Definisce metadati dell'app (nome, icone, colori)
+- Specifica il comportamento quando l'app è installata (display mode: `standalone`)
+- Permette al browser di identificare l'app come installabile
+
+**Dove si trova:**
+- File: `manifest.webmanifest`
+- Riferimento HTML: `<link rel="manifest" href="manifest.webmanifest">` nel `<head>`
+
+**Contenuto minimo:**
+```json
+{
+  "name": "TPL FVG",
+  "short_name": "TPL FVG",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "icons": [...],
+  "theme_color": "#17b7b1",
+  "background_color": "#17b7b1"
+}
+```
+
+**Verifica:**
+- Il test `test-manifest.js` verifica che il manifest sia caricato correttamente
+- Il test PWA Install Banner verifica la presenza del tag `<link rel="manifest">`
+
+---
+
+#### **2. Service Worker (`sw.js`)** ✅
+
+**Cosa fa:**
+- Abilita funzionalità offline (caching)
+- Permette all'app di funzionare senza connessione internet
+- **REQUISITO OBBLIGATORIO** per l'installazione su Android/Chrome
+
+**Dove si trova:**
+- File: `sw.js` (root del progetto)
+- Registrazione: `navigator.serviceWorker.register('/sw.js')`
+
+**Funzionalità:**
+- Cache static assets (HTML, CSS, JS, immagini)
+- Cache API responses (dati dinamici)
+- Offline fallback (mostra contenuto cached quando offline)
+- Update management (verifica aggiornamenti)
+
+**Verifica:**
+- Il test `test-sw.js` verifica la registrazione e funzionalità del Service Worker
+- Condizione installabilità: `'serviceWorker' in navigator` deve essere `true`
+
+---
+
+#### **3. HTTPS (o localhost)** ✅
+
+**Cosa fa:**
+- Fornisce connessione sicura (crittografata)
+- **REQUISITO OBBLIGATORIO** per Service Worker e installazione PWA
+
+**Dove si verifica:**
+- GitHub Pages: Automaticamente HTTPS
+- Localhost: Supportato per sviluppo
+- 127.0.0.1: Supportato per sviluppo
+
+**Verifica:**
+- Condizione installabilità: `location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1'`
+
+---
+
+#### **4. beforeinstallprompt Event** ⚠️
+
+**Cosa fa:**
+- Evento del browser che indica che l'app è installabile
+- Viene emesso quando **tutte le condizioni** sono soddisfatte:
+  - ✅ Manifest presente e valido
+  - ✅ Service Worker registrato e attivo
+  - ✅ HTTPS (o localhost)
+  - ✅ App **non già installata**
+  - ✅ Utente **non ha già rifiutato** l'installazione
+
+**Dove si gestisce:**
+- File: `js/components/pwa-install.js`
+- Event listener: `window.addEventListener('beforeinstallprompt', (e) => { ... })`
+
+**Nota importante:**
+- Il `beforeinstallprompt` **NON viene sempre emesso**, anche se tutte le condizioni sono soddisfatte
+- Il browser decide autonomamente quando mostrare il prompt
+- **Non disponibile in DevTools mobile** (emulazione non supporta correttamente l'evento)
+- **Non disponibile se l'app è già installata** (standalone mode)
+
+**Verifica:**
+- Il test PWA Install Banner verifica: `hasDeferredPrompt: !!deferredInstallPrompt`
+- Se `false`, può essere normale (browser non ha emesso l'evento)
+
+---
+
+### **Condizioni di Installabilità - Checklist**
+
+Il modulo `pwa-install.js` verifica automaticamente tutte le condizioni:
+
+```javascript
+const checks = {
+  hasServiceWorker: 'serviceWorker' in navigator,           // ✅ Browser supporta SW
+  hasManifest: !!document.querySelector('link[rel="manifest"]'), // ✅ Manifest presente
+  isHTTPS: location.protocol === 'https:' || ...,           // ✅ HTTPS o localhost
+  isStandalone: window.matchMedia('(display-mode: standalone)').matches, // ❌ Non già installata
+  hasDeferredPrompt: !!deferredInstallPrompt,               // ⚠️ Evento emesso (opzionale)
+  userAgent: navigator.userAgent                            // Info dispositivo
+};
+```
+
+**Risultato:**
+- ✅ **Tutte le condizioni soddisfatte**: App installabile
+- ❌ **Alcune condizioni mancanti**: App non installabile
+- ⚠️ **Deferred prompt non disponibile**: Normale, può essere installabile comunque
+
+---
+
+### **Come Funziona l'Installazione**
+
+#### **Android/Chrome:**
+1. Browser emette `beforeinstallprompt` event
+2. Banner PWA mostra pulsante "Installa"
+3. Utente clicca "Installa"
+4. Browser mostra prompt nativo di installazione
+5. Utente conferma installazione
+6. App installata come standalone
+
+#### **iOS/Safari:**
+1. Banner PWA mostra istruzioni manuali
+2. Utente deve usare menu "Condividi" → "Aggiungi a Home"
+3. Nessun `beforeinstallprompt` (Safari non supporta)
+4. App installata come standalone
+
+---
+
+### **Moduli PWA nel Progetto**
+
+#### **1. `js/components/pwa-install.js`** ✅
+
+**Funzionalità:**
+- Banner installazione PWA (Android/Chrome)
+- Istruzioni installazione iOS/Safari
+- Gestione `beforeinstallprompt` event
+- Gestione `appinstalled` event
+- Rilevamento dispositivo (iOS/Android)
+- Gestione frequenza mostra banner (7 giorni)
+- Nasconde banner quando app è in background
+
+**API Pubblica:**
+```javascript
+window.PWAInstall = {
+  show: () => {},              // Mostra banner manualmente
+  hide: () => {},              // Nasconde banner
+  testShowBanner: () => {},    // Forza visualizzazione (test)
+  checkInstallability: () => {} // Verifica condizioni installabilità
+};
+```
+
+**Dipendenza:** `window.Storage` (localStorage per frequenza banner)
+
+---
+
+#### **2. `manifest.webmanifest`** ✅
+
+**Contenuto:**
+- Nome app: "TPL FVG"
+- Display mode: "standalone" (app-like experience)
+- Icons: 192x192, 512x512
+- Theme color: #17b7b1
+- Start URL: "./index.html"
+
+**Riferimento HTML:**
+- `<link rel="manifest" href="manifest.webmanifest">` in `<head>`
+
+---
+
+#### **3. `js/components/pwa-bottom-nav.js`** ✅
+
+**Funzionalità:**
+- Brand header e bottom navigation (mostra/nascondi in modalità PWA)
+- Evidenziazione tab attiva in base alla pagina corrente
+- Gestione pulsante impostazioni nella bottom nav
+- Scroll progress bar nel brand header
+- PWA Update Check Button (verifica aggiornamenti)
+- Simulazione offline globale (per test)
+- Listener per cambio modalità test PWA
+
+**API Pubblica:**
+```javascript
+window.PWABottomNav = {
+  toggle: () => {},              // Mostra/nascondi bottom nav
+  highlightActiveTab: () => {},  // Evidenzia tab attiva
+  refresh: () => {}              // Aggiorna tutto
+};
+
+// Retrocompatibilità
+window.refreshPWABottomNav = () => {};
+```
+
+**Dipendenze:**
+- `window.Storage` (localStorage per modalità test)
+- `window.SettingsModal` (apertura modal impostazioni)
+- `window.Updates` (verifica aggiornamenti)
+
+**File CSS:** `css/components/pwa-bottom-nav.css` (586 righe)
+
+**Stili:**
+- Brand header (glassmorphism, scroll progress bar)
+- Bottom navigation (barra inferiore sospesa)
+- Navigation items (tab/icone)
+- Logo e brand title
+- Dark mode support
+- Responsive (mobile, tablet, schermi piccoli)
+
+---
+
+#### **4. `sw.js` (Service Worker)** ✅
+
+**Funzionalità:**
+- Cache static assets
+- Cache API responses
+- Offline fallback
+- Update management
+
+**Registrazione:**
+- Automatica all'avvio dell'app
+- Verificata da `test-sw.js`
+
+---
+
+### **Test PWA Install Banner**
+
+Il test in `test.html` verifica:
+1. ✅ Banner HTML presente
+2. ✅ Modulo PWAInstall caricato
+3. ✅ Condizioni installabilità (Service Worker, Manifest, HTTPS, Standalone, Deferred Prompt)
+
+**Pulsanti di test:**
+- 🧪 **Test PWA Install Banner**: Esegue tutti i test
+- 👁️ **Mostra Banner**: Forza visualizzazione banner (test)
+- 🙈 **Nascondi Banner**: Nasconde banner
+- 🔍 **Verifica Condizioni**: Mostra dettagli condizioni installabilità
+
+---
+
+### **Troubleshooting**
+
+#### **Problema: Banner non appare su Android**
+- ✅ Verifica: Manifest presente (`<link rel="manifest">`)
+- ✅ Verifica: Service Worker registrato
+- ✅ Verifica: HTTPS (o localhost)
+- ⚠️ Nota: `beforeinstallprompt` potrebbe non essere emesso (normale)
+- 💡 Soluzione: Usa pulsante "Mostra Banner" per testare manualmente
+
+#### **Problema: Deferred Prompt non disponibile**
+- ⚠️ Normale se app già installata
+- ⚠️ Normale se utente ha già rifiutato installazione
+- ⚠️ Normale in DevTools mobile (emulazione non supporta)
+- ✅ Banner può essere mostrato comunque (test manuale)
+
+#### **Problema: Manifest non trovato**
+- ✅ Verifica: Tag `<link rel="manifest" href="manifest.webmanifest">` nel `<head>`
+- ✅ Verifica: File `manifest.webmanifest` esiste nella root
+- ✅ Verifica: Path corretto (relativo alla pagina HTML)
+
+---
+
+### **Riferimenti**
+
+- **Manifest:** `manifest.webmanifest`
+- **Service Worker:** `sw.js`
+- **Banner PWA:** `js/components/pwa-install.js`
+- **Test Manifest:** `js/tests/test-manifest.js`
+- **Test Service Worker:** `js/tests/test-sw.js`
+- **Test PWA Install:** Sezione "Test PWA Install Banner" in `test.html`
+
+---
+
 ## 🎯 Convenzioni di Codice
 
 ### **Naming:**
@@ -1642,5 +1931,5 @@ Tutti i `onclick` inline in `test.html` sono stati sostituiti con **event delega
 
 ---
 
-**Ultimo aggiornamento**: 10 Novembre 2025 ore 12:10  
-**Versione progetto**: 1.7.1 (event delegation, TOC navigation module, test.html ottimizzato, fix GPS reset button, evidenziazione fermata selezionata)
+**Ultimo aggiornamento**: 10 Novembre 2025 ore 16:15  
+**Versione progetto**: 1.7.2 (modularizzazione PWA Bottom Navigation, riduzione script.js e style1.css, migliorata organizzazione codice)

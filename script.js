@@ -134,11 +134,6 @@ const summaryCodice = document.getElementById('summary-codice');
 const summaryPartenza = document.getElementById('summary-partenza');
 const summaryArrivo = document.getElementById('summary-arrivo');
 const footerYear = document.getElementById('footer-year');
-// PWA install elements
-const pwaBanner = document.getElementById('pwa-install-banner');
-const pwaBtnInstall = document.getElementById('pwa-install-button');
-const pwaBtnLater = document.getElementById('pwa-install-later');
-const pwaIosHint = document.getElementById('pwa-ios-hint');
 // Modal fermate elements
 const fermateModal = document.getElementById('fermate-modal');
 const fermateModalTitle = document.getElementById('fermate-modal-title');
@@ -169,7 +164,6 @@ let lineaIdx = '';
 let partenzaIdx = '';
 let arrivoIdx = '';
 let hasCalculated = false;
-let deferredInstallPrompt = null; // beforeinstallprompt event
 // Modal fermate state
 // Le variabili currentModalType e filteredFermate sono ora gestite internamente da js/components/modals.js
 
@@ -1136,132 +1130,10 @@ window.addEventListener('DOMContentLoaded', function () {
 // Il modulo hamburger-menu.js si auto-inizializza e gestisce automaticamente il menu mobile
 // API disponibile: window.HamburgerMenu (open, close, isOpen, init)
 
-// --- PWA Install logic (GLOBALE - funziona su tutte le pagine) ---
-(function initPWAInstallBanner() {
-  // Elementi DOM (cercati dinamicamente per supportare tutte le pagine)
-  const pwaBanner = document.getElementById('pwa-install-banner');
-  const pwaBtnInstall = document.getElementById('pwa-install-button');
-  const pwaBtnLater = document.getElementById('pwa-install-later');
-  const pwaIosHint = document.getElementById('pwa-ios-hint');
-
-  // Se il banner non esiste nella pagina, esci
-  if (!pwaBanner) return;
-
-  // Funzioni helper
-  function isStandalone() {
-    return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-  }
-
-  function canShowAgain() {
-    try {
-      const lastDismiss = Storage.getItem('tpl.pwa.dismissTs');
-      if (!lastDismiss) return true;
-      const days = 7; // ripropone dopo 7 giorni
-      return Date.now() - parseInt(lastDismiss, 10) > days * 24 * 60 * 60 * 1000;
-    } catch { return true; }
-  }
-
-  function showBanner() {
-    if (pwaBanner && !isStandalone()) {
-      pwaBanner.style.display = 'block';
-    }
-  }
-
-  function hideBanner() {
-    if (pwaBanner) pwaBanner.style.display = 'none';
-  }
-
-  // Rilevamento dispositivo
-  function isIOSDevice() {
-    const userAgent = window.navigator.userAgent.toLowerCase();
-    const isIPhone = /iphone|ipod/.test(userAgent);
-    const isIPad = /ipad/.test(userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-    return isIPhone || isIPad;
-  }
-
-  function isAndroidDevice() {
-    return /android/i.test(window.navigator.userAgent);
-  }
-
-  const isSafari = /^((?!chrome|android).)*safari/i.test(window.navigator.userAgent);
-  const isChrome = /chrome|chromium|crios/i.test(window.navigator.userAgent) && !/edge|edg/i.test(window.navigator.userAgent);
-
-  // Gestione Android/Chrome via beforeinstallprompt
-  window.addEventListener('beforeinstallprompt', (e) => {
-    // Mostra solo se non già installata e con frequenza
-    if (isStandalone() || !canShowAgain()) return;
-    e.preventDefault();
-    deferredInstallPrompt = e;
-    if (pwaIosHint) pwaIosHint.style.display = 'none';
-    if (pwaBtnInstall) pwaBtnInstall.style.display = 'inline-block';
-    showBanner();
-  });
-
-  // Click su Installa (Android/Chrome/iOS)
-  if (pwaBtnInstall) {
-    pwaBtnInstall.addEventListener('click', async () => {
-      if (deferredInstallPrompt) {
-        // Android/Chrome: usa prompt nativo
-        deferredInstallPrompt.prompt();
-        const { outcome } = await deferredInstallPrompt.userChoice;
-        deferredInstallPrompt = null;
-        hideBanner();
-        if (outcome === 'dismissed') {
-          Storage.setItem('tpl.pwa.dismissTs', String(Date.now()));
-        }
-      } else {
-        // iOS o browser senza evento: toggle hint con animazione
-        if (pwaIosHint) {
-          const isVisible = pwaIosHint.style.display === 'block';
-          if (isVisible) {
-            pwaIosHint.style.display = 'none';
-          } else {
-            pwaIosHint.style.display = 'block';
-            // Scroll smooth verso hint
-            setTimeout(() => {
-              pwaIosHint.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }, 100);
-          }
-        }
-      }
-    });
-  }
-
-  // Click su Più tardi
-  if (pwaBtnLater) {
-    pwaBtnLater.addEventListener('click', () => {
-      hideBanner();
-      Storage.setItem('tpl.pwa.dismissTs', String(Date.now()));
-    });
-  }
-
-  // Evento installata
-  window.addEventListener('appinstalled', () => {
-    hideBanner();
-    Storage.removeItem('tpl.pwa.dismissTs');
-  });
-
-  // iOS: mostra banner con hint per istruzioni manuali
-  if (isIOSDevice() && isSafari && !isStandalone() && canShowAgain()) {
-    // iOS Safari: mostra hint e nascondi pulsante "Installa"
-    if (pwaIosHint) pwaIosHint.style.display = 'block';
-    if (pwaBtnInstall) pwaBtnInstall.textContent = 'Mostra istruzioni';
-    showBanner();
-  } else if (isAndroidDevice() && isChrome && !isStandalone() && canShowAgain() && !deferredInstallPrompt) {
-    // Android Chrome ma senza beforeinstallprompt (già installata o browser non supporta)
-    // Mostra comunque il banner per informare
-    if (pwaIosHint) pwaIosHint.style.display = 'none';
-    if (pwaBtnInstall) pwaBtnInstall.style.display = 'inline-block';
-    showBanner();
-  }
-
-  // Listener per visibilità pagina (nasconde banner quando app va in background)
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden && isStandalone()) {
-      hideBanner();
-    }
-  });
-})();
+// --- PWA Install Banner ---
+// CODICE SPOSTATO IN js/components/pwa-install.js (10/11/2025)
+// Il modulo pwa-install.js si auto-inizializza e gestisce automaticamente il banner installazione PWA
+// API disponibile: window.PWAInstall (init, show, hide, getDeferredPrompt, setDeferredPrompt)
 
 // Event listener per pulsante reset (solo su index.html)
 if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('/')) {
@@ -1301,204 +1173,13 @@ if (window.location.pathname.endsWith('index.html') || window.location.pathname 
 
 // ========================================
 // PWA BOTTOM NAVIGATION
-// Gestione della barra di navigazione inferiore in modalità PWA
+// NOTA: Questo codice è stato spostato in js/components/pwa-bottom-nav.js
+// Il modulo gestisce:
+// - Brand header e bottom navigation
+// - Scroll progress bar
+// - PWA Update Check Button
+// - Simulazione offline globale (per test)
 // ========================================
-
-(function initPWABottomNav() {
-  const bottomNav = document.getElementById('pwa-bottom-nav');
-  const brandHeader = document.getElementById('pwa-brand-header');
-  if (!bottomNav && !brandHeader) return; // Pagina senza PWA elements
-
-  // Verifica se siamo in modalità PWA
-  function isStandalone() {
-    // Controlla se è attiva la modalità test
-    // Nota: Storage.getItem può restituire booleano (se salvato come JSON) o stringa
-    const pwaTestModeValue = Storage.getItem('tpl.pwaTestMode');
-    const isTestMode = pwaTestModeValue === 'true' || pwaTestModeValue === true;
-    if (isTestMode) {
-      return true; // Forza modalità PWA per testing
-    }
-
-    // Controlla la modalità reale PWA
-    return (
-      window.matchMedia('(display-mode: standalone)').matches ||
-      window.navigator.standalone === true
-    );
-  }
-
-  // Mostra/nasconde PWA elements (brand header + bottom nav)
-  function toggleBottomNav() {
-    const isPWA = isStandalone();
-
-    if (isPWA) {
-      if (brandHeader) {
-        brandHeader.style.display = 'flex';
-        brandHeader.classList.add('show');
-      }
-      if (bottomNav) {
-        bottomNav.style.display = 'flex';
-        bottomNav.classList.add('show');
-      }
-      document.body.classList.add('pwa-mode');
-      console.log('📱 PWA Mode: ATTIVA (Brand Header + Bottom Nav)');
-    } else {
-      if (brandHeader) {
-        brandHeader.style.display = 'none';
-        brandHeader.classList.remove('show');
-      }
-      if (bottomNav) {
-        bottomNav.style.display = 'none';
-        bottomNav.classList.remove('show');
-      }
-      document.body.classList.remove('pwa-mode');
-      console.log('🌐 PWA Mode: nascosta (modalità browser)');
-    }
-  }
-
-  // Evidenzia la tab attiva in base alla pagina corrente
-  function highlightActiveTab() {
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-    const items = bottomNav.querySelectorAll('.pwa-nav-item');
-
-    items.forEach(item => {
-      item.classList.remove('active');
-
-      const page = item.getAttribute('data-page');
-      if (
-        (page === 'home' && (currentPage === 'index.html' || currentPage === '')) ||
-        (page === 'fermate' && currentPage === 'fermate.html') ||
-        (page === 'prezzi' && currentPage === 'prezzi.html')
-      ) {
-        item.classList.add('active');
-      }
-    });
-  }
-
-  // Gestisce il click sul pulsante impostazioni
-  function setupSettingsButton() {
-    const settingsBtn = document.getElementById('pwa-settings-btn');
-    
-    // Il modal potrebbe non essere ancora caricato (viene caricato dinamicamente)
-    if (!settingsBtn) {
-      return; // Pulsante non trovato, esci silenziosamente
-    }
-
-    // Rimuovi listener precedenti se esistono
-    const newBtn = settingsBtn.cloneNode(true);
-    settingsBtn.parentNode.replaceChild(newBtn, settingsBtn);
-
-    // Aggiungi listener che usa SettingsModal.open() se disponibile (metodo preferito)
-    newBtn.addEventListener('click', async function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      
-      console.log('⚙️ Click su pulsante impostazioni PWA!');
-      
-      // Prova prima con SettingsModal.open() (metodo preferito - gestisce tutto correttamente)
-      if (typeof window.SettingsModal !== 'undefined' && 
-          typeof window.SettingsModal.open === 'function') {
-        console.log('✅ Usando SettingsModal.open()');
-        try {
-          await window.SettingsModal.open();
-          return;
-        } catch (error) {
-          console.error('❌ Errore nell\'apertura del modal con SettingsModal.open():', error);
-          // Continua con il fallback
-        }
-      }
-      
-      // Fallback: prova a caricare e aprire il modal manualmente
-      const settingsModal = document.getElementById('settings-modal');
-      
-      if (!settingsModal) {
-        // Se il modal non esiste, prova a caricarlo dinamicamente
-        console.log('📥 Modal non trovato, tentativo di caricamento...');
-        
-        // Prova a chiamare loadHTML se disponibile
-        if (typeof window.SettingsModal !== 'undefined' && 
-            typeof window.SettingsModal.loadHTML === 'function') {
-          try {
-            await window.SettingsModal.loadHTML();
-            // Dopo il caricamento, riprova ad aprire usando open()
-            if (typeof window.SettingsModal.open === 'function') {
-              await window.SettingsModal.open();
-              return;
-            }
-          } catch (error) {
-            console.error('❌ Errore nel caricamento del modal:', error);
-          }
-        }
-        
-        console.warn('⚠️ Modal impostazioni non trovato e impossibile caricarlo.');
-        return;
-      }
-
-      // Se il modal esiste, aprilo direttamente
-      console.log('✅ Apertura modal esistente');
-      settingsModal.style.display = 'flex';
-      setTimeout(function() {
-        settingsModal.classList.add('show');
-        console.log('✅ Modal impostazioni aperto', {
-          display: settingsModal.style.display,
-          classList: settingsModal.classList.toString()
-        });
-      }, 10);
-    });
-  }
-
-  // Inizializza al caricamento
-  toggleBottomNav();
-  highlightActiveTab();
-  setupSettingsButton();
-
-  // Listener per cambio modalità test (da localStorage)
-  window.addEventListener('storage', (e) => {
-    if (e.key === 'tpl.pwaTestMode') {
-      console.log('🧪 Modalità test PWA cambiata:', e.newValue);
-      toggleBottomNav();
-    }
-  });
-
-  // Listener per aggiornamenti forzati (da test.html)
-  window.addEventListener('pwaTestModeChanged', () => {
-    console.log('🧪 Evento pwaTestModeChanged ricevuto');
-    toggleBottomNav();
-  });
-
-  // ===== GESTIONE SIMULAZIONE OFFLINE GLOBALE =====
-  // Controlla se la modalità offline test è attiva e trigger l'evento
-  (function checkOfflineTestMode() {
-    const isOfflineTestMode = Storage.getItem('tpl.offlineTestMode') === 'true';
-
-    if (isOfflineTestMode) {
-      console.log('🔴 Modalità offline test attiva - triggering evento offline');
-      // Trigger evento offline al caricamento della pagina
-      setTimeout(() => {
-        window.dispatchEvent(new Event('offline'));
-      }, 100);
-    }
-
-    // Listener per cambio stato offline test mode
-    window.addEventListener('storage', (e) => {
-      if (e.key === 'tpl.offlineTestMode') {
-        const isOffline = e.newValue === 'true';
-        console.log('🌐 Modalità offline test cambiata:', isOffline ? 'OFFLINE' : 'ONLINE');
-
-        if (isOffline) {
-          window.dispatchEvent(new Event('offline'));
-        } else {
-          window.dispatchEvent(new Event('online'));
-        }
-      }
-    });
-  })();
-
-  // Espone funzione refresh globale per la pagina test
-  window.refreshPWABottomNav = function () {
-    toggleBottomNav();
-    highlightActiveTab();
-  };
-})();
 
 // ========================================
 // PULSANTE "VEDI TUTTI GLI AGGIORNAMENTI"
@@ -1559,61 +1240,5 @@ if (window.location.pathname.endsWith('index.html') || window.location.pathname 
   }
 })();
 
-// ========================================
-// PWA SCROLL PROGRESS BAR
-// Barra di progresso che indica quanto si è scrollato
-// ========================================
-
-(function initScrollProgress() {
-  const brandHeader = document.getElementById('pwa-brand-header');
-  if (!brandHeader) return;
-
-  function updateScrollProgress() {
-    // Calcola la percentuale di scroll
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    const scrollPercentage = (scrollTop / scrollHeight) * 100;
-
-    // Aggiorna la larghezza della barra ::after tramite CSS custom property
-    brandHeader.style.setProperty('--scroll-progress', scrollPercentage + '%');
-  }
-
-  // Listener per lo scroll
-  window.addEventListener('scroll', updateScrollProgress, { passive: true });
-
-  // Inizializza al caricamento
-  updateScrollProgress();
-})();
-
-// ========================================
-// PWA UPDATE CHECK BUTTON
-// Pulsante per verificare aggiornamenti nel modal Impostazioni
-// ========================================
-
-(function initPWAUpdateButton() {
-  const updateBtn = document.getElementById('pwa-cache-reset');
-  if (!updateBtn) return;
-
-  updateBtn.addEventListener('click', function () {
-    console.log('🔄 Pulsante PWA Update cliccato');
-
-    // Chiudi il modal Impostazioni prima
-    if (typeof SettingsModal !== 'undefined' && SettingsModal.close) {
-      SettingsModal.close();
-    }
-
-    // Aspetta un attimo e poi verifica aggiornamenti
-    setTimeout(() => {
-      if (typeof Updates !== 'undefined' && typeof Updates.checkForUpdates === 'function') {
-        console.log('✅ Chiamata a Updates.checkForUpdates()');
-        Updates.checkForUpdates();
-      } else if (typeof checkForUpdates === 'function') {
-        // Fallback per compatibilità
-        console.log('✅ Chiamata a checkForUpdates() (fallback)');
-        checkForUpdates();
-      } else {
-        console.error('❌ Updates.checkForUpdates non è disponibile');
-      }
-    }, 400);
-  });
-})();
+// NOTA: PWA Scroll Progress Bar e PWA Update Check Button
+// sono stati spostati in js/components/pwa-bottom-nav.js
