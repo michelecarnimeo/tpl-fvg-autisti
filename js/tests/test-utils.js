@@ -40,8 +40,11 @@
         // Aggiungi al DOM
         output.appendChild(logDiv);
 
-        // Auto-scroll in fondo
-        output.scrollTop = output.scrollHeight;
+        // Auto-scroll in fondo (posticipato per evitare forced reflow)
+        // Usa requestAnimationFrame per posticipare lo scroll dopo il rendering
+        requestAnimationFrame(() => {
+            output.scrollTop = output.scrollHeight;
+        });
 
         // Log anche in console per debug
         const consoleMethod = type === 'error' ? 'error' : type === 'warning' ? 'warn' : 'log';
@@ -203,7 +206,10 @@
     `;
 
         output.appendChild(logDiv);
-        output.scrollTop = output.scrollHeight;
+        // Auto-scroll in fondo (posticipato per evitare forced reflow)
+        requestAnimationFrame(() => {
+            output.scrollTop = output.scrollHeight;
+        });
     }
 
     /**
@@ -257,7 +263,10 @@
     `;
 
         output.appendChild(progressDiv);
-        output.scrollTop = output.scrollHeight;
+        // Auto-scroll in fondo (posticipato per evitare forced reflow)
+        requestAnimationFrame(() => {
+            output.scrollTop = output.scrollHeight;
+        });
     }
 
     /**

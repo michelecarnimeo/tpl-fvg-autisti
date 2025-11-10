@@ -25,28 +25,62 @@
 
       const startTime = performance.now();
 
-      const response = await fetch('database.json');
+      // Prova prima a usare tariffario già caricato
+      let data = null;
+      let loadTime = 0;
       
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      if (window.Tariffario && window.Tariffario.getData) {
+        // Usa modulo Tariffario se disponibile
+        data = window.Tariffario.getData();
+        loadTime = 0; // Già caricato, tempo trascurabile
+        callbacks.log('✓ Database già caricato (modulo Tariffario)', 'success');
+      } else if (window.tariffario && Array.isArray(window.tariffario)) {
+        // Usa window.tariffario se disponibile
+        data = window.tariffario;
+        loadTime = 0; // Già caricato, tempo trascurabile
+        callbacks.log('✓ Database già caricato (window.tariffario)', 'success');
+      } else {
+        // Carica database.json
+        const response = await fetch('database.json');
+        
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        data = await response.json();
+        const endTime = performance.now();
+        loadTime = Math.round(endTime - startTime);
+        callbacks.log(`✓ Database caricato in ${loadTime}ms`, 'success');
       }
 
-      const data = await response.json();
-      const endTime = performance.now();
-      const loadTime = Math.round(endTime - startTime);
+      // Verifica formato dati
+      let linee = [];
+      let fermate = [];
+      
+      if (Array.isArray(data)) {
+        // Formato nuovo: array di linee
+        linee = data;
+        // Estrai tutte le fermate uniche dalle linee
+        const fermateSet = new Set();
+        data.forEach(linea => {
+          if (linea.fermate && Array.isArray(linea.fermate)) {
+            linea.fermate.forEach(fermata => fermateSet.add(fermata));
+          }
+        });
+        fermate = Array.from(fermateSet);
+      } else if (data && data.linee) {
+        // Formato vecchio: oggetto con linee/fermate
+        linee = data.linee;
+        fermate = data.fermate || [];
+      } else {
+        throw new Error('Struttura database non valida: formato non riconosciuto');
+      }
 
-      callbacks.log(`✓ Database caricato in ${loadTime}ms`, 'success');
-
-      // Verifica che i dati siano validi
-      if (!data.linee || !Array.isArray(data.linee)) {
+      if (!linee || !Array.isArray(linee) || linee.length === 0) {
         throw new Error('Struttura database non valida: campo "linee" mancante o non array');
       }
 
-      if (!data.fermate || !Array.isArray(data.fermate)) {
-        throw new Error('Struttura database non valida: campo "fermate" mancante o non array');
-      }
-
-      callbacks.log(`✓ Database contiene ${data.linee.length} linee e ${data.fermate.length} fermate`, 'success');
+      callbacks.log(`✓ Database contiene ${linee.length} linee e ${fermate.length} fermate`, 'success');
 
       // Valutazione performance
       let performanceRating = 'buona';
@@ -95,12 +129,20 @@
       callbacks.log('Verifica disponibilità Pricing...', 'info');
       callbacks.log('✓ Pricing disponibile', 'success');
 
-      // Verifica che il database sia caricato
-      if (typeof window.database === 'undefined' || !window.database) {
+      // Ottieni tariffario (array di linee) o database (oggetto)
+      const tariffario = (window.Tariffario && window.Tariffario.getData) 
+        ? window.Tariffario.getData() 
+        : (window.tariffario || window.database);
+      
+      if (!tariffario || (Array.isArray(tariffario) && tariffario.length === 0)) {
         throw new Error('Database non disponibile! Assicurati che database.json sia caricato.');
       }
 
-      if (!window.database.linee || window.database.linee.length === 0) {
+      // Se è un array, è il formato nuovo (tariffario)
+      // Se è un oggetto con linee, è il formato vecchio (database)
+      const linee = Array.isArray(tariffario) ? tariffario : (tariffario.linee || []);
+      
+      if (!linee || linee.length === 0) {
         throw new Error('Nessuna linea disponibile nel database');
       }
 
@@ -112,9 +154,10 @@
       callbacks.log(`Test calcolo prezzo: Linea ${lineaIdx}, Partenza ${partenzaIdx}, Arrivo ${arrivoIdx}`, 'info');
 
       // Misura tempo calcolo
+      // Pricing.calculatePrice si aspetta un array di linee
       const startTime = performance.now();
 
-      const result = Pricing.calculatePrice(lineaIdx, partenzaIdx, arrivoIdx, window.database);
+      const result = Pricing.calculatePrice(lineaIdx, partenzaIdx, arrivoIdx, tariffario);
 
       const endTime = performance.now();
       const calcTime = Math.round(endTime - startTime);
@@ -165,7 +208,7 @@
 
       for (let i = 0; i < iterations; i++) {
         const iterStart = performance.now();
-        Pricing.calculatePrice(lineaIdx, partenzaIdx, arrivoIdx, window.database);
+        Pricing.calculatePrice(lineaIdx, partenzaIdx, arrivoIdx, tariffario);
         const iterEnd = performance.now();
         times.push(Math.round(iterEnd - iterStart));
       }

@@ -346,6 +346,153 @@
     }
   };
 
+  /**
+   * Inizializza event delegation per pulsante test Prezzi
+   */
+  function initPrezziEventDelegation() {
+    // Verifica se il listener è già stato aggiunto
+    if (document.body.dataset.prezziDelegationAdded === 'true') {
+      return;
+    }
+
+    // Event delegation: listener per pulsanti con data-test="price"
+    document.body.addEventListener('click', (e) => {
+      const button = e.target.closest('[data-test="price"]');
+      
+      if (button && button.classList.contains('test-button')) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        if (typeof window.testPriceCalculation === 'function') {
+          window.testPriceCalculation();
+        } else {
+          console.error('❌ testPriceCalculation non disponibile');
+        }
+      }
+    });
+
+    // Marca come inizializzato
+    document.body.dataset.prezziDelegationAdded = 'true';
+    console.log('✅ Event delegation per Prezzi test inizializzata');
+  }
+
+  // Auto-inizializza event delegation quando il DOM è pronto
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPrezziEventDelegation);
+  } else {
+    initPrezziEventDelegation();
+  }
+
+  /**
+   * Inizializza event delegation per pulsanti test singoli Prezzi
+   */
+  function initPrezziSingleEventDelegation() {
+    // Verifica se il listener è già stato aggiunto
+    if (document.body.dataset.prezziSingleDelegationAdded === 'true') {
+      return;
+    }
+
+    // Event delegation: listener per pulsanti con data-test="price-single"
+    document.body.addEventListener('click', (e) => {
+      const button = e.target.closest('[data-test="price-single"]');
+      
+      if (button && button.classList.contains('test-run-single')) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const testId = button.dataset.testId;
+        if (testId && typeof window.runSinglePriceTest === 'function') {
+          window.runSinglePriceTest(testId);
+        } else {
+          console.error('❌ runSinglePriceTest non disponibile o testId mancante');
+        }
+      }
+    });
+
+    // Marca come inizializzato
+    document.body.dataset.prezziSingleDelegationAdded = 'true';
+    console.log('✅ Event delegation per Prezzi singoli test inizializzata');
+  }
+
+  // Auto-inizializza event delegation per singoli test quando il DOM è pronto
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPrezziSingleEventDelegation);
+  } else {
+    initPrezziSingleEventDelegation();
+  }
+
+  /**
+   * Inizializza event delegation per pulsanti utility Prezzi
+   * (Toggle groups, Reset, Copy/Download/Clear log)
+   */
+  function initPrezziUtilityEventDelegation() {
+    // Verifica se il listener è già stato aggiunto
+    if (document.body.dataset.prezziUtilityDelegationAdded === 'true') {
+      return;
+    }
+
+    // Event delegation: listener per pulsanti utility Prezzi
+    document.body.addEventListener('click', (e) => {
+      const button = e.target.closest('[data-price-action]');
+      
+      if (button && button.classList.contains('test-button')) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const action = button.dataset.priceAction;
+        
+        switch(action) {
+          case 'toggle-open':
+            if (typeof window.toggleAllPriceGroups === 'function') {
+              window.toggleAllPriceGroups(true);
+            }
+            break;
+            
+          case 'toggle-close':
+            if (typeof window.toggleAllPriceGroups === 'function') {
+              window.toggleAllPriceGroups(false);
+            }
+            break;
+            
+          case 'reset':
+            if (typeof window.resetPriceTests === 'function') {
+              window.resetPriceTests();
+            }
+            break;
+            
+          case 'copy-log':
+            if (typeof window.copyPriceLog === 'function') {
+              window.copyPriceLog();
+            }
+            break;
+            
+          case 'download-log':
+            if (typeof window.downloadPriceLog === 'function') {
+              window.downloadPriceLog();
+            }
+            break;
+            
+          case 'clear-log':
+            if (typeof window.clearPriceLog === 'function') {
+              window.clearPriceLog();
+            }
+            break;
+        }
+      }
+    });
+
+    // Marca come inizializzato
+    document.body.dataset.prezziUtilityDelegationAdded = 'true';
+    console.log('✅ Event delegation per Prezzi utility buttons inizializzata');
+  }
+
+  // Auto-inizializza event delegation per utility buttons quando il DOM è pronto
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPrezziUtilityEventDelegation);
+  } else {
+    initPrezziUtilityEventDelegation();
+  }
+
   console.log('✅ js/tests/test-prezzi-wrappers.js caricato - Funzioni Prezzi test disponibili nello scope globale');
 
 })();

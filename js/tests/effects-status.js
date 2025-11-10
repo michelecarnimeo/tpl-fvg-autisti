@@ -228,6 +228,53 @@
 
   console.log('✅ js/tests/effects-status.js caricato - EffectsStatus disponibile');
 
+  /**
+   * Inizializza event delegation per pulsante aggiorna status effetti
+   */
+  function initEffectsStatusEventDelegation() {
+    // Verifica se il listener è già stato aggiunto
+    if (document.body && document.body.dataset.effectsStatusDelegationAdded === 'true') {
+      return;
+    }
+
+    // Funzione per aggiungere il listener
+    const addListener = () => {
+      if (document.body.dataset.effectsStatusDelegationAdded === 'true') {
+        return;
+      }
+
+      // Event delegation: listener per pulsanti con data-action="update-effects-status"
+      document.body.addEventListener('click', (e) => {
+        const button = e.target.closest('[data-action="update-effects-status"]');
+        
+        if (button && button.classList.contains('test-button')) {
+          e.preventDefault();
+          e.stopPropagation();
+          
+          if (typeof window.updateEffectsStatus === 'function') {
+            window.updateEffectsStatus();
+          } else {
+            console.error('❌ updateEffectsStatus non disponibile');
+          }
+        }
+      });
+
+      // Marca come inizializzato
+      document.body.dataset.effectsStatusDelegationAdded = 'true';
+      console.log('✅ Event delegation per update effects status inizializzata');
+    };
+
+    // Auto-inizializza event delegation quando il DOM è pronto
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', addListener);
+    } else {
+      addListener();
+    }
+  }
+
+  // Auto-inizializza event delegation
+  initEffectsStatusEventDelegation();
+
   // Auto-inizializza
   init();
 })();

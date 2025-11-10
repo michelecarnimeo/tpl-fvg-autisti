@@ -95,7 +95,8 @@ function toggleLocationButton(show) {
   if (window.Geolocation && window.Geolocation.toggleLocationButton) {
     return window.Geolocation.toggleLocationButton(show);
   }
-  console.warn('⚠️ Geolocation module not available');
+  // Non loggare warning - il modulo geolocation è opzionale in alcune pagine (es. test.html)
+  return false;
 }
 
 // toggleSwapButton è ora in js/utils/ui-helpers.js

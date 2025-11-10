@@ -86,6 +86,53 @@
     }
   };
 
+  /**
+   * Inizializza event delegation per pulsante "Esegui tutti i test"
+   */
+  function initRunAllEventDelegation() {
+    // Verifica se il listener è già stato aggiunto
+    if (document.body && document.body.dataset.runAllDelegationAdded === 'true') {
+      return;
+    }
+
+    // Funzione per aggiungere il listener
+    const addListener = () => {
+      if (document.body.dataset.runAllDelegationAdded === 'true') {
+        return;
+      }
+
+      // Event delegation: listener per pulsanti con data-test="run-all"
+      document.body.addEventListener('click', (e) => {
+        const button = e.target.closest('[data-test="run-all"]');
+        
+        if (button && (button.classList.contains('run-all-btn') || button.classList.contains('test-button'))) {
+          e.preventDefault();
+          e.stopPropagation();
+          
+          if (typeof window.runAllTests === 'function') {
+            window.runAllTests();
+          } else {
+            console.error('❌ runAllTests non disponibile');
+          }
+        }
+      });
+
+      // Marca come inizializzato
+      document.body.dataset.runAllDelegationAdded = 'true';
+      console.log('✅ Event delegation per "Esegui tutti i test" inizializzata');
+    };
+
+    // Auto-inizializza event delegation quando il DOM è pronto
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', addListener);
+    } else {
+      addListener();
+    }
+  }
+
+  // Auto-inizializza event delegation
+  initRunAllEventDelegation();
+
   console.log('✅ js/tests/test-all-wrappers.js caricato - Funzione runAllTests disponibile nello scope globale');
 
 })();

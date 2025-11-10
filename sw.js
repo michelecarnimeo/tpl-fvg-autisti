@@ -49,6 +49,8 @@ const STATIC_ASSETS = [
   './js/tests/test-utils.js', // Utility funzioni test (solo per test.html)
   './js/tests/test-settings.js', // Test suite settings (solo per test.html)
   './js/tests/test-settings-wrappers.js', // Wrapper funzioni Settings test (solo per test.html)
+  './js/tests/test-darkmode.js', // Test suite dark mode (solo per test.html)
+  './js/tests/test-darkmode-wrappers.js', // Wrapper funzioni Dark Mode test (solo per test.html)
   './js/tests/test-sw.js', // Test suite service worker (solo per test.html)
   './js/tests/test-sw-wrappers.js', // Wrapper funzioni Service Worker test (solo per test.html)
   './js/tests/test-all-wrappers.js', // Wrapper funzione runAllTests (solo per test.html)

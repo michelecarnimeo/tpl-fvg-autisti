@@ -257,3 +257,77 @@ window.toggleAllSwGroups = function(open) {
 
 console.log('✅ js/tests/test-accordion-wrappers.js caricato - Funzioni accordion disponibili nello scope globale');
 
+/**
+ * ========================================
+ * EVENT DELEGATION PER TOGGLE GRUPPI
+ * ========================================
+ * 
+ * Sostituisce gli onclick inline con event delegation
+ * usando data-toggle-group e data-group-id
+ */
+
+/**
+ * Inizializza event delegation per toggle dei gruppi accordion
+ */
+function initAccordionToggleEventDelegation() {
+  // Verifica se il listener è già stato aggiunto
+  if (document.body && document.body.dataset.accordionToggleDelegationAdded === 'true') {
+    return;
+  }
+
+  // Funzione per aggiungere il listener
+  const addListener = () => {
+    if (document.body.dataset.accordionToggleDelegationAdded === 'true') {
+      return;
+    }
+
+    // Event delegation: listener per header con data-toggle-group
+    document.body.addEventListener('click', (e) => {
+      const header = e.target.closest('[data-toggle-group]');
+      
+      if (header && header.classList.contains('test-group-header')) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const prefix = header.dataset.toggleGroup;
+        const groupId = header.dataset.groupId;
+        
+        if (prefix && groupId) {
+          // Mappatura prefix -> nome funzione
+          const functionMap = {
+            'db': 'toggleDbGroup',
+            'storage': 'toggleStorageGroup',
+            'price': 'togglePriceGroup',
+            'sw': 'toggleSwGroup',
+            'route': 'toggleRouteGroup',
+            'settings': 'toggleSettingsGroup'
+          };
+          
+          const toggleFunctionName = functionMap[prefix];
+          const toggleFunction = toggleFunctionName ? window[toggleFunctionName] : null;
+          
+          if (typeof toggleFunction === 'function') {
+            toggleFunction(groupId);
+          } else {
+            console.error(`❌ Funzione ${toggleFunctionName || 'sconosciuta'} non disponibile per prefix "${prefix}"`);
+          }
+        }
+      }
+    });
+
+    // Marca come inizializzato
+    document.body.dataset.accordionToggleDelegationAdded = 'true';
+    console.log('✅ Event delegation per toggle gruppi accordion inizializzata');
+  };
+
+  // Auto-inizializza event delegation quando il DOM è pronto
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', addListener);
+  } else {
+    addListener();
+  }
+}
+
+// Auto-inizializza event delegation
+initAccordionToggleEventDelegation();
+

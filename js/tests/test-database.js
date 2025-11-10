@@ -882,3 +882,130 @@ if (typeof window !== 'undefined') {
     window.testDatabaseLoad = testDatabaseLoad;
     window.resetDatabaseTests = resetDatabaseTests;
 }
+
+/**
+ * Inizializza event delegation per pulsante test Database
+ */
+function initDatabaseEventDelegation() {
+    // Verifica se il listener è già stato aggiunto
+    if (document.body && document.body.dataset.databaseDelegationAdded === 'true') {
+        return;
+    }
+
+    // Funzione per aggiungere il listener
+    const addListener = () => {
+        if (document.body.dataset.databaseDelegationAdded === 'true') {
+            return;
+        }
+
+        // Event delegation: listener per pulsanti con data-test="database"
+        document.body.addEventListener('click', (e) => {
+            const button = e.target.closest('[data-test="database"]');
+            
+            if (button && button.classList.contains('test-button')) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                if (typeof window.testDatabaseLoad === 'function') {
+                    window.testDatabaseLoad();
+                } else {
+                    console.error('❌ testDatabaseLoad non disponibile');
+                }
+            }
+        });
+
+        // Marca come inizializzato
+        document.body.dataset.databaseDelegationAdded = 'true';
+        console.log('✅ Event delegation per Database test inizializzata');
+    };
+
+    // Auto-inizializza event delegation quando il DOM è pronto
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', addListener);
+    } else {
+        addListener();
+    }
+}
+
+/**
+ * Inizializza event delegation per pulsanti utility Database
+ * (Toggle groups, Reset, Copy/Download/Clear log)
+ */
+function initDatabaseUtilityEventDelegation() {
+    // Verifica se il listener è già stato aggiunto
+    if (document.body && document.body.dataset.databaseUtilityDelegationAdded === 'true') {
+        return;
+    }
+
+    // Funzione per aggiungere il listener
+    const addListener = () => {
+        if (document.body.dataset.databaseUtilityDelegationAdded === 'true') {
+            return;
+        }
+
+        // Event delegation: listener per pulsanti utility Database
+        document.body.addEventListener('click', (e) => {
+            const button = e.target.closest('[data-db-action]');
+            
+            if (button && button.classList.contains('test-button')) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const action = button.dataset.dbAction;
+                
+                switch(action) {
+                    case 'toggle-open':
+                        if (typeof window.toggleAllDbGroups === 'function') {
+                            window.toggleAllDbGroups(true);
+                        }
+                        break;
+                        
+                    case 'toggle-close':
+                        if (typeof window.toggleAllDbGroups === 'function') {
+                            window.toggleAllDbGroups(false);
+                        }
+                        break;
+                        
+                    case 'reset':
+                        if (typeof window.resetDatabaseTests === 'function') {
+                            window.resetDatabaseTests();
+                        }
+                        break;
+                        
+                    case 'copy-log':
+                        if (typeof window.copyDatabaseLog === 'function') {
+                            window.copyDatabaseLog();
+                        }
+                        break;
+                        
+                    case 'download-log':
+                        if (typeof window.downloadDatabaseLog === 'function') {
+                            window.downloadDatabaseLog();
+                        }
+                        break;
+                        
+                    case 'clear-log':
+                        if (typeof window.clearDatabaseLog === 'function') {
+                            window.clearDatabaseLog();
+                        }
+                        break;
+                }
+            }
+        });
+
+        // Marca come inizializzato
+        document.body.dataset.databaseUtilityDelegationAdded = 'true';
+        console.log('✅ Event delegation per Database utility buttons inizializzata');
+    };
+
+    // Auto-inizializza event delegation quando il DOM è pronto
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', addListener);
+    } else {
+        addListener();
+    }
+}
+
+// Auto-inizializza
+initDatabaseEventDelegation();
+initDatabaseUtilityEventDelegation();

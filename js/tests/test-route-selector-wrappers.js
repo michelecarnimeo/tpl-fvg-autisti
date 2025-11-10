@@ -28,7 +28,10 @@
       const timestamp = new Date().toLocaleTimeString('it-IT');
       const className = type === 'success' ? 'test-log-success' : type === 'error' ? 'test-log-error' : 'test-log-info';
       logContent.innerHTML += `<div class="${className}">[${timestamp}] ${message}</div>`;
-      logContent.scrollTop = logContent.scrollHeight;
+      // Auto-scroll in fondo (posticipato per evitare forced reflow)
+      requestAnimationFrame(() => {
+        logContent.scrollTop = logContent.scrollHeight;
+      });
       
       // Log anche in console
       if (type === 'error') {
@@ -153,7 +156,10 @@
       const timestamp = new Date().toLocaleTimeString('it-IT');
       const className = type === 'success' ? 'test-log-success' : type === 'error' ? 'test-log-error' : 'test-log-info';
       logContent.innerHTML += `<div class="${className}">[${timestamp}] ${message}</div>`;
-      logContent.scrollTop = logContent.scrollHeight;
+      // Auto-scroll in fondo (posticipato per evitare forced reflow)
+      requestAnimationFrame(() => {
+        logContent.scrollTop = logContent.scrollHeight;
+      });
     };
 
     const updateStatus = function(id, status) {
@@ -220,6 +226,153 @@
       }
     }
   };
+
+  /**
+   * Inizializza event delegation per pulsante test Route Selector
+   */
+  function initRouteEventDelegation() {
+    // Verifica se il listener è già stato aggiunto
+    if (document.body.dataset.routeDelegationAdded === 'true') {
+      return;
+    }
+
+    // Event delegation: listener per pulsanti con data-test="route"
+    document.body.addEventListener('click', (e) => {
+      const button = e.target.closest('[data-test="route"]');
+      
+      if (button && button.classList.contains('test-button')) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        if (typeof window.testRouteSelector === 'function') {
+          window.testRouteSelector();
+        } else {
+          console.error('❌ testRouteSelector non disponibile');
+        }
+      }
+    });
+
+    // Marca come inizializzato
+    document.body.dataset.routeDelegationAdded = 'true';
+    console.log('✅ Event delegation per Route Selector test inizializzata');
+  }
+
+  // Auto-inizializza event delegation quando il DOM è pronto
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initRouteEventDelegation);
+  } else {
+    initRouteEventDelegation();
+  }
+
+  /**
+   * Inizializza event delegation per pulsanti test singoli Route Selector
+   */
+  function initRouteSingleEventDelegation() {
+    // Verifica se il listener è già stato aggiunto
+    if (document.body.dataset.routeSingleDelegationAdded === 'true') {
+      return;
+    }
+
+    // Event delegation: listener per pulsanti con data-test="route-single"
+    document.body.addEventListener('click', (e) => {
+      const button = e.target.closest('[data-test="route-single"]');
+      
+      if (button && button.classList.contains('test-run-single')) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const testId = button.dataset.testId;
+        if (testId && typeof window.runSingleRouteTest === 'function') {
+          window.runSingleRouteTest(testId);
+        } else {
+          console.error('❌ runSingleRouteTest non disponibile o testId mancante');
+        }
+      }
+    });
+
+    // Marca come inizializzato
+    document.body.dataset.routeSingleDelegationAdded = 'true';
+    console.log('✅ Event delegation per Route Selector singoli test inizializzata');
+  }
+
+  // Auto-inizializza event delegation per singoli test quando il DOM è pronto
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initRouteSingleEventDelegation);
+  } else {
+    initRouteSingleEventDelegation();
+  }
+
+  /**
+   * Inizializza event delegation per pulsanti utility Route Selector
+   * (Toggle groups, Reset, Copy/Download/Clear log)
+   */
+  function initRouteUtilityEventDelegation() {
+    // Verifica se il listener è già stato aggiunto
+    if (document.body.dataset.routeUtilityDelegationAdded === 'true') {
+      return;
+    }
+
+    // Event delegation: listener per pulsanti utility Route Selector
+    document.body.addEventListener('click', (e) => {
+      const button = e.target.closest('[data-route-action]');
+      
+      if (button && button.classList.contains('test-button')) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const action = button.dataset.routeAction;
+        
+        switch(action) {
+          case 'toggle-open':
+            if (typeof window.toggleAllRouteGroups === 'function') {
+              window.toggleAllRouteGroups(true);
+            }
+            break;
+            
+          case 'toggle-close':
+            if (typeof window.toggleAllRouteGroups === 'function') {
+              window.toggleAllRouteGroups(false);
+            }
+            break;
+            
+          case 'reset':
+            if (typeof window.resetRouteTests === 'function') {
+              window.resetRouteTests();
+            }
+            break;
+            
+          case 'copy-log':
+            if (typeof window.copyRouteLog === 'function') {
+              window.copyRouteLog();
+            }
+            break;
+            
+          case 'download-log':
+            if (typeof window.downloadRouteLog === 'function') {
+              window.downloadRouteLog();
+            }
+            break;
+            
+          case 'clear-log':
+            if (typeof window.clearRouteLog === 'function') {
+              window.clearRouteLog();
+            }
+            break;
+        }
+      }
+    });
+
+    // Marca come inizializzato
+    document.body.dataset.routeUtilityDelegationAdded = 'true';
+    console.log('✅ Event delegation per Route Selector utility buttons inizializzata');
+  }
+
+  // Auto-inizializza event delegation per utility buttons quando il DOM è pronto
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initRouteUtilityEventDelegation);
+  } else {
+    initRouteUtilityEventDelegation();
+  }
 
   console.log('✅ RouteSelector test wrappers caricati');
 })();

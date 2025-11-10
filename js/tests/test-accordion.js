@@ -32,7 +32,7 @@
             animation: false
         },
         storage: {
-            groups: ['group1', 'group2', 'group3', 'group4', 'group5', 'group6'],
+            groups: ['group1', 'group2', 'group3', 'group4', 'group5'],
             animation: true,
             animationDuration: 600
         },
@@ -84,14 +84,15 @@
             if (useAnimation) {
                 const separator = content?.closest('.test-group-separator');
                 if (separator) {
+                    // Raggruppa le operazioni DOM per ridurre reflow
                     separator.classList.remove('expanding');
-                    // Forza reflow per assicurare che l'animazione parta
-                    separator.offsetHeight;
-                    separator.classList.add('expanding');
-                    
-                    setTimeout(() => {
-                        separator.classList.remove('expanding');
-                    }, animationDuration);
+                    // Usa requestAnimationFrame per forzare reflow solo quando necessario
+                    requestAnimationFrame(() => {
+                        separator.classList.add('expanding');
+                        setTimeout(() => {
+                            separator.classList.remove('expanding');
+                        }, animationDuration);
+                    });
                 } else {
                     console.warn(`⚠️ Separator non trovato per gruppo: ${prefix}-${groupId}`);
                 }
@@ -124,7 +125,7 @@
             const icon = document.getElementById(`${prefix}-${groupId}-icon`);
 
             if (!content || !icon) {
-                console.warn(`⚠️ Elementi non trovati per ${prefix}-${groupId}`);
+                // Non loggare warning - alcuni gruppi potrebbero non esistere in alcune pagine
                 return;
             }
 

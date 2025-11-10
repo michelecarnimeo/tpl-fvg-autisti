@@ -230,5 +230,152 @@
 
   console.log('✅ js/tests/test-settings-wrappers.js caricato - Funzioni Settings test disponibili nello scope globale');
 
+  /**
+   * Inizializza event delegation per pulsanti test singoli Settings
+   */
+  function initSettingsSingleEventDelegation() {
+    // Verifica se il listener è già stato aggiunto
+    if (document.body.dataset.settingsSingleDelegationAdded === 'true') {
+      return;
+    }
+
+    // Event delegation: listener per pulsanti con data-test="settings-single"
+    document.body.addEventListener('click', (e) => {
+      const button = e.target.closest('[data-test="settings-single"]');
+      
+      if (button && button.classList.contains('test-run-single')) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const testId = button.dataset.testId;
+        if (testId && typeof window.runSingleSettingsTest === 'function') {
+          window.runSingleSettingsTest(testId);
+        } else {
+          console.error('❌ runSingleSettingsTest non disponibile o testId mancante');
+        }
+      }
+    });
+
+    // Marca come inizializzato
+    document.body.dataset.settingsSingleDelegationAdded = 'true';
+    console.log('✅ Event delegation per Settings singoli test inizializzata');
+  }
+
+  // Auto-inizializza event delegation per singoli test quando il DOM è pronto
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSettingsSingleEventDelegation);
+  } else {
+    initSettingsSingleEventDelegation();
+  }
+
+  /**
+   * Inizializza event delegation per pulsante test Settings
+   */
+  function initSettingsEventDelegation() {
+    // Verifica se il listener è già stato aggiunto
+    if (document.body.dataset.settingsDelegationAdded === 'true') {
+      return;
+    }
+
+    // Event delegation: listener per pulsanti con data-test="settings"
+    document.body.addEventListener('click', (e) => {
+      const button = e.target.closest('[data-test="settings"]');
+      
+      if (button && button.classList.contains('test-button')) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        if (typeof window.testSettings === 'function') {
+          window.testSettings();
+        } else {
+          console.error('❌ testSettings non disponibile');
+        }
+      }
+    });
+
+    // Marca come inizializzato
+    document.body.dataset.settingsDelegationAdded = 'true';
+    console.log('✅ Event delegation per Settings test inizializzata');
+  }
+
+  // Auto-inizializza event delegation quando il DOM è pronto
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSettingsEventDelegation);
+  } else {
+    initSettingsEventDelegation();
+  }
+
+  /**
+   * Inizializza event delegation per pulsanti utility Settings
+   * (Toggle groups, Reset, Copy/Download/Clear log)
+   */
+  function initSettingsUtilityEventDelegation() {
+    // Verifica se il listener è già stato aggiunto
+    if (document.body.dataset.settingsUtilityDelegationAdded === 'true') {
+      return;
+    }
+
+    // Event delegation: listener per pulsanti utility Settings
+    document.body.addEventListener('click', (e) => {
+      const button = e.target.closest('[data-settings-action]');
+      
+      if (button && button.classList.contains('test-button')) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const action = button.dataset.settingsAction;
+        
+        switch(action) {
+          case 'toggle-open':
+            if (typeof window.toggleAllSettingsGroups === 'function') {
+              window.toggleAllSettingsGroups(true);
+            }
+            break;
+            
+          case 'toggle-close':
+            if (typeof window.toggleAllSettingsGroups === 'function') {
+              window.toggleAllSettingsGroups(false);
+            }
+            break;
+            
+          case 'reset':
+            if (typeof window.resetSettingsTests === 'function') {
+              window.resetSettingsTests();
+            }
+            break;
+            
+          case 'copy-log':
+            if (typeof window.copySettingsLog === 'function') {
+              window.copySettingsLog();
+            }
+            break;
+            
+          case 'download-log':
+            if (typeof window.downloadSettingsLog === 'function') {
+              window.downloadSettingsLog();
+            }
+            break;
+            
+          case 'clear-log':
+            if (typeof window.clearSettingsLog === 'function') {
+              window.clearSettingsLog();
+            }
+            break;
+        }
+      }
+    });
+
+    // Marca come inizializzato
+    document.body.dataset.settingsUtilityDelegationAdded = 'true';
+    console.log('✅ Event delegation per Settings utility buttons inizializzata');
+  }
+
+  // Auto-inizializza event delegation per utility buttons quando il DOM è pronto
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSettingsUtilityEventDelegation);
+  } else {
+    initSettingsUtilityEventDelegation();
+  }
+
 })();
 

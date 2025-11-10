@@ -936,9 +936,9 @@
           onCloseMobileMenu();
         }
       });
-    } else {
-      console.warn('⚠️ Pulsante open-settings NON trovato!');
     }
+    // Nota: open-settings è opzionale - alcune pagine potrebbero non averlo
+    // Non loggare warning se non trovato
 
     // Desktop settings button
     if (desktopSettingsBtn) {

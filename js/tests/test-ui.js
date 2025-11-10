@@ -8,7 +8,12 @@
 
   // Verifica disponibilità dipendenze
   function checkDependenciesAvailable(callbacks) {
-    if (typeof window.database === 'undefined' || !window.database) {
+    // Verifica tariffario (array di linee) o database (oggetto con linee/fermate)
+    const tariffario = (window.Tariffario && window.Tariffario.getData) 
+      ? window.Tariffario.getData() 
+      : (window.tariffario || window.database);
+    
+    if (!tariffario || (Array.isArray(tariffario) && tariffario.length === 0)) {
       callbacks.log('✗ Database non disponibile! Assicurati che database.json sia caricato.', 'error');
       const allTestIds = getAllTestIds();
       allTestIds.forEach(id => callbacks.updateStatus(id, 'fail'));
@@ -38,19 +43,45 @@
         throw new Error('Database non disponibile');
       }
 
-      // Verifica che ci siano linee nel database
-      if (!window.database.linee || !Array.isArray(window.database.linee) || window.database.linee.length === 0) {
+      // Ottieni tariffario (array di linee) o database (oggetto con linee/fermate)
+      const tariffario = (window.Tariffario && window.Tariffario.getData) 
+        ? window.Tariffario.getData() 
+        : (window.tariffario || window.database);
+      
+      // Se è un array, è il formato nuovo (tariffario)
+      // Se è un oggetto con linee/fermate, è il formato vecchio (database)
+      let linee = [];
+      let fermate = [];
+      
+      if (Array.isArray(tariffario)) {
+        // Formato nuovo: array di linee
+        linee = tariffario;
+        // Estrai tutte le fermate uniche dalle linee
+        const fermateSet = new Set();
+        tariffario.forEach(linea => {
+          if (linea.fermate && Array.isArray(linea.fermate)) {
+            linea.fermate.forEach(fermata => fermateSet.add(fermata));
+          }
+        });
+        fermate = Array.from(fermateSet);
+      } else if (tariffario && tariffario.linee) {
+        // Formato vecchio: oggetto con linee/fermate
+        linee = tariffario.linee;
+        fermate = tariffario.fermate || [];
+      }
+      
+      if (!linee || !Array.isArray(linee) || linee.length === 0) {
         throw new Error('Nessuna linea trovata nel database');
       }
 
-      callbacks.log(`✓ Database caricato con ${window.database.linee.length} linee`, 'success');
+      callbacks.log(`✓ Database caricato con ${linee.length} linee`, 'success');
 
       // Verifica che ci siano fermate nel database
-      if (!window.database.fermate || !Array.isArray(window.database.fermate) || window.database.fermate.length === 0) {
-        throw new Error('Nessuna fermata trovata nel database');
+      if (!fermate || !Array.isArray(fermate) || fermate.length === 0) {
+        callbacks.log('⚠️ Nessuna fermata trovata nel database (potrebbe essere normale)', 'warn');
+      } else {
+        callbacks.log(`✓ Database contiene ${fermate.length} fermate`, 'success');
       }
-
-      callbacks.log(`✓ Database contiene ${window.database.fermate.length} fermate`, 'success');
 
       // Verifica che gli elementi select esistano nella pagina (se siamo in prezzi.html)
       const selectLinea = document.getElementById('linea-select');

@@ -340,24 +340,6 @@
                     data-label="⚡ Performance">⚡
                     Performance</a>
             </div>
-            <script>
-                // Smooth scroll per i link dell'indice
-                document.addEventListener('DOMContentLoaded', () => {
-                    const toc = document.getElementById('section-index');
-                    if (!toc) return;
-
-                    toc.querySelectorAll('a[href^="#"]').forEach(a => {
-                        a.addEventListener('click', (e) => {
-                            const target = document.querySelector(a.getAttribute('href'));
-                            if (target) {
-                                e.preventDefault();
-                                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                                try { history.replaceState(null, '', a.getAttribute('href')); } catch { }
-                            }
-                        });
-                    });
-                });
-            </script>
         </div>
 
         <!-- Statistiche -->
@@ -381,7 +363,7 @@
                     <div class="stat-label">In attesa</div>
                 </div>
             </div>
-            <button class="run-all-btn" onclick="runAllTests()">▶️ Esegui tutti i test</button>
+            <button class="run-all-btn" data-test="run-all">▶️ Esegui tutti i test</button>
         </div>
 
         <!-- Test Modalità PWA -->
@@ -1007,7 +989,7 @@
             <div class="effects-grid" id="effects-grid">
                 <!-- Gli effetti verranno popolati dinamicamente -->
             </div>
-            <button class="test-button" onclick="updateEffectsStatus()">🔄 Aggiorna Status</button>
+            <button class="test-button" data-action="update-effects-status">🔄 Aggiorna Status</button>
         </div>
 
         <!-- Test 1: Caricamento Database -->
@@ -1039,7 +1021,7 @@
 
                 <!-- Gruppo 1: Caricamento & Struttura -->
                 <div class="test-group-separator">
-                    <div class="test-group-header" onclick="toggleDbGroup('group1')">
+                    <div class="test-group-header" data-toggle-group="db" data-group-id="group1">
                         <div class="test-group-bar group-db-1"></div>
                         <div class="test-group-title-container">
                             <div class="test-group-title">Caricamento & Struttura</div>
@@ -1076,7 +1058,7 @@
 
                 <!-- Gruppo 2: Validazione Dati -->
                 <div class="test-group-separator">
-                    <div class="test-group-header" onclick="toggleDbGroup('group2')">
+                    <div class="test-group-header" data-toggle-group="db" data-group-id="group2">
                         <div class="test-group-bar group-db-2"></div>
                         <div class="test-group-title-container">
                             <div class="test-group-title">Validazione Dati</div>
@@ -1109,7 +1091,7 @@
 
                 <!-- Gruppo 3: Analisi Qualità -->
                 <div class="test-group-separator">
-                    <div class="test-group-header" onclick="toggleDbGroup('group3')">
+                    <div class="test-group-header" data-toggle-group="db" data-group-id="group3">
                         <div class="test-group-bar group-db-3"></div>
                         <div class="test-group-title-container">
                             <div class="test-group-title">Analisi Qualità</div>
@@ -1154,7 +1136,7 @@
 
                 <!-- Gruppo 4: Performance -->
                 <div class="test-group-separator">
-                    <div class="test-group-header" onclick="toggleDbGroup('group4')">
+                    <div class="test-group-header" data-toggle-group="db" data-group-id="group4">
                         <div class="test-group-bar group-db-4"></div>
                         <div class="test-group-title-container">
                             <div class="test-group-title">Performance</div>
@@ -1175,22 +1157,22 @@
             </div>
 
             <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; margin-top: 1rem;">
-                <button class="test-button" onclick="testDatabaseLoad()" style="flex: 1; min-width: 120px;">🧪 Esegui
+                <button class="test-button" data-test="database" style="flex: 1; min-width: 120px;">🧪 Esegui
                     Tutti i Test</button>
-                <button class="test-button" onclick="toggleAllDbGroups(true)" style="background: #6b7280; min-width: 100px;">📂 Espandi
+                <button class="test-button" data-db-action="toggle-open" style="background: #6b7280; min-width: 100px;">📂 Espandi
                     Tutti</button>
-                <button class="test-button" onclick="toggleAllDbGroups(false)" style="background: #6b7280; min-width: 100px;">📁 Comprimi
+                <button class="test-button" data-db-action="toggle-close" style="background: #6b7280; min-width: 100px;">📁 Comprimi
                     Tutti</button>
-                <button class="test-button" onclick="resetDatabaseTests()" style="background: #ef4444; transition: background-color 0.2s ease; min-width: 100px;">🔄 Reset
+                <button class="test-button" data-db-action="reset" style="background: #ef4444; transition: background-color 0.2s ease; min-width: 100px;">🔄 Reset
                     Test</button>
             </div>
             <div class="test-output" id="output-database" style="display:none;"></div>
             <div id="db-log-buttons" style="display: none; gap: 0.5rem; margin-top: 0.5rem;">
-                <button class="test-button" onclick="copyDatabaseLog()" style="background: #0d9488;">📋 Copia
+                <button class="test-button" data-db-action="copy-log" style="background: #0d9488;">📋 Copia
                     log</button>
-                <button class="test-button" onclick="downloadDatabaseLog()" style="background: #3b82f6;">💾 Scarica
+                <button class="test-button" data-db-action="download-log" style="background: #3b82f6;">💾 Scarica
                     log</button>
-                <button class="test-button" onclick="clearDatabaseLog()" style="background: #ef4444;">🗑️ Cancella
+                <button class="test-button" data-db-action="clear-log" style="background: #ef4444;">🗑️ Cancella
                     log</button>
             </div>
         </div>
@@ -1207,7 +1189,7 @@
                 <span>Persistenza preferenza</span>
                 <span class="test-status pending">In attesa</span>
             </div>
-            <button class="test-button" onclick="testDarkMode()">🧪 Test Dark Mode</button>
+            <button class="test-button" data-test="darkmode">🧪 Test Dark Mode</button>
             <div class="test-output" id="output-darkmode" style="display:none;"></div>
         </div>
 
@@ -1236,7 +1218,7 @@
 
                 <!-- Gruppo 1: Test Base -->
                 <div class="test-group-separator">
-                    <div class="test-group-header" onclick="toggleStorageGroup('group1')">
+                    <div class="test-group-header" data-toggle-group="storage" data-group-id="group1">
                         <div class="test-group-bar group-storage-1"></div>
                         <div class="test-group-title-container">
                             <div class="test-group-title">Test Base</div>
@@ -1248,17 +1230,17 @@
                     <div id="storage-group1-content" class="test-group-content">
                         <div class="test-group-items-container">
                             <div class="test-item" id="test-storage-set-get">
-                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-set-get')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="storage-single" data-test-id="test-storage-set-get" title="Esegui solo questo test">▶</button>
                                 <span>Storage.setItem() e Storage.getItem()</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-storage-remove">
-                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-remove')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="storage-single" data-test-id="test-storage-remove" title="Esegui solo questo test">▶</button>
                                 <span>Storage.removeItem()</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-storage-default-value">
-                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-default-value')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="storage-single" data-test-id="test-storage-default-value" title="Esegui solo questo test">▶</button>
                                 <span>Storage.getItem() con defaultValue</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
@@ -1268,7 +1250,7 @@
 
                 <!-- Gruppo 2: Test JSON -->
                 <div class="test-group-separator">
-                    <div class="test-group-header" onclick="toggleStorageGroup('group2')">
+                    <div class="test-group-header" data-toggle-group="storage" data-group-id="group2">
                         <div class="test-group-bar group-storage-2"></div>
                         <div class="test-group-title-container">
                             <div class="test-group-title">Test JSON</div>
@@ -1280,22 +1262,22 @@
                     <div id="storage-group2-content" class="test-group-content">
                         <div class="test-group-items-container">
                             <div class="test-item" id="test-storage-json-object">
-                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-json-object')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="storage-single" data-test-id="test-storage-json-object" title="Esegui solo questo test">▶</button>
                                 <span>Oggetti JSON</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-storage-json-array">
-                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-json-array')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="storage-single" data-test-id="test-storage-json-array" title="Esegui solo questo test">▶</button>
                                 <span>Array JSON</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-storage-boolean">
-                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-boolean')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="storage-single" data-test-id="test-storage-boolean" title="Esegui solo questo test">▶</button>
                                 <span>Valori boolean</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-storage-number">
-                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-number')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="storage-single" data-test-id="test-storage-number" title="Esegui solo questo test">▶</button>
                                 <span>Valori numerici</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
@@ -1305,7 +1287,7 @@
 
                 <!-- Gruppo 3: Test Funzioni Avanzate -->
                 <div class="test-group-separator">
-                    <div class="test-group-header" onclick="toggleStorageGroup('group3')">
+                    <div class="test-group-header" data-toggle-group="storage" data-group-id="group3">
                         <div class="test-group-bar group-storage-3"></div>
                         <div class="test-group-title-container">
                             <div class="test-group-title">Funzioni Avanzate</div>
@@ -1317,27 +1299,27 @@
                     <div id="storage-group3-content" class="test-group-content">
                         <div class="test-group-items-container">
                             <div class="test-item" id="test-storage-clear">
-                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-clear')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="storage-single" data-test-id="test-storage-clear" title="Esegui solo questo test">▶</button>
                                 <span>Storage.clear()</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-storage-prefix-get">
-                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-prefix-get')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="storage-single" data-test-id="test-storage-prefix-get" title="Esegui solo questo test">▶</button>
                                 <span>Storage.getItemsByPrefix()</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-storage-prefix-remove">
-                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-prefix-remove')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="storage-single" data-test-id="test-storage-prefix-remove" title="Esegui solo questo test">▶</button>
                                 <span>Storage.removeItemsByPrefix()</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-storage-has-item">
-                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-has-item')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="storage-single" data-test-id="test-storage-has-item" title="Esegui solo questo test">▶</button>
                                 <span>Storage.hasItem()</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-storage-size">
-                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-size')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="storage-single" data-test-id="test-storage-size" title="Esegui solo questo test">▶</button>
                                 <span>Storage.getSize()</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
@@ -1347,7 +1329,7 @@
 
                 <!-- Gruppo 4: Test Edge Cases -->
                 <div class="test-group-separator">
-                    <div class="test-group-header" onclick="toggleStorageGroup('group4')">
+                    <div class="test-group-header" data-toggle-group="storage" data-group-id="group4">
                         <div class="test-group-bar group-storage-4"></div>
                         <div class="test-group-title-container">
                             <div class="test-group-title">Edge Cases</div>
@@ -1359,22 +1341,22 @@
                     <div id="storage-group4-content" class="test-group-content">
                         <div class="test-group-items-container">
                             <div class="test-item" id="test-storage-retrocompatibility">
-                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-retrocompatibility')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="storage-single" data-test-id="test-storage-retrocompatibility" title="Esegui solo questo test">▶</button>
                                 <span>Retrocompatibilità localStorage</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-storage-null-undefined">
-                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-null-undefined')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="storage-single" data-test-id="test-storage-null-undefined" title="Esegui solo questo test">▶</button>
                                 <span>Valori null e undefined</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-storage-special-chars">
-                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-special-chars')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="storage-single" data-test-id="test-storage-special-chars" title="Esegui solo questo test">▶</button>
                                 <span>Caratteri speciali</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-storage-large-value">
-                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-large-value')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="storage-single" data-test-id="test-storage-large-value" title="Esegui solo questo test">▶</button>
                                 <span>Valore grande (10KB)</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
@@ -1384,7 +1366,7 @@
 
                 <!-- Gruppo 5: Test Avanzati -->
                 <div class="test-group-separator">
-                    <div class="test-group-header" onclick="toggleStorageGroup('group5')">
+                    <div class="test-group-header" data-toggle-group="storage" data-group-id="group5">
                         <div class="test-group-bar group-storage-5"></div>
                         <div class="test-group-title-container">
                             <div class="test-group-title">Test Avanzati</div>
@@ -1396,42 +1378,42 @@
                     <div id="storage-group5-content" class="test-group-content">
                         <div class="test-group-items-container">
                             <div class="test-item" id="test-storage-multiple-operations">
-                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-multiple-operations')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="storage-single" data-test-id="test-storage-multiple-operations" title="Esegui solo questo test">▶</button>
                                 <span>Operazioni multiple</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-storage-performance">
-                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-performance')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="storage-single" data-test-id="test-storage-performance" title="Esegui solo questo test">▶</button>
                                 <span>Performance (100KB x100)</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-storage-iterate-keys">
-                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-iterate-keys')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="storage-single" data-test-id="test-storage-iterate-keys" title="Esegui solo questo test">▶</button>
                                 <span>Iterazione chiavi</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-storage-invalid-json">
-                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-invalid-json')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="storage-single" data-test-id="test-storage-invalid-json" title="Esegui solo questo test">▶</button>
                                 <span>JSON invalido</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-storage-non-string">
-                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-non-string')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="storage-single" data-test-id="test-storage-non-string" title="Esegui solo questo test">▶</button>
                                 <span>Valori non-stringa</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-storage-namespace">
-                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-namespace')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="storage-single" data-test-id="test-storage-namespace" title="Esegui solo questo test">▶</button>
                                 <span>Namespace prefix (tpl.*)</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-storage-migration">
-                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-migration')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="storage-single" data-test-id="test-storage-migration" title="Esegui solo questo test">▶</button>
                                 <span>Migrazione isDark → themeMode</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-storage-timestamp">
-                                <button class="test-run-single" onclick="runSingleStorageTest('test-storage-timestamp')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="storage-single" data-test-id="test-storage-timestamp" title="Esegui solo questo test">▶</button>
                                 <span>Gestione timestamp</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
@@ -1443,16 +1425,16 @@
             <!-- Fine Card Gruppi Test Storage -->
 
             <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; margin-top: 1rem;">
-                <button class="test-button" onclick="testStorage()" style="flex: 1; min-width: 150px;">🧪 Test Storage (24 test)</button>
-                <button class="test-button" onclick="toggleAllStorageGroups(true)" style="background: #6b7280;">📂 Apri Tutti</button>
-                <button class="test-button" onclick="toggleAllStorageGroups(false)" style="background: #6b7280;">📁 Chiudi Tutti</button>
-                <button class="test-button" onclick="resetStorageModuleTests()" style="background: #ef4444; transition: background-color 0.2s ease; min-width: 100px;">🔄 Reset Test</button>
+                <button class="test-button" data-test="storage" style="flex: 1; min-width: 150px;">🧪 Test Storage (24 test)</button>
+                <button class="test-button" data-storage-action="toggle-open" style="background: #6b7280;">📂 Apri Tutti</button>
+                <button class="test-button" data-storage-action="toggle-close" style="background: #6b7280;">📁 Chiudi Tutti</button>
+                <button class="test-button" data-storage-action="reset" style="background: #ef4444; transition: background-color 0.2s ease; min-width: 100px;">🔄 Reset Test</button>
             </div>
             <div class="test-output" id="output-storage" style="display:none;"></div>
             <div id="storage-log-buttons" style="display: none; gap: 0.5rem; margin-top: 0.5rem;">
-                <button class="test-button" onclick="copyStorageLog()" style="background: #0d9488;">📋 Copia log</button>
-                <button class="test-button" onclick="downloadStorageLog()" style="background: #3b82f6;">💾 Scarica log</button>
-                <button class="test-button" onclick="clearStorageLog()" style="background: #ef4444;">🗑️ Cancella log</button>
+                <button class="test-button" data-storage-action="copy-log" style="background: #0d9488;">📋 Copia log</button>
+                <button class="test-button" data-storage-action="download-log" style="background: #3b82f6;">💾 Scarica log</button>
+                <button class="test-button" data-storage-action="clear-log" style="background: #ef4444;">🗑️ Cancella log</button>
             </div>
         </div>
 
@@ -1481,7 +1463,7 @@
 
                 <!-- Gruppo 1: Test Unitari -->
                 <div class="test-group-separator">
-                    <div class="test-group-header" onclick="togglePriceGroup('group1')">
+                    <div class="test-group-header" data-toggle-group="price" data-group-id="group1">
                         <div class="test-group-bar group-price-1"></div>
                         <div class="test-group-title-container">
                             <div class="test-group-title">Test Unitari</div>
@@ -1493,27 +1475,27 @@
                     <div id="price-group1-content" class="test-group-content">
                         <div class="test-group-items-container">
                             <div class="test-item" id="test-pricing-calculate">
-                                <button class="test-run-single" onclick="runSinglePriceTest('test-pricing-calculate')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="price-single" data-test-id="test-pricing-calculate" title="Esegui solo questo test">▶</button>
                                 <span>Pricing.calculatePrice()</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-pricing-ticket-code">
-                                <button class="test-run-single" onclick="runSinglePriceTest('test-pricing-ticket-code')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="price-single" data-test-id="test-pricing-ticket-code" title="Esegui solo questo test">▶</button>
                                 <span>Pricing.getTicketCode()</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-pricing-format">
-                                <button class="test-run-single" onclick="runSinglePriceTest('test-pricing-format')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="price-single" data-test-id="test-pricing-format" title="Esegui solo questo test">▶</button>
                                 <span>Pricing.formatPrice()</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-pricing-validation">
-                                <button class="test-run-single" onclick="runSinglePriceTest('test-pricing-validation')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="price-single" data-test-id="test-pricing-validation" title="Esegui solo questo test">▶</button>
                                 <span>Pricing.isValidSelection()</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-pricing-route">
-                                <button class="test-run-single" onclick="runSinglePriceTest('test-pricing-route')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="price-single" data-test-id="test-pricing-route" title="Esegui solo questo test">▶</button>
                                 <span>Pricing.isRouteAvailable()</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
@@ -1523,7 +1505,7 @@
 
                 <!-- Gruppo 2: Edge Cases -->
                 <div class="test-group-separator">
-                    <div class="test-group-header" onclick="togglePriceGroup('group2')">
+                    <div class="test-group-header" data-toggle-group="price" data-group-id="group2">
                         <div class="test-group-bar group-price-2"></div>
                         <div class="test-group-title-container">
                             <div class="test-group-title">Edge Cases</div>
@@ -1535,17 +1517,17 @@
                     <div id="price-group2-content" class="test-group-content">
                         <div class="test-group-items-container">
                             <div class="test-item" id="test-pricing-same-stop">
-                                <button class="test-run-single" onclick="runSinglePriceTest('test-pricing-same-stop')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="price-single" data-test-id="test-pricing-same-stop" title="Esegui solo questo test">▶</button>
                                 <span>Stessa fermata (partenza = arrivo)</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-pricing-out-of-range">
-                                <button class="test-run-single" onclick="runSinglePriceTest('test-pricing-out-of-range')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="price-single" data-test-id="test-pricing-out-of-range" title="Esegui solo questo test">▶</button>
                                 <span>Indici fuori range</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-pricing-fallback">
-                                <button class="test-run-single" onclick="runSinglePriceTest('test-pricing-fallback')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="price-single" data-test-id="test-pricing-fallback" title="Esegui solo questo test">▶</button>
                                 <span>Fallback tariffarioAggiornato</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
@@ -1555,7 +1537,7 @@
 
                 <!-- Gruppo 3: Test Avanzati -->
                 <div class="test-group-separator">
-                    <div class="test-group-header" onclick="togglePriceGroup('group3')">
+                    <div class="test-group-header" data-toggle-group="price" data-group-id="group3">
                         <div class="test-group-bar group-price-3"></div>
                         <div class="test-group-title-container">
                             <div class="test-group-title">Test Avanzati</div>
@@ -1567,27 +1549,27 @@
                     <div id="price-group3-content" class="test-group-content">
                         <div class="test-group-items-container">
                             <div class="test-item" id="test-pricing-empty-tariffario">
-                                <button class="test-run-single" onclick="runSinglePriceTest('test-pricing-empty-tariffario')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="price-single" data-test-id="test-pricing-empty-tariffario" title="Esegui solo questo test">▶</button>
                                 <span>Tariffario vuoto/null</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-pricing-negative-indices">
-                                <button class="test-run-single" onclick="runSinglePriceTest('test-pricing-negative-indices')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="price-single" data-test-id="test-pricing-negative-indices" title="Esegui solo questo test">▶</button>
                                 <span>Indici negativi</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-pricing-string-indices">
-                                <button class="test-run-single" onclick="runSinglePriceTest('test-pricing-string-indices')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="price-single" data-test-id="test-pricing-string-indices" title="Esegui solo questo test">▶</button>
                                 <span>Indici come stringhe ("0", "5")</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-pricing-zero-price">
-                                <button class="test-run-single" onclick="runSinglePriceTest('test-pricing-zero-price')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="price-single" data-test-id="test-pricing-zero-price" title="Esegui solo questo test">▶</button>
                                 <span>Prezzo zero (gratuito)</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-pricing-missing-matrices">
-                                <button class="test-run-single" onclick="runSinglePriceTest('test-pricing-missing-matrices')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="price-single" data-test-id="test-pricing-missing-matrices" title="Esegui solo questo test">▶</button>
                                 <span>Matrici prezzi/codici mancanti</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
@@ -1597,7 +1579,7 @@
 
                 <!-- Gruppo 4: Robustezza Dati -->
                 <div class="test-group-separator">
-                    <div class="test-group-header" onclick="togglePriceGroup('group4')">
+                    <div class="test-group-header" data-toggle-group="price" data-group-id="group4">
                         <div class="test-group-bar group-price-4"></div>
                         <div class="test-group-title-container">
                             <div class="test-group-title">Robustezza Dati</div>
@@ -1609,82 +1591,82 @@
                     <div id="price-group4-content" class="test-group-content">
                         <div class="test-group-items-container">
                             <div class="test-item" id="test-pricing-null-price">
-                                <button class="test-run-single" onclick="runSinglePriceTest('test-pricing-null-price')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="price-single" data-test-id="test-pricing-null-price" title="Esegui solo questo test">▶</button>
                                 <span>Prezzo null nella matrice</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-pricing-undefined-price">
-                                <button class="test-run-single" onclick="runSinglePriceTest('test-pricing-undefined-price')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="price-single" data-test-id="test-pricing-undefined-price" title="Esegui solo questo test">▶</button>
                                 <span>Prezzo undefined nella matrice</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-pricing-string-price">
-                                <button class="test-run-single" onclick="runSinglePriceTest('test-pricing-string-price')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="price-single" data-test-id="test-pricing-string-price" title="Esegui solo questo test">▶</button>
                                 <span>Prezzo come stringa ("3.50")</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-pricing-line-not-exists">
-                                <button class="test-run-single" onclick="runSinglePriceTest('test-pricing-line-not-exists')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="price-single" data-test-id="test-pricing-line-not-exists" title="Esegui solo questo test">▶</button>
                                 <span>Linea non esistente (indice 999)</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-pricing-result-structure">
-                                <button class="test-run-single" onclick="runSinglePriceTest('test-pricing-result-structure')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="price-single" data-test-id="test-pricing-result-structure" title="Esegui solo questo test">▶</button>
                                 <span>Struttura risultato corretta</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-pricing-nan-price">
-                                <button class="test-run-single" onclick="runSinglePriceTest('test-pricing-nan-price')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="price-single" data-test-id="test-pricing-nan-price" title="Esegui solo questo test">▶</button>
                                 <span>Prezzo NaN nella matrice</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-pricing-infinity-price">
-                                <button class="test-run-single" onclick="runSinglePriceTest('test-pricing-infinity-price')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="price-single" data-test-id="test-pricing-infinity-price" title="Esegui solo questo test">▶</button>
                                 <span>Prezzo Infinity nella matrice</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-pricing-negative-price">
-                                <button class="test-run-single" onclick="runSinglePriceTest('test-pricing-negative-price')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="price-single" data-test-id="test-pricing-negative-price" title="Esegui solo questo test">▶</button>
                                 <span>Prezzo negativo</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-pricing-fermate-not-array">
-                                <button class="test-run-single" onclick="runSinglePriceTest('test-pricing-fermate-not-array')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="price-single" data-test-id="test-pricing-fermate-not-array" title="Esegui solo questo test">▶</button>
                                 <span>fermate non array</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-pricing-code-with-spaces">
-                                <button class="test-run-single" onclick="runSinglePriceTest('test-pricing-code-with-spaces')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="price-single" data-test-id="test-pricing-code-with-spaces" title="Esegui solo questo test">▶</button>
                                 <span>Codice con spazi</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-pricing-price-code-only">
-                                <button class="test-run-single" onclick="runSinglePriceTest('test-pricing-price-code-only')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="price-single" data-test-id="test-pricing-price-code-only" title="Esegui solo questo test">▶</button>
                                 <span>Solo codice senza prezzo</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-pricing-fallback-actual">
-                                <button class="test-run-single" onclick="runSinglePriceTest('test-pricing-fallback-actual')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="price-single" data-test-id="test-pricing-fallback-actual" title="Esegui solo questo test">▶</button>
                                 <span>Fallback tariffarioAggiornato (funzionamento)</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-pricing-extreme-values">
-                                <button class="test-run-single" onclick="runSinglePriceTest('test-pricing-extreme-values')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="price-single" data-test-id="test-pricing-extreme-values" title="Esegui solo questo test">▶</button>
                                 <span>Valori estremi (grande/piccolo/decimali)</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-pricing-symmetry">
-                                <button class="test-run-single" onclick="runSinglePriceTest('test-pricing-symmetry')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="price-single" data-test-id="test-pricing-symmetry" title="Esegui solo questo test">▶</button>
                                 <span>Simmetria andata/ritorno</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-pricing-multiple-lines">
-                                <button class="test-run-single" onclick="runSinglePriceTest('test-pricing-multiple-lines')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="price-single" data-test-id="test-pricing-multiple-lines" title="Esegui solo questo test">▶</button>
                                 <span>Test con più linee diverse</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-pricing-performance">
-                                <button class="test-run-single" onclick="runSinglePriceTest('test-pricing-performance')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="price-single" data-test-id="test-pricing-performance" title="Esegui solo questo test">▶</button>
                                 <span>Performance (1000 calcoli)</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
@@ -1696,20 +1678,20 @@
             <!-- Fine Card Gruppi Test Prezzi -->
 
             <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; margin-top: 1rem;">
-                <button class="test-button" onclick="testPriceCalculation()" style="flex: 1; min-width: 150px;">🧪 Test
+                <button class="test-button" data-test="price" style="flex: 1; min-width: 150px;">🧪 Test
                     Modulo Prezzi</button>
-                <button class="test-button" onclick="toggleAllPriceGroups(true)" style="background: #6b7280;">📂 Apri
+                <button class="test-button" data-price-action="toggle-open" style="background: #6b7280;">📂 Apri
                     Tutti</button>
-                <button class="test-button" onclick="toggleAllPriceGroups(false)" style="background: #6b7280;">📁 Chiudi
+                <button class="test-button" data-price-action="toggle-close" style="background: #6b7280;">📁 Chiudi
                     Tutti</button>
-                <button class="test-button" onclick="resetPriceTests()" style="background: #ef4444; transition: background-color 0.2s ease; min-width: 100px;">🔄 Reset Test</button>
+                <button class="test-button" data-price-action="reset" style="background: #ef4444; transition: background-color 0.2s ease; min-width: 100px;">🔄 Reset Test</button>
             </div>
             <div class="test-output" id="output-price" style="display:none;" data-no-copy="true"></div>
             <div id="price-log-buttons" style="display: none; gap: 0.5rem; margin-top: 0.5rem;">
-                <button class="test-button" onclick="copyPriceLog()" style="background: #0d9488;">📋 Copia log</button>
-                <button class="test-button" onclick="downloadPriceLog()" style="background: #3b82f6;">💾 Scarica
+                <button class="test-button" data-price-action="copy-log" style="background: #0d9488;">📋 Copia log</button>
+                <button class="test-button" data-price-action="download-log" style="background: #3b82f6;">💾 Scarica
                     log</button>
-                <button class="test-button" onclick="clearPriceLog()" style="background: #ef4444;">🗑️ Cancella
+                <button class="test-button" data-price-action="clear-log" style="background: #ef4444;">🗑️ Cancella
                     log</button>
             </div>
         </div>
@@ -1739,7 +1721,7 @@
 
                 <!-- Gruppo 1: Test Base -->
                 <div class="test-group-separator">
-                    <div class="test-group-header" onclick="toggleRouteGroup('group1')">
+                    <div class="test-group-header" data-toggle-group="route" data-group-id="group1">
                         <div class="test-group-bar group-route-1"></div>
                         <div class="test-group-title-container">
                             <div class="test-group-title">Test Base</div>
@@ -1751,12 +1733,12 @@
                     <div id="route-group1-content" class="test-group-content">
                         <div class="test-group-items-container">
                             <div class="test-item" id="test-route-module">
-                                <button class="test-run-single" onclick="runSingleRouteTest('test-route-module')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="route-single" data-test-id="test-route-module" title="Esegui solo questo test">▶</button>
                                 <span>Disponibilità modulo</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-route-initial-state">
-                                <button class="test-run-single" onclick="runSingleRouteTest('test-route-initial-state')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="route-single" data-test-id="test-route-initial-state" title="Esegui solo questo test">▶</button>
                                 <span>Stato iniziale</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
@@ -1766,7 +1748,7 @@
 
                 <!-- Gruppo 2: Selezione -->
                 <div class="test-group-separator">
-                    <div class="test-group-header" onclick="toggleRouteGroup('group2')">
+                    <div class="test-group-header" data-toggle-group="route" data-group-id="group2">
                         <div class="test-group-bar group-route-2"></div>
                         <div class="test-group-title-container">
                             <div class="test-group-title">Selezione</div>
@@ -1778,17 +1760,17 @@
                     <div id="route-group2-content" class="test-group-content">
                         <div class="test-group-items-container">
                             <div class="test-item" id="test-route-select-linea">
-                                <button class="test-run-single" onclick="runSingleRouteTest('test-route-select-linea')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="route-single" data-test-id="test-route-select-linea" title="Esegui solo questo test">▶</button>
                                 <span>Selezione linea</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-route-select-partenza">
-                                <button class="test-run-single" onclick="runSingleRouteTest('test-route-select-partenza')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="route-single" data-test-id="test-route-select-partenza" title="Esegui solo questo test">▶</button>
                                 <span>Selezione partenza</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-route-select-arrivo">
-                                <button class="test-run-single" onclick="runSingleRouteTest('test-route-select-arrivo')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="route-single" data-test-id="test-route-select-arrivo" title="Esegui solo questo test">▶</button>
                                 <span>Selezione arrivo</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
@@ -1798,7 +1780,7 @@
 
                 <!-- Gruppo 3: Funzionalità -->
                 <div class="test-group-separator">
-                    <div class="test-group-header" onclick="toggleRouteGroup('group3')">
+                    <div class="test-group-header" data-toggle-group="route" data-group-id="group3">
                         <div class="test-group-bar group-route-3"></div>
                         <div class="test-group-title-container">
                             <div class="test-group-title">Funzionalità</div>
@@ -1810,17 +1792,17 @@
                     <div id="route-group3-content" class="test-group-content">
                         <div class="test-group-items-container">
                             <div class="test-item" id="test-route-swap">
-                                <button class="test-run-single" onclick="runSingleRouteTest('test-route-swap')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="route-single" data-test-id="test-route-swap" title="Esegui solo questo test">▶</button>
                                 <span>Swap partenza/arrivo</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-route-reset">
-                                <button class="test-run-single" onclick="runSingleRouteTest('test-route-reset')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="route-single" data-test-id="test-route-reset" title="Esegui solo questo test">▶</button>
                                 <span>Reset selezioni</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-route-getters">
-                                <button class="test-run-single" onclick="runSingleRouteTest('test-route-getters')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="route-single" data-test-id="test-route-getters" title="Esegui solo questo test">▶</button>
                                 <span>Metodi getter</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
@@ -1830,7 +1812,7 @@
 
                 <!-- Gruppo 4: Storage -->
                 <div class="test-group-separator">
-                    <div class="test-group-header" onclick="toggleRouteGroup('group4')">
+                    <div class="test-group-header" data-toggle-group="route" data-group-id="group4">
                         <div class="test-group-bar group-route-4"></div>
                         <div class="test-group-title-container">
                             <div class="test-group-title">Storage</div>
@@ -1842,12 +1824,12 @@
                     <div id="route-group4-content" class="test-group-content">
                         <div class="test-group-items-container">
                             <div class="test-item" id="test-route-storage-save">
-                                <button class="test-run-single" onclick="runSingleRouteTest('test-route-storage-save')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="route-single" data-test-id="test-route-storage-save" title="Esegui solo questo test">▶</button>
                                 <span>Salvataggio Storage</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-route-storage-restore">
-                                <button class="test-run-single" onclick="runSingleRouteTest('test-route-storage-restore')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="route-single" data-test-id="test-route-storage-restore" title="Esegui solo questo test">▶</button>
                                 <span>Ripristino Storage</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
@@ -1859,20 +1841,20 @@
             <!-- Fine Card Gruppi Test Route Selector -->
 
             <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; margin-top: 1rem;">
-                <button class="test-button" onclick="testRouteSelector()" style="flex: 1; min-width: 150px;">🧪 Test
+                <button class="test-button" data-test="route" style="flex: 1; min-width: 150px;">🧪 Test
                     Route Selector</button>
-                <button class="test-button" onclick="toggleAllRouteGroups(true)" style="background: #6b7280;">📂 Apri
+                <button class="test-button" data-route-action="toggle-open" style="background: #6b7280;">📂 Apri
                     Tutti</button>
-                <button class="test-button" onclick="toggleAllRouteGroups(false)" style="background: #6b7280;">📁 Chiudi
+                <button class="test-button" data-route-action="toggle-close" style="background: #6b7280;">📁 Chiudi
                     Tutti</button>
-                <button class="test-button" onclick="resetRouteTests()" style="background: #ef4444; transition: background-color 0.2s ease; min-width: 100px;">🔄 Reset Test</button>
+                <button class="test-button" data-route-action="reset" style="background: #ef4444; transition: background-color 0.2s ease; min-width: 100px;">🔄 Reset Test</button>
             </div>
             <div class="test-output" id="output-route" style="display:none;" data-no-copy="true"></div>
             <div id="route-log-buttons" style="display: none; gap: 0.5rem; margin-top: 0.5rem;">
-                <button class="test-button" onclick="copyRouteLog()" style="background: #0d9488;">📋 Copia log</button>
-                <button class="test-button" onclick="downloadRouteLog()" style="background: #3b82f6;">💾 Scarica
+                <button class="test-button" data-route-action="copy-log" style="background: #0d9488;">📋 Copia log</button>
+                <button class="test-button" data-route-action="download-log" style="background: #3b82f6;">💾 Scarica
                     log</button>
-                <button class="test-button" onclick="clearRouteLog()" style="background: #ef4444;">🗑️ Cancella
+                <button class="test-button" data-route-action="clear-log" style="background: #ef4444;">🗑️ Cancella
                     log</button>
             </div>
         </div>
@@ -1902,7 +1884,7 @@
 
                 <!-- Gruppo 1: Dimensione Testo -->
                 <div class="test-group-separator">
-                    <div class="test-group-header" onclick="toggleSettingsGroup('group1')">
+                    <div class="test-group-header" data-toggle-group="settings" data-group-id="group1">
                         <div class="test-group-bar group-settings-1"></div>
                         <div class="test-group-title-container">
                             <div class="test-group-title">Dimensione Testo</div>
@@ -1914,17 +1896,17 @@
                     <div id="settings-group1-content" class="test-group-content">
                         <div class="test-group-items-container">
                             <div class="test-item" id="test-settings-font-size-normal">
-                                <button class="test-run-single" onclick="runSingleSettingsTest('test-settings-font-size-normal')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="settings-single" data-test-id="test-settings-font-size-normal" title="Esegui solo questo test">▶</button>
                                 <span>Font Size: Normal</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-settings-font-size-large">
-                                <button class="test-run-single" onclick="runSingleSettingsTest('test-settings-font-size-large')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="settings-single" data-test-id="test-settings-font-size-large" title="Esegui solo questo test">▶</button>
                                 <span>Font Size: Large</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-settings-font-size-xlarge">
-                                <button class="test-run-single" onclick="runSingleSettingsTest('test-settings-font-size-xlarge')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="settings-single" data-test-id="test-settings-font-size-xlarge" title="Esegui solo questo test">▶</button>
                                 <span>Font Size: XLarge</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
@@ -1934,7 +1916,7 @@
 
                 <!-- Gruppo 2: Tema -->
                 <div class="test-group-separator">
-                    <div class="test-group-header" onclick="toggleSettingsGroup('group2')">
+                    <div class="test-group-header" data-toggle-group="settings" data-group-id="group2">
                         <div class="test-group-bar group-settings-2"></div>
                         <div class="test-group-title-container">
                             <div class="test-group-title">Tema</div>
@@ -1946,17 +1928,17 @@
                     <div id="settings-group2-content" class="test-group-content">
                         <div class="test-group-items-container">
                             <div class="test-item" id="test-settings-theme-light">
-                                <button class="test-run-single" onclick="runSingleSettingsTest('test-settings-theme-light')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="settings-single" data-test-id="test-settings-theme-light" title="Esegui solo questo test">▶</button>
                                 <span>Tema: Light</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-settings-theme-dark">
-                                <button class="test-run-single" onclick="runSingleSettingsTest('test-settings-theme-dark')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="settings-single" data-test-id="test-settings-theme-dark" title="Esegui solo questo test">▶</button>
                                 <span>Tema: Dark</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-settings-theme-system">
-                                <button class="test-run-single" onclick="runSingleSettingsTest('test-settings-theme-system')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="settings-single" data-test-id="test-settings-theme-system" title="Esegui solo questo test">▶</button>
                                 <span>Tema: System</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
@@ -1966,7 +1948,7 @@
 
                 <!-- Gruppo 3: Accessibilità -->
                 <div class="test-group-separator">
-                    <div class="test-group-header" onclick="toggleSettingsGroup('group3')">
+                    <div class="test-group-header" data-toggle-group="settings" data-group-id="group3">
                         <div class="test-group-bar group-settings-3"></div>
                         <div class="test-group-title-container">
                             <div class="test-group-title">Accessibilità</div>
@@ -1978,32 +1960,32 @@
                     <div id="settings-group3-content" class="test-group-content">
                         <div class="test-group-items-container">
                             <div class="test-item" id="test-settings-high-contrast">
-                                <button class="test-run-single" onclick="runSingleSettingsTest('test-settings-high-contrast')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="settings-single" data-test-id="test-settings-high-contrast" title="Esegui solo questo test">▶</button>
                                 <span>Contrasto Alto</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-settings-touch-friendly">
-                                <button class="test-run-single" onclick="runSingleSettingsTest('test-settings-touch-friendly')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="settings-single" data-test-id="test-settings-touch-friendly" title="Esegui solo questo test">▶</button>
                                 <span>Touch Friendly</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-settings-reduce-motion">
-                                <button class="test-run-single" onclick="runSingleSettingsTest('test-settings-reduce-motion')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="settings-single" data-test-id="test-settings-reduce-motion" title="Esegui solo questo test">▶</button>
                                 <span>Riduci Animazioni</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-settings-extra-spacing">
-                                <button class="test-run-single" onclick="runSingleSettingsTest('test-settings-extra-spacing')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="settings-single" data-test-id="test-settings-extra-spacing" title="Esegui solo questo test">▶</button>
                                 <span>Spaziatura Extra</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-settings-compact-layout">
-                                <button class="test-run-single" onclick="runSingleSettingsTest('test-settings-compact-layout')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="settings-single" data-test-id="test-settings-compact-layout" title="Esegui solo questo test">▶</button>
                                 <span>Layout Compatto</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-settings-blue-light-filter">
-                                <button class="test-run-single" onclick="runSingleSettingsTest('test-settings-blue-light-filter')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="settings-single" data-test-id="test-settings-blue-light-filter" title="Esegui solo questo test">▶</button>
                                 <span>Filtro Luce Blu</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
@@ -2013,7 +1995,7 @@
 
                 <!-- Gruppo 4: Dimensione Interfaccia -->
                 <div class="test-group-separator">
-                    <div class="test-group-header" onclick="toggleSettingsGroup('group4')">
+                    <div class="test-group-header" data-toggle-group="settings" data-group-id="group4">
                         <div class="test-group-bar group-settings-4"></div>
                         <div class="test-group-title-container">
                             <div class="test-group-title">Dimensione Interfaccia</div>
@@ -2025,27 +2007,27 @@
                     <div id="settings-group4-content" class="test-group-content">
                         <div class="test-group-items-container">
                             <div class="test-item" id="test-settings-interface-scale-75">
-                                <button class="test-run-single" onclick="runSingleSettingsTest('test-settings-interface-scale-75')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="settings-single" data-test-id="test-settings-interface-scale-75" title="Esegui solo questo test">▶</button>
                                 <span>Interface Scale: 75%</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-settings-interface-scale-85">
-                                <button class="test-run-single" onclick="runSingleSettingsTest('test-settings-interface-scale-85')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="settings-single" data-test-id="test-settings-interface-scale-85" title="Esegui solo questo test">▶</button>
                                 <span>Interface Scale: 85%</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-settings-interface-scale-100">
-                                <button class="test-run-single" onclick="runSingleSettingsTest('test-settings-interface-scale-100')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="settings-single" data-test-id="test-settings-interface-scale-100" title="Esegui solo questo test">▶</button>
                                 <span>Interface Scale: 100%</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-settings-interface-scale-115">
-                                <button class="test-run-single" onclick="runSingleSettingsTest('test-settings-interface-scale-115')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="settings-single" data-test-id="test-settings-interface-scale-115" title="Esegui solo questo test">▶</button>
                                 <span>Interface Scale: 115%</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-settings-interface-scale-125">
-                                <button class="test-run-single" onclick="runSingleSettingsTest('test-settings-interface-scale-125')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="settings-single" data-test-id="test-settings-interface-scale-125" title="Esegui solo questo test">▶</button>
                                 <span>Interface Scale: 125%</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
@@ -2055,7 +2037,7 @@
 
                 <!-- Gruppo 5: Feedback e Persistenza -->
                 <div class="test-group-separator">
-                    <div class="test-group-header" onclick="toggleSettingsGroup('group5')">
+                    <div class="test-group-header" data-toggle-group="settings" data-group-id="group5">
                         <div class="test-group-bar group-settings-5"></div>
                         <div class="test-group-title-container">
                             <div class="test-group-title">Feedback e Persistenza</div>
@@ -2067,27 +2049,27 @@
                     <div id="settings-group5-content" class="test-group-content">
                         <div class="test-group-items-container">
                             <div class="test-item" id="test-settings-haptic-feedback">
-                                <button class="test-run-single" onclick="runSingleSettingsTest('test-settings-haptic-feedback')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="settings-single" data-test-id="test-settings-haptic-feedback" title="Esegui solo questo test">▶</button>
                                 <span>Feedback Aptico</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-settings-animation-toggle">
-                                <button class="test-run-single" onclick="runSingleSettingsTest('test-settings-animation-toggle')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="settings-single" data-test-id="test-settings-animation-toggle" title="Esegui solo questo test">▶</button>
                                 <span>Toggle Animazioni</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-settings-keep-screen-on">
-                                <button class="test-run-single" onclick="runSingleSettingsTest('test-settings-keep-screen-on')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="settings-single" data-test-id="test-settings-keep-screen-on" title="Esegui solo questo test">▶</button>
                                 <span>Keep Screen On (Wake Lock)</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-settings-localstorage-persistence">
-                                <button class="test-run-single" onclick="runSingleSettingsTest('test-settings-localstorage-persistence')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="settings-single" data-test-id="test-settings-localstorage-persistence" title="Esegui solo questo test">▶</button>
                                 <span>Persistenza localStorage</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-settings-css-classes">
-                                <button class="test-run-single" onclick="runSingleSettingsTest('test-settings-css-classes')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="settings-single" data-test-id="test-settings-css-classes" title="Esegui solo questo test">▶</button>
                                 <span>Classi CSS applicate</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
@@ -2099,16 +2081,16 @@
             <!-- Fine Card Gruppi Test Settings -->
 
             <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; margin-top: 1rem;">
-                <button class="test-button" onclick="testSettings()" style="flex: 1; min-width: 150px;">🧪 Test Modulo Settings</button>
-                <button class="test-button" onclick="toggleAllSettingsGroups(true)" style="background: #6b7280;">📂 Apri Tutti</button>
-                <button class="test-button" onclick="toggleAllSettingsGroups(false)" style="background: #6b7280;">📁 Chiudi Tutti</button>
-                <button class="test-button" onclick="resetSettingsTests()" style="background: #ef4444; transition: background-color 0.2s ease; min-width: 100px;">🔄 Reset Test</button>
+                <button class="test-button" data-test="settings" style="flex: 1; min-width: 150px;">🧪 Test Modulo Settings</button>
+                <button class="test-button" data-settings-action="toggle-open" style="background: #6b7280;">📂 Apri Tutti</button>
+                <button class="test-button" data-settings-action="toggle-close" style="background: #6b7280;">📁 Chiudi Tutti</button>
+                <button class="test-button" data-settings-action="reset" style="background: #ef4444; transition: background-color 0.2s ease; min-width: 100px;">🔄 Reset Test</button>
             </div>
             <div class="test-output" id="output-settings" style="display:none;" data-no-copy="true"></div>
             <div id="settings-log-buttons" style="display: none; gap: 0.5rem; margin-top: 0.5rem;">
-                <button class="test-button" onclick="copySettingsLog()" style="background: #0d9488;">📋 Copia log</button>
-                <button class="test-button" onclick="downloadSettingsLog()" style="background: #3b82f6;">💾 Scarica log</button>
-                <button class="test-button" onclick="clearSettingsLog()" style="background: #ef4444;">🗑️ Cancella log</button>
+                <button class="test-button" data-settings-action="copy-log" style="background: #0d9488;">📋 Copia log</button>
+                <button class="test-button" data-settings-action="download-log" style="background: #3b82f6;">💾 Scarica log</button>
+                <button class="test-button" data-settings-action="clear-log" style="background: #ef4444;">🗑️ Cancella log</button>
             </div>
         </div>
 
@@ -2137,7 +2119,7 @@
 
                 <!-- Gruppo 1: Registrazione e Base -->
                 <div class="test-group-separator">
-                    <div class="test-group-header" onclick="toggleSwGroup('group1')">
+                    <div class="test-group-header" data-toggle-group="sw" data-group-id="group1">
                         <div class="test-group-bar group-sw-1"></div>
                         <div class="test-group-title-container">
                             <div class="test-group-title">Registrazione e Base</div>
@@ -2149,17 +2131,17 @@
                     <div id="sw-group1-content" class="test-group-content">
                         <div class="test-group-items-container">
                             <div class="test-item" id="test-sw-registration">
-                                <button class="test-run-single" onclick="runSingleSwTest('test-sw-registration')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="sw-single" data-test-id="test-sw-registration" title="Esegui solo questo test">▶</button>
                                 <span>Registrazione Service Worker</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-sw-cache">
-                                <button class="test-run-single" onclick="runSingleSwTest('test-sw-cache')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="sw-single" data-test-id="test-sw-cache" title="Esegui solo questo test">▶</button>
                                 <span>Verifica cache</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-sw-version-not-cached">
-                                <button class="test-run-single" onclick="runSingleSwTest('test-sw-version-not-cached')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="sw-single" data-test-id="test-sw-version-not-cached" title="Esegui solo questo test">▶</button>
                                 <span>version.json non in cache</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
@@ -2169,7 +2151,7 @@
 
                 <!-- Gruppo 2: Cache Management -->
                 <div class="test-group-separator">
-                    <div class="test-group-header" onclick="toggleSwGroup('group2')">
+                    <div class="test-group-header" data-toggle-group="sw" data-group-id="group2">
                         <div class="test-group-bar group-sw-2"></div>
                         <div class="test-group-title-container">
                             <div class="test-group-title">Cache Management</div>
@@ -2181,22 +2163,22 @@
                     <div id="sw-group2-content" class="test-group-content">
                         <div class="test-group-items-container">
                             <div class="test-item" id="test-sw-cache-size">
-                                <button class="test-run-single" onclick="runSingleSwTest('test-sw-cache-size')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="sw-single" data-test-id="test-sw-cache-size" title="Esegui solo questo test">▶</button>
                                 <span>Dimensione cache</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-sw-cache-cleanup">
-                                <button class="test-run-single" onclick="runSingleSwTest('test-sw-cache-cleanup')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="sw-single" data-test-id="test-sw-cache-cleanup" title="Esegui solo questo test">▶</button>
                                 <span>Cache cleanup</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-sw-static-assets">
-                                <button class="test-run-single" onclick="runSingleSwTest('test-sw-static-assets')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="sw-single" data-test-id="test-sw-static-assets" title="Esegui solo questo test">▶</button>
                                 <span>Static assets verification</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-sw-fetch-strategy">
-                                <button class="test-run-single" onclick="runSingleSwTest('test-sw-fetch-strategy')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="sw-single" data-test-id="test-sw-fetch-strategy" title="Esegui solo questo test">▶</button>
                                 <span>Fetch strategy (cache-first)</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
@@ -2206,7 +2188,7 @@
 
                 <!-- Gruppo 3: Messaggi e Comunicazione -->
                 <div class="test-group-separator">
-                    <div class="test-group-header" onclick="toggleSwGroup('group3')">
+                    <div class="test-group-header" data-toggle-group="sw" data-group-id="group3">
                         <div class="test-group-bar group-sw-3"></div>
                         <div class="test-group-title-container">
                             <div class="test-group-title">Messaggi e Comunicazione</div>
@@ -2218,22 +2200,22 @@
                     <div id="sw-group3-content" class="test-group-content">
                         <div class="test-group-items-container">
                             <div class="test-item" id="test-sw-messages">
-                                <button class="test-run-single" onclick="runSingleSwTest('test-sw-messages')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="sw-single" data-test-id="test-sw-messages" title="Esegui solo questo test">▶</button>
                                 <span>Messaggi al Service Worker</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-sw-clear-cache-message">
-                                <button class="test-run-single" onclick="runSingleSwTest('test-sw-clear-cache-message')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="sw-single" data-test-id="test-sw-clear-cache-message" title="Esegui solo questo test">▶</button>
                                 <span>CLEAR_CACHE message</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-sw-skip-waiting-message">
-                                <button class="test-run-single" onclick="runSingleSwTest('test-sw-skip-waiting-message')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="sw-single" data-test-id="test-sw-skip-waiting-message" title="Esegui solo questo test">▶</button>
                                 <span>SKIP_WAITING message</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-sw-offline-fallback">
-                                <button class="test-run-single" onclick="runSingleSwTest('test-sw-offline-fallback')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="sw-single" data-test-id="test-sw-offline-fallback" title="Esegui solo questo test">▶</button>
                                 <span>Offline fallback</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
@@ -2243,7 +2225,7 @@
 
                 <!-- Gruppo 4: Strategie e Patterns -->
                 <div class="test-group-separator">
-                    <div class="test-group-header" onclick="toggleSwGroup('group4')">
+                    <div class="test-group-header" data-toggle-group="sw" data-group-id="group4">
                         <div class="test-group-bar group-sw-4"></div>
                         <div class="test-group-title-container">
                             <div class="test-group-title">Strategie e Patterns</div>
@@ -2255,17 +2237,17 @@
                     <div id="sw-group4-content" class="test-group-content">
                         <div class="test-group-items-container">
                             <div class="test-item" id="test-sw-update-mechanism">
-                                <button class="test-run-single" onclick="runSingleSwTest('test-sw-update-mechanism')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="sw-single" data-test-id="test-sw-update-mechanism" title="Esegui solo questo test">▶</button>
                                 <span>Update mechanism</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-sw-github-pages-patterns">
-                                <button class="test-run-single" onclick="runSingleSwTest('test-sw-github-pages-patterns')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="sw-single" data-test-id="test-sw-github-pages-patterns" title="Esegui solo questo test">▶</button>
                                 <span>GitHub Pages patterns</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
                             <div class="test-item" id="test-sw-error-handling">
-                                <button class="test-run-single" onclick="runSingleSwTest('test-sw-error-handling')" title="Esegui solo questo test">▶</button>
+                                <button class="test-run-single" data-test="sw-single" data-test-id="test-sw-error-handling" title="Esegui solo questo test">▶</button>
                                 <span>Error handling</span>
                                 <span class="test-status pending">In attesa</span>
                             </div>
@@ -2277,16 +2259,16 @@
             <!-- Fine Card Gruppi Test Service Worker -->
 
             <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; margin-top: 1rem;">
-                <button class="test-button" onclick="testServiceWorker()" style="flex: 1; min-width: 150px;">🧪 Test Modulo Service Worker</button>
-                <button class="test-button" onclick="toggleAllSwGroups(true)" style="background: #6b7280;">📂 Apri Tutti</button>
-                <button class="test-button" onclick="toggleAllSwGroups(false)" style="background: #6b7280;">📁 Chiudi Tutti</button>
-                <button class="test-button" onclick="resetSwTests()" style="background: #ef4444; transition: background-color 0.2s ease; min-width: 100px;">🔄 Reset Test</button>
+                <button class="test-button" data-test="serviceworker" style="flex: 1; min-width: 150px;">🧪 Test Modulo Service Worker</button>
+                <button class="test-button" data-sw-action="toggle-open" style="background: #6b7280;">📂 Apri Tutti</button>
+                <button class="test-button" data-sw-action="toggle-close" style="background: #6b7280;">📁 Chiudi Tutti</button>
+                <button class="test-button" data-sw-action="reset" style="background: #ef4444; transition: background-color 0.2s ease; min-width: 100px;">🔄 Reset Test</button>
             </div>
             <div class="test-output" id="output-sw" style="display:none;" data-no-copy="true"></div>
             <div id="sw-log-buttons" style="display: none; gap: 0.5rem; margin-top: 0.5rem;">
-                <button class="test-button" onclick="copySwLog()" style="background: #0d9488;">📋 Copia log</button>
-                <button class="test-button" onclick="downloadSwLog()" style="background: #3b82f6;">💾 Scarica log</button>
-                <button class="test-button" onclick="clearSwLog()" style="background: #ef4444;">🗑️ Cancella log</button>
+                <button class="test-button" data-sw-action="copy-log" style="background: #0d9488;">📋 Copia log</button>
+                <button class="test-button" data-sw-action="download-log" style="background: #3b82f6;">💾 Scarica log</button>
+                <button class="test-button" data-sw-action="clear-log" style="background: #ef4444;">🗑️ Cancella log</button>
             </div>
         </div>
 
@@ -2305,7 +2287,7 @@
                 <span>Aggiornamento riepilogo</span>
                 <span class="test-status pending">In attesa</span>
             </div>
-            <button class="test-button" onclick="testUIComponents()">🧪 Test UI Components</button>
+            <button class="test-button" data-test="ui">🧪 Test UI Components</button>
             <div class="test-output" id="output-ui" style="display:none;"></div>
         </div>
 
@@ -2320,7 +2302,7 @@
                 <span>Validazione icone</span>
                 <span class="test-status pending">In attesa</span>
             </div>
-            <button class="test-button" onclick="testManifest()">🧪 Test Manifest</button>
+            <button class="test-button" data-test="manifest">🧪 Test Manifest</button>
             <div class="test-output" id="output-manifest" style="display:none;"></div>
         </div>
 
@@ -2328,21 +2310,32 @@
         <div id="section-performance" class="test-section">
             <h2>⚡ Test Performance</h2>
             <div class="test-item" id="test-perf-load-time">
+                <button class="test-run-single" data-test="performance-single" data-test-id="test-perf-load-time" title="Esegui solo questo test">▶</button>
                 <span>Tempo caricamento dati</span>
                 <span class="test-status pending">In attesa</span>
             </div>
             <div class="test-item" id="test-perf-calc-time">
+                <button class="test-run-single" data-test="performance-single" data-test-id="test-perf-calc-time" title="Esegui solo questo test">▶</button>
                 <span>Tempo calcolo prezzo</span>
                 <span class="test-status pending">In attesa</span>
             </div>
-            <button class="test-button" onclick="testPerformance()">🧪 Test Performance</button>
+            <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; margin-top: 1rem;">
+                <button class="test-button" data-test="performance" style="flex: 1; min-width: 150px;">🧪 Test Performance</button>
+                <button class="test-button" data-performance-action="reset" style="background: #ef4444; transition: background-color 0.2s ease; min-width: 100px;">🔄 Reset Test</button>
+            </div>
             <div class="test-output" id="output-performance" style="display:none;"></div>
+            <div id="performance-log-buttons" style="display: none; gap: 0.5rem; margin-top: 0.5rem; flex-wrap: wrap;">
+                <button class="test-button" data-performance-action="copy-log" style="background: #0d9488;">📋 Copia log</button>
+                <button class="test-button" data-performance-action="download-log" style="background: #3b82f6;">💾 Scarica log</button>
+                <button class="test-button" data-performance-action="clear-log" style="background: #ef4444;">🗑️ Cancella log</button>
+            </div>
         </div>
 
     </div>
 
     <!-- Pulsante torna su -->
-    <button class="scroll-to-top" onclick="scrollToTop()" title="Torna su">
+    <!-- Gestito automaticamente da js/utils/ui-helpers.js con addEventListener -->
+    <button class="scroll-to-top" title="Torna su">
         ↑
     </button>
 
@@ -2379,10 +2372,7 @@
         </div>
     </div>
 
-    <!-- Modal Impostazioni -->
-    <!-- L'HTML del modal viene caricato dinamicamente da components/settings-modal.html -->
-    <!-- Vedi js/components/modals.js per la funzione loadSettingsModalHTML() -->
-    <!-- Il div viene creato dinamicamente quando necessario, non è presente qui -->
+    
 
     <!-- Footer -->
     <footer class="footer">
@@ -2404,12 +2394,12 @@
     <script src="js/features/tests-ui.js"></script>
     <script src="js/features/prezzi.js?v=20251102-2"></script>
     <script src="js/tests/test-prezzi.js"></script>
-    <!-- Wrapper funzioni Prezzi test - IMPORTANTE: Deve essere caricato PRIMA del DOM per essere disponibile agli onclick -->
+    <!-- Wrapper funzioni Prezzi test - Event delegation gestita automaticamente per data-test="price" e data-test="price-single" -->
     <script src="js/tests/test-prezzi-wrappers.js"></script>
     <!-- Route Selector (dipende da tariffario.js e Pricing) -->
     <script src="js/features/route-selector.js"></script>
     <script src="js/tests/test-route-selector.js"></script>
-    <!-- Wrapper funzioni Route Selector test - IMPORTANTE: Deve essere caricato PRIMA del DOM per essere disponibile agli onclick -->
+    <!-- Wrapper funzioni Route Selector test - Event delegation gestita automaticamente per data-test="route" e data-test="route-single" -->
     <script src="js/tests/test-route-selector-wrappers.js"></script>
     <!-- GPS Modules - Fase 1-3 modularizzazione GPS (09/11/2025) -->
     <!-- IMPORTANTE: Ordine di caricamento importante per dipendenze -->
@@ -2431,12 +2421,12 @@
     <!-- Modulo utility per test - Step 1 modularizzazione (02/11/2025) -->
     <script src="js/tests/test-utils.js"></script>
     <!-- Funzioni gestione log - Step 2 modularizzazione (06/11/2025) -->
-    <!-- IMPORTANTE: Deve essere caricato PRIMA del DOM per essere disponibile agli onclick -->
+    <!-- Le funzioni sono disponibili globalmente (window.copyDatabaseLog, ecc.) -->
     <script src="js/tests/test-log-helpers.js"></script>
     <!-- Wrapper funzioni accordion - Step 3 modularizzazione (06/11/2025) -->
-    <!-- IMPORTANTE: Deve essere caricato PRIMA del DOM per essere disponibile agli onclick -->
+    <!-- Event delegation gestita automaticamente per toggle gruppi (data-toggle-group e data-group-id) -->
     <script src="js/tests/test-accordion-wrappers.js"></script>
-    <!-- Wrapper funzioni Storage test - Deve essere caricato PRIMA del DOM per essere disponibile agli onclick -->
+    <!-- Wrapper funzioni Storage test - Event delegation gestita automaticamente per data-test="storage" e data-test="storage-single" -->
     <script src="js/tests/test-storage-wrappers.js"></script>
     <!-- Modulo accordion per gruppi test - Step 3 modularizzazione (06/11/2025) -->
     <script src="js/tests/test-accordion.js"></script>
@@ -2447,6 +2437,7 @@
     <script src="js/tests/test-settings.js"></script>
     <script src="js/tests/test-settings-wrappers.js"></script>
     <script src="js/tests/test-darkmode.js"></script>
+    <script src="js/tests/test-darkmode-wrappers.js"></script>
     <script src="js/tests/test-sw.js"></script>
     <script src="js/tests/test-sw-wrappers.js"></script>
     <script src="js/tests/test-all-wrappers.js"></script>
@@ -2454,8 +2445,10 @@
     <script src="js/tests/test-ui.js"></script>
     <script src="js/tests/test-manifest.js"></script>
     <script src="js/tests/test-performance.js"></script>
-    <!-- Wrapper funzioni UI, Manifest, Performance test - IMPORTANTE: Deve essere caricato PRIMA del DOM per essere disponibile agli onclick -->
+    <!-- Wrapper funzioni UI, Manifest, Performance test - Event delegation gestita automaticamente per data-test="ui", "manifest", "performance" -->
     <script src="js/tests/test-ui-manifest-performance-wrappers.js"></script>
+    <!-- TOC Navigation - Smooth scroll e highlight dinamico per indice mobile e sidebar desktop -->
+    <script src="js/features/toc-navigation.js"></script>
     <!-- Mega Dropdown Settings (componente condiviso, solo desktop) -->
     <script src="js/components/mega-dropdown-settings.js"></script>
     <script src="js/utils/connection-monitor.js"></script>
@@ -2469,285 +2462,14 @@
     <script src="js/tests/error-404-simulator.js"></script>
     <script src="test-config.js"></script>
     <script>
-        // ===== FUNZIONI ACCORDION =====
-        // Le funzioni sono ora definite in js/tests/test-accordion-wrappers.js
-        // che viene caricato PRIMA del DOM per essere disponibile agli onclick
-
-        // ===== ATTIVA PULSANTI COPIA LOG =====
-        // Rimosso: i pulsanti vengono ora aggiunti solo quando si esegue il test
-
-        // ===== WRAPPER LEGACY COMPATIBILITY =====
-        // RIMOSSO: Le funzioni wrapper legacy sono state eliminate.
-        // Ora si usa direttamente TestUtils.log(), TestUtils.updateTestStatus(), TestUtils.updateStats()
-
-        // ===== TOGGLE ACCORDION GROUPS =====
-        // Le funzioni sono già definite all'inizio dello script per essere disponibili immediatamente
-        // Questo blocco è solo un commento di riferimento
-
-        // ===== FUNZIONI GESTIONE LOG =====
-        // RIMOSSO: Le funzioni gestione log sono state spostate in js/tests/test-log-helpers.js
-        // Le funzioni sono ancora disponibili globalmente (window.copyDatabaseLog, ecc.)
-
-        // ===== FUNZIONI HEADER =====
-        // RIMOSSO: Le funzioni header sono state spostate nei rispettivi moduli:
-        // - resetDatabaseTests() → js/tests/test-database.js
-        // - resetPriceTests() e updatePriceHeader() → js/tests/test-prezzi.js
-        // - resetSettingsTests() e updateSettingsHeader() → js/tests/test-settings.js
-        // - resetSwTests() e updateSwHeader() → js/tests/test-sw.js
-        // Le funzioni sono ancora disponibili globalmente (window.resetDatabaseTests, ecc.)
-
-        // resetStorageTests DEPRECATO - funzione rimossa perché test-localstorage.js è deprecato
-        // NOTA: testStorage, resetStorageModuleTests e runSingleStorageTest sono ora definite
-        // in js/tests/test-storage-wrappers.js per essere disponibili agli onclick
-
-        // ===== GESTIONE MODALITÀ PWA TEST =====
-
-        // ===== MODALITÀ PWA TEST =====
-        // CODICE SPOSTATO IN js/tests/pwa-test-mode.js (09/11/2025)
-        // Le funzioni sono ora disponibili come window.PWATestMode
-        // Il modulo si auto-inizializza al caricamento
-
-        // ===== GESTIONE SIMULAZIONE OFFLINE =====
-        // Spostato in js/utils/offline-simulator.js
-
-        // Test 1: Database - spostato in js/tests/test-database.js
-
-        // Test 2: LocalStorage - DEPRECATO - ora usa test-storage.js
-
-        // Test 3: Dark Mode - spostato in js/tests/test-darkmode.js
-        window.testDarkMode = async function() {
-            const output = 'output-darkmode';
-            const outputEl = document.getElementById(output);
-            if (outputEl) {
-                outputEl.innerHTML = '';
-                outputEl.style.display = 'block';
-            }
-
-            try {
-                if (typeof DarkModeTests === 'undefined') {
-                    TestUtils.log(output, '✗ DarkModeTests non disponibile! Assicurati che test-darkmode.js sia caricato.', 'error');
-                    return;
-                }
-
-                if (typeof Settings === 'undefined') {
-                    TestUtils.log(output, '✗ Settings non disponibile! Assicurati che settings.js sia caricato.', 'error');
-                    return;
-                }
-
-                TestUtils.log(output, '✓ DarkModeTests e Settings disponibili', 'success');
-
-                const results = await DarkModeTests.runAll({
-                    log: (message, type) => TestUtils.log(output, message, type),
-                    updateStatus: (id, status) => TestUtils.updateTestStatus(id, status)
-                });
-
-                if (results) {
-                    TestUtils.log(output, `✅ Test completati: ${results.passed} passati, ${results.failed} falliti`, results.failed > 0 ? 'error' : 'success');
-                }
-            } catch (error) {
-                TestUtils.log(output, `✗ Errore fatale: ${error.message}`, 'error');
-                console.error('Errore test dark mode:', error);
-            }
-        }
-
-        // Test 3.5: Storage Module (js/core/storage.js)
-        // NOTA: testStorage, resetStorageModuleTests, runSingleStorageTest e updateStorageHeader
-        // sono ora definite in js/tests/test-storage-wrappers.js per essere disponibili agli onclick
-
-        // RIMOSSO: testPriceCalculation() e runSinglePriceTest() spostate in js/tests/test-prezzi-wrappers.js
-        // Le funzioni sono ancora disponibili globalmente (window.testPriceCalculation, window.runSinglePriceTest)
-        // IMPORTANTE: js/tests/test-prezzi-wrappers.js deve essere caricato PRIMA del DOM per essere disponibile agli onclick
-
-        // RIMOSSO: updatePriceHeader() spostata in js/tests/test-prezzi.js
-        // La funzione è ancora disponibile globalmente (window.updatePriceHeader)
-
-        // ===== FUNZIONI TOGGLE PER SETTINGS =====
-        // Le funzioni sono già definite all'inizio dello script
-
-        // RIMOSSO: resetSettingsTests() spostata in js/tests/test-settings.js
-        // La funzione è ancora disponibile globalmente (window.resetSettingsTests)
-
-        // RIMOSSO: testSettings() e runSingleSettingsTest() spostate in js/tests/test-settings-wrappers.js
-        // Le funzioni sono ancora disponibili globalmente (window.testSettings, window.runSingleSettingsTest)
-        // IMPORTANTE: js/tests/test-settings-wrappers.js deve essere caricato PRIMA del DOM per essere disponibile agli onclick
-
-        // RIMOSSO: testServiceWorker() spostata in js/tests/test-sw-wrappers.js
-        // La funzione è ancora disponibile globalmente (window.testServiceWorker)
-        // IMPORTANTE: js/tests/test-sw-wrappers.js deve essere caricato PRIMA del DOM per essere disponibile agli onclick
-
-        // RIMOSSO: updateSwHeader() spostata in js/tests/test-sw.js
-        // La funzione è ancora disponibile globalmente (window.updateSwHeader)
-
-        // ===== FUNZIONI TOGGLE PER SERVICE WORKER =====
-        // Le funzioni sono già definite all'inizio dello script
-
-        // RIMOSSO: resetSwTests() spostata in js/tests/test-sw.js
-        // La funzione è ancora disponibile globalmente (window.resetSwTests)
-
-        window.runSingleSwTest = async function(testId) {
-            const output = 'output-sw';
-            const outputEl = document.getElementById(output);
-            
-            if (!outputEl) {
-                console.error('Elemento output non trovato:', output);
-                return;
-            }
-
-            // Mostra output
-            outputEl.innerHTML = '';
-            outputEl.style.display = 'block';
-
-            // Utility functions
-            const log = (message, type = 'info') => {
-                if (typeof TestUtils !== 'undefined' && TestUtils.log) {
-                    TestUtils.log(output, message, type);
-                } else {
-                    const logDiv = document.createElement('div');
-                    logDiv.className = `console-log ${type}`;
-                    logDiv.textContent = message;
-                    outputEl.appendChild(logDiv);
-                    console.log(`[${type}] ${message}`);
-                }
-            };
-
-            const updateStatus = (id, status) => {
-                if (typeof TestUtils !== 'undefined' && TestUtils.updateStatus) {
-                    TestUtils.updateStatus(id, status);
-                } else if (typeof TestUtils !== 'undefined' && TestUtils.updateTestStatus) {
-                    TestUtils.updateTestStatus(id, status);
-                }
-            };
-
-            log(`🧪 Esecuzione Test: ${testId}...`, 'info');
-            log('', 'info');
-
-            const startTime = performance.now();
-
-            try {
-                // Verifica che ServiceWorkerTests sia disponibile
-                if (typeof ServiceWorkerTests === 'undefined') {
-                    throw new Error('ServiceWorkerTests non disponibile! Assicurati che test-sw.js sia caricato.');
-                }
-
-                const callbacks = {
-                    log: log,
-                    updateStatus: updateStatus
-                };
-
-                // Mappatura testId -> funzione di test
-                const testMap = {
-                    'test-sw-registration': () => ServiceWorkerTests.testRegistration(callbacks),
-                    'test-sw-cache': () => ServiceWorkerTests.testCache(callbacks),
-                    'test-sw-version-not-cached': () => ServiceWorkerTests.testVersionNotCached(callbacks),
-                    'test-sw-cache-size': () => ServiceWorkerTests.testCacheSize(callbacks),
-                    'test-sw-messages': () => ServiceWorkerTests.testMessages(callbacks),
-                    'test-sw-offline-fallback': () => ServiceWorkerTests.testOfflineFallback(callbacks),
-                    'test-sw-update-mechanism': () => ServiceWorkerTests.testUpdateMechanism(callbacks),
-                    'test-sw-cache-cleanup': () => ServiceWorkerTests.testCacheCleanup(callbacks),
-                    'test-sw-static-assets': () => ServiceWorkerTests.testStaticAssets(callbacks),
-                    'test-sw-fetch-strategy': () => ServiceWorkerTests.testFetchStrategy(callbacks),
-                    'test-sw-clear-cache-message': () => ServiceWorkerTests.testClearCacheMessage(callbacks),
-                    'test-sw-skip-waiting-message': () => ServiceWorkerTests.testSkipWaitingMessage(callbacks),
-                    'test-sw-github-pages-patterns': () => ServiceWorkerTests.testGitHubPagesPatterns(callbacks),
-                    'test-sw-error-handling': () => ServiceWorkerTests.testErrorHandling(callbacks)
-                };
-
-                if (testMap[testId]) {
-                    await testMap[testId]();
-                } else {
-                    log(`⚠️ Test "${testId}" non riconosciuto`, 'warn');
-                    return;
-                }
-
-                const endTime = performance.now();
-                const duration = Math.round(endTime - startTime);
-                
-                log('', 'info');
-                log(`✅ Test ${testId} completato in ${duration}ms`, 'success');
-
-            } catch (error) {
-                log(`✗ Test ${testId} fallito: ${error.message}`, 'error');
-                updateStatus(testId, 'fail');
-            }
-        }
-
-        // ===== TEST WRAPPER FUNCTIONS =====
-        // CODICE RIMOSSO: Gestito da js/tests/test-ui-manifest-performance-wrappers.js
-        // Le funzioni testUIComponents(), testManifest(), testPerformance() sono disponibili globalmente
-        // I moduli test-ui.js, test-manifest.js, test-performance.js devono essere caricati prima dei wrapper
-
-        // Test 9: Geolocalizzazione (Versione Migliorata)
-        // NOTA: Tutte le funzioni GPS sono state spostate nei moduli in js/tests/gps/
-        // I moduli si auto-inizializzano al caricamento
-
-        // ===== WATCH POSITION - MONITORAGGIO CONTINUO =====
-        // CODICE SPOSTATO IN js/tests/gps/watch-position.js (Fase 4 modularizzazione GPS - 09/11/2025)
-        // Il modulo si auto-inizializza
-
-        // ===== SIMULAZIONE POSIZIONE FAKE =====
-        // CODICE SPOSTATO IN js/tests/gps/fake-position.js (Fase 2 modularizzazione GPS - 09/11/2025)
-        // Il modulo si auto-inizializza
-
-        // ===== TEST GEOLOCALIZZAZIONE BASE =====
-        // FUNZIONE SPOSTATA IN js/tests/gps/test-geolocation.js (Fase 4 modularizzazione GPS - 09/11/2025)
-        // La funzione è ora disponibile come window.GPSTestGeolocation.run() o window.testGeolocation()
-        
-        // NOTA: checkGeolocationPermission() e checkHttpsRequirement() sono ora in js/tests/gps/helpers.js e si auto-inizializzano
-        // Il modulo helpers.js gestisce automaticamente il controllo permessi e HTTPS
-
-        // ===== CALCOLO DISTANZA =====
-        // CODICE SPOSTATO IN js/tests/gps/distance-calculator.js (Fase 3 modularizzazione GPS - 09/11/2025)
-        // Le funzioni sono ora disponibili come window.GPSDistanceCalculator
-
-        // ===== MAPPA INTERATTIVA LEAFLET =====
-        // CODICE SPOSTATO IN js/tests/gps/map-leaflet.js (Fase 3 modularizzazione GPS - 09/11/2025)
-        // Le funzioni sono ora disponibili come window.GPSMap
-
-        // RIMOSSO: runAllTests() spostata in js/tests/test-all-wrappers.js
-        // La funzione è ancora disponibile globalmente (window.runAllTests)
-        // IMPORTANTE: js/tests/test-all-wrappers.js deve essere caricato PRIMA del DOM per essere disponibile agli onclick
-
-        // ===== EFFECTS STATUS =====
-        // CODICE SPOSTATO IN js/tests/effects-status.js (09/11/2025)
-        // Le funzioni sono ora disponibili come window.EffectsStatus
-        // Il modulo si auto-inizializza al caricamento
-
-        // ===== RILEVAMENTO INFO DEVICE/BROWSER =====
-        // CODICE SPOSTATO IN js/tests/device-detector.js (09/11/2025)
-        // Le funzioni sono ora disponibili come window.DeviceDetector
-        // Il modulo si auto-inizializza al caricamento
-
-        // ===== TEST RAPIDO GPS ONE-CLICK =====
-        // FUNZIONE SPOSTATA IN js/tests/gps/quick-test.js (Fase 4 modularizzazione GPS - 09/11/2025)
-        // La funzione è ora disponibile come window.GPSQuickTest.run()
-
-        // ===== EXPORT REPORT GPS =====
-        // FUNZIONE SPOSTATA IN js/tests/gps/export-report.js (Fase 4 modularizzazione GPS - 09/11/2025)
-        // La funzione è ora disponibile come window.GPSExportReport.export(format)
-
-        // ===== RESET DATI GPS =====
-        // FUNZIONI SPOSTATE IN js/tests/gps/reset-data.js (Fase 2 modularizzazione GPS - 09/11/2025)
-        // Le funzioni sono disponibili come window.GPSResetData e si auto-inizializzano
-
-        // ===== LISTENER DOM CONTENT LOADED =====
+        // ===== INITIALIZATION =====
+        // Tutte le funzioni sono modulari e caricate tramite script tag sopra.
+        // Event delegation gestita automaticamente dai wrapper modules.
+        // I moduli DeviceDetector e EffectsStatus si auto-inizializzano.
         window.addEventListener('DOMContentLoaded', () => {
-            // Inizializza info device (se non già inizializzato dal modulo)
-            if (typeof window.DeviceDetector !== 'undefined' && window.DeviceDetector.detect) {
-                // Il modulo si auto-inizializza, ma chiamiamo comunque per sicurezza
-                window.DeviceDetector.detect();
-            } else if (typeof detectDeviceInfo === 'function') {
-                // Fallback a funzione globale per retrocompatibilità
-                detectDeviceInfo();
-            }
-
-            // Inizializza statistiche
-            TestUtils.updateStats();
-            // Effects Status si auto-inizializza dal modulo
-            if (typeof window.EffectsStatus !== 'undefined' && window.EffectsStatus.update) {
-                window.EffectsStatus.update();
-            } else if (typeof updateEffectsStatus === 'function') {
-                // Fallback a funzione globale per retrocompatibilità
-                updateEffectsStatus();
+            // Inizializza statistiche test (conta status iniziali)
+            if (typeof TestUtils !== 'undefined' && typeof TestUtils.updateStats === 'function') {
+                TestUtils.updateStats();
             }
 
             // Event listener per test geolocalizzazione
@@ -2839,12 +2561,7 @@
         // NOTA: Questo componente è disponibile in tutte le pagine (solo desktop)
     </script>
 
-    <script>
-        // Aspetta che il DOM sia pronto
-        document.addEventListener('DOMContentLoaded', () => {
-            renderChangelog('changelog-container');
-        });
-    </script>
+    <!-- Changelog non presente in test.html - rimosso renderChangelog -->
 
     <!-- Script Rilevamento Display - Spostato in js/utils/display-detector.js -->
     <script src="js/utils/display-detector.js"></script>
@@ -2888,23 +2605,24 @@
                     const isExpanding = !content.classList.contains('expanded');
                     
                     // Animazione press (sempre)
+                    // Usa requestAnimationFrame per ridurre forced reflow
                     group.classList.remove('clicking');
-                    void group.offsetHeight; // Forza reflow
-                    group.classList.add('clicking');
-                    
-                    setTimeout(() => {
-                        group.classList.remove('clicking');
-                    }, 200);
+                    requestAnimationFrame(() => {
+                        group.classList.add('clicking');
+                        setTimeout(() => {
+                            group.classList.remove('clicking');
+                        }, 200);
+                    });
                     
                     // Animazione highlight (solo quando si apre)
                     if (isExpanding) {
                         group.classList.remove('opening');
-                        void group.offsetHeight;
-                        group.classList.add('opening');
-                        
-                        setTimeout(() => {
-                            group.classList.remove('opening');
-                        }, 300);
+                        requestAnimationFrame(() => {
+                            group.classList.add('opening');
+                            setTimeout(() => {
+                                group.classList.remove('opening');
+                            }, 300);
+                        });
                     }
                 });
             });
@@ -2913,106 +2631,6 @@
         });
     </script>
 
-    <!-- TOC Sidebar JavaScript - Highlight dinamico durante scroll -->
-    <script>
-        (function initTOCSidebar() {
-            const sidebar = document.getElementById('toc-sidebar');
-            const sidebarLinks = sidebar?.querySelectorAll('.toc-sidebar-link');
-            const sections = [];
-
-            if (!sidebar || !sidebarLinks || sidebarLinks.length === 0) {
-                return;
-            }
-
-            // Raccogli tutte le sezioni
-            sidebarLinks.forEach(link => {
-                const sectionId = link.getAttribute('data-section');
-                const section = document.getElementById(sectionId);
-                if (section) {
-                    sections.push({ link, section, id: sectionId });
-                }
-            });
-
-            // Smooth scroll per i link della sidebar
-            sidebarLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    const targetId = link.getAttribute('href');
-                    const target = document.querySelector(targetId);
-                    if (target) {
-                        e.preventDefault();
-                        const offset = 80; // Offset per navbar
-                        const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - offset;
-                        
-                        window.scrollTo({
-                            top: targetPosition,
-                            behavior: 'smooth'
-                        });
-                        
-                        // Aggiorna URL senza ricaricare
-                        try {
-                            history.replaceState(null, '', targetId);
-                        } catch {}
-                    }
-                });
-            });
-
-            // Intersection Observer per highlight dinamico
-            const observerOptions = {
-                root: null,
-                rootMargin: '-20% 0px -60% 0px', // Trigger quando sezione è nel terzo superiore della viewport
-                threshold: 0
-            };
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const sectionId = entry.target.id;
-                        const correspondingLink = sidebar.querySelector(`[data-section="${sectionId}"]`);
-                        
-                        if (correspondingLink) {
-                            // Rimuovi active da tutti i link
-                            sidebarLinks.forEach(l => l.classList.remove('active'));
-                            // Aggiungi active al link corrispondente
-                            correspondingLink.classList.add('active');
-                            
-                            // Scroll della sidebar per mantenere il link visibile
-                            const linkRect = correspondingLink.getBoundingClientRect();
-                            const sidebarRect = sidebar.getBoundingClientRect();
-                            
-                            if (linkRect.top < sidebarRect.top || linkRect.bottom > sidebarRect.bottom) {
-                                correspondingLink.scrollIntoView({
-                                    behavior: 'smooth',
-                                    block: 'nearest',
-                                    inline: 'nearest'
-                                });
-                            }
-                        }
-                    }
-                });
-            }, observerOptions);
-
-            // Osserva tutte le sezioni
-            sections.forEach(({ section }) => {
-                observer.observe(section);
-            });
-
-            // Evidenzia la prima sezione visibile all'avvio
-            function highlightFirstVisible() {
-                for (const { link, section } of sections) {
-                    const rect = section.getBoundingClientRect();
-                    if (rect.top >= 0 && rect.top < window.innerHeight * 0.5) {
-                        sidebarLinks.forEach(l => l.classList.remove('active'));
-                        link.classList.add('active');
-                        break;
-                    }
-                }
-            }
-
-            // Esegui all'avvio e dopo un piccolo delay per assicurarsi che tutto sia caricato
-            setTimeout(highlightFirstVisible, 100);
-            window.addEventListener('load', highlightFirstVisible);
-        })();
-    </script>
 
 </body>
 

@@ -35,8 +35,9 @@
     const mobileVersionCard = document.getElementById('mobile-version-card');
 
     // Verifica elementi essenziali
+    // Se gli elementi non esistono, la pagina non ha il menu mobile - esci silenziosamente
     if (!hamburgerToggle || !mobileMenu || !mobileMenuOverlay) {
-      console.warn('⚠️ Hamburger Menu: Elementi essenziali non trovati');
+      // Non loggare warning - è normale che alcune pagine non abbiano il menu mobile
       return false;
     }
 

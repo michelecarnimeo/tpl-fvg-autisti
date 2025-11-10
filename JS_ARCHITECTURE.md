@@ -31,6 +31,7 @@ tpl-fvg-autisti/
 │   │   ├── geolocation.js      ✅ FATTO - Geolocalizzazione e ordinamento fermate
 │   │   ├── page-renderers.js   ✅ FATTO - Rendering pagine fermate/prezzi, selezione linee, ricerca
 │   │   ├── tests-ui.js         ✅ FATTO - UI componenti test
+│   │   ├── toc-navigation.js   ✅ FATTO (2025-11-10) - Smooth scroll e highlight TOC (indice mobile + sidebar desktop)
 │   │   └── animations.js       ← Logica animazioni JS ⏳ TODO
 │   │
 │   ├── data/
@@ -40,30 +41,36 @@ tpl-fvg-autisti/
 │   ├── utils/
 │   │   ├── ui-helpers.js       ✅ FATTO - Funzioni UI helper (scroll to top, swap button)
 │   │   ├── offline-notifications.js ✅ FATTO - Notifiche online/offline
-│   │   └── connection-monitor.js ✅ FATTO - Monitor connessione internet
+│   │   ├── connection-monitor.js ✅ FATTO - Monitor connessione internet
+│   │   ├── offline-simulator.js ✅ FATTO - Simulatore offline
+│   │   ├── display-detector.js ✅ FATTO - Rilevamento display
+│   │   └── interface-scale.js  ✅ FATTO - Scala interfaccia
 │   │
 │   ├── tests/
 │   │   ├── test-accordion.js   ✅ FATTO - Gestione accordion gruppi
-│   │   ├── test-accordion-wrappers.js ✅ FATTO - Wrapper funzioni accordion
-│   │   ├── test-all-wrappers.js ✅ FATTO - Wrapper runAllTests()
+│   │   ├── test-accordion-wrappers.js ✅ FATTO - Wrapper funzioni accordion + Event delegation toggle gruppi
+│   │   ├── test-all-wrappers.js ✅ FATTO - Wrapper runAllTests() + Event delegation
 │   │   ├── test-database.js    ✅ FATTO - Suite test database.json
 │   │   ├── test-darkmode.js    ✅ FATTO - Suite test dark mode
+│   │   ├── test-darkmode-wrappers.js ✅ FATTO - Wrapper funzioni Dark Mode test + Event delegation
 │   │   ├── test-log-helpers.js ✅ FATTO - Funzioni gestione log (copia, download, clear)
 │   │   ├── test-manifest.js    ✅ FATTO - Suite test manifest PWA
 │   │   ├── test-performance.js ✅ FATTO - Suite test performance
 │   │   ├── test-prezzi.js      ✅ FATTO - Suite test per prezzi.js
-│   │   ├── test-prezzi-wrappers.js ✅ FATTO - Wrapper funzioni Prezzi test
+│   │   ├── test-prezzi-wrappers.js ✅ FATTO - Wrapper funzioni Prezzi test + Event delegation
+│   │   ├── test-route-selector.js ✅ FATTO - Suite test Route Selector
+│   │   ├── test-route-selector-wrappers.js ✅ FATTO - Wrapper funzioni Route Selector test + Event delegation
 │   │   ├── test-settings.js    ✅ FATTO - Suite test per settings.js
-│   │   ├── test-settings-wrappers.js ✅ FATTO - Wrapper funzioni Settings test
+│   │   ├── test-settings-wrappers.js ✅ FATTO - Wrapper funzioni Settings test + Event delegation
 │   │   ├── test-storage.js     ✅ FATTO - Suite test per storage.js (24 test)
-│   │   ├── test-storage-wrappers.js ✅ FATTO - Wrapper funzioni Storage test
+│   │   ├── test-storage-wrappers.js ✅ FATTO - Wrapper funzioni Storage test + Event delegation
 │   │   ├── test-sw.js          ✅ FATTO - Suite test Service Worker
-│   │   ├── test-sw-wrappers.js ✅ FATTO - Wrapper funzioni Service Worker test
+│   │   ├── test-sw-wrappers.js ✅ FATTO - Wrapper funzioni Service Worker test + Event delegation
 │   │   ├── test-ui.js          ✅ FATTO - Suite test UI componenti
-│   │   ├── test-ui-manifest-performance-wrappers.js ✅ FATTO (09/11/2025) - Wrapper test UI/Manifest/Performance
+│   │   ├── test-ui-manifest-performance-wrappers.js ✅ FATTO (09/11/2025) - Wrapper test UI/Manifest/Performance + Event delegation
 │   │   ├── test-utils.js       ✅ FATTO - Utility test (logging, status, statistiche)
 │   │   ├── device-detector.js  ✅ FATTO (09/11/2025) - Rilevamento informazioni dispositivo
-│   │   ├── effects-status.js   ✅ FATTO (09/11/2025) - Status effetti (dark mode, animazioni, ecc.)
+│   │   ├── effects-status.js   ✅ FATTO (09/11/2025) - Status effetti (dark mode, animazioni, ecc.) + Event delegation
 │   │   ├── error-404-simulator.js ✅ FATTO (09/11/2025) - Simulatore errore 404
 │   │   ├── pwa-test-mode.js    ✅ FATTO (09/11/2025) - Modalità test PWA
 │   │   └── gps/                ✅ FATTO (09/11/2025) - Moduli GPS avanzati
@@ -131,12 +138,22 @@ I file JavaScript devono essere caricati in questo ordine preciso:
 <script src="js/tests/test-prezzi.js"></script>
 <script src="js/tests/test-settings.js"></script>
 <script src="js/tests/test-sw.js"></script>
-<!-- Test wrappers (funzioni globali per onclick) -->
+<script src="js/tests/test-route-selector.js"></script>
+<script src="js/tests/test-darkmode.js"></script>
+<!-- Test wrappers (event delegation automatica, NO onclick inline) -->
+<script src="js/tests/test-accordion-wrappers.js"></script>
 <script src="js/tests/test-storage-wrappers.js"></script>
 <script src="js/tests/test-prezzi-wrappers.js"></script>
 <script src="js/tests/test-settings-wrappers.js"></script>
 <script src="js/tests/test-sw-wrappers.js"></script>
+<script src="js/tests/test-route-selector-wrappers.js"></script>
+<script src="js/tests/test-darkmode-wrappers.js"></script>
 <script src="js/tests/test-all-wrappers.js"></script>
+<script src="js/tests/test-ui-manifest-performance-wrappers.js"></script>
+<!-- Features test page -->
+<script src="js/features/toc-navigation.js"></script>
+<script src="js/tests/effects-status.js"></script>
+<script src="js/tests/device-detector.js"></script>
 
 <!-- 6. MAIN (sempre ultimo!) -->
 <script src="js/main.js"></script>
@@ -546,157 +563,46 @@ if (result.valido) {
 **Dipendenze:** Nessuna (logica pura)  
 **Usato da:** `script.js` (orchestrazione UI), future pagine che necessitano calcolo prezzi
 
-**Responsabilità Dettagliate:**
+---
 
-`prezzi.js` gestisce **TUTTE** le responsabilità relative al calcolo prezzi:
+#### **features/toc-navigation.js** ✅ (2025-11-10)
 
-1. **Gestione Parametri** (validazione/normalizzazione):
+**Contenuto:**
 
-   - `isValidSelection()` - Valida che selezione sia corretta (indici validi, non uguali, ecc.)
-   - `isRouteAvailable()` - Verifica che la tratta esista nella matrice
-   - Normalizzazione indici (parseInt, controlli bounds)
+- Gestione navigazione Table of Contents (TOC)
+- Smooth scroll per link dell'indice mobile (`#section-index`)
+- Smooth scroll per link della sidebar desktop (`#toc-sidebar`)
+- Intersection Observer per highlight dinamico delle sezioni attive
+- Scroll automatico della sidebar per mantenere visibile il link attivo
+- Evidenziazione della prima sezione visibile all'avvio
+- Aggiornamento URL senza ricaricare la pagina
 
-2. **Calcolo Prezzo** (logica matematica):
-
-   - `calculatePrice()` - Legge dalla matrice `prezzi[][]`
-   - Gestione errori (try/catch, controlli tipo)
-   - Fallback su `tariffarioAggiornato` se codice non trovato
-
-3. **Recupero Codice**:
-
-   - `getTicketCode()` - Legge dalla matrice `codici[][]`
-   - Fallback su `tariffarioAggiornato` per codici mancanti
-
-4. **Formattazione**:
-   - `formatPrice()` - Formatta numero in "X.XX €" o "-"
-
-**Architettura e Flusso Dati:**
-
-```
-┌─────────────────────────────────────────┐
-│          prezzi.js                      │
-│      (COMPLETAMENTE INDIPENDENTE)       │
-├─────────────────────────────────────────┤
-│ 1. Gestione Parametri                   │
-│    - isValidSelection()                 │
-│    - isRouteAvailable()                 │
-│                                         │
-│ 2. Calcolo Prezzo                       │
-│    - calculatePrice()                   │
-│      → Legge matrice prezzi[][]         │
-│      → Gestisce errori                  │
-│                                         │
-│ 3. Recupero Codice                      │
-│    - getTicketCode()                    │
-│      → Legge matrice codici[][]         │
-│      → Fallback tariffarioAggiornato     │
-│                                         │
-│ 4. Formattazione                        │
-│    - formatPrice()                      │
-└─────────────────────────────────────────┘
-         ↑
-         │ riceve parametri (NO variabili globali)
-         │
-┌─────────────┐
-│ script.js   │ ← Carica tariffario (fetch)
-│             │ ← Passa dati a Pricing.calculatePrice()
-│             │ ← Aggiorna DOM con risultati
-└─────────────┘
-```
-
-**Indipendenza da script.js:**
-
-- ✅ `prezzi.js` NON importa nulla da `script.js`
-- ✅ `prezzi.js` NON legge variabili globali di `script.js`
-- ✅ `prezzi.js` riceve TUTTO come parametri (funzioni pure)
-- ✅ `script.js` dipende da `prezzi.js` (chiama le funzioni)
-- ✅ Separazione netta: Logica (`prezzi.js`) vs UI (`script.js`)
-
-**Esempio Test Isolato:**
+**API Pubblica:**
 
 ```javascript
-// Test completamente isolato (senza script.js)
-const tariffario = [
-  {
-    fermate: ["A", "B", "C"],
-    prezzi: [
-      [0, 2.5, 3.5],
-      [2.5, 0, 2.0],
-      [3.5, 2.0, 0],
-    ],
-    codici: [
-      ["", "E1", "E2"],
-      ["E1", "", "E1"],
-      ["E2", "E1", ""],
-    ],
-  },
-];
-
-const result = Pricing.calculatePrice(0, 0, 1, tariffario);
-// { prezzo: 2.5, codice: 'E1', valido: true }
-```
-
-**Futuro - Integrazione con tariffario.js:**
-
-Quando sarà creato `data/tariffario.js`, `prezzi.js` potrà usarlo direttamente:
-
-```javascript
-// FUTURO (quando tariffario.js esisterà)
-window.Pricing = {
-  calculatePrice(lineaIdx, partenzaIdx, arrivoIdx) {
-    // Non riceve più tariffario come parametro!
-    const tariffario = window.Tariffario.get(); // ← Legge da tariffario.js
-    // ... resto della logica ...
-  },
+window.TOCNavigation = {
+  init: init,              // Inizializza tutto
+  initMobile: initMobileTOC,  // Solo indice mobile
+  initSidebar: initSidebarTOC // Solo sidebar desktop
 };
 ```
 
-Attualmente `prezzi.js` riceve `tariffario` come parametro per mantenere l'indipendenza e la testabilità.
+**Dipendenze:** Nessuna (solo DOM)  
+**Usato da:** `test.html`
 
-**Ridondanza Eliminata con la Modularizzazione:**
+**Funzionalità:**
 
-La modularizzazione di `prezzi.js` ha eliminato la ridondanza JavaScript presente in `script.js`:
+1. **Indice Mobile (`#section-index`)**:
+   - Smooth scroll per link `.toc-link`
+   - Aggiorna URL con `history.replaceState`
 
-**Prima della Modularizzazione:**
-- Logica calcolo prezzo duplicata in 2 funzioni (`calcolaPrezzo()`, `renderPrezzi()`)
-- Logica recupero codice duplicata in 2 posti
-- Formattazione prezzo duplicata in 2 posti
-- Fallback `tariffarioAggiornato` duplicato
+2. **Sidebar Desktop (`#toc-sidebar`)**:
+   - Smooth scroll con offset per navbar (80px)
+   - Intersection Observer per evidenziare sezione attiva
+   - Scroll automatico sidebar per mantenere link visibile
+   - Evidenziazione prima sezione visibile all'avvio
 
-**Dopo la Modularizzazione (v1.6.9+):**
-- Logica calcolo centralizzata in `Pricing.calculatePrice()` (-50% duplicazione)
-- Logica codice centralizzata in `Pricing.getTicketCode()` (-50% duplicazione)
-- Formattazione centralizzata in `Pricing.formatPrice()` (-50% duplicazione)
-- Fallback centralizzato in una singola funzione (-50% duplicazione)
-- Rendering estratto in `js/features/page-renderers.js` (usa Pricing)
-- Gestione route estratta in `js/features/route-selector.js` (usa Pricing)
-
-**Ridondanza HTML:**
-- ❌ **NON esiste ridondanza HTML** - Le pagine HTML non contengono logica duplicata
-- Le HTML usano solo riferimenti a funzioni globali (es. `onclick="swapRoutes()"`) che rimangono compatibili
-- `index.html`: 1 riferimento inline (`swapRoutes()`)
-- `prezzi.html`: 0 riferimenti inline, rendering gestito da `page-renderers.js`
-- `fermate.html`: 0 riferimenti inline, rendering gestito da `page-renderers.js`
-
-**Beneficio Futuro:**
-Se in futuro si aggiunge una nuova pagina HTML che deve calcolare prezzi:
-- ❌ **Prima**: Dovremmo duplicare logica in quella pagina
-- ✅ **Dopo**: Usa `Pricing.calculatePrice()` per calcolo - nessuna duplicazione!
-- ✅ Usa `PageRenderers.renderPrezzi()` per rendering - nessuna duplicazione!
-- ✅ Usa `RouteSelector` per gestione stato - nessuna duplicazione!
-- ✅ Tutti i moduli sono riutilizzabili e testabili in isolamento
-
-**Statistiche Ridondanza Eliminata:**
-
-| Tipo Ridondanza                   | Prima                                    | Dopo                                | Risparmio |
-| --------------------------------- | ---------------------------------------- | ----------------------------------- | --------- |
-| **Logica calcolo prezzo**         | 2 funzioni (calcolaPrezzo, renderPrezzi) | 1 funzione (Pricing.calculatePrice) | ✅ -50%   |
-| **Logica recupero codice**        | 2 posti (calcolaPrezzo, renderPrezzi)    | 1 funzione (Pricing.getTicketCode)  | ✅ -50%   |
-| **Logica formattazione prezzo**   | 2 posti                                  | 1 funzione (Pricing.formatPrice)    | ✅ -50%   |
-| **Fallback tariffarioAggiornato** | 2 posti (duplicato)                      | 1 funzione (centralizzato)          | ✅ -50%   |
-| **Codice nelle HTML**             | 0 (non c'era)                            | 0 (non c'è)                         | ✅ 0%     |
-
-**Risultato:** -50% codice duplicato in JavaScript, +3 moduli riutilizzabili (`prezzi.js`, `page-renderers.js`, `route-selector.js`)
+**Auto-inizializzazione:** Si attiva automaticamente su `DOMContentLoaded`
 
 ---
 
@@ -803,6 +709,26 @@ Se in futuro si aggiunge una nuova pagina HTML che deve calcolare prezzi:
 
 ---
 
+#### **tests/test-accordion-wrappers.js** ✅
+
+**Contenuto:**
+
+- Wrapper functions globali per toggle accordion gruppi
+- `window.toggleDbGroup()`, `window.toggleStorageGroup()`, `window.togglePriceGroup()`, ecc.
+- `window.toggleAllDbGroups()`, `window.toggleAllStorageGroups()`, ecc.
+- **Event delegation automatica** per toggle gruppi usando `data-toggle-group` e `data-group-id`
+- Sostituisce completamente gli `onclick` inline nell'HTML
+
+**Dipendenze:** `tests/test-accordion.js` (opzionale)  
+**Usato da:** `test.html` (event delegation, NO onclick inline)
+
+**Event Delegation:**
+- Gestisce automaticamente click su elementi con `data-toggle-group` (db, storage, price, sw, route, settings)
+- Usa `data-group-id` per identificare il gruppo da aprire/chiudere
+- Auto-inizializza su `DOMContentLoaded`
+
+---
+
 #### **tests/test-storage-wrappers.js** ✅
 
 **Contenuto:**
@@ -813,9 +739,15 @@ Se in futuro si aggiunge una nuova pagina HTML che deve calcolare prezzi:
 - `window.resetStorageModuleTests()` - Reset completo
 - `window.updateStorageHeader()` - Aggiorna header con statistiche
 - Funzioni log: `copyStorageLog()`, `downloadStorageLog()`, `clearStorageLog()`
+- **Event delegation automatica** per pulsanti test e utility
 
 **Dipendenze:** `tests/test-storage.js`, `tests/test-log-helpers.js`  
-**Usato da:** `test.html` (onclick attributes)
+**Usato da:** `test.html` (event delegation, NO onclick inline)
+
+**Event Delegation:**
+- `data-test="storage"` - Pulsante test principale
+- `data-test="storage-single" data-test-id="..."` - Test singoli
+- `data-storage-action` - Azioni utility (toggle-open, toggle-close, reset, copy-log, download-log, clear-log)
 
 ---
 
@@ -827,9 +759,15 @@ Se in futuro si aggiunge una nuova pagina HTML che deve calcolare prezzi:
 - `window.testPriceCalculation()` - Esegue tutti i test Prezzi
 - `window.runSinglePriceTest()` - Esegue un singolo test
 - Caricamento automatico tariffario se vuoto (da `window.tariffario` o `database.json`)
+- **Event delegation automatica** per pulsanti test e utility
 
 **Dipendenze:** `tests/test-prezzi.js`, `tests/test-log-helpers.js`  
-**Usato da:** `test.html` (onclick attributes)
+**Usato da:** `test.html` (event delegation, NO onclick inline)
+
+**Event Delegation:**
+- `data-test="price"` - Pulsante test principale
+- `data-test="price-single" data-test-id="..."` - Test singoli
+- `data-price-action` - Azioni utility (toggle-open, toggle-close, reset, copy-log, download-log, clear-log)
 
 ---
 
@@ -840,9 +778,15 @@ Se in futuro si aggiunge una nuova pagina HTML che deve calcolare prezzi:
 - Wrapper functions globali per test Settings
 - `window.testSettings()` - Esegue tutti i test Settings
 - `window.runSingleSettingsTest()` - Esegue un singolo test
+- **Event delegation automatica** per pulsanti test e utility
 
 **Dipendenze:** `tests/test-settings.js`, `tests/test-log-helpers.js`  
-**Usato da:** `test.html` (onclick attributes)
+**Usato da:** `test.html` (event delegation, NO onclick inline)
+
+**Event Delegation:**
+- `data-test="settings"` - Pulsante test principale
+- `data-test="settings-single" data-test-id="..."` - Test singoli
+- `data-settings-action` - Azioni utility (toggle-open, toggle-close, reset, copy-log, download-log, clear-log)
 
 ---
 
@@ -852,9 +796,53 @@ Se in futuro si aggiunge una nuova pagina HTML che deve calcolare prezzi:
 
 - Wrapper functions globali per test Service Worker
 - `window.testServiceWorker()` - Esegue tutti i test SW
+- `window.runSingleSwTest()` - Esegue un singolo test
+- **Event delegation automatica** per pulsanti test e utility
 
 **Dipendenze:** `tests/test-sw.js`, `tests/test-log-helpers.js`  
-**Usato da:** `test.html` (onclick attributes)
+**Usato da:** `test.html` (event delegation, NO onclick inline)
+
+**Event Delegation:**
+- `data-test="serviceworker"` - Pulsante test principale
+- `data-test="sw-single" data-test-id="..."` - Test singoli
+- `data-sw-action` - Azioni utility (toggle-open, toggle-close, reset, copy-log, download-log, clear-log)
+
+---
+
+#### **tests/test-route-selector-wrappers.js** ✅
+
+**Contenuto:**
+
+- Wrapper functions globali per test Route Selector
+- `window.testRouteSelector()` - Esegue tutti i test Route Selector
+- `window.runSingleRouteTest()` - Esegue un singolo test
+- **Event delegation automatica** per pulsanti test e utility
+
+**Dipendenze:** `tests/test-route-selector.js`, `tests/test-log-helpers.js`  
+**Usato da:** `test.html` (event delegation, NO onclick inline)
+
+**Event Delegation:**
+- `data-test="route"` - Pulsante test principale
+- `data-test="route-single" data-test-id="..."` - Test singoli
+- `data-route-action` - Azioni utility (toggle-open, toggle-close, reset, copy-log, download-log, clear-log)
+
+---
+
+#### **tests/test-darkmode-wrappers.js** ✅
+
+**Contenuto:**
+
+- Wrapper functions globali per test Dark Mode
+- `window.testDarkMode()` - Esegue tutti i test Dark Mode
+- `window.runSingleDarkModeTest()` - Esegue un singolo test
+- **Event delegation automatica** per pulsanti test
+
+**Dipendenze:** `tests/test-darkmode.js`, `tests/test-log-helpers.js`  
+**Usato da:** `test.html` (event delegation, NO onclick inline)
+
+**Event Delegation:**
+- `data-test="darkmode"` - Pulsante test principale
+- `data-test="darkmode-single" data-test-id="..."` - Test singoli (se presenti)
 
 ---
 
@@ -864,9 +852,13 @@ Se in futuro si aggiunge una nuova pagina HTML che deve calcolare prezzi:
 
 - Wrapper function globale per eseguire tutti i test in sequenza
 - `window.runAllTests()` - Esegue tutti i test (Database, Storage, Dark Mode, Prezzi, Settings, SW, UI, Manifest, Performance)
+- **Event delegation automatica** per pulsante `data-test="run-all"`
 
 **Dipendenze:** Tutti i wrapper test  
-**Usato da:** `test.html` (onclick attribute)
+**Usato da:** `test.html` (event delegation, NO onclick inline)
+
+**Event Delegation:**
+- `data-test="run-all"` - Pulsante esegui tutti i test
 
 ---
 
@@ -879,9 +871,15 @@ Se in futuro si aggiunge una nuova pagina HTML che deve calcolare prezzi:
 - `window.testManifest()` - Esegue test manifest PWA
 - `window.testPerformance()` - Esegue test performance
 - Delega alle rispettive funzioni `UITests.runAll()`, `ManifestTests.runAll()`, `PerformanceTests.runAll()`
+- **Event delegation automatica** per pulsanti test
 
 **Dipendenze:** `tests/test-ui.js`, `tests/test-manifest.js`, `tests/test-performance.js`  
-**Usato da:** `test.html` (onclick attributes)
+**Usato da:** `test.html` (event delegation, NO onclick inline)
+
+**Event Delegation:**
+- `data-test="ui"` - Pulsante test UI
+- `data-test="manifest"` - Pulsante test Manifest
+- `data-test="performance"` - Pulsante test Performance
 
 ---
 
@@ -907,9 +905,13 @@ Se in futuro si aggiunge una nuova pagina HTML che deve calcolare prezzi:
 - `updateEffectsStatus()` - Aggiorna status effetti
 - `detectEffects()` - Rileva effetti attivi
 - Auto-inizializza su `DOMContentLoaded` e su eventi `resize`, `darkmode-toggle`
+- **Event delegation automatica** per pulsante aggiorna status
 
 **Dipendenze:** Nessuna (solo DOM)  
 **Usato da:** `test.html`
+
+**Event Delegation:**
+- `data-action="update-effects-status"` - Pulsante aggiorna status effetti
 
 ---
 
@@ -1410,6 +1412,7 @@ if (document.readyState === "loading") {
 - [x] **features/updates.js** ✅ - Verifica aggiornamenti
 - [x] **features/settings.js** ✅ - Logica impostazioni (tema, font, accessibilità)
 - [x] **features/prezzi.js** ✅ - Calcolo prezzi (funzioni pure, logica business)
+- [x] **features/toc-navigation.js** ✅ (2025-11-10) - Smooth scroll e highlight TOC (indice mobile + sidebar desktop)
 
 ### Tests
 
@@ -1417,17 +1420,21 @@ if (document.readyState === "loading") {
 - [x] **tests/test-log-helpers.js** ✅ - Funzioni gestione log (copia, download, clear)
 - [x] **tests/test-database.js** ✅ - Suite test database.json
 - [x] **tests/test-storage.js** ✅ - Suite test completa per storage.js (24 test)
-- [x] **tests/test-storage-wrappers.js** ✅ - Wrapper funzioni Storage test
+- [x] **tests/test-storage-wrappers.js** ✅ - Wrapper funzioni Storage test + Event delegation
 - [x] **tests/test-prezzi.js** ✅ - Suite test completa per prezzi.js (26+ test)
-- [x] **tests/test-prezzi-wrappers.js** ✅ - Wrapper funzioni Prezzi test
+- [x] **tests/test-prezzi-wrappers.js** ✅ - Wrapper funzioni Prezzi test + Event delegation
+- [x] **tests/test-route-selector.js** ✅ - Suite test Route Selector
+- [x] **tests/test-route-selector-wrappers.js** ✅ - Wrapper funzioni Route Selector test + Event delegation
 - [x] **tests/test-settings.js** ✅ - Suite test per settings.js
-- [x] **tests/test-settings-wrappers.js** ✅ - Wrapper funzioni Settings test
+- [x] **tests/test-settings-wrappers.js** ✅ - Wrapper funzioni Settings test + Event delegation
 - [x] **tests/test-sw.js** ✅ - Suite test Service Worker
-- [x] **tests/test-sw-wrappers.js** ✅ - Wrapper funzioni Service Worker test
-- [x] **tests/test-all-wrappers.js** ✅ - Wrapper runAllTests()
-- [x] **tests/test-ui-manifest-performance-wrappers.js** ✅ (09/11/2025) - Wrapper test UI/Manifest/Performance
+- [x] **tests/test-sw-wrappers.js** ✅ - Wrapper funzioni Service Worker test + Event delegation
+- [x] **tests/test-darkmode-wrappers.js** ✅ - Wrapper funzioni Dark Mode test + Event delegation
+- [x] **tests/test-all-wrappers.js** ✅ - Wrapper runAllTests() + Event delegation
+- [x] **tests/test-ui-manifest-performance-wrappers.js** ✅ (09/11/2025) - Wrapper test UI/Manifest/Performance + Event delegation
+- [x] **tests/test-accordion-wrappers.js** ✅ - Wrapper funzioni accordion + Event delegation toggle gruppi
 - [x] **tests/device-detector.js** ✅ (09/11/2025) - Rilevamento informazioni dispositivo
-- [x] **tests/effects-status.js** ✅ (09/11/2025) - Status effetti (dark mode, animazioni, ecc.)
+- [x] **tests/effects-status.js** ✅ (09/11/2025) - Status effetti (dark mode, animazioni, ecc.) + Event delegation
 - [x] **tests/error-404-simulator.js** ✅ (09/11/2025) - Simulatore errore 404
 - [x] **tests/pwa-test-mode.js** ✅ (09/11/2025) - Modalità test PWA
 - [x] **tests/gps/helpers.js** ✅ (09/11/2025) - Helper funzioni GPS
@@ -1442,7 +1449,11 @@ if (document.readyState === "loading") {
 
 ### Utils
 
+- [x] **utils/ui-helpers.js** ✅ - Funzioni UI helper (scroll to top, swap button)
 - [x] **utils/connection-monitor.js** ✅ (09/11/2025) - Monitor connessione internet
+- [x] **utils/offline-simulator.js** ✅ - Simulatore offline
+- [x] **utils/display-detector.js** ✅ - Rilevamento display
+- [x] **utils/interface-scale.js** ✅ - Scala interfaccia
 
 ### Da Completare
 
@@ -1549,5 +1560,87 @@ Ogni componente CSS ha il suo corrispondente JavaScript per la logica.
 
 ---
 
-**Ultimo aggiornamento**: 9 Novembre 2025  
-**Versione progetto**: 1.7.0 (modularizzazione GPS, componenti condivisi, test.html completata)
+---
+
+## 🎯 Event Delegation - Sostituzione onclick inline
+
+**Data implementazione:** 2025-11-10
+
+Tutti i `onclick` inline in `test.html` sono stati sostituiti con **event delegation** usando data attributes.
+
+### **Vantaggi:**
+
+1. **Separazione HTML/JS**: Nessun JavaScript inline nell'HTML
+2. **Performance**: Un solo listener per tipo di evento invece di centinaia
+3. **Manutenibilità**: Modifiche agli event handlers senza toccare l'HTML
+4. **Scalabilità**: Facile aggiungere nuovi elementi senza modificare il codice
+5. **Best Practice**: Pattern moderno e raccomandato
+
+### **Pattern Event Delegation:**
+
+#### **Toggle Gruppi Accordion:**
+```html
+<!-- Prima: onclick="toggleDbGroup('group1')" -->
+<!-- Dopo: -->
+<div class="test-group-header" data-toggle-group="db" data-group-id="group1">
+```
+
+**Gestito da:** `test-accordion-wrappers.js`  
+**Data attributes:** `data-toggle-group`, `data-group-id`
+
+#### **Test Singoli:**
+```html
+<!-- Prima: onclick="runSingleStorageTest('test-id')" -->
+<!-- Dopo: -->
+<button class="test-run-single" data-test="storage-single" data-test-id="test-id">
+```
+
+**Gestito da:** Wrapper modules (storage, price, route, settings, sw)  
+**Data attributes:** `data-test="[module]-single"`, `data-test-id`
+
+#### **Pulsanti Test Principali:**
+```html
+<!-- Prima: onclick="testStorage()" -->
+<!-- Dopo: -->
+<button class="test-button" data-test="storage">
+```
+
+**Gestito da:** Wrapper modules  
+**Data attributes:** `data-test="[module]"`
+
+#### **Azioni Utility:**
+```html
+<!-- Prima: onclick="toggleAllStorageGroups(true)" -->
+<!-- Dopo: -->
+<button class="test-button" data-storage-action="toggle-open">
+```
+
+**Gestito da:** Wrapper modules  
+**Data attributes:** `data-[module]-action` (toggle-open, toggle-close, reset, copy-log, download-log, clear-log)
+
+### **Moduli con Event Delegation:**
+
+- ✅ `test-accordion-wrappers.js` - Toggle gruppi accordion
+- ✅ `test-storage-wrappers.js` - Test Storage + utility
+- ✅ `test-prezzi-wrappers.js` - Test Prezzi + utility
+- ✅ `test-route-selector-wrappers.js` - Test Route Selector + utility
+- ✅ `test-settings-wrappers.js` - Test Settings + utility
+- ✅ `test-sw-wrappers.js` - Test Service Worker + utility
+- ✅ `test-darkmode-wrappers.js` - Test Dark Mode
+- ✅ `test-all-wrappers.js` - Run all tests
+- ✅ `test-ui-manifest-performance-wrappers.js` - Test UI/Manifest/Performance
+- ✅ `effects-status.js` - Update effects status
+- ✅ `toc-navigation.js` - TOC navigation (smooth scroll)
+
+### **Risultato:**
+
+- **120+ onclick rimossi** da `test.html`
+- **0 onclick rimasti** nel file
+- **Event delegation centralizzata** nei wrapper modules
+- **Funzioni globali mantenute** per retrocompatibilità
+- **Codice più pulito e manutenibile**
+
+---
+
+**Ultimo aggiornamento**: 10 Novembre 2025  
+**Versione progetto**: 1.7.1 (event delegation, TOC navigation module, test.html ottimizzato)

@@ -369,5 +369,152 @@ window.clearStorageLog = function() {
     }
 };
 
+/**
+ * Inizializza event delegation per pulsante test Storage
+ */
+function initStorageEventDelegation() {
+  // Verifica se il listener è già stato aggiunto
+  if (document.body.dataset.storageDelegationAdded === 'true') {
+    return;
+  }
+
+  // Event delegation: listener per pulsanti con data-test="storage"
+  document.body.addEventListener('click', (e) => {
+    const button = e.target.closest('[data-test="storage"]');
+    
+    if (button && button.classList.contains('test-button')) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      if (typeof window.testStorage === 'function') {
+        window.testStorage();
+      } else {
+        console.error('❌ testStorage non disponibile');
+      }
+    }
+  });
+
+  // Marca come inizializzato
+  document.body.dataset.storageDelegationAdded = 'true';
+  console.log('✅ Event delegation per Storage test inizializzata');
+}
+
+// Auto-inizializza event delegation quando il DOM è pronto
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initStorageEventDelegation);
+} else {
+  initStorageEventDelegation();
+}
+
+/**
+ * Inizializza event delegation per pulsanti test singoli Storage
+ */
+function initStorageSingleEventDelegation() {
+  // Verifica se il listener è già stato aggiunto
+  if (document.body.dataset.storageSingleDelegationAdded === 'true') {
+    return;
+  }
+
+  // Event delegation: listener per pulsanti con data-test="storage-single"
+  document.body.addEventListener('click', (e) => {
+    const button = e.target.closest('[data-test="storage-single"]');
+    
+    if (button && button.classList.contains('test-run-single')) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const testId = button.dataset.testId;
+      if (testId && typeof window.runSingleStorageTest === 'function') {
+        window.runSingleStorageTest(testId);
+      } else {
+        console.error('❌ runSingleStorageTest non disponibile o testId mancante');
+      }
+    }
+  });
+
+  // Marca come inizializzato
+  document.body.dataset.storageSingleDelegationAdded = 'true';
+  console.log('✅ Event delegation per Storage singoli test inizializzata');
+}
+
+// Auto-inizializza event delegation per singoli test quando il DOM è pronto
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initStorageSingleEventDelegation);
+} else {
+  initStorageSingleEventDelegation();
+}
+
+/**
+ * Inizializza event delegation per pulsanti utility Storage
+ * (Toggle groups, Reset, Copy/Download/Clear log)
+ */
+function initStorageUtilityEventDelegation() {
+  // Verifica se il listener è già stato aggiunto
+  if (document.body.dataset.storageUtilityDelegationAdded === 'true') {
+    return;
+  }
+
+  // Event delegation: listener per pulsanti utility Storage
+  document.body.addEventListener('click', (e) => {
+    const button = e.target.closest('[data-storage-action]');
+    
+    if (button && button.classList.contains('test-button')) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const action = button.dataset.storageAction;
+      
+      switch(action) {
+        case 'toggle-open':
+          if (typeof window.toggleAllStorageGroups === 'function') {
+            window.toggleAllStorageGroups(true);
+          }
+          break;
+          
+        case 'toggle-close':
+          if (typeof window.toggleAllStorageGroups === 'function') {
+            window.toggleAllStorageGroups(false);
+          }
+          break;
+          
+        case 'reset':
+          if (typeof window.resetStorageModuleTests === 'function') {
+            window.resetStorageModuleTests();
+          }
+          break;
+          
+        case 'copy-log':
+          if (typeof window.copyStorageLog === 'function') {
+            window.copyStorageLog();
+          }
+          break;
+          
+        case 'download-log':
+          if (typeof window.downloadStorageLog === 'function') {
+            window.downloadStorageLog();
+          }
+          break;
+          
+        case 'clear-log':
+          if (typeof window.clearStorageLog === 'function') {
+            window.clearStorageLog();
+          }
+          break;
+      }
+    }
+  });
+
+  // Marca come inizializzato
+  document.body.dataset.storageUtilityDelegationAdded = 'true';
+  console.log('✅ Event delegation per Storage utility buttons inizializzata');
+}
+
+// Auto-inizializza event delegation per utility buttons quando il DOM è pronto
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initStorageUtilityEventDelegation);
+} else {
+  initStorageUtilityEventDelegation();
+}
+
 console.log('✅ js/tests/test-storage-wrappers.js caricato - Funzioni Storage test disponibili nello scope globale');
 

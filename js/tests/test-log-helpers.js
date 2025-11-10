@@ -162,6 +162,19 @@
         clearLog('output-route', 'route-log-buttons');
     };
 
+    // Performance
+    window.copyPerformanceLog = function() {
+        copyLog('output-performance', 'Performance');
+    };
+
+    window.downloadPerformanceLog = function() {
+        downloadLog('output-performance', 'test-performance');
+    };
+
+    window.clearPerformanceLog = function() {
+        clearLog('output-performance', 'performance-log-buttons');
+    };
+
     console.log('✅ js/tests/test-log-helpers.js caricato - Funzioni gestione log disponibili nello scope globale');
 })();
 
