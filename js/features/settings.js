@@ -150,16 +150,7 @@
 
   // Funzione per aggiornare i pulsanti (stato attivo)
   function updateFontSizeButton(level) {
-    // Aggiorna pulsanti desktop
-    const desktopButtons = document.querySelectorAll('.font-size-btn');
-    desktopButtons.forEach(btn => {
-      if (btn.dataset.size === level) {
-        btn.classList.add('active');
-      } else {
-        btn.classList.remove('active');
-      }
-    });
-
+    // NOTE: pulsanti legacy .font-size-btn rimossi - ora gestiti solo dal dropdown e mobile
     // Aggiorna pulsanti mobile
     const mobileButtons = document.querySelectorAll('.mobile-font-btn');
     mobileButtons.forEach(btn => {
@@ -208,8 +199,7 @@
   // Media query per rilevare tema sistema
   const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
 
-  // Elementi DOM (letti quando necessario)
-  const darkModeToggle = document.getElementById('darkmode-toggle');
+  // NOTE: darkModeToggle rimosso - pulsante legacy non più presente nell'HTML
 
   /**
    * Imposta il tema (system, light, dark)
@@ -237,8 +227,8 @@
     // Applica il tema
     document.documentElement.classList.toggle('dark', shouldBeDark);
     updateBodyColors(shouldBeDark);
-    updateToggleIcon(shouldBeDark);
     updateMobileDarkModeButton(shouldBeDark);
+    // NOTE: updateToggleIcon() rimosso - pulsante legacy non più presente
   }
 
   function updateBodyColors(isDark) {
@@ -247,15 +237,6 @@
       body.className = body.className.replace(/bg-background-light|text-foreground-light/g, '') + ' bg-background-dark text-foreground-dark';
     } else {
       body.className = body.className.replace(/bg-background-dark|text-foreground-dark/g, '') + ' bg-background-light text-foreground-light';
-    }
-  }
-
-  // Funzione per aggiornare l'icona del toggle
-  function updateToggleIcon(isDark) {
-    if (!darkModeToggle) return; // Elemento non esiste in tutte le pagine
-    const toggleIcon = darkModeToggle.querySelector('span');
-    if (toggleIcon) {
-      toggleIcon.textContent = isDark ? '☀️' : '🌙';
     }
   }
 
@@ -590,7 +571,7 @@
     setThemeMode: setThemeMode,
     applyTheme: applyTheme,
     updateBodyColors: updateBodyColors,
-    updateToggleIcon: updateToggleIcon,
+    // NOTE: updateToggleIcon rimosso - pulsante legacy non più presente
     updateMobileDarkModeButton: updateMobileDarkModeButton,
 
     // Accessibilità

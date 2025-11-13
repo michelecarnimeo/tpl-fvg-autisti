@@ -193,16 +193,9 @@
    * Setup event listeners per aggiornamento automatico
    */
   function setupEventListeners() {
-    // Listener per dark mode toggle
-    const darkModeToggle = document.getElementById('darkmode-toggle');
-    if (darkModeToggle && !darkModeToggle.dataset.effectsListenerAdded) {
-      darkModeToggle.addEventListener('click', () => {
-        // Aspetta che il cambio modalità sia completato
-        setTimeout(updateEffectsStatus, 100);
-      });
-      darkModeToggle.dataset.effectsListenerAdded = 'true';
-    }
-
+    // NOTE: darkModeToggle rimosso - pulsante legacy non più presente
+    // Il cambio tema viene rilevato automaticamente tramite resize o aggiornamento manuale
+    
     // Listener per resize (debounce per performance)
     let resizeTimeout;
     if (!window.effectsResizeListenerAdded) {

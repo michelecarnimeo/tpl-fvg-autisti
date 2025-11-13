@@ -1,37 +1,6 @@
 // script.js - Gestione logica TPL FVG
 
 // ========================================
-// STORAGE HELPER
-// ========================================
-// Usa Storage se disponibile, altrimenti fallback su localStorage
-const Storage = window.Storage || {
-  getItem: (key, defaultValue = null) => {
-    try {
-      const item = localStorage.getItem(key);
-      return item !== null ? item : defaultValue;
-    } catch {
-      return defaultValue;
-    }
-  },
-  setItem: (key, value) => {
-    try {
-      localStorage.setItem(key, value);
-      return true;
-    } catch {
-      return false;
-    }
-  },
-  removeItem: (key) => {
-    try {
-      localStorage.removeItem(key);
-      return true;
-    } catch {
-      return false;
-    }
-  }
-};
-
-// ========================================
 // SEZIONE 0: FEEDBACK APTICO (VIBRAZIONE)
 // ========================================
 // Le funzioni di feedback aptico sono ora in js/features/settings.js
@@ -120,7 +89,7 @@ function updateLocationButtonIcon(hasLocation) {
 
 // Elementi DOM
 const mainApp = document.getElementById('main-app');
-const darkModeToggle = document.getElementById('darkmode-toggle');
+// NOTE: darkModeToggle rimosso - ora gestito direttamente da Settings.setThemeMode()
 const lineaBtn = document.getElementById('linea-btn');
 const lineaText = document.getElementById('linea-text');
 const partenzaBtn = document.getElementById('partenza-btn');
@@ -168,40 +137,31 @@ let hasCalculated = false;
 // Le variabili currentModalType e filteredFermate sono ora gestite internamente da js/components/modals.js
 
 // Utility dark mode
-function setDarkMode(isDark) {
-  document.documentElement.classList.toggle('dark', isDark);
-  Storage.setItem('tpl.isDark', isDark ? '1' : '0');
-  // Aggiorna i colori del body per tutte le pagine
-  if (window.Settings && window.Settings.updateBodyColors) {
-    window.Settings.updateBodyColors(isDark);
-  }
-}
+// NOTE: setDarkMode() rimossa - ora si usa direttamente Settings.setThemeMode()
 
+/**
+ * Toggle dark mode (light/dark)
+ * Usato da hamburger-menu.js per il pulsante mobile dark mode
+ * @returns {void}
+ */
 function toggleDark() {
-  // Nuovo sistema: cicla tra light/dark (non usa più system per il toggle manuale)
-  const isDark = !document.documentElement.classList.contains('dark');
-  const newMode = isDark ? 'dark' : 'light';
+  // Determina il nuovo tema basandosi sullo stato attuale
+  const isCurrentlyDark = document.documentElement.classList.contains('dark');
+  const newMode = isCurrentlyDark ? 'light' : 'dark';
 
-  // Usa Settings.setThemeMode() se disponibile
-  if (window.Settings && window.Settings.setThemeMode) {
+  // Usa direttamente Settings.setThemeMode()
+  if (window.Settings && typeof window.Settings.setThemeMode === 'function') {
     window.Settings.setThemeMode(newMode);
   } else {
-    // Fallback
-    Storage.setItem('tpl.themeMode', newMode);
-    document.documentElement.classList.toggle('dark', isDark);
-    if (window.Settings && window.Settings.updateBodyColors) {
-      window.Settings.updateBodyColors(isDark);
-    }
-    if (window.Settings && window.Settings.updateToggleIcon) {
-      window.Settings.updateToggleIcon(isDark);
-    }
-    if (window.Settings && window.Settings.updateMobileDarkModeButton) {
-      window.Settings.updateMobileDarkModeButton(isDark);
-    }
+    // Fallback minimale se Settings non è disponibile
+    console.warn('⚠️ Settings.setThemeMode non disponibile, fallback...');
+    window.Storage.setItem('tpl.themeMode', newMode);
+    document.documentElement.classList.toggle('dark', !isCurrentlyDark);
   }
-
-  console.log('Tema cambiato manualmente a:', newMode);
 }
+
+// Esponi toggleDark globalmente per retrocompatibilità (hamburger-menu.js)
+window.toggleDark = toggleDark;
 
 // ================================
 // SISTEMA ACCESSIBILITÀ - DIMENSIONE TESTO
@@ -210,20 +170,11 @@ function toggleDark() {
 // Usa window.Settings.setFontSize() e window.Settings.initFontSize() per richiamarle
 
 
-// Funzione populateLinee() è ora in js/components/modals.js
-// Gestita internamente quando viene aperto il modal
-function populateLinee() {
-  // Funzione mantenuta per compatibilità (potrebbe essere chiamata da altri punti)
-  // Il popolamento viene fatto automaticamente da LineeModal.open()
-  if (typeof LineeModal !== 'undefined' && LineeModal.open) {
-    // Non apriamo il modal, solo popoliamo se necessario
-    // In realtà il popolamento avviene quando si apre il modal
-  }
-}
+// NOTE: populateLinee() rimossa - il popolamento avviene automaticamente quando si apre LineeModal
+// Non più necessaria, il modal si popola automaticamente all'apertura
 
-// Abilita/disabilita pulsanti partenza/arrivo
-// Le funzioni di gestione route sono ora in js/features/route-selector.js
-// Questa funzione è mantenuta per retrocompatibilità
+// NOTE: updateFermateButtons() rimossa - ora si usa direttamente RouteSelector.updateUI()
+// Mantenuta solo come alias per retrocompatibilità
 function updateFermateButtons() {
   if (typeof window.RouteSelector !== 'undefined' && window.RouteSelector.updateUI) {
     window.RouteSelector.updateUI();
@@ -284,7 +235,7 @@ function selectLinea(idx, nome) {
     partenzaIdx = '';
     arrivoIdx = '';
     if (lineaText) lineaText.textContent = nome;
-    Storage.setItem('tpl.lineaIdx', lineaIdx);
+    window.Storage.setItem('tpl.lineaIdx', lineaIdx);
   }
 
   closeLineeModal();
@@ -293,23 +244,34 @@ function selectLinea(idx, nome) {
 // Funzioni populateFermateList, renderFermateList, selectFermata, filterFermate
 // sono ora in js/components/modals.js e vengono gestite internamente dal modulo
 
-// Controlla e aggiorna lo stato della card prezzo
-// Le funzioni di gestione route sono ora in js/features/route-selector.js
-// Queste funzioni sono mantenute per retrocompatibilità
+// NOTE: updatePriceCardState(), updateSummary(), calcolaPrezzo() sono wrapper duplicati
+// Tutte chiamano RouteSelector.updateUI() che aggiorna UI, summary, prezzo e stato card
+// Mantenute per retrocompatibilità con codice esistente
+
+/**
+ * Aggiorna lo stato della card prezzo
+ * Wrapper per RouteSelector.updateUI()
+ */
 function updatePriceCardState() {
   if (typeof window.RouteSelector !== 'undefined' && window.RouteSelector.updateUI) {
     window.RouteSelector.updateUI();
   }
 }
 
-// Aggiorna riepilogo selezioni
+/**
+ * Aggiorna riepilogo selezioni
+ * Wrapper per RouteSelector.updateUI()
+ */
 function updateSummary() {
   if (typeof window.RouteSelector !== 'undefined' && window.RouteSelector.updateUI) {
     window.RouteSelector.updateUI();
   }
 }
 
-// Calcola prezzo e codice automaticamente (usa Pricing.js)
+/**
+ * Calcola prezzo e codice automaticamente
+ * Wrapper per RouteSelector.updateUI()
+ */
 function calcolaPrezzo() {
   if (typeof window.RouteSelector !== 'undefined' && window.RouteSelector.updateUI) {
     window.RouteSelector.updateUI();
@@ -339,9 +301,9 @@ function resetFilters() {
     partenzaIdx = '';
     arrivoIdx = '';
     hasCalculated = false;
-    Storage.removeItem('tpl.lineaIdx');
-    Storage.removeItem('tpl.partenzaIdx');
-    Storage.removeItem('tpl.arrivoIdx');
+    window.Storage.removeItem('tpl.lineaIdx');
+    window.Storage.removeItem('tpl.partenzaIdx');
+    window.Storage.removeItem('tpl.arrivoIdx');
   }
 }
 
@@ -369,10 +331,10 @@ function getCurrentVersionSync() {
 // sono ora in js/features/updates.js e vengono usate direttamente da lì
 
 // Event listeners
-if (darkModeToggle) darkModeToggle.addEventListener('click', toggleDark);
+// NOTE: darkModeToggle rimosso - ora gestito direttamente da Settings.setThemeMode()
 
-// Event listeners per font size - pulsanti desktop e mobile
-document.querySelectorAll('.font-size-btn, .mobile-font-btn').forEach(btn => {
+// Event listeners per font size - solo pulsanti mobile (i pulsanti legacy sono stati rimossi)
+document.querySelectorAll('.mobile-font-btn').forEach(btn => {
   btn.addEventListener('click', function () {
     const size = this.dataset.size;
     if (size && window.Settings && window.Settings.setFontSize) {
@@ -381,30 +343,41 @@ document.querySelectorAll('.font-size-btn, .mobile-font-btn').forEach(btn => {
   });
 });
 
-// Event listener per reset cache
-const cacheResetBtn = document.getElementById('cache-reset');
-if (cacheResetBtn) {
-  cacheResetBtn.addEventListener('click', resetCache);
-}
+// NOTE: cacheResetBtn rimosso - ora gestito direttamente da Updates.checkForUpdates()
 
 // Event listeners per modal cache
+// NOTE: Le funzioni cancelResetCache e confirmResetCache sono in window.Updates
 const cacheCancelBtn = document.getElementById('cache-cancel');
 const cacheConfirmBtn = document.getElementById('cache-confirm');
 const cacheModal = document.getElementById('cache-modal');
 
 if (cacheCancelBtn) {
-  cacheCancelBtn.addEventListener('click', cancelResetCache);
+  cacheCancelBtn.addEventListener('click', () => {
+    if (window.Updates && typeof window.Updates.cancelResetCache === 'function') {
+      window.Updates.cancelResetCache();
+    } else {
+      console.warn('⚠️ Updates.cancelResetCache non disponibile');
+    }
+  });
 }
 
 if (cacheConfirmBtn) {
-  cacheConfirmBtn.addEventListener('click', confirmResetCache);
+  cacheConfirmBtn.addEventListener('click', () => {
+    if (window.Updates && typeof window.Updates.confirmResetCache === 'function') {
+      window.Updates.confirmResetCache();
+    } else {
+      console.warn('⚠️ Updates.confirmResetCache non disponibile');
+    }
+  });
 }
 
 // Chiudi modal cliccando fuori
 if (cacheModal) {
   cacheModal.addEventListener('click', function (e) {
     if (e.target === cacheModal) {
-      cancelResetCache();
+      if (window.Updates && typeof window.Updates.cancelResetCache === 'function') {
+        window.Updates.cancelResetCache();
+      }
     }
   });
 }
@@ -414,19 +387,25 @@ document.addEventListener('keydown', function (e) {
   if (e.key === 'Escape') {
     const modal = document.getElementById('cache-modal');
     if (modal && modal.style.display === 'block') {
-      cancelResetCache();
+      if (window.Updates && typeof window.Updates.cancelResetCache === 'function') {
+        window.Updates.cancelResetCache();
+      }
     }
 
     // Chiudi modal linee fermate se aperto
     const lineeModalFermate = document.getElementById('linee-fermate-modal');
     if (lineeModalFermate && lineeModalFermate.classList.contains('show')) {
-      closeLineeModalFermate();
+      if (typeof window.closeLineeModalFermate === 'function') {
+        window.closeLineeModalFermate();
+      }
     }
 
     // Chiudi modal linee prezzi se aperto
     const lineeModalPrezzi = document.getElementById('linee-prezzi-modal');
     if (lineeModalPrezzi && lineeModalPrezzi.classList.contains('show')) {
-      closeLineeModalPrezzi();
+      if (typeof window.closeLineeModalPrezzi === 'function') {
+        window.closeLineeModalPrezzi();
+      }
     }
   }
 });
@@ -513,16 +492,16 @@ function initializeModalsModules() {
         } else {
           // Fallback se il modulo non è disponibile
           console.warn('⚠️ RouteSelector non disponibile, fallback...');
-          const tariffarioData = (typeof window.Tariffario !== 'undefined' && window.Tariffario.getData) 
-            ? window.Tariffario.getData() 
+          const tariffarioData = (typeof window.Tariffario !== 'undefined' && window.Tariffario.getData)
+            ? window.Tariffario.getData()
             : tariffario;
           if (type === 'partenza') {
             partenzaIdx = index;
             if (partenzaText && tariffarioData[lineaIdx]) {
               partenzaText.textContent = tariffarioData[lineaIdx].fermate[index];
             }
-            Storage.setItem('tpl.partenzaIdx', partenzaIdx);
-            
+            window.Storage.setItem('tpl.partenzaIdx', partenzaIdx);
+
             // Se l'utente modifica manualmente la partenza, resetta lo stato UI del pulsante GPS
             if (window.Geolocation && typeof window.Geolocation.resetLocationButtonUI === 'function') {
               window.Geolocation.resetLocationButtonUI();
@@ -534,7 +513,7 @@ function initializeModalsModules() {
             if (arrivoText && tariffarioData[lineaIdx]) {
               arrivoText.textContent = tariffarioData[lineaIdx].fermate[index];
             }
-            Storage.setItem('tpl.arrivoIdx', arrivoIdx);
+            window.Storage.setItem('tpl.arrivoIdx', arrivoIdx);
           }
           updateSummary();
           calcolaPrezzo();
@@ -592,41 +571,9 @@ function initializeModalsModules() {
   }
 }
 
-// Event listeners per modale linee sono ora gestiti da js/components/modals.js
-
-// Event listeners per modale linee fermate
-const lineeModalFermateClose = document.getElementById('linee-fermate-modal-close');
-const lineeModalFermate = document.getElementById('linee-fermate-modal');
-
-if (lineeModalFermateClose) {
-  lineeModalFermateClose.addEventListener('click', closeLineeModalFermate);
-}
-
-// Chiudi modale linee fermate cliccando fuori
-if (lineeModalFermate) {
-  lineeModalFermate.addEventListener('click', (e) => {
-    if (e.target === lineeModalFermate) {
-      closeLineeModalFermate();
-    }
-  });
-}
-
-// Event listeners per modale linee prezzi
-const lineeModalPrezziClose = document.getElementById('linee-prezzi-modal-close');
-const lineeModalPrezzi = document.getElementById('linee-prezzi-modal');
-
-if (lineeModalPrezziClose) {
-  lineeModalPrezziClose.addEventListener('click', closeLineeModalPrezzi);
-}
-
-// Chiudi modale linee prezzi cliccando fuori
-if (lineeModalPrezzi) {
-  lineeModalPrezzi.addEventListener('click', (e) => {
-    if (e.target === lineeModalPrezzi) {
-      closeLineeModalPrezzi();
-    }
-  });
-}
+// NOTE: Event listeners per modale linee sono ora gestiti da js/components/modals.js e js/features/page-renderers.js
+// Le funzioni closeLineeModalFermate, openLineeModalFermate, closeLineeModalPrezzi, openLineeModalPrezzi
+// sono esposte globalmente da page-renderers.js e vengono gestite internamente dal modulo
 
 // I pulsanti swap e calcola usano onclick nell'HTML, non servono listener qui
 
@@ -640,7 +587,7 @@ async function loadData() {
   // Carica i dati usando il modulo Tariffario
   if (typeof window.Tariffario !== 'undefined' && window.Tariffario.load) {
     await window.Tariffario.load();
-    
+
     // Sincronizza variabili locali con i dati del modulo
     tariffario = window.Tariffario.getData();
     tariffarioAggiornato = window.Tariffario.getAggiornato();
@@ -651,23 +598,22 @@ async function loadData() {
       const res = await fetch('database.json');
       tariffario = await res.json();
       console.log('Database caricato (fallback), tariffario.length:', tariffario.length);
-    } catch { 
-      tariffario = []; 
+    } catch {
+      tariffario = [];
     }
     tariffarioAggiornato = null;
-    
+
     // Esponi su window
     if (typeof window !== 'undefined') {
       window.tariffario = tariffario;
       window.tariffarioAggiornato = tariffarioAggiornato;
     }
-    
+
     // Dispara evento
     window.dispatchEvent(new Event('tariffarioLoaded'));
   }
 
-  // Popola linee (wrapper per modals.js)
-  populateLinee();
+  // NOTE: populateLinee() rimossa - il popolamento avviene automaticamente quando si apre LineeModal
 
   // Ripristina selezioni usando RouteSelector
   // Aspetta che RouteSelector sia completamente inizializzato
@@ -695,12 +641,12 @@ async function loadData() {
   function useFallbackRestore() {
     console.warn('⚠️ RouteSelector non disponibile, fallback ripristino...');
     try {
-      const sLinea = Storage.getItem('tpl.lineaIdx');
-      const sPart = Storage.getItem('tpl.partenzaIdx');
-      const sArr = Storage.getItem('tpl.arrivoIdx');
+      const sLinea = window.Storage.getItem('tpl.lineaIdx');
+      const sPart = window.Storage.getItem('tpl.partenzaIdx');
+      const sArr = window.Storage.getItem('tpl.arrivoIdx');
       // Ottieni tariffario dal modulo
-      const tariffarioData = (typeof window.Tariffario !== 'undefined' && window.Tariffario.getData) 
-        ? window.Tariffario.getData() 
+      const tariffarioData = (typeof window.Tariffario !== 'undefined' && window.Tariffario.getData)
+        ? window.Tariffario.getData()
         : tariffario;
 
       if (sLinea !== null) {
@@ -740,14 +686,14 @@ async function loadData() {
   // Ripristina tema/dimensione testo (gestito da Settings, ma migrazione qui)
   try {
     // Retrocompatibilità: converti vecchio sistema isDark a themeMode
-    const oldDarkMode = Storage.getItem('tpl.isDark');
-    const existingThemeMode = Storage.getItem('tpl.themeMode');
+    const oldDarkMode = window.Storage.getItem('tpl.isDark');
+    const existingThemeMode = window.Storage.getItem('tpl.themeMode');
 
     if (!existingThemeMode && oldDarkMode !== null) {
       // Migrazione da vecchio sistema
       const newMode = oldDarkMode === '1' ? 'dark' : 'light';
-      Storage.setItem('tpl.themeMode', newMode);
-      Storage.removeItem('tpl.isDark'); // Rimuovi vecchia impostazione
+      window.Storage.setItem('tpl.themeMode', newMode);
+      window.Storage.removeItem('tpl.isDark'); // Rimuovi vecchia impostazione
     }
 
     // Il tema verrà caricato dal modal impostazioni con loadTheme()
@@ -935,12 +881,12 @@ async function handleLocationClick() {
 
 async function handleFermateLocationClick() {
   if (!fermateLocationBtn) return;
-  
+
   if (window.Geolocation && window.Geolocation.handleFermateLocationClick) {
     // Il modulo Geolocation gestirà l'ordinamento usando FermateModal.sortByDistance()
     // Non serve più il callback onSorted, il modal gestisce tutto internamente
     const result = await window.Geolocation.handleFermateLocationClick();
-    
+
     // Sincronizza variabili locali per retrocompatibilità
     if (window.Geolocation.getUserPosition) {
       userPosition = window.Geolocation.getUserPosition();
@@ -967,43 +913,8 @@ function disableLocationSorting() {
 // js/features/page-renderers.js che si inizializza al caricamento
 // Non è più necessario qui - mantenuto per riferimento storico
 
-// Funzionalità di ricerca per tratte
-if (window.location.pathname.endsWith('tratte.html')) {
-  window.addEventListener('DOMContentLoaded', () => {
-    const searchInput = document.getElementById('search-input');
-    const clearBtn = document.getElementById('clear-search');
-
-    if (searchInput && clearBtn) {
-      searchInput.addEventListener('input', (e) => {
-        const searchTerm = e.target.value.toLowerCase();
-        const fermateItems = document.querySelectorAll('.fermate-item');
-
-        // Mostra/nascondi pulsante clear
-        clearBtn.style.display = searchTerm ? 'flex' : 'none';
-
-        // Filtra fermate
-        tratteItems.forEach(item => {
-          const text = item.textContent.toLowerCase();
-          if (text.includes(searchTerm)) {
-            item.style.display = '';
-          } else {
-            item.style.display = 'none';
-          }
-        });
-      });
-
-      // Pulsante clear
-      clearBtn.addEventListener('click', () => {
-        searchInput.value = '';
-        clearBtn.style.display = 'none';
-        document.querySelectorAll('.fermate-item').forEach(item => {
-          item.style.display = '';
-        });
-        searchInput.focus();
-      });
-    }
-  });
-}
+// NOTE: Codice per tratte.html rimosso - la pagina tratte.html non esiste nel progetto
+// Se necessario, la funzionalità di ricerca è gestita da page-renderers.js per fermate.html
 
 // ========================================
 // SEZIONE UI HELPERS
@@ -1028,7 +939,7 @@ if (window.location.pathname.endsWith('tratte.html')) {
       });
     }
   }
-  
+
   // Esegui quando il DOM è pronto
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', setupSwapButtonListener);
@@ -1045,8 +956,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 
 // Event listeners per controllo animazione
 window.addEventListener('DOMContentLoaded', function () {
-  // Carica preferenza all'avvio
-  // loadAnimationPreference(); // TODO: Funzione non ancora implementata
+  // NOTE: loadAnimationPreference() è in Settings.initialize() e viene chiamata automaticamente
 
   // Inizializza la mini card versione
   initMobileVersionCard();
@@ -1096,11 +1006,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
   // Pulsanti desktop - usa event delegation per gestire tutti i pulsanti
   document.addEventListener('click', function (e) {
-    if (e.target.closest('#animationToggle')) {
-      if (window.Settings && window.Settings.toggleAnimation) {
-        window.Settings.toggleAnimation();
-      }
-    }
+    // NOTE: #animationToggle rimosso - ora gestito direttamente da Settings.toggleAnimation()
     if (e.target.closest('#mobile-animation-toggle')) {
       if (window.Settings && window.Settings.toggleAnimation) {
         window.Settings.toggleAnimation();

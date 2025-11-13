@@ -531,109 +531,12 @@ p, span, div, a, button, input, select, textarea, label, li {
     transform: translateY(-2px);                /* Solleva di più */
   }
   
-  /* SOTTOSEZIONE 7.11.4: Pulsante Impostazioni Desktop */
-  .nav-settings-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.6rem 1.2rem;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.15));
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    border-radius: 10px;
-    color: rgba(255, 255, 255, 0.95);
-    font-weight: 500;
-    font-size: 0.95rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    margin-left: 0.5rem;
-  }
-  
-  .nav-settings-btn:hover {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.25));
-    border-color: rgba(255, 255, 255, 0.6);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-    transform: translateY(-2px);
-  }
-  
-  .nav-settings-btn:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-  }
-  
-  .nav-settings-btn .settings-icon {
-    font-size: 1.1rem;
-    display: flex;
-    align-items: center;
-  }
-  
-  .nav-settings-btn .settings-text {
-    font-size: 0.95rem;
-  }
-  
-  /* Nascondi testo su schermi piccoli, mostra solo icona */
-  @media (max-width: 1024px) {
-    .nav-settings-btn .settings-text {
-      display: none;
-    }
-    .nav-settings-btn {
-      padding: 0.6rem;
-    }
-  }
-  
-  /* Nascondi completamente su mobile (dove c'è il menu hamburger) */
-  @media (max-width: 768px) {
-    .nav-settings-btn {
-      display: none !important;
-    }
-  }
-  
   /* Rifrazione visibile per stato attivo */
   .nav-link.active::before {
     opacity: 1;
   }
   
-  /* SOTTOSEZIONE 7.12: Toggle dark mode */
-  .dark-mode-toggle {
-    background: transparent;                   /* Nessun sfondo di default */
-    border: none;                             /* Nessun bordo di default */
-    color: rgba(255, 255, 255, 0.95);        /* Testo bianco con 95% opacità */
-    border-radius: 8px;                       /* Bordi arrotondati */
-    padding: 0.5rem;                          /* Padding interno */
-    cursor: pointer;                          /* Cursore pointer */
-    transition: all 0.3s ease;               /* Transizione fluida */
-    font-size: 1.2rem;                       /* Dimensione font grande */
-    display: flex;                            /* Layout flexbox */
-    align-items: center;                      /* Allineamento verticale centrale */
-    justify-content: center;                  /* Allineamento orizzontale centrale */
-    min-width: 40px;                         /* Larghezza minima */
-    height: 40px;                            /* Altezza fissa */
-    box-shadow: none;                        /* Nessuna ombra di default */
-  }
-  
-  .dark-mode-toggle:hover {
-    background: rgba(255, 255, 255, 0.1);      /* Sfondo bianco trasparente */
-    border: 1px solid rgba(255, 255, 255, 0.3); /* Bordo bianco trasparente */
-    color: rgba(255, 255, 255, 1);             /* Testo bianco pieno */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Ombra leggera */
-    transform: translateY(-1px);                /* Solleva leggermente */
-  }
-  
   /* SOTTOSEZIONE 7.13: Stili dark mode per navbar */
-  .dark .dark-mode-toggle {
-    background: transparent;                   /* Nessun sfondo di default */
-    color: rgba(255, 255, 255, 1);            /* Testo bianco pieno (100% opaco) */
-    border: none;                             /* Nessun bordo di default */
-    box-shadow: none;                         /* Nessuna ombra di default */
-  }
-  
-  .dark .dark-mode-toggle:hover {
-    background: rgba(255, 255, 255, 0.1);     /* Sfondo bianco trasparente al hover */
-    border: 1px solid rgba(255, 255, 255, 0.3); /* Bordo bianco trasparente */
-    color: rgba(255, 255, 255, 1);            /* Testo bianco pieno */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Ombra leggera */
-  }
-  
   .dark .nav-link {
     background: transparent;                   /* Nessun sfondo di default */
     color: rgba(255, 255, 255, 1);            /* Testo bianco pieno (100% opaco) */
@@ -648,81 +551,6 @@ p, span, div, a, button, input, select, textarea, label, li {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Ombra leggera */
   }
   
-  /* SOTTOSEZIONE 7.14: Pulsante controllo animazione */
-  .animation-toggle {
-    background: transparent;                   /* Nessun sfondo di default */
-    border: none;                             /* Nessun bordo di default */
-    color: rgba(255, 255, 255, 0.95);        /* Testo bianco con 95% opacità */
-    border-radius: 8px;                       /* Bordi arrotondati */
-    padding: 0.5rem;                          /* Padding interno */
-    cursor: pointer;                          /* Cursore pointer */
-    transition: all 0.3s ease;               /* Transizione fluida */
-    font-size: 1.1rem;                       /* Dimensione font */
-    display: flex;                            /* Layout flexbox */
-    align-items: center;                      /* Allineamento verticale centrale */
-    justify-content: center;                  /* Allineamento orizzontale centrale */
-    min-width: 40px;                         /* Larghezza minima */
-    height: 40px;                            /* Altezza fissa */
-    box-shadow: none;                        /* Nessuna ombra di default */
-    margin-left: 0.5rem;                     /* Margine sinistro per separare dal dark mode */
-  }
-  
-  .animation-toggle:hover {
-    background: rgba(255, 255, 255, 0.1);      /* Sfondo bianco trasparente */
-    border: 1px solid rgba(255, 255, 255, 0.3); /* Bordo bianco trasparente */
-    color: rgba(255, 255, 255, 1);             /* Testo bianco pieno */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Ombra leggera */
-    transform: translateY(-1px);                /* Solleva leggermente */
-  }
-  
-  /* Stato attivo - animazione abilitata */
-  .animation-toggle.active {
-    background: rgba(34, 197, 94, 0.3);        /* Sfondo verde più visibile */
-    border: 2px solid #22c55e;                 /* Bordo verde più spesso e visibile */
-    color: #ffffff;                            /* Testo bianco per contrasto */
-    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4); /* Ombra verde più marcata */
-    font-weight: 600;                          /* Testo in grassetto */
-  }
-  
-  .animation-toggle.active:hover {
-    background: rgba(34, 197, 94, 0.4);        /* Sfondo verde più intenso */
-    border: 2px solid #16a34a;                 /* Bordo verde più scuro */
-    color: #ffffff;                            /* Testo bianco */
-    box-shadow: 0 6px 16px rgba(34, 197, 94, 0.5); /* Ombra verde più intensa */
-    transform: translateY(-2px);               /* Solleva di più */
-  }
-  
-  /* Stili per modalità scura */
-  .dark .animation-toggle {
-    background: transparent;                   /* Nessun sfondo di default */
-    color: rgba(255, 255, 255, 1);            /* Testo bianco pieno (100% opaco) */
-    border: none;                             /* Nessun bordo di default */
-    box-shadow: none;                         /* Nessuna ombra di default */
-  }
-  
-  .dark .animation-toggle:hover {
-    background: rgba(255, 255, 255, 0.1);     /* Sfondo bianco trasparente al hover */
-    border: 1px solid rgba(255, 255, 255, 0.3); /* Bordo bianco trasparente */
-    color: rgba(255, 255, 255, 1);            /* Testo bianco pieno */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Ombra leggera */
-  }
-  
-  .dark .animation-toggle.active {
-    background: rgba(34, 197, 94, 0.3);        /* Sfondo verde più visibile */
-    border: 2px solid #22c55e;                 /* Bordo verde più spesso e visibile */
-    color: #ffffff;                            /* Testo bianco per contrasto */
-    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4); /* Ombra verde più marcata */
-    font-weight: 600;                          /* Testo in grassetto */
-  }
-  
-  .dark .animation-toggle.active:hover {
-    background: rgba(34, 197, 94, 0.4);        /* Sfondo verde più intenso */
-    border: 2px solid #16a34a;                 /* Bordo verde più scuro */
-    color: #ffffff;                            /* Testo bianco */
-    box-shadow: 0 6px 16px rgba(34, 197, 94, 0.5); /* Ombra verde più intensa */
-    transform: translateY(-2px);               /* Solleva di più */
-  }
-  
   .dark .nav-link.active {
     background: rgba(255, 255, 255, 0.2);     /* Sfondo bianco più opaco per stato attivo */
     border-color: rgba(255, 255, 255, 0.5);   /* Bordo bianco più opaco */
@@ -730,94 +558,13 @@ p, span, div, a, button, input, select, textarea, label, li {
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5); /* Ombra scura più profonda */
   }
   
-  .dark .nav-settings-btn {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
-    border-color: rgba(255, 255, 255, 0.3);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  }
-  
-  .dark .nav-settings-btn:hover {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.15));
-    border-color: rgba(255, 255, 255, 0.5);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-  }
-
-  /* SOTTOSEZIONE 7.15: Gruppo pulsanti dimensione testo */
-  .font-size-group {
-    display: flex;                            /* Layout flexbox */
-    align-items: center;                      /* Allineamento verticale centrale */
-    gap: 0.25rem;                            /* Spazio tra i pulsanti */
-    margin-left: 0.5rem;                     /* Margine sinistro per separare */
-    padding: 0.25rem;                        /* Padding interno */
-    background: rgba(255, 255, 255, 0.05);   /* Sfondo leggermente trasparente */
-    border-radius: 8px;                      /* Bordi arrotondati */
-  }
-  
-  .font-size-btn {
-    background: transparent;                   /* Nessun sfondo di default */
-    border: 1px solid transparent;            /* Bordo trasparente di default */
-    color: rgba(255, 255, 255, 0.8);         /* Testo bianco con 80% opacità */
-    border-radius: 6px;                       /* Bordi arrotondati */
-    padding: 0.4rem;                          /* Padding interno */
-    cursor: pointer;                          /* Cursore pointer */
-    transition: all 0.3s ease;               /* Transizione fluida */
-    font-weight: 700;                        /* Peso font bold per la lettera A */
-    display: flex;                            /* Layout flexbox */
-    align-items: center;                      /* Allineamento verticale centrale */
-    justify-content: center;                  /* Allineamento orizzontale centrale */
-    min-width: 32px;                         /* Larghezza minima */
-    height: 32px;                            /* Altezza fissa */
-    box-shadow: none;                        /* Nessuna ombra di default */
-  }
-  
-  /* Dimensioni diverse per ogni pulsante */
-  #font-size-small span {
-    font-size: 0.85rem;                      /* Piccolo */
-  }
-  
-  #font-size-medium span {
-    font-size: 1.05rem;                      /* Medio */
-  }
-  
-  #font-size-large span {
-    font-size: 1.25rem;                      /* Grande */
-  }
-  
-  .font-size-btn:hover {
-    background: rgba(255, 255, 255, 0.15);    /* Sfondo bianco trasparente */
-    border-color: rgba(255, 255, 255, 0.3);  /* Bordo bianco trasparente */
-    color: rgba(255, 255, 255, 1);           /* Testo bianco pieno */
-    transform: translateY(-1px);              /* Solleva leggermente */
-  }
-  
-  /* Stato attivo - pulsante selezionato */
-  .font-size-btn.active {
-    background: rgba(255, 255, 255, 0.25);    /* Sfondo bianco più opaco */
-    border-color: rgba(255, 255, 255, 0.5);  /* Bordo bianco più opaco */
-    color: rgba(255, 255, 255, 1);           /* Testo bianco pieno */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); /* Ombra leggera */
-  }
-  
-  /* Stili per modalità scura */
-  .dark .font-size-group {
-    background: rgba(255, 255, 255, 0.03);   /* Sfondo leggermente trasparente */
-  }
-  
-  .dark .font-size-btn {
-    color: rgba(248, 250, 252, 0.8);        /* Testo chiaro */
-  }
-  
-  .dark .font-size-btn:hover {
-    background: rgba(255, 255, 255, 0.15);   /* Sfondo bianco trasparente al hover */
-    border-color: rgba(255, 255, 255, 0.3); /* Bordo bianco trasparente */
-    color: rgba(255, 255, 255, 1);          /* Testo bianco pieno */
-  }
-  
-  .dark .font-size-btn.active {
-    background: rgba(255, 255, 255, 0.25);   /* Sfondo bianco più opaco */
-    border-color: rgba(255, 255, 255, 0.5); /* Bordo bianco più opaco */
-    color: rgba(255, 255, 255, 1);          /* Testo bianco pieno */
-  }
+  /* NOTE: Pulsanti legacy (dark-mode-toggle, animation-toggle, cache-reset, font-size-group) 
+     sono stati completamente rimossi dall'HTML e dal codice.
+     Le funzionalità sono ora gestite direttamente tramite API pubbliche:
+     - Settings.setThemeMode() per il tema
+     - Settings.toggleAnimation() per l'animazione
+     - Settings.setFontSize() per la dimensione testo
+     - Updates.checkForUpdates() per aggiornamenti/cache */
   
   /* ========================================
      SEZIONE 8: MAIN CONTENT - LAYOUT E CARD
@@ -3272,35 +3019,45 @@ p, span, div, a, button, input, select, textarea, label, li {
   body.interface-scale-75 {
     zoom: 0.75;
     -moz-transform: scale(0.75);
+    transform: scale(0.75);
     -moz-transform-origin: 0 0;
+    transform-origin: 0 0;
   }
   
   /* Compatta - 85% */
   body.interface-scale-85 {
     zoom: 0.85;
     -moz-transform: scale(0.85);
+    transform: scale(0.85);
     -moz-transform-origin: 0 0;
+    transform-origin: 0 0;
   }
   
   /* Normale - 100% (default) */
   body.interface-scale-100 {
     zoom: 1;
     -moz-transform: scale(1);
+    transform: scale(1);
     -moz-transform-origin: 0 0;
+    transform-origin: 0 0;
   }
   
   /* Grande - 115% */
   body.interface-scale-115 {
     zoom: 1.15;
     -moz-transform: scale(1.15);
+    transform: scale(1.15);
     -moz-transform-origin: 0 0;
+    transform-origin: 0 0;
   }
   
   /* Molto Grande - 125% */
   body.interface-scale-125 {
     zoom: 1.25;
     -moz-transform: scale(1.25);
+    transform: scale(1.25);
     -moz-transform-origin: 0 0;
+    transform-origin: 0 0;
   }
   
   
@@ -5321,7 +5078,7 @@ p, span, div, a, button, input, select, textarea, label, li {
 }
 
 .touch-friendly .settings-font-btn,
-.touch-friendly .font-size-btn,
+.touch-friendly .dropdown-font-btn,
 .touch-friendly .mobile-font-btn {
   padding: 1.25rem !important;
   min-height: 70px !important;

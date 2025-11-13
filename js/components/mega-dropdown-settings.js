@@ -73,20 +73,11 @@
         if (themeRadios.length > 0) {
             themeRadios.forEach(radio => {
                 radio.addEventListener('change', () => {
-                    const themeToggle = document.getElementById('darkmode-toggle');
-                    if (themeToggle) {
-                        if (radio.value === 'dark') {
-                            document.body.classList.add('dark');
-                        } else if (radio.value === 'light') {
-                            document.body.classList.remove('dark');
-                        } else {
-                            // Sistema - segue preferenze dispositivo
-                            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                                document.body.classList.add('dark');
-                            } else {
-                                document.body.classList.remove('dark');
-                            }
-                        }
+                    // Usa direttamente l'API pubblica di Settings
+                    if (typeof window.Settings !== 'undefined' && window.Settings.setThemeMode) {
+                        window.Settings.setThemeMode(radio.value); // 'light', 'dark', 'system'
+                    } else {
+                        console.warn('⚠️ Settings.setThemeMode non disponibile');
                     }
                 });
             });
@@ -96,9 +87,11 @@
         const animationToggle = document.getElementById('dropdown-animation-toggle');
         if (animationToggle) {
             animationToggle.addEventListener('change', () => {
-                const realToggle = document.getElementById('animationToggle');
-                if (realToggle) {
-                    realToggle.click();
+                // Usa direttamente l'API pubblica di Settings
+                if (typeof window.Settings !== 'undefined' && window.Settings.toggleAnimation) {
+                    window.Settings.toggleAnimation();
+                } else {
+                    console.warn('⚠️ Settings.toggleAnimation non disponibile');
                 }
             });
         }
@@ -116,19 +109,18 @@
         if (fontButtons.length > 0) {
             fontButtons.forEach(btn => {
                 btn.addEventListener('click', () => {
-                    const size = btn.dataset.size;
+                    const size = btn.dataset.size; // 'normal', 'large', 'xlarge'
 
                     // Rimuovi active da tutti
                     fontButtons.forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
 
-                    // Applica la dimensione
-                    const realBtns = document.querySelectorAll('.font-size-btn');
-                    realBtns.forEach(realBtn => {
-                        if (realBtn.dataset.size === size) {
-                            realBtn.click();
-                        }
-                    });
+                    // Usa direttamente l'API pubblica di Settings
+                    if (typeof window.Settings !== 'undefined' && window.Settings.setFontSize) {
+                        window.Settings.setFontSize(size);
+                    } else {
+                        console.warn('⚠️ Settings.setFontSize non disponibile');
+                    }
                 });
             });
         }
@@ -178,9 +170,11 @@
         const checkUpdatesBtn = document.getElementById('dropdown-check-updates');
         if (checkUpdatesBtn) {
             checkUpdatesBtn.addEventListener('click', () => {
-                const cacheResetBtn = document.getElementById('cache-reset');
-                if (cacheResetBtn) {
-                    cacheResetBtn.click();
+                // Usa direttamente l'API pubblica di Updates
+                if (typeof window.Updates !== 'undefined' && window.Updates.checkForUpdates) {
+                    window.Updates.checkForUpdates();
+                } else {
+                    console.warn('⚠️ Updates.checkForUpdates non disponibile');
                 }
                 closeDropdown();
             });
@@ -190,9 +184,11 @@
         const clearCacheBtn = document.getElementById('dropdown-clear-cache');
         if (clearCacheBtn) {
             clearCacheBtn.addEventListener('click', () => {
-                const cacheResetBtn = document.getElementById('cache-reset');
-                if (cacheResetBtn) {
-                    cacheResetBtn.click();
+                // Usa direttamente l'API pubblica di Updates (stessa funzione di checkForUpdates)
+                if (typeof window.Updates !== 'undefined' && window.Updates.checkForUpdates) {
+                    window.Updates.checkForUpdates();
+                } else {
+                    console.warn('⚠️ Updates.checkForUpdates non disponibile');
                 }
                 closeDropdown();
             });
@@ -242,9 +238,7 @@
             dependencies: {
                 settingsModal: typeof window.SettingsModal !== 'undefined',
                 settings: typeof window.Settings !== 'undefined',
-                cacheResetBtn: !!document.getElementById('cache-reset'),
-                darkmodeToggle: !!document.getElementById('darkmode-toggle'),
-                fontSizeBtns: document.querySelectorAll('.font-size-btn').length > 0
+                updates: typeof window.Updates !== 'undefined'
             }
         };
         
