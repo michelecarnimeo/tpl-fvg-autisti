@@ -16,35 +16,34 @@
   left: 0;
   right: 0;
   width: 100%;
-  
+
   /* Trasparenza glassmorphism come navbar originale */
-  background: linear-gradient(135deg, 
-    rgba(0, 123, 138, 0.9) 0%, 
-    rgba(0, 123, 138, 0.7) 50%, 
-    rgba(0, 123, 138, 0.5) 100%
-  );
+  background: linear-gradient(135deg,
+      rgba(0, 123, 138, 0.9) 0%,
+      rgba(0, 123, 138, 0.7) 50%,
+      rgba(0, 123, 138, 0.5) 100%);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
-  
+
   /* Bordi e ombre */
   border-bottom: 1px solid rgba(0, 123, 138, 0.3);
   box-shadow: 0 4px 12px 0 rgba(0, 123, 138, 0.4);
-  
+
   /* Layout */
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  
+
   /* Dimensioni */
   padding: 9px 2rem !important;
   padding-top: max(9px, env(safe-area-inset-top)) !important;
   padding-bottom: 9px !important;
-  
+
   /* Animazioni */
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
   z-index: 999;
-  
+
   /* Scroll progress bar variable */
   --scroll-progress: 0%;
 }
@@ -57,17 +56,16 @@
   left: 0;
   right: 0;
   height: 60%;
-  background: linear-gradient(180deg, 
-    rgba(255, 255, 255, 0.15) 0%, 
-    transparent 100%
-  );
+  background: linear-gradient(180deg,
+      rgba(255, 255, 255, 0.15) 0%,
+      transparent 100%);
   pointer-events: none;
   z-index: 1;
   border-radius: inherit;
 }
 
 /* Contenuto brand header sopra rifrazione */
-.pwa-brand-header > * {
+.pwa-brand-header>* {
   position: relative;
   z-index: 2;
 }
@@ -80,10 +78,9 @@
   left: 0;
   height: 3px;
   width: var(--scroll-progress);
-  background: linear-gradient(90deg, 
-    rgba(255, 255, 255, 0.9),
-    rgba(255, 255, 255, 0.7)
-  );
+  background: linear-gradient(90deg,
+      rgba(255, 255, 255, 0.9),
+      rgba(255, 255, 255, 0.7));
   transition: width 0.1s ease-out;
   box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
   border-radius: 0 3px 3px 0;
@@ -115,36 +112,35 @@
   bottom: 16px;
   left: 50%;
   transform: translateX(-50%);
-  
+
   /* Trasparenza glassmorphism come navbar originale */
-  background: linear-gradient(135deg, 
-    rgba(0, 123, 138, 0.9) 0%, 
-    rgba(0, 123, 138, 0.7) 50%, 
-    rgba(0, 123, 138, 0.5) 100%
-  );
+  background: linear-gradient(135deg,
+      rgba(0, 123, 138, 0.9) 0%,
+      rgba(0, 123, 138, 0.7) 50%,
+      rgba(0, 123, 138, 0.5) 100%);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
-  
+
   /* Bordi e ombre */
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 20px;
-  box-shadow: 
+  box-shadow:
     0 8px 32px rgba(0, 0, 0, 0.3),
     0 2px 12px rgba(0, 123, 138, 0.4);
-  
+
   /* Layout */
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
-  
+
   /* Dimensioni */
   padding: 0.75rem 2rem;
   padding-bottom: max(0.75rem, calc(env(safe-area-inset-bottom) + 0.75rem));
   max-width: calc(100% - 32px);
   width: auto;
   min-width: 450px;
-  
+
   /* Animazioni */
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
   z-index: 999;
@@ -158,17 +154,16 @@
   left: 0;
   right: 0;
   height: 60%;
-  background: linear-gradient(180deg, 
-    rgba(255, 255, 255, 0.15) 0%, 
-    transparent 100%
-  );
+  background: linear-gradient(180deg,
+      rgba(255, 255, 255, 0.15) 0%,
+      transparent 100%);
   pointer-events: none;
   z-index: 1;
   border-radius: inherit;
 }
 
 /* Contenuto bottom nav sopra rifrazione */
-.pwa-bottom-nav > * {
+.pwa-bottom-nav>* {
   position: relative;
   z-index: 2;
 }
@@ -206,16 +201,16 @@
   align-items: center;
   justify-content: center;
   gap: 0.35rem;
-  
+
   padding: 0.625rem 1.25rem;
   border-radius: 12px;
   background: transparent;
   border: none;
-  
+
   color: rgba(255, 255, 255, 0.7);
   text-decoration: none;
   cursor: pointer;
-  
+
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   -webkit-tap-highlight-color: transparent;
@@ -260,7 +255,7 @@ button.pwa-nav-item:focus {
     color: #ffffff;
     transform: scale(1.05);
   }
-  
+
   .pwa-nav-item:hover .pwa-nav-icon {
     transform: scale(1.15);
   }
@@ -345,7 +340,7 @@ button.pwa-nav-item:focus {
     transform: rotateY(180deg);
     opacity: 0;
   }
-  
+
   .pwa-logo-wrapper:hover .pwa-logo-hover {
     transform: rotateY(360deg);
     opacity: 1;
@@ -357,7 +352,7 @@ button.pwa-nav-item:focus {
   .pwa-logo-hover {
     display: none;
   }
-  
+
   .pwa-logo-default {
     opacity: 1 !important;
     transform: rotateY(0deg) !important;
@@ -372,13 +367,11 @@ button.pwa-nav-item:focus {
   left: 0;
   right: 0;
   height: 60%;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.25) 0%,
-    rgba(255, 255, 255, 0.15) 40%,
-    transparent 70%,
-    transparent 100%
-  );
+  background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.25) 0%,
+      rgba(255, 255, 255, 0.15) 40%,
+      transparent 70%,
+      transparent 100%);
   border-radius: 14px 14px 8px 8px;
   pointer-events: none;
   z-index: 1;
@@ -430,23 +423,21 @@ button.pwa-nav-item:focus {
 /* Dark Mode per PWA Brand Header e Bottom Nav */
 body.dark-mode .pwa-brand-header,
 body.dark-mode .pwa-bottom-nav {
-  background: linear-gradient(135deg, 
-    rgba(13, 94, 102, 0.9) 0%, 
-    rgba(10, 77, 84, 0.7) 50%, 
-    rgba(8, 60, 66, 0.5) 100%
-  );
+  background: linear-gradient(135deg,
+      rgba(13, 94, 102, 0.9) 0%,
+      rgba(10, 77, 84, 0.7) 50%,
+      rgba(8, 60, 66, 0.5) 100%);
   border-color: rgba(255, 255, 255, 0.1);
-  box-shadow: 
+  box-shadow:
     0 8px 32px rgba(0, 0, 0, 0.5),
     0 4px 16px rgba(13, 94, 102, 0.4);
 }
 
 body.dark-mode .pwa-brand-header::before,
 body.dark-mode .pwa-bottom-nav::before {
-  background: linear-gradient(180deg, 
-    rgba(255, 255, 255, 0.08) 0%, 
-    transparent 100%
-  );
+  background: linear-gradient(180deg,
+      rgba(255, 255, 255, 0.08) 0%,
+      transparent 100%);
 }
 
 body.dark-mode .pwa-nav-item {
@@ -468,7 +459,7 @@ body.dark-mode .pwa-nav-item:hover {
 .dark .pwa-bottom-nav {
   background: linear-gradient(135deg, rgba(0, 100, 110, 0.95), rgba(0, 123, 138, 0.95));
   border-color: rgba(255, 255, 255, 0.15);
-  box-shadow: 
+  box-shadow:
     0 8px 40px rgba(0, 0, 0, 0.5),
     0 4px 16px rgba(0, 123, 138, 0.3);
 }
@@ -496,17 +487,10 @@ body.dark-mode .pwa-nav-item:hover {
 /* ========================================
    PWA MODE LAYOUT
    Stili per layout quando PWA è attiva
+   NOTA: Le regole di padding per .main-content e footer
+   sono state spostate in css/layout.css per centralizzare
+   la gestione del layout e risolvere problemi di spazio vuoto
    ======================================== */
-
-/* Padding per contenuto quando PWA è attiva */
-body.pwa-mode .main-content {
-  padding-top: 85px; /* Spazio per brand header in alto */
-  padding-bottom: calc(90px + env(safe-area-inset-bottom)); /* Spazio per bottom nav */
-}
-
-body.pwa-mode footer {
-  padding-bottom: calc(90px + env(safe-area-inset-bottom));
-}
 
 /* Nasconde navbar superiore in modalità PWA */
 body.pwa-mode .navbar {
@@ -516,6 +500,8 @@ body.pwa-mode .navbar {
 /* ========================================
    RESPONSIVE - MOBILE
    Stili per schermi mobili
+   NOTA: padding-top per body.pwa-mode .main-content ora centralizzato
+   in css/layout.css per evitare duplicazioni
    ======================================== */
 
 /* Responsive - Mobile */
@@ -524,41 +510,37 @@ body.pwa-mode .navbar {
     padding: 0.75rem 1rem;
     gap: 0.5rem;
   }
-  
-  body.pwa-mode .main-content {
-    padding-top: 80px; /* Altezza ridotta brand header mobile */
-  }
-  
+
   .pwa-bottom-nav {
     padding: 0.625rem 1rem;
     max-width: calc(100% - 24px);
     bottom: 12px;
     min-width: 0;
   }
-  
+
   .pwa-nav-item {
     padding: 0.5rem 0.75rem;
     gap: 0.25rem;
   }
-  
+
   .pwa-nav-icon {
     width: 22px;
     height: 22px;
   }
-  
+
   .pwa-nav-label {
     font-size: 0.65rem;
   }
-  
+
   .pwa-logo-wrapper {
     width: 50px;
     height: 50px;
   }
-  
+
   .pwa-logo-acronym div {
     font-size: 1.4rem;
   }
-  
+
   .pwa-logo-text {
     font-size: 0.8rem;
     line-height: 1.1;
@@ -571,41 +553,41 @@ body.pwa-mode .navbar {
     padding: 0.625rem 0.75rem;
     gap: 0.4rem;
   }
-  
+
   .pwa-bottom-nav {
     padding: 0.5rem 0.5rem;
     max-width: calc(100% - 20px);
     gap: 0.25rem;
   }
-  
+
   .pwa-nav-item {
     padding: 0.5rem 0.5rem;
     gap: 0.2rem;
   }
-  
+
   .pwa-nav-icon {
     width: 20px;
     height: 20px;
   }
-  
+
   .pwa-nav-label {
     font-size: 0.6rem;
   }
-  
+
   .pwa-logo-wrapper {
     width: 45px;
     height: 45px;
   }
-  
+
   .pwa-logo-acronym div {
     font-size: 1.2rem;
   }
-  
+
   .pwa-logo-text {
     font-size: 0.7rem;
     line-height: 1;
   }
-  
+
   .pwa-brand-title {
     gap: 0.4rem;
   }
@@ -619,21 +601,26 @@ body.pwa-mode .navbar {
 /* Ottimizzazione PWA Bottom Navigation per schermi medi */
 @media (max-width: 768px) and (min-width: 481px) {
   .pwa-nav-item {
-    padding: 0.5rem 0.9rem; /* Padding ridotto */
-    gap: 0.25rem; /* Gap ridotto tra icona e testo */
+    padding: 0.5rem 0.9rem;
+    /* Padding ridotto */
+    gap: 0.25rem;
+    /* Gap ridotto tra icona e testo */
   }
-  
+
   .pwa-nav-icon {
-    width: 22px; /* Icone più piccole */
+    width: 22px;
+    /* Icone più piccole */
     height: 22px;
   }
-  
+
   .pwa-nav-label {
-    font-size: 0.7rem; /* Label più piccole */
+    font-size: 0.7rem;
+    /* Label più piccole */
   }
-  
+
   .pwa-bottom-nav {
-    padding: 0.5rem; /* Barra più compatta */
+    padding: 0.5rem;
+    /* Barra più compatta */
     gap: 0.25rem;
   }
 }
@@ -642,4 +629,3 @@ body.pwa-mode .navbar {
 body.display-optimized .pwa-bottom-nav {
   border-width: 0.5px;
 }
-

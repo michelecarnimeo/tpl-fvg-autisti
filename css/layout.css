@@ -1,0 +1,107 @@
+/* ========================================
+   LAYOUT COMPONENT
+   Gestione layout globale body/html/footer
+   Risolve problema spazio vuoto dopo footer
+   ======================================== */
+
+/* ========================================
+   HTML E BODY BASE
+   ======================================== */
+
+html {
+    height: 100%;
+    /* Altezza fissa al 100% del viewport */
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+    /* Altezza minima viewport */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    /* Layout verticale: header, main, footer */
+}
+
+/* Main content cresce per riempire lo spazio disponibile */
+.main-content {
+    flex: 1 0 auto;
+    /* Cresce, non si restringe, base auto */
+}
+
+/* Footer si attacca al fondo */
+.footer {
+    flex-shrink: 0;
+    /* Non si restringe */
+    margin-top: auto;
+    /* Si spinge in fondo se c'è spazio */
+}
+
+/* ========================================
+   PWA MODE - PADDING AGGIUNTIVO
+   ======================================== */
+
+/* Padding per main quando in modalità PWA */
+body.pwa-mode .main-content {
+    padding-top: 85px;
+    /* Spazio per brand header in alto */
+    padding-bottom: calc(90px + env(safe-area-inset-bottom));
+    /* Spazio per bottom nav */
+}
+
+/* Padding per footer quando in modalità PWA */
+body.pwa-mode .footer {
+    padding-bottom: calc(90px + env(safe-area-inset-bottom));
+}
+
+/* ========================================
+   FIX SPAZIO VUOTO DOPO FOOTER
+   ======================================== */
+
+/* Previene overflow indesiderato */
+html,
+body {
+    overflow-x: hidden;
+    /* Nasconde scroll orizzontale */
+}
+
+/* Rimuove margini/padding extra dal body */
+body::after {
+    content: none;
+    /* Previene pseudo-elementi indesiderati */
+}
+
+/* Assicura che il footer non abbia margini extra */
+.footer {
+    margin-bottom: 0 !important;
+}
+
+/* ========================================
+   RESPONSIVE - MOBILE
+   ======================================== */
+
+@media (max-width: 768px) {
+    body.pwa-mode .main-content {
+        padding-top: 80px;
+        /* Altezza ridotta brand header mobile */
+        padding-bottom: calc(80px + env(safe-area-inset-bottom));
+    }
+
+    body.pwa-mode .footer {
+        padding-bottom: calc(80px + env(safe-area-inset-bottom));
+    }
+}
+
+@media (max-width: 480px) {
+    body.pwa-mode .main-content {
+        padding-top: 80px;
+        /* Altezza ridotta brand header mobile */
+        padding-bottom: calc(75px + env(safe-area-inset-bottom));
+    }
+
+    body.pwa-mode .footer {
+        padding-bottom: calc(75px + env(safe-area-inset-bottom));
+    }
+}

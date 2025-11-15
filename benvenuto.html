@@ -1,55 +1,64 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
-<title>Benvenuto - TPL FVG Autisti</title>
-<!-- Font locali per PWA offline -->
-<!-- CSS personalizzato -->
-<link rel="stylesheet" href="style1.css">
-<!-- Animazioni e transizioni globali -->
-<link rel="stylesheet" href="css/animations.css">
-<link rel="stylesheet" href="css/components/footer.css">
-<link rel="stylesheet" href="css/components/modals.css">
-<!-- Settings (struttura modale) -->
-<link rel="stylesheet" href="css/components/settings/impostazioni.css">
-<link rel="stylesheet" href="css/components/settings/accessibilita.css">
-<link rel="stylesheet" href="css/components/settings/aspetto.css">
-<link rel="stylesheet" href="css/components/settings/info.css">
-<link rel="manifest" href="manifest.webmanifest"/>
-<link rel="icon" href="src/tpl.jpg" type="image/jpeg"/>
-<!-- Stili specifici per la pagina benvenuto -->
-<link rel="stylesheet" href="css/pages/benvenuto.css">
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport" />
+  <title>Benvenuto - TPL FVG Autisti</title>
+  <!-- Font locali per PWA offline -->
+  <!-- CSS personalizzato -->
+  <link rel="stylesheet" href="style1.css">
+  <!-- Animazioni e transizioni globali -->
+  <link rel="stylesheet" href="css/animations.css">
+  <!-- Layout globale (body, html, footer) -->
+  <link rel="stylesheet" href="css/layout.css">
+  <!-- Componenti estratti -->
+  <link rel="stylesheet" href="css/components/navbar.css">
+  <link rel="stylesheet" href="css/components/forms.css">
+  <link rel="stylesheet" href="css/components/buttons.css">
+  <link rel="stylesheet" href="css/components/price-card.css">
+  <link rel="stylesheet" href="css/components/footer.css">
+  <link rel="stylesheet" href="css/components/modals.css">
+  <!-- Settings (struttura modale) -->
+  <link rel="stylesheet" href="css/components/settings/impostazioni.css">
+  <link rel="stylesheet" href="css/components/settings/accessibilita.css">
+  <link rel="stylesheet" href="css/components/settings/aspetto.css">
+  <link rel="stylesheet" href="css/components/settings/info.css">
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="src/tpl.jpg" type="image/jpeg" />
+  <!-- Stili specifici per la pagina benvenuto -->
+  <link rel="stylesheet" href="css/pages/benvenuto.css">
 </head>
+
 <body>
 
-<!-- Pulsante Impostazioni fisso in alto a destra -->
-<button id="open-settings" class="settings-btn-corner" aria-label="Apri Impostazioni" title="Impostazioni">
-  ⚙️
-</button>
+  <!-- Pulsante Impostazioni fisso in alto a destra -->
+  <button id="open-settings" class="settings-btn-corner" aria-label="Apri Impostazioni" title="Impostazioni">
+    ⚙️
+  </button>
 
-<div class="main-content">
-  <div class="container">
-    <div class="main-card fade-in">
-      <div class="card-title">
-        <div class="mb-4 welcome-image-container">
-          <img src="./src/benvenuto.jpg" alt="Benvenuto TPL FVG" class="welcome-image" loading="lazy" />
+  <div class="main-content">
+    <div class="container">
+      <div class="main-card fade-in">
+        <div class="card-title">
+          <div class="mb-4 welcome-image-container">
+            <img src="./src/benvenuto.jpg" alt="Benvenuto TPL FVG" class="welcome-image" loading="lazy" />
+          </div>
+          <h1>Benvenuto in TPL FVG Autisti</h1>
+          <p class="welcome-description">
+            Guida tariffe pensata per gli autisti TPL FVG.<br>
+            Calcola rapidamente il costo e il codice del biglietto in base alla tratta selezionata.
+          </p>
         </div>
-        <h1>Benvenuto in TPL FVG Autisti</h1>
-        <p class="welcome-description">
-          Guida tariffe pensata per gli autisti TPL FVG.<br>
-          Calcola rapidamente il costo e il codice del biglietto in base alla tratta selezionata.
-        </p>
-      </div>
-      
-      <div class="calculate-section">
-        <button id="start-btn" class="calculate-btn">
-          Inizia
-        </button>
+
+        <div class="calculate-section">
+          <button id="start-btn" class="calculate-btn">
+            Inizia
+          </button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
   <!-- L'HTML del modal viene caricato dinamicamente da components/settings-modal.html -->
   <!-- Vedi js/components/modals.js per la funzione loadSettingsModalHTML() -->
@@ -59,26 +68,27 @@
     <!-- Footer generato dinamicamente da footer.js -->
   </footer>
 
-<!-- Script principale -->
-<!-- CORE (sempre per primo!) -->
-<script src="js/core/storage.js"></script>
-<!-- DATA -->
-<script src="js/data/tariffario.js"></script>
-<!-- FEATURES -->
-<script src="js/features/updates.js"></script>
-<script src="js/features/settings.js"></script>
-<script src="js/features/prezzi.js"></script>
-<script src="js/features/route-selector.js"></script>
-<!-- UTILS -->
-<script src="js/utils/ui-helpers.js"></script>
-<script src="js/utils/offline-notifications.js"></script>
-<!-- Altri moduli -->
-<script src="footer.js"></script>
-<script src="changelog.js"></script>
-<script src="js/components/modals.js"></script>
-<script src="script.js"></script>
-<script src="js/utils/app-init.js"></script>
-<script src="js/pages/benvenuto.js"></script>
+  <!-- Script principale -->
+  <!-- CORE (sempre per primo!) -->
+  <script src="js/core/storage.js"></script>
+  <!-- DATA -->
+  <script src="js/data/tariffario.js"></script>
+  <!-- FEATURES -->
+  <script src="js/features/updates.js"></script>
+  <script src="js/features/settings.js"></script>
+  <script src="js/features/prezzi.js"></script>
+  <script src="js/features/route-selector.js"></script>
+  <!-- UTILS -->
+  <script src="js/utils/ui-helpers.js"></script>
+  <script src="js/utils/offline-notifications.js"></script>
+  <!-- Altri moduli -->
+  <script src="footer.js"></script>
+  <script src="changelog.js"></script>
+  <script src="js/components/modals.js"></script>
+  <script src="script.js"></script>
+  <script src="js/utils/app-init.js"></script>
+  <script src="js/pages/benvenuto.js"></script>
 
 </body>
+
 </html>

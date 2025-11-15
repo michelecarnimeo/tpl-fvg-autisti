@@ -1,6 +1,6 @@
 {
-  "version": "1.7.3",
-  "versionDate": "13 Novembre 2025",
-  "versionTime": "17:00",
-  "updateNotes": "Pulizia codice: rimosso fallback Storage duplicato da script.js (31 righe) e aggiornati tutti i riferimenti a window.Storage. Rimossi pulsanti legacy (darkmode-toggle, animation-toggle, cache-reset, font-size-btn) da HTML e CSS. Tutte le funzionalità ora utilizzano API pubbliche dei moduli (Settings, Updates). Migliorata coerenza architettura modulare."
+  "version": "1.7.4",
+  "versionDate": "15 Novembre 2025",
+  "versionTime": "14:30",
+  "updateNotes": "Miglioramenti UI/UX: ottimizzata leggibilità bottoni con glassmorphism e text-shadow, ridotto font-weight a 500, fix cursor swap button con !important, unificato sizing price card (1.2rem code, 1.35rem value), aggiunto white-space:nowrap per mobile, semplificati labels (Codice/Prezzo), migliorato hover swap button (turchese-light)."
 }

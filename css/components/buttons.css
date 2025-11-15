@@ -1,0 +1,224 @@
+/* BUTTONS - estratto da style1.css (Sezione 10 + varianti) */
+.button,
+.btn,
+.route-button,
+.swap-btn,
+.calculate-btn,
+.reset-btn,
+.reset-route-btn,
+.location-btn,
+.location-btn-small,
+.swap-btn-small,
+.small-btn,
+.pwa-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: all .25s ease;
+    user-select: none;
+    text-decoration: none;
+    border-radius: 12px;
+}
+
+.button:disabled,
+.btn:disabled,
+.route-button:disabled,
+.swap-btn:disabled,
+.swap-btn-small:disabled,
+.calculate-btn:disabled,
+.reset-btn:disabled,
+.reset-route-btn:disabled,
+.location-btn:disabled,
+.location-btn-small:disabled,
+.small-btn:disabled,
+.pwa-btn:disabled {
+    opacity: .4;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Primary actions */
+.calculate-btn,
+.pwa-btn.primary {
+    background: linear-gradient(135deg, var(--turchese) 0%, #20c5bd 100%);
+    color: #fff;
+    padding: .7rem 1rem;
+    font-weight: 600;
+    box-shadow: 0 8px 18px rgba(23, 183, 177, .25);
+}
+
+.calculate-btn:hover,
+.pwa-btn.primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 22px rgba(23, 183, 177, .3);
+}
+
+.calculate-btn:active,
+.pwa-btn.primary:active {
+    transform: translateY(0);
+    box-shadow: 0 6px 14px rgba(23, 183, 177, .22);
+}
+
+/* Secondary and neutrals */
+.reset-btn,
+.pwa-btn.neutral {
+    background: var(--glass-bg);
+    color: var(--testo-principale);
+    border: 1px solid var(--glass-border);
+    padding: .6rem .9rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, .08);
+}
+
+.reset-btn:hover,
+.pwa-btn.neutral:hover {
+    background: rgba(255, 255, 255, .6);
+}
+
+/* Route button (base) */
+.route-button {
+    padding: .65rem 1rem;
+    background: rgba(255, 255, 255, 0.98);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: rgba(15, 23, 42, 1);
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
+    box-shadow: 0 4px 12px rgba(30, 41, 59, .25);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+}
+
+.route-button:hover {
+    background: rgba(255, 255, 255, 1);
+    border-color: rgba(255, 255, 255, .5);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 20px rgba(30, 41, 59, .28);
+}
+
+.route-button:active {
+    transform: translateY(0);
+    box-shadow: 0 6px 14px rgba(30, 41, 59, .22);
+}
+
+/* Selettore linea eredita stili route-button ottimizzati */
+
+/* Swap and location buttons (iconic) - accent turchese per distinguerli */
+.swap-btn,
+.swap-btn-small,
+.location-btn,
+.location-btn-small,
+.small-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: var(--turchese);
+    border: none;
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(23, 183, 177, .3);
+    transition: all .25s ease;
+    opacity: 1;
+}
+
+/* Assicura cursor pointer quando NON disabilitato - specificità maggiore */
+.swap-btn:not(:disabled),
+.swap-btn:not(:disabled):hover,
+.swap-btn-small:not(:disabled),
+.swap-btn-small:not(:disabled):hover,
+.location-btn:not(:disabled),
+.location-btn:not(:disabled):hover,
+.location-btn-small:not(:disabled),
+.location-btn-small:not(:disabled):hover,
+.small-btn:not(:disabled),
+.small-btn:not(:disabled):hover {
+    cursor: pointer !important;
+    opacity: 1 !important;
+}
+
+.swap-btn:hover:not(:disabled),
+.swap-btn-small:hover:not(:disabled),
+.location-btn:hover:not(:disabled),
+.location-btn-small:hover:not(:disabled),
+.small-btn:hover:not(:disabled) {
+    background: var(--turchese-light);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(23, 183, 177, .4);
+}
+
+.swap-btn:active:not(:disabled),
+.swap-btn-small:active:not(:disabled),
+.location-btn:active:not(:disabled),
+.location-btn-small:active:not(:disabled),
+.small-btn:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 3px 8px rgba(23, 183, 177, .3);
+}
+
+/* PWA buttons */
+.pwa-btn {
+    padding: .6rem .9rem;
+}
+
+.pwa-btn.ghost {
+    background: transparent;
+    color: var(--testo-principale);
+    border: 1px dashed var(--glass-border);
+}
+
+/* Dark mode */
+.dark .reset-btn,
+.dark .reset-route-btn,
+.dark .pwa-btn.neutral {
+    background: var(--glass-bg-dark);
+    color: #e5e7eb;
+    border-color: var(--glass-border-dark);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, .35);
+}
+
+/* Dark mode - swap e location mantengono turchese */
+.dark .swap-btn:not(:disabled),
+.dark .swap-btn-small:not(:disabled),
+.dark .location-btn:not(:disabled),
+.dark .location-btn-small:not(:disabled),
+.dark .small-btn:not(:disabled) {
+    background: var(--turchese);
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(23, 183, 177, .4);
+}
+
+.dark .swap-btn:disabled,
+.dark .swap-btn-small:disabled,
+.dark .location-btn:disabled,
+.dark .location-btn-small:disabled,
+.dark .small-btn:disabled {
+    background: rgba(30, 41, 59, 0.5);
+    color: rgba(148, 163, 184, 0.5);
+}
+
+.dark .route-button {
+    background: rgba(30, 41, 59, 0.98);
+    color: rgba(255, 255, 255, 1);
+    border-color: rgba(148, 163, 184, 0.3);
+    text-shadow: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .35);
+}
+
+.dark .route-button:hover {
+    background: rgba(30, 41, 59, 1);
+    border-color: rgba(148, 163, 184, .5);
+}
+
+.dark .pwa-btn.ghost {
+    color: #e5e7eb;
+    border-color: var(--glass-border-dark);
+}
+
+/* High contrast tweak if present */
+.high-contrast .calculate-btn {
+    filter: saturate(1.05) contrast(1.05);
+}

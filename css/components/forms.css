@@ -1,0 +1,198 @@
+/* FORMS - estratto da style1.css (Sezione 9 + parte 23) */
+.form-group {
+    margin-bottom: 1.2rem;
+}
+
+.route-divider {
+    width: 100%;
+    height: 1px;
+    background: rgba(15, 23, 42, 0.2);
+    margin: 1.5rem 0;
+    border: none;
+}
+
+.reset-divider {
+    width: 100%;
+    height: 1px;
+    background: rgba(15, 23, 42, 0.2);
+    margin: -0.5rem 0 1rem 0;
+    border: none;
+}
+
+.route-section {
+    margin-top: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.route-label {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.route-icon {
+    font-size: .9rem;
+    font-weight: 600;
+    color: var(--testo-secondario);
+    text-transform: uppercase;
+    letter-spacing: .5px;
+}
+
+.form-select {
+    width: 100%;
+    padding: .6rem .8rem;
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    background: var(--glass-bg);
+    color: rgba(15, 23, 42, .95);
+    font-size: 1rem;
+    transition: all .3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .1);
+    font-weight: 500;
+    position: relative;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23374151' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right .75rem center;
+    background-size: 1rem;
+    padding-right: 2.5rem;
+}
+
+.form-select::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: transparent;
+    border-radius: 12px 12px 6px 6px;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity .3s ease;
+}
+
+.form-select option {
+    background: rgba(30, 41, 59, .95);
+    color: #fff;
+    padding: .5rem .8rem;
+}
+
+.form-select:focus {
+    outline: none;
+    border-color: var(--turchese);
+    box-shadow: 0 0 0 3px rgba(23, 183, 177, .1);
+}
+
+.form-select:focus::before {
+    opacity: 1;
+}
+
+.form-select:disabled {
+    background: rgba(233, 236, 239, .3);
+    color: var(--grigio-scuro);
+    cursor: not-allowed;
+    background-image: none;
+}
+
+.dark .form-select {
+    background: var(--glass-bg-dark);
+    color: rgba(248, 250, 252, .95);
+    border-color: var(--glass-border-dark);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .3);
+}
+
+.dark .form-select:focus {
+    border-color: var(--turchese);
+    box-shadow: 0 0 0 3px rgba(23, 183, 177, .2);
+}
+
+.dark .form-select:disabled {
+    background: rgba(30, 41, 59, .3);
+    color: rgba(148, 163, 184, .7);
+    background-image: none;
+}
+
+.dark .route-divider {
+    background: rgba(255, 255, 255, .15);
+}
+
+.dark .reset-divider {
+    background: rgba(255, 255, 255, .15);
+}
+
+.dark .route-icon {
+    color: rgba(248, 250, 252, .7);
+}
+
+/* Search box */
+.search-container {
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: center;
+}
+
+.route-button-container {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    width: 100%;
+}
+
+.search-box {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    align-items: center;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .1);
+    transition: all .3s ease;
+    overflow: hidden;
+}
+
+.search-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--testo-secondario);
+    font-size: 1.2rem;
+    pointer-events: none;
+    z-index: 2;
+    transition: color .3s ease;
+}
+
+.search-input {
+    width: 100%;
+    padding: 12px 16px 12px 48px;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: var(--testo-principale);
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all .3s ease;
+}
+
+.search-input::placeholder {
+    color: var(--testo-secondario);
+    font-weight: 400;
+    opacity: .8;
+}
+
+.search-box:focus-within {
+    border-color: var(--turchese);
+    box-shadow: 0 0 0 3px rgba(23, 183, 177, .1);
+}
+
+.search-box:focus-within .search-icon {
+    color: var(--turchese);
+}

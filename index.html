@@ -10,6 +10,13 @@
   <link rel="stylesheet" href="style1.css">
   <!-- Animazioni e transizioni globali -->
   <link rel="stylesheet" href="css/animations.css">
+  <!-- Layout globale (body, html, footer) -->
+  <link rel="stylesheet" href="css/layout.css">
+  <!-- Componenti estratti -->
+  <link rel="stylesheet" href="css/components/navbar.css">
+  <link rel="stylesheet" href="css/components/forms.css">
+  <link rel="stylesheet" href="css/components/buttons.css">
+  <link rel="stylesheet" href="css/components/price-card.css">
   <!-- Componenti CSS modulari -->
   <link rel="stylesheet" href="css/components/footer.css">
   <link rel="stylesheet" href="css/components/modals.css">
@@ -52,12 +59,12 @@
         <button id="hamburger-toggle" class="hamburger-toggle" aria-label="Menu">
           <span class="hamburger-icon"></span>
         </button>
-        
+
         <nav class="navbar-nav">
           <a href="index.html" class="nav-link active">Home</a>
           <a href="fermate.html" class="nav-link">Fermate</a>
           <a href="prezzi.html" class="nav-link">Prezzi</a>
-          
+
           <!-- Mega Dropdown Impostazioni (solo desktop) -->
           <div class="settings-dropdown-container">
             <button id="settings-dropdown-btn" class="nav-settings-dropdown-btn" title="Impostazioni">
@@ -92,7 +99,8 @@
                 <div class="dropdown-item">
                   <label class="dropdown-label" for="dropdown-animation-toggle">🎬 Animazione Sfondo</label>
                   <label class="dropdown-toggle">
-                    <input type="checkbox" id="dropdown-animation-toggle" aria-label="Attiva/disattiva animazione sfondo">
+                    <input type="checkbox" id="dropdown-animation-toggle"
+                      aria-label="Attiva/disattiva animazione sfondo">
                     <span class="toggle-slider"></span>
                   </label>
                 </div>
@@ -141,15 +149,15 @@
               </div>
             </div>
           </div>
-          
+
           <!-- NOTE: Pulsanti legacy rimossi - ora si usano direttamente le API pubbliche (Settings, Updates) -->
         </nav>
       </div>
     </div>
-    
+
     <!-- Mobile menu overlay -->
     <div id="mobile-menu-overlay" class="mobile-menu-overlay"></div>
-    
+
     <!-- Mobile menu drawer -->
     <div id="mobile-menu" class="mobile-menu">
       <div class="mobile-menu-header">
@@ -186,113 +194,122 @@
           <p class="subtitle">Seleziona una linea per iniziare</p>
         </div>
 
-      <div class="form-group">
-        <button id="linea-btn" class="route-button linea-select-btn">
-          <span id="linea-text">Seleziona una linea</span>
-          <span class="route-arrow">▼</span>
-        </button>
-      </div>
-      
-      <!-- Divisore tra select e route -->
-      <hr class="route-divider">
-      
-      <div class="route-section">
-        <div class="route-label">
-          <div class="route-icon"><span>Partenza</span></div>
-          <div class="route-button-container">
-            <button id="partenza-btn" class="route-button" disabled>
-              <span id="partenza-text">Seleziona la partenza</span>
-              <span class="route-arrow">▼</span>
-            </button>
-            <!-- Pulsante geolocalizzazione (nascosto inizialmente) -->
-            <button id="location-btn" class="location-btn-small" style="display: none;" title="Rileva posizione e ordina fermate per distanza">
-              <span id="location-icon">📍</span>
-            </button>
+        <div class="form-group">
+          <button id="linea-btn" class="route-button linea-select-btn">
+            <span id="linea-text">Seleziona una linea</span>
+            <span class="route-arrow">▼</span>
+          </button>
+        </div>
+
+        <!-- Divisore tra select e route -->
+        <hr class="route-divider">
+
+        <div class="route-section">
+          <div class="route-label">
+            <div class="route-icon"><span>Partenza</span></div>
+            <div class="route-button-container">
+              <button id="partenza-btn" class="route-button" disabled>
+                <span id="partenza-text">Seleziona la partenza</span>
+                <span class="route-arrow">▼</span>
+              </button>
+              <!-- Pulsante geolocalizzazione (nascosto inizialmente) -->
+              <button id="location-btn" class="location-btn-small" style="display: none;"
+                title="Rileva posizione e ordina fermate per distanza">
+                <span id="location-icon">📍</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="route-label">
+            <div class="route-icon"><span>Destinazione</span></div>
+            <div class="route-button-container">
+              <button id="arrivo-btn" class="route-button" disabled>
+                <span id="arrivo-text">Seleziona la destinazione</span>
+                <span class="route-arrow">▼</span>
+              </button>
+              <!-- Pulsante inversione fermate (nascosto inizialmente) -->
+              <button id="swap-btn" class="swap-btn-small" type="button" title="Inverte partenza e arrivo"
+                style="display: none;">
+                <span>⇅</span>
+              </button>
+            </div>
           </div>
         </div>
 
-        <div class="route-label">
-          <div class="route-icon"><span>Destinazione</span></div>
-          <div class="route-button-container">
-            <button id="arrivo-btn" class="route-button" disabled>
-              <span id="arrivo-text">Seleziona la destinazione</span>
-              <span class="route-arrow">▼</span>
-            </button>
-            <!-- Pulsante inversione fermate (nascosto inizialmente) -->
-            <button id="swap-btn" class="swap-btn-small" type="button" title="Inverte partenza e arrivo" style="display: none;">
-              <span>⇅</span>
-            </button>
+        <!-- Pulsanti reset -->
+        <div class="reset-section">
+          <button id="reset-route-btn" class="reset-route-btn" type="button"
+            title="Resetta solo partenza e destinazione" style="display: none;">
+            Resetta percorso
+          </button>
+          <button id="reset-btn" class="reset-btn" type="button" title="Resetta tutto e riparti da capo">
+            Riparti da capo
+          </button>
+        </div>
+
+        <!-- Divisore tra reset e price card -->
+        <hr class="reset-divider">
+
+        <!-- Sezione prezzo divisa in due parti con colori distinti -->
+        <div class="price-card inactive" id="price-card">
+          <!-- Codice biglietto -->
+          <div class="price-section">
+            <div class="price-label">Codice</div>
+            <div id="summary-codice" class="price-code">-</div>
+          </div>
+
+          <!-- Divisore -->
+          <div class="price-divider"></div>
+
+          <!-- Costo biglietto -->
+          <div class="price-section">
+            <div class="price-label">Prezzo</div>
+            <div id="summary-prezzo" class="price-value">-</div>
+          </div>
+          <div id="prezzo-errore" class="price-error" style="display: none;">
+            ⚠️ Prezzo non disponibile per questa tratta
           </div>
         </div>
-      </div>
 
-      <!-- Pulsanti reset -->
-      <div class="reset-section">
-        <button id="reset-route-btn" class="reset-route-btn" type="button" title="Resetta solo partenza e destinazione" style="display: none;">
-          Resetta percorso
-        </button>
-        <button id="reset-btn" class="reset-btn" type="button" title="Resetta tutto e riparti da capo">
-          Riparti da capo
-        </button>
-      </div>
-
-      <!-- Divisore tra reset e price card -->
-      <hr class="reset-divider">
-
-      <!-- Sezione prezzo divisa in due parti con colori distinti -->
-      <div class="price-card inactive" id="price-card">
-        <!-- Codice biglietto -->
-        <div class="price-section">
-          <div class="price-label">Codice biglietto</div>
-          <div id="summary-codice" class="price-code">-</div>
-        </div>
-        
-        <!-- Divisore -->
-        <div class="price-divider"></div>
-        
-        <!-- Costo biglietto -->
-        <div class="price-section">
-          <div class="price-label">Costo del biglietto</div>
-          <div id="summary-prezzo" class="price-value">-</div>
-        </div>
-        
-        <div id="prezzo-errore" class="price-error" style="display: none;">
-          ⚠️ Prezzo non disponibile per questa tratta
-        </div>
-      </div>
-
-      <!-- Banner installazione PWA posizionato sotto la card prezzi -->
-      <div id="pwa-install-banner" class="pwa-install-banner" style="display: none;">
-        <div class="pwa-install-content">
-          <div class="pwa-install-text">
-            <span class="pwa-install-title">📱 Installa l'app</span>
-            <span class="pwa-install-subtitle">Accedi più velocemente e offline</span>
+        <!-- Banner installazione PWA posizionato sotto la card prezzi -->
+        <div id="pwa-install-banner" class="pwa-install-banner" style="display: none;">
+          <div class="pwa-install-content">
+            <div class="pwa-install-text">
+              <span class="pwa-install-title">📱 Installa l'app</span>
+              <span class="pwa-install-subtitle">Accedi più velocemente e offline</span>
+            </div>
+            <div class="pwa-install-actions">
+              <button id="pwa-install-later" class="pwa-btn pwa-btn-secondary" type="button">Più tardi</button>
+              <button id="pwa-install-button" class="pwa-btn pwa-btn-primary" type="button">Installa</button>
+            </div>
           </div>
-          <div class="pwa-install-actions">
-            <button id="pwa-install-later" class="pwa-btn pwa-btn-secondary" type="button">Più tardi</button>
-            <button id="pwa-install-button" class="pwa-btn pwa-btn-primary" type="button">Installa</button>
+          <div id="pwa-ios-hint" class="pwa-ios-hint" style="display: none;">
+            <div class="ios-hint-title">📲 Come installare su iPhone/iPad:</div>
+            <ol class="ios-hint-steps">
+              <li><span class="step-number">1.</span> Tocca il pulsante <strong>Condividi</strong> <span
+                  class="ios-share-icon">📤</span> in basso (Safari)</li>
+              <li><span class="step-number">2.</span> Scorri e seleziona <strong>"Aggiungi a Home"</strong> <span
+                  class="ios-plus-icon">➕</span></li>
+              <li><span class="step-number">3.</span> Tocca <strong>"Aggiungi"</strong> in alto a destra ✅</li>
+            </ol>
+            <div class="ios-hint-note">💡 L'app apparirà sulla tua schermata Home come un'app nativa</div>
+          </div>
+          <div id="pwa-android-hint" class="pwa-android-hint" style="display: none;">
+            <div class="android-hint-title">🤖 Come installare su Android:</div>
+            <ol class="android-hint-steps">
+              <li><span class="step-number">1.</span> Tocca il pulsante <strong>"Installa"</strong> qui sopra (se
+                disponibile) ⬆️</li>
+              <li><span class="step-number">2.</span> Oppure: tocca il menu <strong>⋮</strong> (tre puntini) in alto a
+                destra del browser</li>
+              <li><span class="step-number">3.</span> Seleziona <strong>"Installa app"</strong> o <strong>"Aggiungi alla
+                  schermata Home"</strong> 📱</li>
+              <li><span class="step-number">4.</span> Conferma l'installazione toccando <strong>"Installa"</strong> ✅
+              </li>
+            </ol>
+            <div class="android-hint-note">💡 L'app apparirà sulla tua schermata Home e potrai aprirla come un'app
+              nativa</div>
           </div>
         </div>
-        <div id="pwa-ios-hint" class="pwa-ios-hint" style="display: none;">
-          <div class="ios-hint-title">📲 Come installare su iPhone/iPad:</div>
-          <ol class="ios-hint-steps">
-            <li><span class="step-number">1.</span> Tocca il pulsante <strong>Condividi</strong> <span class="ios-share-icon">📤</span> in basso (Safari)</li>
-            <li><span class="step-number">2.</span> Scorri e seleziona <strong>"Aggiungi a Home"</strong> <span class="ios-plus-icon">➕</span></li>
-            <li><span class="step-number">3.</span> Tocca <strong>"Aggiungi"</strong> in alto a destra ✅</li>
-          </ol>
-          <div class="ios-hint-note">💡 L'app apparirà sulla tua schermata Home come un'app nativa</div>
-        </div>
-        <div id="pwa-android-hint" class="pwa-android-hint" style="display: none;">
-          <div class="android-hint-title">🤖 Come installare su Android:</div>
-          <ol class="android-hint-steps">
-            <li><span class="step-number">1.</span> Tocca il pulsante <strong>"Installa"</strong> qui sopra (se disponibile) ⬆️</li>
-            <li><span class="step-number">2.</span> Oppure: tocca il menu <strong>⋮</strong> (tre puntini) in alto a destra del browser</li>
-            <li><span class="step-number">3.</span> Seleziona <strong>"Installa app"</strong> o <strong>"Aggiungi alla schermata Home"</strong> 📱</li>
-            <li><span class="step-number">4.</span> Conferma l'installazione toccando <strong>"Installa"</strong> ✅</li>
-          </ol>
-          <div class="android-hint-note">💡 L'app apparirà sulla tua schermata Home e potrai aprirla come un'app nativa</div>
-        </div>
-      </div>
       </div>
     </div>
   </main>
@@ -315,19 +332,21 @@
       </div>
     </div>
   </div>
-  
+
   <!-- PWA Bottom Navigation (in basso) -->
   <nav id="pwa-bottom-nav" class="pwa-bottom-nav" style="display: none;">
     <a href="index.html" class="pwa-nav-item active" data-page="home">
-      <svg class="pwa-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+      <svg class="pwa-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+        stroke-linejoin="round">
         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
         <polyline points="9 22 9 12 15 12 15 22"></polyline>
       </svg>
       <span class="pwa-nav-label">Home</span>
     </a>
-    
+
     <a href="fermate.html" class="pwa-nav-item" data-page="fermate">
-      <svg class="pwa-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+      <svg class="pwa-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+        stroke-linejoin="round">
         <rect x="3" y="3" width="18" height="18" rx="2"></rect>
         <circle cx="8.5" cy="8.5" r="1.5"></circle>
         <circle cx="15.5" cy="8.5" r="1.5"></circle>
@@ -335,17 +354,19 @@
       </svg>
       <span class="pwa-nav-label">Fermate</span>
     </a>
-    
+
     <a href="prezzi.html" class="pwa-nav-item" data-page="prezzi">
-      <svg class="pwa-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+      <svg class="pwa-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+        stroke-linejoin="round">
         <line x1="12" y1="1" x2="12" y2="23"></line>
         <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
       </svg>
       <span class="pwa-nav-label">Prezzi</span>
     </a>
-    
+
     <button class="pwa-nav-item" data-page="settings" id="pwa-settings-btn">
-      <svg class="pwa-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+      <svg class="pwa-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+        stroke-linejoin="round">
         <circle cx="12" cy="12" r="3"></circle>
         <path d="M12 1v6m0 6v6m5.2-13.2l-4.2 4.2m0 6l4.2 4.2M1 12h6m6 0h6m-13.2 5.2l4.2-4.2m0-6l-4.2-4.2"></path>
       </svg>
@@ -376,13 +397,13 @@
             <button id="fermate-clear-search" class="fermate-clear-btn" style="display: none;">✕</button>
           </div>
         </div>
-        
+
         <!-- Pulsante geolocalizzazione -->
         <button id="fermate-location-btn" class="fermate-location-btn-inline" title="Rileva fermata più vicina">
           <span id="fermate-location-icon">📍</span>
           <span id="fermate-location-text">Rileva fermata più vicina</span>
         </button>
-        
+
         <!-- Lista fermate -->
         <div class="fermate-list-container">
           <ul id="fermate-modal-list" class="fermate-modal-list">
@@ -425,7 +446,8 @@
       </div>
       <div class="cache-modal-footer">
         <button id="cache-cancel" class="cache-modal-btn cache-modal-cancel">Annulla</button>
-        <button id="cache-confirm" class="cache-modal-btn cache-modal-confirm" style="display: none;">Riavvia e Aggiorna (v1.2)</button>
+        <button id="cache-confirm" class="cache-modal-btn cache-modal-confirm" style="display: none;">Riavvia e Aggiorna
+          (v1.2)</button>
       </div>
     </div>
   </div>
@@ -460,4 +482,5 @@
   <script src="js/utils/app-init.js"></script>
 
 </body>
+
 </html>

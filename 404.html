@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -9,6 +10,13 @@
   <link rel="stylesheet" href="style1.css">
   <!-- Animazioni e transizioni globali -->
   <link rel="stylesheet" href="css/animations.css">
+  <!-- Layout globale (body, html, footer) -->
+  <link rel="stylesheet" href="css/layout.css">
+  <!-- Componenti estratti -->
+  <link rel="stylesheet" href="css/components/navbar.css">
+  <link rel="stylesheet" href="css/components/forms.css">
+  <link rel="stylesheet" href="css/components/buttons.css">
+  <link rel="stylesheet" href="css/components/price-card.css">
   <!-- Componenti CSS modulari -->
   <link rel="stylesheet" href="css/components/footer.css">
   <link rel="stylesheet" href="css/components/modals.css">
@@ -151,6 +159,7 @@
         opacity: 0;
         transform: translateY(20px);
       }
+
       to {
         opacity: 1;
         transform: translateY(0);
@@ -158,6 +167,7 @@
     }
   </style>
 </head>
+
 <body>
   <!-- Navbar -->
   <header class="navbar">
@@ -182,12 +192,12 @@
             </div>
           </div>
         </a>
-        
+
         <nav class="navbar-nav">
           <a href="index.html" class="nav-link">Home</a>
           <a href="fermate.html" class="nav-link">Fermate</a>
           <a href="prezzi.html" class="nav-link">Prezzi</a>
-          
+
           <!-- Mega Dropdown Impostazioni (solo desktop) -->
           <div class="settings-dropdown-container">
             <button id="settings-dropdown-btn" class="nav-settings-dropdown-btn" title="Impostazioni">
@@ -222,7 +232,8 @@
                 <div class="dropdown-item">
                   <label class="dropdown-label" for="dropdown-animation-toggle">🎬 Animazione Sfondo</label>
                   <label class="dropdown-toggle">
-                    <input type="checkbox" id="dropdown-animation-toggle" aria-label="Attiva/disattiva animazione sfondo">
+                    <input type="checkbox" id="dropdown-animation-toggle"
+                      aria-label="Attiva/disattiva animazione sfondo">
                     <span class="toggle-slider"></span>
                   </label>
                 </div>
@@ -271,15 +282,18 @@
               </div>
             </div>
           </div>
-          
+
           <!-- Pulsanti individuali (nascosti su desktop, usati solo via JS per compatibilità) -->
-          <button id="darkmode-toggle" class="dark-mode-toggle navbar-legacy-btn" title="Darkmode" style="display: none;">
+          <button id="darkmode-toggle" class="dark-mode-toggle navbar-legacy-btn" title="Darkmode"
+            style="display: none;">
             <span>🌙</span>
           </button>
-          <button class="animation-toggle navbar-legacy-btn" id="animationToggle" title="Toggle animazione sfondo" style="display: none;">
+          <button class="animation-toggle navbar-legacy-btn" id="animationToggle" title="Toggle animazione sfondo"
+            style="display: none;">
             🎬
           </button>
-          <button id="cache-reset" class="cache-reset-btn navbar-legacy-btn" title="Verifica aggiornamenti e riavvia app" style="display: none;">
+          <button id="cache-reset" class="cache-reset-btn navbar-legacy-btn"
+            title="Verifica aggiornamenti e riavvia app" style="display: none;">
             <span id="cache-icon">🔄</span>
           </button>
           <div class="font-size-group navbar-legacy-btn" style="display: none;">
@@ -309,7 +323,7 @@
             La pagina che stai cercando non esiste o è stata spostata.<br>
             Torna alla home o esplora le sezioni disponibili dell'app.
           </p>
-          
+
           <div class="error-links">
             <a href="index.html" class="error-link">
               <span class="error-icon">🏠</span>
@@ -360,5 +374,5 @@
   <!-- NOTA: Il mega dropdown è gestito automaticamente da js/components/mega-dropdown-settings.js -->
 
 </body>
-</html>
 
+</html>

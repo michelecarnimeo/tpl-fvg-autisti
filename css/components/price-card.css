@@ -1,0 +1,91 @@
+/* PRICE CARD - estratto da style1.css (Sezione 22) */
+.price-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 1rem;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, .08);
+    transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+
+.price-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, .12);
+}
+
+.price-card.active {
+    border-color: var(--turchese);
+    box-shadow: 0 0 0 3px rgba(23, 183, 177, .1), 0 12px 28px rgba(0, 0, 0, .12);
+}
+
+.price-card.inactive {
+    opacity: .7;
+}
+
+.price-card .price-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.price-card .price-label {
+    color: var(--testo-secondario);
+    font-weight: 600;
+    letter-spacing: .2px;
+}
+
+.price-card .price-value {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--testo-principale);
+    white-space: nowrap;
+}
+
+.price-card .price-code {
+    font-size: 1.2rem;
+    color: var(--testo-principale);
+    font-weight: 800;
+}
+
+.price-card .price-divider {
+    height: 1px;
+    width: 100%;
+    background: rgba(15, 23, 42, .15);
+    margin: .8rem 0;
+}
+
+/* Messaggio errore prezzo */
+.price-card .price-error {
+    margin-top: .5rem;
+    color: #b91c1c;
+    font-weight: 600;
+}
+
+/* Dark */
+.dark .price-card {
+    background: var(--glass-bg-dark);
+    border-color: var(--glass-border-dark);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, .35);
+}
+
+.dark .price-card.active {
+    border-color: var(--turchese);
+    box-shadow: 0 0 0 3px rgba(23, 183, 177, .15), 0 12px 28px rgba(0, 0, 0, .42);
+}
+
+.dark .price-card .price-label {
+    color: rgba(248, 250, 252, .75);
+}
+
+.dark .price-card .price-value {
+    color: rgba(248, 250, 252, .98);
+}
+
+.dark .price-card .price-code {
+    color: rgba(248, 250, 252, .98);
+}
+
+.dark .price-card .price-divider {
+    background: rgba(255, 255, 255, .15);
+}

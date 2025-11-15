@@ -1,0 +1,251 @@
+/* NAVBAR - estratto da style1.css (Sezione 7) */
+.navbar {
+    background: linear-gradient(135deg, rgba(0, 123, 138, 0.9) 0%, rgba(0, 123, 138, 0.7) 50%, rgba(0, 123, 138, 0.5) 100%);
+    padding: 9px 0;
+    box-shadow: 0 4px 12px 0 rgba(0, 123, 138, 0.4);
+    border-bottom: 1px solid rgba(0, 123, 138, 0.3);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        padding: 0.6rem 0;
+    }
+}
+
+@media (max-width: 390px) {
+    .navbar {
+        padding: 0.5rem 0;
+    }
+}
+
+.navbar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60%;
+    background: transparent;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.navbar-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.navbar-brand-link {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.navbar-logo-wrapper {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    display: block;
+    perspective: 1000px;
+    transform-style: preserve-3d;
+}
+
+.navbar-logo-default {
+    transform: rotateY(0deg);
+    backface-visibility: hidden;
+}
+
+.navbar-logo-hover {
+    transform: rotateY(180deg);
+    backface-visibility: hidden;
+}
+
+.navbar-brand-link:hover .navbar-logo-default {
+    transform: rotateY(-180deg);
+    opacity: 0;
+}
+
+.navbar-brand-link:hover .navbar-logo-hover {
+    transform: rotateY(0deg);
+    opacity: 1;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.navbar-logo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50px;
+    height: 50px;
+    transition: transform .6s ease-in-out, opacity .6s ease-in-out, box-shadow .3s ease;
+    border-radius: 12px;
+    border: 2px solid rgba(0, 123, 138, .7);
+    object-fit: contain;
+    box-shadow: 0 2px 8px rgba(0, 123, 138, .4);
+}
+
+.navbar-logo-default {
+    opacity: 1;
+    z-index: 1;
+}
+
+.navbar-logo-hover {
+    opacity: 0;
+    z-index: 2;
+}
+
+.navbar-logo::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(135deg, rgba(255, 255, 255, .15) 0%, rgba(255, 255, 255, .08) 40%, transparent 70%, transparent 100%);
+    border-radius: 12px 12px 6px 6px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.navbar-title {
+    color: rgba(255, 255, 255, 1);
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-decoration: none;
+    text-shadow: 0 2px 15px rgba(0, 0, 0, .6);
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+.navbar-title .logo-acronym,
+.navbar-title .navbar-title-main {
+    display: flex;
+    flex-direction: column;
+    font-family: 'Arial', sans-serif;
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: rgba(255, 255, 255, 1);
+    letter-spacing: .5px;
+    line-height: 1;
+    text-shadow: 0 2px 15px rgba(0, 0, 0, .6);
+}
+
+.navbar-title .logo-text,
+.navbar-title .navbar-title-sub {
+    display: flex;
+    flex-direction: column;
+    font-family: 'Arial', sans-serif;
+    font-weight: 300;
+    font-size: .8rem;
+    color: rgba(255, 255, 255, .9);
+    letter-spacing: .3px;
+    line-height: 1;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, .5);
+}
+
+.navbar-nav {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.nav-link {
+    color: rgba(255, 255, 255, .95);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1rem;
+    padding: .5rem 1rem;
+    border-radius: 8px;
+    transition: all .3s ease;
+    position: relative;
+    white-space: nowrap;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+.nav-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: transparent;
+    border-radius: 8px 8px 4px 4px;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity .3s ease;
+}
+
+.nav-link:hover {
+    background: rgba(255, 255, 255, .1);
+    border: 1px solid rgba(255, 255, 255, .3);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .1);
+    transform: translateY(-1px);
+}
+
+.nav-link:hover::before {
+    opacity: 1;
+}
+
+.nav-link.active {
+    background: rgba(255, 255, 255, .4);
+    color: #fff;
+    border-color: rgba(255, 255, 255, .6);
+    font-weight: 600;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, .25);
+    transform: translateY(-2px);
+}
+
+.nav-link.active::before {
+    opacity: 1;
+}
+
+.dark .nav-link {
+    background: transparent;
+    color: #fff;
+    border: none;
+    box-shadow: none;
+}
+
+.dark .nav-link:hover {
+    background: rgba(255, 255, 255, .1);
+    border: 1px solid rgba(255, 255, 255, .3);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .2);
+}
+
+.dark .nav-link.active {
+    background: rgba(255, 255, 255, .2);
+    border-color: rgba(255, 255, 255, .5);
+    color: #fff;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, .5);
+}
+
+/* Mobile: mostra hamburger, nascondi menu desktop */
+@media (max-width: 768px) {
+    .hamburger-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .navbar-nav {
+        display: none;
+    }
+}
