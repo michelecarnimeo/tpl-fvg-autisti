@@ -545,6 +545,8 @@
   let setFontSize = null;
   let triggerHaptic = null;
   let onCloseMobileMenu = null;
+
+  const BODY_SCALE_CLASSES = ['interface-scale-75', 'interface-scale-85', 'interface-scale-100', 'interface-scale-115', 'interface-scale-125'];
   
   // Handler per il pulsante "Verifica Aggiornamenti" (per event delegation)
   let handleUpdateCheckClick = null;
@@ -898,8 +900,8 @@
     }
 
     // Leggi elementi DOM (adesso che il DOM è pronto)
-    settingsModal = document.getElementById('settings-modal');
-    openSettingsBtn = document.getElementById('open-settings');
+      settingsModal = document.getElementById('settings-modal');
+      openSettingsBtn = document.getElementById('open-settings');
     desktopSettingsBtn = document.getElementById('desktop-settings-btn');
     closeSettingsBtn = document.getElementById('settings-modal-close');
 
@@ -1109,7 +1111,13 @@
     // Interface Scale (Dimensione Interfaccia)
     const scaleRadios = document.querySelectorAll('input[name="interface-scale"]');
     if (scaleRadios && scaleRadios.length > 0) {
+      const savedScale = window.Storage ? window.Storage.getItem('tpl.interfaceScale') : null;
+      const bodyClassScale = BODY_SCALE_CLASSES.find(cls => document.body.classList.contains(cls)) || null;
+      const currentScale = savedScale || (bodyClassScale ? bodyClassScale.replace('interface-scale-', '') : '100');
+
       scaleRadios.forEach(radio => {
+        radio.checked = radio.value === currentScale;
+
         radio.addEventListener('change', (e) => {
           if (e.target.checked && setInterfaceScale) {
             const scale = e.target.value;

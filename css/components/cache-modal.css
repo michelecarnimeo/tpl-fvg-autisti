@@ -1,0 +1,223 @@
+/* ========================================
+   COMPONENT: CACHE MODAL
+   File: css/components/cache-modal.css
+   Descrizione: Modal per conferma reset cache e aggiornamenti
+   Contenuto: .cache-modal, overlay, content, header, body, footer, buttons, dark mode, responsive
+   Dipendenze: variables.css, animations.css
+   ======================================== */
+
+/* SOTTOSEZIONE: Modal overlay */
+.cache-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 10000;
+}
+
+/* SOTTOSEZIONE: Modal content */
+.cache-modal-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  width: 90%;
+  max-width: 500px;
+  overflow: hidden;
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+/* SOTTOSEZIONE: Header modal */
+.cache-modal-header {
+  background: var(--turchese);
+  color: white;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.cache-modal-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+/* SOTTOSEZIONE: Body modal */
+.cache-modal-body {
+  padding: 2rem;
+  text-align: center;
+}
+
+.cache-modal-body p {
+  margin: 0 0 1rem 0;
+  color: var(--testo-principale);
+  line-height: 1.5;
+}
+
+/* Stili per elementi kbd (tasti) */
+.cache-modal-body kbd {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  padding: 0.2rem 0.4rem;
+  font-family: 'Courier New', monospace;
+  font-size: 0.85em;
+  color: #475569;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Stili per liste ordinate */
+.cache-modal-body ol {
+  text-align: left;
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+}
+
+.cache-modal-body li {
+  margin: 0.5rem 0;
+  color: var(--testo-principale);
+}
+
+.cache-modal-warning {
+  color: #dc2626;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+/* SOTTOSEZIONE: Footer modal */
+.cache-modal-footer {
+  display: flex;
+  gap: 1rem;
+  padding: 0 2rem 2rem 2rem;
+}
+
+/* SOTTOSEZIONE: Pulsanti modal */
+.cache-modal-btn {
+  flex: 1;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cache-modal-cancel {
+  background: #f3f4f6;
+  color: var(--testo-principale);
+}
+
+.cache-modal-cancel:hover {
+  background: #e5e7eb;
+}
+
+.cache-modal-confirm {
+  background: #dc2626;
+  color: white;
+}
+
+.cache-modal-confirm:hover {
+  background: #b91c1c;
+}
+
+/* ========================================
+   DARK MODE VARIANT
+   ======================================== */
+
+.dark .cache-modal-content {
+  background: rgba(30, 41, 59, 0.98);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.dark .cache-modal-body p {
+  color: var(--testo-principale);
+}
+
+.dark .cache-modal-body kbd {
+  background: #374151;
+  border: 1px solid #4b5563;
+  color: #d1d5db;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.dark .cache-modal-body li {
+  color: var(--testo-principale);
+}
+
+.dark .cache-modal-cancel {
+  background: #374151;
+  color: var(--testo-principale);
+}
+
+.dark .cache-modal-cancel:hover {
+  background: #4b5563;
+}
+
+/* ========================================
+   RESPONSIVE - MOBILE
+   ======================================== */
+
+@media (max-width: 480px) {
+  .cache-modal-content {
+    width: 95%;
+    max-width: none;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .cache-modal-header {
+    padding: 1rem;
+  }
+
+  .cache-modal-header h3 {
+    font-size: 1.1rem;
+  }
+
+  .cache-modal-body {
+    padding: 1rem;
+  }
+
+  .cache-modal-body p {
+    font-size: 0.95rem;
+  }
+
+  .cache-modal-footer {
+    padding: 1rem;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .cache-modal-btn {
+    padding: 0.875rem;
+    font-size: 0.95rem;
+  }
+}
+
+/* SOTTOSEZIONE: Modal per schermi molto piccoli */
+@media (max-width: 360px) {
+  .cache-modal-content {
+    width: 98%;
+  }
+
+  .cache-modal-header,
+  .cache-modal-body,
+  .cache-modal-footer {
+    padding: 0.75rem;
+  }
+
+  .cache-modal-body p {
+    font-size: 0.9rem;
+  }
+
+  .cache-modal-btn {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+}
+

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prototipo Linea + Mappa</title>
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-sA+e2HB7QmXeYfEIqTR9dMzmQ4wQIXtu1yT1gGmHNwM=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-o9N1j7kGDe8YRV1K5J4h8exkGuhleZz3f3s3zLf5pLA=" crossorigin=""></script>
+
+  <style>
+    :root {
+      --primary: #0f172a;
+      --accent: #007b8a;
+      --accent-light: #12b9c1;
+      --bg: #f4f7fb;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--primary);
+    }
+
+    .page {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .panel {
+      width: 420px;
+      max-width: 100%;
+      padding: 2rem;
+      background: white;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.1);
+      z-index: 2;
+    }
+
+    .panel h1 {
+      margin-top: 0;
+    }
+
+    .panel label {
+      display: block;
+      margin-bottom: 0.75rem;
+      font-weight: 600;
+    }
+
+    select,
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      border-radius: 10px;
+      border: 1px solid rgba(15, 23, 42, 0.2);
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    button {
+      background: var(--accent);
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    button:hover {
+      background: var(--accent-light);
+    }
+
+    .map-wrapper {
+      flex: 1;
+      position: relative;
+      min-height: 100vh;
+    }
+
+    #map {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+
+    .info-card {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: white;
+      border-radius: 12px;
+      padding: 1rem;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.15);
+      min-width: 260px;
+    }
+
+    .info-card h3 {
+      margin: 0 0 0.5rem;
+    }
+
+    .stop-list {
+      max-height: 240px;
+      overflow-y: auto;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .stop-list li {
+      padding: 0.5rem 0.75rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .stop-list li:hover {
+      background: rgba(0, 123, 138, 0.08);
+    }
+
+    .stop-list li.active {
+      background: rgba(0, 123, 138, 0.15);
+      font-weight: 600;
+    }
+
+    @media (max-width: 900px) {
+      .page {
+        flex-direction: column;
+      }
+
+      .panel {
+        width: 100%;
+        border-radius: 0 0 24px 24px;
+      }
+
+      .map-wrapper {
+        min-height: 60vh;
+      }
+
+      .info-card {
+        position: static;
+        margin: 1rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <aside class="panel">
+      <h1>Demo mappa linea</h1>
+      <p>Seleziona una linea per mostrare fermate e percorso su OpenStreetMap.</p>
+
+      <label for="linea-select">Linea</label>
+      <select id="linea-select">
+        <option value="udine">Linea Udine Centro</option>
+        <option value="san-daniele">Linea San Daniele</option>
+      </select>
+
+      <button id="load-map-btn">Mostra mappa</button>
+    </aside>
+
+    <section class="map-wrapper">
+      <div id="map"></div>
+
+      <div class="info-card" id="info-card" hidden>
+        <h3 id="line-title">Linea</h3>
+        <p id="line-summary"></p>
+        <ul class="stop-list" id="stop-list"></ul>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const demoData = {
+      'udine': {
+        name: 'Linea Udine Centro',
+        summary: 'Percorso circolare con 8 fermate principali.',
+        stops: [
+          { name: 'Stazione Centrale', coords: [46.0627, 13.2357] },
+          { name: 'Piazza Libertà', coords: [46.0639, 13.2344] },
+          { name: 'Ospedale Santa Maria', coords: [46.0609, 13.2315] },
+          { name: 'Università', coords: [46.0662, 13.2334] },
+          { name: 'Giardin Grande', coords: [46.0654, 13.2289] },
+          { name: 'Via Aquileia', coords: [46.0598, 13.2291] },
+          { name: 'Viale Venezia', coords: [46.0584, 13.2376] },
+          { name: 'Campagnuzza', coords: [46.0615, 13.2413] }
+        ]
+      },
+      'san-daniele': {
+        name: 'Linea Udine - San Daniele',
+        summary: 'Percorso extraurbano con tappe intermedie.',
+        stops: [
+          { name: 'Udine Autostazione', coords: [46.0640, 13.2356] },
+          { name: 'Tavagnacco', coords: [46.0991, 13.2203] },
+          { name: 'Tricesimo', coords: [46.1636, 13.2082] },
+          { name: 'Buja', coords: [46.2076, 13.1232] },
+          { name: 'Majano', coords: [46.2147, 13.0524] },
+          { name: 'Ragogna', coords: [46.1703, 12.9922] },
+          { name: 'San Daniele Centro', coords: [46.1609, 13.0116] }
+        ]
+      }
+    };
+
+    const map = L.map('map');
+    map.setView([46.0627, 13.2357], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    let stopMarkers = [];
+    const lineSelect = document.getElementById('linea-select');
+    const loadMapBtn = document.getElementById('load-map-btn');
+    const infoCard = document.getElementById('info-card');
+    const lineTitle = document.getElementById('line-title');
+    const lineSummary = document.getElementById('line-summary');
+    const stopList = document.getElementById('stop-list');
+
+    function clearMarkers() {
+      stopMarkers.forEach(marker => map.removeLayer(marker));
+      stopMarkers = [];
+      stopList.innerHTML = '';
+    }
+
+    function renderLine(lineKey) {
+      const line = demoData[lineKey];
+      if (!line) return;
+
+      clearMarkers();
+
+      lineTitle.textContent = line.name;
+      lineSummary.textContent = line.summary;
+      infoCard.hidden = false;
+
+      const bounds = [];
+
+      line.stops.forEach((stop, index) => {
+        const marker = L.marker(stop.coords).addTo(map)
+          .bindPopup(`<strong>${stop.name}</strong>`);
+        stopMarkers.push(marker);
+        bounds.push(stop.coords);
+
+        const li = document.createElement('li');
+        li.textContent = `${index + 1}. ${stop.name}`;
+        li.addEventListener('click', () => {
+          marker.openPopup();
+          li.classList.add('active');
+          setTimeout(() => li.classList.remove('active'), 1500);
+        });
+        stopList.appendChild(li);
+      });
+
+      if (bounds.length) {
+        map.fitBounds(bounds, { padding: [40, 40] });
+      }
+
+      setTimeout(() => map.invalidateSize(), 150);
+    }
+
+    loadMapBtn.addEventListener('click', () => {
+      renderLine(lineSelect.value);
+    });
+
+    // Load default line on start
+    renderLine(lineSelect.value);
+  </script>
+</body>
+
+</html>
+

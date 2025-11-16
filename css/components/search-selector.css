@@ -1,0 +1,188 @@
+/* ========================================
+   COMPONENT: SEARCH & ROUTE SELECTOR
+   Estratto da style1.css - Sezione 23
+   Versione 1.0.0
+   ======================================== */
+
+.line-selector-container {
+  max-width: 600px;
+  margin: 0 auto 1.5rem;
+  padding-top: 1rem;
+  border-top: 2px solid rgba(15, 23, 42, 0.4);
+}
+
+.search-container {
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.route-button-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.location-btn-small,
+.swap-btn-small {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: var(--turchese);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 123, 138, 0.3);
+  flex-shrink: 0;
+}
+
+.location-btn-small:hover,
+.swap-btn-small:hover {
+  background: var(--turchese-scuro);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 123, 138, 0.4);
+}
+
+.location-btn-small.active,
+.swap-btn-small.active {
+  background: var(--turchese-scuro);
+  box-shadow: 0 0 0 2px rgba(0, 123, 138, 0.3);
+}
+
+.location-btn-small:disabled,
+.swap-btn-small:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.location-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--turchese);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 8px rgba(0, 123, 138, 0.3);
+  min-width: 180px;
+}
+
+.location-btn:hover {
+  background: var(--turchese-scuro);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 123, 138, 0.4);
+}
+
+.location-btn.active {
+  background: var(--turchese-scuro);
+  box-shadow: 0 0 0 3px rgba(0, 123, 138, 0.3);
+}
+
+.location-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.search-box {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  align-items: center;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.search-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--testo-secondario);
+  font-size: 1.2rem;
+  pointer-events: none;
+  z-index: 2;
+  transition: color 0.3s ease;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px 16px 12px 48px;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--testo-principale);
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.search-input::placeholder {
+  color: var(--testo-secondario);
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+.search-box:focus-within {
+  border-color: var(--turchese);
+  box-shadow: 0 0 0 3px rgba(23, 183, 177, 0.1);
+}
+
+.search-box:focus-within .search-icon {
+  color: var(--turchese);
+}
+
+/* Dark mode variants */
+.dark .location-btn-small,
+.dark .swap-btn-small,
+.dark .location-btn {
+  background: var(--turchese);
+  box-shadow: 0 2px 6px rgba(0, 153, 170, 0.4);
+}
+
+.dark .location-btn-small:hover,
+.dark .swap-btn-small:hover,
+.dark .location-btn:hover {
+  background: var(--turchese-scuro);
+  box-shadow: 0 4px 10px rgba(0, 153, 170, 0.5);
+}
+
+.dark .location-btn-small.active,
+.dark .swap-btn-small.active,
+.dark .location-btn.active {
+  box-shadow: 0 0 0 2px rgba(0, 153, 170, 0.4);
+}
+
+.dark .search-box {
+  background: rgba(30, 41, 59, 0.6);
+  border-color: rgba(148, 163, 184, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.dark .search-icon,
+.dark .search-input::placeholder {
+  color: rgba(148, 163, 184, 0.7);
+}
+
+.dark .search-input {
+  color: rgba(248, 250, 252, 0.95);
+}
+

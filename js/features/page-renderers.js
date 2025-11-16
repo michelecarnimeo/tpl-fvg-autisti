@@ -162,6 +162,34 @@
     }
     
     console.log('✅ renderFermate completata. Fermate andata:', andataList.children.length, 'Fermate ritorno:', ritornoList.children.length);
+
+    console.log('🗺️ Verifico disponibilità LineMap...', {
+      windowLineMap: typeof window.LineMap,
+      updateFunction: typeof window.LineMap?.update
+    });
+
+    if (window.LineMap && typeof window.LineMap.update === 'function') {
+      console.log('🗺️ LineMap disponibile, preparo dati mappa...');
+      
+      const stopsWithCoords = (linea.fermateDettaglio || linea.fermate || []).map((stop, idx) => {
+        if (typeof stop === 'object' && stop.coords) return stop;
+        return {
+          name: typeof stop === 'string' ? stop : (stop?.name || `Fermata ${idx + 1}`),
+          coords: stop?.coords || null
+        };
+      });
+
+      const lineMapPayload = {
+        name: linea.nome,
+        summary: linea.percorso || linea.descrizione || null,
+        stops: stopsWithCoords
+      };
+
+      console.log('🗺️ Chiamo LineMap.update con:', lineMapPayload);
+      window.LineMap.update(linea.nome, lineMapPayload);
+    } else {
+      console.warn('⚠️ LineMap non disponibile o update non è una funzione');
+    }
   }
 
   /**

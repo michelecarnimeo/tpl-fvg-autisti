@@ -433,22 +433,30 @@
   // DIMENSIONE INTERFACCIA
   // ========================================
 
+  const VALID_INTERFACE_SCALES = ['75', '85', '100', '115', '125'];
+  const DEFAULT_INTERFACE_SCALE = '100';
+
   function setInterfaceScale(scale) {
-    // Rimuovi tutte le classi di scala precedenti
-    document.body.classList.remove('interface-scale-75', 'interface-scale-85', 'interface-scale-100', 'interface-scale-115', 'interface-scale-125');
+    const targetScale = VALID_INTERFACE_SCALES.includes(scale) ? scale : DEFAULT_INTERFACE_SCALE;
 
-    // Aggiungi la nuova classe di scala
-    document.body.classList.add(`interface-scale-${scale}`);
+    if (window.InterfaceScale && typeof window.InterfaceScale.applyScale === 'function') {
+      window.InterfaceScale.applyScale(targetScale);
+    } else {
+      document.documentElement.classList.remove('scale-75', 'scale-85', 'scale-100', 'scale-115', 'scale-125');
+      document.body.classList.remove('interface-scale-75', 'interface-scale-85', 'interface-scale-100', 'interface-scale-115', 'interface-scale-125');
+      document.documentElement.classList.add(`scale-${targetScale}`);
+      document.body.classList.add(`interface-scale-${targetScale}`);
+    }
 
-    Storage.setItem('tpl.interfaceScale', scale);
+    Storage.setItem('tpl.interfaceScale', targetScale);
 
-    console.log('Dimensione interfaccia:', scale + '%');
+    console.log('Dimensione interfaccia:', targetScale + '%');
     triggerHaptic('medium'); // Feedback al cambio dimensione
   }
 
   function loadInterfaceScale() {
     const saved = Storage.getItem('tpl.interfaceScale');
-    const scale = saved || '100'; // Default 100%
+    const scale = saved || DEFAULT_INTERFACE_SCALE; // Default 100%
     setInterfaceScale(scale);
   }
 

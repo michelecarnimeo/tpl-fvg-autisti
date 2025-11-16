@@ -1,7 +1,7 @@
-const CACHE_NAME = 'tpl-cache-v13';
+const CACHE_NAME = 'tpl-cache-v21';
 const CACHE_SIZE_LIMIT = 100 * 1024 * 1024; // 100MB per supporto offline completo
-const STATIC_CACHE = 'tpl-static-v13';
-const DYNAMIC_CACHE = 'tpl-dynamic-v13';
+const STATIC_CACHE = 'tpl-static-v21';
+const DYNAMIC_CACHE = 'tpl-dynamic-v21';
 const MAX_DYNAMIC_ITEMS = 200; // Più elementi per supporto offline
 
 // Configurazione ottimizzata per supporto offline
@@ -30,8 +30,14 @@ const STATIC_ASSETS = [
   './css/components/forms.css', // Forms
   './css/components/buttons.css', // Buttons
   './css/components/price-card.css', // Price card
+  './css/components/cards.css', // Main content cards
+  './css/components/page-layout.css?v=1.0.0', // Page titles / layout helpers
+  './css/components/fermate-card.css?v=1.0.0', // Fermate cards & lists
+  './css/components/search-selector.css?v=1.0.0', // Ricerca e selettori
+  './css/components/line-map.css?v=1.0.0', // Map styles
   './css/components/footer.css', // Footer modulare CSS
   './css/components/modals.css', // Modals modulare CSS
+  './css/components/cache-modal.css', // Cache modal
   './css/components/mega-dropdown-settings.css', // Mega Dropdown Settings
   './css/components/pwa-bottom-nav.css', // PWA Bottom Navigation
   './css/components/settings/impostazioni.css', // Settings (struttura)
@@ -52,6 +58,7 @@ const STATIC_ASSETS = [
   './js/features/route-selector.js', // Gestione selezione route (linea/partenza/arrivo)
   './js/features/geolocation.js', // Gestione geolocalizzazione e ordinamento fermate per distanza
   './js/features/page-renderers.js', // Rendering pagine fermate.html e prezzi.html
+  './js/features/line-map.js?v=1.0.0', // Map logic
   './js/tests/test-prezzi.js', // Test suite prezzi (solo per test.html)
   './js/tests/test-prezzi-wrappers.js', // Wrapper funzioni Prezzi test (solo per test.html)
   './js/tests/test-route-selector.js', // Test suite route selector (solo per test.html)
@@ -94,6 +101,12 @@ const STATIC_ASSETS = [
   './js/utils/app-init.js', // Inizializzazione app comune (SW registration, changelog)
   './js/utils/interface-scale.js', // Sistema scala interfaccia
   './js/pages/benvenuto.js', // Logica specifica pagina benvenuto
+  './libs/leaflet/leaflet.css', // Leaflet CSS (locale)
+  './libs/leaflet/leaflet.js', // Leaflet JS (locale)
+  './libs/leaflet/leaflet-icon-fix.js', // Leaflet icon path fix
+  './libs/leaflet/marker-icon.png', // Leaflet marker icon
+  './libs/leaflet/marker-icon-2x.png', // Leaflet marker icon retina
+  './libs/leaflet/marker-shadow.png', // Leaflet marker shadow
   './components/settings-modal.html', // Settings modal HTML centralizzato
   './database.json', // DATI CRITICI per offline
   './manifest.webmanifest', // PWA

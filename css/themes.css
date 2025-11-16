@@ -108,59 +108,50 @@ body.blue-light-filter::after {
    5. INTERFACE SCALE (ZOOM)
    ======================================== */
 
+/* Scaling baseline font-size via html classes */
+html.scale-75 {
+  font-size: 12px;
+}
+
+html.scale-85 {
+  font-size: 13.6px;
+}
+
+html.scale-100 {
+  font-size: 16px;
+}
+
+html.scale-115 {
+  font-size: 18.4px;
+}
+
+html.scale-125 {
+  font-size: 20px;
+}
+
 /* Molto Compatta - 75% */
 body.interface-scale-75 {
-  zoom: 0.75;
-  -moz-transform: scale(0.75);
-  transform: scale(0.75);
-  -moz-transform-origin: top left;
-  transform-origin: top left;
-  width: 100vw;
-  overflow-x: hidden;
+  transform-origin: top center;
 }
 
 /* Compatta - 85% */
 body.interface-scale-85 {
-  zoom: 0.85;
-  -moz-transform: scale(0.85);
-  transform: scale(0.85);
-  -moz-transform-origin: top left;
-  transform-origin: top left;
-  width: 100vw;
-  overflow-x: hidden;
+  transform-origin: top center;
 }
 
 /* Normale - 100% (default) */
 body.interface-scale-100 {
-  zoom: 1;
-  -moz-transform: scale(1);
-  transform: scale(1);
-  -moz-transform-origin: top left;
-  transform-origin: top left;
-  width: 100vw;
-  overflow-x: hidden;
+  transform-origin: top center;
 }
 
 /* Grande - 115% */
 body.interface-scale-115 {
-  zoom: 1.15;
-  -moz-transform: scale(1.15);
-  transform: scale(1.15);
-  -moz-transform-origin: top left;
-  transform-origin: top left;
-  width: 100vw;
-  overflow-x: hidden;
+  transform-origin: top center;
 }
 
 /* Molto Grande - 125% */
 body.interface-scale-125 {
-  zoom: 1.25;
-  -moz-transform: scale(1.25);
-  transform: scale(1.25);
-  -moz-transform-origin: top left;
-  transform-origin: top left;
-  width: 100vw;
-  overflow-x: hidden;
+  transform-origin: top center;
 }
 
 /* ========================================

@@ -1,0 +1,77 @@
+/* ========================================
+   COMPONENT: MAIN CARDS
+   Estratto da style1.css - Sezione 8
+   ======================================== */
+
+/* Card principale con glassmorphism */
+.main-card {
+  /* Sfondo glassmorphism */
+  background: var(--glass-bg);
+  backdrop-filter: var(--backdrop-blur);
+  -webkit-backdrop-filter: var(--backdrop-blur);
+
+  /* Bordi e ombre */
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  box-shadow: var(--glass-shadow);
+
+  /* Spaziatura e dimensioni */
+  padding: 2rem;
+  margin: 1.5rem auto;
+  max-width: 500px;
+  width: 90%;
+
+  /* Layout e animazioni */
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+/* Variante dark mode */
+.dark .main-card {
+  background: var(--glass-bg-dark);
+  border-color: var(--glass-border-dark);
+  box-shadow: var(--glass-shadow-dark);
+}
+
+/* Media query – ottimizzazione mobile */
+@media (max-width: 768px) {
+  .main-card {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    padding: 1rem !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+  }
+}
+
+/* ========================================
+   TITOLI DELLA CARD PRINCIPALE
+   ======================================== */
+
+.card-title {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.card-title h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--testo-principale);
+  text-shadow: 0 2px 10px rgba(255, 255, 255, 0.3);
+}
+
+.card-title p {
+  font-size: 1.05rem;
+  color: rgba(51, 65, 85, 0.8);
+  max-width: 90%;
+  margin: -1rem auto 0 auto;
+  text-shadow: 0 1px 5px rgba(255, 255, 255, 0.2);
+}
+

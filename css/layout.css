@@ -145,7 +145,8 @@ body::after {
   align-items: flex-start;
   padding: 1rem 0;
   flex: 1;
-  overflow: visible;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .fermate-page .main-content > .container {

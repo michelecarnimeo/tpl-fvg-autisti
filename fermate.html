@@ -22,8 +22,15 @@
   <link rel="stylesheet" href="css/components/forms.css">
   <link rel="stylesheet" href="css/components/buttons.css">
   <link rel="stylesheet" href="css/components/price-card.css">
+  <link rel="stylesheet" href="css/components/cards.css">
+  <link rel="stylesheet" href="css/components/page-layout.css?v=1.0.0">
+  <link rel="stylesheet" href="css/components/fermate-card.css?v=1.0.0">
+  <link rel="stylesheet" href="libs/leaflet/leaflet.css">
+  <link rel="stylesheet" href="css/components/line-map.css?v=1.0.0">
+  <link rel="stylesheet" href="css/components/search-selector.css?v=1.0.0">
   <link rel="stylesheet" href="css/components/footer.css">
   <link rel="stylesheet" href="css/components/modals.css">
+  <link rel="stylesheet" href="css/components/cache-modal.css">
   <link rel="stylesheet" href="css/components/mega-dropdown-settings.css">
   <link rel="stylesheet" href="css/components/pwa-bottom-nav.css">
   <link rel="stylesheet" href="css/components/settings/impostazioni.css">
@@ -232,6 +239,27 @@
           </ul>
         </div>
       </div>
+
+      <section id="line-map-section" class="line-map-section" style="display: none;">
+        <div class="line-map-header">
+          <div>
+            <h2 id="line-map-title">Mappa linea</h2>
+            <p id="line-map-summary">Visualizza fermate e percorso sulla mappa interattiva.</p>
+          </div>
+          <button id="toggle-map-btn" class="map-toggle-btn" type="button">Nascondi mappa</button>
+        </div>
+
+        <div class="line-map-wrapper">
+          <div class="line-map-container">
+            <div id="line-map"></div>
+          </div>
+          <div class="line-map stops-card" id="line-map-sidebar">
+            <h3>Fermate evidenziate</h3>
+            <ul id="line-map-stops" class="line-map-stop-list"></ul>
+          </div>
+        </div>
+      </section>
+
       <!-- Banner installazione PWA -->
       <div id="pwa-install-banner" class="pwa-install-banner" style="display: none;">
         <div class="pwa-install-content">
@@ -397,6 +425,9 @@
   <script src="js/features/route-selector.js"></script>
   <script src="js/features/geolocation.js"></script>
   <script src="js/features/page-renderers.js"></script>
+  <script src="libs/leaflet/leaflet.js"></script>
+  <script src="libs/leaflet/leaflet-icon-fix.js"></script>
+  <script src="js/features/line-map.js"></script>
   <!-- UTILS -->
   <script src="js/utils/ui-helpers.js"></script>
   <script src="js/utils/offline-notifications.js"></script>
