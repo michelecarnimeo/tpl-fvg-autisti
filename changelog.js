@@ -4,6 +4,35 @@
 
 const changelogData = [
   {
+    version: '1.7.7',
+    date: '16 Novembre 2025',
+    time: '16:30',
+    title: 'FASE 3 Componenti Core - Pulizia Duplicati (v1.7.7)',
+    hidden: false,
+    changes: [
+      '🎉 FASE 3: COMPONENTI CORE - Completata!',
+      '  • Eliminati 1045 righe di codice duplicato da style1.css',
+      '  • style1.css ridotto da 6403 a 5358 righe (-16.3%)',
+      '🗑️ SEZIONI ELIMINATE (già modularizzate):',
+      '  • ✅ SEZIONE 7: Navbar → css/components/navbar.css',
+      '  • ✅ SEZIONE 9: Forms → css/components/forms.css',
+      '  • ✅ SEZIONE 10: Buttons → css/components/buttons.css',
+      '  • ✅ SEZIONE 22: Price Card → css/components/price-card.css',
+      '  • ✅ PWA Bottom Nav → css/components/pwa-bottom-nav.css',
+      '✨ COMPONENTI VERIFICATI E CONFERMATI:',
+      '  • buttons.css: swap-btn, calculate-btn, reset-btn, route-button, location-btn',
+      '  • navbar.css: navbar, navbar-brand, navbar-logo (flip 3D), nav-link',
+      '  • forms.css: form-group, form-select, search-box, route-section, dividers',
+      '  • pwa-bottom-nav.css: pwa-brand-header, pwa-bottom-nav, pwa-nav-item, logo flip',
+      '  • price-card.css: price-card, price-section, price-label, price-value, price-code',
+      '🎯 RISULTATO:',
+      '  • Modularizzazione CSS completata con successo!',
+      '  • Nessun errore di linting',
+      '  • Tutti i componenti funzionanti e ottimizzati',
+      '  • style1.css ora contiene solo codice non ancora modularizzato',
+    ]
+  },
+  {
     version: '1.7.6',
     date: '16 Novembre 2025',
     time: '15:00',

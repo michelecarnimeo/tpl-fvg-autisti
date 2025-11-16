@@ -1,6 +1,6 @@
 {
-  "version": "1.7.6",
+  "version": "1.7.7",
   "versionDate": "16 Novembre 2025",
-  "versionTime": "15:00",
-  "updateNotes": "FASE 2 Temi e Animazioni completata: creato themes.css con dark mode, high contrast, reduce motion, blue light filter, interface scale, extra spacing, compact layout, touch friendly. Pulito animations.css da duplicati, completato variables.css. Commentate 8 sezioni duplicate in style1.css. Service Worker v13. Pronto per FASE 3: Componenti Core."
+  "versionTime": "16:30",
+  "updateNotes": "FASE 3 Componenti Core completata: eliminati 1045 righe di codice duplicato da style1.css. Verificati e confermati componenti modularizzati: buttons.css, navbar.css, forms.css, pwa-bottom-nav.css, price-card.css. style1.css ridotto da 6403 a 5358 righe. Modularizzazione CSS completata con successo!"
 }
