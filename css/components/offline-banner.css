@@ -1,0 +1,135 @@
+/* ========================================
+   COMPONENTE: OFFLINE BANNER
+   File: css/components/offline-banner.css
+   Versione: 1.0.0
+   Descrizione: Banner di notifica per lo stato di connessione (offline/online)
+   Contenuto: .offline-banner, .offline-content, .offline-icon, .offline-text,
+              .offline-close, stato online, dark mode, responsive, safe-area
+   Dipendenze: variables.css, animations.css (per .pulse utility class)
+   ======================================== */
+
+.offline-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10000;
+  transform: translateY(-100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.offline-banner.show {
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.offline-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg,
+      rgba(251, 146, 60, 0.95),
+      rgba(234, 88, 12, 0.95));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.offline-icon {
+  font-size: 1.5rem;
+  /* NOTA: Animazione pulse sostituita con utility class .pulse in HTML/JS */
+  /* @keyframes pulse spostato in css/animations.css */
+}
+
+.offline-text {
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.offline-close {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.5rem;
+  font-weight: bold;
+  line-height: 1;
+  transition: all 0.2s ease;
+  margin-left: auto;
+}
+
+.offline-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.offline-close:active {
+  transform: scale(0.95);
+}
+
+/* Stato online (verde) */
+.offline-banner.online .offline-content {
+  background: linear-gradient(135deg,
+      rgba(34, 197, 94, 0.95),
+      rgba(22, 163, 74, 0.95));
+}
+
+.offline-banner.online .offline-text {
+  color: white;
+}
+
+/* Dark mode */
+.dark .offline-content {
+  background: linear-gradient(135deg,
+      rgba(251, 146, 60, 0.98),
+      rgba(234, 88, 12, 0.98));
+  border-bottom-color: rgba(255, 255, 255, 0.2);
+}
+
+.dark .offline-banner.online .offline-content {
+  background: linear-gradient(135deg,
+      rgba(34, 197, 94, 0.98),
+      rgba(22, 163, 74, 0.98));
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .offline-content {
+    padding: 0.75rem 1.5rem;
+    gap: 0.5rem;
+  }
+
+  .offline-text {
+    font-size: 0.9rem;
+  }
+
+  .offline-icon {
+    font-size: 1.25rem;
+  }
+
+  .offline-close {
+    width: 24px;
+    height: 24px;
+    font-size: 1.25rem;
+  }
+}
+
+/* Supporto safe-area per notch/isole */
+@media (max-width: 768px) {
+  .offline-content {
+    padding-top: max(0.75rem, env(safe-area-inset-top));
+  }
+}
+

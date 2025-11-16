@@ -1,6 +1,6 @@
 {
-  "version": "1.8.1",
-  "versionDate": "16 Novembre 2025",
-  "versionTime": "23:40",
-  "updateNotes": "Modularizzazione CSS Utilities e Componenti UI: utilities.css, footer.css, scroll-to-top.css, pwa-install-banner.css. Rimosso 711 righe da style1.css. File ridotto da 2106 a 1395 righe (-33.7%). Architettura CSS aggiornata con nuovo ordine di caricamento."
+  "version": "1.8.2",
+  "versionDate": "17 Novembre 2025",
+  "versionTime": "00:30",
+  "updateNotes": "Modularizzazione CSS Finale: offline-banner.css, update-items.css, preset-buttons.css, display-optimization.css. Completata pulizia style1.css (1010 → 254 righe, -75%). Fix navbar glassmorphism. Rimosso 756 righe in questa sessione. Totale: -1852 righe da v1.8.0 (-87.9%)."
 }

@@ -1,9 +1,11 @@
 /* NAVBAR - estratto da style1.css (Sezione 7) */
 .navbar {
-    background: linear-gradient(135deg, rgba(0, 123, 138, 0.9) 0%, rgba(0, 123, 138, 0.7) 50%, rgba(0, 123, 138, 0.5) 100%);
+    background: linear-gradient(135deg, rgba(0, 123, 138, 0.75) 0%, rgba(0, 123, 138, 0.65) 50%, rgba(0, 123, 138, 0.55) 100%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     padding: 9px 0;
     box-shadow: 0 4px 12px 0 rgba(0, 123, 138, 0.4);
-    border-bottom: 1px solid rgba(0, 123, 138, 0.3);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     position: sticky;
     top: 0;
     z-index: 1000;

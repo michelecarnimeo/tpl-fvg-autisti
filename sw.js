@@ -46,6 +46,11 @@ const STATIC_ASSETS = [
   './css/components/pwa-bottom-nav.css', // PWA Bottom Navigation
   './css/components/scroll-to-top.css?v=1.0.0', // Scroll to top button
   './css/components/pwa-install-banner.css?v=1.0.0', // PWA install banner
+  './css/components/version-card.css?v=1.0.0', // Version card (mobile)
+  './css/components/offline-banner.css?v=1.0.0', // Offline banner
+  './css/components/update-items.css?v=1.0.0', // Update items (show all button)
+  './css/components/preset-buttons.css?v=1.0.0', // Preset buttons (test/debug)
+  './css/components/display-optimization.css?v=1.0.0', // Display optimization (DPR detection)
   './css/components/settings/impostazioni.css', // Settings (struttura)
   './css/components/settings/accessibilita.css', // Settings (tab Accessibilità)
   './css/components/settings/aspetto.css', // Settings (tab Aspetto)

@@ -1,0 +1,101 @@
+/* ========================================
+   COMPONENTE: PRESET BUTTONS
+   File: css/components/preset-buttons.css
+   Versione: 1.0.0
+   Descrizione: Pulsanti preset per distanza e fake position (usati in test/debug)
+   Contenuto: .distance-preset-btn, .fake-position-preset, stati hover/active,
+              #apply-fake-position, dark mode
+   Dipendenze: variables.css
+   ======================================== */
+
+.distance-preset-btn,
+.fake-position-preset {
+  padding: 0.5rem 1rem;
+  background: white;
+  border: 2px solid #d1d5db;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: #374151;
+  transition: all 0.3s ease;
+}
+
+.distance-preset-btn:hover,
+.fake-position-preset:hover {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.distance-preset-btn:active,
+.fake-position-preset:active {
+  transform: translateY(0);
+}
+
+.distance-preset-btn.active {
+  background: var(--turchese);
+  border-color: var(--turchese);
+  color: white;
+  box-shadow: 0 4px 12px rgba(23, 183, 177, 0.3);
+}
+
+/* Pulsanti fake position (viola) */
+.fake-position-preset {
+  border-color: #d8b4fe;
+  color: #7e22ce;
+}
+
+.fake-position-preset:hover {
+  background: #faf5ff;
+  border-color: #a855f7;
+  box-shadow: 0 4px 8px rgba(168, 85, 247, 0.2);
+}
+
+.fake-position-preset.active {
+  background: #a855f7;
+  border-color: #7e22ce;
+  color: white;
+}
+
+/* Hover pulsante "Applica Posizione Fake" */
+#apply-fake-position:hover {
+  background: #9333ea;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
+}
+
+#apply-fake-position:active {
+  transform: translateY(0);
+}
+
+/* Dark mode */
+.dark .distance-preset-btn,
+.dark .fake-position-preset {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.dark .distance-preset-btn:hover,
+.dark .fake-position-preset:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.dark .fake-position-preset {
+  border-color: rgba(168, 85, 247, 0.3);
+  color: #c084fc;
+}
+
+.dark .fake-position-preset:hover {
+  background: rgba(168, 85, 247, 0.1);
+  border-color: #a855f7;
+}
+
+.dark .fake-position-preset.active {
+  background: #a855f7;
+  color: white;
+}
+

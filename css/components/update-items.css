@@ -1,0 +1,77 @@
+/* ========================================
+   COMPONENTE: UPDATE ITEMS
+   File: css/components/update-items.css
+   Versione: 1.0.0
+   Descrizione: Pulsante "Vedi tutti gli aggiornamenti" e gestione visibilità item nascosti
+   Contenuto: .update-item-hidden, .show-all-updates-btn, .show-updates-icon,
+              stati active, dark mode
+   Dipendenze: variables.css
+   ======================================== */
+
+.update-item-hidden {
+  display: none;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+}
+
+.update-item-hidden.show {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.show-all-updates-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  margin-top: 1rem;
+  background: linear-gradient(135deg, rgba(23, 183, 177, 0.1), rgba(16, 185, 129, 0.1));
+  border: 2px solid rgba(23, 183, 177, 0.3);
+  border-radius: 10px;
+  color: #17b7b1;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.show-all-updates-btn:hover {
+  background: linear-gradient(135deg, rgba(23, 183, 177, 0.15), rgba(16, 185, 129, 0.15));
+  border-color: #17b7b1;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(23, 183, 177, 0.2);
+}
+
+.show-all-updates-btn:active {
+  transform: translateY(0);
+}
+
+.show-updates-icon {
+  font-size: 1.1rem;
+  transition: transform 0.3s ease;
+}
+
+.show-all-updates-btn.active .show-updates-icon {
+  transform: rotate(180deg);
+}
+
+.show-all-updates-btn.active .show-updates-text::after {
+  content: ' meno';
+}
+
+/* Dark mode */
+.dark .show-all-updates-btn {
+  background: linear-gradient(135deg, rgba(23, 183, 177, 0.15), rgba(16, 185, 129, 0.15));
+  border-color: rgba(23, 183, 177, 0.4);
+  color: #10b981;
+}
+
+.dark .show-all-updates-btn:hover {
+  background: linear-gradient(135deg, rgba(23, 183, 177, 0.2), rgba(16, 185, 129, 0.2));
+  border-color: #10b981;
+}
+

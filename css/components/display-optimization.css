@@ -1,0 +1,425 @@
+/* ========================================
+   COMPONENTE: DISPLAY OPTIMIZATION
+   File: css/components/display-optimization.css
+   Versione: 1.0.0
+   Descrizione: Ottimizzazione display avanzata con rilevamento DPR e preset
+   Contenuto: .display-optimization-card, .display-detection, .display-specs,
+              .preset-options, .display-recommendations, HiDPI media queries,
+              dark mode, responsive
+   Dipendenze: variables.css, animations.css (per pulseGlow)
+   ======================================== */
+
+.display-optimization-card {
+  background: linear-gradient(135deg, rgba(23, 183, 177, 0.03), rgba(0, 153, 170, 0.03));
+  border: 1px solid rgba(23, 183, 177, 0.15);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+}
+
+.display-detection {
+  margin-bottom: 1rem;
+}
+
+.display-detection-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.display-detection-icon {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.display-detection-title {
+  font-size: 0.85rem;
+  color: var(--testo-secondario);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.display-detection-type {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+#display-type-text {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--testo);
+}
+
+#display-type-text.retina {
+  color: var(--turchese);
+}
+
+#display-type-text.super-retina {
+  color: #22c55e;
+}
+
+.display-dpr-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: monospace;
+  background: var(--grigio-chiaro);
+  color: var(--testo-secondario);
+}
+
+.display-dpr-badge.retina {
+  background: var(--turchese);
+  color: white;
+}
+
+.display-dpr-badge.super-retina {
+  background: #22c55e;
+  color: white;
+}
+
+.display-specs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.display-spec-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.75rem;
+  background: var(--bianco);
+  border: 1px solid var(--bordo);
+  border-radius: 8px;
+}
+
+.display-spec-label {
+  font-size: 0.75rem;
+  color: var(--testo-secondario);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  font-weight: 600;
+}
+
+.display-spec-value {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--testo);
+  font-family: monospace;
+}
+
+/* NOTA: Stili UI per .scale-preset-selector sono stati spostati 
+   in css/components/settings/accessibilita.css */
+
+/* Preset Selector */
+.display-preset-selector {
+  margin-top: 1rem;
+}
+
+.preset-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.preset-header-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.preset-header-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--testo);
+  margin-bottom: 0.25rem;
+}
+
+.preset-header-description {
+  font-size: 0.8rem;
+  color: var(--testo-secondario);
+}
+
+.preset-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.preset-option {
+  position: relative;
+  cursor: pointer;
+}
+
+.preset-option input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.preset-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: var(--bianco);
+  border: 2px solid var(--bordo);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.preset-card:hover {
+  border-color: rgba(23, 183, 177, 0.4);
+  background: rgba(23, 183, 177, 0.02);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.preset-option input[type="radio"]:checked+.preset-card {
+  border-color: var(--turchese);
+  background: linear-gradient(135deg, rgba(23, 183, 177, 0.08), rgba(0, 153, 170, 0.08));
+  box-shadow:
+    0 0 0 3px rgba(23, 183, 177, 0.1),
+    0 4px 12px rgba(23, 183, 177, 0.15);
+}
+
+.preset-icon {
+  font-size: 2rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.preset-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.preset-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--testo);
+  margin-bottom: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.preset-description {
+  font-size: 0.75rem;
+  color: var(--testo-secondario);
+  line-height: 1.4;
+}
+
+/* Badge Consigliato */
+.recommended-badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  margin-left: 0;
+  border-radius: 12px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  animation: pulseGlow 2s ease-in-out infinite;
+  /* NOTA: @keyframes pulseGlow spostato in css/animations.css */
+}
+
+/* Suggerimenti Display */
+.display-recommendations {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: var(--bianco);
+  border: 1px solid var(--bordo);
+  border-left: 4px solid var(--turchese);
+  border-radius: 8px;
+}
+
+.recommendation-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  color: var(--testo);
+}
+
+.recommendation-icon {
+  font-size: 1.3rem;
+}
+
+.recommendation-title {
+  font-size: 0.95rem;
+}
+
+.recommendation-list {
+  margin: 0;
+  padding-left: 1.5rem;
+  color: var(--testo-secondario);
+  line-height: 1.8;
+}
+
+.recommendation-list li {
+  margin: 0.5rem 0;
+}
+
+.recommendation-list strong {
+  color: var(--turchese);
+  font-weight: 600;
+}
+
+/* Interface Scale Classes */
+/* ✅ SPOSTATO IN css/themes.css (html.scale-75/85/100/115/125) */
+
+/* Dark Mode */
+.dark .scale-preset-card {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .scale-preset-card:hover {
+  border-color: rgba(0, 153, 170, 0.4);
+  background: rgba(0, 153, 170, 0.08);
+}
+
+.dark .scale-preset-option input[type="radio"]:checked+.scale-preset-card {
+  border-color: var(--turchese-light);
+  background: linear-gradient(135deg, rgba(0, 153, 170, 0.15), rgba(23, 183, 177, 0.15));
+  box-shadow:
+    0 0 0 3px rgba(0, 153, 170, 0.15),
+    0 2px 8px rgba(0, 153, 170, 0.2);
+}
+
+.dark .scale-preset-percent {
+  background: rgba(0, 153, 170, 0.2);
+  color: var(--turchese-light);
+}
+
+.dark .scale-preset-option input[type="radio"]:checked+.scale-preset-card .scale-preset-percent {
+  background: var(--turchese-light);
+  color: var(--grigio-scuro);
+}
+
+.dark .display-optimization-card {
+  background: linear-gradient(135deg, rgba(0, 153, 170, 0.08), rgba(23, 183, 177, 0.08));
+  border-color: rgba(0, 153, 170, 0.25);
+}
+
+.dark .display-spec-item {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .display-dpr-badge {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.dark .preset-card {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .preset-card:hover {
+  border-color: rgba(0, 153, 170, 0.4);
+  background: rgba(0, 153, 170, 0.08);
+}
+
+.dark .preset-option input[type="radio"]:checked+.preset-card {
+  border-color: var(--turchese-light);
+  background: linear-gradient(135deg, rgba(0, 153, 170, 0.15), rgba(23, 183, 177, 0.15));
+  box-shadow:
+    0 0 0 3px rgba(0, 153, 170, 0.15),
+    0 4px 12px rgba(0, 153, 170, 0.2);
+}
+
+.dark .display-recommendations {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.1);
+  border-left-color: var(--turchese-light);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .display-specs {
+    grid-template-columns: 1fr;
+  }
+
+  .display-detection-header {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .display-optimization-card {
+    padding: 1rem;
+  }
+
+  .preset-options {
+    grid-template-columns: 1fr;
+  }
+
+  .preset-card {
+    padding: 0.875rem;
+  }
+
+  .preset-icon {
+    font-size: 1.75rem;
+  }
+}
+
+/* Media Queries per Ottimizzazioni HiDPI */
+@media (-webkit-min-device-pixel-ratio: 2),
+(min-resolution: 192dpi),
+(min-resolution: 2dppx) {
+
+  body.display-optimized {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body.display-optimized .info-card,
+  body.display-optimized .settings-item {
+    border-width: 0.5px;
+  }
+
+  /* NOTA: body.display-optimized .pwa-bottom-nav spostato in css/components/pwa-bottom-nav.css */
+
+  body.display-optimized .card,
+  body.display-optimized .info-card {
+    box-shadow:
+      0 1px 3px rgba(0, 0, 0, 0.08),
+      0 1px 2px rgba(0, 0, 0, 0.06);
+  }
+
+  body.display-optimized .pwa-logo-img,
+  body.display-optimized .info-logo,
+  body.display-optimized .navbar-logo {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+@media (-webkit-min-device-pixel-ratio: 3),
+(min-resolution: 288dpi),
+(min-resolution: 3dppx) {
+
+  body.display-optimized .info-card,
+  body.display-optimized .settings-item {
+    border-width: 0.33px;
+  }
+
+  body.display-optimized {
+    text-rendering: optimizeLegibility;
+  }
+}
+
