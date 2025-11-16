@@ -1,6 +1,6 @@
 {
-  "version": "1.8.0",
+  "version": "1.8.1",
   "versionDate": "16 Novembre 2025",
-  "versionTime": "22:45",
-  "updateNotes": "Modularizzazione CSS: Mobile Menu, Modal Fermate/Linee, Modal Impostazioni. Rimosso 1497 righe duplicate da style1.css (-41%). File ridotto da 3613 a 2116 righe. Nessun errore di linting."
+  "versionTime": "23:40",
+  "updateNotes": "Modularizzazione CSS Utilities e Componenti UI: utilities.css, footer.css, scroll-to-top.css, pwa-install-banner.css. Rimosso 711 righe da style1.css. File ridotto da 2106 a 1395 righe (-33.7%). Architettura CSS aggiornata con nuovo ordine di caricamento."
 }

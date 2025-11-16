@@ -1,0 +1,134 @@
+/* ========================================
+   COMPONENTE: SCROLL TO TOP
+   File: css/components/scroll-to-top.css
+   Descrizione: Pulsante floating per tornare in cima alla pagina
+   Contenuto: .scroll-to-top, stati (visible, hover, active), dark mode, responsive
+   Dipendenze: variables.css
+   ======================================== */
+
+/* Pulsante floating per tornare in cima alla pagina */
+.scroll-to-top {
+  position: fixed;
+  /* Posizione fissa nello schermo */
+  bottom: 2rem;
+  /* Distanza dal basso */
+  right: 2rem;
+  /* Distanza da destra */
+  width: 3rem;
+  /* Larghezza del pulsante */
+  height: 3rem;
+  /* Altezza del pulsante */
+  background: var(--turchese);
+  /* Colore di sfondo principale */
+  color: white;
+  /* Colore del testo */
+  border: none;
+  /* Nessun bordo */
+  border-radius: 50%;
+  /* Completamente rotondo */
+  font-size: 1.5rem;
+  /* Dimensione dell'icona */
+  font-weight: bold;
+  /* Grassetto */
+  cursor: pointer;
+  /* Cursore pointer */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  /* Ombra per profondità */
+  opacity: 0;
+  /* Invisibile di default */
+  visibility: hidden;
+  /* Nascosto di default */
+  transform: translateY(100px);
+  /* Traslato fuori schermo */
+  transition: all 0.3s ease;
+  /* Transizione fluida */
+  z-index: 999;
+  /* Sopra quasi tutti gli elementi */
+  display: flex;
+  /* Layout flex */
+  align-items: center;
+  /* Centra verticalmente */
+  justify-content: center;
+  /* Centra orizzontalmente */
+}
+
+/* Stato visibile del pulsante */
+.scroll-to-top.visible {
+  opacity: 1;
+  /* Completamente visibile */
+  visibility: visible;
+  /* Visibile */
+  transform: translateY(0);
+  /* Nella posizione normale */
+}
+
+/* Effetto hover */
+.scroll-to-top:hover {
+  background: var(--turchese-hover);
+  /* Colore più scuro al hover */
+  transform: translateY(-3px);
+  /* Solleva leggermente */
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+  /* Ombra più pronunciata */
+}
+
+/* Effetto active (click) */
+.scroll-to-top:active {
+  transform: translateY(-1px);
+  /* Riduce il sollevamento */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  /* Ombra normale */
+}
+
+/* ========================================
+   DARK MODE
+   ======================================== */
+
+/* Dark mode per pulsante torna su */
+body.dark-mode .scroll-to-top {
+  background: var(--turchese);
+  /* Stesso colore in dark mode */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  /* Ombra più scura */
+}
+
+body.dark-mode .scroll-to-top:hover {
+  background: var(--turchese-hover);
+  /* Hover in dark mode */
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+/* Responsive per mobile */
+@media (max-width: 768px) {
+  .scroll-to-top {
+    bottom: 1.5rem;
+    /* Più vicino al basso */
+    right: 1.5rem;
+    /* Più vicino a destra */
+    width: 2.75rem;
+    /* Leggermente più piccolo */
+    height: 2.75rem;
+    /* Leggermente più piccolo */
+    font-size: 1.3rem;
+    /* Icona più piccola */
+  }
+}
+
+@media (max-width: 480px) {
+  .scroll-to-top {
+    bottom: 1rem;
+    /* Ancora più vicino al basso */
+    right: 1rem;
+    /* Ancora più vicino a destra */
+    width: 2.5rem;
+    /* Più piccolo su schermi piccoli */
+    height: 2.5rem;
+    /* Più piccolo su schermi piccoli */
+    font-size: 1.2rem;
+    /* Icona ancora più piccola */
+  }
+}
+

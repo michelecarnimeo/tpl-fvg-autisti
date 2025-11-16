@@ -1,0 +1,549 @@
+/* ========================================
+   COMPONENTE: PWA INSTALL BANNER
+   File: css/components/pwa-install-banner.css
+   Descrizione: Banner per promuovere l'installazione dell'app come PWA con istruzioni iOS/Android
+   Contenuto: .pwa-install-banner, .pwa-install-content, .pwa-btn, .pwa-ios-hint, .pwa-android-hint, dark mode, responsive
+   Dipendenze: variables.css, animations.css (slideUp)
+   ======================================== */
+
+/* Banner per promuovere l'installazione dell'app come PWA */
+.pwa-install-banner {
+  margin: 2rem 0 1.5rem 0;
+  /* Spaziatura sopra e sotto */
+  padding: 0;
+  /* Reset padding */
+  border-radius: 16px;
+  /* Angoli arrotondati */
+  overflow: hidden;
+  /* Nasconde contenuto che esce */
+  background: linear-gradient(135deg, var(--turchese) 0%, #17b7b1 100%);
+  /* Gradiente turchese */
+  box-shadow: 0 8px 24px rgba(0, 123, 138, 0.25);
+  /* Ombra turchese */
+  animation: slideUp 0.4s ease-out;
+  /* Animazione di entrata */
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out, margin 0.3s ease-out, max-height 0.3s ease-out, box-shadow 0.3s ease;
+  /* Transizione fluida */
+  /* NOTA: @keyframes slideUp spostato in css/animations.css */
+}
+
+/* Banner PWA in chiusura */
+.pwa-install-banner.closing {
+  transform: translateY(-20px);
+  /* Sposta verso l'alto */
+  opacity: 0;
+  /* Scompare */
+  margin-top: 0 !important;
+  /* Riduce margine superiore */
+  margin-bottom: 0 !important;
+  /* Riduce margine inferiore */
+  max-height: 0 !important;
+  /* Riduce altezza */
+  overflow: hidden;
+  /* Nasconde overflow */
+  padding: 0;
+  /* Rimuove padding */
+}
+
+.pwa-install-banner:hover {
+  box-shadow: 0 12px 32px rgba(0, 123, 138, 0.35);
+  /* Ombra più pronunciata al hover */
+  transform: translateY(-2px);
+  /* Solleva leggermente */
+}
+
+/* Contenuto principale del banner */
+.pwa-install-content {
+  display: flex;
+  /* Layout flex */
+  justify-content: space-between;
+  /* Spazia elementi ai lati */
+  align-items: center;
+  /* Centra verticalmente */
+  padding: 1.25rem 1.5rem;
+  /* Padding interno */
+  gap: 1rem;
+  /* Spazio tra elementi */
+}
+
+/* Sezione testo del banner */
+.pwa-install-text {
+  display: flex;
+  /* Layout flex */
+  flex-direction: column;
+  /* Disponi in colonna */
+  gap: 0.25rem;
+  /* Piccolo spazio tra titolo e sottotitolo */
+  flex: 1;
+  /* Occupa spazio disponibile */
+}
+
+/* Titolo del banner */
+.pwa-install-title {
+  font-size: 1.125rem;
+  /* Testo leggermente più grande */
+  font-weight: 700;
+  /* Grassetto */
+  color: white;
+  /* Testo bianco */
+  display: flex;
+  /* Per allineare icona */
+  align-items: center;
+  /* Centra verticalmente */
+  gap: 0.5rem;
+  /* Spazio tra emoji e testo */
+}
+
+/* Sottotitolo del banner */
+.pwa-install-subtitle {
+  font-size: 0.875rem;
+  /* Testo più piccolo */
+  color: rgba(255, 255, 255, 0.9);
+  /* Bianco leggermente trasparente */
+  font-weight: 400;
+  /* Peso normale */
+}
+
+/* Contenitore azioni (pulsanti) */
+.pwa-install-actions {
+  display: flex;
+  /* Layout flex */
+  gap: 0.75rem;
+  /* Spazio tra pulsanti */
+  align-items: center;
+  /* Centra verticalmente */
+}
+
+/* Stili comuni per i pulsanti PWA */
+.pwa-btn {
+  padding: 0.625rem 1.25rem;
+  /* Padding interno */
+  border-radius: 8px;
+  /* Angoli arrotondati */
+  border: none;
+  /* Nessun bordo */
+  font-size: 0.9375rem;
+  /* Dimensione font */
+  font-weight: 600;
+  /* Semi-grassetto */
+  cursor: pointer;
+  /* Cursore pointer */
+  transition: all 0.2s ease;
+  /* Transizione fluida */
+  white-space: nowrap;
+  /* Testo su una riga */
+}
+
+/* Pulsante primario (Installa) */
+.pwa-btn-primary {
+  background: white;
+  /* Sfondo bianco */
+  color: var(--turchese);
+  /* Testo turchese */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  /* Ombra leggera */
+}
+
+.pwa-btn-primary:hover {
+  background: #f8f9fa;
+  /* Grigio chiarissimo al hover */
+  transform: translateY(-1px);
+  /* Solleva leggermente */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  /* Ombra più pronunciata */
+}
+
+.pwa-btn-primary:active {
+  transform: translateY(0);
+  /* Reset posizione al click */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  /* Ombra ridotta */
+}
+
+/* Pulsante secondario (Più tardi) */
+.pwa-btn-secondary {
+  background: rgba(255, 255, 255, 0.2);
+  /* Sfondo bianco semi-trasparente */
+  color: white;
+  /* Testo bianco */
+  backdrop-filter: blur(10px);
+  /* Effetto blur glassmorphism */
+  -webkit-backdrop-filter: blur(10px);
+  /* Safari support */
+}
+
+.pwa-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.3);
+  /* Più opaco al hover */
+  transform: translateY(-1px);
+  /* Solleva leggermente */
+}
+
+.pwa-btn-secondary:active {
+  transform: translateY(0);
+  /* Reset posizione al click */
+  background: rgba(255, 255, 255, 0.25);
+  /* Leggermente meno opaco */
+}
+
+/* ========================================
+   HINT iOS
+   ======================================== */
+
+/* Sezione hint per iOS */
+.pwa-ios-hint {
+  background: rgba(255, 255, 255, 0.15);
+  /* Sfondo semi-trasparente */
+  backdrop-filter: blur(10px);
+  /* Effetto blur */
+  -webkit-backdrop-filter: blur(10px);
+  /* Safari support */
+  padding: 0;
+  /* Padding iniziale 0 per animazione */
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  /* Bordo superiore */
+  color: white;
+  /* Testo bianco */
+  max-height: 0;
+  /* Altezza iniziale 0 per animazione */
+  overflow: hidden;
+  /* Nasconde contenuto durante animazione */
+  opacity: 0;
+  /* Opacità iniziale 0 per animazione */
+  transition: max-height 0.4s ease-out, opacity 0.4s ease-out, padding 0.4s ease-out;
+  /* Animazione fluida */
+}
+
+/* Hint iOS visibile */
+.pwa-ios-hint.show,
+.pwa-ios-hint[style*="display: block"] {
+  max-height: 500px;
+  /* Altezza massima (adeguata per contenuto) */
+  opacity: 1;
+  /* Opacità piena */
+  padding: 1.25rem 1.5rem;
+  /* Padding normale */
+}
+
+/* Titolo hint iOS */
+.ios-hint-title {
+  font-size: 1rem;
+  /* Dimensione font */
+  font-weight: 600;
+  /* Semi-grassetto */
+  margin-bottom: 0.75rem;
+  /* Spazio sotto */
+  display: flex;
+  /* Per allineare icona */
+  align-items: center;
+  /* Centra verticalmente */
+  gap: 0.5rem;
+  /* Spazio tra emoji e testo */
+}
+
+/* Lista step iOS */
+.ios-hint-steps {
+  list-style: none;
+  /* Rimuove bullets default */
+  padding: 0;
+  /* Reset padding */
+  margin: 0 0 0.75rem 0;
+  /* Margine sotto */
+  display: flex;
+  /* Layout flex */
+  flex-direction: column;
+  /* Disponi in colonna */
+  gap: 0.5rem;
+  /* Spazio tra step */
+}
+
+.ios-hint-steps li {
+  display: flex;
+  /* Layout flex */
+  align-items: flex-start;
+  /* Allinea in alto */
+  gap: 0.5rem;
+  /* Spazio tra numero e testo */
+  line-height: 1.5;
+  /* Altezza linea */
+}
+
+/* Numero dello step */
+.step-number {
+  background: rgba(255, 255, 255, 0.25);
+  /* Sfondo semi-trasparente */
+  color: white;
+  /* Testo bianco */
+  border-radius: 50%;
+  /* Completamente rotondo */
+  width: 1.5rem;
+  /* Larghezza fissa */
+  height: 1.5rem;
+  /* Altezza fissa */
+  display: inline-flex;
+  /* Flex per centrare */
+  align-items: center;
+  /* Centra verticalmente */
+  justify-content: center;
+  /* Centra orizzontalmente */
+  font-size: 0.75rem;
+  /* Font piccolo */
+  font-weight: 700;
+  /* Grassetto */
+  flex-shrink: 0;
+  /* Non rimpicciolire */
+}
+
+/* Icone iOS */
+.ios-share-icon,
+.ios-plus-icon {
+  display: inline-block;
+  /* Inline */
+  margin: 0 0.25rem;
+  /* Margine laterale */
+}
+
+/* Nota finale iOS */
+.ios-hint-note {
+  font-size: 0.875rem;
+  /* Font leggermente più piccolo */
+  font-style: italic;
+  /* Corsivo */
+  color: rgba(255, 255, 255, 0.85);
+  /* Leggermente trasparente */
+  padding-top: 0.5rem;
+  /* Padding sopra */
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  /* Bordo superiore */
+}
+
+/* ========================================
+   HINT ANDROID
+   ======================================== */
+
+/* Sezione hint per Android (stile simile a iOS) */
+.pwa-android-hint {
+  background: rgba(255, 255, 255, 0.15);
+  /* Sfondo semi-trasparente */
+  backdrop-filter: blur(10px);
+  /* Effetto blur */
+  -webkit-backdrop-filter: blur(10px);
+  /* Safari support */
+  padding: 1.25rem 1.5rem;
+  /* Padding interno */
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  /* Bordo superiore */
+  color: white;
+  /* Testo bianco */
+  max-height: 0;
+  /* Altezza iniziale 0 per animazione */
+  overflow: hidden;
+  /* Nasconde contenuto durante animazione */
+  opacity: 0;
+  /* Opacità iniziale 0 per animazione */
+  transition: max-height 0.4s ease-out, opacity 0.4s ease-out, padding 0.4s ease-out;
+  /* Animazione fluida */
+}
+
+/* Hint Android visibile */
+.pwa-android-hint.show {
+  max-height: 500px;
+  /* Altezza massima (adeguata per contenuto) */
+  opacity: 1;
+  /* Opacità piena */
+  padding: 1.25rem 1.5rem;
+  /* Padding normale */
+}
+
+/* Titolo hint Android */
+.android-hint-title {
+  font-size: 1rem;
+  /* Dimensione font */
+  font-weight: 600;
+  /* Semi-grassetto */
+  margin-bottom: 0.75rem;
+  /* Spazio sotto */
+  display: flex;
+  /* Per allineare icona */
+  align-items: center;
+  /* Centra verticalmente */
+  gap: 0.5rem;
+  /* Spazio tra emoji e testo */
+}
+
+/* Lista step Android */
+.android-hint-steps {
+  list-style: none;
+  /* Rimuove bullets default */
+  padding: 0;
+  /* Reset padding */
+  margin: 0 0 0.75rem 0;
+  /* Margine sotto */
+  display: flex;
+  /* Layout flex */
+  flex-direction: column;
+  /* Disponi in colonna */
+  gap: 0.5rem;
+  /* Spazio tra step */
+}
+
+.android-hint-steps li {
+  display: flex;
+  /* Layout flex */
+  align-items: flex-start;
+  /* Allinea in alto */
+  gap: 0.5rem;
+  /* Spazio tra numero e testo */
+  line-height: 1.5;
+  /* Altezza linea */
+}
+
+/* Nota finale Android */
+.android-hint-note {
+  font-size: 0.875rem;
+  /* Font leggermente più piccolo */
+  font-style: italic;
+  /* Corsivo */
+  color: rgba(255, 255, 255, 0.85);
+  /* Leggermente trasparente */
+  padding-top: 0.5rem;
+  /* Padding sopra */
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  /* Bordo superiore */
+}
+
+/* ========================================
+   DARK MODE
+   ======================================== */
+
+/* Dark mode per banner PWA */
+body.dark-mode .pwa-install-banner {
+  background: linear-gradient(135deg, #0d5e66 0%, #0a4d54 100%);
+  /* Gradiente più scuro */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  /* Ombra più scura */
+}
+
+body.dark-mode .pwa-install-banner:hover {
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+  /* Ombra ancora più scura al hover */
+}
+
+body.dark-mode .pwa-btn-primary {
+  background: rgba(255, 255, 255, 0.95);
+  /* Bianco leggermente trasparente */
+  color: #0d5e66;
+  /* Turchese scuro */
+}
+
+body.dark-mode .pwa-btn-primary:hover {
+  background: white;
+  /* Bianco pieno al hover */
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+/* Responsive per mobile */
+@media (max-width: 768px) {
+  .pwa-install-banner {
+    margin: 1.5rem 0 1rem 0;
+    /* Margini ridotti */
+    border-radius: 12px;
+    /* Angoli meno arrotondati */
+  }
+
+  .pwa-install-content {
+    flex-direction: column;
+    /* Disponi in colonna */
+    align-items: stretch;
+    /* Allunga elementi */
+    padding: 1rem;
+    /* Padding ridotto */
+    gap: 0.75rem;
+    /* Spazio ridotto */
+  }
+
+  .pwa-install-text {
+    text-align: center;
+    /* Centra testo */
+  }
+
+  .pwa-install-title {
+    font-size: 1rem;
+    /* Font leggermente più piccolo */
+    justify-content: center;
+    /* Centra contenuto */
+  }
+
+  .pwa-install-subtitle {
+    font-size: 0.8125rem;
+    /* Font più piccolo */
+  }
+
+  .pwa-install-actions {
+    flex-direction: row;
+    /* Mantieni in riga */
+    justify-content: center;
+    /* Centra */
+    width: 100%;
+    /* Larghezza piena */
+  }
+
+  .pwa-btn {
+    flex: 1;
+    /* Occupa spazio uguale */
+    padding: 0.75rem 1rem;
+    /* Padding maggiore per tap */
+    font-size: 0.875rem;
+    /* Font leggermente più piccolo */
+  }
+
+  .pwa-ios-hint,
+  .pwa-android-hint {
+    padding: 1rem;
+    /* Padding ridotto */
+  }
+
+  .pwa-ios-hint.show,
+  .pwa-android-hint.show {
+    padding: 1rem;
+    /* Padding ridotto quando visibile */
+  }
+
+  .ios-hint-title {
+    font-size: 0.9375rem;
+    /* Font leggermente più piccolo */
+  }
+
+  .ios-hint-steps {
+    font-size: 0.875rem;
+    /* Font più piccolo */
+  }
+}
+
+@media (max-width: 480px) {
+  .pwa-install-content {
+    padding: 0.875rem;
+    /* Padding ancora più ridotto */
+  }
+
+  .pwa-install-actions {
+    flex-direction: column;
+    /* Disponi pulsanti in colonna */
+    gap: 0.5rem;
+    /* Spazio ridotto */
+  }
+
+  .pwa-btn {
+    width: 100%;
+    /* Larghezza piena */
+  }
+
+  .ios-hint-steps {
+    gap: 0.625rem;
+    /* Spazio ridotto tra step */
+  }
+}
+

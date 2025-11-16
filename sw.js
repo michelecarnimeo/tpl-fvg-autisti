@@ -1,7 +1,7 @@
-const CACHE_NAME = 'tpl-cache-v21';
+const CACHE_NAME = 'tpl-cache-v22';
 const CACHE_SIZE_LIMIT = 100 * 1024 * 1024; // 100MB per supporto offline completo
-const STATIC_CACHE = 'tpl-static-v21';
-const DYNAMIC_CACHE = 'tpl-dynamic-v21';
+const STATIC_CACHE = 'tpl-static-v22';
+const DYNAMIC_CACHE = 'tpl-dynamic-v22';
 const MAX_DYNAMIC_ITEMS = 200; // Più elementi per supporto offline
 
 // Configurazione ottimizzata per supporto offline
@@ -20,12 +20,13 @@ const STATIC_ASSETS = [
   './fermate.html', // Fermate (offline critico)
   './prezzi.html', // Prezzi (offline critico)
   './404.html', // Pagina errore 404
-  // CSS - Ordine di caricamento: Variables → Base → Layout → Animations → Themes → Components → Legacy
+  // CSS - Ordine di caricamento: Variables → Base → Layout → Animations → Utilities → Themes → Components → Legacy
   './css/variables.css', // 1. Variabili CSS globali
   './css/base.css', // 2. Reset e typography
   './css/layout.css', // 3. Layout globale (body, container, main-content)
   './css/animations.css', // 4. Animazioni e transizioni
-  './css/themes.css', // 5. Temi e accessibilità (dark mode, high contrast, reduce motion, etc.)
+  './css/utilities.css?v=1.0.0', // 5. Utility classes (.hidden, .inactive)
+  './css/themes.css', // 6. Temi e accessibilità (dark mode, high contrast, reduce motion, etc.)
   './css/components/navbar.css', // Navbar
   './css/components/forms.css', // Forms
   './css/components/buttons.css', // Buttons
@@ -43,6 +44,8 @@ const STATIC_ASSETS = [
   './css/components/settings-modal.css', // Modal impostazioni
   './css/components/mega-dropdown-settings.css', // Mega Dropdown Settings
   './css/components/pwa-bottom-nav.css', // PWA Bottom Navigation
+  './css/components/scroll-to-top.css?v=1.0.0', // Scroll to top button
+  './css/components/pwa-install-banner.css?v=1.0.0', // PWA install banner
   './css/components/settings/impostazioni.css', // Settings (struttura)
   './css/components/settings/accessibilita.css', // Settings (tab Accessibilità)
   './css/components/settings/aspetto.css', // Settings (tab Aspetto)

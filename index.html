@@ -9,7 +9,7 @@
   
   <!-- ========================================
        ORDINE CARICAMENTO CSS (IMPORTANTE!)
-       1. Variables → 2. Base → 3. Layout → 4. Animations → 5. Components → 6. Legacy
+       1. Variables → 2. Base → 3. Layout → 4. Animations → 5. Utilities → 6. Themes → 7. Components → 8. Legacy
        ======================================== -->
   
   <!-- 1. VARIABILI (sempre per primo!) -->
@@ -23,10 +23,14 @@
   
   <!-- 4. ANIMAZIONI (dopo layout, prima temi) -->
   <link rel="stylesheet" href="css/animations.css">
-  <!-- 5. TEMI E ACCESSIBILITÀ (dopo animazioni, prima componenti) -->
+  
+  <!-- 5. UTILITIES (classi helper globali) -->
+  <link rel="stylesheet" href="css/utilities.css?v=1.0.0">
+  
+  <!-- 6. TEMI E ACCESSIBILITÀ (dopo utilities, prima componenti) -->
   <link rel="stylesheet" href="css/themes.css">
   
-  <!-- 6. COMPONENTI (in qualsiasi ordine) -->
+  <!-- 7. COMPONENTI (in qualsiasi ordine) -->
   <link rel="stylesheet" href="css/components/navbar.css">
   <link rel="stylesheet" href="css/components/forms.css">
   <link rel="stylesheet" href="css/components/buttons.css">
@@ -43,6 +47,8 @@
   <link rel="stylesheet" href="css/components/settings-modal.css">
   <link rel="stylesheet" href="css/components/mega-dropdown-settings.css">
   <link rel="stylesheet" href="css/components/pwa-bottom-nav.css">
+  <link rel="stylesheet" href="css/components/scroll-to-top.css?v=1.0.0">
+  <link rel="stylesheet" href="css/components/pwa-install-banner.css?v=1.0.0">
   
   <!-- Settings (dopo modals.css) -->
   <link rel="stylesheet" href="css/components/settings/impostazioni.css">
@@ -50,7 +56,7 @@
   <link rel="stylesheet" href="css/components/settings/aspetto.css">
   <link rel="stylesheet" href="css/components/settings/info.css">
   
-  <!-- 7. LEGACY (temporaneo - da dismettere gradualmente) -->
+  <!-- 8. LEGACY (temporaneo - da dismettere gradualmente) -->
   <link rel="stylesheet" href="style1.css">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="src/tpl.jpg" type="image/jpeg">

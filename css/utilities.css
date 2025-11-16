@@ -1,0 +1,18 @@
+/* ========================================
+   COMPONENTE: UTILITY CLASSES
+   File: css/utilities.css
+   Descrizione: Classi utility globali per nascondere elementi, stati inattivi, ecc.
+   Contenuto: .hidden, .inactive
+   Dipendenze: Nessuna
+   ======================================== */
+
+/* Classe per nascondere elementi */
+.hidden {
+  display: none !important;
+}
+
+/* Classe per elementi inattivi */
+.inactive {
+  opacity: 0.6;
+}
+
