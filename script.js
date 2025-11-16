@@ -97,7 +97,6 @@ const arrivoBtn = document.getElementById('arrivo-btn');
 const partenzaText = document.getElementById('partenza-text');
 const arrivoText = document.getElementById('arrivo-text');
 const swapBtn = document.getElementById('swap-btn');
-const prezzoErrore = document.getElementById('prezzo-errore');
 const summaryPrezzo = document.getElementById('summary-prezzo');
 const summaryCodice = document.getElementById('summary-codice');
 const summaryPartenza = document.getElementById('summary-partenza');

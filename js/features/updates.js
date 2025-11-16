@@ -235,18 +235,18 @@ async function confirmResetCache() {
       console.warn('⚠️ Errore nel cancellare LocalStorage:', error);
     }
 
-    // Ricarica sempre la pagina corrente (non reindirizzare a benvenuto.html)
-    console.log('🔄 Riavvio app...', { currentPage: window.location.pathname });
+    // Reindirizza alla pagina benvenuto dopo l'aggiornamento
+    console.log('🔄 Riavvio app e redirect a benvenuto.html...');
     
-    // Ricarica la pagina corrente (mantiene l'utente sulla stessa pagina)
+    // Redirect alla pagina benvenuto
     setTimeout(() => {
-      window.location.reload();
+      window.location.href = 'benvenuto.html';
     }, 300);
   } catch (error) {
     console.error('❌ Errore durante il reset cache:', error);
-    // Fallback: riavvia comunque la pagina corrente
+    // Fallback: redirect a benvenuto comunque
     setTimeout(() => {
-      window.location.reload();
+      window.location.href = 'benvenuto.html';
     }, 300);
   }
 }

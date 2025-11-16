@@ -1,7 +1,7 @@
-const CACHE_NAME = 'tpl-cache-v4';
+const CACHE_NAME = 'tpl-cache-v12';
 const CACHE_SIZE_LIMIT = 100 * 1024 * 1024; // 100MB per supporto offline completo
-const STATIC_CACHE = 'tpl-static-v4';
-const DYNAMIC_CACHE = 'tpl-dynamic-v4';
+const STATIC_CACHE = 'tpl-static-v12';
+const DYNAMIC_CACHE = 'tpl-dynamic-v12';
 const MAX_DYNAMIC_ITEMS = 200; // Più elementi per supporto offline
 
 // Configurazione ottimizzata per supporto offline
@@ -20,14 +20,26 @@ const STATIC_ASSETS = [
   './fermate.html', // Fermate (offline critico)
   './prezzi.html', // Prezzi (offline critico)
   './404.html', // Pagina errore 404
-  './style1.css', // Stili essenziali
+  // CSS - Ordine di caricamento: Variables → Base → Layout → Animations → Components → Legacy
+  './css/variables.css', // 1. Variabili CSS globali
+  './css/base.css', // 2. Reset e typography
+  './css/layout.css', // 3. Layout globale (body, container, main-content)
+  './css/animations.css', // 4. Animazioni e transizioni
+  './css/components/navbar.css', // Navbar
+  './css/components/forms.css', // Forms
+  './css/components/buttons.css', // Buttons
+  './css/components/price-card.css', // Price card
   './css/components/footer.css', // Footer modulare CSS
   './css/components/modals.css', // Modals modulare CSS
+  './css/components/mega-dropdown-settings.css', // Mega Dropdown Settings
+  './css/components/pwa-bottom-nav.css', // PWA Bottom Navigation
   './css/components/settings/impostazioni.css', // Settings (struttura)
   './css/components/settings/accessibilita.css', // Settings (tab Accessibilità)
   './css/components/settings/aspetto.css', // Settings (tab Aspetto)
   './css/components/settings/info.css', // Settings (tab Info)
-  './css/components/mega-dropdown-settings.css', // Mega Dropdown Settings (componente condiviso, solo desktop)
+  './css/pages/benvenuto.css', // Pagina benvenuto
+  './css/pages/fermate.css', // Pagina fermate
+  './style1.css', // 6. LEGACY (temporaneo - da dismettere)
   './script.js', // Funzionalità app
   './footer.js', // Footer modulare JS
   './changelog.js', // Changelog dinamico
@@ -82,8 +94,6 @@ const STATIC_ASSETS = [
   './js/utils/interface-scale.js', // Sistema scala interfaccia
   './js/pages/benvenuto.js', // Logica specifica pagina benvenuto
   './components/settings-modal.html', // Settings modal HTML centralizzato
-  './css/pages/benvenuto.css', // Stili specifici pagina benvenuto
-  './css/pages/fermate.css', // Stili specifici pagina fermate
   './database.json', // DATI CRITICI per offline
   './manifest.webmanifest', // PWA
   './src/tpl.jpg', // Icona app

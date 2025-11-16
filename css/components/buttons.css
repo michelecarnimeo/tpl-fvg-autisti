@@ -170,6 +170,26 @@
     border: 1px dashed var(--glass-border);
 }
 
+/* Reset route button - Ghost/Outline style */
+.reset-route-btn {
+    background: transparent;
+    color: var(--turchese);
+    border: 1px dashed var(--turchese);
+    font-weight: 500;
+}
+
+.reset-route-btn:hover:not(:disabled) {
+    background: rgba(0, 123, 138, 0.1);
+    border-color: var(--turchese-light);
+    color: var(--turchese-light);
+    transform: translateY(-1px);
+}
+
+.reset-route-btn:active:not(:disabled) {
+    transform: translateY(0);
+    background: rgba(0, 123, 138, 0.15);
+}
+
 /* Dark mode */
 .dark .reset-btn,
 .dark .reset-route-btn,

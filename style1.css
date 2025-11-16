@@ -194,139 +194,17 @@ li {
 
 /* ========================================
    SEZIONE 5: BACKGROUND DEL BODY - GRADIENTE ANIMATO
+   ⚠️ SPOSTATO IN css/layout.css
    ======================================== */
-/* Configurazione principale del body con sfondo glassmorphism animato */
-body {
-  /* SOTTOSEZIONE 5.1: Font principale */
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  /* Font di sistema per compatibilità offline */
+/* NOTA: Regole body, body::before, .main-content, .container spostate in css/layout.css */
 
-  /* SOTTOSEZIONE 5.2: Gradiente di sfondo bianco sfumato */
-  /* Background base (fallback) */
-  background: #f8fafc;
-  position: relative;
-  /* Posizionamento relativo per pseudo-elemento */
-  overflow-x: hidden;
-  /* Nasconde scroll orizzontale */
-
-  /* SOTTOSEZIONE 5.3: Testo e layout base */
-  color: var(--testo-principale);
-  /* Colore del testo principale */
-  line-height: 1.6;
-  /* Altezza della riga per leggibilità */
-  min-height: 100vh;
-  /* Altezza minima viewport */
-
-  /* SOTTOSEZIONE 5.4: Transizioni e posizionamento */
-  transition: all 0.3s ease;
-  /* Transizioni smooth per tutti gli elementi */
-
-  /* SOTTOSEZIONE 5.5: Layout flexbox */
-  margin: 0;
-  /* Rimuove margini default */
-  padding: 0;
-  /* Rimuove padding default */
-  display: flex;
-  /* Layout flexbox per struttura verticale */
-  flex-direction: column;
-  /* Direzione verticale (header, main, footer) */
-}
-
-/* SOTTOSEZIONE 5.6: Animazione del gradiente di sfondo */
-/* Definisce l'animazione per far muovere il gradiente di sfondo */
-/* NOTA: @keyframes gradientShift spostato in css/animations.css */
-
-/* SOTTOSEZIONE 5.6.1: Animazione controllata da JavaScript */
-/* L'animazione è disabilitata di default per migliorare le performance */
-
-/* SOTTOSEZIONE 5.5: Pseudo-elemento per gradiente animato (ottimizzato) */
-/* Usa pseudo-elemento con transform invece di background-position per evitare repaint */
-body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 25%, #cbd5e1 50%, #94a3b8 75%, #64748b 100%);
-  background-size: 50% 50%;
-  z-index: -1;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-body.animation-enabled::before {
-  opacity: 1;
-  animation: gradientShift 20s ease infinite;
-  will-change: transform;
-  /* Ottimizza il rendering dell'animazione */
-}
-
-/* SOTTOSEZIONE 5.6: Background per modalità scura */
-/* Override del gradiente quando la classe .dark è attiva */
-.dark body {
-  background: #1a202c;
-  /* Fallback colore scuro */
-}
-
-.dark body::before {
-  background: linear-gradient(135deg, #1a202c 0%, #2d3748 25%, #4a5568 50%, #718096 75%, #a0aec0 100%);
-  background-size: 50% 50%;
-}
-
-.dark body.animation-enabled::before {
-  opacity: 1;
-  animation: gradientShift 20s ease infinite;
-  will-change: transform;
-  /* Ottimizza il rendering dell'animazione */
-}
+/* ⚠️ SPOSTATO IN css/layout.css - body::before, animazioni gradiente, dark mode */
 
 /* ========================================
      SEZIONE 6: CONTAINER PRINCIPALE
+     ⚠️ SPOSTATO IN css/layout.css
      ======================================== */
-/* Container wrapper per tutto il contenuto dell'applicazione */
-.container {
-  max-width: none;
-  /* Nessuna larghezza massima - usa tutto lo spazio */
-  margin: 0 auto;
-  /* Centra il container orizzontalmente */
-  padding: 0 0.25rem;
-  /* Padding laterale minimo per evitare attaccarsi ai bordi */
-  width: 100%;
-  /* Usa tutta la larghezza disponibile */
-  box-sizing: border-box;
-  /* Include padding nel calcolo delle dimensioni */
-}
-
-/* SOTTOSEZIONE 6.1: Responsive mobile - padding maggiore */
-@media (max-width: 768px) {
-  .container {
-    padding: 0 1rem;
-    /* Padding laterale maggiore su tablet/mobile */
-  }
-}
-
-@media (max-width: 480px) {
-  .container {
-    padding: 0 0.75rem;
-    /* Padding ottimale per smartphone */
-  }
-}
-
-/* SOTTOSEZIONE 6.2: Media query per schermi grandi (1200px+) */
-@media (min-width: 1200px) {
-
-  /* Container del main content con layout grid */
-  .main-content>.container {
-    display: grid;
-    /* Layout a griglia */
-    grid-template-columns: 1fr;
-    /* Una colonna (layout verticale) */
-    gap: 2rem;
-    /* Spazio tra gli elementi */
-  }
-}
+/* NOTA: Regole .container e media queries spostate in css/layout.css */
 
 /* ========================================
    COMPONENTI: NAVBAR, BOTTONI, MODALI, FORM, CARD, FOOTER
@@ -722,24 +600,9 @@ body.animation-enabled::before {
 
 /* ========================================
      SEZIONE 8: MAIN CONTENT - LAYOUT E CARD
+     ⚠️ PARZIALMENTE SPOSTATO IN css/layout.css
      ======================================== */
-/* Contenitore principale dell'applicazione */
-.main-content {
-  flex: 1;
-  /* Occupa lo spazio rimanente */
-  display: flex;
-  /* Layout flexbox */
-  flex-direction: column;
-  /* Direzione verticale */
-  align-items: center;
-  /* Centra orizzontalmente */
-  padding: 2rem 0;
-  /* Padding verticale */
-  position: relative;
-  /* Per posizionamento assoluto */
-  overflow: hidden;
-  /* Nasconde overflow */
-}
+/* NOTA: .main-content base spostato in css/layout.css */
 
 /* Card principale con glassmorphism */
 .main-card {
@@ -1355,103 +1218,9 @@ body.animation-enabled::before {
 
 /* ========================================
    SEZIONE 12: LAYOUT PAGINE
+   ⚠️ SPOSTATO IN css/layout.css
    ======================================== */
-/* SOTTOSEZIONE 12.1: Layout specifico per pagine tratte e tariffe */
-.fermate-page {
-  display: flex;
-  /* Layout flexbox */
-  flex-direction: column;
-  /* Direzione verticale */
-  min-height: 100vh;
-  /* Altezza minima viewport */
-}
-
-/* Main content per pagine tratte */
-.fermate-page .main-content {
-  min-height: 0;
-  /* Altezza minima (reset) */
-  align-items: flex-start;
-  /* Allineamento in alto */
-  padding: 1rem 0;
-  /* Padding verticale */
-  flex: 1;
-  /* Occupa spazio disponibile */
-  overflow: visible;
-  /* Contenuto visibile */
-}
-
-/* SOTTOSEZIONE 12.2: Layout ottimizzato per pagina benvenuto */
-body:not(.fermate-page) .main-content {
-  align-items: center;
-  /* Allineamento centrale */
-  padding: 1rem 0;
-  /* Padding verticale */
-}
-
-/* Card principale per pagine non-tratte */
-body:not(.fermate-page) .main-card {
-  max-width: 600px !important;
-  /* Larghezza massima 600px */
-  padding: 2rem;
-  /* Padding interno */
-  margin: 1rem auto !important;
-  /* Margine automatico e centrato */
-}
-
-/* SOTTOSEZIONE 12.3: Media queries per layout pagine */
-@media (min-width: 768px) {
-
-  /* Card per pagine non-tratte */
-  body:not(.fermate-page) .main-card {
-    max-width: 650px !important;
-    /* Larghezza massima 650px */
-    padding: 2rem;
-    /* Padding ancora maggiore */
-  }
-}
-
-@media (min-width: 992px) {
-
-  /* Card per pagine non-tratte */
-  body:not(.fermate-page) .main-card {
-    max-width: 700px !important;
-    /* Larghezza massima 700px */
-    padding: 2.5rem;
-    /* Padding maggiore */
-  }
-}
-
-@media (min-width: 1200px) {
-
-  /* Card per pagine non-tratte */
-  body:not(.fermate-page) .main-card {
-    max-width: 750px !important;
-    /* Larghezza massima 750px */
-    padding: 3rem;
-    /* Padding massimo */
-  }
-}
-
-@media (min-width: 1400px) {
-
-  /* Card per pagine non-tratte */
-  body:not(.fermate-page) .main-card {
-    max-width: 850px !important;
-    /* Larghezza massima 850px */
-    padding: 2.5rem;
-    /* Padding maggiore */
-  }
-}
-
-/* SOTTOSEZIONE 12.4: Eccezione per pagine tratte/tariffe - layout verticale normale */
-.fermate-page .main-content>.container {
-  display: block !important;
-  /* Layout a blocchi */
-  align-items: normal;
-  /* Allineamento normale */
-  overflow: visible;
-  /* Contenuto visibile */
-}
+/* NOTA: Tutte le regole .fermate-page, body:not(.fermate-page), media queries spostate in css/layout.css */
 
 /* ========================================
      SEZIONE 13: TITOLI PAGINE
@@ -3651,8 +3420,10 @@ body.interface-scale-75 {
   zoom: 0.75;
   -moz-transform: scale(0.75);
   transform: scale(0.75);
-  -moz-transform-origin: 0 0;
-  transform-origin: 0 0;
+  -moz-transform-origin: top left;
+  transform-origin: top left;
+  width: 100vw;
+  overflow-x: hidden;
 }
 
 /* Compatta - 85% */
@@ -3660,8 +3431,10 @@ body.interface-scale-85 {
   zoom: 0.85;
   -moz-transform: scale(0.85);
   transform: scale(0.85);
-  -moz-transform-origin: 0 0;
-  transform-origin: 0 0;
+  -moz-transform-origin: top left;
+  transform-origin: top left;
+  width: 100vw;
+  overflow-x: hidden;
 }
 
 /* Normale - 100% (default) */
@@ -3669,8 +3442,10 @@ body.interface-scale-100 {
   zoom: 1;
   -moz-transform: scale(1);
   transform: scale(1);
-  -moz-transform-origin: 0 0;
-  transform-origin: 0 0;
+  -moz-transform-origin: top left;
+  transform-origin: top left;
+  width: 100vw;
+  overflow-x: hidden;
 }
 
 /* Grande - 115% */
@@ -3678,8 +3453,10 @@ body.interface-scale-115 {
   zoom: 1.15;
   -moz-transform: scale(1.15);
   transform: scale(1.15);
-  -moz-transform-origin: 0 0;
-  transform-origin: 0 0;
+  -moz-transform-origin: top left;
+  transform-origin: top left;
+  width: 100vw;
+  overflow-x: hidden;
 }
 
 /* Molto Grande - 125% */
@@ -3687,47 +3464,18 @@ body.interface-scale-125 {
   zoom: 1.25;
   -moz-transform: scale(1.25);
   transform: scale(1.25);
-  -moz-transform-origin: 0 0;
-  transform-origin: 0 0;
+  -moz-transform-origin: top left;
+  transform-origin: top left;
+  width: 100vw;
+  overflow-x: hidden;
 }
 
 
 /* ========================================
      SEZIONE 20: SEZIONI LAYOUT
+     ⚠️ SPOSTATO IN css/layout.css
      ======================================== */
-/* SOTTOSEZIONE 20.1: Sezione calcolo */
-.calculate-section {
-  text-align: center;
-  /* Testo centrato */
-  margin: 1.2rem 0;
-  /* Margine verticale */
-  display: flex;
-  /* Layout flexbox */
-  flex-direction: column;
-  /* Direzione verticale */
-  align-items: center;
-  /* Allineamento centrale */
-  gap: 0.5rem;
-  /* Spazio tra elementi */
-}
-
-/* SOTTOSEZIONE 20.2: Sezione reset */
-.reset-section {
-  display: flex;
-  /* Flexbox per allineare pulsanti */
-  justify-content: center;
-  /* Centra i pulsanti */
-  align-items: center;
-  /* Allinea verticalmente */
-  gap: 0.75rem;
-  /* Spazio tra i pulsanti */
-  margin: 1.5rem 0;
-  /* Margine verticale */
-  padding: 1rem 0;
-  /* Padding verticale */
-  flex-wrap: wrap;
-  /* Wrap su schermi piccoli */
-}
+/* NOTA: .calculate-section e .reset-section spostate in css/layout.css */
 
 /* ========================================
      SEZIONE 21: BOTTONI UTILITY

@@ -113,7 +113,7 @@
       if (pwaBanner) {
         // Aggiungi classe di chiusura per animazione
         pwaBanner.classList.add('closing');
-        
+
         // Dopo l'animazione (300ms), nascondi completamente
         setTimeout(() => {
           pwaBanner.style.display = 'none';
@@ -121,23 +121,19 @@
         }, 300);
       }
     }
-    
+
     /**
      * Mostra/nascondi hint iOS con animazione
      */
     function toggleIOSHint(show) {
       if (!pwaIosHint) return;
-      
+
       if (show) {
         // Mostra hint
         pwaIosHint.style.display = 'block';
         // Forza reflow per attivare animazione
         pwaIosHint.offsetHeight;
         pwaIosHint.classList.add('show');
-        // Scroll smooth verso hint dopo animazione
-        setTimeout(() => {
-          pwaIosHint.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }, 400);
       } else {
         // Nascondi hint
         pwaIosHint.classList.remove('show');
@@ -147,23 +143,19 @@
         }, 400);
       }
     }
-    
+
     /**
      * Mostra/nascondi hint Android con animazione
      */
     function toggleAndroidHint(show) {
       if (!pwaAndroidHint) return;
-      
+
       if (show) {
         // Mostra hint
         pwaAndroidHint.style.display = 'block';
         // Forza reflow per attivare animazione
         pwaAndroidHint.offsetHeight;
         pwaAndroidHint.classList.add('show');
-        // Scroll smooth verso hint dopo animazione
-        setTimeout(() => {
-          pwaAndroidHint.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }, 400);
       } else {
         // Nascondi hint
         pwaAndroidHint.classList.remove('show');
@@ -205,7 +197,7 @@
     // Rilevamento browser
     const isSafari = /^((?!chrome|android).)*safari/i.test(window.navigator.userAgent);
     const isChrome = /chrome|chromium|crios/i.test(window.navigator.userAgent) && !/edge|edg/i.test(window.navigator.userAgent);
-    
+
     // Debug: Log rilevamento dispositivo/browser
     console.log('🔍 PWA Install - Rilevamento:', {
       userAgent: navigator.userAgent,
@@ -225,7 +217,7 @@
         isStandalone: isStandalone(),
         canShowAgain: canShowAgain()
       });
-      
+
       // Mostra solo se non già installata e con frequenza
       if (isStandalone() || !canShowAgain()) {
         console.log('⚠️ Banner non mostrato:', {
@@ -233,7 +225,7 @@
         });
         return;
       }
-      
+
       e.preventDefault();
       deferredInstallPrompt = e;
       // Nascondi hint iOS e Android (il pulsante Installa funziona)
@@ -274,7 +266,7 @@
           // iOS o Android senza evento: toggle hint con animazione
           const isIOS = isIOSDevice() && isSafari;
           const isAndroid = isAndroidDevice() && !isIOS;
-          
+
           if (isIOS && pwaIosHint) {
             // iOS: toggle hint iOS
             const isVisible = pwaIosHint.classList.contains('show') || pwaIosHint.style.display === 'block';
@@ -387,7 +379,7 @@
         } else {
           console.log('🔄 Banner PWA aggiornato (iOS Safari - istruzioni aperte)');
         }
-      } 
+      }
       // Android o altro mobile: configura per Android (istruzioni già aperte)
       else if (!currentIsIOS && currentIsMobile) {
         // Nascondi hint iOS se presente
@@ -437,7 +429,7 @@
       resizeTimeout = setTimeout(() => {
         const isNowMobile = isMobileViewport();
         const currentUserAgent = navigator.userAgent;
-        
+
         // Se cambia User Agent (cambio dispositivo in DevTools) o viewport mobile/desktop
         if (lastUserAgent !== currentUserAgent || isNowMobile) {
           lastUserAgent = currentUserAgent;
@@ -468,12 +460,12 @@
     });
 
     console.log('✅ PWA Install Banner inizializzato');
-    
+
     // Esponi updateBannerMode nell'API pubblica per aggiornamenti manuali
     if (typeof window.PWAInstall === 'object') {
       window.PWAInstall._updateBannerMode = updateBannerMode;
     }
-    
+
     return true;
   }
 
@@ -488,7 +480,7 @@
   // API Pubblica
   window.PWAInstall = {
     init: init,
-    show: function() {
+    show: function () {
       const pwaBanner = document.getElementById('pwa-install-banner');
       if (pwaBanner) {
         // Mostra solo se viewport mobile
@@ -501,41 +493,41 @@
         }
       }
     },
-    hide: function() {
+    hide: function () {
       const pwaBanner = document.getElementById('pwa-install-banner');
       if (pwaBanner) {
         pwaBanner.style.display = 'none';
         console.log('✅ Banner PWA nascosto manualmente (PWAInstall.hide())');
       }
     },
-    getDeferredPrompt: function() {
+    getDeferredPrompt: function () {
       return deferredInstallPrompt;
     },
-    setDeferredPrompt: function(prompt) {
+    setDeferredPrompt: function (prompt) {
       deferredInstallPrompt = prompt;
     },
     // Funzione di test: forza visualizzazione banner (per debug)
-    testShowBanner: function() {
+    testShowBanner: function () {
       const pwaBanner = document.getElementById('pwa-install-banner');
       const pwaBtnInstall = document.getElementById('pwa-install-button');
       const pwaIosHint = document.getElementById('pwa-ios-hint');
-      
+
       if (!pwaBanner) {
         console.error('❌ Banner PWA non trovato nella pagina');
         return false;
       }
-      
+
       // Verifica viewport mobile (solo warning, forza comunque per test)
       const isMobile = window.innerWidth <= 768 || window.matchMedia('(max-width: 768px)').matches;
       if (!isMobile) {
         console.warn('⚠️ TEST: viewport desktop rilevata, ma forzando visualizzazione per test');
       }
-      
+
       // Mostra banner forzando la visualizzazione (per test, anche su desktop)
       pwaBanner.style.display = 'block';
       if (pwaBtnInstall) pwaBtnInstall.style.display = 'inline-block';
       if (pwaIosHint) pwaIosHint.style.display = 'none';
-      
+
       console.log('🧪 TEST: Banner PWA mostrato forzatamente (PWAInstall.testShowBanner())');
       console.log('🔍 Debug stato:', {
         bannerVisible: pwaBanner.style.display === 'block',
@@ -544,11 +536,11 @@
         isMobileViewport: isMobile,
         viewportWidth: window.innerWidth
       });
-      
+
       return true;
     },
     // Verifica condizioni installabilità
-    checkInstallability: function() {
+    checkInstallability: function () {
       const checks = {
         hasServiceWorker: 'serviceWorker' in navigator,
         hasManifest: !!document.querySelector('link[rel="manifest"]'),
@@ -557,21 +549,21 @@
         hasDeferredPrompt: !!deferredInstallPrompt,
         userAgent: navigator.userAgent
       };
-      
+
       console.log('🔍 PWA Installability Check:', checks);
       return checks;
     },
     // Simula modalità Android (per test)
-    simulateAndroid: function() {
+    simulateAndroid: function () {
       const pwaBanner = document.getElementById('pwa-install-banner');
       const pwaBtnInstall = document.getElementById('pwa-install-button');
       const pwaIosHint = document.getElementById('pwa-ios-hint');
-      
+
       if (!pwaBanner) {
         console.error('❌ Banner PWA non trovato nella pagina');
         return false;
       }
-      
+
       // Verifica viewport mobile
       const isMobile = window.innerWidth <= 768 || window.matchMedia('(max-width: 768px)').matches;
       if (!isMobile) {
@@ -581,7 +573,7 @@
         // Mostra comunque per test, ma avvisa
         console.log('🔧 Forzando visualizzazione per test (non in produzione)...');
       }
-      
+
       // Simula comportamento Android: nascondi hint iOS, mostra hint Android
       const pwaAndroidHint = document.getElementById('pwa-android-hint');
       if (pwaIosHint) {
@@ -597,10 +589,10 @@
         pwaBtnInstall.style.display = 'inline-block';
         pwaBtnInstall.textContent = 'Riduci';
       }
-      
+
       // Mostra banner (forzato per test, anche su desktop)
       pwaBanner.style.display = 'block';
-      
+
       console.log('🤖 Simulazione Android attivata');
       console.log('📱 Banner mostrato in modalità Android (simulata)');
       console.log('💡 Nota: Il pulsante "Installa" non funzionerà realmente (serve beforeinstallprompt su dispositivo reale)');
@@ -612,20 +604,20 @@
         viewportWidth: window.innerWidth,
         userAgent: navigator.userAgent
       });
-      
+
       return true;
     },
     // Simula modalità iOS (per test)
-    simulateIOS: function() {
+    simulateIOS: function () {
       const pwaBanner = document.getElementById('pwa-install-banner');
       const pwaBtnInstall = document.getElementById('pwa-install-button');
       const pwaIosHint = document.getElementById('pwa-ios-hint');
-      
+
       if (!pwaBanner) {
         console.error('❌ Banner PWA non trovato nella pagina');
         return false;
       }
-      
+
       // Verifica viewport mobile
       const isMobile = window.innerWidth <= 768 || window.matchMedia('(max-width: 768px)').matches;
       if (!isMobile) {
@@ -635,7 +627,7 @@
         // Mostra comunque per test, ma avvisa
         console.log('🔧 Forzando visualizzazione per test (non in produzione)...');
       }
-      
+
       // Simula comportamento iOS: mostra hint iOS già aperto, nascondi hint Android
       const pwaAndroidHint = document.getElementById('pwa-android-hint');
       if (pwaAndroidHint) {
@@ -651,10 +643,10 @@
         pwaBtnInstall.style.display = 'inline-block';
         pwaBtnInstall.textContent = 'Riduci';
       }
-      
+
       // Mostra banner (forzato per test, anche su desktop)
       pwaBanner.style.display = 'block';
-      
+
       console.log('🍎 Simulazione iOS attivata');
       console.log('📱 Banner mostrato in modalità iOS (simulata)');
       console.log('💡 Nota: Su iOS l\'installazione è sempre manuale (Condividi → Aggiungi a Home)');
@@ -666,31 +658,31 @@
         viewportWidth: window.innerWidth,
         userAgent: navigator.userAgent
       });
-      
+
       return true;
     },
     // Verifica se viewport è mobile
-    isMobileViewport: function() {
+    isMobileViewport: function () {
       return window.innerWidth <= 768 || window.matchMedia('(max-width: 768px)').matches;
     },
     // Aggiorna solo la modalità del banner (senza re-inizializzare tutto)
     // Utile quando cambi dispositivo in DevTools
-    updateMode: function() {
+    updateMode: function () {
       const pwaBanner = document.getElementById('pwa-install-banner');
       const pwaBtnInstall = document.getElementById('pwa-install-button');
       const pwaIosHint = document.getElementById('pwa-ios-hint');
-      
+
       if (!pwaBanner) {
         console.error('❌ Banner PWA non trovato nella pagina');
         return false;
       }
-      
+
       // Rileva dispositivo e browser corrente
       const userAgent = window.navigator.userAgent.toLowerCase();
       const currentIsIOS = /iphone|ipod|ipad/.test(userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
       const currentIsSafari = /^((?!chrome|android).)*safari/i.test(window.navigator.userAgent);
       const currentIsMobile = window.innerWidth <= 768 || window.matchMedia('(max-width: 768px)').matches;
-      
+
       console.log('🔄 Aggiornamento modalità banner PWA...', {
         isIOS: currentIsIOS,
         isSafari: currentIsSafari,
@@ -698,14 +690,14 @@
         userAgent: navigator.userAgent,
         viewportWidth: window.innerWidth
       });
-      
+
       // Se viewport desktop, nascondi banner
       if (!currentIsMobile) {
         pwaBanner.style.display = 'none';
         console.log('ℹ️ Banner nascosto: viewport desktop');
         return false;
       }
-      
+
       // iOS Safari: mostra istruzioni aperte
       if (currentIsIOS && currentIsSafari) {
         const pwaAndroidHint = document.getElementById('pwa-android-hint');
@@ -746,11 +738,11 @@
         console.log('✅ Banner aggiornato: Android/Altro mobile (istruzioni aperte)');
         return true;
       }
-      
+
       return false;
     },
     // Aggiorna il banner in base al dispositivo corrente (per cambio dispositivo in DevTools)
-    refresh: function() {
+    refresh: function () {
       console.log('🔄 Aggiornamento banner PWA richiesto (refresh completo)...');
       // Ri-inizializza il modulo (richiama init)
       // Nota: In DevTools, dopo aver cambiato dispositivo, ricarica la pagina per aggiornare User Agent

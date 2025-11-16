@@ -4,43 +4,127 @@
    Usato da: tutti i file CSS
    ======================================== */
 
-/* NOTA: Questo file verrà popolato gradualmente mentre modularizziamo i componenti.
-   Le variabili vengono spostate qui da style1.css e animations.css man mano che servono. */
-
 :root {
   /* ========================================
-     SEZIONE 1: COLORI
+     COLORI PRINCIPALI
      ======================================== */
-  /* NOTA: Variabili colori verranno spostate qui da style1.css (linee 28-60)
-     quando modularizziamo i componenti che le usano */
+  
+  /* Colori brand */
+  --turchese: #007b8a;
+  --turchese-scuro: #005f6b;
+  --turchese-light: #0099aa;
+  --turchese-hover: #0099aa;
+  
+  /* Colori base */
+  --bianco: #ffffff;
+  --grigio-chiaro: #f0f4f8;
+  --grigio-medio: #e9ecef;
+  --grigio-scuro: #6c757d;
+  
+  /* Colori testo */
+  --testo-principale: #0f172a;
+  --testo-secondario: #4a5568;
+  --testo-scuro: #ffffff;
+  
+  /* Bordi */
+  --bordo: rgba(255, 255, 255, 0.18);
+  --bordo-scuro: rgba(148, 163, 184, 0.1);
   
   /* ========================================
-     SEZIONE 2: ANIMAZIONI E TRANSIZIONI
+     GLASSMORPHISM
      ======================================== */
-  /* NOTA: Variabili animazioni verranno spostate qui da animations.css (linee 12-32)
-     quando modularizziamo le animazioni */
+  
+  /* Light mode */
+  --glass-bg: rgba(255, 255, 255, 0.95);
+  --glass-border: rgba(255, 255, 255, 0.5);
+  --glass-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.15);
+  --backdrop-blur: none; /* Rimosso per performance */
+  
+  /* Dark mode */
+  --bg-scuro: #0f172a;
+  --card-scuro: rgba(30, 41, 59, 0.4);
+  --glass-bg-dark: rgba(30, 41, 59, 0.95);
+  --glass-border-dark: rgba(148, 163, 184, 0.5);
+  --glass-shadow-dark: 0 4px 12px 0 rgba(0, 0, 0, 0.3);
   
   /* ========================================
-     SEZIONE 3: SPACING
+     TYPOGRAPHY
      ======================================== */
-  /* NOTA: Variabili spacing verranno aggiunte qui quando servono */
+  
+  /* Font size multiplier per accessibilità */
+  --font-size-multiplier: 1;
+  
+  /* Font family */
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   
   /* ========================================
-     SEZIONE 4: TYPOGRAPHY
+     SPACING
      ======================================== */
-  /* NOTA: Variabili font verranno aggiunte qui quando servono */
+  
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-xxl: 3rem;
   
   /* ========================================
-     SEZIONE 5: ALTRE VARIABILI GLOBALI
+     ANIMAZIONI E TRANSIZIONI
      ======================================== */
-  /* NOTA: Altre variabili globali verranno aggiunte qui quando servono */
+  
+  /* Durate */
+  --anim-duration-fast: 0.15s;
+  --anim-duration-normal: 0.3s;
+  --anim-duration-slow: 0.5s;
+  
+  /* Easing functions */
+  --easing-ease: ease;
+  --easing-ease-in: ease-in;
+  --easing-ease-out: ease-out;
+  --easing-ease-in-out: ease-in-out;
+  --easing-bezier-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --easing-bezier-decelerate: cubic-bezier(0, 0, 0.2, 1);
+  --easing-bezier-accelerate: cubic-bezier(0.4, 0, 1, 1);
+  
+  /* ========================================
+     BREAKPOINTS (per riferimento)
+     ======================================== */
+  
+  /* 
+   * Mobile: < 480px
+   * Tablet: 480px - 768px
+   * Desktop: 768px - 1200px
+   * Large: > 1200px
+   */
+  
+  /* ========================================
+     Z-INDEX LAYERS
+     ======================================== */
+  
+  --z-background: -1;
+  --z-base: 0;
+  --z-content: 1;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-fixed: 300;
+  --z-modal-backdrop: 1000;
+  --z-modal: 1001;
+  --z-popover: 2000;
+  --z-tooltip: 3000;
 }
 
 /* ========================================
    DARK MODE OVERRIDES
    ======================================== */
-/* NOTA: Overrides per dark mode verranno aggiunti qui quando servono */
-.dark {
-  /* Override variabili per modalità scura */
-}
 
+.dark {
+  /* Override colori per modalità scura */
+  --testo-principale: #ffffff;
+  --testo-secondario: #cbd5e1;
+  --bg-scuro: #0f172a;
+  
+  /* Glassmorphism dark */
+  --glass-bg: var(--glass-bg-dark);
+  --glass-border: var(--glass-border-dark);
+  --glass-shadow: var(--glass-shadow-dark);
+}

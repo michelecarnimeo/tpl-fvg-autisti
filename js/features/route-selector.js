@@ -75,7 +75,6 @@
     summaryCodice = document.getElementById('summary-codice');
     summaryPartenza = document.getElementById('summary-partenza');
     summaryArrivo = document.getElementById('summary-arrivo');
-    prezzoErrore = document.getElementById('prezzo-errore');
   }
 
   /**
@@ -119,7 +118,7 @@
       if (typeof toggleSwapButton === 'function') {
         toggleSwapButton(false);
       }
-      
+
       // Nascondi pulsante "Resetta percorso"
       const resetRouteBtn = document.getElementById('reset-route-btn');
       if (resetRouteBtn) {
@@ -140,7 +139,7 @@
     if (typeof toggleSwapButton === 'function') {
       toggleSwapButton(true);
     }
-    
+
     // Mostra pulsante "Resetta percorso" quando la linea è selezionata
     const resetRouteBtn = document.getElementById('reset-route-btn');
     if (resetRouteBtn) {
@@ -171,7 +170,7 @@
 
     const tariffario = getTariffario();
     const fermate = (lineaIdx !== '' && tariffario[lineaIdx]) ? tariffario[lineaIdx].fermate : [];
-    
+
     if (summaryPartenza) {
       summaryPartenza.textContent = partenzaIdx !== '' && fermate[partenzaIdx] ? fermate[partenzaIdx] : '-';
     }
@@ -186,7 +185,7 @@
    * Calcola prezzo e codice (usa Pricing.js)
    */
   function calcolaPrezzo() {
-    if (!summaryPrezzo || !summaryCodice || !prezzoErrore) return; // Non siamo su index.html
+    if (!summaryPrezzo || !summaryCodice) return; // Non siamo su index.html
 
     const tariffario = getTariffario();
     const tariffarioAggiornato = getTariffarioAggiornato();
@@ -198,14 +197,20 @@
       // Aggiorna UI con i risultati
       if (summaryPrezzo) summaryPrezzo.textContent = Pricing.formatPrice(result.prezzo);
       if (summaryCodice) summaryCodice.textContent = result.codice || '-';
-      if (prezzoErrore) {
-        prezzoErrore.style.display = (result.prezzo === null && !result.valido) ? 'block' : 'none';
+
+      // Mostra notifica se il prezzo non è disponibile per questa tratta
+      if (result.prezzo === null && !result.valido) {
+        if (typeof showNotificationModal === 'function') {
+          showNotificationModal(
+            '⚠️ Prezzo non disponibile',
+            'Il prezzo per questa combinazione di fermate non è disponibile nel tariffario.'
+          );
+        }
       }
     } else {
       // Fallback se Pricing.js non è disponibile
       if (summaryPrezzo) summaryPrezzo.textContent = '-';
       if (summaryCodice) summaryCodice.textContent = '-';
-      if (prezzoErrore) prezzoErrore.style.display = 'none';
       console.warn('⚠️ Pricing.js non disponibile, impossibile calcolare prezzo');
     }
 
@@ -257,7 +262,7 @@
       if (partenzaText && tariffario[lineaIdx]) {
         partenzaText.textContent = tariffario[lineaIdx].fermate[index];
       }
-      
+
       // Se l'utente modifica manualmente la partenza (non è un'auto-assegnazione),
       // resetta lo stato UI del pulsante GPS per permettere di ri-premere il pulsante
       if (!isAutoAssignment) {
@@ -367,9 +372,6 @@
       summaryArrivo.textContent = '-';
       summaryArrivo.innerHTML = '-';
     }
-    if (prezzoErrore) {
-      prezzoErrore.style.display = 'none';
-    }
 
     // Nascondi pulsanti geolocalizzazione e swap
     if (typeof toggleLocationButton === 'function') {
@@ -453,9 +455,6 @@
       summaryArrivo.textContent = '-';
       summaryArrivo.innerHTML = '-';
     }
-    if (prezzoErrore) {
-      prezzoErrore.style.display = 'none';
-    }
 
     // Reset completo stato geolocalizzazione
     if (window.Geolocation && typeof window.Geolocation.resetLocationState === 'function') {
@@ -517,12 +516,12 @@
           }
         }
       }
-      
+
       // Restore partenza (accetta sia stringhe che numeri)
       if (sPart !== null && sPart !== '' && sPart !== undefined) {
         partenzaIdx = sPart;
       }
-      
+
       // Restore arrivo (accetta sia stringhe che numeri)
       if (sArr !== null && sArr !== '' && sArr !== undefined) {
         arrivoIdx = sArr;
@@ -539,7 +538,7 @@
       const lineIdx = typeof lineaIdx === 'string' && lineaIdx !== '' ? parseInt(lineaIdx, 10) : lineaIdx;
       const partIdx = typeof partenzaIdx === 'string' && partenzaIdx !== '' ? parseInt(partenzaIdx, 10) : partenzaIdx;
       const arrIdx = typeof arrivoIdx === 'string' && arrivoIdx !== '' ? parseInt(arrivoIdx, 10) : arrivoIdx;
-      
+
       if (partIdx !== '' && !isNaN(lineIdx) && tariffario[lineIdx] && tariffario[lineIdx].fermate && partenzaText) {
         if (tariffario[lineIdx].fermate[partIdx]) {
           partenzaText.textContent = tariffario[lineIdx].fermate[partIdx];

@@ -55,13 +55,6 @@
     margin: .8rem 0;
 }
 
-/* Messaggio errore prezzo */
-.price-card .price-error {
-    margin-top: .5rem;
-    color: #b91c1c;
-    font-weight: 600;
-}
-
 /* Dark */
 .dark .price-card {
     background: var(--glass-bg-dark);

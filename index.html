@@ -6,27 +6,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>TPL FVG - Calcolo Biglietto</title>
   <!-- Font locali per PWA offline -->
-  <!-- CSS personalizzati -->
-  <link rel="stylesheet" href="style1.css">
-  <!-- Animazioni e transizioni globali -->
-  <link rel="stylesheet" href="css/animations.css">
-  <!-- Layout globale (body, html, footer) -->
+  
+  <!-- ========================================
+       ORDINE CARICAMENTO CSS (IMPORTANTE!)
+       1. Variables → 2. Base → 3. Layout → 4. Animations → 5. Components → 6. Legacy
+       ======================================== -->
+  
+  <!-- 1. VARIABILI (sempre per primo!) -->
+  <link rel="stylesheet" href="css/variables.css">
+  
+  <!-- 2. BASE (reset e typography) -->
+  <link rel="stylesheet" href="css/base.css">
+  
+  <!-- 3. LAYOUT (struttura generale) -->
   <link rel="stylesheet" href="css/layout.css">
-  <!-- Componenti estratti -->
+  
+  <!-- 4. ANIMAZIONI (dopo layout, prima componenti) -->
+  <link rel="stylesheet" href="css/animations.css">
+  
+  <!-- 5. COMPONENTI (in qualsiasi ordine) -->
   <link rel="stylesheet" href="css/components/navbar.css">
   <link rel="stylesheet" href="css/components/forms.css">
   <link rel="stylesheet" href="css/components/buttons.css">
   <link rel="stylesheet" href="css/components/price-card.css">
-  <!-- Componenti CSS modulari -->
   <link rel="stylesheet" href="css/components/footer.css">
   <link rel="stylesheet" href="css/components/modals.css">
-  <!-- Settings (struttura modale) -->
+  <link rel="stylesheet" href="css/components/mega-dropdown-settings.css">
+  <link rel="stylesheet" href="css/components/pwa-bottom-nav.css">
+  
+  <!-- Settings (dopo modals.css) -->
   <link rel="stylesheet" href="css/components/settings/impostazioni.css">
   <link rel="stylesheet" href="css/components/settings/accessibilita.css">
   <link rel="stylesheet" href="css/components/settings/aspetto.css">
   <link rel="stylesheet" href="css/components/settings/info.css">
-  <link rel="stylesheet" href="css/components/mega-dropdown-settings.css">
-  <link rel="stylesheet" href="css/components/pwa-bottom-nav.css">
+  
+  <!-- 6. LEGACY (temporaneo - da dismettere gradualmente) -->
+  <link rel="stylesheet" href="style1.css">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="src/tpl.jpg" type="image/jpeg">
 </head>
@@ -240,10 +255,10 @@
         <div class="reset-section">
           <button id="reset-route-btn" class="reset-route-btn" type="button"
             title="Resetta solo partenza e destinazione" style="display: none;">
-            Resetta percorso
+            ↺ Resetta percorso
           </button>
           <button id="reset-btn" class="reset-btn" type="button" title="Resetta tutto e riparti da capo">
-            Riparti da capo
+            ⟲ Riparti da capo
           </button>
         </div>
 
@@ -265,9 +280,6 @@
           <div class="price-section">
             <div class="price-label">Prezzo</div>
             <div id="summary-prezzo" class="price-value">-</div>
-          </div>
-          <div id="prezzo-errore" class="price-error" style="display: none;">
-            ⚠️ Prezzo non disponibile per questa tratta
           </div>
         </div>
 
@@ -312,6 +324,11 @@
         </div>
       </div>
     </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <!-- Footer generato dinamicamente da footer.js -->
+    </footer>
   </main>
 
   <!-- PWA Brand Header (in alto) -->
@@ -373,11 +390,6 @@
       <span class="pwa-nav-label">Impostazioni</span>
     </button>
   </nav>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <!-- Footer generato dinamicamente da footer.js -->
-  </footer>
 
   <!-- Modal selezione fermate -->
   <div id="fermate-modal" class="fermate-modal">
