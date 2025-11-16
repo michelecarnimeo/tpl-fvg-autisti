@@ -4,6 +4,37 @@
 
 const changelogData = [
   {
+    version: '1.7.6',
+    date: '16 Novembre 2025',
+    time: '15:00',
+    title: 'FASE 2 Temi e Animazioni (v1.7.6)',
+    hidden: false,
+    changes: [
+      '✨ FASE 2: TEMI E ANIMAZIONI - Completata:',
+      '  • Creato css/themes.css: 8 modalità accessibilità e temi globali',
+      '  • Dark mode (.dark) - override variabili CSS',
+      '  • High contrast (.high-contrast) - bordi più spessi, font più bold',
+      '  • Reduce motion (body.reduce-motion) - disabilita animazioni',
+      '  • Blue light filter (body.blue-light-filter) - overlay caldo',
+      '  • Interface scale (body.interface-scale-*) - zoom 75%, 85%, 100%, 115%, 125%',
+      '  • Extra spacing (body.extra-spacing) - padding aumentato per touch',
+      '  • Compact layout (body.compact-layout) - spacing ridotto',
+      '  • Touch friendly (.touch-friendly) - pulsanti più grandi (min-height 56px)',
+      '🔧 PULIZIA E OTTIMIZZAZIONI:',
+      '  • Pulito css/animations.css: variabili spostate in variables.css',
+      '  • Completato css/variables.css: aggiunte variabili animazioni mancanti',
+      '  • Commentate 8 sezioni duplicate in style1.css (spostate in themes.css)',
+      '  • Aggiornati 4 file HTML con ordine caricamento corretto',
+      '📦 SERVICE WORKER:',
+      '  • Cache aggiornata a v13',
+      '  • Aggiunto css/themes.css negli asset statici',
+      '  • Ordine caricamento: Variables → Base → Layout → Animations → Themes → Components',
+      '📝 ARCHITETTURA:',
+      '  • Separazione netta: themes.css = effetti globali, settings/*.css = UI tab',
+      '  • Pronto per FASE 3: Componenti Core (navbar, buttons, forms, cards, pwa-nav)',
+    ]
+  },
+  {
     version: '1.7.5',
     date: '16 Novembre 2025',
     time: '13:45',

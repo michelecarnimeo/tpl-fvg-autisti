@@ -1,6 +1,6 @@
 {
-  "version": "1.7.5",
+  "version": "1.7.6",
   "versionDate": "16 Novembre 2025",
-  "versionTime": "13:45",
-  "updateNotes": "FASE 1 Modularizzazione CSS completata: creati variables.css, base.css, consolidato layout.css. Fix critici: risolto scroll oltre footer con layout app-style (body fixed, main scrollabile), footer dentro main-content, navbar sempre fissa. Verifica Aggiornamenti ora reindirizza a benvenuto.html. Service Worker v12 con nuovi CSS modulari. Preparato per FASE 2: Temi e Animazioni."
+  "versionTime": "15:00",
+  "updateNotes": "FASE 2 Temi e Animazioni completata: creato themes.css con dark mode, high contrast, reduce motion, blue light filter, interface scale, extra spacing, compact layout, touch friendly. Pulito animations.css da duplicati, completato variables.css. Commentate 8 sezioni duplicate in style1.css. Service Worker v13. Pronto per FASE 3: Componenti Core."
 }
