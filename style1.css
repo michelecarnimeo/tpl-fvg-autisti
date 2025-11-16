@@ -86,48 +86,16 @@ body {
 
 /* ========================================
      SEZIONE 4: MODALITÀ SCURA (DARK MODE)
+     ⚠️ SPOSTATO IN css/themes.css
      ======================================== */
-/* Ridefinisce le variabili CSS quando la classe .dark è applicata al body */
-.dark {
-  --grigio-chiaro: var(--bg-scuro);
-  /* Grigio chiaro diventa sfondo scuro */
-  --bianco: var(--card-scuro);
-  /* Bianco diventa card scura */
-  --testo-principale: var(--testo-scuro);
-  /* Testo principale diventa chiaro */
-  --testo-secondario: #cbd5e1;
-  /* Testo secondario più chiaro per miglior contrasto */
-  --bordo: var(--bordo-scuro);
-  /* Bordi diventano chiari */
-  --glass-bg: var(--glass-bg-dark);
-  /* Glassmorphism diventa scuro */
-  --glass-border: var(--glass-border-dark);
-  /* Bordi glassmorphism diventano chiari */
-  --glass-shadow: var(--glass-shadow-dark);
-  /* Ombre glassmorphism diventano scure */
-}
+/* NOTA: Regole .dark spostate in css/themes.css */
 
 /* ========================================
    SEZIONE 4.5: ACCESSIBILITÀ - DIMENSIONI TESTO
+   ⚠️ SPOSTATO IN css/base.css
    ======================================== */
-/* Classi per regolare la dimensione del testo per accessibilità */
+/* NOTA: Classi font-size-* spostate in css/base.css */
 
-/* SOTTOSEZIONE 4.5.1: Dimensione normale (default) */
-body.font-size-normal {
-  --font-size-multiplier: 1;
-}
-
-/* SOTTOSEZIONE 4.5.2: Dimensione grande (+15%) */
-body.font-size-large {
-  --font-size-multiplier: 1.15;
-}
-
-/* SOTTOSEZIONE 4.5.3: Dimensione molto grande (+30%) */
-body.font-size-xlarge {
-  --font-size-multiplier: 1.3;
-}
-
-/* SOTTOSEZIONE 4.5.4: Applicazione del moltiplicatore a tutti gli elementi di testo */
 body {
   font-size: calc(16px * var(--font-size-multiplier));
 }
@@ -3246,229 +3214,26 @@ li {
 }
 
 /* SOTTOSEZIONE 19.4: Riduci Animazioni (Reduce Motion) */
-/* Disabilita TUTTE le animazioni/transizioni quando attivo */
-body.reduce-motion *,
-body.reduce-motion *::before,
-body.reduce-motion *::after {
-  animation-duration: 0.01ms !important;
-  animation-iteration-count: 1 !important;
-  transition-duration: 0.01ms !important;
-  scroll-behavior: auto !important;
-}
+/* ⚠️ SPOSTATO IN css/themes.css */
+/* NOTA: Regole body.reduce-motion spostate in css/themes.css */
 
 /* SOTTOSEZIONE 19.5: Spaziatura Extra (Extra Spacing) */
-/* Aumenta padding e margin per touch più accurato */
-body.extra-spacing button,
-body.extra-spacing .btn,
-body.extra-spacing .button,
-body.extra-spacing input[type="button"],
-body.extra-spacing .settings-toggle {
-  padding: 1rem !important;
-  margin: 0.75rem 0 !important;
-}
-
-body.extra-spacing .settings-item {
-  padding: 1.25rem !important;
-  gap: 1rem !important;
-}
-
-body.extra-spacing .container,
-body.extra-spacing .main-content {
-  gap: 1.5rem !important;
-}
-
-body.extra-spacing .navbar-item {
-  padding: 1rem 1.5rem !important;
-}
-
-body.extra-spacing .pwa-nav-item {
-  padding: 1rem !important;
-  gap: 0.75rem !important;
-}
-
-body.extra-spacing .modal-content {
-  padding: 2rem !important;
-}
-
-body.extra-spacing .fermata-item,
-body.extra-spacing .linea-item {
-  padding: 1.25rem !important;
-  margin-bottom: 1rem !important;
-}
+/* ⚠️ SPOSTATO IN css/themes.css */
+/* NOTA: Regole body.extra-spacing spostate in css/themes.css */
 
 /* SOTTOSEZIONE 19.6: Layout Compatto (Compact Layout) */
-/* Riduce padding e margin per mostrare più contenuto */
-body.compact-layout button,
-body.compact-layout .btn,
-body.compact-layout .button,
-body.compact-layout input[type="button"] {
-  padding: 0.5rem 0.75rem !important;
-  margin: 0.35rem 0 !important;
-}
-
-body.compact-layout .settings-item {
-  padding: 0.75rem !important;
-  gap: 0.5rem !important;
-}
-
-body.compact-layout .settings-section {
-  padding: 0.75rem !important;
-  margin-bottom: 0.75rem !important;
-}
-
-body.compact-layout .container,
-body.compact-layout .main-content {
-  gap: 0.75rem !important;
-}
-
-body.compact-layout .navbar-item {
-  padding: 0.6rem 1rem !important;
-}
-
-body.compact-layout .pwa-nav-item {
-  padding: 0.4rem 0.7rem !important;
-  gap: 0.2rem !important;
-}
-
-body.compact-layout .modal-content,
-body.compact-layout .settings-content {
-  padding: 1rem !important;
-}
-
-body.compact-layout .fermate-modal-content,
-body.compact-layout .settings-modal-content {
-  padding: 0 !important;
-  /* I modali hanno già padding interno */
-}
-
-body.compact-layout .fermate-modal-body {
-  padding: 0.75rem !important;
-}
-
-body.compact-layout .fermata-item,
-body.compact-layout .linea-item,
-body.compact-layout .linea-modal-item {
-  padding: 0.75rem !important;
-  margin-bottom: 0.5rem !important;
-}
-
-body.compact-layout .fermate-modal-list li {
-  padding: 0.75rem !important;
-  margin-bottom: 0.35rem !important;
-}
-
-body.compact-layout .price-card {
-  padding: 1rem !important;
-}
-
-body.compact-layout .price-section {
-  margin-bottom: 0.75rem !important;
-}
-
-body.compact-layout .settings-tabs {
-  padding: 0.5rem !important;
-  gap: 0.25rem !important;
-}
-
-body.compact-layout .settings-tab {
-  padding: 0.6rem 1rem !important;
-}
-
-body.compact-layout .info-card,
-body.compact-layout .update-item {
-  padding: 1rem !important;
-  margin-bottom: 0.75rem !important;
-}
+/* ⚠️ SPOSTATO IN css/themes.css */
+/* NOTA: Regole body.compact-layout spostate in css/themes.css */
 
 /* SOTTOSEZIONE 19.7: Filtro Luce Blu (Blue Light Filter) */
-/* Riduce luce blu per proteggere gli occhi durante uso notturno */
-/* APPROCCIO: Usare pseudo-element overlay per evitare stacking context issues */
-
-body::after {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  /* Non blocca i click */
-  z-index: 999999;
-  /* Sopra tutto (ma sotto i modali che hanno z-index maggiore) */
-  background-color: rgba(255, 235, 200, 0.2);
-  /* Tonalità calda */
-  mix-blend-mode: multiply;
-  /* Mescola con il contenuto sottostante */
-  opacity: 0;
-  /* Trasparente di default */
-  transition: opacity 0.5s ease-in-out;
-  /* Transizione smooth */
-}
-
-/* Attiva l'overlay quando il filtro è abilitato */
-body.blue-light-filter::after {
-  opacity: 1;
-}
+/* ⚠️ SPOSTATO IN css/themes.css */
+/* NOTA: Regole body::after e body.blue-light-filter::after spostate in css/themes.css */
 
 /* ========================================
      DIMENSIONE INTERFACCIA (ZOOM)
-     Applica uno zoom all'intera interfaccia
+     ⚠️ SPOSTATO IN css/themes.css
      ======================================== */
-
-/* Molto Compatta - 75% */
-body.interface-scale-75 {
-  zoom: 0.75;
-  -moz-transform: scale(0.75);
-  transform: scale(0.75);
-  -moz-transform-origin: top left;
-  transform-origin: top left;
-  width: 100vw;
-  overflow-x: hidden;
-}
-
-/* Compatta - 85% */
-body.interface-scale-85 {
-  zoom: 0.85;
-  -moz-transform: scale(0.85);
-  transform: scale(0.85);
-  -moz-transform-origin: top left;
-  transform-origin: top left;
-  width: 100vw;
-  overflow-x: hidden;
-}
-
-/* Normale - 100% (default) */
-body.interface-scale-100 {
-  zoom: 1;
-  -moz-transform: scale(1);
-  transform: scale(1);
-  -moz-transform-origin: top left;
-  transform-origin: top left;
-  width: 100vw;
-  overflow-x: hidden;
-}
-
-/* Grande - 115% */
-body.interface-scale-115 {
-  zoom: 1.15;
-  -moz-transform: scale(1.15);
-  transform: scale(1.15);
-  -moz-transform-origin: top left;
-  transform-origin: top left;
-  width: 100vw;
-  overflow-x: hidden;
-}
-
-/* Molto Grande - 125% */
-body.interface-scale-125 {
-  zoom: 1.25;
-  -moz-transform: scale(1.25);
-  transform: scale(1.25);
-  -moz-transform-origin: top left;
-  transform-origin: top left;
-  width: 100vw;
-  overflow-x: hidden;
-}
+/* NOTA: Regole body.interface-scale-* spostate in css/themes.css */
 
 
 /* ========================================
@@ -5855,135 +5620,15 @@ body.dark-mode .pwa-btn-primary:hover {
 
 /* =====================================
    SEZIONE 19: MODALITÀ CONTRASTO ALTO
+   ⚠️ SPOSTATO IN css/themes.css
    ===================================== */
-
-.high-contrast {
-  /* Aumenta contrasto testi */
-  --testo-principale: #000000 !important;
-  --testo-secondario: #1f2937 !important;
-}
-
-.high-contrast button,
-.high-contrast .route-button,
-.high-contrast .linea-select-btn {
-  border-width: 2px !important;
-  font-weight: 600 !important;
-}
-
-.high-contrast .main-card,
-.high-contrast .price-card {
-  border-width: 3px !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
-}
-
-.high-contrast .price-code,
-.high-contrast .price-value {
-  font-weight: 700 !important;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-}
-
-.high-contrast .navbar {
-  border-bottom: 3px solid var(--turchese) !important;
-}
-
-/* Dark mode + Contrasto Alto */
-.dark.high-contrast {
-  --testo-principale: #ffffff !important;
-  --testo-secondario: #e2e8f0 !important;
-}
-
-.dark.high-contrast .main-card,
-.dark.high-contrast .price-card {
-  border-color: #17b7b1 !important;
-  border-width: 3px !important;
-}
+/* NOTA: Regole .high-contrast e .dark.high-contrast spostate in css/themes.css */
 
 /* =====================================
    SEZIONE 20: MODALITÀ TOUCH FRIENDLY
+   ⚠️ SPOSTATO IN css/themes.css
    ===================================== */
-
-.touch-friendly button,
-.touch-friendly .route-button,
-.touch-friendly .linea-select-btn,
-.touch-friendly .reset-route-btn,
-.touch-friendly .reset-btn {
-  min-height: 56px !important;
-  padding: 1rem 1.5rem !important;
-  font-size: 1.1rem !important;
-}
-
-.touch-friendly .mobile-nav-link,
-.touch-friendly .mobile-nav-button {
-  min-height: 60px !important;
-  padding: 1.25rem 1.5rem !important;
-}
-
-.touch-friendly .settings-item {
-  padding: 1.25rem !important;
-  margin-bottom: 1rem !important;
-}
-
-.touch-friendly .settings-toggle {
-  width: 60px;
-  height: 34px;
-}
-
-.touch-friendly .settings-toggle-slider:before {
-  height: 26px;
-  width: 26px;
-}
-
-.touch-friendly .settings-toggle input:checked+.settings-toggle-slider:before {
-  transform: translateX(26px);
-}
-
-.touch-friendly .settings-font-btn,
-.touch-friendly .dropdown-font-btn,
-.touch-friendly .mobile-font-btn {
-  padding: 1.25rem !important;
-  min-height: 70px !important;
-}
-
-.touch-friendly .fermate-modal-list li,
-.touch-friendly .linea-modal-item {
-  min-height: 60px !important;
-  padding: 1.25rem !important;
-  margin-bottom: 0.5rem !important;
-}
-
-.touch-friendly .settings-tab {
-  padding: 1.25rem !important;
-  font-size: 1.1rem !important;
-}
-
-/* Spaziatura aumentata */
-.touch-friendly .route-section {
-  gap: 1.5rem !important;
-}
-
-.touch-friendly .form-group {
-  margin-bottom: 2rem !important;
-}
-
-.touch-friendly .settings-modal-content {
-  max-width: 700px !important;
-}
-
-/* Pulsanti più grandi su mobile */
-@media (max-width: 768px) {
-
-  .touch-friendly button,
-  .touch-friendly .route-button {
-    min-height: 64px !important;
-    font-size: 1.15rem !important;
-  }
-
-  .touch-friendly .mobile-nav-link,
-  .touch-friendly .mobile-nav-button {
-    min-height: 68px !important;
-    font-size: 1.1rem !important;
-  }
-}
+/* NOTA: Regole .touch-friendly spostate in css/themes.css */
 
 /* ========================================
    TAB INFO E AGGIORNAMENTI

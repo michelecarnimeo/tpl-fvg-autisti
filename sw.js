@@ -1,7 +1,7 @@
-const CACHE_NAME = 'tpl-cache-v12';
+const CACHE_NAME = 'tpl-cache-v13';
 const CACHE_SIZE_LIMIT = 100 * 1024 * 1024; // 100MB per supporto offline completo
-const STATIC_CACHE = 'tpl-static-v12';
-const DYNAMIC_CACHE = 'tpl-dynamic-v12';
+const STATIC_CACHE = 'tpl-static-v13';
+const DYNAMIC_CACHE = 'tpl-dynamic-v13';
 const MAX_DYNAMIC_ITEMS = 200; // Più elementi per supporto offline
 
 // Configurazione ottimizzata per supporto offline
@@ -20,11 +20,12 @@ const STATIC_ASSETS = [
   './fermate.html', // Fermate (offline critico)
   './prezzi.html', // Prezzi (offline critico)
   './404.html', // Pagina errore 404
-  // CSS - Ordine di caricamento: Variables → Base → Layout → Animations → Components → Legacy
+  // CSS - Ordine di caricamento: Variables → Base → Layout → Animations → Themes → Components → Legacy
   './css/variables.css', // 1. Variabili CSS globali
   './css/base.css', // 2. Reset e typography
   './css/layout.css', // 3. Layout globale (body, container, main-content)
   './css/animations.css', // 4. Animazioni e transizioni
+  './css/themes.css', // 5. Temi e accessibilità (dark mode, high contrast, reduce motion, etc.)
   './css/components/navbar.css', // Navbar
   './css/components/forms.css', // Forms
   './css/components/buttons.css', // Buttons
@@ -39,7 +40,7 @@ const STATIC_ASSETS = [
   './css/components/settings/info.css', // Settings (tab Info)
   './css/pages/benvenuto.css', // Pagina benvenuto
   './css/pages/fermate.css', // Pagina fermate
-  './style1.css', // 6. LEGACY (temporaneo - da dismettere)
+  './style1.css', // 7. LEGACY (temporaneo - da dismettere)
   './script.js', // Funzionalità app
   './footer.js', // Footer modulare JS
   './changelog.js', // Changelog dinamico
