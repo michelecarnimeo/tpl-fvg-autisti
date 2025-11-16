@@ -1,6 +1,6 @@
 {
-  "version": "1.7.9",
+  "version": "1.8.0",
   "versionDate": "16 Novembre 2025",
-  "versionTime": "22:00",
-  "updateNotes": "FASE 4 Modularizzazione CSS: completato Cache Modal. Fix layout scroll fermate.html. Ottimizzazione mobile fermate-card (rimosso glassmorphism). Mappa Leaflet funzionante con scroll automatico. Service Worker cache v21."
+  "versionTime": "22:45",
+  "updateNotes": "Modularizzazione CSS: Mobile Menu, Modal Fermate/Linee, Modal Impostazioni. Rimosso 1497 righe duplicate da style1.css (-41%). File ridotto da 3613 a 2116 righe. Nessun errore di linting."
 }

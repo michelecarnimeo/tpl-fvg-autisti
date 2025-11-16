@@ -1,0 +1,429 @@
+/* ========================================
+   COMPONENT: MOBILE MENU (HAMBURGER)
+   File: css/components/mobile-menu.css
+   Descrizione: Menu mobile drawer con hamburger toggle
+   Contenuto: hamburger button, overlay, drawer, navigation, font size controls, dark mode
+   Dipendenze: variables.css, animations.css
+   ======================================== */
+
+/* SOTTOSEZIONE: Hamburger toggle button - visibile solo su mobile */
+.hamburger-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.hamburger-icon {
+  display: block;
+  width: 28px;
+  height: 2px;
+  background: var(--bianco);
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.hamburger-icon::before,
+.hamburger-icon::after {
+  content: '';
+  display: block;
+  width: 28px;
+  height: 2px;
+  background: var(--bianco);
+  position: absolute;
+  transition: all 0.3s ease;
+}
+
+.hamburger-icon::before {
+  top: -8px;
+}
+
+.hamburger-icon::after {
+  top: 8px;
+}
+
+/* Animazione hamburger quando menu aperto */
+.hamburger-toggle.active .hamburger-icon {
+  background: transparent;
+}
+
+.hamburger-toggle.active .hamburger-icon::before {
+  top: 0;
+  transform: rotate(45deg);
+}
+
+.hamburger-toggle.active .hamburger-icon::after {
+  top: 0;
+  transform: rotate(-45deg);
+}
+
+/* SOTTOSEZIONE: Overlay scuro dietro il menu */
+.mobile-menu-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.mobile-menu-overlay.active {
+  display: block;
+  opacity: 1;
+}
+
+/* SOTTOSEZIONE: Menu mobile drawer */
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 240px;
+  height: 100vh;
+  background: var(--glass-bg);
+  border-left: 1px solid var(--glass-border);
+  box-shadow: -8px 0 32px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  transition: right 0.3s ease;
+  overflow-y: auto;
+}
+
+.mobile-menu.active {
+  right: 0;
+}
+
+/* SOTTOSEZIONE: Header del menu mobile */
+.mobile-menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  border-bottom: 1px solid var(--glass-border);
+  background: rgba(0, 123, 138, 0.1);
+}
+
+.mobile-menu-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--testo-principale);
+}
+
+.mobile-menu-close {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--testo-principale);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+}
+
+.mobile-menu-close:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+/* SOTTOSEZIONE: Navigazione menu mobile */
+.mobile-menu-nav {
+  padding: 12px 0;
+}
+
+.mobile-nav-link,
+.mobile-nav-button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  color: var(--testo-principale);
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  background: none;
+  width: 100%;
+  cursor: pointer;
+  text-align: left;
+  position: relative;
+  border-radius: 8px;
+}
+
+/* Padding extra per pulsanti con badge ON/OFF */
+.mobile-toggle-with-badge {
+  padding-right: 60px;
+}
+
+.mobile-nav-link:hover,
+.mobile-nav-button:hover {
+  background: rgba(0, 123, 138, 0.1);
+  color: var(--turchese);
+  transform: translateX(4px);
+}
+
+/* Stato attivo per pulsante animazione mobile */
+.mobile-toggle-with-badge.active {
+  background: rgba(34, 197, 94, 0.15);
+  color: #15803d;
+  font-weight: 600;
+  border-left: 4px solid #22c55e;
+  padding-left: 16px;
+  padding-right: 60px;
+}
+
+.mobile-toggle-with-badge.active:hover {
+  background: rgba(34, 197, 94, 0.25);
+  color: #16a34a;
+  transform: translateX(6px);
+}
+
+/* Indicatore ON/OFF per animazione */
+.mobile-toggle-with-badge.active::after {
+  content: 'ON';
+  position: absolute;
+  right: 20px;
+  background: #22c55e;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 12px;
+  animation: pulse-active 2s ease-in-out infinite;
+}
+
+.mobile-toggle-with-badge:not(.active)::after {
+  content: 'OFF';
+  position: absolute;
+  right: 20px;
+  background: rgba(148, 163, 184, 0.3);
+  color: rgba(71, 85, 105, 0.8);
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+/* Animazione click */
+.mobile-nav-button:active {
+  transform: scale(0.98);
+  transition: transform 0.1s ease;
+}
+
+.mobile-nav-icon {
+  font-size: 1.2rem;
+  width: 24px;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+/* Icona animata quando pulsante animazione è attivo */
+.mobile-toggle-with-badge.active .mobile-nav-icon {
+  animation: rotate-icon 3s linear infinite;
+}
+
+.mobile-menu-divider {
+  height: 1px;
+  background: var(--glass-border);
+  margin: 12px 20px;
+}
+
+/* SOTTOSEZIONE: Sezione dimensione testo menu mobile */
+.mobile-font-size-section {
+  padding: 12px 20px;
+}
+
+.mobile-section-title {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--testo-secondario);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+
+.mobile-font-size-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.mobile-font-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px 8px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.75rem;
+  color: var(--testo-principale);
+}
+
+.font-btn-letter {
+  font-weight: 700;
+}
+
+/* Dimensioni diverse per ogni pulsante mobile */
+#mobile-font-size-small .font-btn-letter {
+  font-size: 0.9rem;
+}
+
+#mobile-font-size-medium .font-btn-letter {
+  font-size: 1.1rem;
+}
+
+#mobile-font-size-large .font-btn-letter {
+  font-size: 1.3rem;
+}
+
+.mobile-font-btn:hover {
+  background: rgba(0, 123, 138, 0.1);
+  border-color: var(--turchese);
+  color: var(--turchese);
+}
+
+.mobile-font-btn.active {
+  background: rgba(0, 123, 138, 0.15);
+  border-color: var(--turchese);
+  color: var(--turchese);
+  box-shadow: 0 2px 8px rgba(0, 123, 138, 0.2);
+}
+
+.font-btn-label {
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+/* SOTTOSEZIONE: Stili per pagina benvenuto */
+.benvenuto-font-size-section {
+  margin-top: 1rem;
+}
+
+.benvenuto-font-size-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.benvenuto-font-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.6rem 0.5rem !important;
+}
+
+.benvenuto-font-btn.active {
+  background: var(--turchese) !important;
+  color: white !important;
+  border-color: var(--turchese-scuro) !important;
+  box-shadow: 0 4px 12px rgba(0, 123, 138, 0.3) !important;
+}
+
+/* ========================================
+   RESPONSIVE - MOBILE
+   ======================================== */
+
+/* Media query - mostra hamburger su mobile, nascondi navbar-nav */
+@media (max-width: 768px) {
+  .hamburger-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .navbar-nav {
+    display: none;
+  }
+}
+
+/* ========================================
+   DARK MODE VARIANT
+   ======================================== */
+
+.dark .mobile-menu {
+  background: rgba(30, 41, 59, 0.95);
+  border-left-color: rgba(148, 163, 184, 0.2);
+  box-shadow: -8px 0 32px rgba(0, 0, 0, 0.7);
+}
+
+.dark .mobile-menu-header {
+  border-bottom-color: var(--glass-border-dark);
+  background: rgba(23, 183, 177, 0.15);
+}
+
+.dark .mobile-menu-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.dark .mobile-nav-link:hover,
+.dark .mobile-nav-button:hover {
+  background: rgba(23, 183, 177, 0.2);
+}
+
+/* Stato attivo per pulsante animazione mobile - dark mode */
+.dark .mobile-toggle-with-badge.active {
+  background: rgba(34, 197, 94, 0.2);
+  color: #86efac;
+  font-weight: 600;
+  border-left: 4px solid #22c55e;
+}
+
+.dark .mobile-toggle-with-badge.active:hover {
+  background: rgba(34, 197, 94, 0.3);
+  color: #bbf7d0;
+}
+
+/* Indicatore ON/OFF per animazione - dark mode */
+.dark .mobile-toggle-with-badge.active::after {
+  background: #22c55e;
+  color: white;
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+}
+
+.dark .mobile-toggle-with-badge:not(.active)::after {
+  background: rgba(71, 85, 105, 0.4);
+  color: rgba(148, 163, 184, 0.9);
+}
+
+.dark .mobile-menu-divider {
+  background: var(--glass-border-dark);
+}
+
+.dark .mobile-section-title {
+  color: rgba(248, 250, 252, 0.7);
+}
+
+.dark .mobile-font-btn {
+  background: var(--glass-bg-dark);
+  border-color: var(--glass-border-dark);
+  color: var(--testo-scuro);
+}
+
+.dark .mobile-font-btn:hover {
+  background: rgba(23, 183, 177, 0.15);
+  border-color: var(--turchese);
+  color: var(--turchese);
+}
+
+.dark .mobile-font-btn.active {
+  background: rgba(23, 183, 177, 0.2);
+  border-color: var(--turchese);
+  color: var(--turchese);
+}
+

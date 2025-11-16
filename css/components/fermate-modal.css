@@ -1,0 +1,786 @@
+/* ========================================
+   COMPONENT: MODAL FERMATE E LINEE
+   File: css/components/fermate-modal.css
+   Descrizione: Modal per selezione fermate e linee con ricerca e geolocalizzazione
+   Contenuto: .fermate-modal, .linea-modal-item, search box, location buttons, dark mode, responsive
+   Dipendenze: variables.css
+   ======================================== */
+
+/* SOTTOSEZIONE: Modal fermate */
+.fermate-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fermate-modal.show {
+  display: flex;
+  opacity: 1;
+}
+
+.fermate-modal.closing {
+  opacity: 0;
+}
+
+.fermate-modal-content {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  box-shadow: var(--glass-shadow);
+  width: 100%;
+  max-width: 500px;
+  max-height: 65vh;
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  transform: scale(0.9) translateY(-10px);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+}
+
+/* ========================================
+   OTTIMIZZAZIONE SCHERMI PICCOLI (Universal Small Screen)
+   Copre: iPhone SE, 12/13 Mini, Galaxy S, Pixel compatti, ecc.
+   ======================================== */
+@media (max-width: 430px),
+(max-height: 670px) {
+  .fermate-modal-content {
+    max-height: 70vh;
+    margin: 8px;
+    border-radius: 12px;
+    width: calc(100% - 16px);
+  }
+
+  .fermate-modal-header {
+    padding: 8px 12px;
+    min-height: 44px;
+  }
+
+  .fermate-modal-header h2 {
+    font-size: 1rem;
+  }
+
+  .fermate-modal-body {
+    padding: 12px;
+  }
+
+  .fermate-search-box {
+    padding: 8px 10px;
+    font-size: 0.95rem;
+  }
+
+  .fermate-modal-list li {
+    padding: 12px 14px;
+    font-size: 0.95rem;
+  }
+
+  /* Ottimizzazione modale linee */
+  .linea-modal-item {
+    padding: 10px 12px;
+    gap: 12px;
+    font-size: 0.95rem;
+  }
+
+  .linea-badge {
+    min-width: 55px;
+    height: 55px;
+  }
+
+  .linea-icon {
+    font-size: 20px;
+  }
+
+  .linea-number {
+    font-size: 0.9rem;
+  }
+
+  .linea-route {
+    font-size: 0.95rem;
+  }
+
+  .linea-stops {
+    font-size: 0.85rem;
+  }
+}
+
+.fermate-modal.show .fermate-modal-content {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+}
+
+.fermate-modal.closing .fermate-modal-content {
+  transform: scale(0.95) translateY(10px);
+  opacity: 0;
+}
+
+.fermate-modal-header {
+  /* Stile navbar con gradient turchese */
+  background: linear-gradient(135deg,
+      rgba(0, 123, 138, 0.9) 0%,
+      rgba(0, 123, 138, 0.7) 50%,
+      rgba(0, 123, 138, 0.5) 100%);
+  border-bottom: 1px solid rgba(0, 123, 138, 0.3);
+  box-shadow: 0 4px 12px 0 rgba(0, 123, 138, 0.4);
+  border-radius: 16px 16px 0 0;
+  padding: 10px 20px;
+  min-height: 52px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* SOTTOSEZIONE: Azioni modal fermate */
+.fermate-modal-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* SOTTOSEZIONE: Pulsante geolocalizzazione modal */
+.fermate-location-btn {
+  display: none;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--turchese);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 123, 138, 0.3);
+}
+
+.fermate-location-btn:hover {
+  background: var(--turchese-scuro);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 123, 138, 0.4);
+}
+
+.fermate-location-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.fermate-modal-title,
+#fermate-modal-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: white !important;
+  line-height: 32px;
+  margin: 0;
+}
+
+.fermate-modal-close {
+  background: none;
+  color: white;
+  opacity: 0.95;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+  line-height: 1;
+}
+
+.fermate-modal-close:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 1);
+  transform: scale(1.1);
+}
+
+.fermate-modal-body {
+  padding: 20px 24px 24px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* SOTTOSEZIONE: Container ricerca fermate */
+.fermate-search-container {
+  margin-bottom: 20px;
+  flex-shrink: 0;
+}
+
+.fermate-search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 8px 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: scale(1);
+}
+
+.fermate-search-box:focus-within {
+  border-color: var(--turchese);
+  box-shadow: 0 0 0 3px rgba(23, 183, 177, 0.15), 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 12px 16px;
+  transform: scale(1.02);
+}
+
+.fermate-search-icon {
+  font-size: 1.1rem;
+  color: var(--testo-secondario);
+  margin-right: 10px;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.fermate-search-box:focus-within .fermate-search-icon {
+  font-size: 1.2rem;
+  color: var(--turchese);
+}
+
+.fermate-search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--testo-principale);
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.fermate-search-box:focus-within .fermate-search-input {
+  font-size: 1rem;
+}
+
+.fermate-search-input::placeholder {
+  color: var(--testo-secondario);
+  font-weight: 400;
+}
+
+.fermate-clear-btn {
+  background: none;
+  border: none;
+  color: var(--testo-secondario);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  margin-left: 8px;
+  flex-shrink: 0;
+}
+
+.fermate-clear-btn:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: var(--testo-principale);
+}
+
+/* SOTTOSEZIONE: Pulsante geolocalizzazione inline */
+.fermate-location-btn-inline {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 14px 20px;
+  margin: 12px 0;
+  background: linear-gradient(135deg, var(--turchese) 0%, var(--turchese-scuro) 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 10px rgba(0, 123, 138, 0.3);
+}
+
+.fermate-location-btn-inline:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 123, 138, 0.4);
+  background: linear-gradient(135deg, var(--turchese-scuro) 0%, var(--turchese) 100%);
+}
+
+.fermate-location-btn-inline:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0, 123, 138, 0.3);
+}
+
+#fermate-location-icon {
+  font-size: 1.2rem;
+}
+
+#fermate-location-text {
+  letter-spacing: 0.3px;
+}
+
+/* SOTTOSEZIONE: Container lista fermate */
+.fermate-list-container {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.fermate-modal-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 8px 0 0;
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--turchese) var(--grigio-chiaro);
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+}
+
+.fermate-modal-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.fermate-modal-list::-webkit-scrollbar-track {
+  background: var(--grigio-chiaro);
+  border-radius: 3px;
+}
+
+.fermate-modal-list::-webkit-scrollbar-thumb {
+  background: var(--turchese);
+  border-radius: 3px;
+}
+
+.fermate-modal-list::-webkit-scrollbar-thumb:hover {
+  background: var(--turchese-scuro);
+}
+
+/* Scrollbar sempre visibile e utilizzabile su mobile */
+@media (max-width: 768px),
+(pointer: coarse) {
+  .fermate-modal-list {
+    scrollbar-width: auto;
+    padding-right: 12px;
+    overflow-y: scroll !important;
+  }
+
+  .fermate-modal-list::-webkit-scrollbar {
+    width: 20px;
+    -webkit-appearance: none;
+    background: transparent;
+  }
+
+  .fermate-modal-list::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .fermate-modal-list::-webkit-scrollbar-thumb {
+    background: var(--turchese);
+    border-radius: 10px;
+    border: 4px solid rgba(255, 255, 255, 0);
+    background-clip: padding-box;
+    min-height: 60px;
+    -webkit-box-shadow: 0 0 1px rgba(0, 123, 138, 0.5);
+    opacity: 0.9;
+  }
+
+  .fermate-modal-list::-webkit-scrollbar-thumb:active,
+  .fermate-modal-list::-webkit-scrollbar-thumb:hover {
+    background: var(--turchese-scuro);
+    background-clip: padding-box;
+    opacity: 1;
+    border-color: rgba(255, 255, 255, 0);
+  }
+
+  .fermate-modal-list::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 20px;
+    pointer-events: none;
+    background: transparent;
+  }
+}
+
+.fermate-modal-list li {
+  padding: 14px 24px;
+  cursor: pointer;
+  border-radius: 8px;
+  margin-bottom: 4px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--testo-principale);
+  font-weight: 500;
+}
+
+.fermate-modal-list li:hover {
+  background: rgba(0, 123, 138, 0.1);
+  color: var(--turchese);
+}
+
+.fermate-modal-list li.selected {
+  background: var(--turchese);
+  color: white;
+}
+
+.fermate-modal-list li.selected:hover {
+  background: var(--turchese-scuro);
+  color: white;
+}
+
+/* ========================================
+   SEZIONE 18B: MODAL LINEE (STILE AVANZATO)
+   ======================================== */
+
+/* SOTTOSEZIONE: Header modale linee con stile navbar */
+#linee-modal .fermate-modal-header {
+  background: linear-gradient(135deg,
+      rgba(0, 123, 138, 0.9) 0%,
+      rgba(0, 123, 138, 0.7) 50%,
+      rgba(0, 123, 138, 0.5) 100%);
+  border-bottom: 1px solid rgba(0, 123, 138, 0.3);
+  box-shadow: 0 4px 12px 0 rgba(0, 123, 138, 0.4);
+  border-radius: 16px 16px 0 0;
+  padding: 10px 20px;
+  min-height: 52px;
+}
+
+#linee-modal .fermate-modal-title,
+#linee-modal-title {
+  color: white !important;
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 32px;
+}
+
+#linee-modal .fermate-modal-close {
+  color: white;
+  opacity: 0.95;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+#linee-modal .fermate-modal-close:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 1);
+  transform: scale(1.1);
+}
+
+/* SOTTOSEZIONE: Item linea con badge e dettagli */
+.linea-modal-item {
+  padding: 16px;
+  cursor: pointer;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.linea-modal-item:hover {
+  background: linear-gradient(135deg, rgba(0, 123, 138, 0.1) 0%, rgba(23, 183, 177, 0.05) 100%);
+  border-color: var(--turchese);
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(0, 123, 138, 0.15);
+}
+
+.linea-modal-item:active {
+  transform: translateX(4px) scale(0.98);
+}
+
+/* Badge con icona bus e numero linea */
+.linea-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, var(--turchese) 0%, var(--turchese-scuro) 100%);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 123, 138, 0.3);
+  transition: all 0.3s ease;
+}
+
+.linea-modal-item:hover .linea-badge {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(0, 123, 138, 0.4);
+}
+
+.linea-icon {
+  font-size: 24px;
+  margin-bottom: 2px;
+}
+
+.linea-number {
+  font-size: 14px;
+  font-weight: 700;
+  color: white;
+  letter-spacing: 0.5px;
+}
+
+/* Dettagli linea (percorso e numero fermate) */
+.linea-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.linea-route {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--testo-principale);
+  line-height: 1.3;
+}
+
+.linea-stops {
+  font-size: 13px;
+  color: var(--testo-secondario);
+  font-weight: 500;
+}
+
+/* Freccia di selezione */
+.linea-arrow {
+  font-size: 28px;
+  color: var(--testo-secondario);
+  transition: all 0.3s ease;
+  opacity: 0.5;
+}
+
+.linea-modal-item:hover .linea-arrow {
+  color: var(--turchese);
+  transform: translateX(4px);
+  opacity: 1;
+}
+
+/* ========================================
+   RESPONSIVE - MOBILE
+   ======================================== */
+
+@media (max-width: 480px) {
+  .fermate-modal-content {
+    margin: 10px;
+    max-height: 68vh;
+  }
+
+  .fermate-modal-header,
+  .fermate-modal-body {
+    padding: 16px;
+  }
+
+  .fermate-search-box {
+    padding: 10px 12px;
+  }
+
+  .fermate-modal-list li {
+    padding: 16px 20px;
+  }
+
+  .linea-modal-item {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .linea-badge {
+    min-width: 60px;
+    height: 60px;
+  }
+
+  .linea-icon {
+    font-size: 20px;
+  }
+
+  .linea-number {
+    font-size: 12px;
+  }
+
+  .linea-route {
+    font-size: 14px;
+  }
+
+  .linea-stops {
+    font-size: 12px;
+  }
+
+  .linea-arrow {
+    font-size: 24px;
+  }
+}
+
+/* ========================================
+   DARK MODE VARIANT
+   ======================================== */
+
+.dark .fermate-modal-content {
+  background: var(--glass-bg-dark);
+  border-color: var(--glass-border-dark);
+  box-shadow: var(--glass-shadow-dark);
+}
+
+.dark .fermate-modal-header {
+  border-bottom-color: var(--glass-border-dark);
+}
+
+.dark .fermate-location-btn {
+  background: var(--turchese);
+  box-shadow: 0 2px 6px rgba(0, 153, 170, 0.4);
+}
+
+.dark .fermate-location-btn:hover {
+  background: var(--turchese-scuro);
+  box-shadow: 0 4px 10px rgba(0, 153, 170, 0.5);
+}
+
+.dark .fermate-modal-header {
+  background: linear-gradient(135deg,
+      rgba(0, 123, 138, 0.95) 0%,
+      rgba(0, 123, 138, 0.8) 50%,
+      rgba(0, 123, 138, 0.6) 100%);
+  border-bottom-color: rgba(0, 123, 138, 0.5);
+  box-shadow: 0 4px 12px 0 rgba(0, 123, 138, 0.6);
+}
+
+.dark .fermate-modal-title,
+.dark #fermate-modal-title {
+  color: white !important;
+}
+
+.dark .fermate-modal-close {
+  color: white;
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+.dark .fermate-modal-close:hover {
+  border-color: rgba(255, 255, 255, 1);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.dark .fermate-search-box {
+  background: var(--glass-bg-dark);
+  border-color: var(--glass-border-dark);
+}
+
+.dark .fermate-search-input {
+  color: rgba(248, 250, 252, 0.95);
+}
+
+.dark .fermate-search-input::placeholder {
+  color: rgba(148, 163, 184, 0.7);
+}
+
+.dark .fermate-search-icon {
+  color: rgba(148, 163, 184, 0.7);
+}
+
+.dark .fermate-clear-btn {
+  color: rgba(148, 163, 184, 0.7);
+}
+
+.dark .fermate-clear-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(248, 250, 252, 0.95);
+}
+
+.dark .fermate-location-btn-inline {
+  background: linear-gradient(135deg, rgba(0, 153, 170, 0.9) 0%, rgba(0, 123, 138, 0.9) 100%);
+  box-shadow: 0 3px 10px rgba(0, 153, 170, 0.4);
+}
+
+.dark .fermate-location-btn-inline:hover {
+  background: linear-gradient(135deg, rgba(0, 123, 138, 0.9) 0%, rgba(0, 153, 170, 0.9) 100%);
+  box-shadow: 0 5px 15px rgba(0, 153, 170, 0.5);
+}
+
+.dark .fermate-modal-list li {
+  color: rgba(248, 250, 252, 0.95);
+}
+
+.dark .fermate-modal-list li:hover {
+  background: rgba(23, 183, 177, 0.2);
+  color: var(--turchese);
+}
+
+.dark .fermate-modal-list li.selected {
+  background: var(--turchese);
+  color: white;
+}
+
+.dark .fermate-modal-list li.selected:hover {
+  background: var(--turchese-scuro);
+  color: white;
+}
+
+/* Dark mode per header modale linee */
+.dark #linee-modal .fermate-modal-header {
+  background: linear-gradient(135deg,
+      rgba(0, 123, 138, 0.95) 0%,
+      rgba(0, 123, 138, 0.8) 50%,
+      rgba(0, 123, 138, 0.6) 100%);
+  border-bottom-color: rgba(0, 123, 138, 0.5);
+  box-shadow: 0 4px 12px 0 rgba(0, 123, 138, 0.6);
+}
+
+.dark .linea-modal-item {
+  background: var(--glass-bg-dark);
+  border-color: var(--glass-border-dark);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.dark .linea-modal-item:hover {
+  background: linear-gradient(135deg, rgba(23, 183, 177, 0.15) 0%, rgba(0, 123, 138, 0.1) 100%);
+  border-color: var(--turchese);
+  box-shadow: 0 4px 12px rgba(23, 183, 177, 0.25);
+}
+
+.dark .linea-route {
+  color: rgba(248, 250, 252, 0.95);
+}
+
+.dark .linea-stops {
+  color: rgba(148, 163, 184, 0.8);
+}
+
+.dark .linea-arrow {
+  color: rgba(148, 163, 184, 0.6);
+}
+
+.dark .linea-modal-item:hover .linea-arrow {
+  color: var(--turchese);
+}
+

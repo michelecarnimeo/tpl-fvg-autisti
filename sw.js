@@ -38,6 +38,9 @@ const STATIC_ASSETS = [
   './css/components/footer.css', // Footer modulare CSS
   './css/components/modals.css', // Modals modulare CSS
   './css/components/cache-modal.css', // Cache modal
+  './css/components/mobile-menu.css', // Mobile menu (hamburger)
+  './css/components/fermate-modal.css', // Modal fermate e linee
+  './css/components/settings-modal.css', // Modal impostazioni
   './css/components/mega-dropdown-settings.css', // Mega Dropdown Settings
   './css/components/pwa-bottom-nav.css', // PWA Bottom Navigation
   './css/components/settings/impostazioni.css', // Settings (struttura)
