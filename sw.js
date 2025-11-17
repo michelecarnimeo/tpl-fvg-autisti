@@ -1,7 +1,7 @@
-const CACHE_NAME = 'tpl-cache-v23';
+const CACHE_NAME = 'tpl-cache-v1.2.3';
 const CACHE_SIZE_LIMIT = 100 * 1024 * 1024; // 100MB per supporto offline completo
-const STATIC_CACHE = 'tpl-static-v23';
-const DYNAMIC_CACHE = 'tpl-dynamic-v23';
+const STATIC_CACHE = 'tpl-static-v1.2.3';
+const DYNAMIC_CACHE = 'tpl-dynamic-v1.2.3';
 const MAX_DYNAMIC_ITEMS = 200; // Più elementi per supporto offline
 
 // Configurazione ottimizzata per supporto offline
@@ -74,12 +74,14 @@ const STATIC_ASSETS = [
   './changelog.js', // Changelog dinamico
   './js/core/storage.js', // Core: Storage wrapper (deve essere caricato per primo!)
   './js/data/tariffario.js', // Data: Gestione tariffario
+  './js/data/coordinates-linea-400.js?v=1.0.0', // Data: Coordinate GPS Linea 400 Udine-Grado
   './js/features/updates.js', // Verifica aggiornamenti
   './js/features/settings.js', // Gestione impostazioni
   './js/features/prezzi.js', // Calcolo prezzi
   './js/features/route-selector.js', // Gestione selezione route (linea/partenza/arrivo)
   './js/features/geolocation.js', // Gestione geolocalizzazione e ordinamento fermate per distanza
   './js/features/page-renderers.js', // Rendering pagine fermate.html e prezzi.html
+  './js/features/fermate-accordion.js?v=1.0.0', // Accordion mobile per card fermate
   './js/features/line-map.js?v=1.0.0', // Map logic
   './js/tests/test-prezzi.js', // Test suite prezzi (solo per test.html)
   './js/tests/test-prezzi-wrappers.js', // Wrapper funzioni Prezzi test (solo per test.html)

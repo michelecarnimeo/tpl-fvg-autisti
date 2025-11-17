@@ -1,6 +1,6 @@
 {
-  "version": "1.8.3",
+  "version": "1.8.4",
   "versionDate": "17 Novembre 2025",
-  "versionTime": "10:00",
-  "updateNotes": "Sistema CSS Preset Intelligente: 4 preset ottimizzati (desktop/tablet/mobile/pwa), loader automatico, riduzione CSS -30%~45%, performance +200~280ms FCP. HTML semplificato da 40+ righe a 1 script. Service Worker v23. Documentazione completa."
+  "versionTime": "11:10",
+  "updateNotes": "Fermate mobile accordion + mappa GPS reale: card fermate solo desktop/tablet, su mobile/PWA accordion espandibile con badge conteggio; nuovo modulo fermate-accordion.js e coordinate reali Linea 400; Line Map aggiornata con marker GPS e summary dinamico; fermate.html allinea nuovi script versionati; Service Worker cache tpl-cache-v1.2.3 confermata."
 }

@@ -111,16 +111,38 @@
       if (!rawData) return null;
       if (rawData.stops && rawData.stops[0]?.coords) return rawData; // già tutto
 
-      // mock coords come fallback (da sostituire con coordinate reali)
-      const baseCoord = [46.062, 13.235];
-      const offset = 0.01;
-      const stops = (rawData.stops || []).map((name, index) => ({
-        name,
-        coords: [
-          baseCoord[0] + (Math.random() - 0.5) * offset,
-          baseCoord[1] + (Math.random() - 0.5) * offset
-        ]
-      }));
+      const fermateNomi = rawData.stops || [];
+      let stops = [];
+
+      // Se lineKey è 0 (Linea 400 Udine-Grado) e abbiamo coordinate reali, usale
+      if (lineKey === 0 && typeof window.CoordinatesLinea400 !== 'undefined') {
+        console.log('🗺️ Uso coordinate reali Linea 400');
+        stops = fermateNomi.map((nome, index) => {
+          const coords = window.CoordinatesLinea400.get(nome);
+          if (coords) {
+            return {
+              name: nome,
+              coords: [coords.lat, coords.lng],
+              descrizione: coords.descrizione
+            };
+          } else {
+            console.warn(`⚠️ Coordinate mancanti per fermata: ${nome}`);
+            return null;
+          }
+        }).filter(stop => stop !== null); // Rimuovi fermate senza coordinate
+      } else {
+        // Mock coords come fallback per altre linee
+        console.log('🗺️ Uso coordinate mock (linea diversa da 400 o coordinate non disponibili)');
+        const baseCoord = [46.062, 13.235];
+        const offset = 0.01;
+        stops = fermateNomi.map((name, index) => ({
+          name,
+          coords: [
+            baseCoord[0] + (Math.random() - 0.5) * offset,
+            baseCoord[1] + (Math.random() - 0.5) * offset
+          ]
+        }));
+      }
 
       return {
         name: rawData.name || lineKey,

@@ -4,6 +4,38 @@
 
 const changelogData = [
   {
+    version: '1.8.4',
+    date: '17 Novembre 2025',
+    time: '11:10',
+    title: 'Fermate mobile accordion + mappa GPS reale (v1.8.4)',
+    hidden: false,
+    changes: [
+      '📱 FERMATE MOBILE/PWA:',
+      '  • Card fermate mostrate solo su desktop/tablet (layout glassmorphism)',
+      '  • Mobile/PWA: nuovo accordion espandibile con badge conteggio fermate',
+      '  • Header touch-friendly con icona toggle e animazioni smooth',
+      '  • Modulo js/features/fermate-accordion.js (versionato ?v=1.0.0)',
+      '🗺️ MAPPA LINEA 400 CON COORDINATE REALI:',
+      '  • Creato js/data/coordinates-linea-400.js?v=1.0.0 con GPS reali Udine→Grado',
+      '  • Line Map utilizza marker precisi, popup descrittivi e bounds corretti',
+      '  • Eventi fermateRendered per re-init componenti responsive',
+      '🚏 AGGIORNAMENTI LINEE:',
+      '  • Linea 401 Udine-San Daniele aggiunta al database (45 fermate)',
+      '  • Lista fermate e mappe sincronizzate con nuovi dati',
+      '⚙️ SERVICE WORKER & VERSIONI:',
+      '  • Cache confermata tpl-cache-v1.2.3 (nessun nuovo asset pesante)',
+      '  • sw.js include nuovi file versionati (accordion + coordinate)',
+      '  • fermate.html aggiornata con script versionati e ordine corretto',
+      '✅ QUALITÀ:',
+      '  • Nessun errore di linting',
+      '  • Logging dettagliato per debug LineMap/accordion',
+      '  • Retrocompatibilità desktop/tablet preservata',
+      '📚 DOCUMENTAZIONE:',
+      '  • version.json aggiornato a 1.8.4 (17/11/2025 h16:00)',
+      '  • Changelog sincronizzato con nuove funzionalità'
+    ]
+  },
+  {
     version: '1.8.3',
     date: '17 Novembre 2025',
     time: '10:00',

@@ -161,6 +161,11 @@
       console.error('❌ searchContainer non trovato!');
     }
     
+    // Dispatch evento per inizializzare accordion mobile
+    window.dispatchEvent(new CustomEvent('fermateRendered', {
+      detail: { lineaIndex, fermateCount: fermate.length }
+    }));
+    
     console.log('✅ renderFermate completata. Fermate andata:', andataList.children.length, 'Fermate ritorno:', ritornoList.children.length);
 
     console.log('🗺️ Verifico disponibilità LineMap...', {
