@@ -1,6 +1,6 @@
 {
-  "version": "1.8.4",
+  "version": "1.8.5",
   "versionDate": "17 Novembre 2025",
-  "versionTime": "11:10",
-  "updateNotes": "Fermate mobile accordion + mappa GPS reale: card fermate solo desktop/tablet, su mobile/PWA accordion espandibile con badge conteggio; nuovo modulo fermate-accordion.js e coordinate reali Linea 400; Line Map aggiornata con marker GPS e summary dinamico; fermate.html allinea nuovi script versionati; Service Worker cache tpl-cache-v1.2.3 confermata."
+  "versionTime": "16:50",
+  "updateNotes": "Debug Logger modulare con overlay persistente, pulsanti di test e categorie filtrabili su test.html; fix scroll/navbar e compatibilità preset CSS (import legacy style1.css, loader dinamico); pulizia script.js eliminando wrapper duplicati e spostando toggleDark in settings; aggiunto piano di consolidamento per i test JS."
 }

@@ -5,7 +5,94 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>TPL FVG - Test Funzionalità</title>
-    <link rel="stylesheet" href="style1.css">
+    <script src="js/utils/css-preset-loader.js"></script>
+    <style>
+      /* Scroll normalization per test.html */
+      html, body {
+        overflow-y: auto;
+        height: auto;
+        touch-action: auto;
+      }
+      
+      /* Navbar sticky */
+      .navbar {
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 1000 !important;
+      }
+      
+      /* Mobile scroll optimization */
+      body {
+        min-height: 100vh;
+        -webkit-overflow-scrolling: touch;
+      }
+    </style>
+    <script>
+      // Fix scroll bloccato su test.html - SICURO
+      function forceUnblockScroll() {
+        // Controlla che gli elementi esistano
+        if (document.body) {
+          document.body.style.overflow = '';
+          document.body.style.height = '';
+          document.body.style.position = '';
+          document.body.style.touchAction = 'auto';
+        }
+        if (document.documentElement) {
+          document.documentElement.style.overflow = '';
+          document.documentElement.style.height = '';
+          document.documentElement.style.position = '';
+        }
+        // Debug rimosso per sicurezza
+      }
+      
+      // Esegui al DOMContentLoaded (quando body esiste)
+      document.addEventListener('DOMContentLoaded', forceUnblockScroll);
+      
+      // Esegui dopo 1 secondo per sicurezza
+      setTimeout(forceUnblockScroll, 1000);
+      
+      // Esponi globalmente per debug
+      window.forceUnblockScroll = forceUnblockScroll;
+      
+      // DIAGNOSI COMPLETA SCROLL
+      window.diagnoseScroll = function() {
+        console.log('🔍 DIAGNOSI SCROLL:', {
+          body: {
+            overflow: getComputedStyle(document.body).overflow,
+            overflowX: getComputedStyle(document.body).overflowX,
+            overflowY: getComputedStyle(document.body).overflowY,
+            height: getComputedStyle(document.body).height,
+            maxHeight: getComputedStyle(document.body).maxHeight,
+            position: getComputedStyle(document.body).position,
+            touchAction: getComputedStyle(document.body).touchAction
+          },
+          html: {
+            overflow: getComputedStyle(document.documentElement).overflow,
+            overflowX: getComputedStyle(document.documentElement).overflowX,
+            overflowY: getComputedStyle(document.documentElement).overflowY,
+            height: getComputedStyle(document.documentElement).height,
+            maxHeight: getComputedStyle(document.documentElement).maxHeight
+          },
+          viewport: {
+            innerHeight: window.innerHeight,
+            outerHeight: window.outerHeight,
+            scrollHeight: document.body.scrollHeight,
+            clientHeight: document.body.clientHeight
+          },
+          scroll: {
+            scrollTop: document.documentElement.scrollTop || document.body.scrollTop,
+            scrollY: window.scrollY,
+            canScroll: document.body.scrollHeight > window.innerHeight
+          }
+        });
+      };
+      
+      // Diagnosi disabilitata in produzione
+      // Decommentare solo per debug
+      // setTimeout(() => {
+      //   if (window.diagnoseScroll) window.diagnoseScroll();
+      // }, 2000);
+    </script>
     <!-- Animazioni e transizioni globali -->
     <link rel="stylesheet" href="css/animations.css">
     <link rel="stylesheet" href="css/components/footer.css">
@@ -1008,6 +1095,57 @@
 
             <!-- CARD UNICA che contiene tutti i gruppi (stile Mobile 3) -->
             <div class="test-groups-card">
+
+                <!-- Gruppo 0: Debug Logger -->
+                <div class="test-group-separator">
+                    <div class="test-group-header" data-toggle-group="debug" data-group-id="debug">
+                        <div class="test-group-bar group-debug"></div>
+                        <div class="test-group-title-container">
+                            <div class="test-group-title">🐛 Debug Logger</div>
+                            <div class="test-group-subtitle">Sistema di logging avanzato per debugging</div>
+                        </div>
+                        <div class="test-group-badge badge-info">DEV</div>
+                        <div class="test-group-icon">▶</div>
+                    </div>
+                    <div id="debug-group-content" class="test-group-content">
+                        <div class="test-group-items-container">
+                            <div class="test-item">
+                                <div class="test-item-header">
+                                    <div class="test-item-title">🔧 Controllo Debug Logger</div>
+                                    <div class="test-item-description">Attiva/disattiva il sistema di debug logging</div>
+                                </div>
+                                <div class="test-item-actions">
+                                    <button class="test-btn test-btn-primary" onclick="DebugCore.enable()">
+                                        ✅ Attiva Logger
+                                    </button>
+                                    <button class="test-btn test-btn-secondary" onclick="DebugCore.disable()">
+                                        ❌ Disattiva Logger
+                                    </button>
+                                    <button class="test-btn test-btn-info" onclick="window.diagnoseScroll()">
+                                        🔍 Diagnosi Scroll
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="test-item">
+                                <div class="test-item-header">
+                                    <div class="test-item-title">📝 Test Log Categorie</div>
+                                    <div class="test-item-description">Testa le diverse categorie di logging</div>
+                                </div>
+                                <div class="test-item-actions">
+                                    <button class="test-btn test-btn-success" onclick="DebugCore.log('GPS', 'Test GPS logging', {lat: 40.123, lng: 18.456})">
+                                        📍 Test GPS
+                                    </button>
+                                    <button class="test-btn test-btn-warning" onclick="DebugCore.log('PERFORMANCE', 'Test performance', {loadTime: '234ms'})">
+                                        ⚡ Test Performance
+                                    </button>
+                                    <button class="test-btn test-btn-danger" onclick="DebugCore.log('ERROR', 'Test errore simulato', {type: 'TestError'})">
+                                        ❌ Test Error
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Gruppo 1: Caricamento & Struttura -->
                 <div class="test-group-separator">
@@ -2508,6 +2646,13 @@
     <script src="js/utils/display-detector.js"></script>
     <!-- UI Helpers (gestisce scroll-to-top) -->
     <script src="js/utils/ui-helpers.js"></script>
+    <!-- DEBUG LOGGER -->
+    <script src="js/debug/core.js"></script>
+    <script src="js/debug/categories.js"></script>
+    <script src="js/debug/ui.js"></script>
+    <!-- GEOLOCATION MODULE (necessario per test GPS) -->
+    <script src="js/features/geolocation.js"></script>
+    <!-- Hamburger Menu -->
     <script src="js/components/hamburger-menu.js"></script>
     <script src="js/components/pwa-install.js"></script>
     <script src="script.js"></script>
@@ -2527,14 +2672,14 @@
 
             // Event listener per test geolocalizzazione
             // Usa event delegation su document.body per evitare problemi con clonazione pulsanti
-            console.log('🔧 Setup event listener per test-location-btn (event delegation)');
+            // Setup event listener per test-location-btn (event delegation)
             document.body.addEventListener('click', (e) => {
                 // Verifica se il click è sul pulsante test-location-btn o sui suoi figli
                 const target = e.target;
                 const btn = target.closest('#test-location-btn');
                 
                 if (btn) {
-                    console.log('🔘 Click su test-location-btn rilevato (event delegation)');
+                    // Click su test-location-btn rilevato
                     e.preventDefault();
                     e.stopPropagation();
                     try {
@@ -2636,12 +2781,12 @@
 
         // ===== ANIMAZIONE HEADER (Database & LocalStorage) =====
         // L'animazione shrink/expand dell'header è gestita automaticamente da js/features/tests-ui.js
-        console.log('ℹ️ Animazione header gestita da tests-ui.js');
+        // Animazione header gestita da tests-ui.js
 
         // ===== ANIMAZIONE SOBRIA GRUPPI TEST =====
         // Animazione subtile quando si clicca per aprire/chiudere i gruppi
         document.addEventListener('DOMContentLoaded', () => {
-            console.log('🎨 Inizializzazione animazioni sobrie gruppi test');
+            // Inizializzazione animazioni sobrie gruppi test
             
             // Seleziona tutti i gruppi
             document.querySelectorAll('.test-group-separator').forEach(group => {
@@ -2680,7 +2825,7 @@
                 });
             });
             
-            console.log('✅ Animazioni sobrie applicate a', document.querySelectorAll('.test-group-separator').length, 'gruppi');
+            // Animazioni sobrie applicate ai gruppi test
         });
     </script>
 

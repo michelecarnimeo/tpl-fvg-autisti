@@ -17,33 +17,8 @@
 let userPosition = null;
 let locationPermissionGranted = false;
 
-// Wrapper per retrocompatibilità
-function calculateDistance(lat1, lon1, lat2, lon2) {
-  if (window.Geolocation && window.Geolocation.calculateDistance) {
-    return window.Geolocation.calculateDistance(lat1, lon1, lat2, lon2);
-  }
-  console.warn('⚠️ Geolocation module not available, using fallback');
-  // Fallback (non dovrebbe essere necessario)
-  const R = 6371;
-  const dLat = (lat2 - lat1) * Math.PI / 180;
-  const dLon = (lon2 - lon1) * Math.PI / 180;
-  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-    Math.sin(dLon / 2) * Math.sin(dLon / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c;
-}
-
-function requestUserLocation() {
-  if (window.Geolocation && window.Geolocation.requestUserLocation) {
-    return window.Geolocation.requestUserLocation().then(position => {
-      userPosition = position;
-      locationPermissionGranted = true;
-      return position;
-    });
-  }
-  return Promise.reject(new Error('Geolocation module not available'));
-}
+// RIMOSSO: calculateDistance() e requestUserLocation() - non usate direttamente
+// Usa window.Geolocation.calculateDistance() e window.Geolocation.requestUserLocation() direttamente
 
 function sortFermateByDistance(fermate, userPos) {
   if (window.Geolocation && window.Geolocation.sortFermateByDistance) {
@@ -53,33 +28,15 @@ function sortFermateByDistance(fermate, userPos) {
   return fermate.map((name, index) => ({ name, index, distance: null, coordinates: null }));
 }
 
-function isGeolocationSupported() {
-  if (window.Geolocation && window.Geolocation.isGeolocationSupported) {
-    return window.Geolocation.isGeolocationSupported();
-  }
-  return 'geolocation' in navigator;
-}
-
-function toggleLocationButton(show) {
-  if (window.Geolocation && window.Geolocation.toggleLocationButton) {
-    return window.Geolocation.toggleLocationButton(show);
-  }
-  // Non loggare warning - il modulo geolocation è opzionale in alcune pagine (es. test.html)
-  return false;
-}
+// RIMOSSO: isGeolocationSupported() e toggleLocationButton() - non usate
+// Usa window.Geolocation.isGeolocationSupported() e window.Geolocation.toggleLocationButton() direttamente
 
 // toggleSwapButton è ora in js/utils/ui-helpers.js
 // Mantenuto come commento per riferimento - la funzione è esposta globalmente dal modulo
 // window.toggleSwapButton() è disponibile direttamente da ui-helpers.js
 
-function updateLocationButtonIcon(hasLocation) {
-  if (window.Geolocation && window.Geolocation.updateLocationButtonIcon) {
-    const icon = document.getElementById('location-icon');
-    if (icon) {
-      return window.Geolocation.updateLocationButtonIcon(icon, hasLocation);
-    }
-  }
-}
+// RIMOSSO: updateLocationButtonIcon() - non usata
+// Usa window.Geolocation.updateLocationButtonIcon() direttamente
 
 // ========================================
 // SEZIONE 1: ANIMAZIONE SFONDO
@@ -138,29 +95,14 @@ let hasCalculated = false;
 // Utility dark mode
 // NOTE: setDarkMode() rimossa - ora si usa direttamente Settings.setThemeMode()
 
-/**
- * Toggle dark mode (light/dark)
- * Usato da hamburger-menu.js per il pulsante mobile dark mode
- * @returns {void}
- */
-function toggleDark() {
-  // Determina il nuovo tema basandosi sullo stato attuale
-  const isCurrentlyDark = document.documentElement.classList.contains('dark');
-  const newMode = isCurrentlyDark ? 'light' : 'dark';
-
-  // Usa direttamente Settings.setThemeMode()
-  if (window.Settings && typeof window.Settings.setThemeMode === 'function') {
-    window.Settings.setThemeMode(newMode);
-  } else {
-    // Fallback minimale se Settings non è disponibile
-    console.warn('⚠️ Settings.setThemeMode non disponibile, fallback...');
-    window.Storage.setItem('tpl.themeMode', newMode);
-    document.documentElement.classList.toggle('dark', !isCurrentlyDark);
+// SPOSTATO: toggleDark() → js/features/settings.js
+// La funzione è ora esposta globalmente da Settings.toggleDark()
+// Mantenuto wrapper per retrocompatibilità hamburger-menu.js
+window.toggleDark = function() {
+  if (window.Settings && window.Settings.toggleDark) {
+    window.Settings.toggleDark();
   }
-}
-
-// Esponi toggleDark globalmente per retrocompatibilità (hamburger-menu.js)
-window.toggleDark = toggleDark;
+};
 
 // ================================
 // SISTEMA ACCESSIBILITÀ - DIMENSIONE TESTO
@@ -174,49 +116,24 @@ window.toggleDark = toggleDark;
 
 // NOTE: updateFermateButtons() rimossa - ora si usa direttamente RouteSelector.updateUI()
 // Mantenuta solo come alias per retrocompatibilità
-function updateFermateButtons() {
-  if (typeof window.RouteSelector !== 'undefined' && window.RouteSelector.updateUI) {
-    window.RouteSelector.updateUI();
-  }
-}
+// RIMOSSO: updateFermateButtons() - duplicato di RouteSelector.updateUI()
+// Usa window.RouteSelector.updateUI() direttamente
 
 // ===== MODAL FERMATE =====
 // Le funzioni del modal fermate sono ora in js/components/modals.js
 // Questo script usa solo l'API pubblica esposta dal modulo
 
 // Wrapper per compatibilità - delega a FermateModal
-function openFermateModal(type) {
-  if (typeof FermateModal !== 'undefined' && FermateModal.open) {
-    FermateModal.open(type);
-  } else {
-    console.warn('⚠️ FermateModal non ancora inizializzato');
-  }
-}
-
-function closeFermateModal() {
-  if (typeof FermateModal !== 'undefined' && FermateModal.close) {
-    FermateModal.close();
-  }
-}
+// SPOSTATO: openFermateModal() e closeFermateModal() → js/components/modals.js
+// Usa FermateModal.open(type) e FermateModal.close() direttamente
 
 // ===== MODAL LINEE =====
 // Le funzioni del modal linee sono ora in js/components/modals.js
 // Questo script usa solo l'API pubblica esposta dal modulo
 
 // Wrapper per compatibilità - delega a LineeModal
-function openLineeModal() {
-  if (typeof LineeModal !== 'undefined' && LineeModal.open) {
-    LineeModal.open();
-  } else {
-    console.warn('⚠️ LineeModal non ancora inizializzato');
-  }
-}
-
-function closeLineeModal() {
-  if (typeof LineeModal !== 'undefined' && LineeModal.close) {
-    LineeModal.close();
-  }
-}
+// SPOSTATO: openLineeModal() e closeLineeModal() → js/components/modals.js  
+// Usa LineeModal.open() e LineeModal.close() direttamente
 
 function selectLinea(idx, nome) {
   // Questa funzione viene chiamata dal callback di LineeModal
@@ -237,7 +154,10 @@ function selectLinea(idx, nome) {
     window.Storage.setItem('tpl.lineaIdx', lineaIdx);
   }
 
-  closeLineeModal();
+  // Chiudi modal linee usando il modulo
+  if (typeof LineeModal !== 'undefined' && LineeModal.close) {
+    LineeModal.close();
+  }
 }
 
 // Funzioni populateFermateList, renderFermateList, selectFermata, filterFermate
@@ -251,31 +171,11 @@ function selectLinea(idx, nome) {
  * Aggiorna lo stato della card prezzo
  * Wrapper per RouteSelector.updateUI()
  */
-function updatePriceCardState() {
-  if (typeof window.RouteSelector !== 'undefined' && window.RouteSelector.updateUI) {
-    window.RouteSelector.updateUI();
-  }
-}
+// RIMOSSO: updatePriceCardState() - duplicato di RouteSelector.updateUI() 
+// Usa window.RouteSelector.updateUI() direttamente
 
-/**
- * Aggiorna riepilogo selezioni
- * Wrapper per RouteSelector.updateUI()
- */
-function updateSummary() {
-  if (typeof window.RouteSelector !== 'undefined' && window.RouteSelector.updateUI) {
-    window.RouteSelector.updateUI();
-  }
-}
-
-/**
- * Calcola prezzo e codice automaticamente
- * Wrapper per RouteSelector.updateUI()
- */
-function calcolaPrezzo() {
-  if (typeof window.RouteSelector !== 'undefined' && window.RouteSelector.updateUI) {
-    window.RouteSelector.updateUI();
-  }
-}
+// RIMOSSO: updateSummary() e calcolaPrezzo() - duplicati di RouteSelector.updateUI()
+// Usa window.RouteSelector.updateUI() direttamente
 
 // Funzione swap globale
 // Le funzioni swap e calculatePrice sono ora gestite da js/features/route-selector.js
@@ -410,15 +310,27 @@ document.addEventListener('keydown', function (e) {
 });
 // Event listener per apertura modale linee
 if (lineaBtn) {
-  lineaBtn.addEventListener('click', openLineeModal);
+  lineaBtn.addEventListener('click', () => {
+    if (typeof LineeModal !== 'undefined' && LineeModal.open) {
+      LineeModal.open();
+    }
+  });
 }
 
 // Event listeners per pulsanti partenza/arrivo
 if (partenzaBtn) {
-  partenzaBtn.addEventListener('click', () => openFermateModal('partenza'));
+  partenzaBtn.addEventListener('click', () => {
+    if (typeof FermateModal !== 'undefined' && FermateModal.open) {
+      FermateModal.open('partenza');
+    }
+  });
 }
 if (arrivoBtn) {
-  arrivoBtn.addEventListener('click', () => openFermateModal('arrivo'));
+  arrivoBtn.addEventListener('click', () => {
+    if (typeof FermateModal !== 'undefined' && FermateModal.open) {
+      FermateModal.open('arrivo');
+    }
+  });
 }
 
 // Event listener per pulsante geolocalizzazione (sia per index.html che fermate.html)
@@ -514,8 +426,10 @@ function initializeModalsModules() {
             }
             window.Storage.setItem('tpl.arrivoIdx', arrivoIdx);
           }
-          updateSummary();
-          calcolaPrezzo();
+          // Usa direttamente RouteSelector.updateUI() invece dei wrapper
+          if (window.RouteSelector && window.RouteSelector.updateUI) {
+            window.RouteSelector.updateUI();
+          }
         }
       }
     });
@@ -663,8 +577,10 @@ async function loadData() {
       if (arrivoIdx !== '' && tariffarioData[lineaIdx] && arrivoText) {
         arrivoText.textContent = tariffarioData[lineaIdx].fermate[arrivoIdx];
       }
-      updateSummary();
-      calcolaPrezzo();
+      // Usa direttamente RouteSelector.updateUI() invece dei wrapper
+      if (window.RouteSelector && window.RouteSelector.updateUI) {
+        window.RouteSelector.updateUI();
+      }
     } catch (error) {
       console.error('❌ Errore durante ripristino fallback:', error);
     }
@@ -716,26 +632,9 @@ async function loadData() {
 // - window.renderFermate(lineaIndex, sortByDistance)
 // - window.renderPrezzi(lineaIndex)
 
-// Wrapper per retrocompatibilità
-function renderFermate(lineaIndex = 0, sortByDistance = false) {
-  if (window.PageRenderers && typeof window.PageRenderers.renderFermate === 'function') {
-    return window.PageRenderers.renderFermate(lineaIndex, sortByDistance);
-  } else if (typeof window.renderFermate === 'function' && window.renderFermate !== renderFermate) {
-    // Se esiste già la funzione globale (dal modulo), usala
-    return window.renderFermate(lineaIndex, sortByDistance);
-  }
-  console.warn('⚠️ PageRenderers module not available');
-}
-
-function renderPrezzi(lineaIndex = 0) {
-  if (window.PageRenderers && typeof window.PageRenderers.renderPrezzi === 'function') {
-    return window.PageRenderers.renderPrezzi(lineaIndex);
-  } else if (typeof window.renderPrezzi === 'function' && window.renderPrezzi !== renderPrezzi) {
-    // Se esiste già la funzione globale (dal modulo), usala
-    return window.renderPrezzi(lineaIndex);
-  }
-  console.warn('⚠️ PageRenderers module not available');
-}
+// RIMOSSO: renderFermate() e renderPrezzi() - wrapper non necessari
+// I moduli PageRenderers espongono già le funzioni globalmente
+// Usa window.renderFermate() e window.renderPrezzi() direttamente
 
 // ========================================
 // SEZIONE PAGE LINES
@@ -743,79 +642,20 @@ function renderPrezzi(lineaIndex = 0) {
 // Le funzioni di gestione linee sono ora in js/features/page-renderers.js
 // Usa window.PageRenderers o le funzioni globali (retrocompatibilità)
 
-// Wrapper per retrocompatibilità - Fermate
-function populateLineeTratte() {
-  if (window.PageRenderers && typeof window.PageRenderers.populateLineeTratte === 'function') {
-    return window.PageRenderers.populateLineeTratte();
-  } else if (typeof window.populateLineeTratte === 'function' && window.populateLineeTratte !== populateLineeTratte) {
-    return window.populateLineeTratte();
-  }
-  console.warn('⚠️ PageRenderers module not available');
-}
+// RIMOSSO: populateLineeTratte() - wrapper non necessario
+// Usa window.populateLineeTratte() direttamente dal modulo PageRenderers
 
-function openLineeModalFermate() {
-  if (window.PageRenderers && typeof window.PageRenderers.openLineeModalFermate === 'function') {
-    return window.PageRenderers.openLineeModalFermate();
-  } else if (typeof window.openLineeModalFermate === 'function' && window.openLineeModalFermate !== openLineeModalFermate) {
-    return window.openLineeModalFermate();
-  }
-  console.warn('⚠️ PageRenderers module not available');
-}
+// RIMOSSO: openLineeModalFermate() e closeLineeModalFermate() - wrapper non necessari
+// Usa window.openLineeModalFermate() e window.closeLineeModalFermate() direttamente
 
-function closeLineeModalFermate() {
-  if (window.PageRenderers && typeof window.PageRenderers.closeLineeModalFermate === 'function') {
-    return window.PageRenderers.closeLineeModalFermate();
-  } else if (typeof window.closeLineeModalFermate === 'function' && window.closeLineeModalFermate !== closeLineeModalFermate) {
-    return window.closeLineeModalFermate();
-  }
-  console.warn('⚠️ PageRenderers module not available');
-}
+// RIMOSSO: selectLineaFermate() - wrapper non necessario
+// Usa window.selectLineaFermate() direttamente
 
-function selectLineaFermate(idx, nome) {
-  if (window.PageRenderers && typeof window.PageRenderers.selectLineaFermate === 'function') {
-    return window.PageRenderers.selectLineaFermate(idx, nome);
-  } else if (typeof window.selectLineaFermate === 'function' && window.selectLineaFermate !== selectLineaFermate) {
-    return window.selectLineaFermate(idx, nome);
-  }
-  console.warn('⚠️ PageRenderers module not available');
-}
+// RIMOSSO: populateLineePrezzi() e openLineeModalPrezzi() - wrapper non necessari
+// Usa window.populateLineePrezzi() e window.openLineeModalPrezzi() direttamente
 
-// Wrapper per retrocompatibilità - Prezzi
-function populateLineePrezzi() {
-  if (window.PageRenderers && typeof window.PageRenderers.populateLineePrezzi === 'function') {
-    return window.PageRenderers.populateLineePrezzi();
-  } else if (typeof window.populateLineePrezzi === 'function' && window.populateLineePrezzi !== populateLineePrezzi) {
-    return window.populateLineePrezzi();
-  }
-  console.warn('⚠️ PageRenderers module not available');
-}
-
-function openLineeModalPrezzi() {
-  if (window.PageRenderers && typeof window.PageRenderers.openLineeModalPrezzi === 'function') {
-    return window.PageRenderers.openLineeModalPrezzi();
-  } else if (typeof window.openLineeModalPrezzi === 'function' && window.openLineeModalPrezzi !== openLineeModalPrezzi) {
-    return window.openLineeModalPrezzi();
-  }
-  console.warn('⚠️ PageRenderers module not available');
-}
-
-function closeLineeModalPrezzi() {
-  if (window.PageRenderers && typeof window.PageRenderers.closeLineeModalPrezzi === 'function') {
-    return window.PageRenderers.closeLineeModalPrezzi();
-  } else if (typeof window.closeLineeModalPrezzi === 'function' && window.closeLineeModalPrezzi !== closeLineeModalPrezzi) {
-    return window.closeLineeModalPrezzi();
-  }
-  console.warn('⚠️ PageRenderers module not available');
-}
-
-function selectLineaPrezzi(idx, nome) {
-  if (window.PageRenderers && typeof window.PageRenderers.selectLineaPrezzi === 'function') {
-    return window.PageRenderers.selectLineaPrezzi(idx, nome);
-  } else if (typeof window.selectLineaPrezzi === 'function' && window.selectLineaPrezzi !== selectLineaPrezzi) {
-    return window.selectLineaPrezzi(idx, nome);
-  }
-  console.warn('⚠️ PageRenderers module not available');
-}
+// RIMOSSO: closeLineeModalPrezzi() e selectLineaPrezzi() - wrapper non necessari
+// Usa window.closeLineeModalPrezzi() e window.selectLineaPrezzi() direttamente
 
 // ========================================
 // SEZIONE PAGE SEARCH
@@ -823,16 +663,8 @@ function selectLineaPrezzi(idx, nome) {
 // La funzione setupRicercaPrezzi è ora in js/features/page-renderers.js
 // Usa window.PageRenderers.setupRicercaPrezzi() o window.setupRicercaPrezzi() (retrocompatibilità)
 
-// Wrapper per retrocompatibilità
-function setupRicercaPrezzi() {
-  if (window.PageRenderers && typeof window.PageRenderers.setupRicercaPrezzi === 'function') {
-    return window.PageRenderers.setupRicercaPrezzi();
-  } else if (typeof window.setupRicercaPrezzi === 'function' && window.setupRicercaPrezzi !== setupRicercaPrezzi) {
-    // Se esiste già la funzione globale (dal modulo), usala
-    return window.setupRicercaPrezzi();
-  }
-  console.warn('⚠️ PageRenderers module not available');
-}
+// RIMOSSO: setupRicercaPrezzi() - wrapper non necessario
+// Usa window.setupRicercaPrezzi() direttamente
 
 // ========================================
 // SEZIONE PAGE INITIALIZATION
@@ -841,15 +673,8 @@ function setupRicercaPrezzi() {
 // sono ora in js/features/page-renderers.js
 // Il modulo si inizializza automaticamente quando viene caricato
 
-// Wrapper per retrocompatibilità (se necessario)
-function initFermatePrezzi() {
-  if (window.PageRenderers && typeof window.PageRenderers.initFermatePrezzi === 'function') {
-    return window.PageRenderers.initFermatePrezzi();
-  } else if (typeof window.initFermatePrezzi === 'function' && window.initFermatePrezzi !== initFermatePrezzi) {
-    return window.initFermatePrezzi();
-  }
-  console.warn('⚠️ PageRenderers module not available');
-}
+// RIMOSSO: initFermatePrezzi() - wrapper non necessario
+// Il modulo PageRenderers si auto-inizializza
 
 // Funzione per mostrare notifiche all'utente
 // Funzioni geolocalizzazione delegate al modulo

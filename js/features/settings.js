@@ -577,6 +577,12 @@
 
     // Tema
     setThemeMode: setThemeMode,
+    toggleDark: function() {
+      // Determina il nuovo tema basandosi sullo stato attuale
+      const isCurrentlyDark = document.documentElement.classList.contains('dark');
+      const newMode = isCurrentlyDark ? 'light' : 'dark';
+      setThemeMode(newMode);
+    },
     applyTheme: applyTheme,
     updateBodyColors: updateBodyColors,
     // NOTE: updateToggleIcon rimosso - pulsante legacy non più presente

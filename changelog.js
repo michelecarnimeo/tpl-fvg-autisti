@@ -4,6 +4,32 @@
 
 const changelogData = [
   {
+    version: '1.8.5',
+    date: '17 Novembre 2025',
+    time: '16:50',
+    title: 'Debug Logger modulare + fix pagina test (v1.8.5)',
+    hidden: false,
+    changes: [
+      '🐛 DEBUG LOGGER COMPLETO:',
+      '  • Creati moduli js/debug/core.js, categories.js e ui.js con overlay drag, filtri e storage persistente',
+      '  • Shortcut per categorie GPS/PERFORMANCE/ERROR/UI, export e clear centralizzati',
+      '  • Attivazione dal gruppo dedicato in test.html con pulsanti enable/disable e test categorie',
+      '🧭 TEST.HTML STABILIZZATA:',
+      '  • Loader CSS preset dinamico + import legacy style1.css dentro tutti i preset device',
+      '  • Fix scroll/navbar: normalizzazione overflow, forceUnblockScroll sicuro, navbar sticky con !important',
+      '  • Rimosse console.log rumorose, diagnostica scroll eseguibile manualmente',
+      '⚙️ SCRIPT.JS CLEANUP:',
+      '  • Rimossi wrapper obsoleti (calculateDistance, updateSummary, renderFermate, ecc.) in favore dei moduli',
+      '  • Toggle dark mode spostato in Settings.toggleDark e mantenuto wrapper di compatibilità',
+      '📚 TOOLING & DOCUMENTAZIONE:',
+      '  • Creato js/tests/consolidation-plan.md per ridurre i 60+ file caricati in test.html',
+      '  • Version.json aggiornato a 1.8.5 con note su debug logger e fix UI',
+      '✅ QUALITÀ:',
+      '  • Nessun nuovo lint/error',
+      '  • Test manuali su test.html (scroll, navbar, logger) completati'
+    ]
+  },
+  {
     version: '1.8.4',
     date: '17 Novembre 2025',
     time: '11:10',

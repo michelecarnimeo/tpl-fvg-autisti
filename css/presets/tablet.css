@@ -18,6 +18,7 @@
 @import url('../animations.css');
 @import url('../utilities.css?v=1.0.0');
 @import url('../themes.css');
+@import url('../../style1.css'); /* Legacy support per test.html */
 
 /* ========================================
    NAVIGATION - TABLET (entrambi)
