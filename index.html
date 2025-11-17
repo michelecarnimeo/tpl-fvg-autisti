@@ -8,58 +8,34 @@
   <!-- Font locali per PWA offline -->
   
   <!-- ========================================
-       ORDINE CARICAMENTO CSS (IMPORTANTE!)
-       1. Variables → 2. Base → 3. Layout → 4. Animations → 5. Utilities → 6. Themes → 7. Components → 8. Legacy
+       🎨 CSS PRESET LOADER (v1.8.3)
+       
+       Sistema intelligente di caricamento CSS ottimizzato per:
+       - 🖥️ Desktop (≥ 1024px): navbar, mega-dropdown
+       - 📱 Tablet (768-1023px): navbar + mobile menu
+       - 📱 Mobile (< 768px): mobile menu, PWA banner
+       - 📲 PWA (standalone): bottom nav, app-like
+       
+       Il loader rileva automaticamente la modalità e carica
+       SOLO i componenti CSS necessari, riducendo il tempo di
+       caricamento e migliorando le performance.
        ======================================== -->
   
-  <!-- 1. VARIABILI (sempre per primo!) -->
-  <link rel="stylesheet" href="css/variables.css">
+  <!-- 🚀 CSS Preset Loader - Caricamento intelligente CSS -->
+  <script src="js/utils/css-preset-loader.js"></script>
   
-  <!-- 2. BASE (reset e typography) -->
-  <link rel="stylesheet" href="css/base.css">
-  
-  <!-- 3. LAYOUT (struttura generale) -->
-  <link rel="stylesheet" href="css/layout.css">
-  
-  <!-- 4. ANIMAZIONI (dopo layout, prima temi) -->
-  <link rel="stylesheet" href="css/animations.css">
-  
-  <!-- 5. UTILITIES (classi helper globali) -->
-  <link rel="stylesheet" href="css/utilities.css?v=1.0.0">
-  
-  <!-- 6. TEMI E ACCESSIBILITÀ (dopo utilities, prima componenti) -->
-  <link rel="stylesheet" href="css/themes.css">
-  
-  <!-- 7. COMPONENTI (in qualsiasi ordine) -->
-  <link rel="stylesheet" href="css/components/navbar.css">
-  <link rel="stylesheet" href="css/components/forms.css">
-  <link rel="stylesheet" href="css/components/buttons.css">
-  <link rel="stylesheet" href="css/components/price-card.css">
-  <link rel="stylesheet" href="css/components/cards.css">
-  <link rel="stylesheet" href="css/components/page-layout.css?v=1.0.0">
-  <link rel="stylesheet" href="css/components/fermate-card.css?v=1.0.0">
-  <link rel="stylesheet" href="css/components/search-selector.css?v=1.0.0">
-  <link rel="stylesheet" href="css/components/footer.css">
-  <link rel="stylesheet" href="css/components/modals.css">
-  <link rel="stylesheet" href="css/components/cache-modal.css">
-  <link rel="stylesheet" href="css/components/mobile-menu.css">
-  <link rel="stylesheet" href="css/components/fermate-modal.css">
-  <link rel="stylesheet" href="css/components/settings-modal.css">
-  <link rel="stylesheet" href="css/components/mega-dropdown-settings.css">
-  <link rel="stylesheet" href="css/components/pwa-bottom-nav.css">
-  <link rel="stylesheet" href="css/components/scroll-to-top.css?v=1.0.0">
-  <link rel="stylesheet" href="css/components/pwa-install-banner.css?v=1.0.0">
-  <link rel="stylesheet" href="css/components/version-card.css?v=1.0.0">
-  <link rel="stylesheet" href="css/components/offline-banner.css?v=1.0.0">
-  
-  <!-- Settings (dopo modals.css) -->
-  <link rel="stylesheet" href="css/components/settings/impostazioni.css">
-  <link rel="stylesheet" href="css/components/settings/accessibilita.css">
-  <link rel="stylesheet" href="css/components/settings/aspetto.css">
-  <link rel="stylesheet" href="css/components/settings/info.css">
-  
-  <!-- 8. LEGACY (temporaneo - da dismettere gradualmente) -->
-  <link rel="stylesheet" href="style1.css">
+  <!-- Il CSS verrà caricato automaticamente dal loader sopra
+       in base alla modalità rilevata (desktop/tablet/mobile/pwa).
+       
+       I preset caricano dinamicamente:
+       - css/variables.css
+       - css/base.css
+       - css/layout.css
+       - css/animations.css
+       - css/utilities.css
+       - css/themes.css
+       - css/components/* (solo quelli necessari)
+       - style1.css (legacy) -->
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="src/tpl.jpg" type="image/jpeg">
 </head>

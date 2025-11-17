@@ -1,0 +1,79 @@
+/**
+ * 🖥️ PRESET CSS - DESKTOP
+ * Ottimizzato per schermi desktop (≥ 1024px)
+ * 
+ * Include:
+ * - Navbar completa sempre visibile
+ * - Mega dropdown settings
+ * - NO mobile menu
+ * - NO PWA bottom navigation
+ * - Tutti i componenti modali e funzionalità
+ */
+
+/* ========================================
+   CORE (sempre necessari)
+   ======================================== */
+@import url('../variables.css');
+@import url('../base.css');
+@import url('../layout.css');
+@import url('../animations.css');
+@import url('../utilities.css?v=1.0.0');
+@import url('../themes.css');
+
+/* ========================================
+   NAVIGATION - DESKTOP
+   ======================================== */
+@import url('../components/navbar.css');
+@import url('../components/mega-dropdown-settings.css');
+/* NO mobile-menu.css - non necessario su desktop */
+/* NO pwa-bottom-nav.css - navbar visibile */
+
+/* ========================================
+   FORMS & INPUTS
+   ======================================== */
+@import url('../components/forms.css');
+@import url('../components/buttons.css');
+@import url('../components/search-selector.css?v=1.0.0');
+
+/* ========================================
+   CARDS & CONTENT
+   ======================================== */
+@import url('../components/price-card.css');
+@import url('../components/cards.css');
+@import url('../components/page-layout.css?v=1.0.0');
+@import url('../components/fermate-card.css?v=1.0.0');
+@import url('../components/version-card.css?v=1.0.0');
+
+/* ========================================
+   MODALS (tutti necessari)
+   ======================================== */
+@import url('../components/modals.css');
+@import url('../components/cache-modal.css');
+@import url('../components/fermate-modal.css');
+@import url('../components/settings-modal.css');
+
+/* Settings Modal Tabs */
+@import url('../components/settings/impostazioni.css');
+@import url('../components/settings/accessibilita.css');
+@import url('../components/settings/aspetto.css');
+@import url('../components/settings/info.css');
+
+/* ========================================
+   UTILITIES & FEATURES
+   ======================================== */
+@import url('../components/footer.css');
+@import url('../components/scroll-to-top.css?v=1.0.0');
+@import url('../components/offline-banner.css?v=1.0.0');
+@import url('../components/update-items.css?v=1.0.0');
+
+/* ========================================
+   PWA FEATURES (condizionali)
+   ======================================== */
+@import url('../components/pwa-install-banner.css?v=1.0.0');
+/* Banner installazione PWA (mostra solo se non installato) */
+
+/* ========================================
+   LEGACY (temporaneo)
+   ======================================== */
+@import url('../../style1.css');
+

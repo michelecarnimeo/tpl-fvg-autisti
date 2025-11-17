@@ -1,7 +1,7 @@
-const CACHE_NAME = 'tpl-cache-v22';
+const CACHE_NAME = 'tpl-cache-v23';
 const CACHE_SIZE_LIMIT = 100 * 1024 * 1024; // 100MB per supporto offline completo
-const STATIC_CACHE = 'tpl-static-v22';
-const DYNAMIC_CACHE = 'tpl-dynamic-v22';
+const STATIC_CACHE = 'tpl-static-v23';
+const DYNAMIC_CACHE = 'tpl-dynamic-v23';
 const MAX_DYNAMIC_ITEMS = 200; // Più elementi per supporto offline
 
 // Configurazione ottimizzata per supporto offline
@@ -20,6 +20,17 @@ const STATIC_ASSETS = [
   './fermate.html', // Fermate (offline critico)
   './prezzi.html', // Prezzi (offline critico)
   './404.html', // Pagina errore 404
+  
+  // ======================================== 
+  // 🎨 CSS PRESET LOADER (v1.8.3)
+  // Sistema intelligente di caricamento CSS
+  // ========================================
+  './js/utils/css-preset-loader.js', // Loader intelligente CSS (carica dinamicamente)
+  './css/presets/desktop.css', // Preset Desktop (≥ 1024px)
+  './css/presets/tablet.css', // Preset Tablet (768-1023px)
+  './css/presets/mobile.css', // Preset Mobile (< 768px)
+  './css/presets/pwa.css', // Preset PWA (standalone/fullscreen)
+  
   // CSS - Ordine di caricamento: Variables → Base → Layout → Animations → Utilities → Themes → Components → Legacy
   './css/variables.css', // 1. Variabili CSS globali
   './css/base.css', // 2. Reset e typography

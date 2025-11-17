@@ -1,6 +1,6 @@
 {
-  "version": "1.8.2",
+  "version": "1.8.3",
   "versionDate": "17 Novembre 2025",
-  "versionTime": "00:30",
-  "updateNotes": "Modularizzazione CSS Finale: offline-banner.css, update-items.css, preset-buttons.css, display-optimization.css. Completata pulizia style1.css (1010 → 254 righe, -75%). Fix navbar glassmorphism. Rimosso 756 righe in questa sessione. Totale: -1852 righe da v1.8.0 (-87.9%)."
+  "versionTime": "10:00",
+  "updateNotes": "Sistema CSS Preset Intelligente: 4 preset ottimizzati (desktop/tablet/mobile/pwa), loader automatico, riduzione CSS -30%~45%, performance +200~280ms FCP. HTML semplificato da 40+ righe a 1 script. Service Worker v23. Documentazione completa."
 }

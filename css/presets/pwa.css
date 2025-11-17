@@ -1,0 +1,81 @@
+/**
+ * 📲 PRESET CSS - PWA (Progressive Web App)
+ * Ottimizzato per app installata (standalone/fullscreen)
+ * 
+ * Include:
+ * - PWA bottom navigation (navigazione principale)
+ * - Mobile menu (accessibile da settings)
+ * - NO navbar desktop (hidden in PWA mode)
+ * - NO mega dropdown
+ * - Interfaccia app-like nativa
+ */
+
+/* ========================================
+   CORE (sempre necessari)
+   ======================================== */
+@import url('../variables.css');
+@import url('../base.css');
+@import url('../layout.css');
+@import url('../animations.css');
+@import url('../utilities.css?v=1.0.0');
+@import url('../themes.css');
+
+/* ========================================
+   NAVIGATION - PWA
+   ======================================== */
+@import url('../components/navbar.css');
+/* Navbar nascosta in PWA, ma CSS necessario per fallback */
+@import url('../components/pwa-bottom-nav.css');
+/* Bottom navigation principale in PWA */
+@import url('../components/mobile-menu.css');
+/* Mobile menu accessibile da pulsante settings */
+/* NO mega-dropdown-settings.css - non necessario in PWA */
+
+/* ========================================
+   FORMS & INPUTS (touch-optimized)
+   ======================================== */
+@import url('../components/forms.css');
+@import url('../components/buttons.css');
+@import url('../components/search-selector.css?v=1.0.0');
+
+/* ========================================
+   CARDS & CONTENT (app-like)
+   ======================================== */
+@import url('../components/price-card.css');
+@import url('../components/cards.css');
+@import url('../components/page-layout.css?v=1.0.0');
+@import url('../components/fermate-card.css?v=1.0.0');
+@import url('../components/version-card.css?v=1.0.0');
+
+/* ========================================
+   MODALS (tutti necessari, fullscreen su PWA)
+   ======================================== */
+@import url('../components/modals.css');
+@import url('../components/cache-modal.css');
+@import url('../components/fermate-modal.css');
+@import url('../components/settings-modal.css');
+
+/* Settings Modal Tabs */
+@import url('../components/settings/impostazioni.css');
+@import url('../components/settings/accessibilita.css');
+@import url('../components/settings/aspetto.css');
+@import url('../components/settings/info.css');
+
+/* ========================================
+   UTILITIES & FEATURES
+   ======================================== */
+@import url('../components/footer.css');
+@import url('../components/scroll-to-top.css?v=1.0.0');
+@import url('../components/offline-banner.css?v=1.0.0');
+@import url('../components/update-items.css?v=1.0.0');
+
+/* ========================================
+   PWA FEATURES (app experience)
+   ======================================== */
+/* NO pwa-install-banner.css - app già installata */
+
+/* ========================================
+   LEGACY (temporaneo)
+   ======================================== */
+@import url('../../style1.css');
+
