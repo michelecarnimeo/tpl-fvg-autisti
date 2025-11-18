@@ -251,11 +251,10 @@
     if (locationBtn) {
       // Mostra solo se la geolocalizzazione è supportata
       const shouldShow = show && isGeolocationSupported();
-      locationBtn.style.display = shouldShow ? 'flex' : 'none';
-
-      // Se è il pulsante piccolo (index.html), usa display: flex
-      if (locationBtn.classList.contains('location-btn-small')) {
-        locationBtn.style.display = shouldShow ? 'flex' : 'none';
+      if (shouldShow) {
+        locationBtn.classList.remove('hidden');
+      } else {
+        locationBtn.classList.add('hidden');
       }
     }
   }

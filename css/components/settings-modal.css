@@ -32,7 +32,8 @@
 .settings-modal-content {
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
-  border-radius: 16px;
+  border-radius: 12px;
+  /* Uniformato a 12px come modale linee */
   box-shadow: var(--glass-shadow);
   width: 90%;
   max-width: 600px;
@@ -123,12 +124,17 @@
       rgba(0, 123, 138, 0.5) 100%);
   border-bottom: 1px solid rgba(0, 123, 138, 0.3);
   box-shadow: 0 4px 12px 0 rgba(0, 123, 138, 0.4);
-  border-radius: 16px 16px 0 0;
-  padding: 10px 20px;
+  border-radius: 12px 12px 0 0;
+  /* Uniformato a 12px come modale linee */
+  padding: 10px;
+  /* Padding uniforme 10px per simmetria */
   min-height: 52px;
-  display: flex;
+  display: grid !important;
+  /* Usa grid invece di flex per simmetria perfetta */
+  grid-template-columns: 1fr auto;
+  /* Layout: titolo a sinistra, pulsante a destra */
   align-items: center;
-  justify-content: space-between;
+  gap: 0;
 }
 
 .settings-modal-header h3 {
@@ -137,28 +143,54 @@
   font-weight: 700;
   color: white;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  grid-column: 1;
+  /* Prima colonna */
+  justify-self: start;
+  /* Allineato a sinistra */
 }
 
 .settings-modal-close {
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: none;
+  /* Uniformato a modale linee */
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  /* Uniformato a modale linee: bordo 2px */
   font-size: 1.5rem;
   color: white;
+  opacity: 0.95;
+  /* Uniformato a modale linee */
   cursor: pointer;
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  /* Uniformato a modale linee: 32px invece di 36px */
+  height: 32px;
+  /* Uniformato a modale linee: 32px invece di 36px */
+  min-width: 32px;
+  min-height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 8px;
-  transition: all 0.2s ease;
+  /* Border-radius ridotto per elemento piccolo, mantiene simmetria */
+  transition: all 0.3s ease;
+  /* Uniformato a modale linee: 0.3s invece di 0.2s */
   font-weight: 300;
   line-height: 1;
+  padding: 0;
+  /* Rimuove padding predefinito */
+  box-sizing: border-box;
+  /* Include bordo nelle dimensioni */
+  grid-column: 2;
+  /* Seconda colonna (auto) - a destra */
 }
 
 .settings-modal-close:hover {
-  background: rgba(255, 255, 255, 0.25);
-  transform: rotate(90deg);
+  opacity: 1;
+  /* Uniformato a modale linee */
+  background: rgba(255, 255, 255, 0.2);
+  /* Uniformato a modale linee */
+  border-color: rgba(255, 255, 255, 1);
+  /* Uniformato a modale linee */
+  transform: scale(1.1);
+  /* Uniformato a modale linee: scale invece di rotate */
 }
 
 /* Tabs */
@@ -173,13 +205,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 1rem;
+  gap: 6px;
+  /* Gap ridotto per compattezza */
+  padding: 0.75rem 0.5rem;
+  /* Padding ridotto per compattezza */
   background: transparent;
   border: none;
   border-bottom: 3px solid transparent;
   color: var(--testo-secondario);
-  font-size: 1rem;
+  font-size: 0.95rem;
+  /* Font-size leggermente ridotto */
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -199,7 +234,8 @@
 }
 
 .tab-icon {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
+  /* Icona leggermente ridotta per compattezza */
 }
 
 /* Content */
@@ -247,7 +283,7 @@
 .settings-item:hover {
   background: rgba(0, 123, 138, 0.05);
   border-color: var(--turchese);
-  transform: translateX(4px);
+  /* Rimosso transform: translateX(4px) per simmetria */
 }
 
 .settings-item.active {

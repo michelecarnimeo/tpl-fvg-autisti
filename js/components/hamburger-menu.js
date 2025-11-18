@@ -45,10 +45,12 @@
      * Apri menu mobile
      */
     function openMenu() {
+      console.log('🔓 Apertura menu hamburger...');
       hamburgerToggle.classList.add('active');
       mobileMenu.classList.add('active');
       mobileMenuOverlay.classList.add('active');
       document.body.style.overflow = 'hidden'; // Blocca scroll
+      console.log('✅ Menu hamburger aperto - overlay active:', mobileMenuOverlay.classList.contains('active'));
     }
 
     /**

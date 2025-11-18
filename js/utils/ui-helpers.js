@@ -37,7 +37,11 @@
   function toggleSwapButton(show) {
     const swapBtn = document.getElementById('swap-btn');
     if (swapBtn) {
-      swapBtn.style.display = show ? 'flex' : 'none';
+      if (show) {
+        swapBtn.classList.remove('hidden');
+      } else {
+        swapBtn.classList.add('hidden');
+      }
     }
   }
 

@@ -41,8 +41,8 @@ async function checkForUpdates() {
   modal.style.display = 'block';
   modalTitle.innerHTML = '🔄 Verifica Aggiornamenti';
   modalMessage.innerHTML = '<p style="text-align: center;">⏳ Verifica aggiornamenti in corso...</p>';
-  modalWarning.style.display = 'none';
-  confirmBtn.style.display = 'none';
+  if (modalWarning) modalWarning.classList.add('hidden');
+  if (confirmBtn) confirmBtn.classList.add('hidden');
   if (cancelBtn) cancelBtn.textContent = 'Chiudi';
 
   try {
@@ -109,8 +109,8 @@ async function checkForUpdates() {
         </div>
       `;
       confirmBtn.textContent = 'Aggiorna Ora';
-      confirmBtn.style.display = 'block';
-      modalWarning.style.display = 'none';
+      if (confirmBtn) confirmBtn.classList.remove('hidden');
+      if (modalWarning) modalWarning.classList.add('hidden');
 
     } else if (isDifferentVersion) {
       // Versione diversa ma non più recente (downgrade o versione personalizzata)
@@ -131,7 +131,7 @@ async function checkForUpdates() {
         </div>
       `;
       confirmBtn.textContent = 'Riavvia App';
-      confirmBtn.style.display = 'block';
+      if (confirmBtn) confirmBtn.classList.remove('hidden');
 
     } else {
       // App già aggiornata
@@ -157,7 +157,7 @@ async function checkForUpdates() {
         </div>
       `;
       confirmBtn.textContent = 'Riavvia App';
-      confirmBtn.style.display = 'block';
+      if (confirmBtn) confirmBtn.classList.remove('hidden');
     }
 
   } catch (error) {

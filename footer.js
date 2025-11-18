@@ -11,14 +11,28 @@ function generateFooterHTML(version) {
   const currentYear = new Date().getFullYear();
 
   return `
-    <p>© <span id="footer-year">${currentYear}</span> Michele Carnimeo. Tutti i diritti riservati.<br>TPL FVG è un marchio di TPL FVG S.C. a R.L. · <a href="test.html" style="color: inherit; text-decoration: none; transition: text-decoration 0.3s ease;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">TPL Autisti ${version}</a></p>
-    <div class="footer-links" style="display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center;">
-      <a href="https://t.me/+eoJ9nYFFrjphMzVk" target="_blank" class="telegram-link" title="Canale Telegram">
-        <span class="telegram-icon">📢</span> Avvisi & Aggiornamenti
-      </a>
-      <a href="https://t.me/+2yIF2NfPYt82MWI0" target="_blank" class="telegram-link" title="Gruppo Telegram">
-        <span class="telegram-icon">🐛</span> Segnala Errori
-      </a>
+    <div class="footer-wrapper">
+      <div class="footer-info">
+        <p class="footer-copyright">
+          © <span id="footer-year">${currentYear}</span> Michele Carnimeo · Tutti i diritti riservati
+        </p>
+        <p class="footer-legal">
+          TPL FVG è un marchio di TPL FVG S.C. a R.L.
+        </p>
+      </div>
+      <div class="footer-brand">
+        <p class="footer-app-name">
+          <a href="test.html" class="footer-version-link">TPL Autisti <span class="footer-version-number">v${version}</span></a>
+        </p>
+      </div>
+      <div class="footer-actions">
+        <a href="https://t.me/+eoJ9nYFFrjphMzVk" target="_blank" class="telegram-link" title="Canale Telegram">
+          <span class="telegram-icon">📢</span> Avvisi & Aggiornamenti
+        </a>
+        <a href="https://t.me/+2yIF2NfPYt82MWI0" target="_blank" class="telegram-link" title="Gruppo Telegram">
+          <span class="telegram-icon">🐛</span> Segnala Errori
+        </a>
+      </div>
     </div>
   `;
 }

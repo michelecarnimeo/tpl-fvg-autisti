@@ -4,6 +4,40 @@
 
 const changelogData = [
   {
+    version: '1.8.6',
+    date: '18 Novembre 2025',
+    time: '16:50',
+    title: 'Ottimizzazioni UI: simmetria modali, fix DevTool warnings e miglioramenti footer (v1.8.6)',
+    hidden: false,
+    changes: [
+      '🎨 SIMMETRIA MODALI:',
+      '  • Uniformata simmetria modali linee e impostazioni (header con CSS Grid, pulsante chiusura 32px, border-radius 12px)',
+      '  • Pulsante chiusura identico tra modali: bordo 2px, hover scale(1.1), opacity 0.95',
+      '  • Rimossa scrollbar modali su desktop e mobile, padding simmetrico per card',
+      '  • Rimosso transform translateX su hover items per evitare asimmetrie',
+      '🔧 FIX DEVTOOL WARNINGS:',
+      '  • Aggiunto -webkit-user-select per supporto Safari 3+ sui pulsanti',
+      '  • Rimossi tutti gli inline styles (display: none) sostituiti con classe .hidden',
+      '  • Ottimizzate animazioni pulse: usa transform/opacity su pseudo-elemento invece di box-shadow (evita Paint)',
+      '📱 FOOTER MIGLIORATO:',
+      '  • Layout responsive: tre sezioni orizzontali su desktop, verticale su mobile',
+      '  • Badge Telegram con stile pill, colori distinti e hover effects',
+      '  • Divisore gradiente sopra il footer per separazione visiva',
+      '  • Footer più compatto e ristretto (max-width 900px)',
+      '🍔 MENU HAMBURGER:',
+      '  • Fix overlay: z-index corretto (1001), dimensioni 100vw/100vh, display block quando attivo',
+      '  • Overlay oscura correttamente tutta la pagina, non solo la navbar',
+      '🎯 UI MIGLIORAMENTI:',
+      '  • Pulsanti disabilitati più visibili: sfondo semi-trasparente, bordo solido, box-shadow',
+      '  • Tab impostazioni più compatte: padding 0.75rem 0.5rem, font-size 0.95rem, icona 1.1rem',
+      '  • Testo "Seleziona una linea" non più offuscato (usa var(--testo-principale))',
+      '✅ QUALITÀ:',
+      '  • Tutti i DevTool warnings risolti',
+      '  • Nessun nuovo lint/error',
+      '  • Test manuali completati su desktop e mobile'
+    ]
+  },
+  {
     version: '1.8.5',
     date: '17 Novembre 2025',
     time: '16:50',

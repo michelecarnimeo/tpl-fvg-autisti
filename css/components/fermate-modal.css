@@ -34,10 +34,11 @@
 .fermate-modal-content {
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
-  border-radius: 16px;
+  border-radius: 12px;
   box-shadow: var(--glass-shadow);
   width: 100%;
-  max-width: 500px;
+  max-width: 420px;
+  /* Ridotto da 500px per modale più compatto */
   max-height: 65vh;
   margin: 20px;
   display: flex;
@@ -45,6 +46,8 @@
   transform: scale(0.9) translateY(-10px);
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   opacity: 0;
+  overflow: hidden;
+  /* Nasconde spazio tra bordo e header arrotondato */
 }
 
 /* ========================================
@@ -130,7 +133,7 @@
       rgba(0, 123, 138, 0.5) 100%);
   border-bottom: 1px solid rgba(0, 123, 138, 0.3);
   box-shadow: 0 4px 12px 0 rgba(0, 123, 138, 0.4);
-  border-radius: 16px 16px 0 0;
+  border-radius: 12px 12px 0 0;
   padding: 10px 20px;
   min-height: 52px;
   display: flex;
@@ -344,83 +347,45 @@
 .fermate-modal-list {
   list-style: none;
   margin: 0;
-  padding: 0 8px 0 0;
+  padding: 0 8px 0 8px;
+  /* Padding simmetrico per centrare le card */
   flex: 1;
   overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--turchese) var(--grigio-chiaro);
+  /* Scrollbar nascosta su desktop */
+  scrollbar-width: none;
+  /* Firefox: nasconde scrollbar */
+  -ms-overflow-style: none;
+  /* IE/Edge: nasconde scrollbar */
   -webkit-overflow-scrolling: touch;
   touch-action: pan-y;
 }
 
+/* Scrollbar completamente nascosta su desktop */
 .fermate-modal-list::-webkit-scrollbar {
-  width: 6px;
+  display: none;
+  /* Chrome/Safari: nasconde scrollbar */
+  width: 0;
+  height: 0;
 }
 
-.fermate-modal-list::-webkit-scrollbar-track {
-  background: var(--grigio-chiaro);
-  border-radius: 3px;
-}
-
-.fermate-modal-list::-webkit-scrollbar-thumb {
-  background: var(--turchese);
-  border-radius: 3px;
-}
-
-.fermate-modal-list::-webkit-scrollbar-thumb:hover {
-  background: var(--turchese-scuro);
-}
-
-/* Scrollbar sempre visibile e utilizzabile su mobile */
+/* Scrollbar nascosta anche su mobile */
 @media (max-width: 768px),
 (pointer: coarse) {
   .fermate-modal-list {
-    scrollbar-width: auto;
-    padding-right: 12px;
-    overflow-y: scroll !important;
+    scrollbar-width: none;
+    /* Firefox: nasconde scrollbar */
+    -ms-overflow-style: none;
+    /* IE/Edge: nasconde scrollbar */
+    padding-right: 8px;
+    /* Padding simmetrico senza scrollbar */
+    overflow-y: auto;
   }
 
   .fermate-modal-list::-webkit-scrollbar {
-    width: 20px;
-    -webkit-appearance: none;
-    background: transparent;
-  }
-
-  .fermate-modal-list::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    border: 2px solid transparent;
-    background-clip: padding-box;
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-  }
-
-  .fermate-modal-list::-webkit-scrollbar-thumb {
-    background: var(--turchese);
-    border-radius: 10px;
-    border: 4px solid rgba(255, 255, 255, 0);
-    background-clip: padding-box;
-    min-height: 60px;
-    -webkit-box-shadow: 0 0 1px rgba(0, 123, 138, 0.5);
-    opacity: 0.9;
-  }
-
-  .fermate-modal-list::-webkit-scrollbar-thumb:active,
-  .fermate-modal-list::-webkit-scrollbar-thumb:hover {
-    background: var(--turchese-scuro);
-    background-clip: padding-box;
-    opacity: 1;
-    border-color: rgba(255, 255, 255, 0);
-  }
-
-  .fermate-modal-list::after {
-    content: '';
-    position: absolute;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    width: 20px;
-    pointer-events: none;
-    background: transparent;
+    display: none;
+    /* Chrome/Safari: nasconde scrollbar */
+    width: 0;
+    height: 0;
   }
 }
 
@@ -464,9 +429,18 @@
       rgba(0, 123, 138, 0.5) 100%);
   border-bottom: 1px solid rgba(0, 123, 138, 0.3);
   box-shadow: 0 4px 12px 0 rgba(0, 123, 138, 0.4);
-  border-radius: 16px 16px 0 0;
-  padding: 10px 20px;
+  border-radius: 12px 12px 0 0;
+  padding: 10px;
+  /* Padding: 10px su tutti i lati */
+  padding-right: 10px;
+  /* Padding destro per distanza dal bordo */
   min-height: 52px;
+  display: grid !important;
+  /* Usa grid invece di flex per simmetria perfetta */
+  grid-template-columns: 1fr auto;
+  /* Layout: titolo a sinistra, pulsante a destra */
+  align-items: center;
+  gap: 0;
 }
 
 #linee-modal .fermate-modal-title,
@@ -475,19 +449,44 @@
   font-weight: 600;
   font-size: 1rem;
   line-height: 32px;
+  margin: 0;
+  /* Rimuove margini predefiniti */
+  text-align: center;
+  /* Centra il testo */
+  grid-column: 1;
+  /* Prima colonna */
+  justify-self: center;
+  /* Centrato nella sua colonna */
 }
 
 #linee-modal .fermate-modal-close {
   color: white;
   opacity: 0.95;
   border: 2px solid rgba(255, 255, 255, 0.6);
-  border-radius: 6px;
+  border-radius: 8px;
+  /* Border-radius ridotto per elemento piccolo, mantiene simmetria */
   width: 32px;
   height: 32px;
+  min-width: 32px;
+  /* Forza larghezza minima */
+  min-height: 32px;
+  /* Forza altezza minima */
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
+  padding: 0;
+  /* Rimuove padding predefinito */
+  font-size: 1.5rem;
+  /* Dimensione font per il carattere × */
+  line-height: 1;
+  /* Altezza linea 1 per centratura perfetta */
+  box-sizing: border-box;
+  /* Include bordo nelle dimensioni */
+  grid-column: 2;
+  /* Seconda colonna (auto) - a destra */
+  z-index: 1;
+  /* Sopra il titolo */
 }
 
 #linee-modal .fermate-modal-close:hover {

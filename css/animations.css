@@ -101,23 +101,27 @@
   }
 }
 
-/* Animazione pulse attivo (con box-shadow) */
+/* Animazione pulse attivo (ottimizzata - usa pseudo-elemento invece di box-shadow) */
 @keyframes pulse-active {
   0%, 100% {
-    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+    transform: scale(1);
+    opacity: 0.7;
   }
   50% {
-    box-shadow: 0 0 0 6px rgba(34, 197, 94, 0);
+    transform: scale(1.3);
+    opacity: 0;
   }
 }
 
-/* Animazione pulse glow */
+/* Animazione pulse glow (ottimizzata - usa pseudo-elemento invece di box-shadow) */
 @keyframes pulseGlow {
   0%, 100% {
-    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+    transform: scale(1);
+    opacity: 0.4;
   }
   50% {
-    box-shadow: 0 0 0 4px rgba(34, 197, 94, 0);
+    transform: scale(1.2);
+    opacity: 0;
   }
 }
 
@@ -211,14 +215,48 @@
   animation: pulse 2s var(--easing-ease-in-out) infinite;
 }
 
-/* Pulse active */
+/* Pulse active (ottimizzato - usa pseudo-elemento per evitare Paint) */
 .pulse-active {
-  animation: pulse-active 2s var(--easing-ease-in-out) infinite;
+  position: relative;
+  /* Crea layer compositing per performance */
+  will-change: transform;
 }
 
-/* Pulse glow */
+.pulse-active::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: rgba(34, 197, 94, 0.7);
+  animation: pulse-active 2s var(--easing-ease-in-out) infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Pulse glow (ottimizzato - usa pseudo-elemento per evitare Paint) */
 .pulse-glow {
+  position: relative;
+  /* Crea layer compositing per performance */
+  will-change: transform;
+}
+
+.pulse-glow::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: rgba(34, 197, 94, 0.4);
   animation: pulseGlow 2s var(--easing-ease-in-out) infinite;
+  pointer-events: none;
+  z-index: -1;
 }
 
 /* Rotate */

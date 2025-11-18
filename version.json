@@ -1,6 +1,6 @@
 {
-  "version": "1.8.5",
-  "versionDate": "17 Novembre 2025",
+  "version": "1.8.6",
+  "versionDate": "18 Novembre 2025",
   "versionTime": "16:50",
-  "updateNotes": "Debug Logger modulare con overlay persistente, pulsanti di test e categorie filtrabili su test.html; fix scroll/navbar e compatibilità preset CSS (import legacy style1.css, loader dinamico); pulizia script.js eliminando wrapper duplicati e spostando toggleDark in settings; aggiunto piano di consolidamento per i test JS."
+  "updateNotes": "Ottimizzazioni UI: uniformata simmetria modali linee e impostazioni (header, pulsante chiusura, border-radius 12px); fix DevTool warnings (-webkit-user-select per Safari, rimossi inline styles, ottimizzate animazioni box-shadow); migliorato footer con layout responsive e badge Telegram; fix overlay menu hamburger; migliorata visibilità pulsanti disabilitati; ridotte dimensioni tab impostazioni; rimosso scrollbar modali; ottimizzate animazioni pulse per performance."
 }

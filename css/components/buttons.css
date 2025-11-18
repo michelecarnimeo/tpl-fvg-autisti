@@ -19,6 +19,8 @@
     border: none;
     cursor: pointer;
     transition: all .25s ease;
+    -webkit-user-select: none;
+    /* Supporto Safari 3+ */
     user-select: none;
     text-decoration: none;
     border-radius: 12px;
@@ -36,10 +38,18 @@
 .location-btn-small:disabled,
 .small-btn:disabled,
 .pwa-btn:disabled {
-    opacity: .4;
+    opacity: 1;
+    /* Opacità piena per visibilità */
     cursor: not-allowed;
     transform: none;
-    box-shadow: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    /* Ombra leggera per dare profondità */
+    background: rgba(255, 255, 255, 0.5);
+    /* Sfondo semi-trasparente per distinguerli come disabilitati */
+    border: 1px solid rgba(148, 163, 184, 0.4);
+    /* Bordo solido per indicare stato disabilitato */
+    color: rgba(15, 23, 42, 0.6);
+    /* Testo più chiaro ma visibile */
 }
 
 /* Primary actions */
@@ -231,6 +241,19 @@
 .dark .route-button:hover {
     background: rgba(30, 41, 59, 1);
     border-color: rgba(148, 163, 184, .5);
+}
+
+.dark .route-button:disabled {
+    opacity: 1;
+    /* Opacità piena per visibilità */
+    background: rgba(30, 41, 59, 0.5);
+    /* Sfondo semi-trasparente per distinguerli come disabilitati */
+    border: 1px solid rgba(148, 163, 184, 0.3);
+    /* Bordo solido per indicare stato disabilitato */
+    color: rgba(148, 163, 184, 0.6);
+    /* Testo più chiaro ma visibile */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    /* Ombra leggera per dare profondità */
 }
 
 .dark .pwa-btn.ghost {

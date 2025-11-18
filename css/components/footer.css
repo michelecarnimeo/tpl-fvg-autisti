@@ -2,52 +2,273 @@
    COMPONENTE: FOOTER
    File: css/components/footer.css
    Descrizione: Stili per il footer dell'applicazione, link e informazioni
-   Contenuto: .footer-links, .telegram-link, .telegram-icon, .update-info, dark mode
+   Contenuto: .footer-content, .footer-links, .telegram-link, dark mode
    Dipendenze: variables.css
    ======================================== */
 
-/* SOTTOSEZIONE 24.1: Link footer */
-.footer-links {
+/* SOTTOSEZIONE 24.0: Wrapper footer principale */
+.footer-wrapper {
   display: flex;
-  /* Layout flexbox orizzontale */
-  justify-content: center;
-  /* Centra i link */
-  gap: 2rem;
-  /* Spazio tra i link */
-  margin: 1rem 0;
-  /* Margine verticale */
-  flex-wrap: wrap;
-  /* Va a capo su schermi piccoli */
+  flex-direction: column;
+  /* Mobile: layout verticale */
+  align-items: center;
+  gap: 1rem;
+  padding: 0 1rem;
 }
 
-/* SOTTOSEZIONE 24.2: Link Telegram */
-.telegram-link {
-  color: var(--testo-secondario);
-  /* Colore testo secondario */
-  text-decoration: none;
-  /* Nessuna sottolineatura */
-  transition: color 0.3s ease;
-  /* Transizione colore */
+.footer-wrapper p {
+  margin: 0.25rem 0;
+  /* Spaziatura ridotta tra le righe */
+  line-height: 1.5;
+  /* Altezza linea compatta */
+}
+
+/* Sezione info (sinistra su desktop) */
+.footer-info {
+  text-align: center;
+  /* Centrato su mobile */
+}
+
+/* Sezione brand (centro su desktop) */
+.footer-brand {
+  text-align: center;
+}
+
+/* Sezione actions (destra su desktop) */
+.footer-actions {
   display: flex;
-  /* Layout flexbox */
+  flex-direction: row;
+  /* Orizzontale su mobile */
+  gap: 1rem;
+  flex-wrap: nowrap;
+  padding: 0.75rem 0 0 0;
+  border-top: 1px solid var(--bordo);
+  /* Separatore su mobile */
+  width: 100%;
+  justify-content: center;
+}
+
+/* Layout desktop/tablet: tre sezioni orizzontali */
+@media (min-width: 768px) {
+  .footer-wrapper {
+    flex-direction: row;
+    /* Layout orizzontale */
+    justify-content: space-between;
+    /* Spazio tra le sezioni */
+    align-items: center;
+    /* Allineamento verticale centrale */
+    gap: 2rem;
+    /* Gap ridotto */
+    max-width: 900px;
+    /* Più ristretto (era 1200px) */
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+  
+  /* Sezione sinistra: info testuali */
+  .footer-info {
+    flex: 1;
+    /* Occupa spazio disponibile */
+    text-align: left;
+    /* Allineato a sinistra */
+  }
+  
+  .footer-info p {
+    font-size: 0.75rem;
+    /* Più piccolo */
+  }
+  
+  /* Sezione centro: nome app prominente */
+  .footer-brand {
+    flex: 0 0 auto;
+    /* Non cresce né si restringe */
+    text-align: center;
+  }
+  
+  .footer-brand .footer-app-name {
+    font-size: 1.15rem;
+    /* Più grande su desktop */
+    margin: 0 !important;
+  }
+  
+  /* Sezione destra: link Telegram impilati */
+  .footer-actions {
+    flex: 1;
+    /* Occupa spazio disponibile */
+    flex-direction: column;
+    /* Verticale su desktop */
+    align-items: flex-end;
+    /* Allineato a destra */
+    gap: 0.75rem;
+    /* Gap ridotto tra i badge */
+    border-top: none;
+    /* Rimuovo separatore */
+    padding: 0;
+    width: auto;
+  }
+}
+
+/* SOTTOSEZIONE 24.1: Nome app e versione (prominente) */
+.footer-app-name {
+  font-size: 1rem;
+  /* Dimensione normale */
+  font-weight: 600;
+  /* Semi-bold */
+  margin-bottom: 0.4rem !important;
+  /* Spazio ridotto sotto */
+  color: var(--testo-principale);
+  /* Colore principale */
+}
+
+.footer-version-number {
+  color: var(--turchese);
+  /* Versione in turchese */
+  font-weight: 500;
+  /* Medium weight */
+}
+
+/* SOTTOSEZIONE 24.2: Copyright (secondario) */
+.footer-copyright {
+  font-size: 0.8rem;
+  /* Piccolo */
+  color: var(--testo-secondario);
+  /* Colore secondario */
+  opacity: 0.85;
+  /* Leggermente trasparente */
+}
+
+/* SOTTOSEZIONE 24.3: Info legale marchio (piccolo) */
+.footer-legal {
+  font-size: 0.75rem;
+  /* Molto piccolo */
+  color: var(--testo-secondario);
+  /* Colore secondario */
+  opacity: 0.7;
+  /* Più trasparente */
+  margin-top: 0.15rem !important;
+  /* Spazio minimo sopra */
+}
+
+/* SOTTOSEZIONE 24.4: Responsive mobile - riduci dimensioni */
+@media (max-width: 480px) {
+  .footer-wrapper {
+    padding: 0 0.5rem;
+  }
+  
+  .footer-actions {
+    gap: 0.5rem;
+    /* Gap ridotto su mobile */
+    padding: 0.75rem 0 0 0;
+  }
+  
+  .telegram-link {
+    padding: 0.4rem 0.75rem;
+    /* Padding ridotto */
+    font-size: 0.75rem;
+    /* Font più piccolo */
+  }
+  
+  .telegram-icon {
+    font-size: 1rem;
+    /* Icona più piccola */
+  }
+}
+
+/* SOTTOSEZIONE 24.2: Link Telegram (stile badge moderno) */
+.telegram-link {
+  display: inline-flex;
+  /* Layout flexbox inline */
   align-items: center;
   /* Allineamento verticale centrale */
-  gap: 0.5rem;
+  gap: 0.4rem;
   /* Spazio tra icona e testo */
+  padding: 0.5rem 1rem;
+  /* Padding interno generoso */
+  border-radius: 20px;
+  /* Bordo molto arrotondato (pill shape) */
+  text-decoration: none;
+  /* Nessuna sottolineatura */
+  font-size: 0.85rem;
+  /* Testo leggermente più piccolo */
+  font-weight: 500;
+  /* Medium weight */
+  transition: all 0.3s ease;
+  /* Transizione smooth su tutto */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  /* Ombra leggera */
 }
 
-.telegram-link:hover {
-  color: var(--turchese);
-  /* Colore turchese al hover */
+/* Stile specifico per "Avvisi & Aggiornamenti" (blu) */
+.telegram-link:first-child {
+  background: rgba(59, 130, 246, 0.1);
+  /* Background blu chiaro */
+  color: #2563eb;
+  /* Testo blu */
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  /* Bordo blu sottile */
+}
+
+.telegram-link:first-child:hover {
+  background: rgba(59, 130, 246, 0.15);
+  /* Background più intenso al hover */
+  border-color: rgba(59, 130, 246, 0.3);
+  /* Bordo più visibile */
+  transform: translateY(-2px);
+  /* Solleva leggermente */
+  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.15);
+  /* Ombra più pronunciata */
+}
+
+/* Stile specifico per "Segnala Errori" (arancione) */
+.telegram-link:last-child {
+  background: rgba(249, 115, 22, 0.1);
+  /* Background arancione chiaro */
+  color: #ea580c;
+  /* Testo arancione */
+  border: 1px solid rgba(249, 115, 22, 0.2);
+  /* Bordo arancione sottile */
+}
+
+.telegram-link:last-child:hover {
+  background: rgba(249, 115, 22, 0.15);
+  /* Background più intenso al hover */
+  border-color: rgba(249, 115, 22, 0.3);
+  /* Bordo più visibile */
+  transform: translateY(-2px);
+  /* Solleva leggermente */
+  box-shadow: 0 4px 8px rgba(249, 115, 22, 0.15);
+  /* Ombra più pronunciata */
 }
 
 /* SOTTOSEZIONE 24.3: Icona Telegram */
 .telegram-icon {
-  font-size: 1.2rem;
-  /* Dimensione icona */
+  font-size: 1.1rem;
+  /* Dimensione icona leggermente ridotta */
+  line-height: 1;
+  /* Allineamento perfetto */
 }
 
-/* SOTTOSEZIONE 24.4: Informazioni aggiornamento */
+/* SOTTOSEZIONE 24.5: Link versione app */
+.footer-version-link {
+  color: var(--testo-principale);
+  /* Colore principale */
+  text-decoration: none;
+  /* Nessuna sottolineatura */
+  transition: all 0.3s ease;
+  /* Transizione smooth */
+}
+
+.footer-version-link:hover {
+  color: var(--turchese);
+  /* Turchese al hover */
+}
+
+.footer-version-link:hover .footer-version-number {
+  color: var(--turchese-hover);
+  /* Turchese più chiaro al hover */
+}
+
+/* SOTTOSEZIONE 24.6: Informazioni aggiornamento */
 .update-info {
   margin-top: 1rem;
   /* Margine superiore */
@@ -64,14 +285,38 @@
    ======================================== */
 
 /* SOTTOSEZIONE 25.6: Dark mode per footer */
-.dark .telegram-link {
-  color: rgba(248, 250, 252, 0.8);
-  /* Testo chiaro con opacità */
+.dark .telegram-link:first-child {
+  background: rgba(59, 130, 246, 0.15);
+  /* Background blu più visibile in dark */
+  color: #60a5fa;
+  /* Testo blu più chiaro */
+  border-color: rgba(59, 130, 246, 0.3);
+  /* Bordo più visibile */
 }
 
-.dark .telegram-link:hover {
-  color: var(--turchese);
-  /* Colore turchese al hover */
+.dark .telegram-link:first-child:hover {
+  background: rgba(59, 130, 246, 0.25);
+  /* Background ancora più intenso */
+  color: #93c5fd;
+  /* Testo ancora più chiaro */
+  border-color: rgba(59, 130, 246, 0.4);
+}
+
+.dark .telegram-link:last-child {
+  background: rgba(249, 115, 22, 0.15);
+  /* Background arancione più visibile in dark */
+  color: #fb923c;
+  /* Testo arancione più chiaro */
+  border-color: rgba(249, 115, 22, 0.3);
+  /* Bordo più visibile */
+}
+
+.dark .telegram-link:last-child:hover {
+  background: rgba(249, 115, 22, 0.25);
+  /* Background ancora più intenso */
+  color: #fdba74;
+  /* Testo ancora più chiaro */
+  border-color: rgba(249, 115, 22, 0.4);
 }
 
 .dark .update-info {

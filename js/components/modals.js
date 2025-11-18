@@ -248,9 +248,9 @@
     // Mostra/nascondi pulsante geolocalizzazione solo per la partenza
     if (fermateLocationBtn) {
       if (type === 'partenza') {
-        fermateLocationBtn.style.display = 'flex';
+        fermateLocationBtn.classList.remove('hidden');
       } else {
-        fermateLocationBtn.style.display = 'none';
+        fermateLocationBtn.classList.add('hidden');
       }
     }
 
@@ -339,7 +339,11 @@
 
         // Mostra/nascondi pulsante clear
         if (fermateClearSearch) {
-          fermateClearSearch.style.display = searchTerm ? 'block' : 'none';
+          if (searchTerm) {
+            fermateClearSearch.classList.remove('hidden');
+          } else {
+            fermateClearSearch.classList.add('hidden');
+          }
         }
       });
     }

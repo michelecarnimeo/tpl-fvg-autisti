@@ -65,7 +65,7 @@
           </div>
         </a>
         <!-- Hamburger button (mobile only) -->
-        <button id="hamburger-toggle" class="hamburger-toggle" aria-label="Menu">
+        <button id="hamburger-toggle" class="hamburger-toggle" type="button" aria-label="Menu">
           <span class="hamburger-icon"></span>
         </button>
 
@@ -76,7 +76,7 @@
 
           <!-- Mega Dropdown Impostazioni (solo desktop) -->
           <div class="settings-dropdown-container">
-            <button id="settings-dropdown-btn" class="nav-settings-dropdown-btn" title="Impostazioni">
+            <button id="settings-dropdown-btn" class="nav-settings-dropdown-btn" type="button" title="Impostazioni">
               <span class="settings-icon">⚙️</span>
               <span class="settings-text">Impostazioni</span>
               <span class="dropdown-arrow">▼</span>
@@ -122,9 +122,9 @@
                 <div class="dropdown-item">
                   <span class="dropdown-label">A Dimensione Testo</span>
                   <div class="dropdown-font-buttons">
-                    <button class="dropdown-font-btn active" data-size="normal">A</button>
-                    <button class="dropdown-font-btn" data-size="large">A</button>
-                    <button class="dropdown-font-btn" data-size="xlarge">A</button>
+                    <button class="dropdown-font-btn active" type="button" data-size="normal">A</button>
+                    <button class="dropdown-font-btn" type="button" data-size="large">A</button>
+                    <button class="dropdown-font-btn" type="button" data-size="xlarge">A</button>
                   </div>
                 </div>
 
@@ -141,17 +141,17 @@
               <div class="dropdown-section">
                 <h4 class="dropdown-section-title">⚡ Azioni Rapide</h4>
 
-                <button class="dropdown-action-btn" id="dropdown-open-settings-modal">
+                <button class="dropdown-action-btn" id="dropdown-open-settings-modal" type="button">
                   <span>⚙️</span>
                   <span>Apri Impostazioni Complete</span>
                 </button>
 
-                <button class="dropdown-action-btn" id="dropdown-check-updates">
+                <button class="dropdown-action-btn" id="dropdown-check-updates" type="button">
                   <span>🔄</span>
                   <span>Verifica Aggiornamenti</span>
                 </button>
 
-                <button class="dropdown-action-btn" id="dropdown-clear-cache">
+                <button class="dropdown-action-btn" id="dropdown-clear-cache" type="button">
                   <span>🗑️</span>
                   <span>Cancella Cache</span>
                 </button>
@@ -171,7 +171,7 @@
     <div id="mobile-menu" class="mobile-menu">
       <div class="mobile-menu-header">
         <span class="mobile-menu-title">Menu</span>
-        <button id="mobile-menu-close" class="mobile-menu-close" aria-label="Chiudi menu">×</button>
+        <button id="mobile-menu-close" class="mobile-menu-close" type="button" aria-label="Chiudi menu">×</button>
       </div>
       <nav class="mobile-menu-nav">
         <a href="index.html" class="mobile-nav-link">
@@ -186,7 +186,7 @@
           <span class="mobile-nav-icon">💰</span>
           <span>Prezzi</span>
         </a>
-        <button id="open-settings" class="mobile-nav-link">
+        <button id="open-settings" class="mobile-nav-link" type="button">
           <span class="mobile-nav-icon">⚙️</span>
           <span>Impostazioni</span>
         </button>
@@ -204,7 +204,7 @@
         </div>
 
         <div class="form-group">
-          <button id="linea-btn" class="route-button linea-select-btn">
+          <button id="linea-btn" class="route-button linea-select-btn" type="button">
             <span id="linea-text">Seleziona una linea</span>
             <span class="route-arrow">▼</span>
           </button>
@@ -217,12 +217,12 @@
           <div class="route-label">
             <div class="route-icon"><span>Partenza</span></div>
             <div class="route-button-container">
-              <button id="partenza-btn" class="route-button" disabled>
+              <button id="partenza-btn" class="route-button" type="button" disabled>
                 <span id="partenza-text">Seleziona la partenza</span>
                 <span class="route-arrow">▼</span>
               </button>
               <!-- Pulsante geolocalizzazione (nascosto inizialmente) -->
-              <button id="location-btn" class="location-btn-small" style="display: none;"
+              <button id="location-btn" class="location-btn-small hidden" type="button"
                 title="Rileva posizione e ordina fermate per distanza">
                 <span id="location-icon">📍</span>
               </button>
@@ -232,13 +232,12 @@
           <div class="route-label">
             <div class="route-icon"><span>Destinazione</span></div>
             <div class="route-button-container">
-              <button id="arrivo-btn" class="route-button" disabled>
+              <button id="arrivo-btn" class="route-button" type="button" disabled>
                 <span id="arrivo-text">Seleziona la destinazione</span>
                 <span class="route-arrow">▼</span>
               </button>
               <!-- Pulsante inversione fermate (nascosto inizialmente) -->
-              <button id="swap-btn" class="swap-btn-small" type="button" title="Inverte partenza e arrivo"
-                style="display: none;">
+              <button id="swap-btn" class="swap-btn-small hidden" type="button" title="Inverte partenza e arrivo">
                 <span>⇅</span>
               </button>
             </div>
@@ -247,8 +246,8 @@
 
         <!-- Pulsanti reset -->
         <div class="reset-section">
-          <button id="reset-route-btn" class="reset-route-btn" type="button"
-            title="Resetta solo partenza e destinazione" style="display: none;">
+          <button id="reset-route-btn" class="reset-route-btn hidden" type="button"
+            title="Resetta solo partenza e destinazione">
             ↺ Resetta percorso
           </button>
           <button id="reset-btn" class="reset-btn" type="button" title="Resetta tutto e riparti da capo">
@@ -278,7 +277,7 @@
         </div>
 
         <!-- Banner installazione PWA posizionato sotto la card prezzi -->
-        <div id="pwa-install-banner" class="pwa-install-banner" style="display: none;">
+        <div id="pwa-install-banner" class="pwa-install-banner hidden">
           <div class="pwa-install-content">
             <div class="pwa-install-text">
               <span class="pwa-install-title">📱 Installa l'app</span>
@@ -289,7 +288,7 @@
               <button id="pwa-install-button" class="pwa-btn pwa-btn-primary" type="button">Installa</button>
             </div>
           </div>
-          <div id="pwa-ios-hint" class="pwa-ios-hint" style="display: none;">
+          <div id="pwa-ios-hint" class="pwa-ios-hint hidden">
             <div class="ios-hint-title">📲 Come installare su iPhone/iPad:</div>
             <ol class="ios-hint-steps">
               <li><span class="step-number">1.</span> Tocca il pulsante <strong>Condividi</strong> <span
@@ -300,7 +299,7 @@
             </ol>
             <div class="ios-hint-note">💡 L'app apparirà sulla tua schermata Home come un'app nativa</div>
           </div>
-          <div id="pwa-android-hint" class="pwa-android-hint" style="display: none;">
+          <div id="pwa-android-hint" class="pwa-android-hint hidden">
             <div class="android-hint-title">🤖 Come installare su Android:</div>
             <ol class="android-hint-steps">
               <li><span class="step-number">1.</span> Tocca il pulsante <strong>"Installa"</strong> qui sopra (se
@@ -326,7 +325,7 @@
   </main>
 
   <!-- PWA Brand Header (in alto) -->
-  <div id="pwa-brand-header" class="pwa-brand-header" style="display: none;">
+  <div id="pwa-brand-header" class="pwa-brand-header hidden">
     <div class="pwa-logo-wrapper">
       <img src="src/logo.png" alt="TPL" class="pwa-logo-img pwa-logo-default">
       <img src="src/logo1.png" alt="TPL" class="pwa-logo-img pwa-logo-hover">
@@ -345,7 +344,7 @@
   </div>
 
   <!-- PWA Bottom Navigation (in basso) -->
-  <nav id="pwa-bottom-nav" class="pwa-bottom-nav" style="display: none;">
+  <nav id="pwa-bottom-nav" class="pwa-bottom-nav hidden">
     <a href="index.html" class="pwa-nav-item active" data-page="home">
       <svg class="pwa-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
         stroke-linejoin="round">
@@ -375,7 +374,7 @@
       <span class="pwa-nav-label">Prezzi</span>
     </a>
 
-    <button class="pwa-nav-item" data-page="settings" id="pwa-settings-btn">
+    <button class="pwa-nav-item" data-page="settings" id="pwa-settings-btn" type="button">
       <svg class="pwa-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
         stroke-linejoin="round">
         <circle cx="12" cy="12" r="3"></circle>
@@ -391,7 +390,7 @@
       <div class="fermate-modal-header">
         <h3 id="fermate-modal-title">Seleziona fermata</h3>
         <div class="fermate-modal-actions">
-          <button id="fermate-modal-close" class="fermate-modal-close" aria-label="Chiudi">×</button>
+          <button id="fermate-modal-close" class="fermate-modal-close" type="button" aria-label="Chiudi">×</button>
         </div>
       </div>
       <div class="fermate-modal-body">
@@ -400,12 +399,12 @@
           <div class="fermate-search-box">
             <span class="fermate-search-icon">🔍</span>
             <input type="text" id="fermate-search-input" class="fermate-search-input" placeholder="Cerca per nome..." />
-            <button id="fermate-clear-search" class="fermate-clear-btn" style="display: none;">✕</button>
+            <button id="fermate-clear-search" class="fermate-clear-btn hidden" type="button">✕</button>
           </div>
         </div>
 
         <!-- Pulsante geolocalizzazione -->
-        <button id="fermate-location-btn" class="fermate-location-btn-inline" title="Rileva fermata più vicina">
+        <button id="fermate-location-btn" class="fermate-location-btn-inline" type="button" title="Rileva fermata più vicina">
           <span id="fermate-location-icon">📍</span>
           <span id="fermate-location-text">Rileva fermata più vicina</span>
         </button>
@@ -426,7 +425,7 @@
       <div class="fermate-modal-header">
         <h3 id="linee-modal-title">Seleziona linea</h3>
         <div class="fermate-modal-actions">
-          <button id="linee-modal-close" class="fermate-modal-close" aria-label="Chiudi">×</button>
+          <button id="linee-modal-close" class="fermate-modal-close" type="button" aria-label="Chiudi">×</button>
         </div>
       </div>
       <div class="fermate-modal-body">
@@ -448,11 +447,11 @@
       </div>
       <div class="cache-modal-body">
         <p id="modal-message">Verifico se ci sono aggiornamenti disponibili...</p>
-        <p class="cache-modal-warning" id="modal-warning" style="display: none;"></p>
+        <p class="cache-modal-warning hidden" id="modal-warning"></p>
       </div>
       <div class="cache-modal-footer">
-        <button id="cache-cancel" class="cache-modal-btn cache-modal-cancel">Annulla</button>
-        <button id="cache-confirm" class="cache-modal-btn cache-modal-confirm" style="display: none;">Riavvia e Aggiorna
+        <button id="cache-cancel" class="cache-modal-btn cache-modal-cancel" type="button">Annulla</button>
+        <button id="cache-confirm" class="cache-modal-btn cache-modal-confirm hidden" type="button">Riavvia e Aggiorna
           (v1.2)</button>
       </div>
     </div>

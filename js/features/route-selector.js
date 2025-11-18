@@ -122,7 +122,7 @@
       // Nascondi pulsante "Resetta percorso"
       const resetRouteBtn = document.getElementById('reset-route-btn');
       if (resetRouteBtn) {
-        resetRouteBtn.style.display = 'none';
+        resetRouteBtn.classList.add('hidden');
       }
       return;
     }
@@ -143,7 +143,7 @@
     // Mostra pulsante "Resetta percorso" quando la linea è selezionata
     const resetRouteBtn = document.getElementById('reset-route-btn');
     if (resetRouteBtn) {
-      resetRouteBtn.style.display = 'inline-block';
+      resetRouteBtn.classList.remove('hidden');
     }
   }
 

@@ -114,6 +114,44 @@ body::after {
   flex-shrink: 0;
   width: 100%;
   margin-top: auto;
+  padding-top: 3rem;
+  /* Spazio generoso sopra il footer */
+  position: relative;
+  /* Per il pseudo-elemento */
+}
+
+/* Divisore decorativo sopra il footer */
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 1.5rem;
+  /* Posizionato a metà del padding-top */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  /* Non copre tutta la larghezza */
+  max-width: 600px;
+  /* Larghezza massima */
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(148, 163, 184, 0.3) 20%,
+    rgba(148, 163, 184, 0.3) 80%,
+    transparent
+  );
+  /* Gradiente che sfuma ai lati - colore più visibile */
+}
+
+/* Dark mode: divisore più chiaro */
+.dark .footer::before {
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(148, 163, 184, 0.4) 20%,
+    rgba(148, 163, 184, 0.4) 80%,
+    transparent
+  );
 }
 
 /* ========================================
@@ -230,6 +268,7 @@ body.pwa-mode .main-content {
 /* Padding per footer quando in modalità PWA */
 body.pwa-mode .footer {
   padding-bottom: calc(90px + env(safe-area-inset-bottom));
+  /* Mantiene padding-top per il divisore */
 }
 
 /* ========================================
@@ -250,6 +289,18 @@ body.pwa-mode .footer {
     padding: 0 !important;
   }
   
+  /* Footer: riduci padding-top su tablet */
+  .footer {
+    padding-top: 2.5rem;
+  }
+  
+  .footer::before {
+    top: 1.25rem;
+    /* Aggiusta posizione divisore */
+    width: 85%;
+    /* Leggermente più largo su tablet */
+  }
+  
   body.pwa-mode .main-content {
     padding-top: 80px;
     padding-bottom: calc(80px + env(safe-area-inset-bottom));
@@ -267,6 +318,18 @@ body.pwa-mode .footer {
 @media (max-width: 480px) {
   .container {
     padding: 0 0.75rem;
+  }
+  
+  /* Footer: riduci ulteriormente padding-top su mobile */
+  .footer {
+    padding-top: 2rem;
+  }
+  
+  .footer::before {
+    top: 1rem;
+    /* Aggiusta posizione divisore */
+    width: 90%;
+    /* Ancora più largo su mobile */
   }
   
   body.pwa-mode .main-content {
