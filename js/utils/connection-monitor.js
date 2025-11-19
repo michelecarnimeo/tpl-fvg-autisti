@@ -80,16 +80,12 @@
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 2000);
 
-        // Verifica connessione usando un endpoint semplice
-        // Usiamo mode: 'no-cors' per evitare problemi CORS, ma questo significa che
-        // non possiamo verificare lo status code HTTP. Se la richiesta completa senza
-        // errori di rete, assumiamo che siamo online.
-        const fetchPromise = fetch('https://www.google.com/favicon.ico?t=' + Date.now(), {
+        // Verifica connessione usando un endpoint locale leggero
+        // Aggiungiamo cache busting per evitare risposte dalla cache
+        const fetchPromise = fetch('/ping.txt?t=' + Date.now(), {
           method: 'HEAD',
-          mode: 'no-cors',
           cache: 'no-cache',
-          signal: controller.signal,
-          referrerPolicy: 'no-referrer'
+          signal: controller.signal
         });
 
         // Race tra fetch e timeout per gestire timeout espliciti

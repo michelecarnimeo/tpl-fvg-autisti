@@ -199,7 +199,9 @@
     border-radius: 16px;
     border: 1px solid var(--glass-border);
     cursor: pointer;
-    user-select: none;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+            user-select: none;
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
@@ -338,7 +340,9 @@
   
   .fermate-card h3 {
     cursor: pointer;
-    user-select: none;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+            user-select: none;
   }
   
   .fermate-list {

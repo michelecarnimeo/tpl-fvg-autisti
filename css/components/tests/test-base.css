@@ -4,6 +4,19 @@
    ======================================== */
 
 /* ========================================
+   OVERRIDE LAYOUT PER PAGINE TEST
+   Permette lo scroll verticale
+   ======================================== */
+
+html:has(body.test-page),
+body.test-page {
+    position: static !important;
+    overflow: auto !important;
+    height: auto !important;
+    min-height: 100vh;
+}
+
+/* ========================================
    CONTAINER
    ======================================== */
 

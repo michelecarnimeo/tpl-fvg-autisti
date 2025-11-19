@@ -127,6 +127,27 @@ window.toggleRouteGroup = function(groupId) {
     }
 };
 
+window.toggleDebugGroup = function(groupId) {
+    if (typeof TestAccordion !== 'undefined' && TestAccordion.toggleGroup) {
+        TestAccordion.toggleGroup('debug', groupId);
+    } else {
+        const content = document.getElementById(`debug-${groupId}-content`);
+        const icon = document.getElementById(`debug-${groupId}-icon`);
+        
+        if (content && icon) {
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                icon.classList.remove('expanded');
+                icon.textContent = '▶';
+            } else {
+                content.classList.add('expanded');
+                icon.classList.add('expanded');
+                icon.textContent = '▼';
+            }
+        }
+    }
+};
+
 window.toggleAllDbGroups = function(open) {
     if (typeof TestAccordion !== 'undefined' && TestAccordion.toggleAllGroups) {
         TestAccordion.toggleAllGroups('db', open);
@@ -300,7 +321,8 @@ function initAccordionToggleEventDelegation() {
             'price': 'togglePriceGroup',
             'sw': 'toggleSwGroup',
             'route': 'toggleRouteGroup',
-            'settings': 'toggleSettingsGroup'
+            'settings': 'toggleSettingsGroup',
+            'debug': 'toggleDebugGroup'
           };
           
           const toggleFunctionName = functionMap[prefix];

@@ -111,6 +111,9 @@
     <link rel="stylesheet" href="css/components/tests/test-page-specific.css">
     <!-- Test Device Info (device info cards) -->
     <link rel="stylesheet" href="css/components/tests/test-device-info.css">
+    <!-- Test Mode & GPS Debug Panel -->
+    <link rel="stylesheet" href="css/components/test-mode.css">
+    <link rel="stylesheet" href="css/components/gps-debug-panel.css">
     <!-- Test Prezzi Adaptive (tipografia adattiva) -->
     <link rel="stylesheet" href="css/components/tests/test-prezzi-adaptive.css">
     <!-- TOC Sidebar (indice rapido desktop) -->
@@ -124,15 +127,13 @@
     <link rel="icon" href="src/tpl.jpg" type="image/jpeg">
 
     <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <link rel="stylesheet" href="libs/leaflet/leaflet.css" />
 
     <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="libs/leaflet/leaflet.js"></script>
 </head>
 
-<body class="bg-background-light text-foreground-light">
+<body class="bg-background-light text-foreground-light test-page">
 
     <!-- Navbar -->
     <header class="navbar">
@@ -441,6 +442,94 @@
                 </div>
             </div>
             <button class="run-all-btn" data-test="run-all">▶️ Esegui tutti i test</button>
+        </div>
+
+        <!-- Test 0: Debug Logger -->
+        <div id="section-debug" class="test-section has-module-header">
+            <!-- Header modulo: Debug Logger -->
+            <div class="test-header" data-module="debug">
+                <div class="test-header-top">
+                    <div class="test-header-left">
+                        <div class="test-title">🐛 Debug Logger</div>
+                        <div class="test-stats">
+                            <span>Sistema di logging avanzato per debugging</span>
+                        </div>
+                    </div>
+                    <div class="test-header-right">
+                        <div class="test-group-badge badge-info">DEV</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD UNICA che contiene i gruppi debug -->
+            <div class="test-groups-card">
+                <!-- Gruppo Debug: Controlli e Test -->
+                <div class="test-group-separator">
+                    <div class="test-group-header" data-toggle-group="debug" data-group-id="group1">
+                        <div class="test-group-bar group-debug"></div>
+                        <div class="test-group-title-container">
+                            <div class="test-group-title">🔧 Controlli Debug</div>
+                            <div class="test-group-subtitle">Attiva/disattiva e testa il sistema di logging</div>
+                        </div>
+                        <div class="test-group-icon" id="debug-group1-icon">▶</div>
+                    </div>
+                    <div id="debug-group1-content" class="test-group-content">
+                        <div class="test-group-items-container">
+                            <div class="test-item">
+                                <div class="test-item-header">
+                                    <div class="test-item-title">🔧 Controllo Debug Logger</div>
+                                    <div class="test-item-description">Attiva/disattiva il sistema di debug logging</div>
+                                </div>
+                                <div class="test-item-actions">
+                                    <button class="test-btn test-btn-primary" onclick="DebugCore.enable()">
+                                        ✅ Attiva Logger
+                                    </button>
+                                    <button class="test-btn test-btn-secondary" onclick="DebugCore.disable()">
+                                        ❌ Disattiva Logger
+                                    </button>
+                                    <button class="test-btn test-btn-info" onclick="window.diagnoseScroll()">
+                                        🔍 Diagnosi Scroll
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="test-item">
+                                <div class="test-item-header">
+                                    <div class="test-item-title">🧪 Modalità Test Globale</div>
+                                    <div class="test-item-description">Attiva funzionalità debug su TUTTE le pagine (GPS, log dettagliati, ecc.)</div>
+                                </div>
+                                <div class="test-item-actions">
+                                    <button class="test-btn test-btn-success" onclick="TestMode.enable()">
+                                        🟢 Attiva Test Mode
+                                    </button>
+                                    <button class="test-btn test-btn-danger" onclick="TestMode.disable()">
+                                        ⚪ Disattiva Test Mode
+                                    </button>
+                                    <button class="test-btn test-btn-info" onclick="console.log('Test Mode:', TestMode.isEnabled())">
+                                        ℹ️ Stato
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="test-item">
+                                <div class="test-item-header">
+                                    <div class="test-item-title">📝 Test Log Categorie</div>
+                                    <div class="test-item-description">Testa le diverse categorie di logging</div>
+                                </div>
+                                <div class="test-item-actions">
+                                    <button class="test-btn test-btn-success" onclick="DebugCore.log('GPS', 'Test GPS logging', {lat: 40.123, lng: 18.456})">
+                                        📍 Test GPS
+                                    </button>
+                                    <button class="test-btn test-btn-warning" onclick="DebugCore.log('PERFORMANCE', 'Test performance', {loadTime: '234ms'})">
+                                        ⚡ Test Performance
+                                    </button>
+                                    <button class="test-btn test-btn-danger" onclick="DebugCore.log('ERROR', 'Test errore simulato', {type: 'TestError'})">
+                                        ❌ Test Error
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Test Modalità PWA -->
@@ -1095,57 +1184,6 @@
 
             <!-- CARD UNICA che contiene tutti i gruppi (stile Mobile 3) -->
             <div class="test-groups-card">
-
-                <!-- Gruppo 0: Debug Logger -->
-                <div class="test-group-separator">
-                    <div class="test-group-header" data-toggle-group="debug" data-group-id="debug">
-                        <div class="test-group-bar group-debug"></div>
-                        <div class="test-group-title-container">
-                            <div class="test-group-title">🐛 Debug Logger</div>
-                            <div class="test-group-subtitle">Sistema di logging avanzato per debugging</div>
-                        </div>
-                        <div class="test-group-badge badge-info">DEV</div>
-                        <div class="test-group-icon">▶</div>
-                    </div>
-                    <div id="debug-group-content" class="test-group-content">
-                        <div class="test-group-items-container">
-                            <div class="test-item">
-                                <div class="test-item-header">
-                                    <div class="test-item-title">🔧 Controllo Debug Logger</div>
-                                    <div class="test-item-description">Attiva/disattiva il sistema di debug logging</div>
-                                </div>
-                                <div class="test-item-actions">
-                                    <button class="test-btn test-btn-primary" onclick="DebugCore.enable()">
-                                        ✅ Attiva Logger
-                                    </button>
-                                    <button class="test-btn test-btn-secondary" onclick="DebugCore.disable()">
-                                        ❌ Disattiva Logger
-                                    </button>
-                                    <button class="test-btn test-btn-info" onclick="window.diagnoseScroll()">
-                                        🔍 Diagnosi Scroll
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="test-item">
-                                <div class="test-item-header">
-                                    <div class="test-item-title">📝 Test Log Categorie</div>
-                                    <div class="test-item-description">Testa le diverse categorie di logging</div>
-                                </div>
-                                <div class="test-item-actions">
-                                    <button class="test-btn test-btn-success" onclick="DebugCore.log('GPS', 'Test GPS logging', {lat: 40.123, lng: 18.456})">
-                                        📍 Test GPS
-                                    </button>
-                                    <button class="test-btn test-btn-warning" onclick="DebugCore.log('PERFORMANCE', 'Test performance', {loadTime: '234ms'})">
-                                        ⚡ Test Performance
-                                    </button>
-                                    <button class="test-btn test-btn-danger" onclick="DebugCore.log('ERROR', 'Test errore simulato', {type: 'TestError'})">
-                                        ❌ Test Error
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <!-- Gruppo 1: Caricamento & Struttura -->
                 <div class="test-group-separator">
@@ -2650,6 +2688,9 @@
     <script src="js/debug/core.js"></script>
     <script src="js/debug/categories.js"></script>
     <script src="js/debug/ui.js"></script>
+    <!-- TEST MODE & GPS DEBUG PANEL -->
+    <script src="js/debug/test-mode.js"></script>
+    <script src="js/debug/gps-debug-panel.js"></script>
     <!-- GEOLOCATION MODULE (necessario per test GPS) -->
     <script src="js/features/geolocation.js"></script>
     <!-- Hamburger Menu -->

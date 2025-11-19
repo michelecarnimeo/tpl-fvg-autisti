@@ -58,6 +58,7 @@
   // Stato geolocalizzazione
   let userPosition = null;
   let locationPermissionGranted = false;
+  const reverseGeocodeCache = new Map();
 
   // Coordinate fermate (da aggiornare con dati reali se disponibili)
   const FERMATE_COORDINATES = {
@@ -166,6 +167,56 @@
   }
 
   /**
+   * Recupera il nome della città a partire da coordinate (reverse geocoding)
+   * Usa OpenStreetMap (Nominatim) con una semplice cache in-memory
+   * @param {number} latitude
+   * @param {number} longitude
+   * @returns {Promise<string|null>}
+   */
+  async function reverseGeocode(latitude, longitude) {
+    const cacheKey = `${latitude.toFixed(3)}:${longitude.toFixed(3)}`;
+    if (reverseGeocodeCache.has(cacheKey)) {
+      return reverseGeocodeCache.get(cacheKey);
+    }
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 4000);
+
+    try {
+      const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${encodeURIComponent(latitude)}&lon=${encodeURIComponent(longitude)}&zoom=12&addressdetails=1`;
+      const response = await fetch(url, {
+        headers: {
+          'Accept': 'application/json'
+        },
+        signal: controller.signal
+      });
+
+      if (!response.ok) {
+        throw new Error(`Reverse geocoding fallito (${response.status})`);
+      }
+
+      const data = await response.json();
+      const address = data.address || {};
+      const cityName =
+        address.city ||
+        address.town ||
+        address.village ||
+        address.municipality ||
+        address.county ||
+        data.display_name ||
+        null;
+
+      reverseGeocodeCache.set(cacheKey, cityName);
+      return cityName;
+    } catch (error) {
+      console.warn('⚠️ Reverse geocoding non riuscito:', error);
+      return null;
+    } finally {
+      clearTimeout(timeoutId);
+    }
+  }
+
+  /**
    * Ordina fermate per distanza dalla posizione utente
    * @param {Array<string>} fermate - Array di nomi fermate
    * @param {Object} userPos - Posizione utente {latitude, longitude}
@@ -176,7 +227,7 @@
       return fermate.map((name, index) => ({ name, index, distance: null, coordinates: null }));
     }
 
-    return fermate.map((fermata, index) => {
+    const sorted = fermate.map((fermata, index) => {
       const coords = FERMATE_COORDINATES[fermata];
       let distance = null;
 
@@ -201,6 +252,25 @@
       if (b.distance === null) return -1;
       return a.distance - b.distance;
     });
+
+    // 🐛 DEBUG PANEL: Mostra fermata più vicina
+    if (sorted.length > 0 && sorted[0].distance !== null && window.GPSDebugPanel) {
+      const nearest = sorted[0];
+      window.GPSDebugPanel.addLog('distance', 'Fermata Più Vicina', {
+        'Fermata': nearest.name,
+        'Distanza': `${(nearest.distance / 1000).toFixed(2)} km`,
+        'Metri': `${Math.round(nearest.distance)}m`,
+        'Coordinate': `${nearest.coordinates.lat}, ${nearest.coordinates.lon}`
+      });
+      
+      // Mostra anche le prime 3 fermate
+      console.log('📏 Top 3 fermate più vicine:', sorted.slice(0, 3).map(f => ({
+        nome: f.name,
+        distanza: `${(f.distance / 1000).toFixed(2)} km`
+      })));
+    }
+
+    return sorted;
   }
 
   /**
@@ -623,8 +693,48 @@
 
       // Richiedi posizione
       const position = await requestUserLocation();
+      
+      // 🐛 DEBUG: Verifica posizione ricevuta
+      console.group('📍 DEBUG GEOLOCALIZZAZIONE');
+      console.log('🔍 Posizione ricevuta da requestUserLocation:', position);
+      
+      if (!position || !position.latitude || !position.longitude) {
+        console.error('❌ Posizione non valida:', position);
+        console.groupEnd();
+        throw new Error('Posizione non valida ricevuta');
+      }
+      
       userPosition = position;
       locationPermissionGranted = true;
+
+      let cityName = null;
+      try {
+        cityName = await reverseGeocode(position.latitude, position.longitude);
+        if (cityName) {
+          console.log('🏙️ Località rilevata:', cityName);
+        }
+      } catch (reverseError) {
+        console.warn('⚠️ Impossibile determinare la località:', reverseError);
+      }
+
+      console.log('✅ Posizione acquisita:', {
+        latitudine: position.latitude,
+        longitudine: position.longitude,
+        precisione: `${position.accuracy.toFixed(2)} metri`,
+        localita: cityName || 'Non disponibile'
+      });
+      console.groupEnd();
+
+      // 🐛 DEBUG PANEL: Mostra nel pannello debug se disponibile
+      if (window.GPSDebugPanel) {
+        window.GPSDebugPanel.show();
+        window.GPSDebugPanel.addLog('position', 'Posizione GPS Acquisita', {
+          'Latitudine': position.latitude.toFixed(6),
+          'Longitudine': position.longitude.toFixed(6),
+          'Precisione': `${position.accuracy.toFixed(0)}m`,
+          'Località': cityName || 'Non disponibile'
+        });
+      }
 
       // Aggiorna UI
       if (fermateLocationIcon) fermateLocationIcon.textContent = '📍';

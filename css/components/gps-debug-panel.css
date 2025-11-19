@@ -1,0 +1,339 @@
+/* ========================================
+   GPS DEBUG PANEL
+   Pannello di debug floating per GPS
+   ======================================== */
+
+.gps-debug-panel {
+  position: fixed;
+  z-index: 99999;
+  width: 320px;
+  max-width: calc(100vw - 40px);
+  background: rgba(15, 23, 42, 0.98);
+  border: 2px solid #10b981;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.gps-debug-panel.dragging {
+  cursor: move;
+  transition: none;
+}
+
+/* ========================================
+   HEADER
+   ======================================== */
+
+.gps-debug-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: linear-gradient(135deg, #10b981, #059669);
+  border-radius: 10px 10px 0 0;
+  cursor: move;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+
+.gps-debug-handle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.gps-debug-icon {
+  font-size: 18px;
+}
+
+.gps-debug-title {
+  font-weight: 600;
+  color: white;
+  font-size: 15px;
+}
+
+.gps-debug-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.gps-debug-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.gps-debug-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.gps-debug-btn:active {
+  transform: scale(0.95);
+}
+
+/* Icone toggle */
+.gps-debug-panel:not(.minimized) .icon-minimize {
+  display: inline;
+}
+
+.gps-debug-panel:not(.minimized) .icon-maximize {
+  display: none;
+}
+
+.gps-debug-panel.minimized .icon-minimize {
+  display: none;
+}
+
+.gps-debug-panel.minimized .icon-maximize {
+  display: inline;
+}
+
+/* ========================================
+   CONTENT
+   ======================================== */
+
+.gps-debug-content {
+  max-height: 400px;
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+  opacity: 1;
+}
+
+.gps-debug-panel.minimized .gps-debug-content {
+  max-height: 0;
+  opacity: 0;
+}
+
+.gps-debug-logs {
+  padding: 12px;
+  max-height: 350px;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* Scrollbar personalizzata */
+.gps-debug-logs::-webkit-scrollbar {
+  width: 6px;
+}
+
+.gps-debug-logs::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.gps-debug-logs::-webkit-scrollbar-thumb {
+  background: #10b981;
+  border-radius: 3px;
+}
+
+.gps-debug-logs::-webkit-scrollbar-thumb:hover {
+  background: #059669;
+}
+
+/* ========================================
+   LOG ENTRIES
+   ======================================== */
+
+.gps-debug-empty {
+  color: rgba(255, 255, 255, 0.5);
+  text-align: center;
+  padding: 20px;
+  font-style: italic;
+}
+
+.gps-debug-log {
+  background: rgba(255, 255, 255, 0.05);
+  border-left: 3px solid #10b981;
+  border-radius: 6px;
+  padding: 10px;
+  margin-bottom: 10px;
+  transition: all 0.2s ease;
+}
+
+.gps-debug-log:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateX(2px);
+}
+
+.gps-debug-log:last-child {
+  margin-bottom: 0;
+}
+
+/* Tipi di log */
+.gps-debug-log-position {
+  border-left-color: #3b82f6;
+}
+
+.gps-debug-log-distance {
+  border-left-color: #8b5cf6;
+}
+
+.gps-debug-log-success {
+  border-left-color: #10b981;
+}
+
+.gps-debug-log-error {
+  border-left-color: #ef4444;
+}
+
+.gps-debug-log-warning {
+  border-left-color: #f59e0b;
+}
+
+.gps-debug-log-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.gps-debug-log-icon {
+  font-size: 16px;
+}
+
+.gps-debug-log-title {
+  font-weight: 600;
+  color: white;
+  flex: 1;
+}
+
+.gps-debug-log-time {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.gps-debug-log-data {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gps-debug-data-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.gps-debug-data-key {
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+}
+
+.gps-debug-data-value {
+  color: #10b981;
+  font-weight: 600;
+  text-align: right;
+  word-break: break-all;
+}
+
+/* ========================================
+   FOOTER
+   ======================================== */
+
+.gps-debug-footer {
+  padding: 10px 12px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 0 0 10px 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.gps-debug-btn-clear {
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.gps-debug-btn-clear:hover {
+  background: rgba(239, 68, 68, 0.3);
+  border-color: rgba(239, 68, 68, 0.7);
+  transform: scale(1.05);
+}
+
+.gps-debug-btn-clear:active {
+  transform: scale(0.95);
+}
+
+/* ========================================
+   RESPONSIVE - Mobile
+   ======================================== */
+
+@media (max-width: 480px) {
+  .gps-debug-panel {
+    width: 280px;
+    max-width: calc(100vw - 20px);
+    font-size: 13px;
+  }
+
+  .gps-debug-content {
+    max-height: 300px;
+  }
+
+  .gps-debug-logs {
+    max-height: 250px;
+    padding: 10px;
+  }
+
+  .gps-debug-log {
+    padding: 8px;
+  }
+
+  .gps-debug-data-row {
+    font-size: 12px;
+  }
+
+  .gps-debug-title {
+    font-size: 14px;
+  }
+}
+
+/* ========================================
+   ANIMAZIONI
+   ======================================== */
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.gps-debug-panel {
+  animation: slideInUp 0.3s ease-out;
+}
+
+.gps-debug-log {
+  animation: slideInUp 0.2s ease-out;
+}
+

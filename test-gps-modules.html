@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test Moduli GPS</title>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="libs/leaflet/leaflet.css" />
+    
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -45,7 +49,7 @@
         }
     </style>
 </head>
-<body>
+<body class="test-page">
     <h1>🧪 Test Moduli GPS</h1>
     <p>Questa pagina testa i moduli GPS creati per la modularizzazione.</p>
     <p><strong>Moduli testati:</strong> helpers.js, fake-position.js, reset-data.js, distance-calculator.js, map-leaflet.js</p>
@@ -93,7 +97,7 @@
     </div>
 
     <!-- Leaflet JS (per map-leaflet.js) -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="libs/leaflet/leaflet.js"></script>
     
     <!-- Carica moduli GPS -->
     <script src="js/tests/gps/helpers.js"></script>

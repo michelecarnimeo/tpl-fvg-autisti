@@ -112,22 +112,39 @@
     }
 }
 
-/* Leggero highlight quando si apre */
-.test-group-separator.opening {
+/* Leggero highlight quando si apre - usando pseudo-elemento per performance */
+.test-group-separator {
+    position: relative;
+}
+
+.test-group-separator::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(59, 130, 246, 0.04);
+    opacity: 0;
+    pointer-events: none;
+    border-radius: inherit;
+}
+
+.test-group-separator.opening::before {
     animation: subtle-highlight 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @keyframes subtle-highlight {
     0% {
-        background-color: transparent;
+        opacity: 0;
     }
     
     50% {
-        background-color: rgba(59, 130, 246, 0.04);
+        opacity: 1;
     }
     
     100% {
-        background-color: transparent;
+        opacity: 0;
     }
 }
 

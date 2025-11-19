@@ -20,8 +20,8 @@
     cursor: pointer;
     transition: all .25s ease;
     -webkit-user-select: none;
-    /* Supporto Safari 3+ */
-    user-select: none;
+       -moz-user-select: none;
+            user-select: none;
     text-decoration: none;
     border-radius: 12px;
 }
