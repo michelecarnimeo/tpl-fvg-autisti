@@ -183,6 +183,9 @@
     const timeoutId = setTimeout(() => controller.abort(), 4000);
 
     try {
+      // NOTA: Nominatim (OpenStreetMap) è un servizio esterno.
+      // I warning "x-content-type-options header missing" e "cache-control header missing"
+      // sono attesi e normali perché non possiamo controllare gli header delle risposte di servizi esterni.
       const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${encodeURIComponent(latitude)}&lon=${encodeURIComponent(longitude)}&zoom=12&addressdetails=1`;
       const response = await fetch(url, {
         headers: {
@@ -217,36 +220,292 @@
   }
 
   /**
+   * Calcola le distanze reali lungo le strade usando OSRM
+   * @param {Object} userPos - Posizione utente {latitude, longitude}
+   * @param {Array<Object>} stops - Array di {name, coordinates: {lat, lon}}
+   * @param {number} maxRetries - Numero massimo di tentativi (default: 2)
+   * @returns {Promise<Array<number>|null>} Array di distanze in km o null se errore
+   */
+  async function getRouteDistances(userPos, stops, maxRetries = 2) {
+    if (!userPos || !stops || stops.length === 0) return null;
+
+    // Se ci sono troppe fermate, limita alle prime 30 per evitare timeout
+    // Le altre useranno la distanza Haversine
+    const MAX_STOPS_FOR_OSRM = 30;
+    const stopsToProcess = stops.length > MAX_STOPS_FOR_OSRM 
+      ? stops.slice(0, MAX_STOPS_FOR_OSRM)
+      : stops;
+
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        // Prepara le coordinate: posizione utente + tutte le fermate
+        const coordinates = [
+          [userPos.longitude, userPos.latitude], // [lon, lat] per OSRM
+          ...stopsToProcess.map(stop => [stop.coordinates.lon, stop.coordinates.lat])
+        ];
+
+        // Formato OSRM: {lon},{lat};{lon},{lat};...
+        const coordsString = coordinates.map(coord => `${coord[0]},${coord[1]}`).join(';');
+        
+        // Usa l'endpoint 'table' per calcolare tutte le distanze in una volta
+        // sources=0 significa che partiamo dalla posizione utente (indice 0)
+        // destinations=1,2,3,... sono tutte le fermate
+        const destinations = Array.from({ length: stopsToProcess.length }, (_, i) => i + 1).join(';');
+        const url = `https://router.project-osrm.org/table/v1/driving/${coordsString}?sources=0&destinations=${destinations}&annotations=distance`;
+        
+        // NOTA: OSRM (Open Source Routing Machine) è un servizio esterno.
+        // I warning sugli header HTTP (es. "server header should only contain the server name")
+        // sono attesi e normali perché non possiamo controllare gli header delle risposte di servizi esterni.
+        
+        const controller = new AbortController();
+        let timeoutId = null;
+        let isAborted = false;
+
+        // Timeout progressivo: 30s al primo tentativo, 40s ai successivi
+        const timeoutDuration = attempt === 0 ? 30000 : 40000;
+        timeoutId = setTimeout(() => {
+          isAborted = true;
+          controller.abort();
+        }, timeoutDuration);
+
+        try {
+          const response = await fetch(url, {
+            signal: controller.signal,
+            headers: {
+              'Accept': 'application/json'
+            }
+          });
+
+          // Pulisci il timeout se la richiesta è completata
+          if (timeoutId) {
+            clearTimeout(timeoutId);
+            timeoutId = null;
+          }
+
+          if (!response.ok) {
+            // Se è un errore 429 (troppe richieste), aspetta prima di riprovare
+            if (response.status === 429 && attempt < maxRetries) {
+              const waitTime = (attempt + 1) * 2000; // 2s, 4s, 6s...
+              console.log(`⏳ OSRM: troppe richieste, aspetto ${waitTime}ms prima di riprovare...`);
+              await new Promise(resolve => setTimeout(resolve, waitTime));
+              continue; // Riprova
+            }
+            throw new Error(`OSRM API error: ${response.status}`);
+          }
+
+          const data = await response.json();
+          
+          if (data.code !== 'Ok' || !data.distances || !data.distances[0]) {
+            throw new Error('OSRM: nessuna distanza calcolata');
+          }
+
+          // data.distances[0] contiene le distanze (metri) dalla posizione utente a tutte le fermate
+          const distanceRow = data.distances[0];
+          if (!Array.isArray(distanceRow) || distanceRow.length !== stopsToProcess.length) {
+            throw new Error('OSRM: dimensioni matrice distanze non valide');
+          }
+
+          // Converte le distanze in chilometri
+          const distances = distanceRow.map(value => {
+            if (typeof value !== 'number' || value < 0 || !Number.isFinite(value)) {
+              return null;
+            }
+            return value / 1000;
+          });
+
+          // Se abbiamo limitato le fermate, aggiungi null per le altre
+          if (stops.length > MAX_STOPS_FOR_OSRM) {
+            const remaining = new Array(stops.length - MAX_STOPS_FOR_OSRM).fill(null);
+            return [...distances, ...remaining];
+          }
+
+          return distances;
+        } catch (fetchError) {
+          // Pulisci il timeout anche in caso di errore
+          if (timeoutId) {
+            clearTimeout(timeoutId);
+            timeoutId = null;
+          }
+
+          // Distingui tra timeout e altri errori
+          if (fetchError.name === 'AbortError' || isAborted) {
+            // Se non è l'ultimo tentativo, riprova
+            if (attempt < maxRetries) {
+              console.log(`⏳ OSRM: timeout (${timeoutDuration}ms), riprovo... (tentativo ${attempt + 2}/${maxRetries + 1})`);
+              await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1))); // Backoff: 1s, 2s, 3s...
+              continue;
+            }
+            throw new Error(`OSRM: timeout nella richiesta (${timeoutDuration}ms)`);
+          }
+          
+          // Gestisci errori di connessione (ERR_CONNECTION_TIMED_OUT, ERR_NETWORK_CHANGED, ecc.)
+          if (fetchError.message && (
+            fetchError.message.includes('ERR_CONNECTION_TIMED_OUT') ||
+            fetchError.message.includes('ERR_NETWORK_CHANGED') ||
+            fetchError.message.includes('Failed to fetch') ||
+            fetchError.message.includes('NetworkError')
+          )) {
+            // Se non è l'ultimo tentativo, riprova dopo un breve delay
+            if (attempt < maxRetries) {
+              const waitTime = (attempt + 1) * 2000; // 2s, 4s, 6s...
+              console.log(`⏳ OSRM: errore di connessione, aspetto ${waitTime}ms prima di riprovare... (tentativo ${attempt + 2}/${maxRetries + 1})`);
+              await new Promise(resolve => setTimeout(resolve, waitTime));
+              continue;
+            }
+            throw new Error('OSRM: errore di connessione dopo tutti i tentativi');
+          }
+          
+          // Se non è l'ultimo tentativo e l'errore è recuperabile, riprova
+          if (attempt < maxRetries && !fetchError.message.includes('429')) {
+            console.log(`⏳ OSRM: errore, riprovo... (tentativo ${attempt + 2}/${maxRetries + 1})`);
+            await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
+            continue;
+          }
+          
+          // Rilancia l'errore originale
+          throw fetchError;
+        }
+      } catch (error) {
+        // Se è l'ultimo tentativo, fallback
+        if (attempt === maxRetries) {
+          const errorMessage = error.message || 'Errore sconosciuto';
+          if (errorMessage.includes('timeout')) {
+            console.warn('⚠️ Timeout nel calcolo distanze OSRM dopo tutti i tentativi, uso distanza in linea d\'aria');
+          } else if (errorMessage.includes('429')) {
+            console.warn('⚠️ OSRM: troppe richieste dopo tutti i tentativi, uso distanza in linea d\'aria');
+          } else {
+            console.warn('⚠️ Errore nel calcolo distanze OSRM dopo tutti i tentativi, uso distanza in linea d\'aria:', errorMessage);
+          }
+          return null; // Fallback alla distanza Haversine
+        }
+        // Altrimenti continua il loop per riprovare
+      }
+    }
+
+    return null; // Non dovrebbe mai arrivare qui, ma per sicurezza
+  }
+
+  /**
    * Ordina fermate per distanza dalla posizione utente
+   * Usa OSRM per calcolare le distanze reali lungo le strade (per pullman)
    * @param {Array<string>} fermate - Array di nomi fermate
    * @param {Object} userPos - Posizione utente {latitude, longitude}
-   * @returns {Array<Object>} Array di oggetti {name, index, distance, coordinates}
+   * @returns {Promise<Array<Object>>} Array di oggetti {name, index, distance, coordinates}
    */
-  function sortFermateByDistance(fermate, userPos) {
+  async function sortFermateByDistance(fermate, userPos) {
     if (!userPos || !fermate || fermate.length === 0) {
       return fermate.map((name, index) => ({ name, index, distance: null, coordinates: null }));
     }
 
-    const sorted = fermate.map((fermata, index) => {
-      const coords = FERMATE_COORDINATES[fermata];
-      let distance = null;
-
-      if (coords) {
-        distance = calculateDistance(
-          userPos.latitude,
-          userPos.longitude,
-          coords.lat,
-          coords.lon
-        );
+    // Prepara i dati delle fermate con coordinate
+    // Usa CoordinatesLinea400 se disponibile (coordinate reali per linea Udine-Grado)
+    const stopsWithCoords = fermate.map((fermata, index) => {
+      let coords = null;
+      
+      // Prova prima con CoordinatesLinea400 (coordinate reali)
+      if (typeof window.CoordinatesLinea400 !== 'undefined' && window.CoordinatesLinea400.get) {
+        const coordData = window.CoordinatesLinea400.get(fermata);
+        if (coordData) {
+          coords = { lat: coordData.lat, lon: coordData.lng };
+        }
       }
-
+      
+      // Fallback a FERMATE_COORDINATES se CoordinatesLinea400 non ha la fermata
+      if (!coords) {
+        coords = FERMATE_COORDINATES[fermata];
+      }
+      
       return {
         name: fermata,
         index: index,
-        distance: distance,
         coordinates: coords
       };
-    }).sort((a, b) => {
+    }).filter(stop => stop.coordinates !== undefined);
+
+    // Prima calcola le distanze Haversine per tutte le fermate (veloce)
+    const stopsWithHaversine = stopsWithCoords.map(stop => {
+      const haversineDistance = stop.coordinates 
+        ? calculateDistance(
+            userPos.latitude,
+            userPos.longitude,
+            stop.coordinates.lat,
+            stop.coordinates.lon
+          )
+        : null;
+      
+      return {
+        ...stop,
+        haversineDistance
+      };
+    });
+
+    // Ordina per distanza Haversine per trovare le fermate più vicine
+    const sortedByHaversine = [...stopsWithHaversine].sort((a, b) => {
+      if (a.haversineDistance === null && b.haversineDistance === null) return 0;
+      if (a.haversineDistance === null) return 1;
+      if (b.haversineDistance === null) return -1;
+      return a.haversineDistance - b.haversineDistance;
+    });
+
+    // Calcola con OSRM solo le prime 15 fermate più vicine (per ridurre tempo e carico)
+    const TOP_STOPS_FOR_OSRM = 15;
+    const topStopsForOSRM = sortedByHaversine.slice(0, TOP_STOPS_FOR_OSRM);
+
+    // Calcola distanze OSRM solo per le fermate più vicine
+    let routeDistances = null;
+    const oosmStopsMap = new Map(); // Mappa nome -> distanza OSRM
+    
+    if (topStopsForOSRM.length > 0) {
+      try {
+        console.log(`🛣️ Calcolo distanze reali con OSRM per le prime ${topStopsForOSRM.length} fermate più vicine...`);
+        const oosmDistances = await getRouteDistances(userPos, topStopsForOSRM);
+        
+        if (oosmDistances && oosmDistances.length === topStopsForOSRM.length) {
+          // Crea mappa nome -> distanza OSRM
+          topStopsForOSRM.forEach((stop, idx) => {
+            if (oosmDistances[idx] !== null && oosmDistances[idx] !== undefined) {
+              oosmStopsMap.set(stop.name, oosmDistances[idx]);
+            }
+          });
+          console.log(`✅ Distanze OSRM calcolate per ${oosmStopsMap.size} fermate`);
+        }
+      } catch (error) {
+        console.warn('⚠️ Errore nel calcolo OSRM:', error.message);
+      }
+    }
+
+    // Mappa le distanze alle fermate (OSRM se disponibile, altrimenti Haversine)
+    const stopsWithDistance = stopsWithHaversine.map(stop => {
+      let distance = null;
+      
+      // Prova prima con OSRM (se disponibile per questa fermata)
+      if (oosmStopsMap.has(stop.name)) {
+        distance = oosmStopsMap.get(stop.name);
+      } else if (stop.haversineDistance !== null) {
+        // Fallback alla distanza Haversine
+        distance = stop.haversineDistance;
+      }
+
+      return {
+        name: stop.name,
+        index: stop.index,
+        distance: distance,
+        coordinates: stop.coordinates
+      };
+    });
+
+    // Aggiungi fermate senza coordinate
+    const stopsWithoutCoords = fermate
+      .map((fermata, index) => {
+        if (!FERMATE_COORDINATES[fermata]) {
+          return { name: fermata, index, distance: null, coordinates: null };
+        }
+        return null;
+      })
+      .filter(stop => stop !== null);
+
+    // Combina e ordina
+    const allStops = [...stopsWithDistance, ...stopsWithoutCoords].sort((a, b) => {
       if (a.distance === null && b.distance === null) return 0;
       if (a.distance === null) return 1;
       if (b.distance === null) return -1;
@@ -254,23 +513,23 @@
     });
 
     // 🐛 DEBUG PANEL: Mostra fermata più vicina
-    if (sorted.length > 0 && sorted[0].distance !== null && window.GPSDebugPanel) {
-      const nearest = sorted[0];
+    if (allStops.length > 0 && allStops[0].distance !== null && window.GPSDebugPanel) {
+      const nearest = allStops[0];
       window.GPSDebugPanel.addLog('distance', 'Fermata Più Vicina', {
         'Fermata': nearest.name,
-        'Distanza': `${(nearest.distance / 1000).toFixed(2)} km`,
-        'Metri': `${Math.round(nearest.distance)}m`,
+        'Distanza': `${nearest.distance.toFixed(2)} km`,
+        'Metri': `${Math.round(nearest.distance * 1000)}m`,
         'Coordinate': `${nearest.coordinates.lat}, ${nearest.coordinates.lon}`
       });
       
       // Mostra anche le prime 3 fermate
-      console.log('📏 Top 3 fermate più vicine:', sorted.slice(0, 3).map(f => ({
+      console.log('📏 Top 3 fermate più vicine:', allStops.slice(0, 3).map(f => ({
         nome: f.name,
-        distanza: `${(f.distance / 1000).toFixed(2)} km`
+        distanza: `${f.distance.toFixed(2)} km`
       })));
     }
 
-    return sorted;
+    return allStops;
   }
 
   /**
@@ -412,11 +671,12 @@
 
   /**
    * Trova la fermata più vicina tra quelle prioritarie per la linea Udine-Grado
+   * Usa distanze reali lungo le strade (OSRM) per determinare la fermata più vicina
    * @param {Object} userPos - Posizione utente {latitude, longitude}
    * @param {Array} fermate - Array di nomi fermate della linea
-   * @returns {Object|null} {name, index, distance} della fermata più vicina, o null
+   * @returns {Promise<Object|null>} {name, index, distance} della fermata più vicina, o null
    */
-  function findNearestPriorityStop(userPos, fermate) {
+  async function findNearestPriorityStop(userPos, fermate) {
     // Fermate prioritarie per la linea Udine-Grado
     const priorityStops = ['Udine', 'Palmanova', 'Cervignano FS', 'Grado'];
     
@@ -427,37 +687,124 @@
       return null;
     }
 
-    // Calcola distanza per ogni fermata prioritaria
-    const stopsWithDistance = availablePriorityStops.map(stopName => {
+    // Verifica disponibilità CoordinatesLinea400
+    const hasCoordinatesLinea400 = typeof window.CoordinatesLinea400 !== 'undefined' && 
+                                     window.CoordinatesLinea400 && 
+                                     typeof window.CoordinatesLinea400.get === 'function';
+    
+    if (!hasCoordinatesLinea400) {
+      console.warn('⚠️ CoordinatesLinea400 non disponibile, uso solo FERMATE_COORDINATES');
+    } else {
+      console.log('✅ CoordinatesLinea400 disponibile, verifico coordinate per fermate prioritarie...');
+    }
+
+    // Prepara le fermate prioritarie con coordinate
+    const priorityStopsWithCoords = availablePriorityStops.map(stopName => {
       const stopIndex = fermate.indexOf(stopName);
-      const coords = FERMATE_COORDINATES[stopName];
+      let coords = null;
+      let coordSource = 'none';
+      
+      // Prova prima con CoordinatesLinea400 (coordinate reali)
+      if (hasCoordinatesLinea400) {
+        const coordData = window.CoordinatesLinea400.get(stopName);
+        if (coordData) {
+          coords = { lat: coordData.lat, lon: coordData.lng };
+          coordSource = 'CoordinatesLinea400';
+          console.log(`✅ ${stopName} trovato in CoordinatesLinea400: (${coords.lat.toFixed(4)}, ${coords.lon.toFixed(4)})`);
+        } else {
+          console.log(`⚠️ CoordinatesLinea400.get("${stopName}") ha restituito null/undefined, uso FERMATE_COORDINATES`);
+        }
+      }
+      
+      // Fallback a FERMATE_COORDINATES
+      if (!coords) {
+        coords = FERMATE_COORDINATES[stopName];
+        if (coords) {
+          coordSource = 'FERMATE_COORDINATES';
+        }
+      }
       
       if (!coords || stopIndex === -1) {
+        console.warn(`⚠️ Coordinate non trovate per "${stopName}" o indice non valido (${stopIndex})`);
         return null;
       }
 
-      const distance = calculateDistance(
-        userPos.latitude,
-        userPos.longitude,
-        coords.lat,
-        coords.lon
-      );
+      console.log(`📍 ${stopName}: (${coords.lat.toFixed(4)}, ${coords.lon.toFixed(4)}) [${coordSource}]`);
 
       return {
         name: stopName,
         index: stopIndex,
-        distance: distance
+        coordinates: coords
       };
     }).filter(stop => stop !== null);
+
+    if (priorityStopsWithCoords.length === 0) {
+      return null;
+    }
+
+    // Calcola distanze reali lungo le strade usando OSRM
+    let routeDistances = null;
+    try {
+      console.log('🛣️ Calcolo distanze reali per fermate prioritarie con OSRM...');
+      console.log(`📍 Fermate da calcolare (${priorityStopsWithCoords.length}):`, 
+        priorityStopsWithCoords.map(s => `${s.name} (${s.coordinates.lat.toFixed(4)}, ${s.coordinates.lon.toFixed(4)})`).join(', '));
+      console.log(`📍 Posizione utente: (${userPos.latitude.toFixed(4)}, ${userPos.longitude.toFixed(4)})`);
+      routeDistances = await getRouteDistances(userPos, priorityStopsWithCoords);
+      if (routeDistances) {
+        console.log('✅ Distanze OSRM calcolate:', routeDistances.map((d, i) => 
+          `${priorityStopsWithCoords[i].name}: ${d !== null ? d.toFixed(2) + ' km' : 'null'}`).join(', '));
+      }
+    } catch (error) {
+      console.warn('⚠️ Errore nel calcolo OSRM per fermate prioritarie, uso distanza in linea d\'aria:', error.message);
+    }
+
+    // Mappa le distanze alle fermate (OSRM se disponibile, altrimenti Haversine)
+    const stopsWithDistance = priorityStopsWithCoords.map((stop, idx) => {
+      let distance = null;
+      let distanceType = 'none';
+      
+      if (routeDistances && routeDistances[idx] !== null && routeDistances[idx] !== undefined) {
+        // Usa distanza OSRM (in km)
+        distance = routeDistances[idx];
+        distanceType = 'OSRM';
+      } else if (stop.coordinates) {
+        // Fallback alla distanza Haversine (in linea d'aria)
+        distance = calculateDistance(
+          userPos.latitude,
+          userPos.longitude,
+          stop.coordinates.lat,
+          stop.coordinates.lon
+        );
+        distanceType = 'Haversine';
+      }
+
+      return {
+        name: stop.name,
+        index: stop.index,
+        distance: distance,
+        distanceType: distanceType
+      };
+    }).filter(stop => stop.distance !== null);
 
     if (stopsWithDistance.length === 0) {
       return null;
     }
 
+    // Log delle distanze calcolate per debug
+    console.log('📊 Distanze fermate prioritarie:');
+    stopsWithDistance.forEach(stop => {
+      console.log(`  - ${stop.name}: ${stop.distance.toFixed(2)} km (${stop.distanceType})`);
+    });
+
     // Trova la fermata più vicina
     const nearest = stopsWithDistance.reduce((prev, current) => {
+      if (!prev || !current || prev.distance === null || current.distance === null) {
+        return prev || current;
+      }
       return (prev.distance < current.distance) ? prev : current;
     });
+
+    console.log(`✅ Fermata più vicina selezionata: ${nearest.name} (${nearest.distance.toFixed(2)} km, ${nearest.distanceType})`);
 
     return nearest;
   }
@@ -510,10 +857,11 @@
   /**
    * Auto-assegna solo la partenza basandosi sulla posizione GPS
    * Funziona solo per la linea Udine-Grado
+   * Usa distanze reali lungo le strade (OSRM) per determinare la fermata più vicina
    * @param {Object} userPos - Posizione utente {latitude, longitude}
-   * @returns {Object|null} {name, index, distance} della fermata più vicina, o null se non possibile
+   * @returns {Promise<Object|null>} {name, index, distance} della fermata più vicina, o null se non possibile
    */
-  function autoAssignRoute(userPos) {
+  async function autoAssignRoute(userPos) {
     // Verifica che RouteSelector e Tariffario siano disponibili
     if (!window.RouteSelector || !window.RouteSelector.getLineaIdx) {
       console.warn('⚠️ RouteSelector non disponibile per auto-assegnazione');
@@ -557,8 +905,8 @@
       return null;
     }
 
-    // Trova la fermata più vicina tra quelle prioritarie
-    const nearestStop = findNearestPriorityStop(userPos, fermate);
+    // Trova la fermata più vicina tra quelle prioritarie (usa OSRM per distanze reali)
+    const nearestStop = await findNearestPriorityStop(userPos, fermate);
     
     if (!nearestStop) {
       console.warn('⚠️ Impossibile trovare fermata prioritaria più vicina');
@@ -597,7 +945,8 @@
       locationPermissionGranted = true;
 
       // Prova auto-assegnazione partenza (solo per linea Udine-Grado)
-      const nearestStop = autoAssignRoute(position);
+      // Usa distanze reali lungo le strade (OSRM)
+      const nearestStop = await autoAssignRoute(position);
 
       if (nearestStop) {
         // Auto-assegna solo la partenza usando RouteSelector
@@ -605,9 +954,9 @@
         if (window.RouteSelector && window.RouteSelector.selectFermata) {
           window.RouteSelector.selectFermata(nearestStop.index, 'partenza', true);
 
-          // Aggiorna UI
-          if (locationIcon) locationIcon.textContent = '✅';
-          if (locationText) locationText.textContent = 'Partenza assegnata';
+          // Aggiorna UI - mantieni testo neutro sul pulsante
+          if (locationIcon) locationIcon.textContent = '📍';
+          if (locationText) locationText.textContent = 'Rilevata';
           locationBtn.classList.add('active');
 
           // Mostra notifica di successo con solo la partenza
@@ -736,10 +1085,34 @@
         });
       }
 
-      // Aggiorna UI
+      // Verifica che il modale delle fermate sia effettivamente aperto (non il modale delle linee)
+      const fermateModal = document.getElementById('fermate-modal');
+      const lineeModal = document.getElementById('linee-modal');
+      const isFermateModalOpen = fermateModal && fermateModal.classList.contains('show');
+      const isLineeModalOpen = lineeModal && lineeModal.classList.contains('show');
+
+      // Prova auto-assegnazione partenza solo se il modale delle fermate è aperto
+      // (non fare auto-assegnazione se il modale delle linee è aperto)
+      // Usa distanze reali lungo le strade (OSRM)
+      let nearestStop = null;
+      if (isFermateModalOpen && !isLineeModalOpen) {
+        nearestStop = await autoAssignRoute(userPosition);
+      }
+
+      // Aggiorna UI - mantieni testo neutro sul pulsante
       if (fermateLocationIcon) fermateLocationIcon.textContent = '📍';
       if (fermateLocationText) fermateLocationText.textContent = 'Rilevata';
-      showLocationNotification('Posizione rilevata! Ordinando fermate per distanza...', 'success');
+      
+      if (nearestStop) {
+        // Mostra notifica di successo con auto-assegnazione
+        const distanceText = nearestStop.distance.toFixed(1);
+        showLocationNotification(
+          `Partenza selezionata: ${nearestStop.name} (${distanceText} km)`,
+          'success'
+        );
+      } else {
+        showLocationNotification('Posizione rilevata! Ordinando fermate per distanza...', 'success');
+      }
 
       // Salva preferenza
       const Storage = getStorage();
@@ -748,7 +1121,7 @@
       // Ri-ordina le fermate per distanza usando il modal
       // Usa FermateModal.sortByDistance() se disponibile (preserva indici e event listener)
       if (window.FermateModal && window.FermateModal.sortByDistance) {
-        const sorted = window.FermateModal.sortByDistance(userPosition);
+        const sorted = await window.FermateModal.sortByDistance(userPosition);
         if (sorted) {
           console.log('✅ Fermate ordinate per distanza nel modal');
         } else {
@@ -762,7 +1135,7 @@
             name: li.textContent.trim(),
             index: li.dataset.index ? parseInt(li.dataset.index, 10) : null
           }));
-          const sortedFermate = sortFermateByDistance(fermate.map(f => f.name), userPosition);
+          const sortedFermate = await sortFermateByDistance(fermate.map(f => f.name), userPosition);
 
           // Re-renderizza la lista ordinata mantenendo gli indici
           // NOTA: Questo è un fallback che non dovrebbe essere necessario
@@ -772,6 +1145,11 @@
           // Questo codice non viene eseguito se FermateModal è disponibile
         }
       }
+
+      // NOTA: Non chiudiamo automaticamente il modale dopo il rilevamento
+      // L'utente può vedere le fermate ordinate per distanza e selezionare manualmente
+      // Se la partenza è stata auto-assegnata, l'utente può comunque vedere la lista
+      // e selezionare una fermata diversa se necessario
 
     } catch (error) {
       console.error('❌ Errore geolocalizzazione modal:', error);

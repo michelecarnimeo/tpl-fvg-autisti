@@ -682,9 +682,6 @@
   /* Padding simmetrico per centrare le card */
   flex: 1;
   overflow-y: auto;
-  /* Scrollbar nascosta su desktop */
-  scrollbar-width: none;
-  /* Firefox: nasconde scrollbar */
   -ms-overflow-style: none;
   /* IE/Edge: nasconde scrollbar */
   /* Migliora usabilità su mobile */
@@ -703,8 +700,6 @@
 /* Scrollbar nascosta anche su mobile */
 @media (max-width: 768px), (pointer: coarse) {
   .fermate-modal-list {
-    scrollbar-width: none;
-    /* Firefox: nasconde scrollbar */
     -ms-overflow-style: none;
     /* IE/Edge: nasconde scrollbar */
     padding-right: 8px;
@@ -717,6 +712,19 @@
     /* Chrome/Safari: nasconde scrollbar */
     width: 0;
     height: 0;
+  }
+}
+
+/* Firefox-only: usa scrollbar-width solo dove supportato */
+@supports (scrollbar-width: thin) {
+  .fermate-modal-list {
+    scrollbar-width: none;
+  }
+
+  @media (max-width: 768px), (pointer: coarse) {
+    .fermate-modal-list {
+      scrollbar-width: none;
+    }
   }
 }
 

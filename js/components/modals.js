@@ -131,9 +131,9 @@
   /**
    * Riordina le fermate per distanza usando il modulo Geolocation
    * @param {Object} userPosition - Posizione utente {latitude, longitude}
-   * @returns {boolean} true se l'ordinamento è stato applicato
+   * @returns {Promise<boolean>} true se l'ordinamento è stato applicato
    */
-  function sortFermateByDistance(userPosition) {
+  async function sortFermateByDistance(userPosition) {
     if (!userPosition || !filteredFermate || filteredFermate.length === 0) {
       return false;
     }
@@ -143,8 +143,13 @@
       // Estrai solo i nomi delle fermate per l'ordinamento
       const fermateNames = filteredFermate.map(f => f.name);
       
-      // Ordina per distanza
-      const sorted = window.Geolocation.sortFermateByDistance(fermateNames, userPosition);
+      // Mostra indicatore di caricamento
+      if (fermateModalList) {
+        fermateModalList.innerHTML = '<li style="text-align: center; padding: 2rem; color: #666;">🛣️ Calcolo distanze reali lungo le strade...</li>';
+      }
+      
+      // Ordina per distanza (ora asincrono)
+      const sorted = await window.Geolocation.sortFermateByDistance(fermateNames, userPosition);
       
       // Ricostruisci filteredFermate mantenendo gli indici originali
       // Crea una mappa nome -> indice originale
@@ -246,12 +251,23 @@
     }
 
     // Mostra/nascondi pulsante geolocalizzazione solo per la partenza
+    // Reset sempre lo stato del pulsante quando si apre il modale
     if (fermateLocationBtn) {
       if (type === 'partenza') {
         fermateLocationBtn.classList.remove('hidden');
+        // Reset stato pulsante quando si apre il modale
+        fermateLocationBtn.disabled = false;
+        fermateLocationBtn.classList.remove('active');
       } else {
         fermateLocationBtn.classList.add('hidden');
       }
+    }
+    // Reset sempre icona e testo quando si apre il modale
+    if (fermateLocationIcon) {
+      fermateLocationIcon.textContent = '📍';
+    }
+    if (fermateLocationText) {
+      fermateLocationText.textContent = 'Rileva fermata più vicina';
     }
 
     // Popola la lista delle fermate
@@ -297,6 +313,18 @@
     if (fermateSearchInput) {
       fermateSearchInput.value = '';
       fermateSearchInput.dispatchEvent(new Event('input'));
+    }
+
+    // Reset pulsante geolocalizzazione
+    if (fermateLocationBtn) {
+      fermateLocationBtn.disabled = false;
+      fermateLocationBtn.classList.remove('active');
+    }
+    if (fermateLocationIcon) {
+      fermateLocationIcon.textContent = '📍';
+    }
+    if (fermateLocationText) {
+      fermateLocationText.textContent = 'Rileva fermata più vicina';
     }
   }
 
@@ -800,6 +828,9 @@
       // Assicurati che il listener per "Verifica Aggiornamenti" sia configurato
       // (nel caso il pulsante sia stato aggiunto dopo l'inizializzazione)
       setupUpdateCheckButton();
+      
+      // Assicurati che il listener per "Riavvia Ora" sia configurato
+      setupRestartAppButton();
     }, 10);
 
     // Sincronizza valori con stato attuale
@@ -1153,24 +1184,41 @@
     // Pulsante "Verifica Aggiornamenti"
     // Configura il listener (viene anche chiamato dopo il caricamento del modal HTML)
     setupUpdateCheckButton();
-
+    
     // Pulsante "Riavvia Ora"
-    const restartAppBtn = document.getElementById('restart-app-btn');
-    if (restartAppBtn) {
-      restartAppBtn.addEventListener('click', () => {
-        console.log('🔄 Pulsante "Riavvia Ora" cliccato');
-        
-        // Chiudi il modal Impostazioni prima
-        closeSettingsModal();
-        
-        // Riavvia l'app dopo un breve delay
-        setTimeout(() => {
-          window.location.reload();
-        }, 300);
-      });
-    }
+    setupRestartAppButton();
 
     console.log('✅ Modal Impostazioni inizializzato');
+  }
+
+  /**
+   * Configura il pulsante "Riavvia Ora"
+   */
+  function setupRestartAppButton() {
+    const restartAppBtn = document.getElementById('restart-app-btn');
+    if (!restartAppBtn) {
+      console.warn('⚠️ Pulsante restart-app-btn non trovato');
+      return;
+    }
+    
+    // Rimuovi listener esistenti per evitare duplicati (clona e sostituisci)
+    const newBtn = restartAppBtn.cloneNode(true);
+    restartAppBtn.parentNode.replaceChild(newBtn, restartAppBtn);
+    
+    // Aggiungi listener
+    newBtn.addEventListener('click', () => {
+      console.log('🔄 Pulsante "Riavvia Ora" cliccato');
+      
+      // Chiudi il modal Impostazioni prima
+      closeSettingsModal();
+      
+      // Riavvia l'app dopo un breve delay
+      setTimeout(() => {
+        window.location.reload();
+      }, 300);
+    });
+    
+    console.log('✅ Pulsante "Riavvia Ora" configurato');
   }
 
   // ===== ESPORTAZIONE PUBBLICA SETTINGS =====

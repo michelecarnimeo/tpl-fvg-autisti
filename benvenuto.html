@@ -17,6 +17,10 @@
   
   <!-- 💼 CSS Specifici Pagina Benvenuto -->
   <link rel="stylesheet" href="css/pages/benvenuto.css">
+  <!-- Cache Modal CSS -->
+  <link rel="stylesheet" href="css/components/cache-modal.css">
+  <!-- App Loader CSS -->
+  <link rel="stylesheet" href="css/components/app-loader.css">
   
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="icon" href="src/tpl.jpg" type="image/jpeg" />
@@ -57,10 +61,29 @@
     </footer>
   </div>
 
+  <!-- Modal conferma riavvio app -->
+  <div id="cache-modal" class="cache-modal">
+    <div class="cache-modal-content">
+      <div class="cache-modal-header">
+        <h3 id="modal-title">🔄 Verifica Aggiornamenti</h3>
+      </div>
+      <div class="cache-modal-body">
+        <p id="modal-message">Verifico se ci sono aggiornamenti disponibili...</p>
+        <p class="cache-modal-warning hidden" id="modal-warning"></p>
+      </div>
+      <div class="cache-modal-footer">
+        <button id="cache-cancel" class="cache-modal-btn cache-modal-cancel" type="button">Annulla</button>
+        <button id="cache-confirm" class="cache-modal-btn cache-modal-confirm hidden" type="button">Riavvia e Aggiorna</button>
+      </div>
+    </div>
+  </div>
+
   <!-- L'HTML del modal viene caricato dinamicamente da components/settings-modal.html -->
   <!-- Vedi js/components/modals.js per la funzione loadSettingsModalHTML() -->
 
   <!-- Script principale -->
+  <!-- APP LOADER (deve essere il primo script) -->
+  <script src="js/components/app-loader.js"></script>
   <!-- CORE (sempre per primo!) -->
   <script src="js/core/storage.js"></script>
   <!-- DATA -->

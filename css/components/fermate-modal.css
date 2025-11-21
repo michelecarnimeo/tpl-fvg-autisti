@@ -352,12 +352,17 @@
   flex: 1;
   overflow-y: auto;
   /* Scrollbar nascosta su desktop */
-  scrollbar-width: none;
-  /* Firefox: nasconde scrollbar */
   -ms-overflow-style: none;
   /* IE/Edge: nasconde scrollbar */
   -webkit-overflow-scrolling: touch;
   touch-action: pan-y;
+}
+
+/* Firefox: nasconde scrollbar (solo se supportato) */
+@supports (scrollbar-width: thin) {
+  .fermate-modal-list {
+    scrollbar-width: none;
+  }
 }
 
 /* Scrollbar completamente nascosta su desktop */
@@ -372,8 +377,6 @@
 @media (max-width: 768px),
 (pointer: coarse) {
   .fermate-modal-list {
-    scrollbar-width: none;
-    /* Firefox: nasconde scrollbar */
     -ms-overflow-style: none;
     /* IE/Edge: nasconde scrollbar */
     padding-right: 8px;
@@ -386,6 +389,16 @@
     /* Chrome/Safari: nasconde scrollbar */
     width: 0;
     height: 0;
+  }
+}
+
+/* Firefox: nasconde scrollbar su mobile (solo se supportato) */
+@supports (scrollbar-width: thin) {
+  @media (max-width: 768px),
+  (pointer: coarse) {
+    .fermate-modal-list {
+      scrollbar-width: none;
+    }
   }
 }
 

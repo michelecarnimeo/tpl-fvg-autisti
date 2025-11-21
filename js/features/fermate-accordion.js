@@ -23,6 +23,9 @@
            window.matchMedia('(display-mode: standalone)').matches;
   }
 
+  // Mantieni riferimento ai listener per poterli rimuovere
+  const cardListeners = new WeakMap();
+
   /**
    * Inizializza accordion per card fermate
    */
@@ -37,10 +40,18 @@
     const cards = document.querySelectorAll('.fermate-card');
     
     cards.forEach((card, index) => {
-      const header = card.querySelector('h3');
+      const header = card.querySelector('.fermate-card-header');
+      const headerTitle = card.querySelector('h3');
       const list = card.querySelector('.fermate-list');
       
-      if (!header || !list) return;
+      if (!header || !headerTitle || !list) return;
+
+      // Rimuovi listener precedente se esiste
+      const previousListener = cardListeners.get(card);
+      if (previousListener) {
+        headerTitle.removeEventListener('click', previousListener);
+        cardListeners.delete(card);
+      }
 
       // Aggiungi classe collapsed inizialmente
       card.classList.add('collapsed');
@@ -49,20 +60,26 @@
       const fermateCount = list.querySelectorAll('.fermate-item').length;
       
       // Aggiungi attributo data-count per badge
-      header.setAttribute('data-count', fermateCount);
+      headerTitle.setAttribute('data-count', fermateCount);
       
       // Aggiungi icona toggle se non esiste
-      if (!header.querySelector('.fermate-toggle-icon')) {
+      if (!headerTitle.querySelector('.fermate-toggle-icon')) {
         const toggleIcon = document.createElement('span');
         toggleIcon.className = 'fermate-toggle-icon';
         toggleIcon.textContent = '▼';
-        header.appendChild(toggleIcon);
+        headerTitle.appendChild(toggleIcon);
       }
       
-      // Event listener per toggle
-      header.addEventListener('click', function() {
+      // Crea nuovo listener e salvalo (solo sul titolo, non sul pulsante)
+      const clickHandler = function(e) {
+        // Non toggleare se il click è sul pulsante "Inverti"
+        if (e.target.closest('.direction-toggle-btn')) {
+          return;
+        }
         toggleCard(card);
-      });
+      };
+      headerTitle.addEventListener('click', clickHandler);
+      cardListeners.set(card, clickHandler);
       
       console.log(`✅ Accordion inizializzato per card ${index + 1}: ${fermateCount} fermate`);
     });

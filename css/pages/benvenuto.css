@@ -29,6 +29,23 @@ body {
     max-height: 320px;
   }
   
+  .card-title {
+    text-align: center;
+  }
+
+  .card-title h1 {
+    font-size: 1.9rem;
+    line-height: 1.25;
+    margin-bottom: 0.75rem;
+  }
+
+  .welcome-description {
+    font-size: 1rem;
+    line-height: 1.7;
+    margin: 0 auto 1.5rem auto;
+    padding: 0 0.75rem;
+  }
+  
   /* Nascondi card su mobile e aggiungi padding */
   .main-card {
     background: transparent !important;

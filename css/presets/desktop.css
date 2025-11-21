@@ -78,3 +78,55 @@
    ======================================== */
 @import url('../../style1.css');
 
+/* ========================================
+   FORZA NASCONDIMENTO MENU MOBILE SU DESKTOP
+   ======================================== */
+/* Assicura che il menu mobile sia sempre nascosto su desktop,
+   anche se mobile-menu.css viene caricato da altri preset o file */
+/* IMPORTANTE: Le regole sono dentro media query per non nascondere su mobile */
+@media (min-width: 769px) {
+  .hamburger-toggle,
+  .hamburger-toggle.active,
+  #hamburger-toggle,
+  #hamburger-toggle.active {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+  }
+  
+  .mobile-menu,
+  .mobile-menu.active,
+  #mobile-menu,
+  #mobile-menu.active {
+    display: none !important;
+    visibility: hidden !important;
+    right: -100% !important;
+    left: auto !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    transform: translateX(100%) !important;
+  }
+  
+  .mobile-menu-overlay,
+  .mobile-menu-overlay.active,
+  #mobile-menu-overlay,
+  #mobile-menu-overlay.active {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+  }
+}
+

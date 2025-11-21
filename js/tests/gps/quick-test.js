@@ -138,6 +138,9 @@
             });
           } else {
             // Fallback: chiamata diretta API
+            // NOTA: Nominatim (OpenStreetMap) è un servizio esterno.
+            // I warning "x-content-type-options header missing" e "cache-control header missing"
+            // sono attesi e normali perché non possiamo controllare gli header delle risposte di servizi esterni.
             const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.coords.latitude}&lon=${position.coords.longitude}&zoom=18&addressdetails=1`);
             if (response.ok) {
               const data = await response.json();

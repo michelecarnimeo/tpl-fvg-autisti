@@ -1,6 +1,6 @@
 {
-  "version": "1.8.6",
-  "versionDate": "18 Novembre 2025",
-  "versionTime": "16:50",
-  "updateNotes": "Ottimizzazioni UI: uniformata simmetria modali linee e impostazioni (header, pulsante chiusura, border-radius 12px); fix DevTool warnings (-webkit-user-select per Safari, rimossi inline styles, ottimizzate animazioni box-shadow); migliorato footer con layout responsive e badge Telegram; fix overlay menu hamburger; migliorata visibilità pulsanti disabilitati; ridotte dimensioni tab impostazioni; rimosso scrollbar modali; ottimizzate animazioni pulse per performance."
+  "version": "1.8.8",
+  "versionDate": "20 Novembre 2025",
+  "versionTime": "16:00",
+  "updateNotes": "Controlli mappa avanzati (dimensioni, centra, posizione, fermate); geolocalizzazione migliorata con reverse geocoding e calcolo distanze reali OSRM; prototipi iOS 26 (home, fermate, welcome); miglioramenti UI/UX menu mobile e modali; ottimizzazioni performance e accessibilità."
 }

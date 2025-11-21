@@ -49,124 +49,52 @@
    * @param {number} lineaIndex - Indice della linea selezionata
    * @param {boolean} sortByDistance - Se true, ordina le fermate per distanza
    */
+  // Stato direzione corrente (true = andata, false = ritorno)
+  let currentDirection = true;
+
+  /**
+   * Renderizza la direzione corrente (andata o ritorno)
+   * NOTA: Funzione disabilitata - la vecchia card fermate è stata rimossa
+   * Ora le fermate sono mostrate solo nella card sotto la mappa
+   */
+  async function renderCurrentDirection() {
+    // Funzione disabilitata - vecchia card rimossa
+    console.log('ℹ️ renderCurrentDirection disabilitata - vecchia card rimossa');
+    return;
+  }
+
+  /**
+   * Inizializza il pulsante toggle direzione
+   * NOTA: Funzione disabilitata - la vecchia card fermate è stata rimossa
+   */
+  function initDirectionToggle() {
+    // Funzione disabilitata - vecchia card rimossa
+    console.log('ℹ️ initDirectionToggle disabilitata - vecchia card rimossa');
+  }
+
   function renderFermate(lineaIndex = 0, sortByDistance = false) {
     console.log('renderFermate chiamata con lineaIndex:', lineaIndex, 'sortByDistance:', sortByDistance);
     
-    const andataList = document.getElementById('fermate-andata');
-    const ritornoList = document.getElementById('fermate-ritorno');
-    const gridContainer = document.getElementById('fermate-grid-container');
-    const searchContainer = document.getElementById('search-container-fermate');
-
     const tariffarioData = getTariffario();
 
-    console.log('andataList:', !!andataList, 'ritornoList:', !!ritornoList, 'tariffario[lineaIndex]:', !!tariffarioData[lineaIndex]);
-
-    if (!andataList || !ritornoList || !tariffarioData[lineaIndex]) {
-      console.error('Impossibile generare liste tratte');
+    if (!tariffarioData[lineaIndex]) {
+      console.error('Impossibile generare lista fermate - tariffario non valido');
       return;
     }
 
     const linea = tariffarioData[lineaIndex];
     let fermate = linea.fermate;
-    console.log('Rendering liste tratte per linea:', linea.nome, 'con', fermate.length, 'fermate');
+    console.log('Rendering lista fermate per linea:', linea.nome, 'con', fermate.length, 'fermate');
 
-    // Pulisce le liste precedenti
-    andataList.innerHTML = '';
-    ritornoList.innerHTML = '';
-
-    // Se richiesto, ordina per distanza
-    let sortedFermate = fermate;
-    if (sortByDistance) {
-      // Usa posizione dal modulo Geolocation
-      const currentUserPosition = (window.Geolocation && window.Geolocation.getUserPosition) 
-        ? window.Geolocation.getUserPosition() 
-        : null;
-      
-      if (currentUserPosition) {
-        const sorted = sortFermateByDistance(fermate, currentUserPosition);
-        sortedFermate = sorted.map(item => item.name);
-        console.log('Fermate ordinate per distanza:', sorted);
-      }
-    }
-
-    // Popola lista andata (0 → fine) - INCLUDE TUTTE LE FERMATE
-    for (let i = 0; i < sortedFermate.length; i++) {
-      const li = document.createElement('li');
-      li.classList.add('fermate-item');
-
-      // Trova l'indice originale della fermata
-      const originalIndex = fermate.indexOf(sortedFermate[i]);
-      
-      // Calcola distanza se richiesto
-      const currentUserPosition = (window.Geolocation && window.Geolocation.getUserPosition) 
-        ? window.Geolocation.getUserPosition() 
-        : null;
-      const distance = currentUserPosition ? sortFermateByDistance(fermate, currentUserPosition).find(f => f.name === sortedFermate[i])?.distance : null;
-
-      let distanceText = '';
-      if (distance !== null) {
-        distanceText = `<span class="fermate-distance">${distance.toFixed(1)} km</span>`;
-      }
-
-      li.innerHTML = `
-        <span class="fermate-icon">📍</span>
-        <span class="fermate-number">${originalIndex + 1}</span>
-        <span class="fermate-stop">${sortedFermate[i]}</span>
-        ${distanceText}
-      `;
-      andataList.appendChild(li);
-    }
-
-    // Popola lista ritorno (fine → 0) - INCLUDE TUTTE LE FERMATE
-    for (let i = sortedFermate.length - 1; i >= 0; i--) {
-      const li = document.createElement('li');
-      li.classList.add('tratte-item');
-
-      // Trova l'indice originale della fermata
-      const originalIndex = fermate.indexOf(sortedFermate[i]);
-      
-      // Calcola distanza se richiesto
-      const currentUserPosition = (window.Geolocation && window.Geolocation.getUserPosition) 
-        ? window.Geolocation.getUserPosition() 
-        : null;
-      const distance = currentUserPosition ? sortFermateByDistance(fermate, currentUserPosition).find(f => f.name === sortedFermate[i])?.distance : null;
-
-      let distanceText = '';
-      if (distance !== null) {
-        distanceText = `<span class="fermate-distance">${distance.toFixed(1)} km</span>`;
-      }
-
-      li.innerHTML = `
-        <span class="tratte-icon">📍</span>
-        <span class="tratte-number">${fermate.length - originalIndex}</span>
-        <span class="tratte-stop">${sortedFermate[i]}</span>
-        ${distanceText}
-      `;
-      ritornoList.appendChild(li);
-    }
-
-    // Mostra griglia e ricerca
-    console.log('Mostro griglia e ricerca...');
-    if (gridContainer) {
-      gridContainer.style.display = 'grid';
-      console.log('✅ gridContainer mostrato, display:', gridContainer.style.display);
-    } else {
-      console.error('❌ gridContainer non trovato!');
-    }
-    
-    if (searchContainer) {
-      searchContainer.style.display = 'flex';
-      console.log('✅ searchContainer mostrato, display:', searchContainer.style.display);
-    } else {
-      console.error('❌ searchContainer non trovato!');
-    }
+    // La vecchia card fermate è stata rimossa, ora usiamo solo la card sotto la mappa
+    console.log('ℹ️ Card fermate vecchia rimossa, uso solo card sotto mappa');
     
     // Dispatch evento per inizializzare accordion mobile
     window.dispatchEvent(new CustomEvent('fermateRendered', {
       detail: { lineaIndex, fermateCount: fermate.length }
     }));
     
-    console.log('✅ renderFermate completata. Fermate andata:', andataList.children.length, 'Fermate ritorno:', ritornoList.children.length);
+    console.log('✅ renderFermate completata. Fermate:', fermate.length);
 
     console.log('🗺️ Verifico disponibilità LineMap...', {
       windowLineMap: typeof window.LineMap,
@@ -177,9 +105,17 @@
       console.log('🗺️ LineMap disponibile, preparo dati mappa...');
       
       const stopsWithCoords = (linea.fermateDettaglio || linea.fermate || []).map((stop, idx) => {
-        if (typeof stop === 'object' && stop.coords) return stop;
+        // Se è già un oggetto con coordinate, assicurati che abbia un nome
+        if (typeof stop === 'object' && stop.coords) {
+          return {
+            name: stop.name || stop.nome || `Fermata ${idx + 1}`,
+            coords: stop.coords
+          };
+        }
+        // Altrimenti crea un oggetto con nome e coordinate null
+        const stopName = typeof stop === 'string' ? stop : (stop?.name || stop?.nome || `Fermata ${idx + 1}`);
         return {
-          name: typeof stop === 'string' ? stop : (stop?.name || `Fermata ${idx + 1}`),
+          name: stopName,
           coords: stop?.coords || null
         };
       });
@@ -191,7 +127,8 @@
       };
 
       console.log('🗺️ Chiamo LineMap.update con:', lineMapPayload);
-      window.LineMap.update(linea.nome, lineMapPayload);
+      // Passa l'indice della linea come primo parametro (per le coordinate Linea 400)
+      window.LineMap.update(lineaIndex, lineMapPayload);
     } else {
       console.warn('⚠️ LineMap non disponibile o update non è una funzione');
     }
@@ -483,8 +420,7 @@
     const lineaText = document.getElementById('linea-fermate-text');
     const gridContainer = document.getElementById('fermate-grid-container');
     const searchContainer = document.getElementById('search-container-fermate');
-    const andataTitle = document.getElementById('andata-title');
-    const ritornoTitle = document.getElementById('ritorno-title');
+    const directionTitle = document.getElementById('fermate-direction-title');
 
     // Aggiorna testo pulsante e salva indice
     if (lineaText) {
@@ -504,29 +440,8 @@
     
     const fermate = linea.fermate;
 
-    // Aggiorna titoli
-    const firstStop = fermate[0];
-    const lastStop = fermate[fermate.length - 1];
-    if (andataTitle) andataTitle.textContent = `(${firstStop} → ${lastStop})`;
-    if (ritornoTitle) ritornoTitle.textContent = `(${lastStop} → ${firstStop})`;
-
-    // Mostra griglia e ricerca
-    console.log('Mostro elementi UI...');
-    if (gridContainer) {
-      gridContainer.style.display = 'grid';
-      gridContainer.classList.remove('show-on-mobile');
-      console.log('✅ gridContainer mostrato, display:', gridContainer.style.display);
-    } else {
-      console.error('❌ gridContainer non trovato in selectLineaFermate!');
-    }
-    
-    if (searchContainer) {
-      searchContainer.style.display = 'flex';
-      searchContainer.classList.remove('show-on-mobile');
-      console.log('✅ searchContainer mostrato, display:', searchContainer.style.display);
-    } else {
-      console.error('❌ searchContainer non trovato in selectLineaFermate!');
-    }
+    // La vecchia card fermate è stata rimossa, ora usiamo solo la card sotto la mappa
+    console.log('ℹ️ Card fermate vecchia rimossa, uso solo card sotto mappa');
 
     // Renderizza tratte con l'indice selezionato
     console.log('Chiamata renderFermate con indice:', lineaIndex);
@@ -674,6 +589,9 @@
    * Ascolta l'evento 'tariffarioLoaded' e inizializza la pagina corrente
    */
   function init() {
+    // La vecchia card fermate è stata rimossa, non serve più inizializzare il toggle direzione
+    // Le fermate sono ora mostrate solo nella card sotto la mappa
+
     // Avvia logica solo se siamo su fermate.html o prezzi.html
     if (window.location.pathname.endsWith('fermate.html') || window.location.pathname.endsWith('prezzi.html')) {
       console.log('Su pagina fermate/prezzi, pathname:', window.location.pathname);

@@ -1,427 +1,692 @@
 ﻿<!DOCTYPE html>
 <html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>TPL FVG - Fermate</title>
+    <!-- Font locali per PWA offline -->
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>TPL FVG - Fermate</title>
-  <!-- Font locali per PWA offline -->
-  
-  <!-- ========================================
+    <!-- ========================================
        🎨 CSS PRESET LOADER (v1.8.3)
        Sistema intelligente di caricamento CSS ottimizzato
        ======================================== -->
-  
-  <!-- 🚀 CSS Preset Loader - Caricamento intelligente CSS -->
-  <script src="js/utils/css-preset-loader.js"></script>
-  
-  <!-- 🗺️ CSS Specifici Pagina Fermate -->
-  <link rel="stylesheet" href="libs/leaflet/leaflet.css">
-  <link rel="stylesheet" href="css/components/line-map.css?v=1.0.0">
-  <link rel="stylesheet" href="css/pages/fermate.css">
-  
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="src/tpl.jpg" type="image/jpeg">
-</head>
 
-<body class="fermate-page">
-  <!-- Navbar -->
-  <header class="navbar">
-    <div class="container">
-      <div class="navbar-content">
-        <a href="index.html" class="navbar-brand-link">
-          <div class="navbar-brand">
-            <div class="navbar-logo-wrapper">
-              <img src="src/logo.png" alt="TPL" class="navbar-logo navbar-logo-default" />
-              <img src="src/logo1.png" alt="TPL" class="navbar-logo navbar-logo-hover" />
-            </div>
-            <div class="navbar-title">
-              <div class="logo-acronym">
-                <div>tpl</div>
-                <div>fvg</div>
+    <!-- 🚀 CSS Preset Loader - Caricamento intelligente CSS -->
+    <script src="js/utils/css-preset-loader.js"></script>
+
+    <!-- 🗺️ CSS Specifici Pagina Fermate -->
+    <link rel="stylesheet" href="libs/leaflet/leaflet.css" />
+    <link rel="stylesheet" href="css/components/line-map.css?v=1.0.0" />
+    <link rel="stylesheet" href="css/pages/fermate.css" />
+    <!-- App Loader CSS -->
+    <link rel="stylesheet" href="css/components/app-loader.css" />
+
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="src/tpl.jpg" type="image/jpeg" />
+  </head>
+
+  <body class="fermate-page">
+    <!-- Navbar -->
+    <header class="navbar">
+      <div class="container">
+        <div class="navbar-content">
+          <a href="index.html" class="navbar-brand-link">
+            <div class="navbar-brand">
+              <div class="navbar-logo-wrapper">
+                <img
+                  src="src/logo.png"
+                  alt="TPL"
+                  class="navbar-logo navbar-logo-default"
+                />
+                <img
+                  src="src/logo1.png"
+                  alt="TPL"
+                  class="navbar-logo navbar-logo-hover"
+                />
               </div>
-              <div class="logo-text">
-                <div>trasporto</div>
-                <div>pubblico</div>
-                <div>locale</div>
+              <div class="navbar-title">
+                <div class="logo-acronym">
+                  <div>tpl</div>
+                  <div>fvg</div>
+                </div>
+                <div class="logo-text">
+                  <div>trasporto</div>
+                  <div>pubblico</div>
+                  <div>locale</div>
+                </div>
               </div>
             </div>
-          </div>
-        </a>
-        <!-- Hamburger button (mobile only) -->
-        <button id="hamburger-toggle" class="hamburger-toggle" aria-label="Menu">
-          <span class="hamburger-icon"></span>
-        </button>
+          </a>
+          <!-- Hamburger button (mobile only) -->
+          <button
+            id="hamburger-toggle"
+            class="hamburger-toggle"
+            aria-label="Menu"
+          >
+            <span class="hamburger-icon"></span>
+          </button>
 
-        <nav class="navbar-nav">
-          <a href="index.html" class="nav-link">Home</a>
-          <a href="fermate.html" class="nav-link active">Fermate</a>
-          <a href="prezzi.html" class="nav-link">Prezzi</a>
+          <nav class="navbar-nav">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="fermate.html" class="nav-link active">Fermate</a>
+            <a href="prezzi.html" class="nav-link">Prezzi</a>
 
-          <!-- Mega Dropdown Impostazioni (solo desktop) -->
-          <div class="settings-dropdown-container">
-            <button id="settings-dropdown-btn" class="nav-settings-dropdown-btn" title="Impostazioni">
-              <span class="settings-icon">⚙️</span>
-              <span class="settings-text">Impostazioni</span>
-              <span class="dropdown-arrow">▼</span>
-            </button>
+            <!-- Mega Dropdown Impostazioni (solo desktop) -->
+            <div class="settings-dropdown-container">
+              <button
+                id="settings-dropdown-btn"
+                class="nav-settings-dropdown-btn"
+                title="Impostazioni"
+              >
+                <span class="settings-icon">⚙️</span>
+                <span class="settings-text">Impostazioni</span>
+                <span class="dropdown-arrow">▼</span>
+              </button>
 
-            <div id="settings-dropdown" class="settings-mega-dropdown">
-              <!-- Sezione Aspetto -->
-              <div class="dropdown-section">
-                <h4 class="dropdown-section-title">👁️ Aspetto</h4>
+              <div id="settings-dropdown" class="settings-mega-dropdown">
+                <!-- Sezione Aspetto -->
+                <div class="dropdown-section">
+                  <h4 class="dropdown-section-title">👁️ Aspetto</h4>
 
-                <div class="dropdown-item">
-                  <span class="dropdown-label">🌓 Tema</span>
-                  <div class="dropdown-theme-options">
-                    <label class="theme-radio">
-                      <input type="radio" name="theme-radio" value="system" checked>
-                      <span>⚙️ Sistema</span>
-                    </label>
-                    <label class="theme-radio">
-                      <input type="radio" name="theme-radio" value="light">
-                      <span>☀️ Chiaro</span>
-                    </label>
-                    <label class="theme-radio">
-                      <input type="radio" name="theme-radio" value="dark">
-                      <span>🌙 Scuro</span>
+                  <div class="dropdown-item">
+                    <span class="dropdown-label">🌓 Tema</span>
+                    <div class="dropdown-theme-options">
+                      <label class="theme-radio">
+                        <input
+                          type="radio"
+                          name="theme-radio"
+                          value="system"
+                          checked
+                        />
+                        <span>⚙️ Sistema</span>
+                      </label>
+                      <label class="theme-radio">
+                        <input type="radio" name="theme-radio" value="light" />
+                        <span>☀️ Chiaro</span>
+                      </label>
+                      <label class="theme-radio">
+                        <input type="radio" name="theme-radio" value="dark" />
+                        <span>🌙 Scuro</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <div class="dropdown-item">
+                    <label
+                      class="dropdown-label"
+                      for="dropdown-animation-toggle"
+                      >🎬 Animazione Sfondo</label
+                    >
+                    <label class="dropdown-toggle">
+                      <input
+                        type="checkbox"
+                        id="dropdown-animation-toggle"
+                        aria-label="Attiva/disattiva animazione sfondo"
+                      />
+                      <span class="toggle-slider"></span>
                     </label>
                   </div>
                 </div>
 
-                <div class="dropdown-item">
-                  <label class="dropdown-label" for="dropdown-animation-toggle">🎬 Animazione Sfondo</label>
-                  <label class="dropdown-toggle">
-                    <input type="checkbox" id="dropdown-animation-toggle"
-                      aria-label="Attiva/disattiva animazione sfondo">
-                    <span class="toggle-slider"></span>
-                  </label>
-                </div>
-              </div>
+                <!-- Sezione Accessibilità -->
+                <div class="dropdown-section">
+                  <h4 class="dropdown-section-title">♿ Accessibilità</h4>
 
-              <!-- Sezione Accessibilità -->
-              <div class="dropdown-section">
-                <h4 class="dropdown-section-title">♿ Accessibilità</h4>
+                  <div class="dropdown-item">
+                    <span class="dropdown-label">A Dimensione Testo</span>
+                    <div class="dropdown-font-buttons">
+                      <button
+                        class="dropdown-font-btn active"
+                        data-size="normal"
+                      >
+                        A
+                      </button>
+                      <button class="dropdown-font-btn" data-size="large">
+                        A
+                      </button>
+                      <button class="dropdown-font-btn" data-size="xlarge">
+                        A
+                      </button>
+                    </div>
+                  </div>
 
-                <div class="dropdown-item">
-                  <span class="dropdown-label">A Dimensione Testo</span>
-                  <div class="dropdown-font-buttons">
-                    <button class="dropdown-font-btn active" data-size="normal">A</button>
-                    <button class="dropdown-font-btn" data-size="large">A</button>
-                    <button class="dropdown-font-btn" data-size="xlarge">A</button>
+                  <div class="dropdown-item">
+                    <label class="dropdown-label" for="dropdown-high-contrast"
+                      >🎨 Alto Contrasto</label
+                    >
+                    <label class="dropdown-toggle">
+                      <input
+                        type="checkbox"
+                        id="dropdown-high-contrast"
+                        aria-label="Attiva/disattiva alto contrasto"
+                      />
+                      <span class="toggle-slider"></span>
+                    </label>
                   </div>
                 </div>
 
-                <div class="dropdown-item">
-                  <label class="dropdown-label" for="dropdown-high-contrast">🎨 Alto Contrasto</label>
-                  <label class="dropdown-toggle">
-                    <input type="checkbox" id="dropdown-high-contrast" aria-label="Attiva/disattiva alto contrasto">
-                    <span class="toggle-slider"></span>
-                  </label>
+                <!-- Sezione Azioni Rapide -->
+                <div class="dropdown-section">
+                  <h4 class="dropdown-section-title">⚡ Azioni Rapide</h4>
+
+                  <button
+                    class="dropdown-action-btn"
+                    id="dropdown-open-settings-modal"
+                  >
+                    <span>⚙️</span>
+                    <span>Apri Impostazioni Complete</span>
+                  </button>
+
+                  <button
+                    class="dropdown-action-btn"
+                    id="dropdown-check-updates"
+                  >
+                    <span>🔄</span>
+                    <span>Verifica Aggiornamenti</span>
+                  </button>
+
+                  <button class="dropdown-action-btn" id="dropdown-clear-cache">
+                    <span>🗑️</span>
+                    <span>Cancella Cache</span>
+                  </button>
                 </div>
               </div>
-
-              <!-- Sezione Azioni Rapide -->
-              <div class="dropdown-section">
-                <h4 class="dropdown-section-title">⚡ Azioni Rapide</h4>
-
-                <button class="dropdown-action-btn" id="dropdown-open-settings-modal">
-                  <span>⚙️</span>
-                  <span>Apri Impostazioni Complete</span>
-                </button>
-
-                <button class="dropdown-action-btn" id="dropdown-check-updates">
-                  <span>🔄</span>
-                  <span>Verifica Aggiornamenti</span>
-                </button>
-
-                <button class="dropdown-action-btn" id="dropdown-clear-cache">
-                  <span>🗑️</span>
-                  <span>Cancella Cache</span>
-                </button>
-              </div>
             </div>
-          </div>
 
-          <!-- NOTE: Pulsanti legacy rimossi - ora si usano direttamente le API pubbliche (Settings, Updates) -->
-        </nav>
+            <!-- NOTE: Pulsanti legacy rimossi - ora si usano direttamente le API pubbliche (Settings, Updates) -->
+          </nav>
+        </div>
       </div>
-    </div>
 
-    <!-- Mobile menu overlay -->
-    <div id="mobile-menu-overlay" class="mobile-menu-overlay"></div>
+      <!-- Mobile menu overlay -->
+      <div id="mobile-menu-overlay" class="mobile-menu-overlay"></div>
 
-    <!-- Mobile menu drawer -->
-    <div id="mobile-menu" class="mobile-menu">
-      <div class="mobile-menu-header">
-        <span class="mobile-menu-title">Menu</span>
-        <button id="mobile-menu-close" class="mobile-menu-close" aria-label="Chiudi menu">×</button>
-      </div>
-      <nav class="mobile-menu-nav">
-        <a href="index.html" class="mobile-nav-link">
-          <span class="mobile-nav-icon">🏠</span>
-          <span>Home</span>
-        </a>
-        <a href="fermate.html" class="mobile-nav-link">
-          <span class="mobile-nav-icon">🚌</span>
-          <span>Fermate</span>
-        </a>
-        <a href="prezzi.html" class="mobile-nav-link">
-          <span class="mobile-nav-icon">💰</span>
-          <span>Prezzi</span>
-        </a>
-        <button id="open-settings" class="mobile-nav-link">
-          <span class="mobile-nav-icon">⚙️</span>
-          <span>Impostazioni</span>
-        </button>
-      </nav>
-    </div>
-  </header>
-
-  <!-- Main Fermate -->
-  <main class="main-content">
-    <div class="container">
-      <!-- Titolo -->
-      <h1 class="page-title">Fermate per linea</h1>
-
-      <!-- Pulsante selezione linea -->
-      <div class="line-selector-container">
-        <div class="form-group">
-          <button id="linea-fermate-btn" class="route-button linea-select-btn">
-            <span id="linea-fermate-text">Seleziona una linea</span>
-            <span class="route-arrow">▼</span>
+      <!-- Mobile menu drawer -->
+      <div id="mobile-menu" class="mobile-menu">
+        <div class="mobile-menu-header">
+          <span class="mobile-menu-title">Menu</span>
+          <button
+            id="mobile-menu-close"
+            class="mobile-menu-close"
+            aria-label="Chiudi menu"
+          >
+            ×
           </button>
         </div>
+        <nav class="mobile-menu-nav">
+          <a href="index.html" class="mobile-nav-link">
+            <span class="mobile-nav-icon">🏠</span>
+            <span>Home</span>
+          </a>
+          <a href="fermate.html" class="mobile-nav-link">
+            <span class="mobile-nav-icon">🚌</span>
+            <span>Fermate</span>
+          </a>
+          <a href="prezzi.html" class="mobile-nav-link">
+            <span class="mobile-nav-icon">💰</span>
+            <span>Prezzi</span>
+          </a>
+          <button id="open-settings" class="mobile-nav-link">
+            <span class="mobile-nav-icon">⚙️</span>
+            <span>Impostazioni</span>
+          </button>
+        </nav>
+      </div>
+    </header>
 
-        <!-- Barra di ricerca (nascosta inizialmente) -->
-        <div id="search-container-fermate" class="search-container" style="display: none;">
-          <div class="search-box">
-            <span class="search-icon">🔍</span>
-            <input type="text" id="search-input" class="search-input" placeholder="Cerca Fermata" />
-            <button id="clear-search" class="clear-btn" style="display: none;">✕</button>
+    <!-- Main Fermate -->
+    <main class="main-content">
+      <div class="container">
+        <!-- Titolo -->
+        <h1 class="page-title">Fermate per linea</h1>
+
+        <!-- Pulsante selezione linea -->
+        <div class="line-selector-container">
+          <div class="form-group">
+            <button
+              id="linea-fermate-btn"
+              class="route-button linea-select-btn"
+            >
+              <span id="linea-fermate-text">Seleziona una linea</span>
+              <span class="route-arrow">▼</span>
+            </button>
+          </div>
+
+          <!-- Barra di ricerca (nascosta inizialmente) -->
+          <div
+            id="search-container-fermate"
+            class="search-container"
+            style="display: none"
+          >
+            <div class="search-box">
+              <span class="search-icon">🔍</span>
+              <input
+                type="text"
+                id="search-input"
+                class="search-input"
+                placeholder="Cerca Fermata"
+              />
+              <button id="clear-search" class="clear-btn" style="display: none">
+                ✕
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mappa linea (posizionata subito dopo la selezione linea) -->
+        <section
+          id="line-map-section"
+          class="line-map-section"
+          style="display: none"
+        >
+          <div class="line-map-header">
+            <div>
+              <h2 id="line-map-title">Mappa linea</h2>
+              <p id="line-map-summary">
+                Visualizza fermate e percorso sulla mappa interattiva.
+              </p>
+            </div>
+          </div>
+
+          <div class="line-map-wrapper">
+            <div class="line-map-column">
+              <div class="line-map-container">
+                <div id="line-map"></div>
+              </div>
+              <div class="line-map-controls">
+                <div class="map-size-controls">
+                  <button
+                    id="map-size-btn"
+                    class="map-size-btn"
+                    type="button"
+                    aria-label="Cambia dimensione mappa"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
+                    <span class="map-size-icon">📐</span>
+                    <span class="map-size-text">Dimensioni</span>
+                  </button>
+                  <div
+                    id="map-size-menu"
+                    class="map-size-menu"
+                    role="menu"
+                    aria-label="Opzioni dimensione mappa"
+                    aria-hidden="true"
+                    style="display: none"
+                  >
+                    <button
+                      class="map-size-option"
+                      data-size="small"
+                      type="button"
+                      role="menuitem"
+                    >
+                      Piccola
+                    </button>
+                    <button
+                      class="map-size-option"
+                      data-size="medium"
+                      type="button"
+                      role="menuitem"
+                    >
+                      Media
+                    </button>
+                    <button
+                      class="map-size-option"
+                      data-size="large"
+                      type="button"
+                      role="menuitem"
+                    >
+                      Grande
+                    </button>
+                    <button
+                      class="map-size-option"
+                      data-size="fullwidth"
+                      type="button"
+                      role="menuitem"
+                    >
+                      Larghezza piena
+                    </button>
+                  </div>
+                </div>
+                <button
+                  id="toggle-map-type-btn"
+                  class="map-type-btn"
+                  type="button"
+                  aria-label="Cambia tipo mappa"
+                >
+                  <span class="map-type-icon">🛰️</span>
+                  <span class="map-type-text">Satellite</span>
+                </button>
+                <button
+                  id="center-map-btn"
+                  class="map-center-btn"
+                  type="button"
+                  aria-label="Centra mappa su tutte le fermate"
+                  title="Centra mappa"
+                >
+                  <span class="map-center-icon">🎯</span>
+                  <span class="map-center-text">Centra</span>
+                </button>
+                <button
+                  id="my-location-btn"
+                  class="map-location-btn"
+                  type="button"
+                  aria-label="Centra mappa sulla mia posizione"
+                  title="La mia posizione"
+                >
+                  <span class="map-location-icon">📍</span>
+                  <span class="map-location-text">Posizione</span>
+                </button>
+                <button
+                  id="toggle-sidebar-btn"
+                  class="map-sidebar-btn"
+                  type="button"
+                  aria-label="Mostra o nascondi lista fermate"
+                  title="Mostra/Nascondi fermate"
+                >
+                  <span class="map-sidebar-icon">📋</span>
+                  <span class="map-sidebar-text">Fermate</span>
+                </button>
+                <button
+                  id="toggle-map-btn"
+                  class="map-toggle-btn"
+                  type="button"
+                >
+                  Nascondi mappa
+                </button>
+              </div>
+            </div>
+            <div class="line-map stops-card" id="line-map-sidebar">
+              <h3>Fermate evidenziate</h3>
+              <ul id="line-map-stops" class="line-map-stop-list"></ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- Banner installazione PWA -->
+        <div
+          id="pwa-install-banner"
+          class="pwa-install-banner"
+          style="display: none"
+        >
+          <div class="pwa-install-content">
+            <div class="pwa-install-text">
+              <span class="pwa-install-title">📱 Installa l'app</span>
+              <span class="pwa-install-subtitle"
+                >Accedi più velocemente e offline</span
+              >
+            </div>
+            <div class="pwa-install-actions">
+              <button
+                id="pwa-install-later"
+                class="pwa-btn pwa-btn-secondary"
+                type="button"
+              >
+                Più tardi
+              </button>
+              <button
+                id="pwa-install-button"
+                class="pwa-btn pwa-btn-primary"
+                type="button"
+              >
+                Installa
+              </button>
+            </div>
+          </div>
+          <div id="pwa-ios-hint" class="pwa-ios-hint" style="display: none">
+            <div class="ios-hint-title">📲 Come installare su iPhone/iPad:</div>
+            <ol class="ios-hint-steps">
+              <li>
+                <span class="step-number">1.</span> Tocca il pulsante
+                <strong>Condividi</strong>
+                <span class="ios-share-icon">📤</span> in basso (Safari)
+              </li>
+              <li>
+                <span class="step-number">2.</span> Scorri e seleziona
+                <strong>"Aggiungi a Home"</strong>
+                <span class="ios-plus-icon">➕</span>
+              </li>
+              <li>
+                <span class="step-number">3.</span> Tocca
+                <strong>"Aggiungi"</strong> in alto a destra ✅
+              </li>
+            </ol>
+            <div class="ios-hint-note">
+              💡 L'app apparirà sulla tua schermata Home come un'app nativa
+            </div>
+          </div>
+          <div
+            id="pwa-android-hint"
+            class="pwa-android-hint"
+            style="display: none"
+          >
+            <div class="android-hint-title">🤖 Come installare su Android:</div>
+            <ol class="android-hint-steps">
+              <li>
+                <span class="step-number">1.</span> Tocca il pulsante
+                <strong>"Installa"</strong> qui sopra (se disponibile) ⬆️
+              </li>
+              <li>
+                <span class="step-number">2.</span> Oppure: tocca il menu
+                <strong>⋮</strong> (tre puntini) in alto a destra del browser
+              </li>
+              <li>
+                <span class="step-number">3.</span> Seleziona
+                <strong>"Installa app"</strong> o
+                <strong>"Aggiungi alla schermata Home"</strong> 📱
+              </li>
+              <li>
+                <span class="step-number">4.</span> Conferma l'installazione
+                toccando <strong>"Installa"</strong> ✅
+              </li>
+            </ol>
+            <div class="android-hint-note">
+              💡 L'app apparirà sulla tua schermata Home e potrai aprirla come
+              un'app nativa
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Griglia fermate (nascosta inizialmente) -->
-      <div id="fermate-grid-container" class="fermate-grid" style="display: none;">
-        <div class="fermate-card fade-in">
-          <h3 id="andata-title">Andata</h3>
-          <ul id="fermate-andata" class="fermate-list">
-            <!-- Fermate generate da JS -->
-          </ul>
+      <!-- Footer -->
+      <footer class="footer">
+        <!-- Footer generato dinamicamente da footer.js -->
+      </footer>
+    </main>
+
+    <!-- PWA Brand Header (in alto) -->
+    <div id="pwa-brand-header" class="pwa-brand-header" style="display: none">
+      <div class="pwa-logo-wrapper">
+        <img
+          src="src/logo.png"
+          alt="TPL"
+          class="pwa-logo-img pwa-logo-default"
+        />
+        <img
+          src="src/logo1.png"
+          alt="TPL"
+          class="pwa-logo-img pwa-logo-hover"
+        />
+      </div>
+      <div class="pwa-brand-title">
+        <div class="pwa-logo-acronym">
+          <div>tpl</div>
+          <div>fvg</div>
         </div>
-        <div class="fermate-card fade-in">
-          <h3 id="ritorno-title">Ritorno</h3>
-          <ul id="fermate-ritorno" class="fermate-list">
-            <!-- Fermate generate da JS -->
-          </ul>
+        <div class="pwa-logo-text">
+          <div>trasporto</div>
+          <div>pubblico</div>
+          <div>locale</div>
         </div>
       </div>
+    </div>
 
-      <section id="line-map-section" class="line-map-section" style="display: none;">
-        <div class="line-map-header">
-          <div>
-            <h2 id="line-map-title">Mappa linea</h2>
-            <p id="line-map-summary">Visualizza fermate e percorso sulla mappa interattiva.</p>
-          </div>
-          <button id="toggle-map-btn" class="map-toggle-btn" type="button">Nascondi mappa</button>
-        </div>
+    <!-- PWA Bottom Navigation (in basso) -->
+    <nav id="pwa-bottom-nav" class="pwa-bottom-nav" style="display: none">
+      <a href="index.html" class="pwa-nav-item" data-page="home">
+        <svg
+          class="pwa-nav-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+        <span class="pwa-nav-label">Home</span>
+      </a>
 
-        <div class="line-map-wrapper">
-          <div class="line-map-container">
-            <div id="line-map"></div>
-          </div>
-          <div class="line-map stops-card" id="line-map-sidebar">
-            <h3>Fermate evidenziate</h3>
-            <ul id="line-map-stops" class="line-map-stop-list"></ul>
-          </div>
-        </div>
-      </section>
+      <a href="fermate.html" class="pwa-nav-item active" data-page="fermate">
+        <svg
+          class="pwa-nav-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+          <circle cx="8.5" cy="8.5" r="1.5"></circle>
+          <circle cx="15.5" cy="8.5" r="1.5"></circle>
+          <path d="M6 16h12"></path>
+        </svg>
+        <span class="pwa-nav-label">Fermate</span>
+      </a>
 
-      <!-- Banner installazione PWA -->
-      <div id="pwa-install-banner" class="pwa-install-banner" style="display: none;">
-        <div class="pwa-install-content">
-          <div class="pwa-install-text">
-            <span class="pwa-install-title">📱 Installa l'app</span>
-            <span class="pwa-install-subtitle">Accedi più velocemente e offline</span>
-          </div>
-          <div class="pwa-install-actions">
-            <button id="pwa-install-later" class="pwa-btn pwa-btn-secondary" type="button">Più tardi</button>
-            <button id="pwa-install-button" class="pwa-btn pwa-btn-primary" type="button">Installa</button>
+      <a href="prezzi.html" class="pwa-nav-item" data-page="prezzi">
+        <svg
+          class="pwa-nav-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <line x1="12" y1="1" x2="12" y2="23"></line>
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+        </svg>
+        <span class="pwa-nav-label">Prezzi</span>
+      </a>
+
+      <button class="pwa-nav-item" data-page="settings" id="pwa-settings-btn">
+        <svg
+          class="pwa-nav-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="3"></circle>
+          <path
+            d="M12 1v6m0 6v6m5.2-13.2l-4.2 4.2m0 6l4.2 4.2M1 12h6m6 0h6m-13.2 5.2l4.2-4.2m0-6l-4.2-4.2"
+          ></path>
+        </svg>
+        <span class="pwa-nav-label">Impostazioni</span>
+      </button>
+    </nav>
+
+    <!-- Pulsante torna su -->
+    <button class="scroll-to-top" title="Torna su">↑</button>
+
+    <!-- Modal selezione linee -->
+    <div id="linee-fermate-modal" class="fermate-modal">
+      <div class="fermate-modal-content">
+        <div class="fermate-modal-header">
+          <h3 id="linee-fermate-modal-title">Seleziona linea</h3>
+          <div class="fermate-modal-actions">
+            <button
+              id="linee-fermate-modal-close"
+              class="fermate-modal-close"
+              aria-label="Chiudi"
+            >
+              ×
+            </button>
           </div>
         </div>
-        <div id="pwa-ios-hint" class="pwa-ios-hint" style="display: none;">
-          <div class="ios-hint-title">📲 Come installare su iPhone/iPad:</div>
-          <ol class="ios-hint-steps">
-            <li><span class="step-number">1.</span> Tocca il pulsante <strong>Condividi</strong> <span
-                class="ios-share-icon">📤</span> in basso (Safari)</li>
-            <li><span class="step-number">2.</span> Scorri e seleziona <strong>"Aggiungi a Home"</strong> <span
-                class="ios-plus-icon">➕</span></li>
-            <li><span class="step-number">3.</span> Tocca <strong>"Aggiungi"</strong> in alto a destra ✅</li>
-          </ol>
-          <div class="ios-hint-note">💡 L'app apparirà sulla tua schermata Home come un'app nativa</div>
-        </div>
-        <div id="pwa-android-hint" class="pwa-android-hint" style="display: none;">
-          <div class="android-hint-title">🤖 Come installare su Android:</div>
-          <ol class="android-hint-steps">
-            <li><span class="step-number">1.</span> Tocca il pulsante <strong>"Installa"</strong> qui sopra (se
-              disponibile) ⬆️</li>
-            <li><span class="step-number">2.</span> Oppure: tocca il menu <strong>⋮</strong> (tre puntini) in alto a
-              destra del browser</li>
-            <li><span class="step-number">3.</span> Seleziona <strong>"Installa app"</strong> o <strong>"Aggiungi alla
-                schermata Home"</strong> 📱</li>
-            <li><span class="step-number">4.</span> Conferma l'installazione toccando <strong>"Installa"</strong> ✅</li>
-          </ol>
-          <div class="android-hint-note">💡 L'app apparirà sulla tua schermata Home e potrai aprirla come un'app nativa
+        <div class="fermate-modal-body">
+          <!-- Lista linee -->
+          <div class="fermate-list-container">
+            <ul id="linee-fermate-modal-list" class="fermate-modal-list">
+              <!-- Linee generate dinamicamente -->
+            </ul>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-      <!-- Footer generato dinamicamente da footer.js -->
-    </footer>
-  </main>
-
-  <!-- PWA Brand Header (in alto) -->
-  <div id="pwa-brand-header" class="pwa-brand-header" style="display: none;">
-    <div class="pwa-logo-wrapper">
-      <img src="src/logo.png" alt="TPL" class="pwa-logo-img pwa-logo-default">
-      <img src="src/logo1.png" alt="TPL" class="pwa-logo-img pwa-logo-hover">
-    </div>
-    <div class="pwa-brand-title">
-      <div class="pwa-logo-acronym">
-        <div>tpl</div>
-        <div>fvg</div>
-      </div>
-      <div class="pwa-logo-text">
-        <div>trasporto</div>
-        <div>pubblico</div>
-        <div>locale</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- PWA Bottom Navigation (in basso) -->
-  <nav id="pwa-bottom-nav" class="pwa-bottom-nav" style="display: none;">
-    <a href="index.html" class="pwa-nav-item" data-page="home">
-      <svg class="pwa-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
-        stroke-linejoin="round">
-        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-        <polyline points="9 22 9 12 15 12 15 22"></polyline>
-      </svg>
-      <span class="pwa-nav-label">Home</span>
-    </a>
-
-    <a href="fermate.html" class="pwa-nav-item active" data-page="fermate">
-      <svg class="pwa-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
-        stroke-linejoin="round">
-        <rect x="3" y="3" width="18" height="18" rx="2"></rect>
-        <circle cx="8.5" cy="8.5" r="1.5"></circle>
-        <circle cx="15.5" cy="8.5" r="1.5"></circle>
-        <path d="M6 16h12"></path>
-      </svg>
-      <span class="pwa-nav-label">Fermate</span>
-    </a>
-
-    <a href="prezzi.html" class="pwa-nav-item" data-page="prezzi">
-      <svg class="pwa-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
-        stroke-linejoin="round">
-        <line x1="12" y1="1" x2="12" y2="23"></line>
-        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-      </svg>
-      <span class="pwa-nav-label">Prezzi</span>
-    </a>
-
-    <button class="pwa-nav-item" data-page="settings" id="pwa-settings-btn">
-      <svg class="pwa-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
-        stroke-linejoin="round">
-        <circle cx="12" cy="12" r="3"></circle>
-        <path d="M12 1v6m0 6v6m5.2-13.2l-4.2 4.2m0 6l4.2 4.2M1 12h6m6 0h6m-13.2 5.2l4.2-4.2m0-6l-4.2-4.2"></path>
-      </svg>
-      <span class="pwa-nav-label">Impostazioni</span>
-    </button>
-  </nav>
-
-  <!-- Pulsante torna su -->
-  <button class="scroll-to-top" title="Torna su">
-    ↑
-  </button>
-
-  <!-- Modal selezione linee -->
-  <div id="linee-fermate-modal" class="fermate-modal">
-    <div class="fermate-modal-content">
-      <div class="fermate-modal-header">
-        <h3 id="linee-fermate-modal-title">Seleziona linea</h3>
-        <div class="fermate-modal-actions">
-          <button id="linee-fermate-modal-close" class="fermate-modal-close" aria-label="Chiudi">×</button>
+    <!-- Modal conferma riavvio app -->
+    <div id="cache-modal" class="cache-modal">
+      <div class="cache-modal-content">
+        <div class="cache-modal-header">
+          <h3 id="modal-title">🔄 Verifica Aggiornamenti</h3>
         </div>
-      </div>
-      <div class="fermate-modal-body">
-        <!-- Lista linee -->
-        <div class="fermate-list-container">
-          <ul id="linee-fermate-modal-list" class="fermate-modal-list">
-            <!-- Linee generate dinamicamente -->
-          </ul>
+        <div class="cache-modal-body">
+          <p id="modal-message">
+            Verifico se ci sono aggiornamenti disponibili...
+          </p>
+          <p
+            class="cache-modal-warning"
+            id="modal-warning"
+            style="display: none"
+          >
+            ⚠️ L'app si ricaricherà automaticamente e tornerai alla pagina di
+            benvenuto.
+          </p>
+        </div>
+        <div class="cache-modal-footer">
+          <button id="cache-cancel" class="cache-modal-btn cache-modal-cancel">
+            Annulla
+          </button>
+          <button
+            id="cache-confirm"
+            class="cache-modal-btn cache-modal-confirm"
+            style="display: none"
+          >
+            Riavvia e Aggiorna (v1.2)
+          </button>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Modal conferma riavvio app -->
-  <div id="cache-modal" class="cache-modal">
-    <div class="cache-modal-content">
-      <div class="cache-modal-header">
-        <h3 id="modal-title">🔄 Verifica Aggiornamenti</h3>
-      </div>
-      <div class="cache-modal-body">
-        <p id="modal-message">Verifico se ci sono aggiornamenti disponibili...</p>
-        <p class="cache-modal-warning" id="modal-warning" style="display: none;">⚠️ L'app si ricaricherà automaticamente
-          e tornerai alla pagina di benvenuto.</p>
-      </div>
-      <div class="cache-modal-footer">
-        <button id="cache-cancel" class="cache-modal-btn cache-modal-cancel">Annulla</button>
-        <button id="cache-confirm" class="cache-modal-btn cache-modal-confirm" style="display: none;">Riavvia e Aggiorna
-          (v1.2)</button>
-      </div>
-    </div>
-  </div>
+    <!-- L'HTML del modal viene caricato dinamicamente da components/settings-modal.html -->
+    <!-- Vedi js/components/modals.js per la funzione loadSettingsModalHTML() -->
 
-  <!-- L'HTML del modal viene caricato dinamicamente da components/settings-modal.html -->
-  <!-- Vedi js/components/modals.js per la funzione loadSettingsModalHTML() -->
-
-  <!-- Script principale -->
-  <!-- CORE (sempre per primo!) -->
-  <script src="js/core/storage.js"></script>
-  <!-- DATA -->
-  <script src="js/data/tariffario.js"></script>
-  <script src="js/data/coordinates-linea-400.js?v=1.0.0"></script>
-  <!-- FEATURES -->
-  <script src="js/features/updates.js"></script>
-  <script src="js/features/settings.js"></script>
-  <script src="js/features/prezzi.js"></script>
-  <script src="js/features/route-selector.js"></script>
-  <script src="js/features/geolocation.js"></script>
-  <script src="js/features/page-renderers.js"></script>
-  <script src="js/features/fermate-accordion.js?v=1.0.0"></script>
-  <script src="libs/leaflet/leaflet.js"></script>
-  <script src="libs/leaflet/leaflet-icon-fix.js"></script>
-  <script src="js/features/line-map.js"></script>
-  <!-- UTILS -->
-  <script src="js/utils/ui-helpers.js"></script>
-  <script src="js/utils/offline-notifications.js"></script>
-  <!-- Altri moduli -->
-  <script src="footer.js"></script>
-  <script src="changelog.js"></script>
-  <script src="js/components/modals.js"></script>
-  <script src="js/components/hamburger-menu.js"></script>
-  <script src="js/components/pwa-install.js"></script>
-  <script src="js/components/pwa-bottom-nav.js"></script>
-  <script src="script.js"></script>
-  <script src="js/utils/app-init.js"></script>
-
-</body>
-
+    <!-- Script principale -->
+    <!-- APP LOADER (deve essere il primo script per apparire subito) -->
+    <script src="js/components/app-loader.js"></script>
+    <!-- CORE (sempre per primo!) -->
+    <script src="js/core/storage.js"></script>
+    <!-- DATA -->
+    <script src="js/data/tariffario.js"></script>
+    <script src="js/data/coordinates-linea-400.js?v=1.0.0"></script>
+    <!-- FEATURES -->
+    <script src="js/features/updates.js"></script>
+    <script src="js/features/settings.js"></script>
+    <script src="js/features/prezzi.js"></script>
+    <script src="js/features/route-selector.js"></script>
+    <script src="js/features/geolocation.js"></script>
+    <script src="js/features/page-renderers.js"></script>
+    <script src="js/features/fermate-accordion.js?v=1.0.0"></script>
+    <script src="libs/leaflet/leaflet.js"></script>
+    <script src="libs/leaflet/leaflet-icon-fix.js"></script>
+    <script src="js/features/line-map.js"></script>
+    <!-- UTILS -->
+    <script src="js/utils/ui-helpers.js"></script>
+    <script src="js/utils/offline-notifications.js"></script>
+    <!-- Altri moduli -->
+    <script src="footer.js"></script>
+    <script src="changelog.js"></script>
+    <script src="js/components/modals.js"></script>
+    <script src="js/components/hamburger-menu.js"></script>
+    <script src="js/components/pwa-install.js"></script>
+    <script src="js/components/pwa-bottom-nav.js"></script>
+    <script src="script.js"></script>
+    <script src="js/utils/app-init.js"></script>
+  </body>
 </html>

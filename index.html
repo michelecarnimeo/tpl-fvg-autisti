@@ -42,6 +42,8 @@
   <!-- Test Mode & GPS Debug Panel CSS -->
   <link rel="stylesheet" href="css/components/test-mode.css">
   <link rel="stylesheet" href="css/components/gps-debug-panel.css">
+  <!-- App Loader CSS -->
+  <link rel="stylesheet" href="css/components/app-loader.css">
 </head>
 
 <body>
@@ -262,6 +264,34 @@
         <!-- Divisore tra reset e price card -->
         <hr class="reset-divider">
 
+        <!-- Sezione Debug (solo in Test Mode) -->
+        <div class="debug-only debug-container" style="display: none;">
+          <div class="debug-container-title">🧪 Pannello Debug</div>
+          <div class="debug-buttons-grid">
+            <button class="debug-btn" id="debug-gps-panel-btn" type="button" title="Apri GPS Debug Panel">
+              📍 GPS Debug
+            </button>
+            <button class="debug-btn" id="debug-test-geolocation-btn" type="button" title="Testa geolocalizzazione">
+              🗺️ Test GPS
+            </button>
+            <button class="debug-btn" id="debug-app-info-btn" type="button" title="Mostra info app">
+              ℹ️ Info App
+            </button>
+            <button class="debug-btn" id="debug-reset-all-btn" type="button" title="Reset completo app">
+              🔄 Reset Completo
+            </button>
+            <button class="debug-btn" id="debug-clear-cache-btn" type="button" title="Cancella cache">
+              🗑️ Clear Cache
+            </button>
+            <button class="debug-btn" id="debug-console-log-btn" type="button" title="Mostra log in console">
+              📋 Log Console
+            </button>
+          </div>
+        </div>
+
+        <!-- Divisore tra debug e price card -->
+        <hr class="reset-divider debug-only" style="display: none;">
+
         <!-- Sezione prezzo divisa in due parti con colori distinti -->
         <div class="price-card inactive" id="price-card">
           <!-- Codice biglietto -->
@@ -465,10 +495,13 @@
   <!-- Vedi js/components/modals.js per la funzione loadSettingsModalHTML() -->
 
   <!-- Script principale -->
+  <!-- APP LOADER (deve essere il primo script per apparire subito) -->
+  <script src="js/components/app-loader.js"></script>
   <!-- CORE (sempre per primo!) -->
   <script src="js/core/storage.js"></script>
   <!-- DATA -->
   <script src="js/data/tariffario.js"></script>
+  <script src="js/data/coordinates-linea-400.js"></script>
   <!-- FEATURES -->
   <script src="js/features/updates.js"></script>
   <script src="js/features/settings.js"></script>
@@ -478,6 +511,7 @@
   <!-- DEBUG & TEST MODE -->
   <script src="js/debug/test-mode.js"></script>
   <script src="js/debug/gps-debug-panel.js"></script>
+  <script src="js/debug/home-debug-buttons.js"></script>
   <!-- UTILS -->
   <script src="js/utils/ui-helpers.js"></script>
   <script src="js/utils/offline-notifications.js"></script>

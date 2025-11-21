@@ -26,6 +26,7 @@
   let initialX = 0;
   let initialY = 0;
   let logs = [];
+  let currentSize = 'medium'; // Preset dimensioni: small, medium, large, xlarge, fullwidth
 
   // ===== INIZIALIZZAZIONE =====
   
@@ -37,6 +38,9 @@
     if (!panel) {
       createPanel();
     }
+    
+    // NON ripristinare lo stato salvato - il pannello deve essere mostrato solo manualmente
+    // quando Test Mode è attivo e viene premuto "Rileva"
   }
 
   /**
@@ -51,6 +55,16 @@
             <span class="gps-debug-title">GPS Debug</span>
           </div>
           <div class="gps-debug-actions">
+            <div class="gps-debug-size-menu">
+              <button class="gps-debug-btn gps-debug-size-btn" title="Cambia dimensione">📐</button>
+              <div class="gps-debug-size-dropdown" id="gps-debug-size-dropdown">
+                <button class="gps-debug-size-option" data-size="small">📱 Piccolo (240px)</button>
+                <button class="gps-debug-size-option" data-size="medium">📱 Medio (320px)</button>
+                <button class="gps-debug-size-option" data-size="large">💻 Grande (400px)</button>
+                <button class="gps-debug-size-option" data-size="xlarge">🖥️ Extra Large (500px)</button>
+                <button class="gps-debug-size-option" data-size="fullwidth">📺 Full Width (90%)</button>
+              </div>
+            </div>
             <button class="gps-debug-btn gps-debug-toggle" title="Minimizza/Espandi">
               <span class="icon-minimize">▼</span>
               <span class="icon-maximize">▲</span>
@@ -78,8 +92,17 @@
     // Setup event listeners
     setupEventListeners();
     
+    // Carica dimensione salvata
+    loadSize();
+    
+    // Applica dimensione
+    applySize();
+    
     // Posiziona il pannello (bottom-right di default)
     positionPanel();
+    
+    // NASCONDI di default - si mostrerà solo se Test Mode è attivo e viene premuto "Rileva"
+    panel.style.display = 'none';
   }
 
   /**
@@ -110,6 +133,9 @@
     const toggleBtn = panel.querySelector('.gps-debug-toggle');
     const closeBtn = panel.querySelector('.gps-debug-close');
     const clearBtn = document.getElementById('gps-debug-clear');
+    const sizeBtn = panel.querySelector('.gps-debug-size-btn');
+    const sizeDropdown = document.getElementById('gps-debug-size-dropdown');
+    const sizeOptions = panel.querySelectorAll('.gps-debug-size-option');
 
     // Drag & Drop
     header.addEventListener('mousedown', startDrag);
@@ -124,6 +150,31 @@
     // Clear logs
     if (clearBtn) {
       clearBtn.addEventListener('click', clearLogs);
+    }
+    
+    // Size menu toggle
+    if (sizeBtn && sizeDropdown) {
+      sizeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        sizeDropdown.classList.toggle('show');
+      });
+      
+      // Chiudi dropdown quando si clicca fuori
+      document.addEventListener('click', (e) => {
+        if (!sizeDropdown.contains(e.target) && e.target !== sizeBtn) {
+          sizeDropdown.classList.remove('show');
+        }
+      });
+      
+      // Seleziona dimensione
+      sizeOptions.forEach(option => {
+        option.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const size = option.dataset.size;
+          setSize(size);
+          sizeDropdown.classList.remove('show');
+        });
+      });
     }
   }
 
@@ -218,6 +269,91 @@
   }
 
   /**
+   * Carica la dimensione salvata
+   */
+  function loadSize() {
+    try {
+      const saved = localStorage.getItem('gps-debug-panel-size');
+      if (saved && ['small', 'medium', 'large', 'xlarge', 'fullwidth'].includes(saved)) {
+        currentSize = saved;
+      }
+    } catch (e) {
+      console.warn('⚠️ Impossibile caricare dimensione pannello:', e);
+    }
+  }
+
+  /**
+   * Salva la dimensione
+   */
+  function saveSize() {
+    try {
+      localStorage.setItem('gps-debug-panel-size', currentSize);
+    } catch (e) {
+      console.warn('⚠️ Impossibile salvare dimensione pannello:', e);
+    }
+  }
+
+  /**
+   * Imposta la dimensione del pannello
+   */
+  function setSize(size) {
+    if (!['small', 'medium', 'large', 'xlarge', 'fullwidth'].includes(size)) {
+      console.warn('⚠️ Dimensione non valida:', size);
+      return;
+    }
+    
+    currentSize = size;
+    applySize();
+    saveSize();
+    
+    // Aggiorna selezione nel dropdown
+    const options = panel.querySelectorAll('.gps-debug-size-option');
+    options.forEach(opt => {
+      if (opt.dataset.size === size) {
+        opt.classList.add('active');
+      } else {
+        opt.classList.remove('active');
+      }
+    });
+    
+    console.log(`📐 GPS Debug Panel: dimensione impostata a ${size}`);
+  }
+
+  /**
+   * Applica la dimensione al pannello
+   */
+  function applySize() {
+    if (!panel) return;
+    
+    // Rimuovi tutte le classi di dimensione
+    panel.classList.remove('size-small', 'size-medium', 'size-large', 'size-xlarge', 'size-fullwidth');
+    
+    // Aggiungi classe corrispondente
+    panel.classList.add(`size-${currentSize}`);
+    
+    // Imposta larghezza CSS
+    const sizes = {
+      small: '240px',
+      medium: '320px',
+      large: '400px',
+      xlarge: '500px',
+      fullwidth: '90vw'
+    };
+    
+    panel.style.width = sizes[currentSize] || sizes.medium;
+    
+    // Aggiorna selezione nel dropdown
+    const options = panel.querySelectorAll('.gps-debug-size-option');
+    options.forEach(opt => {
+      if (opt.dataset.size === currentSize) {
+        opt.classList.add('active');
+      } else {
+        opt.classList.remove('active');
+      }
+    });
+  }
+
+  /**
    * Toggle minimize/maximize
    */
   function toggleMinimize() {
@@ -244,9 +380,15 @@
   }
 
   /**
-   * Mostra il pannello
+   * Mostra il pannello (solo se Test Mode è attivo)
    */
   function show() {
+    // Verifica che Test Mode sia attivo
+    if (typeof window.TestMode === 'undefined' || !window.TestMode.isEnabled()) {
+      console.log('ℹ️ GPS Debug Panel: Test Mode non attivo, pannello non mostrato');
+      return;
+    }
+    
     if (!panel) {
       init();
     }
@@ -347,17 +489,18 @@
     show,
     close,
     addLog,
-    clearLogs
+    clearLogs,
+    setSize
   };
 
-  // Auto-inizializza quando il DOM è pronto
+  // Auto-inizializza quando il DOM è pronto (ma rimane nascosto)
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {
     init();
   }
 
-  console.log('✅ GPS Debug Panel caricato');
+  console.log('✅ GPS Debug Panel caricato (nascosto di default, si mostra solo in Test Mode)');
 
 })();
 

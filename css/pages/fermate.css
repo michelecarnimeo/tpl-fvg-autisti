@@ -4,6 +4,17 @@
    ======================================== */
 
 /* Regole specifiche per pagina Fermate */
+/* Griglia fermate - ora una sola card con toggle direzione */
+.fermate-grid {
+  display: block;
+  width: 100%;
+}
+
+.fermate-grid .fermate-card {
+  width: 100%;
+  max-width: 100%;
+}
+
 @media (max-width: 768px) {
   /* Nascondi griglia fermate e barra di ricerca su mobile nella pagina Fermate */
   .fermate-page #fermate-grid-container.show-on-mobile {

@@ -307,6 +307,9 @@
         reverseGeocodePromise = window.GPSHelpers.reverseGeocode(coords.latitude, coords.longitude);
       } else {
         // Fallback inline
+        // NOTA: Nominatim (OpenStreetMap) è un servizio esterno.
+        // I warning "x-content-type-options header missing" e "cache-control header missing"
+        // sono attesi e normali perché non possiamo controllare gli header delle risposte di servizi esterni.
         reverseGeocodePromise = fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${coords.latitude}&lon=${coords.longitude}&zoom=18&addressdetails=1`)
           .then(response => response.ok ? response.json() : null)
           .catch(() => null);

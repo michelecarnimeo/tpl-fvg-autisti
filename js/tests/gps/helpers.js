@@ -44,6 +44,9 @@
    */
   async function reverseGeocode(lat, lng) {
     try {
+      // NOTA: Nominatim (OpenStreetMap) è un servizio esterno.
+      // I warning "x-content-type-options header missing" e "cache-control header missing"
+      // sono attesi e normali perché non possiamo controllare gli header delle risposte di servizi esterni.
       const response = await fetch(
         `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`,
         {

@@ -4,59 +4,49 @@
    ======================================== */
 
 /* ========================================
-   BADGE MODALITÀ TEST
+   BADGE MODALITÀ TEST (BARRA SOTTO NAVBAR)
    ======================================== */
 
 .test-mode-badge {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 99998;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   background: linear-gradient(135deg, #f59e0b, #d97706);
-  border: 2px solid #fbbf24;
-  border-radius: 8px;
-  padding: 8px 12px;
-  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+  border-bottom: 2px solid #fbbf24;
+  padding: 6px 16px;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
   cursor: pointer;
   transition: all 0.3s ease;
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none;
-  overflow: visible;
-  isolation: isolate;
+  z-index: 999;
 }
 
 .test-mode-badge:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 16px rgba(245, 158, 11, 0.6);
-}
-
-.test-mode-badge::after {
-  content: '';
-  position: absolute;
-  inset: -6px;
-  border-radius: inherit;
-  background: rgba(245, 158, 11, 0.6);
-  filter: blur(12px);
-  opacity: 0.6;
-  z-index: -1;
-  animation: badgePulse 2s ease-in-out infinite;
-  pointer-events: none;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.5);
 }
 
 .test-mode-badge-content {
   display: flex;
   align-items: center;
   gap: 8px;
+  width: 100%;
+  max-width: 1200px;
+  justify-content: center;
 }
 
 .test-mode-badge-icon {
-  font-size: 18px;
-  animation: badgeRotate 3s linear infinite;
+  font-size: 16px;
 }
 
 .test-mode-badge-text {
-  font-weight: 700;
+  font-weight: 600;
   color: white;
   font-size: 13px;
   letter-spacing: 0.5px;
@@ -70,14 +60,16 @@
   height: 20px;
   border-radius: 4px;
   color: white;
-  font-size: 14px;
+  font-size: 12px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
   padding: 0;
-  margin-left: 4px;
+  margin-left: auto;
+  line-height: 1;
+  flex-shrink: 0;
 }
 
 .test-mode-badge-close:hover {
@@ -89,32 +81,6 @@
   transform: scale(0.9);
 }
 
-/* ========================================
-   ANIMAZIONI BADGE
-   ======================================== */
-
-@keyframes badgePulse {
-  0%, 100% {
-    opacity: 0.6;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0;
-    transform: scale(1.2);
-  }
-}
-
-@keyframes badgeRotate {
-  0%, 100% {
-    transform: rotate(0deg);
-  }
-  25% {
-    transform: rotate(-10deg);
-  }
-  75% {
-    transform: rotate(10deg);
-  }
-}
 
 /* ========================================
    TOAST NOTIFICHE
@@ -209,10 +175,24 @@
   font-weight: 700;
   color: #8b5cf6;
   font-size: 14px;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
+}
+
+/* Griglia pulsanti debug */
+.debug-buttons-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+@media (max-width: 480px) {
+  .debug-buttons-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .debug-container-title::before {
@@ -224,19 +204,24 @@
    RESPONSIVE - Mobile
    ======================================== */
 
+/* Badge su mobile */
 @media (max-width: 768px) {
   .test-mode-badge {
-    top: 10px;
-    right: 10px;
-    padding: 6px 10px;
+    padding: 5px 12px;
   }
 
   .test-mode-badge-text {
-    font-size: 12px;
+    font-size: 11px;
   }
 
   .test-mode-badge-icon {
-    font-size: 16px;
+    font-size: 14px;
+  }
+  
+  .test-mode-badge-close {
+    width: 18px;
+    height: 18px;
+    font-size: 11px;
   }
 
   .test-mode-toast {

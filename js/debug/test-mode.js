@@ -75,7 +75,7 @@
   }
 
   /**
-   * Crea il badge visivo
+   * Crea il badge visivo come barra sotto la navbar
    */
   function createBadge() {
     // Rimuovi badge esistente se presente
@@ -84,18 +84,26 @@
       existing.remove();
     }
 
+    // Trova la navbar dove inserire il badge dopo
+    const navbar = document.querySelector('.navbar');
+    if (!navbar) {
+      console.warn('⚠️ Navbar non trovata, badge non creato');
+      return;
+    }
+
     const badge = document.createElement('div');
     badge.id = BADGE_ID;
     badge.className = 'test-mode-badge';
     badge.innerHTML = `
       <div class="test-mode-badge-content">
         <span class="test-mode-badge-icon">🧪</span>
-        <span class="test-mode-badge-text">TEST MODE</span>
+        <span class="test-mode-badge-text">TEST MODE ATTIVO</span>
         <button class="test-mode-badge-close" title="Disattiva Test Mode">✕</button>
       </div>
     `;
     
-    document.body.appendChild(badge);
+    // Inserisci il badge dopo la navbar
+    navbar.insertAdjacentElement('afterend', badge);
     
     // Event listener per chiudere
     const closeBtn = badge.querySelector('.test-mode-badge-close');
@@ -107,7 +115,13 @@
     }
     
     // Click sul badge per info
-    badge.addEventListener('click', showInfo);
+    badge.addEventListener('click', (e) => {
+      // Non mostrare info se si clicca sul pulsante close
+      if (e.target.closest('.test-mode-badge-close')) {
+        return;
+      }
+      showInfo();
+    });
   }
 
   /**
