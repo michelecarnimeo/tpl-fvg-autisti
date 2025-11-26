@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>Prezzi - TPL FVG</title>
+    <link rel="stylesheet" href="css/presets/desktop.css" />
+    <style>
+      /* Stili per icone SVG */
+      .mobile-nav-icon svg {
+        color: var(--ios-text-primary);
+        transition: color 0.3s ease;
+      }
+
+      .mobile-nav-link:hover .mobile-nav-icon svg,
+      .mobile-nav-link.active .mobile-nav-icon svg {
+        color: var(--ios-accent);
+      }
+
+      body.light .mobile-nav-icon svg {
+        color: var(--ios-text-primary-light);
+      }
+
+      body.light .mobile-nav-link:hover .mobile-nav-icon svg,
+      body.light .mobile-nav-link.active .mobile-nav-icon svg {
+        color: var(--ios-accent);
+      }
+
+      /* Progress bar - riduzione larghezza */
+      .step-nav-container {
+        width: auto !important;
+        max-width: 600px !important;
+      }
+
+      /* Stili per pagina prezzi */
+      .prezzi-page-container {
+        padding: 2rem 1rem;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      .prezzi-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+      }
+
+      .prezzi-title {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: var(--ios-text-primary);
+      }
+
+      body.light .prezzi-title {
+        color: var(--ios-text-primary-light);
+      }
+
+      .prezzi-subtitle {
+        font-size: 1rem;
+        color: var(--ios-text-secondary);
+        opacity: 0.8;
+      }
+
+      body.light .prezzi-subtitle {
+        color: var(--ios-text-secondary-light);
+      }
+
+      /* Card selezione linea */
+      .line-selector-card {
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.15) 0%,
+          rgba(255, 255, 255, 0.08) 50%,
+          rgba(255, 255, 255, 0.12) 100%
+        );
+        backdrop-filter: blur(40px) saturate(180%);
+        -webkit-backdrop-filter: blur(40px) saturate(180%);
+        border: 1.5px solid rgba(255, 255, 255, 0.18);
+        border-radius: 24px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2),
+          0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+          0 4px 16px rgba(0, 123, 138, 0.15);
+      }
+
+      body.light .line-selector-card {
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.95) 0%,
+          rgba(255, 255, 255, 0.85) 50%,
+          rgba(255, 255, 255, 0.9) 100%
+        );
+        border-color: rgba(0, 123, 138, 0.2);
+        box-shadow: 0 8px 32px rgba(0, 123, 138, 0.15),
+          0 0 0 1px rgba(0, 123, 138, 0.1) inset,
+          0 4px 16px rgba(0, 123, 138, 0.1);
+      }
+
+      .line-selector-button {
+        width: 100%;
+        padding: 1.25rem 1.5rem;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.2) 0%,
+          rgba(255, 255, 255, 0.15) 100%
+        );
+        border: 1.5px solid rgba(255, 255, 255, 0.25);
+        border-radius: 18px;
+        color: var(--ios-text-primary);
+        font-size: 1.05rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1),
+          0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+      }
+
+      body.light .line-selector-button {
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.6) 0%,
+          rgba(255, 255, 255, 0.5) 100%
+        );
+        border-color: rgba(0, 123, 138, 0.2);
+        color: var(--ios-text-primary-light);
+        box-shadow: 0 4px 16px rgba(0, 123, 138, 0.1),
+          0 0 0 1px rgba(0, 123, 138, 0.08) inset;
+      }
+
+      .line-selector-button:hover {
+        transform: translateY(-2px);
+        border-color: rgba(0, 123, 138, 0.35);
+        box-shadow: 0 6px 24px rgba(0, 123, 138, 0.2),
+          0 0 0 1px rgba(0, 123, 138, 0.15) inset;
+      }
+
+      .line-selector-button .arrow {
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.3s ease;
+      }
+
+      .line-selector-button:hover .arrow {
+        transform: translateX(4px);
+      }
+
+      /* Tabelle prezzi */
+      .prezzi-tables-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        margin-top: 2rem;
+      }
+
+      .prezzi-table-card {
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.15) 0%,
+          rgba(255, 255, 255, 0.08) 50%,
+          rgba(255, 255, 255, 0.12) 100%
+        );
+        backdrop-filter: blur(40px) saturate(180%);
+        -webkit-backdrop-filter: blur(40px) saturate(180%);
+        border: 1.5px solid rgba(255, 255, 255, 0.18);
+        border-radius: 24px;
+        padding: 2rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2),
+          0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+          0 4px 16px rgba(0, 123, 138, 0.15);
+        overflow: hidden;
+      }
+
+      body.light .prezzi-table-card {
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.95) 0%,
+          rgba(255, 255, 255, 0.85) 50%,
+          rgba(255, 255, 255, 0.9) 100%
+        );
+        border-color: rgba(0, 123, 138, 0.2);
+        box-shadow: 0 8px 32px rgba(0, 123, 138, 0.15),
+          0 0 0 1px rgba(0, 123, 138, 0.1) inset,
+          0 4px 16px rgba(0, 123, 138, 0.1);
+      }
+
+      .prezzi-table-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        color: var(--ios-text-primary);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      body.light .prezzi-table-title {
+        color: var(--ios-text-primary-light);
+      }
+
+      .prezzi-table-title svg {
+        width: 24px;
+        height: 24px;
+        color: var(--ios-accent);
+      }
+
+      .prezzi-table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 12px;
+      }
+
+      .prezzi-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 600px;
+      }
+
+      .prezzi-table thead {
+        background: linear-gradient(
+          135deg,
+          rgba(0, 123, 138, 0.2) 0%,
+          rgba(0, 153, 170, 0.15) 100%
+        );
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+      }
+
+      body.light .prezzi-table thead {
+        background: linear-gradient(
+          135deg,
+          rgba(0, 123, 138, 0.1) 0%,
+          rgba(0, 153, 170, 0.08) 100%
+        );
+      }
+
+      .prezzi-table th {
+        padding: 1rem;
+        text-align: left;
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: var(--ios-text-primary);
+        border-bottom: 2px solid rgba(0, 123, 138, 0.3);
+        white-space: nowrap;
+      }
+
+      body.light .prezzi-table th {
+        color: var(--ios-text-primary-light);
+        border-bottom-color: rgba(0, 123, 138, 0.2);
+      }
+
+      .prezzi-table td {
+        padding: 0.875rem 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        color: var(--ios-text-primary);
+        font-size: 0.9rem;
+      }
+
+      body.light .prezzi-table td {
+        border-bottom-color: rgba(0, 0, 0, 0.08);
+        color: var(--ios-text-primary-light);
+      }
+
+      .prezzi-table tbody tr {
+        transition: background 0.2s ease;
+      }
+
+      .prezzi-table tbody tr:hover {
+        background: rgba(0, 123, 138, 0.1);
+      }
+
+      body.light .prezzi-table tbody tr:hover {
+        background: rgba(0, 123, 138, 0.05);
+      }
+
+      .prezzi-table .price-cell {
+        font-weight: 600;
+        color: var(--ios-accent);
+      }
+
+      .prezzi-table .code-cell {
+        font-family: 'Courier New', monospace;
+        font-weight: 500;
+        background: rgba(0, 123, 138, 0.1);
+        padding: 0.4rem 0.6rem;
+        border-radius: 6px;
+        display: inline-block;
+      }
+
+      body.light .prezzi-table .code-cell {
+        background: rgba(0, 123, 138, 0.08);
+      }
+
+      .prezzi-table .empty-cell {
+        color: var(--ios-text-secondary);
+        opacity: 0.5;
+        font-style: italic;
+      }
+
+      /* Stato vuoto */
+      .prezzi-empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: var(--ios-text-secondary);
+      }
+
+      .prezzi-empty-state svg {
+        width: 64px;
+        height: 64px;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+      }
+
+      .prezzi-empty-state h3 {
+        font-size: 1.25rem;
+        margin-bottom: 0.5rem;
+        color: var(--ios-text-primary);
+      }
+
+      body.light .prezzi-empty-state h3 {
+        color: var(--ios-text-primary-light);
+      }
+
+      /* Responsive */
+      @media (min-width: 768px) {
+        .prezzi-tables-container {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+
+      @media (min-width: 1024px) {
+        .prezzi-page-container {
+          padding: 3rem 2rem;
+        }
+
+        .prezzi-title {
+          font-size: 2.5rem;
+        }
+      }
+
+      @media (max-width: 767px) {
+        .prezzi-page-container {
+          padding: 1.5rem 1rem;
+        }
+
+        .line-selector-card {
+          padding: 1.5rem;
+        }
+
+        .prezzi-table-card {
+          padding: 1.5rem;
+        }
+
+        .prezzi-table {
+          font-size: 0.85rem;
+        }
+
+        .prezzi-table th,
+        .prezzi-table td {
+          padding: 0.75rem 0.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <header class="navbar">
+      <div class="navbar-content">
+        <a
+          href="home-ios26-prototype.html"
+          class="navbar-brand"
+          aria-label="Vai alla home TPL FVG"
+        >
+          <div class="navbar-logo-wrapper">
+            <img
+              src="../src/logo.png"
+              alt="TPL"
+              class="navbar-logo"
+              onerror="this.style.display='none'"
+            />
+          </div>
+          <div class="navbar-title">
+            <div class="logo-acronym">
+              <span class="logo-line">tpl</span>
+              <span class="logo-line">fvg</span>
+            </div>
+            <div class="logo-text">
+              <span class="logo-text-line">trasporto</span>
+              <span class="logo-text-line">pubblico</span>
+              <span class="logo-text-line">locale</span>
+            </div>
+          </div>
+        </a>
+
+        <nav class="navbar-nav">
+          <a href="home-ios26-prototype.html" class="nav-link">Home</a>
+          <a href="fermate-ios26-prototype.html" class="nav-link">Fermate</a>
+          <a href="prezzi-ios26-prototype.html" class="nav-link active" aria-current="page">Prezzi</a>
+        </nav>
+
+        <div class="navbar-actions">
+          <button
+            class="settings-button"
+            aria-label="Impostazioni"
+            title="Impostazioni"
+          >
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"
+              ></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+          </button>
+          <button
+            class="hamburger-toggle"
+            onclick="toggleMobileMenu()"
+            aria-label="Menu"
+            id="hamburger-toggle"
+            data-section="prezzi"
+          >
+            <span class="hamburger-section-label">Prezzi</span>
+            <span class="hamburger-separator"></span>
+            <div class="hamburger-icon-wrapper">
+              <div class="hamburger-icon">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobile-menu-overlay"></div>
+
+    <!-- Mobile Menu - Popup iOS 26 Style -->
+    <div class="mobile-menu" id="mobile-menu">
+      <nav class="mobile-menu-nav">
+        <a href="home-ios26-prototype.html" class="mobile-nav-link">
+          <span class="mobile-nav-icon">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="0.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              width="20"
+              height="20"
+            >
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+          </span>
+          <span>Home</span>
+        </a>
+        <a href="fermate-ios26-prototype.html" class="mobile-nav-link">
+          <span class="mobile-nav-icon">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="0.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              width="20"
+              height="20"
+            >
+              <rect x="6" y="5" width="12" height="14" rx="2"></rect>
+              <line x1="6" y1="9" x2="18" y2="9"></line>
+              <line x1="6" y1="14" x2="18" y2="14"></line>
+              <line x1="8" y1="17" x2="9" y2="17"></line>
+              <line x1="15" y1="17" x2="16" y2="17"></line>
+              <path d="M6 8c-2 0 -3 1 -3 3v2"></path>
+              <path d="M18 8c2 0 3 1 3 3v2"></path>
+              <path d="M8 19v1a1.5 1.5 0 0 0 3 0v-1"></path>
+              <path d="M13 19v1a1.5 1.5 0 0 0 3 0v-1"></path>
+            </svg>
+          </span>
+          <span>Fermate</span>
+        </a>
+        <a href="prezzi-ios26-prototype.html" class="mobile-nav-link active">
+          <span class="mobile-nav-icon">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="0.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              width="20"
+              height="20"
+            >
+              <line x1="12" y1="1" x2="12" y2="23"></line>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+          </span>
+          <span>Prezzi</span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="prezzi-page-container">
+        <div class="prezzi-header">
+          <h1 class="prezzi-title">Prezzi e Codici Biglietto</h1>
+          <p class="prezzi-subtitle">
+            Seleziona una linea per visualizzare tutte le tariffe disponibili
+          </p>
+        </div>
+
+        <!-- Card Selezione Linea -->
+        <div class="line-selector-card">
+          <button
+            class="line-selector-button"
+            onclick="openLineaModal()"
+            id="line-selector-btn"
+          >
+            <span id="line-selector-text">Seleziona una linea</span>
+            <span class="arrow">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                width="20"
+                height="20"
+              >
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </span>
+          </button>
+        </div>
+
+        <!-- Container Tabelle Prezzi -->
+        <div class="prezzi-tables-container" id="prezzi-tables-container" style="display: none;">
+          <!-- Tabella Andata -->
+          <div class="prezzi-table-card">
+            <h2 class="prezzi-table-title">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+              Andata
+            </h2>
+            <div class="prezzi-table-wrapper">
+              <table class="prezzi-table" id="prezzi-table-andata">
+                <thead>
+                  <tr>
+                    <th>Partenza</th>
+                    <th>Arrivo</th>
+                    <th>Prezzo</th>
+                    <th>Codice</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Tabella Ritorno -->
+          <div class="prezzi-table-card">
+            <h2 class="prezzi-table-title">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+              Ritorno
+            </h2>
+            <div class="prezzi-table-wrapper">
+              <table class="prezzi-table" id="prezzi-table-ritorno">
+                <thead>
+                  <tr>
+                    <th>Partenza</th>
+                    <th>Arrivo</th>
+                    <th>Prezzo</th>
+                    <th>Codice</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stato Vuoto -->
+        <div class="prezzi-empty-state" id="prezzi-empty-state">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="12" y1="1" x2="12" y2="23"></line>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+          </svg>
+          <h3>Nessuna linea selezionata</h3>
+          <p>Seleziona una linea per visualizzare i prezzi</p>
+        </div>
+      </div>
+    </main>
+
+    <!-- Modal Selezione Linea -->
+    <div class="fermate-modal" id="linea-modal">
+      <div class="fermate-modal-overlay" onclick="closeLineaModal()"></div>
+      <div class="fermate-modal-content">
+        <div class="fermate-modal-handle-wrapper">
+          <div class="fermate-modal-handle"></div>
+        </div>
+        <div class="fermate-modal-header">
+          <h3 class="fermate-modal-title">Seleziona Linea</h3>
+          <div class="fermate-modal-header-actions">
+            <button
+              class="fermate-modal-close"
+              onclick="closeLineaModal()"
+              aria-label="Chiudi"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                width="20"
+                height="20"
+              >
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="fermate-modal-body" id="linea-modal-body">
+          <div class="fermate-list-container">
+            <ul class="fermate-modal-list" id="linea-modal-list">
+              <!-- Linee caricate dinamicamente -->
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script>
+      // Stato applicazione
+      let tariffario = [];
+      let selectedLineaIndex = null;
+      let selectedLineaName = null;
+
+      // Carica tariffario
+      async function loadTariffario() {
+        try {
+          const response = await fetch('../database.json');
+          if (!response.ok) throw new Error('Errore nel caricamento');
+          tariffario = await response.json();
+          console.log('✅ Tariffario caricato:', tariffario.length, 'linee');
+          renderLineeModal();
+        } catch (error) {
+          console.error('❌ Errore caricamento tariffario:', error);
+          showToast('Errore nel caricamento dei dati', 'error');
+        }
+      }
+
+      // Renderizza linee nel modal
+      function renderLineeModal() {
+        const list = document.getElementById('linea-modal-list');
+        if (!list) return;
+
+        list.innerHTML = '';
+
+        tariffario.forEach((linea, index) => {
+          const li = document.createElement('li');
+          li.className = 'fermate-modal-item';
+          li.onclick = () => selectLinea(index, linea.nome);
+
+          const icon = document.createElement('div');
+          icon.className = 'fermate-modal-item-icon';
+          icon.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+              <rect x="6" y="5" width="12" height="14" rx="2" />
+              <line x1="6" y1="9" x2="18" y2="9" />
+              <line x1="6" y1="14" x2="18" y2="14" />
+              <line x1="8" y1="17" x2="9" y2="17" />
+              <line x1="15" y1="17" x2="16" y2="17" />
+              <path d="M6 8c-2 0 -3 1 -3 3v2" />
+              <path d="M18 8c2 0 3 1 3 3v2" />
+              <path d="M8 19v1a1.5 1.5 0 0 0 3 0v-1" />
+              <path d="M13 19v1a1.5 1.5 0 0 0 3 0v-1" />
+            </svg>
+          `;
+
+          const name = document.createElement('div');
+          name.className = 'fermate-modal-item-name';
+          name.textContent = linea.nome;
+
+          const arrow = document.createElement('div');
+          arrow.className = 'fermate-modal-item-arrow';
+          arrow.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          `;
+
+          li.appendChild(icon);
+          li.appendChild(name);
+          li.appendChild(arrow);
+          list.appendChild(li);
+        });
+      }
+
+      // Seleziona linea
+      function selectLinea(index, nome) {
+        selectedLineaIndex = index;
+        selectedLineaName = nome;
+        document.getElementById('line-selector-text').textContent = nome;
+        closeLineaModal();
+        renderPrezzi();
+        showToast(`Linea ${nome} selezionata`, 'success');
+      }
+
+      // Renderizza tabelle prezzi
+      function renderPrezzi() {
+        if (selectedLineaIndex === null) {
+          document.getElementById('prezzi-tables-container').style.display = 'none';
+          document.getElementById('prezzi-empty-state').style.display = 'block';
+          return;
+        }
+
+        const linea = tariffario[selectedLineaIndex];
+        if (!linea || !linea.fermate) {
+          showToast('Dati linea non disponibili', 'error');
+          return;
+        }
+
+        const fermate = linea.fermate;
+        const prezzi = linea.prezzi || [];
+        const codici = linea.codici || [];
+
+        // Renderizza tabella andata
+        renderTable('prezzi-table-andata', fermate, prezzi, codici, (i, j) => i < j);
+
+        // Renderizza tabella ritorno
+        renderTable('prezzi-table-ritorno', fermate, prezzi, codici, (i, j) => i > j);
+
+        document.getElementById('prezzi-tables-container').style.display = 'grid';
+        document.getElementById('prezzi-empty-state').style.display = 'none';
+      }
+
+      // Renderizza singola tabella
+      function renderTable(tableId, fermate, prezzi, codici, filterFn) {
+        const tbody = document.querySelector(`#${tableId} tbody`);
+        if (!tbody) return;
+
+        tbody.innerHTML = '';
+
+        for (let i = 0; i < fermate.length; i++) {
+          for (let j = 0; j < fermate.length; j++) {
+            if (i === j) continue;
+            if (!filterFn(i, j)) continue;
+
+            const prezzo = prezzi[i]?.[j] ?? null;
+            const codice = codici[i]?.[j] ?? '';
+
+            const row = document.createElement('tr');
+
+            const partenzaCell = document.createElement('td');
+            partenzaCell.textContent = fermate[i];
+            row.appendChild(partenzaCell);
+
+            const arrivoCell = document.createElement('td');
+            arrivoCell.textContent = fermate[j];
+            row.appendChild(arrivoCell);
+
+            const prezzoCell = document.createElement('td');
+            prezzoCell.className = 'price-cell';
+            if (prezzo !== null && prezzo !== undefined) {
+              prezzoCell.textContent = `${prezzo.toFixed(2)} €`;
+            } else {
+              prezzoCell.className += ' empty-cell';
+              prezzoCell.textContent = '-';
+            }
+            row.appendChild(prezzoCell);
+
+            const codiceCell = document.createElement('td');
+            if (codice) {
+              codiceCell.className = 'code-cell';
+              codiceCell.textContent = codice;
+            } else {
+              codiceCell.className = 'empty-cell';
+              codiceCell.textContent = '-';
+            }
+            row.appendChild(codiceCell);
+
+            tbody.appendChild(row);
+          }
+        }
+      }
+
+      // Apri modal linea
+      function openLineaModal() {
+        const modal = document.getElementById('linea-modal');
+        const overlay = document.querySelector('.fermate-modal-overlay');
+        if (modal) {
+          modal.classList.add('active');
+          if (overlay) overlay.classList.add('active');
+          document.body.style.overflow = 'hidden';
+          
+          // Inizializza drag per mobile
+          initModalDrag();
+        }
+      }
+
+      // Chiudi modal linea
+      function closeLineaModal() {
+        const modal = document.getElementById('linea-modal');
+        const overlay = document.querySelector('.fermate-modal-overlay');
+        if (modal) {
+          modal.classList.remove('active');
+          if (overlay) overlay.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      }
+
+      // Inizializza drag per chiudere il modal trascinandolo
+      function initModalDrag() {
+        const modal = document.getElementById('linea-modal');
+        if (!modal) return;
+
+        let startY = 0;
+        let currentY = 0;
+        let isDragging = false;
+
+        const handle = modal.querySelector('.fermate-modal-handle');
+        const header = modal.querySelector('.fermate-modal-header');
+
+        const startDrag = (e) => {
+          isDragging = true;
+          startY = e.touches ? e.touches[0].clientY : e.clientY;
+          modal.style.transition = 'none';
+        };
+
+        const drag = (e) => {
+          if (!isDragging) return;
+          currentY = e.touches ? e.touches[0].clientY : e.clientY;
+          const diff = currentY - startY;
+          if (diff > 0) {
+            modal.style.transform = `translateY(${diff}px)`;
+          }
+        };
+
+        const endDrag = () => {
+          if (!isDragging) return;
+          isDragging = false;
+          modal.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+          
+          const diff = currentY - startY;
+          if (diff > 100) {
+            closeLineaModal();
+          } else {
+            modal.style.transform = 'translateY(0)';
+          }
+        };
+
+        if (handle) {
+          handle.addEventListener('touchstart', startDrag);
+          handle.addEventListener('mousedown', startDrag);
+        }
+        if (header) {
+          header.addEventListener('touchstart', startDrag);
+          header.addEventListener('mousedown', startDrag);
+        }
+
+        document.addEventListener('touchmove', drag);
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('touchend', endDrag);
+        document.addEventListener('mouseup', endDrag);
+      }
+
+      // Toggle mobile menu
+      function toggleMobileMenu() {
+        const menu = document.getElementById('mobile-menu');
+        const overlay = document.getElementById('mobile-menu-overlay');
+        if (!menu || !overlay) return;
+
+        const isActive = menu.classList.contains('active');
+
+        if (isActive) {
+          menu.classList.add('closing');
+          setTimeout(() => {
+            menu.classList.remove('active', 'closing');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+          }, 300);
+        } else {
+          menu.classList.add('active');
+          overlay.classList.add('active');
+          document.body.style.overflow = 'hidden';
+        }
+      }
+
+      // Chiudi mobile menu quando si clicca sull'overlay
+      document.getElementById('mobile-menu-overlay')?.addEventListener('click', () => {
+        toggleMobileMenu();
+      });
+
+      // Chiudi modal quando si preme ESC
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          closeLineaModal();
+        }
+      });
+
+      // Toast notifications
+      function showToast(message, type = 'info') {
+        const container = document.getElementById('toast-container');
+        if (!container) return;
+
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        toast.textContent = message;
+
+        container.appendChild(toast);
+
+        setTimeout(() => {
+          toast.classList.add('show');
+        }, 10);
+
+        setTimeout(() => {
+          toast.classList.remove('show');
+          setTimeout(() => {
+            container.removeChild(toast);
+          }, 300);
+        }, 3000);
+      }
+
+      // Inizializzazione
+      document.addEventListener('DOMContentLoaded', () => {
+        loadTariffario();
+      });
+    </script>
+  </body>
+</html>
+

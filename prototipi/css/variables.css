@@ -1,0 +1,72 @@
+/* ========================================
+   VARIABLES MODULE - Prototype
+   Variabili CSS per il design del prototipo
+   ======================================== */
+
+:root {
+  /* ========================================
+     COLORI PRINCIPALI - Dark Mode
+     ======================================== */
+  
+  --ios-bg: linear-gradient(
+    135deg,
+    #0a0e27 0%,
+    #1a1f3a 50%,
+    #2a2f4a 100%
+  );
+  --ios-surface: rgba(255, 255, 255, 0.08);
+  --ios-surface-elevated: rgba(255, 255, 255, 0.12);
+  --ios-border: rgba(255, 255, 255, 0.15);
+  --ios-text-primary: rgba(255, 255, 255, 0.95);
+  --ios-text-secondary: rgba(255, 255, 255, 0.7);
+  --ios-accent: #007aff;
+  --ios-accent-hover: #0051d5;
+  --ios-success: #34c759;
+  --ios-glass: rgba(255, 255, 255, 0.1);
+
+  /* ========================================
+     COLORI PRINCIPALI - Light Mode
+     ======================================== */
+  
+  --ios-bg-light: linear-gradient(
+    135deg,
+    #f5f7fa 0%,
+    #e8ecf1 50%,
+    #dde2e8 100%
+  );
+  --ios-surface-light: rgba(255, 255, 255, 0.7);
+  --ios-surface-elevated-light: rgba(255, 255, 255, 0.85);
+  --ios-border-light: rgba(0, 0, 0, 0.1);
+  --ios-text-primary-light: rgba(0, 0, 0, 0.9);
+  --ios-text-secondary-light: rgba(0, 0, 0, 0.6);
+
+  /* ========================================
+     NAVBAR
+     ======================================== */
+  
+  --navbar-height: 72px;
+  --navbar-content-height: 56px;
+  --navbar-padding: 8px;
+  --navbar-logo-size: 64px;
+  --navbar-logo-size-mobile: 56px;
+
+  /* ========================================
+     HAMBURGER BUTTON
+     ======================================== */
+  
+  --hamburger-min-width: 140px;
+  --hamburger-padding: 0.5rem 0.75rem;
+  --hamburger-border-radius: 16px;
+  --hamburger-border-width: 1.5px;
+
+  /* ========================================
+     SPACING
+     ======================================== */
+  
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+}
+

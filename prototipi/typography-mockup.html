@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TPL FVG Typography Mockup</title>
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/fonts.css">
+    <style>
+        body {
+            font-family: var(--font-primary);
+            display: block;
+            /* Override flex from base.css for this doc */
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        section {
+            margin-bottom: 4rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--ios-border);
+        }
+
+        h1,
+        h2,
+        h3 {
+            margin-bottom: 1.5rem;
+        }
+
+        .type-sample {
+            margin-bottom: 2rem;
+        }
+
+        .type-meta {
+            font-size: 0.8rem;
+            color: var(--ios-text-secondary);
+            margin-bottom: 0.5rem;
+            font-family: monospace;
+        }
+
+        .sample-text {
+            color: var(--ios-text-primary);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--ios-surface);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 1px solid var(--ios-border);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: var(--ios-accent);
+            color: white;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 500;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header style="margin-bottom: 4rem;">
+        <h1 style="font-size: 3rem; font-weight: 700; letter-spacing: -0.02em;">TPL FVG Typography</h1>
+        <p style="font-size: 1.25rem; color: var(--ios-text-secondary);">Font: <strong>Roboto</strong> (Alternativa
+            gratuita a Univers Next)</p>
+    </header>
+
+    <section>
+        <h2>Logo Match Test</h2>
+        <div class="grid">
+            <div class="type-sample">
+                <div class="type-meta">Logo Text - Bold 64px</div>
+                <div class="sample-text"
+                    style="font-size: 4rem; font-weight: 700; line-height: 1; letter-spacing: -0.03em;">
+                    tpl fvg
+                </div>
+            </div>
+            <div class="type-sample">
+                <div class="type-meta">Logo Stacked - Bold 64px</div>
+                <div class="sample-text"
+                    style="font-size: 4rem; font-weight: 700; line-height: 0.9; letter-spacing: -0.03em;">
+                    tpl<br>fvg
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Headings</h2>
+
+        <div class="type-sample">
+            <div class="type-meta">H1 - Bold 48px</div>
+            <div class="sample-text" style="font-size: 3rem; font-weight: 700; line-height: 1.1;">
+                Trasporto Pubblico Locale
+            </div>
+        </div>
+
+        <div class="type-sample">
+            <div class="type-meta">H2 - Semibold 32px</div>
+            <div class="sample-text" style="font-size: 2rem; font-weight: 500; line-height: 1.2;">
+                Prossime Partenze
+            </div>
+        </div>
+
+        <div class="type-sample">
+            <div class="type-meta">H3 - Medium 24px</div>
+            <div class="sample-text" style="font-size: 1.5rem; font-weight: 500; line-height: 1.3;">
+                Dettaglio Fermata
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Body Text</h2>
+        <div class="grid">
+            <div class="type-sample">
+                <div class="type-meta">Body Large - Regular 18px</div>
+                <p class="sample-text" style="font-size: 1.125rem; line-height: 1.5;">
+                    Il servizio di trasporto pubblico locale del Friuli Venezia Giulia si rinnova con una nuova app
+                    dedicata agli autisti.
+                    Interfaccia pulita, leggibile e ottimizzata per l'uso in mobilità.
+                </p>
+            </div>
+            <div class="type-sample">
+                <div class="type-meta">Body Default - Regular 16px</div>
+                <p class="sample-text" style="font-size: 1rem; line-height: 1.5;">
+                    Verifica i turni, controlla le linee assegnate e segnala eventuali anomalie direttamente dal tuo
+                    dispositivo.
+                    La tipografia "Roboto" garantisce ottima leggibilità.
+                </p>
+            </div>
+            <div class="type-sample">
+                <div class="type-meta">Caption - Regular 14px</div>
+                <p class="sample-text" style="font-size: 0.875rem; line-height: 1.4; color: var(--ios-text-secondary);">
+                    Ultimo aggiornamento: 22 Nov 2025<br>
+                    Versione 1.0.0 (Beta)
+                </p>
+            </div>
+        </div>
+    </section>
+
+</body>
+
+</html>

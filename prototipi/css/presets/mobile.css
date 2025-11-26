@@ -1,0 +1,144 @@
+/**
+ * 📱 PRESET CSS - MOBILE
+ * Ottimizzato per smartphone (< 768px)
+ * 
+ * Include:
+ * - Navbar minimale con logo e hamburger
+ * - Navbar nav links nascosti
+ * - Hamburger button visibile
+ * - Mobile menu popup
+ * - Componenti ottimizzati per touch e schermi piccoli
+ */
+
+/* ========================================
+   CORE (sempre necessari)
+   ======================================== */
+@import url('../variables.css');
+@import url('../base.css');
+@import url('../animations.css');
+
+/* ========================================
+   NAVIGATION - MOBILE
+   ======================================== */
+@import url('../components/navbar.css');
+@import url('../components/hamburger-button.css');
+@import url('../components/mobile-menu.css');
+/* Navbar nav links nascosti su mobile */
+
+/* ========================================
+   COMPONENTS
+   ======================================== */
+@import url('../components/main-card.css');
+@import url('../components/progress-bar.css');
+@import url('../components/step-content.css');
+@import url('../components/selection-buttons.css');
+@import url('../components/route-section.css');
+@import url('../components/price-card.css');
+@import url('../components/toast.css');
+@import url('../components/modal.css');
+
+/* ========================================
+   MOBILE SPECIFIC STYLES
+   ======================================== */
+
+/* Regole globali per mobile - sempre applicate quando si usa questo preset */
+.navbar-nav {
+  display: none !important;
+}
+
+.hamburger-toggle {
+  display: flex !important;
+}
+
+/* Assicura che il font funzioni correttamente su mobile */
+.logo-acronym {
+  font-family: "Avenir Next", "Avenir", "Helvetica Neue", Helvetica,
+    -apple-system, BlinkMacSystemFont, system-ui, sans-serif !important;
+  font-size: 1.5rem !important;
+  font-weight: 600 !important;
+  line-height: 0.85 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: lowercase !important;
+  font-feature-settings: "kern" 1, "liga" 0, "calt" 0 !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: geometricPrecision !important;
+  font-stretch: condensed !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0 !important;
+  justify-content: center !important;
+}
+
+/* Assicura che tutti i testi usino il font corretto su mobile */
+body,
+.step-title,
+.step-subtitle,
+.selection-button,
+.nav-link,
+.mobile-nav-link {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+    "Segoe UI", sans-serif !important;
+}
+
+@media (max-width: 767px) {
+  .navbar-nav {
+    display: none !important;
+  }
+
+  .hamburger-toggle {
+    display: flex !important;
+  }
+
+  /* Pulsante impostazioni nascosto su mobile */
+  .settings-button {
+    display: none !important;
+  }
+
+  .navbar {
+    padding: var(--navbar-padding) 1rem !important;
+  }
+
+  .navbar-logo-wrapper {
+    width: 50px !important;
+    height: 50px !important;
+  }
+
+  .main-card {
+    padding: 1.5rem 1rem !important;
+    margin-top: 0 !important;
+    padding-top: 6rem !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .step-content {
+    padding-top: 0 !important;
+  }
+
+  .step-content[data-step="1"] {
+    padding-top: 0 !important;
+  }
+
+  .main-card::before {
+    display: none;
+  }
+
+  .container {
+    padding: 0;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  body {
+    padding: 0;
+    align-items: flex-start;
+  }
+}
+

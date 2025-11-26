@@ -1,0 +1,466 @@
+/* ========================================
+   SELECTION BUTTONS COMPONENT - Prototype
+   Pulsanti selezione linee/fermate
+   ======================================== */
+
+.step-content[data-step="1"] .selection-button {
+  max-width: 420px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.selection-button {
+  width: 100%;
+  min-height: 64px;
+  height: 64px;
+  padding: 0.75rem 1.25rem;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.06) 100%
+  );
+  backdrop-filter: blur(30px) saturate(180%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--ios-text-primary);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  animation: fadeInUp 0.4s ease 0.35s forwards;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+  box-sizing: border-box;
+}
+
+/* Stili migliorati solo per mobile */
+@media (max-width: 1023px) {
+  .step-content[data-step="1"] .selection-button {
+    min-height: 72px;
+    height: auto;
+    padding: 1rem 1.25rem;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0.06) 100%
+    );
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 18px;
+    margin-bottom: 0.875rem;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1),
+      0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+  }
+
+  .step-content[data-step="1"] .line-number-badge {
+    min-width: 56px;
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    background: linear-gradient(
+      135deg,
+      #007b8a 0%,
+      #0099aa 100%
+    );
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    box-shadow: 0 2px 8px rgba(0, 123, 138, 0.3);
+  }
+
+  body.light .step-content[data-step="1"] .line-number-badge {
+    box-shadow: 0 2px 8px rgba(0, 123, 138, 0.25);
+  }
+
+  .step-content[data-step="1"] .selection-button:hover .line-number-badge {
+    transform: scale(1.03);
+    box-shadow: 0 4px 12px rgba(0, 123, 138, 0.4);
+  }
+
+  body.light .step-content[data-step="1"] .selection-button:hover .line-number-badge {
+    box-shadow: 0 4px 12px rgba(0, 123, 138, 0.35);
+  }
+
+  .step-content[data-step="1"] .line-info {
+    gap: 0.5rem;
+  }
+
+  .step-content[data-step="1"] .line-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .step-content[data-step="1"] .line-stops-badge {
+    gap: 0.4rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 8px;
+    background: rgba(0, 123, 138, 0.1);
+    border: 1px solid rgba(0, 123, 138, 0.2);
+  }
+
+  .step-content[data-step="1"] .selection-button:hover {
+    transform: translateY(-2px);
+    border-color: rgba(0, 123, 138, 0.3);
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.15) 0%,
+      rgba(255, 255, 255, 0.1) 100%
+    );
+    box-shadow: 0 4px 20px rgba(0, 123, 138, 0.2),
+      0 0 0 1px rgba(0, 123, 138, 0.15) inset;
+  }
+
+  body.light .step-content[data-step="1"] .selection-button:hover {
+    border-color: rgba(0, 123, 138, 0.25);
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.95) 0%,
+      rgba(255, 255, 255, 0.9) 100%
+    );
+    box-shadow: 0 4px 20px rgba(0, 123, 138, 0.15),
+      0 0 0 1px rgba(0, 123, 138, 0.1) inset;
+  }
+
+  .step-content[data-step="1"] .selection-button .arrow {
+    font-size: 1.1rem;
+    opacity: 0.4;
+  }
+
+  .step-content[data-step="1"] .selection-button:hover .arrow {
+    transform: translateX(4px);
+    opacity: 0.8;
+    color: rgba(0, 123, 138, 0.9);
+  }
+
+  body.light .step-content[data-step="1"] .selection-button:hover .arrow {
+    color: rgba(0, 123, 138, 0.9);
+  }
+}
+
+/* Badge numero linea prominente */
+.line-number-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 123, 138, 0.9) 0%,
+    rgba(0, 153, 170, 0.9) 100%
+  );
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  flex-shrink: 0;
+  box-shadow: 0 3px 10px rgba(0, 123, 138, 0.4),
+    0 0 0 2px rgba(255, 255, 255, 0.1) inset;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Icona bus con numero linea (nuovo stile) */
+.line-icon-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #007b8a 0%, #0099aa 100%);
+  color: white;
+  flex-shrink: 0;
+  box-shadow: 0 3px 10px rgba(0, 123, 138, 0.4),
+    0 0 0 2px rgba(255, 255, 255, 0.1) inset;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  gap: 0.25rem;
+  padding: 0.5rem;
+}
+
+.line-icon-badge svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  flex-shrink: 0;
+}
+
+.line-icon-badge .line-number {
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: white;
+}
+
+body.light .line-number-badge {
+  background: linear-gradient(
+    135deg,
+    #007b8a 0%,
+    #0099aa 100%
+  );
+  box-shadow: 0 4px 12px rgba(0, 123, 138, 0.3),
+    0 0 0 2px rgba(255, 255, 255, 0.2) inset;
+}
+
+.selection-button:hover .line-number-badge {
+  transform: scale(1.05) rotate(2deg);
+  box-shadow: 0 6px 16px rgba(0, 123, 138, 0.5),
+    0 0 0 2px rgba(255, 255, 255, 0.15) inset;
+}
+
+body.light .selection-button:hover .line-number-badge {
+  box-shadow: 0 6px 16px rgba(0, 123, 138, 0.4),
+    0 0 0 2px rgba(255, 255, 255, 0.25) inset;
+}
+
+body.light .selection-button {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.85) 0%,
+    rgba(255, 255, 255, 0.75) 50%,
+    rgba(255, 255, 255, 0.7) 100%
+  );
+  border-color: rgba(0, 123, 138, 0.15);
+  color: var(--ios-text-primary-light);
+  box-shadow: 0 4px 16px rgba(0, 123, 138, 0.1),
+    0 0 0 1px rgba(0, 123, 138, 0.05) inset;
+}
+
+.selection-button .line-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  text-align: left;
+  flex: 1;
+  min-width: 0;
+  justify-content: center;
+}
+
+.selection-button .line-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ios-text-primary);
+  line-height: 1.3;
+}
+
+body.light .selection-button .line-name {
+  color: var(--ios-text-primary-light);
+}
+
+.line-stops-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 10px;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 255, 255, 0.15) 0%,
+    rgba(0, 255, 255, 0.1) 100%
+  );
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  border: 1px solid rgba(0, 255, 255, 0.25);
+  width: fit-content;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0, 255, 255, 0.15),
+    0 0 0 1px rgba(0, 255, 255, 0.1) inset;
+}
+
+body.light .line-stops-badge {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 123, 138, 0.12) 0%,
+    rgba(0, 123, 138, 0.08) 100%
+  );
+  border-color: rgba(0, 123, 138, 0.2);
+  box-shadow: 0 2px 8px rgba(0, 123, 138, 0.12),
+    0 0 0 1px rgba(0, 123, 138, 0.08) inset;
+}
+
+.selection-button:hover .line-stops-badge {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 255, 255, 0.25) 0%,
+    rgba(0, 255, 255, 0.18) 100%
+  );
+  border-color: rgba(0, 255, 255, 0.4);
+  transform: translateY(-1px) scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 255, 255, 0.25),
+    0 0 0 1px rgba(0, 255, 255, 0.15) inset;
+}
+
+body.light .selection-button:hover .line-stops-badge {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 123, 138, 0.18) 0%,
+    rgba(0, 123, 138, 0.14) 100%
+  );
+  border-color: rgba(0, 123, 138, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 123, 138, 0.2),
+    0 0 0 1px rgba(0, 123, 138, 0.12) inset;
+}
+
+.stops-icon {
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+.stops-count {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ios-text-secondary);
+  letter-spacing: 0.2px;
+}
+
+body.light .stops-count {
+  color: var(--ios-text-secondary-light);
+}
+
+.selection-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.selection-button:hover::before {
+  left: 100%;
+}
+
+.selection-button:hover {
+  transform: translateY(-4px) scale(1.01);
+  border-color: rgba(0, 255, 255, 0.4);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.18) 0%,
+    rgba(255, 255, 255, 0.12) 50%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  box-shadow: 0 12px 32px rgba(0, 255, 255, 0.25),
+    0 0 0 1px rgba(0, 255, 255, 0.2) inset,
+    0 0 40px rgba(0, 255, 255, 0.2), 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+body.light .selection-button:hover {
+  border-color: rgba(0, 123, 138, 0.3);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(255, 255, 255, 0.85) 50%,
+    rgba(255, 255, 255, 0.8) 100%
+  );
+  box-shadow: 0 12px 32px rgba(0, 123, 138, 0.2),
+    0 0 0 1px rgba(0, 123, 138, 0.15) inset,
+    0 0 40px rgba(0, 123, 138, 0.15), 0 4px 16px rgba(0, 123, 138, 0.1);
+}
+
+.selection-button:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  transform: scale(0);
+  animation: rippleAnimation 0.4s ease-out;
+  pointer-events: none;
+}
+
+body.light .ripple {
+  background: rgba(0, 123, 138, 0.3);
+}
+
+.selection-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.selection-button .arrow {
+  font-size: 1rem;
+  opacity: 0.5;
+  color: var(--ios-text-secondary);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.selection-button:hover .arrow {
+  transform: translateX(6px);
+  opacity: 1;
+  color: rgba(0, 255, 255, 0.9);
+  background: rgba(0, 255, 255, 0.15);
+  box-shadow: 0 2px 8px rgba(0, 255, 255, 0.2);
+}
+
+body.light .selection-button .arrow {
+  color: var(--ios-text-secondary-light);
+  background: rgba(0, 123, 138, 0.08);
+}
+
+body.light .selection-button:hover .arrow {
+  color: rgba(0, 123, 138, 0.9);
+  background: rgba(0, 123, 138, 0.15);
+  box-shadow: 0 2px 8px rgba(0, 123, 138, 0.2);
+}
+
+.selection-button.selected {
+  border-color: var(--ios-success);
+  background: rgba(52, 199, 89, 0.1);
+  animation: selectionPulse 0.4s ease;
+}
+
+/* Stati vuoti */
+.selection-button:has(span:contains("Seleziona")) {
+  position: relative;
+}
+
+.selection-button:has(#partenza-text:contains("Seleziona partenza")),
+.selection-button:has(#destinazione-text:contains("Seleziona destinazione")) {
+  opacity: 0.85;
+}
+
+.selection-button:has(#partenza-text:not(:contains("Seleziona"))),
+.selection-button:has(#destinazione-text:not(:contains("Seleziona"))) {
+  opacity: 1;
+}
+

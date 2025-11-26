@@ -1,0 +1,97 @@
+/* ========================================
+   TOAST COMPONENT - Prototype
+   Notifiche toast
+   ======================================== */
+
+.toast-container {
+  position: fixed;
+  bottom: calc(1.75rem + env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10000;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 0.75rem;
+  pointer-events: none;
+  width: min(90%, 360px);
+  padding: 0 1rem;
+}
+
+@media (min-width: 768px) {
+  .toast-container {
+    left: auto;
+    right: 1.5rem;
+    transform: none;
+    align-items: flex-end;
+    width: auto;
+    padding: 0;
+  }
+}
+
+.toast {
+  padding: 1rem 1.25rem;
+  border-radius: 16px;
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  opacity: 0;
+  transform: translateY(20px) scale(0.95);
+  animation: toastSlideIn 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  pointer-events: auto;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.toast.success {
+  background: rgba(52, 199, 89, 0.15);
+  border-color: rgba(52, 199, 89, 0.3);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.toast.error {
+  background: rgba(255, 59, 48, 0.15);
+  border-color: rgba(255, 59, 48, 0.3);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.toast.info {
+  background: rgba(0, 122, 255, 0.15);
+  border-color: rgba(0, 122, 255, 0.3);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+body.light .toast.success {
+  background: rgba(52, 199, 89, 0.2);
+  border-color: rgba(52, 199, 89, 0.4);
+  color: #0a1f2f;
+}
+
+body.light .toast.error {
+  background: rgba(255, 59, 48, 0.2);
+  border-color: rgba(255, 59, 48, 0.4);
+  color: #0a1f2f;
+}
+
+body.light .toast.info {
+  background: rgba(0, 123, 138, 0.2);
+  border-color: rgba(0, 123, 138, 0.4);
+  color: #0a1f2f;
+}
+
+.toast-icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.toast-message {
+  flex: 1;
+}
+
+.toast.slide-out {
+  animation: toastSlideOut 0.15s ease forwards;
+}
+

@@ -1,0 +1,67 @@
+/* ========================================
+   TPL FVG - iOS 26 Prototype Styles
+   Complete CSS with Hamburger Button Mockup
+   ======================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+@import url('css/fonts.css');
+
+:root {
+    /* Colori iOS 26 - Futuristi */
+    --ios-bg: linear-gradient(135deg,
+            #0a0e27 0%,
+            #1a1f3a 50%,
+            #2a2f4a 100%);
+    --ios-surface: rgba(255, 255, 255, 0.08);
+    --ios-surface-elevated: rgba(255, 255, 255, 0.12);
+    --ios-border: rgba(255, 255, 255, 0.15);
+    --ios-text-primary: rgba(255, 255, 255, 0.95);
+    --ios-text-secondary: rgba(255, 255, 255, 0.7);
+    --ios-accent: #007aff;
+    --ios-accent-hover: #0051d5;
+    --ios-success: #34c759;
+    --ios-glass: rgba(255, 255, 255, 0.1);
+
+    /* Light mode */
+    --ios-bg-light: linear-gradient(135deg,
+            #f5f7fa 0%,
+            #e8ecf1 50%,
+            #dde2e8 100%);
+    --ios-surface-light: rgba(255, 255, 255, 0.7);
+    --ios-surface-elevated-light: rgba(255, 255, 255, 0.85);
+    --ios-border-light: rgba(0, 0, 0, 0.1);
+    --ios-text-primary-light: rgba(0, 0, 0, 0.9);
+    --ios-text-secondary-light: rgba(0, 0, 0, 0.6);
+}
+
+body {
+    font-family: var(--font-primary);
+    background: var(--ios-bg);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    color: var(--ios-text-primary);
+    overflow-x: hidden;
+    transition: background 0.5s ease;
+    padding-top: calc(80px + env(safe-area-inset-top));
+}
+
+body.light {
+    background: var(--ios-bg-light);
+    color: var(--ios-text-primary-light);
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 0;
+        align-items: flex-start;
+        padding-top: calc(70px + env(safe-area-inset-top)) !important;
+    }
+}

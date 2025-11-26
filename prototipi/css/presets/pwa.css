@@ -1,0 +1,62 @@
+/**
+ * 📲 PRESET CSS - PWA (Progressive Web App)
+ * Ottimizzato per app installata (standalone/fullscreen)
+ * 
+ * Include:
+ * - Navbar minimale con logo e hamburger
+ * - Navbar nav links nascosti
+ * - Hamburger button visibile
+ * - Mobile menu popup
+ * - Interfaccia app-like nativa
+ * - Ottimizzazioni per modalità standalone
+ */
+
+/* ========================================
+   CORE (sempre necessari)
+   ======================================== */
+@import url('../variables.css');
+@import url('../base.css');
+@import url('../animations.css');
+
+/* ========================================
+   NAVIGATION - PWA
+   ======================================== */
+@import url('../components/navbar.css');
+@import url('../components/hamburger-button.css');
+@import url('../components/mobile-menu.css');
+/* Navbar nav links nascosti in PWA */
+
+/* ========================================
+   COMPONENTS
+   ======================================== */
+@import url('../components/main-card.css');
+@import url('../components/progress-bar.css');
+@import url('../components/step-content.css');
+@import url('../components/selection-buttons.css');
+@import url('../components/route-section.css');
+@import url('../components/price-card.css');
+@import url('../components/toast.css');
+@import url('../components/modal.css');
+
+/* ========================================
+   PWA SPECIFIC STYLES
+   ======================================== */
+@media (display-mode: standalone) {
+  .navbar-nav {
+    display: none !important;
+  }
+
+  .hamburger-toggle {
+    display: flex !important;
+  }
+
+  body {
+    padding-top: calc(var(--navbar-height) + env(safe-area-inset-top));
+  }
+
+  .main-card {
+    padding: 2.5rem 1.5rem;
+    margin-top: 2rem;
+  }
+}
+

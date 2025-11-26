@@ -1,0 +1,323 @@
+/* ========================================
+   BENVENUTO PAGE - Specific Styles
+   Stili specifici per la pagina benvenuto
+   ======================================== */
+
+.welcome-shell {
+  max-width: 460px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 2rem 1rem;
+}
+
+.welcome-card {
+  padding: 28px;
+  border-radius: 28px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.06) 100%
+  );
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+    0 6px 24px rgba(0, 123, 138, 0.15);
+}
+
+body.light .welcome-card {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(255, 255, 255, 0.9) 50%,
+    rgba(255, 255, 255, 0.85) 100%
+  );
+  border-color: rgba(0, 123, 138, 0.2);
+  box-shadow: 0 12px 48px rgba(0, 123, 138, 0.15),
+    0 0 0 1px rgba(0, 123, 138, 0.1) inset,
+    0 6px 24px rgba(0, 123, 138, 0.1);
+}
+
+.welcome-label {
+  font-size: 0.85rem;
+  letter-spacing: 0.4rem;
+  text-transform: uppercase;
+  color: var(--ios-text-secondary);
+}
+
+body.light .welcome-label {
+  color: var(--ios-text-secondary-light);
+}
+
+.welcome-card h1 {
+  margin-top: 18px;
+  font-size: clamp(2rem, 5vw, 2.85rem);
+  line-height: 1.15;
+  color: var(--ios-text-primary);
+  font-weight: 700;
+}
+
+body.light .welcome-card h1 {
+  color: var(--ios-text-primary-light);
+}
+
+.welcome-subtitle {
+  margin-top: 16px;
+  color: var(--ios-text-secondary);
+  line-height: 1.5;
+  font-size: 1rem;
+}
+
+body.light .welcome-subtitle {
+  color: var(--ios-text-secondary-light);
+}
+
+.cta-group {
+  margin-top: 26px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btn-primary,
+.btn-ghost {
+  flex: 1;
+  padding: 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-weight: 600;
+  text-decoration: none;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-size: 0.95rem;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #00d5ff, #007ea7);
+  color: #041224;
+  box-shadow: 0 12px 30px rgba(0, 122, 255, 0.35);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 36px rgba(0, 122, 255, 0.4);
+}
+
+.btn-ghost {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  color: var(--ios-text-primary);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+body.light .btn-ghost {
+  background: rgba(255, 255, 255, 0.6);
+  color: var(--ios-text-primary-light);
+  border-color: rgba(0, 123, 138, 0.2);
+}
+
+.btn-ghost:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+body.light .btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(0, 123, 138, 0.3);
+}
+
+.feature-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.feature {
+  padding: 18px 20px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+body.light .feature {
+  background: rgba(255, 255, 255, 0.6);
+  border-color: rgba(0, 123, 138, 0.15);
+}
+
+.feature:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+body.light .feature:hover {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(0, 123, 138, 0.25);
+  box-shadow: 0 8px 24px rgba(0, 123, 138, 0.1);
+}
+
+.feature-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+body.light .feature-icon {
+  background: rgba(0, 123, 138, 0.1);
+}
+
+.feature-text h3 {
+  font-size: 1rem;
+  margin-bottom: 6px;
+  color: var(--ios-text-primary);
+  font-weight: 600;
+}
+
+body.light .feature-text h3 {
+  color: var(--ios-text-primary-light);
+}
+
+.feature-text p {
+  font-size: 0.9rem;
+  color: var(--ios-text-secondary);
+  line-height: 1.4;
+}
+
+body.light .feature-text p {
+  color: var(--ios-text-secondary-light);
+}
+
+.progress-track {
+  margin-top: 10px;
+  border-radius: 20px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.light .progress-track {
+  background: rgba(255, 255, 255, 0.6);
+  border-color: rgba(0, 123, 138, 0.15);
+}
+
+.progress-track h4 {
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.3rem;
+  color: var(--ios-text-secondary);
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+body.light .progress-track h4 {
+  color: var(--ios-text-secondary-light);
+}
+
+.progress-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.progress-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(0, 123, 138, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 123, 138, 0.3);
+  transition: all 0.3s ease;
+}
+
+body.light .progress-step {
+  background: rgba(0, 123, 138, 0.1);
+  border-color: rgba(0, 123, 138, 0.2);
+}
+
+.progress-step:hover {
+  transform: translateX(4px);
+  background: rgba(0, 123, 138, 0.2);
+  border-color: rgba(0, 123, 138, 0.4);
+}
+
+body.light .progress-step:hover {
+  background: rgba(0, 123, 138, 0.15);
+  border-color: rgba(0, 123, 138, 0.3);
+}
+
+.progress-step span {
+  font-size: 0.95rem;
+  color: var(--ios-text-primary);
+  font-weight: 500;
+}
+
+body.light .progress-step span {
+  color: var(--ios-text-primary-light);
+}
+
+.welcome-footer {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--ios-text-secondary);
+  margin-top: 12px;
+}
+
+body.light .welcome-footer {
+  color: var(--ios-text-secondary-light);
+}
+
+/* Responsive */
+@media (max-width: 520px) {
+  .welcome-shell {
+    padding: 1rem;
+    gap: 20px;
+  }
+
+  .welcome-card {
+    padding: 22px;
+  }
+
+  .feature {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .btn-primary,
+  .btn-ghost {
+    flex: unset;
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .welcome-shell {
+    padding-top: calc(var(--navbar-height) + 2rem);
+  }
+}
+

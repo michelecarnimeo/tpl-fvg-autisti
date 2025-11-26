@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Bottom Sheet Examples - iOS 26</title>
+    <link rel="stylesheet" href="css/fonts.css">
+    <style>
+        :root {
+            --ios-bg: #0a0e27;
+            --ios-surface: rgba(30, 30, 35, 0.85);
+            --ios-surface-glass: rgba(30, 30, 35, 0.6);
+            --ios-text: #ffffff;
+            --ios-accent: #007aff;
+            --sheet-radius: 24px;
+            --sheet-bg: rgba(28, 28, 30, 0.95);
+        }
+
+        body {
+            font-family: 'Roboto', -apple-system, sans-serif;
+            background: var(--ios-bg);
+            color: var(--ios-text);
+            margin: 0;
+            padding: 2rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-weight: 700;
+        }
+
+        /* Button Styles */
+        .trigger-btn {
+            background: var(--ios-accent);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 14px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            max-width: 300px;
+            transition: transform 0.2s ease, opacity 0.2s;
+        }
+
+        .trigger-btn:active {
+            transform: scale(0.96);
+            opacity: 0.9;
+        }
+
+        /* --- BOTTOM SHEET CORE STYLES --- */
+
+        /* Overlay (Backdrop) */
+        .sheet-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s;
+        }
+
+        .sheet-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Sheet Container */
+        .bottom-sheet {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--sheet-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--sheet-radius) var(--sheet-radius) 0 0;
+            padding: 1.5rem;
+            padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+            z-index: 1001;
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.33, 1, 0.68, 1);
+            box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.3);
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bottom-sheet.active {
+            transform: translateY(0);
+        }
+
+        /* Handle Bar (The little pill at the top) */
+        .sheet-handle {
+            width: 40px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            margin: -0.5rem auto 1.5rem auto;
+            /* Pull up slightly */
+        }
+
+        /* Content Areas */
+        .sheet-header {
+            margin-bottom: 1rem;
+        }
+
+        .sheet-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin: 0 0 0.5rem 0;
+        }
+
+        .sheet-subtitle {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        .sheet-body {
+            overflow-y: auto;
+            /* Hide scrollbar but keep functionality */
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .sheet-body::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* --- VARIATION 1: LIST SHEET (e.g. Bus Stops) --- */
+        .list-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            gap: 1rem;
+        }
+
+        .list-item:last-child {
+            border-bottom: none;
+        }
+
+        .icon-box {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        /* --- VARIATION 2: ACTION SHEET (e.g. Options) --- */
+        .action-btn {
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+        }
+
+        .action-btn.danger {
+            background: rgba(255, 59, 48, 0.15);
+            color: #ff453a;
+        }
+
+        .action-btn:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Esempi Bottom Sheet</h1>
+
+    <button class="trigger-btn" onclick="openSheet('sheet-basic')">1. Basic Info</button>
+    <button class="trigger-btn" onclick="openSheet('sheet-list')">2. Scrollable List</button>
+    <button class="trigger-btn" onclick="openSheet('sheet-actions')">3. Action Menu</button>
+
+    <!-- OVERLAY (Shared) -->
+    <div class="sheet-overlay" id="overlay" onclick="closeAllSheets()"></div>
+
+    <!-- 1. BASIC SHEET -->
+    <div class="bottom-sheet" id="sheet-basic">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+            <h2 class="sheet-title">Benvenuto a Bordo</h2>
+            <p class="sheet-subtitle">Questa è una bottom sheet informativa semplice. Perfetta per conferme o brevi
+                messaggi.</p>
+        </div>
+        <div class="sheet-body">
+            <button class="trigger-btn" style="width: 100%; margin-top: 1rem;" onclick="closeAllSheets()">Ho
+                capito</button>
+        </div>
+    </div>
+
+    <!-- 2. SCROLLABLE LIST SHEET -->
+    <div class="bottom-sheet" id="sheet-list" style="height: 60vh;">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+            <h2 class="sheet-title">Prossime Fermate</h2>
+            <p class="sheet-subtitle">Linea 400 - Direzione Grado</p>
+        </div>
+        <div class="sheet-body">
+            <div class="list-item">
+                <div class="icon-box">🚌</div>
+                <div>
+                    <div style="font-weight: 600;">Udine Autostazione</div>
+                    <div style="font-size: 0.85rem; opacity: 0.6;">10:45 • Partenza</div>
+                </div>
+            </div>
+            <div class="list-item">
+                <div class="icon-box">📍</div>
+                <div>
+                    <div style="font-weight: 600;">Palmanova Polveriera</div>
+                    <div style="font-size: 0.85rem; opacity: 0.6;">11:15</div>
+                </div>
+            </div>
+            <div class="list-item">
+                <div class="icon-box">📍</div>
+                <div>
+                    <div style="font-weight: 600;">Cervignano FS</div>
+                    <div style="font-size: 0.85rem; opacity: 0.6;">11:35</div>
+                </div>
+            </div>
+            <div class="list-item">
+                <div class="icon-box">📍</div>
+                <div>
+                    <div style="font-weight: 600;">Aquileia Centro</div>
+                    <div style="font-size: 0.85rem; opacity: 0.6;">11:50</div>
+                </div>
+            </div>
+            <div class="list-item">
+                <div class="icon-box">🏁</div>
+                <div>
+                    <div style="font-weight: 600;">Grado Autostazione</div>
+                    <div style="font-size: 0.85rem; opacity: 0.6;">12:10 • Capolinea</div>
+                </div>
+            </div>
+            <!-- More items to demonstrate scrolling -->
+            <div class="list-item">
+                <div class="icon-box">ℹ️</div>
+                <div>Info Aggiuntive...</div>
+            </div>
+            <div class="list-item">
+                <div class="icon-box">ℹ️</div>
+                <div>Info Aggiuntive...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. ACTION SHEET -->
+    <div class="bottom-sheet" id="sheet-actions">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+            <h2 class="sheet-title">Opzioni Biglietto</h2>
+        </div>
+        <div class="sheet-body">
+            <button class="action-btn">
+                <span>🎫</span> Acquista Biglietto
+            </button>
+            <button class="action-btn">
+                <span>⭐️</span> Aggiungi ai Preferiti
+            </button>
+            <button class="action-btn">
+                <span>📤</span> Condividi Orario
+            </button>
+            <div style="height: 1px; background: rgba(255,255,255,0.1); margin: 0.5rem 0;"></div>
+            <button class="action-btn danger" onclick="closeAllSheets()">
+                <span>✖️</span> Annulla
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const overlay = document.getElementById('overlay');
+
+        function openSheet(id) {
+            // Close any open sheets first
+            closeAllSheets();
+
+            // Open requested sheet
+            const sheet = document.getElementById(id);
+            if (sheet) {
+                overlay.classList.add('active');
+                sheet.classList.add('active');
+            }
+        }
+
+        function closeAllSheets() {
+            overlay.classList.remove('active');
+            document.querySelectorAll('.bottom-sheet').forEach(sheet => {
+                sheet.classList.remove('active');
+            });
+        }
+    </script>
+</body>
+
+</html>

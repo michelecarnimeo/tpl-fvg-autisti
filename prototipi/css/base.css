@@ -1,0 +1,38 @@
+/* ========================================
+   BASE MODULE - Prototype
+   Reset CSS e stili base
+   ======================================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+    "Segoe UI", sans-serif;
+  background: var(--ios-bg);
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 2rem;
+  padding-top: calc(var(--navbar-height) + env(safe-area-inset-top));
+  color: var(--ios-text-primary);
+  overflow-x: hidden;
+  transition: background 0.5s ease;
+}
+
+@media (max-width: 768px) {
+  body {
+    padding: 0;
+    align-items: flex-start;
+    padding-top: calc(var(--navbar-height) + env(safe-area-inset-top));
+  }
+}
+
+body.light {
+  background: var(--ios-bg-light);
+  color: var(--ios-text-primary-light);
+}

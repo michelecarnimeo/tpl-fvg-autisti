@@ -1,0 +1,109 @@
+/* ========================================
+   MAIN CARD COMPONENT - Prototype
+   Card principale con glassmorphism
+   ======================================== */
+
+.container {
+  width: 100%;
+  max-width: 480px;
+  position: relative;
+}
+
+.main-card {
+  background: var(--ios-surface);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 1px solid var(--ios-border);
+  border-radius: 28px;
+  padding: 1rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+    0 1px 0 rgba(255, 255, 255, 0.1) inset;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-top: 1rem;
+}
+
+body.light .main-card {
+  background: var(--ios-surface-light);
+  border-color: var(--ios-border-light);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(0, 0, 0, 0.05) inset;
+}
+
+.main-card::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle,
+    rgba(0, 122, 255, 0.1) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+.main-card:hover::before {
+  opacity: 1;
+}
+
+.page-context-breadcrumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 0.88rem;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: 1.75rem;
+}
+
+.page-context-breadcrumb .breadcrumb-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(0, 255, 255, 0.85);
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+.page-context-breadcrumb .breadcrumb-separator {
+  opacity: 0.5;
+}
+
+body.light .page-context-breadcrumb {
+  color: rgba(10, 31, 47, 0.65);
+}
+
+body.light .page-context-breadcrumb .breadcrumb-dot {
+  background: rgba(0, 123, 138, 0.9);
+  box-shadow: none;
+}
+
+/* ========================================
+   RESPONSIVE - MOBILE
+   Nascondi la card su mobile, visibile solo su tablet e desktop
+   ======================================== */
+
+@media (max-width: 767px) {
+  .main-card {
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .main-card::before {
+    display: none;
+  }
+}
+

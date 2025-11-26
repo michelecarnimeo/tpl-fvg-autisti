@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>TPL FVG - Prototipo iOS 26</title>
+    <!-- CSS Modulari -->
+    <link rel="stylesheet" href="css/variables.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/animations.css" />
+    <link rel="stylesheet" href="css/components/navbar.css" />
+    <link rel="stylesheet" href="css/components/hamburger-button.css" />
+    <link rel="stylesheet" href="css/components/mobile-menu.css" />
+    <link rel="stylesheet" href="css/components/progress-bar.css" />
+    <link rel="stylesheet" href="css/components/main-card.css" />
+    <link rel="stylesheet" href="css/components/step-content.css" />
+    <link rel="stylesheet" href="css/components/selection-buttons.css" />
+    <link rel="stylesheet" href="css/components/route-section.css" />
+    <link rel="stylesheet" href="css/components/price-card.css" />
+    <link rel="stylesheet" href="css/components/toast.css" />
+    <link rel="stylesheet" href="css/components/modal.css" />
+    <!-- Preset CSS - Scegli uno: desktop, tablet, mobile, pwa -->
+    <link rel="stylesheet" href="css/presets/mobile.css" />
+  </head>
+  <body>
+    <!-- Navbar -->
+    <header class="navbar">
+      <div class="navbar-content">
+        <a href="#" class="navbar-brand">
+          <div class="navbar-logo-wrapper">
+            <img
+              src="../src/logo.png"
+              alt="TPL"
+              class="navbar-logo"
+              onerror="this.style.display='none'"
+            />
+          </div>
+          <div class="navbar-title">
+            <div class="logo-acronym">
+              <span class="logo-line">tpl</span>
+              <span class="logo-line">fvg</span>
+            </div>
+            <div class="logo-text">
+              <span class="logo-text-line">trasporto</span>
+              <span class="logo-text-line">pubblico</span>
+              <span class="logo-text-line">locale</span>
+            </div>
+          </div>
+        </a>
+
+        <nav class="navbar-nav">
+          <a href="welcome-ios26-prototype.html" class="nav-link">Benvenuto</a>
+          <a href="#" class="nav-link active" aria-current="page">Home</a>
+          <a href="#" class="nav-link">Fermate</a>
+          <a href="#" class="nav-link">Prezzi</a>
+        </nav>
+
+        <div class="navbar-actions">
+          <button
+            class="hamburger-toggle"
+            onclick="toggleMobileMenu()"
+            aria-label="Menu"
+            id="hamburger-toggle"
+            data-section="home"
+          >
+            <span class="hamburger-section-label">Home</span>
+            <span class="hamburger-separator"></span>
+            <div class="hamburger-icon-wrapper">
+              <div class="hamburger-icon">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobile-menu-overlay"></div>
+
+    <!-- Mobile Menu - Popup iOS 26 Style -->
+    <div class="mobile-menu" id="mobile-menu">
+      <nav class="mobile-menu-nav">
+        <a href="welcome-ios26-prototype.html" class="mobile-nav-link">
+          <span class="mobile-nav-icon">✨</span>
+          <span>Benvenuto</span>
+        </a>

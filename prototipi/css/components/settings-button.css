@@ -1,0 +1,76 @@
+/* ========================================
+   SETTINGS BUTTON COMPONENT - Prototype
+   Pulsante impostazioni nella navbar
+   ======================================== */
+
+.settings-button {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+body.light .settings-button {
+  background: rgba(255, 255, 255, 0.7);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.settings-button:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+body.light .settings-button:hover {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.settings-button:active {
+  transform: translateY(0);
+}
+
+.settings-button svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Responsive - Visibile solo su tablet e desktop */
+@media (min-width: 768px) {
+  .settings-button {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+}
+
+/* Nascosto su mobile */
+@media (max-width: 767px) {
+  .settings-button {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+}
+
+/* Visibile anche in modalità PWA */
+body.pwa-mode .settings-button {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
