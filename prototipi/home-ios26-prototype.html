@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="it">
   <head>
     <meta charset="UTF-8" />
@@ -7,2647 +7,22 @@
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
     <title>TPL FVG - Prototipo iOS 26</title>
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      :root {
-        /* Colori iOS 26 - Futuristi */
-        --ios-bg: linear-gradient(
-          135deg,
-          #0a0e27 0%,
-          #1a1f3a 50%,
-          #2a2f4a 100%
-        );
-        --ios-surface: rgba(255, 255, 255, 0.08);
-        --ios-surface-elevated: rgba(255, 255, 255, 0.12);
-        --ios-border: rgba(255, 255, 255, 0.15);
-        --ios-text-primary: rgba(255, 255, 255, 0.95);
-        --ios-text-secondary: rgba(255, 255, 255, 0.7);
-        --ios-accent: #007aff;
-        --ios-accent-hover: #0051d5;
-        --ios-success: #34c759;
-        --ios-glass: rgba(255, 255, 255, 0.1);
-
-        /* Light mode */
-        --ios-bg-light: linear-gradient(
-          135deg,
-          #f5f7fa 0%,
-          #e8ecf1 50%,
-          #dde2e8 100%
-        );
-        --ios-surface-light: rgba(255, 255, 255, 0.7);
-        --ios-surface-elevated-light: rgba(255, 255, 255, 0.85);
-        --ios-border-light: rgba(0, 0, 0, 0.1);
-        --ios-text-primary-light: rgba(0, 0, 0, 0.9);
-        --ios-text-secondary-light: rgba(0, 0, 0, 0.6);
-      }
-
-      body {
-        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
-          "Segoe UI", sans-serif;
-        background: var(--ios-bg);
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 2rem;
-        color: var(--ios-text-primary);
-        overflow-x: hidden;
-        transition: background 0.5s ease;
-      }
-
-      body.light {
-        background: var(--ios-bg-light);
-        color: var(--ios-text-primary-light);
-      }
-
-      .container {
-        width: 100%;
-        max-width: 480px;
-        position: relative;
-      }
-
-      /* Card principale con glassmorphism avanzato */
-      .main-card {
-        background: var(--ios-surface);
-        backdrop-filter: blur(40px) saturate(180%);
-        -webkit-backdrop-filter: blur(40px) saturate(180%);
-        border: 1px solid var(--ios-border);
-        border-radius: 28px;
-        padding: 4rem 2.5rem 2.5rem;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3),
-          0 0 0 1px rgba(255, 255, 255, 0.05) inset,
-          0 1px 0 rgba(255, 255, 255, 0.1) inset;
-        position: relative;
-        overflow: hidden;
-        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        margin-top: 3.5rem;
-      }
-
-      body.light .main-card {
-        background: var(--ios-surface-light);
-        border-color: var(--ios-border-light);
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1),
-          0 0 0 1px rgba(0, 0, 0, 0.05) inset;
-      }
-
-      /* Effetto glow interno */
-      .main-card::before {
-        content: "";
-        position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        background: radial-gradient(
-          circle,
-          rgba(0, 122, 255, 0.1) 0%,
-          transparent 70%
-        );
-        opacity: 0;
-        transition: opacity 0.5s ease;
-        pointer-events: none;
-      }
-
-      .main-card:hover::before {
-        opacity: 1;
-      }
-
-      .page-context-breadcrumb {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.65rem;
-        font-size: 0.88rem;
-        letter-spacing: 0.4px;
-        text-transform: uppercase;
-        color: rgba(255, 255, 255, 0.75);
-        margin-bottom: 1.75rem;
-      }
-
-      .page-context-breadcrumb .breadcrumb-dot {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: rgba(0, 255, 255, 0.85);
-        box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
-      }
-
-      .page-context-breadcrumb .breadcrumb-separator {
-        opacity: 0.5;
-      }
-
-      body.light .page-context-breadcrumb {
-        color: rgba(10, 31, 47, 0.65);
-      }
-
-      body.light .page-context-breadcrumb .breadcrumb-dot {
-        background: rgba(0, 123, 138, 0.9);
-        box-shadow: none;
-      }
-
-      .step-nav-sticky {
-        position: fixed;
-        top: calc(82px + 1.5rem + env(safe-area-inset-top));
-        left: 0;
-        right: 0;
-        display: flex;
-        justify-content: center;
-        pointer-events: none;
-        z-index: 1000;
-        padding: 0.5rem 1rem;
-        opacity: 0;
-        transform: translateY(-20px);
-        animation: progressBarSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.15s
-          forwards;
-      }
-
-      @keyframes progressBarSlideIn {
-        from {
-          opacity: 0;
-          transform: translateY(-20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      .step-nav-container {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.75rem 1rem;
-        border-radius: 16px;
-        background: var(--ios-surface-elevated);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border: 1px solid var(--ios-border);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2),
-          0 0 0 1px rgba(255, 255, 255, 0.05) inset;
-        pointer-events: auto;
-        position: relative;
-        overflow: hidden;
-      }
-
-      body.light .step-nav-container {
-        background: var(--ios-surface-elevated-light);
-        border-color: var(--ios-border-light);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1),
-          0 0 0 1px rgba(0, 0, 0, 0.05) inset;
-      }
-
-      .step-nav-button {
-        border: 1px solid rgba(0, 0, 0, 0.2);
-        background: transparent;
-        color: rgba(255, 255, 255, 0.65);
-        display: flex;
-        align-items: center;
-        gap: 0.35rem;
-        padding: 0.35rem 0.9rem;
-        border-radius: 12px;
-        cursor: pointer;
-        font-size: 0.85rem;
-        letter-spacing: 0.2px;
-        transition: all 0.25s ease;
-        position: relative;
-        opacity: 0;
-        transform: scale(0.9);
-        animation: progressButtonFadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1)
-          forwards;
-      }
-
-      body.light .step-nav-button {
-        border-color: rgba(0, 0, 0, 0.15);
-      }
-
-      .step-nav-button:nth-child(1) {
-        animation-delay: 0.25s;
-      }
-
-      .step-nav-button:nth-child(2) {
-        animation-delay: 0.35s;
-      }
-
-      .step-nav-button:nth-child(3) {
-        animation-delay: 0.45s;
-      }
-
-      @keyframes progressButtonFadeIn {
-        from {
-          opacity: 0;
-          transform: scale(0.9);
-        }
-        to {
-          opacity: 1;
-          transform: scale(1);
-        }
-      }
-
-      .step-nav-index {
-        width: 22px;
-        height: 22px;
-        border-radius: 50%;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        border: 1px solid rgba(255, 255, 255, 0.35);
-        font-size: 0.75rem;
-      }
-
-      .step-nav-button.active {
-        background: rgba(0, 255, 255, 0.15);
-        color: white;
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
-      }
-
-      .step-nav-button.active .step-nav-index {
-        border-color: rgba(0, 255, 255, 0.8);
-        background: rgba(0, 255, 255, 0.15);
-      }
-
-      body.light .step-nav-button {
-        color: rgba(10, 31, 47, 0.55);
-      }
-
-      body.light .step-nav-button.active {
-        color: #0a1f2f;
-        background: rgba(0, 123, 138, 0.15);
-      }
-
-      body.light .step-nav-button.active .step-nav-index {
-        border-color: rgba(0, 123, 138, 0.6);
-      }
-
-      .step-nav-button.drag-source {
-        box-shadow: 0 10px 25px rgba(0, 255, 255, 0.35);
-        transform: scale(1.02);
-      }
-
-      .step-nav-button.drop-target {
-        border: 1px dashed rgba(0, 255, 255, 0.5);
-        background: rgba(0, 255, 255, 0.1);
-      }
-
-      body.light .step-nav-button.drop-target {
-        border-color: rgba(0, 123, 138, 0.5);
-        background: rgba(0, 123, 138, 0.1);
-      }
-
-      /* Step content */
-      .step-content {
-        display: none !important;
-        animation: fadeInUp 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-        opacity: 0;
-        transform: translateY(20px);
-        transition: opacity 0.25s ease, transform 0.25s ease;
-        padding-top: clamp(4rem, 6vw, 5rem);
-      }
-
-      .step-content.active {
-        display: block !important;
-        opacity: 1;
-        transform: translateY(0);
-      }
-
-      /* Step 1: Selezione Linea */
-      .step-content[data-step="1"] {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-      }
-
-      .step-title {
-        font-size: 1.75rem;
-        font-weight: 700;
-        text-align: center;
-        margin-bottom: 0.5rem;
-        background: linear-gradient(
-          135deg,
-          var(--ios-text-primary) 0%,
-          var(--ios-text-secondary) 100%
-        );
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        opacity: 0;
-        animation: fadeInUp 0.4s ease 0.2s forwards;
-        width: 100%;
-      }
-
-      body.light .step-title {
-        background: linear-gradient(
-          135deg,
-          var(--ios-text-primary-light) 0%,
-          var(--ios-text-secondary-light) 100%
-        );
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-      }
-
-      .step-subtitle {
-        font-size: 1rem;
-        text-align: center;
-        color: var(--ios-text-secondary);
-        margin-bottom: 2.5rem;
-        opacity: 0;
-        animation: fadeInUp 0.4s ease 0.3s forwards;
-      }
-
-      body.light .step-subtitle {
-        color: var(--ios-text-secondary-light);
-      }
-
-      /* Badge indicatore sezione */
-      .section-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.5rem 1rem;
-        margin-bottom: 1rem;
-        border-radius: 12px;
-        background: linear-gradient(
-          135deg,
-          rgba(0, 123, 138, 0.15) 0%,
-          rgba(0, 123, 138, 0.1) 100%
-        );
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        border: 1px solid rgba(0, 123, 138, 0.2);
-        font-size: 0.75rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.8px;
-        color: rgba(0, 123, 138, 0.9);
-        opacity: 0;
-        animation: fadeInUp 0.4s ease 0.15s forwards;
-        box-shadow: 0 2px 8px rgba(0, 123, 138, 0.1);
-      }
-
-      body.light .section-badge {
-        background: linear-gradient(
-          135deg,
-          rgba(0, 123, 138, 0.2) 0%,
-          rgba(0, 123, 138, 0.15) 100%
-        );
-        border-color: rgba(0, 123, 138, 0.25);
-        color: rgba(0, 123, 138, 1);
-        box-shadow: 0 2px 8px rgba(0, 123, 138, 0.15);
-      }
-
-      .section-badge-icon {
-        font-size: 0.9rem;
-      }
-
-      /* Pulsanti selezione - Design iOS 26 */
-      .step-content[data-step="1"] .selection-button {
-        max-width: 420px;
-        width: 100%;
-        margin-left: auto;
-        margin-right: auto;
-      }
-
-      .selection-button {
-        width: 100%;
-        padding: 1.5rem 1.75rem;
-        background: linear-gradient(
-          135deg,
-          rgba(255, 255, 255, 0.12) 0%,
-          rgba(255, 255, 255, 0.08) 50%,
-          rgba(255, 255, 255, 0.06) 100%
-        );
-        backdrop-filter: blur(30px) saturate(180%);
-        -webkit-backdrop-filter: blur(30px) saturate(180%);
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 20px;
-        font-size: 1.05rem;
-        font-weight: 600;
-        color: var(--ios-text-primary);
-        cursor: pointer;
-        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 1rem;
-        position: relative;
-        overflow: hidden;
-        opacity: 0;
-        animation: fadeInUp 0.4s ease 0.35s forwards;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15),
-          0 0 0 1px rgba(255, 255, 255, 0.05) inset;
-      }
-
-      .selection-button .line-info {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-        text-align: left;
-        flex: 1;
-      }
-
-      .selection-button .line-name {
-        font-size: 1.05rem;
-        font-weight: 600;
-        color: var(--ios-text-primary);
-      }
-
-      body.light .selection-button .line-name {
-        color: var(--ios-text-primary-light);
-      }
-
-      .line-stops-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-        padding: 0.4rem 0.85rem;
-        border-radius: 12px;
-        background: linear-gradient(
-          135deg,
-          rgba(0, 255, 255, 0.15) 0%,
-          rgba(0, 255, 255, 0.1) 100%
-        );
-        backdrop-filter: blur(12px) saturate(150%);
-        -webkit-backdrop-filter: blur(12px) saturate(150%);
-        border: 1px solid rgba(0, 255, 255, 0.25);
-        width: fit-content;
-        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 2px 8px rgba(0, 255, 255, 0.15),
-          0 0 0 1px rgba(0, 255, 255, 0.1) inset;
-      }
-
-      body.light .line-stops-badge {
-        background: linear-gradient(
-          135deg,
-          rgba(0, 123, 138, 0.12) 0%,
-          rgba(0, 123, 138, 0.08) 100%
-        );
-        border-color: rgba(0, 123, 138, 0.2);
-        box-shadow: 0 2px 8px rgba(0, 123, 138, 0.12),
-          0 0 0 1px rgba(0, 123, 138, 0.08) inset;
-      }
-
-      .selection-button:hover .line-stops-badge {
-        background: linear-gradient(
-          135deg,
-          rgba(0, 255, 255, 0.25) 0%,
-          rgba(0, 255, 255, 0.18) 100%
-        );
-        border-color: rgba(0, 255, 255, 0.4);
-        transform: translateY(-1px) scale(1.05);
-        box-shadow: 0 4px 12px rgba(0, 255, 255, 0.25),
-          0 0 0 1px rgba(0, 255, 255, 0.15) inset;
-      }
-
-      body.light .selection-button:hover .line-stops-badge {
-        background: linear-gradient(
-          135deg,
-          rgba(0, 123, 138, 0.18) 0%,
-          rgba(0, 123, 138, 0.14) 100%
-        );
-        border-color: rgba(0, 123, 138, 0.3);
-        box-shadow: 0 4px 12px rgba(0, 123, 138, 0.2),
-          0 0 0 1px rgba(0, 123, 138, 0.12) inset;
-      }
-
-      .stops-icon {
-        font-size: 0.75rem;
-        opacity: 0.7;
-      }
-
-      .stops-count {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-          "Helvetica Neue", Arial, sans-serif;
-        font-size: 13px;
-        font-weight: 500;
-        color: var(--ios-text-secondary);
-        letter-spacing: 0.2px;
-      }
-
-      body.light .stops-count {
-        color: var(--ios-text-secondary-light);
-      }
-
-      body.light .selection-button {
-        background: linear-gradient(
-          135deg,
-          rgba(255, 255, 255, 0.85) 0%,
-          rgba(255, 255, 255, 0.75) 50%,
-          rgba(255, 255, 255, 0.7) 100%
-        );
-        border-color: rgba(0, 123, 138, 0.15);
-        color: var(--ios-text-primary-light);
-        box-shadow: 0 4px 16px rgba(0, 123, 138, 0.1),
-          0 0 0 1px rgba(0, 123, 138, 0.05) inset;
-      }
-
-      .selection-button::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(
-          90deg,
-          transparent,
-          rgba(255, 255, 255, 0.1),
-          transparent
-        );
-        transition: left 0.5s ease;
-      }
-
-      .selection-button:hover::before {
-        left: 100%;
-      }
-
-      .selection-button:hover {
-        transform: translateY(-4px) scale(1.01);
-        border-color: rgba(0, 255, 255, 0.4);
-        background: linear-gradient(
-          135deg,
-          rgba(255, 255, 255, 0.18) 0%,
-          rgba(255, 255, 255, 0.12) 50%,
-          rgba(255, 255, 255, 0.1) 100%
-        );
-        box-shadow: 0 12px 32px rgba(0, 255, 255, 0.25),
-          0 0 0 1px rgba(0, 255, 255, 0.2) inset,
-          0 0 40px rgba(0, 255, 255, 0.2), 0 4px 16px rgba(0, 0, 0, 0.2);
-      }
-
-      body.light .selection-button:hover {
-        border-color: rgba(0, 123, 138, 0.3);
-        background: linear-gradient(
-          135deg,
-          rgba(255, 255, 255, 0.95) 0%,
-          rgba(255, 255, 255, 0.85) 50%,
-          rgba(255, 255, 255, 0.8) 100%
-        );
-        box-shadow: 0 12px 32px rgba(0, 123, 138, 0.2),
-          0 0 0 1px rgba(0, 123, 138, 0.15) inset,
-          0 0 40px rgba(0, 123, 138, 0.15), 0 4px 16px rgba(0, 123, 138, 0.1);
-      }
-
-      .selection-button:active {
-        transform: translateY(0) scale(0.98);
-      }
-
-      /* Ripple Effect */
-      .ripple {
-        position: absolute;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.4);
-        transform: scale(0);
-        animation: rippleAnimation 0.4s ease-out;
-        pointer-events: none;
-      }
-
-      body.light .ripple {
-        background: rgba(0, 123, 138, 0.3);
-      }
-
-      @keyframes rippleAnimation {
-        to {
-          transform: scale(4);
-          opacity: 0;
-        }
-      }
-
-      .selection-button:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-        pointer-events: none;
-      }
-
-      .selection-button .arrow {
-        font-size: 1.1rem;
-        opacity: 0.5;
-        color: var(--ios-text-secondary);
-        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-      }
-
-      .selection-button:hover .arrow {
-        transform: translateX(6px);
-        opacity: 1;
-        color: rgba(0, 255, 255, 0.9);
-        background: rgba(0, 255, 255, 0.15);
-        box-shadow: 0 2px 8px rgba(0, 255, 255, 0.2);
-      }
-
-      body.light .selection-button .arrow {
-        color: var(--ios-text-secondary-light);
-        background: rgba(0, 123, 138, 0.08);
-      }
-
-      body.light .selection-button:hover .arrow {
-        color: rgba(0, 123, 138, 0.9);
-        background: rgba(0, 123, 138, 0.15);
-        box-shadow: 0 2px 8px rgba(0, 123, 138, 0.2);
-      }
-
-      /* Step 2: Partenza e Destinazione */
-      .step-content[data-step="2"] .step-title {
-        margin-top: 0;
-      }
-
-      /* Step 3: Card Prezzo */
-      .step-content[data-step="3"] .step-title {
-        margin-top: 0;
-      }
-
-      .route-section {
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-        margin-top: 1.5rem;
-      }
-
-      .step-heading {
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-      }
-
-      @media (min-width: 768px) {
-        .step-heading {
-          flex-direction: row;
-          align-items: flex-end;
-          gap: 1rem;
-        }
-      }
-
-      @media (max-width: 768px) {
-        .main-card {
-          margin-top: 28rem;
-          padding-top: 12rem;
-        }
-
-        .step-content {
-          padding-top: clamp(3rem, 8vw, 3.75rem);
-        }
-
-        .step-content[data-step="1"] {
-          padding-top: 6rem;
-        }
-
-        .step-title {
-          margin-top: 1rem;
-        }
-      }
-
-      .route-item {
-        position: relative;
-        opacity: 0;
-        animation: fadeInUp 0.4s ease forwards;
-      }
-
-      .route-item:nth-child(1) {
-        animation-delay: 0.2s;
-      }
-
-      .route-item:nth-child(2) {
-        animation-delay: 0.3s;
-      }
-
-      .route-button-container {
-        display: flex;
-        align-items: stretch;
-        gap: 0.75rem;
-        width: 100%;
-      }
-
-      .route-button-container .selection-button {
-        flex: 1;
-        padding: 1rem 1.75rem;
-      }
-
-      .route-label {
-        font-size: 0.85rem;
-        font-weight: 600;
-        color: var(--ios-text-secondary);
-        margin-bottom: 0.5rem;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-      }
-
-      body.light .route-label {
-        color: var(--ios-text-secondary-light);
-      }
-
-      /* Stati vuoti migliorati */
-      .selection-button:has(span:contains("Seleziona")) {
-        position: relative;
-      }
-
-      .selection-button:has(#partenza-text:contains("Seleziona partenza")),
-      .selection-button:has(
-          #destinazione-text:contains("Seleziona destinazione")
-        ) {
-        opacity: 0.85;
-      }
-
-      .selection-button:has(#partenza-text:not(:contains("Seleziona"))),
-      .selection-button:has(#destinazione-text:not(:contains("Seleziona"))) {
-        opacity: 1;
-      }
-
-      /* Micro-animazioni per selezione */
-      .selection-button.selected {
-        border-color: var(--ios-success);
-        background: rgba(52, 199, 89, 0.1);
-        animation: selectionPulse 0.4s ease;
-      }
-
-      @keyframes selectionPulse {
-        0%,
-        100% {
-          transform: scale(1);
-        }
-        50% {
-          transform: scale(1.02);
-        }
-      }
-
-      /* Step 3: Card Prezzo */
-      .price-card {
-        background: linear-gradient(
-          135deg,
-          var(--ios-accent) 0%,
-          var(--ios-accent-hover) 50%,
-          #5a9fff 100%
-        );
-        background-size: 200% 200%;
-        border-radius: 20px;
-        padding: 2.5rem 2rem;
-        text-align: center;
-        box-shadow: 0 12px 40px rgba(0, 122, 255, 0.3),
-          0 0 0 1px rgba(255, 255, 255, 0.1) inset,
-          0 0 60px rgba(0, 122, 255, 0.2);
-        opacity: 0;
-        transform: scale(0.95) perspective(1000px) rotateX(5deg);
-        position: relative;
-        overflow: hidden;
-        margin-top: 1rem;
-        animation: priceCardEntrance 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s
-            forwards,
-          gradientShift 8s ease infinite;
-        transform-style: preserve-3d;
-      }
-
-      @keyframes priceCardEntrance {
-        0% {
-          opacity: 0;
-          transform: scale(0.9) perspective(1000px) rotateX(10deg)
-            translateY(20px);
-        }
-        60% {
-          transform: scale(1.02) perspective(1000px) rotateX(-2deg)
-            translateY(-5px);
-        }
-        100% {
-          opacity: 1;
-          transform: scale(1) perspective(1000px) rotateX(0deg) translateY(0);
-        }
-      }
-
-      @keyframes gradientShift {
-        0%,
-        100% {
-          background-position: 0% 50%;
-        }
-        50% {
-          background-position: 100% 50%;
-        }
-      }
-
-      .price-card::before {
-        content: "";
-        position: absolute;
-        top: -50%;
-        right: -50%;
-        width: 200%;
-        height: 200%;
-        background: radial-gradient(
-          circle,
-          rgba(255, 255, 255, 0.25) 0%,
-          rgba(255, 255, 255, 0.1) 30%,
-          transparent 70%
-        );
-        animation: rotate 20s linear infinite;
-        pointer-events: none;
-      }
-
-      .price-card::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(
-          135deg,
-          transparent 0%,
-          rgba(255, 255, 255, 0.1) 50%,
-          transparent 100%
-        );
-        animation: shimmer 3s ease-in-out infinite;
-        pointer-events: none;
-      }
-
-      @keyframes shimmer {
-        0%,
-        100% {
-          transform: translateX(-100%) translateY(-100%);
-        }
-        50% {
-          transform: translateX(100%) translateY(100%);
-        }
-      }
-
-      .price-card:hover {
-        transform: perspective(1000px) rotateX(-2deg) translateY(-5px)
-          scale(1.02);
-        box-shadow: 0 16px 50px rgba(0, 122, 255, 0.4),
-          0 0 0 1px rgba(255, 255, 255, 0.15) inset,
-          0 0 80px rgba(0, 122, 255, 0.3);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-      }
-
-      .price-route-info {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 1rem;
-        margin-bottom: 1.5rem;
-      }
-
-      .price-route-item {
-        flex: 1;
-        text-align: center;
-      }
-
-      .price-route-label {
-        font-size: 0.75rem;
-        font-weight: 600;
-        color: rgba(255, 255, 255, 0.8);
-        margin-bottom: 0.25rem;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-      }
-
-      .price-route-value {
-        font-size: 1.1rem;
-        font-weight: 700;
-        color: white;
-        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-        position: relative;
-        z-index: 1;
-      }
-
-      @keyframes valueGlow {
-        0%,
-        100% {
-          text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2),
-            0 0 20px rgba(255, 255, 255, 0.3);
-        }
-        50% {
-          text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2),
-            0 0 30px rgba(255, 255, 255, 0.5), 0 0 40px rgba(255, 255, 255, 0.3);
-        }
-      }
-
-      .price-route-arrow {
-        font-size: 1.5rem;
-        color: rgba(255, 255, 255, 0.9);
-        margin: 0 0.5rem;
-      }
-
-      .price-info {
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        gap: 2rem;
-      }
-
-      .price-section {
-        flex: 1;
-      }
-
-      .price-label {
-        font-size: 0.85rem;
-        font-weight: 600;
-        color: rgba(255, 255, 255, 0.9);
-        margin-bottom: 0.5rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-      }
-
-      .price-value {
-        font-size: 2rem;
-        font-weight: 800;
-        color: white;
-        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-        position: relative;
-        z-index: 1;
-        animation: valueGlow 2s ease-in-out infinite;
-      }
-
-      .code-value {
-        font-size: 1.25rem;
-        font-weight: 700;
-        color: white;
-        font-family: "SF Mono", "Monaco", monospace;
-        letter-spacing: 2px;
-        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-        position: relative;
-        z-index: 1;
-        animation: valueGlow 2s ease-in-out infinite;
-      }
-
-      .price-divider {
-        width: 100%;
-        height: 1px;
-        background: rgba(255, 255, 255, 0.3);
-        margin: 1.5rem 0;
-        border-radius: 1px;
-      }
-
-      /* Pulsante geolocalizzazione (accanto a partenza) */
-      .geolocation-button-small {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-width: 80px;
-        width: 80px;
-        height: 100%;
-        padding: 1.25rem 1rem;
-        background: var(--ios-surface-elevated);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border: 1px solid var(--ios-border);
-        border-radius: 16px;
-        font-size: 1.05rem;
-        font-weight: 600;
-        color: var(--ios-text-primary);
-        cursor: pointer;
-        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        flex-shrink: 0;
-        position: relative;
-        overflow: hidden;
-        box-sizing: border-box;
-      }
-
-      body.light .geolocation-button-small {
-        background: var(--ios-surface-elevated-light);
-        border-color: var(--ios-border-light);
-        color: var(--ios-text-primary-light);
-      }
-
-      .geolocation-button-small::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(
-          90deg,
-          transparent,
-          rgba(255, 255, 255, 0.1),
-          transparent
-        );
-        transition: left 0.5s ease;
-      }
-
-      .geolocation-button-small:hover::before {
-        left: 100%;
-      }
-
-      .geolocation-button-small:hover {
-        transform: translateY(-2px);
-        border-color: var(--ios-accent);
-        box-shadow: 0 8px 24px rgba(0, 122, 255, 0.2),
-          0 0 0 1px rgba(0, 122, 255, 0.1) inset,
-          0 0 20px rgba(0, 122, 255, 0.15);
-      }
-
-      body.light .geolocation-button-small:hover {
-        box-shadow: 0 8px 24px rgba(0, 123, 138, 0.15),
-          0 0 0 1px rgba(0, 123, 138, 0.1) inset,
-          0 0 20px rgba(0, 123, 138, 0.1);
-      }
-
-      .geolocation-button-small:active {
-        transform: translateY(0) scale(0.98);
-      }
-
-      .geolocation-button-small:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-        pointer-events: none;
-      }
-
-      .geolocation-icon {
-        font-size: 1.3rem;
-        transition: transform 0.3s ease;
-        display: block;
-      }
-
-      .geolocation-button-small:hover .geolocation-icon {
-        transform: scale(1.15);
-      }
-
-      .geolocation-button-small.loading .geolocation-icon {
-        animation: pulse 1.5s infinite ease-out;
-      }
-
-      @keyframes pulse {
-        0%,
-        100% {
-          transform: scale(1);
-          opacity: 1;
-        }
-        50% {
-          transform: scale(1.2);
-          opacity: 0.7;
-        }
-      }
-
-      /* Pulsante swap (inverti partenza/destinazione) */
-      .swap-button-small {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-width: 80px;
-        width: 80px;
-        height: 100%;
-        padding: 1.25rem 1rem;
-        background: var(--ios-surface-elevated);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border: 1px solid var(--ios-border);
-        border-radius: 16px;
-        font-size: 1.05rem;
-        font-weight: 600;
-        color: var(--ios-text-primary);
-        cursor: pointer;
-        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        flex-shrink: 0;
-        position: relative;
-        overflow: hidden;
-        position: relative;
-        overflow: hidden;
-        box-sizing: border-box;
-      }
-
-      body.light .swap-button-small {
-        background: var(--ios-surface-elevated-light);
-        border-color: var(--ios-border-light);
-        color: var(--ios-text-primary-light);
-      }
-
-      .swap-button-small::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(
-          90deg,
-          transparent,
-          rgba(255, 255, 255, 0.1),
-          transparent
-        );
-        transition: left 0.5s ease;
-      }
-
-      .swap-button-small:hover::before {
-        left: 100%;
-      }
-
-      .swap-button-small:hover {
-        transform: translateY(-2px);
-        border-color: var(--ios-accent);
-        box-shadow: 0 8px 24px rgba(0, 122, 255, 0.2),
-          0 0 0 1px rgba(0, 122, 255, 0.1) inset,
-          0 0 20px rgba(0, 122, 255, 0.15);
-      }
-
-      body.light .swap-button-small:hover {
-        box-shadow: 0 8px 24px rgba(0, 123, 138, 0.15),
-          0 0 0 1px rgba(0, 123, 138, 0.1) inset,
-          0 0 20px rgba(0, 123, 138, 0.1);
-      }
-
-      .swap-button-small:active {
-        transform: translateY(0) scale(0.98);
-      }
-
-      .swap-button-small:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-        pointer-events: none;
-      }
-
-      .swap-icon {
-        font-size: 1.3rem;
-        transition: transform 0.3s ease;
-        display: block;
-      }
-
-      .swap-button-small:hover .swap-icon {
-        transform: rotate(180deg) scale(1.15);
-      }
-
-      /* Pulsante reset */
-      .reset-button {
-        margin-top: 2.5rem;
-        padding: 0.875rem 1.5rem;
-        background: rgba(255, 255, 255, 0.08);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 12px;
-        color: var(--ios-text-primary);
-        font-size: 0.95rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        opacity: 0;
-        animation: fadeIn 0.4s ease 0.4s forwards;
-        position: relative;
-        overflow: hidden;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      }
-
-      body.light .reset-button {
-        background: rgba(0, 123, 138, 0.1);
-        border-color: rgba(0, 123, 138, 0.25);
-        color: var(--ios-text-primary-light);
-        box-shadow: 0 2px 8px rgba(0, 123, 138, 0.08);
-      }
-
-      .reset-button:hover {
-        background: rgba(255, 255, 255, 0.15);
-        border-color: rgba(0, 255, 255, 0.4);
-        color: rgba(0, 255, 255, 0.95);
-        transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(0, 255, 255, 0.2),
-          0 0 0 1px rgba(0, 255, 255, 0.15) inset,
-          0 0 20px rgba(0, 255, 255, 0.15);
-      }
-
-      body.light .reset-button:hover {
-        background: rgba(0, 123, 138, 0.18);
-        border-color: rgba(0, 123, 138, 0.4);
-        color: rgba(0, 123, 138, 0.95);
-        box-shadow: 0 6px 16px rgba(0, 123, 138, 0.2),
-          0 0 0 1px rgba(0, 123, 138, 0.15) inset,
-          0 0 20px rgba(0, 123, 138, 0.12);
-      }
-
-      /* Animazioni */
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-        }
-        to {
-          opacity: 1;
-        }
-      }
-
-      @keyframes fadeInUp {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      @keyframes fadeInDown {
-        from {
-          opacity: 0;
-          transform: translateY(-20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      @keyframes scaleIn {
-        from {
-          opacity: 0;
-          transform: scale(0.95);
-        }
-        to {
-          opacity: 1;
-          transform: scale(1);
-        }
-      }
-
-      @keyframes rotate {
-        from {
-          transform: rotate(0deg);
-        }
-        to {
-          transform: rotate(360deg);
-        }
-      }
-
-      @keyframes valuePop {
-        0% {
-          transform: scale(0.8);
-          opacity: 0;
-        }
-        50% {
-          transform: scale(1.1);
-        }
-        100% {
-          transform: scale(1);
-          opacity: 1;
-        }
-      }
-
-      .price-card.celebrate {
-        animation: celebrateCard 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
-      }
-
-      @keyframes celebrateCard {
-        0%,
-        100% {
-          transform: perspective(1000px) rotateX(0deg) scale(1);
-        }
-        25% {
-          transform: perspective(1000px) rotateX(-5deg) scale(1.05);
-        }
-        50% {
-          transform: perspective(1000px) rotateX(5deg) scale(1.05);
-        }
-        75% {
-          transform: perspective(1000px) rotateX(-3deg) scale(1.02);
-        }
-      }
-
-      /* Responsive - Mobile */
-      @media (max-width: 768px) {
-        body {
-          padding: 0;
-          align-items: flex-start;
-          padding-top: 1rem;
-        }
-
-        .main-card {
-          /* Rimuovi glassmorphism su mobile per più spazio */
-          background: transparent !important;
-          backdrop-filter: none !important;
-          -webkit-backdrop-filter: none !important;
-          border: none !important;
-          box-shadow: none !important;
-          border-radius: 0 !important;
-          padding: 1.5rem 1rem !important;
-          margin: 0 !important;
-          max-width: 100%;
-          width: 100%;
-        }
-
-        .main-card::before {
-          display: none;
-        }
-
-        .step-indicator {
-          margin-bottom: 2.5rem;
-        }
-
-        .step-title {
-          font-size: 1.5rem;
-          margin-bottom: 0.75rem;
-          margin-top: 0;
-        }
-
-        .step-subtitle {
-          font-size: 0.95rem;
-          margin-bottom: 2rem;
-        }
-
-        .section-badge {
-          font-size: 0.7rem;
-          padding: 0.4rem 0.875rem;
-          margin-bottom: 0.875rem;
-        }
-
-        .selection-button {
-          padding: 1.5rem 1.25rem;
-          margin-bottom: 1.25rem;
-          font-size: 1.1rem;
-        }
-
-        .route-button-container .selection-button {
-          padding: 1rem 1.25rem;
-        }
-
-        .geolocation-button-small,
-        .swap-button-small {
-          min-width: 70px;
-          width: 70px;
-          padding: 1rem 0.75rem;
-        }
-
-        .geolocation-icon,
-        .swap-icon {
-          font-size: 1.4rem;
-        }
-
-        .route-section {
-          gap: 1.5rem;
-          margin-top: 1.5rem;
-        }
-
-        .route-item {
-          margin-bottom: 0.5rem;
-        }
-
-        .route-label {
-          margin-bottom: 1rem;
-          font-size: 0.9rem;
-        }
-
-        .price-card {
-          margin-top: 2.5rem;
-          padding: 2.5rem 1.5rem;
-          border-radius: 20px;
-        }
-
-        .price-route-info {
-          margin-bottom: 2rem;
-          gap: 0.75rem;
-        }
-
-        .price-route-value {
-          font-size: 1.2rem;
-        }
-
-        .price-info {
-          flex-direction: column;
-          gap: 1.5rem;
-        }
-
-        .price-section {
-          width: 100%;
-        }
-
-        .price-value {
-          font-size: 2.25rem;
-        }
-
-        .code-value {
-          font-size: 1.5rem;
-        }
-
-        .reset-button {
-          margin-top: 2.5rem;
-          padding: 1rem 1.5rem;
-          font-size: 1rem;
-          width: 100%;
-        }
-
-        .container {
-          padding: 0;
-        }
-      }
-      /* ========================================
-       NAVBAR iOS 26
-       ======================================== */
-      .navbar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        background: linear-gradient(
-          135deg,
-          rgba(0, 123, 138, 0.85) 0%,
-          rgba(0, 123, 138, 0.75) 50%,
-          rgba(0, 123, 138, 0.65) 100%
-        );
-        backdrop-filter: blur(40px) saturate(180%);
-        -webkit-backdrop-filter: blur(40px) saturate(180%);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        padding: 1rem 2rem;
-        min-height: 84.8px;
-        box-sizing: border-box;
-        z-index: 1000;
-        box-shadow: 0 4px 20px rgba(0, 123, 138, 0.3);
-        transition: all 0.3s ease;
-      }
-
-      body.light .navbar {
-        background: linear-gradient(
-          135deg,
-          rgba(0, 123, 138, 0.9) 0%,
-          rgba(0, 123, 138, 0.8) 50%,
-          rgba(0, 123, 138, 0.7) 100%
-        );
-        border-bottom-color: rgba(255, 255, 255, 0.3);
-        box-shadow: 0 4px 20px rgba(0, 123, 138, 0.2);
-      }
-
-      .navbar-content {
-        max-width: 1200px;
-        margin: 0 auto;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 2rem;
-      }
-
-      .navbar-brand {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        text-decoration: none;
-        color: rgba(255, 255, 255, 0.95);
-        transition: transform 0.3s ease;
-        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-      }
-
-      body.light .navbar-brand {
-        color: rgba(255, 255, 255, 1);
-      }
-
-      .navbar-brand:hover {
-        transform: translateY(-2px);
-      }
-
-      .navbar-logo-wrapper {
-        width: 64px;
-        height: 64px;
-        border-radius: 16px;
-        overflow: hidden;
-        position: relative;
-        box-shadow: 0 4px 12px rgba(0, 123, 138, 0.3);
-        border: 2px solid rgba(255, 255, 255, 0.3);
-        transition: transform 0.3s ease;
-      }
-
-      .navbar-brand:hover .navbar-logo-wrapper {
-        transform: scale(1.05) rotate(5deg);
-      }
-
-      .navbar-logo {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-
-      .navbar-title {
-        display: flex;
-        flex-direction: column;
-        gap: 0.125rem;
-      }
-
-      .logo-acronym {
-        font-size: 1.4rem;
-        font-weight: 800;
-        line-height: 1;
-        letter-spacing: 1px;
-      }
-
-      .logo-text {
-        font-size: 0.85rem;
-        font-weight: 500;
-        opacity: 0.8;
-        line-height: 1;
-      }
-
-      .navbar-nav {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-
-      .nav-link {
-        padding: 0.625rem 1.25rem;
-        border-radius: 12px;
-        text-decoration: none;
-        color: rgba(255, 255, 255, 0.85);
-        font-weight: 600;
-        font-size: 0.95rem;
-        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        background: transparent;
-        border: 1px solid transparent;
-        text-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
-      }
-
-      body.light .nav-link {
-        color: rgba(255, 255, 255, 0.9);
-      }
-
-      .nav-link:hover {
-        background: rgba(255, 255, 255, 0.15);
-        color: rgba(255, 255, 255, 1);
-        border-color: rgba(255, 255, 255, 0.3);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-      }
-
-      body.light .nav-link:hover {
-        background: rgba(255, 255, 255, 0.2);
-        border-color: rgba(255, 255, 255, 0.4);
-      }
-
-      .nav-link.active {
-        background: rgba(255, 255, 255, 0.3);
-        color: white;
-        border-color: rgba(255, 255, 255, 0.5);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        font-weight: 700;
-      }
-
-      .nav-link.active:hover {
-        background: rgba(255, 255, 255, 0.4);
-        transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
-      }
-
-      .navbar-actions {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-      }
-
-      /* Hamburger Menu Button in Navbar - UI/UX Best Practices */
-      .hamburger-toggle {
-        display: none;
-        width: 44px;
-        height: 44px;
-        min-width: 44px;
-        min-height: 44px;
-        border-radius: 12px;
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        background: rgba(255, 255, 255, 0.15);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        flex-shrink: 0;
-        /* Touch target ottimizzato per mobile */
-        touch-action: manipulation;
-        -webkit-tap-highlight-color: transparent;
-      }
-
-      body.light .hamburger-toggle {
-        background: rgba(255, 255, 255, 0.25);
-        border-color: rgba(255, 255, 255, 0.4);
-      }
-
-      .hamburger-toggle:hover {
-        background: rgba(255, 255, 255, 0.25);
-        border-color: rgba(255, 255, 255, 0.5);
-        transform: scale(1.05);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-      }
-
-      .hamburger-toggle:active {
-        transform: scale(0.95);
-        background: rgba(255, 255, 255, 0.2);
-      }
-
-      .hamburger-toggle.active {
-        background: rgba(255, 255, 255, 0.25);
-        border-color: rgba(255, 255, 255, 0.6);
-      }
-
-      .hamburger-toggle.active:hover {
-        background: rgba(255, 255, 255, 0.3);
-      }
-
-      .hamburger-icon {
-        display: block;
-        width: 24px;
-        height: 2px;
-        background: rgba(255, 255, 255, 0.95);
-        border-radius: 2px;
-        transition: all 0.3s ease;
-        position: relative;
-      }
-
-      body.light .hamburger-icon {
-        background: rgba(255, 255, 255, 1);
-      }
-
-      .hamburger-toggle:hover .hamburger-icon {
-        background: white;
-      }
-
-      .hamburger-icon::before,
-      .hamburger-icon::after {
-        content: "";
-        position: absolute;
-        left: 0;
-        width: 24px;
-        height: 2px;
-        background: rgba(255, 255, 255, 0.95);
-        border-radius: 2px;
-        transition: all 0.3s ease;
-      }
-
-      body.light .hamburger-icon::before,
-      body.light .hamburger-icon::after {
-        background: rgba(255, 255, 255, 1);
-      }
-
-      .hamburger-icon::before {
-        top: -8px;
-      }
-
-      .hamburger-icon::after {
-        top: 8px;
-      }
-
-      .hamburger-toggle:hover .hamburger-icon::before,
-      .hamburger-toggle:hover .hamburger-icon::after {
-        background: white;
-      }
-
-      .hamburger-toggle.active .hamburger-icon {
-        background: transparent;
-      }
-
-      .hamburger-toggle.active .hamburger-icon::before {
-        top: 0;
-        transform: rotate(45deg);
-      }
-
-      .hamburger-toggle.active .hamburger-icon::after {
-        top: 0;
-        transform: rotate(-45deg);
-      }
-
-      /* Indicatore sezione sul pulsante hamburger */
-      .hamburger-section-indicator {
-        position: absolute;
-        top: -4px;
-        right: -4px;
-        width: 18px;
-        height: 18px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.7rem;
-        background: linear-gradient(
-          135deg,
-          rgba(0, 123, 138, 0.9) 0%,
-          rgba(0, 123, 138, 0.7) 100%
-        );
-        border: 2px solid rgba(255, 255, 255, 0.95);
-        box-shadow: 0 2px 8px rgba(0, 123, 138, 0.4);
-        opacity: 0;
-        transform: scale(0);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        pointer-events: none;
-        z-index: 1;
-      }
-
-      .hamburger-section-indicator.visible {
-        opacity: 1;
-        transform: scale(1);
-      }
-
-      body.light .hamburger-section-indicator {
-        border-color: rgba(255, 255, 255, 1);
-        box-shadow: 0 2px 8px rgba(0, 123, 138, 0.3);
-      }
-
-      /* Varianti per le diverse sezioni */
-      .hamburger-toggle[data-section="home"] .hamburger-section-indicator {
-        background: linear-gradient(
-          135deg,
-          rgba(0, 123, 138, 0.9) 0%,
-          rgba(0, 123, 138, 0.7) 100%
-        );
-      }
-
-      .hamburger-toggle[data-section="fermate"] .hamburger-section-indicator {
-        background: linear-gradient(
-          135deg,
-          rgba(52, 152, 219, 0.9) 0%,
-          rgba(52, 152, 219, 0.7) 100%
-        );
-        box-shadow: 0 2px 8px rgba(52, 152, 219, 0.4);
-      }
-
-      .hamburger-toggle[data-section="prezzi"] .hamburger-section-indicator {
-        background: linear-gradient(
-          135deg,
-          rgba(46, 204, 113, 0.9) 0%,
-          rgba(46, 204, 113, 0.7) 100%
-        );
-        box-shadow: 0 2px 8px rgba(46, 204, 113, 0.4);
-      }
-
-      /* Mobile menu overlay - iOS 26 Style */
-      .mobile-menu-overlay {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.6);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-        z-index: 999;
-        opacity: 0;
-        transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-
-      .mobile-menu-overlay.active {
-        display: block;
-        opacity: 1;
-      }
-
-      /* Mobile menu - Bottom Sheet iOS 26 Style */
-      .mobile-menu {
-        position: fixed;
-        bottom: -100%;
-        left: 0;
-        right: 0;
-        max-height: 85vh;
-        background: var(--ios-surface);
-        backdrop-filter: blur(40px) saturate(180%);
-        -webkit-backdrop-filter: blur(40px) saturate(180%);
-        border-top-left-radius: 28px;
-        border-top-right-radius: 28px;
-        border-top: 1px solid var(--ios-border);
-        box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.4),
-          0 0 0 1px rgba(255, 255, 255, 0.05) inset;
-        z-index: 1000;
-        transition: bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-          transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-      }
-
-      body.light .mobile-menu {
-        background: var(--ios-surface-light);
-        border-top-color: var(--ios-border-light);
-        box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.2),
-          0 0 0 1px rgba(0, 0, 0, 0.05) inset;
-      }
-
-      .mobile-menu.active {
-        bottom: 0;
-        transform: translateY(0);
-      }
-
-      /* Handle per trascinare */
-      .mobile-menu-handle {
-        width: 40px;
-        height: 4px;
-        background: var(--ios-text-secondary);
-        border-radius: 2px;
-        margin: 0.75rem auto;
-        opacity: 0.5;
-        transition: opacity 0.3s ease;
-      }
-
-      body.light .mobile-menu-handle {
-        background: var(--ios-text-secondary-light);
-      }
-
-      .mobile-menu:hover .mobile-menu-handle {
-        opacity: 0.8;
-      }
-
-      .mobile-menu-header {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 1rem 1.5rem 0.5rem;
-        position: relative;
-      }
-
-      .mobile-menu-title {
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: var(--ios-text-primary);
-        text-align: center;
-        background: linear-gradient(
-          135deg,
-          var(--ios-text-primary) 0%,
-          var(--ios-text-secondary) 100%
-        );
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-      }
-
-      body.light .mobile-menu-title {
-        background: linear-gradient(
-          135deg,
-          var(--ios-text-primary-light) 0%,
-          var(--ios-text-secondary-light) 100%
-        );
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-      }
-
-      .mobile-menu-close {
-        position: absolute;
-        right: 1.5rem;
-        top: 1rem;
-        width: 36px;
-        height: 36px;
-        border-radius: 12px;
-        border: 1px solid var(--ios-border);
-        background: var(--ios-surface-elevated);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        font-size: 1.5rem;
-        color: var(--ios-text-primary);
-        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-
-      body.light .mobile-menu-close {
-        background: var(--ios-surface-elevated-light);
-        border-color: var(--ios-border-light);
-        color: var(--ios-text-primary-light);
-      }
-
-      .mobile-menu-close:hover {
-        background: var(--ios-accent);
-        color: white;
-        border-color: var(--ios-accent);
-        transform: rotate(90deg) scale(1.1);
-      }
-
-      .mobile-menu-nav {
-        display: flex;
-        flex-direction: column;
-        padding: 1rem 1.5rem 2rem;
-        gap: 0.75rem;
-        overflow-y: auto;
-        flex: 1;
-      }
-
-      .mobile-nav-link {
-        padding: 1.25rem 1.5rem;
-        border-radius: 16px;
-        text-decoration: none;
-        border: none;
-        width: 100%;
-        text-align: left;
-        color: var(--ios-text-primary);
-        font-weight: 600;
-        font-size: 1.05rem;
-        display: flex;
-        align-items: center;
-        gap: 1.25rem;
-        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        background: var(--ios-surface-elevated);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border: 1px solid var(--ios-border);
-        position: relative;
-        overflow: hidden;
-        font-family: inherit;
-        cursor: pointer;
-      }
-
-      body.light .mobile-nav-link {
-        color: var(--ios-text-primary-light);
-        background: var(--ios-surface-elevated-light);
-        border-color: var(--ios-border-light);
-      }
-
-      .mobile-nav-link::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(
-          90deg,
-          transparent,
-          rgba(255, 255, 255, 0.1),
-          transparent
-        );
-        transition: left 0.5s ease;
-      }
-
-      .mobile-nav-link:hover::before {
-        left: 100%;
-      }
-
-      .mobile-nav-link:hover {
-        transform: translateY(-2px);
-        border-color: var(--ios-accent);
-        box-shadow: 0 8px 24px rgba(0, 122, 255, 0.2),
-          0 0 0 1px rgba(0, 122, 255, 0.1) inset;
-      }
-
-      .mobile-nav-link:active {
-        transform: translateY(0) scale(0.98);
-      }
-
-      .mobile-nav-link.active {
-        background: linear-gradient(
-          135deg,
-          var(--ios-accent) 0%,
-          var(--ios-accent-hover) 100%
-        );
-        border-color: var(--ios-accent);
-        color: white;
-        box-shadow: 0 8px 24px rgba(0, 122, 255, 0.3);
-      }
-
-      .mobile-nav-state {
-        margin-left: auto;
-        padding: 0.2rem 0.6rem;
-        border-radius: 999px;
-        font-size: 0.65rem;
-        letter-spacing: 0.6px;
-        text-transform: uppercase;
-        border: 1px solid rgba(255, 255, 255, 0.25);
-        color: rgba(255, 255, 255, 0.95);
-        background: rgba(0, 0, 0, 0.2);
-      }
-
-      .mobile-nav-link.active::before {
-        background: linear-gradient(
-          90deg,
-          transparent,
-          rgba(255, 255, 255, 0.2),
-          transparent
-        );
-      }
-
-      .mobile-nav-icon {
-        font-size: 1.5rem;
-        width: 32px;
-        text-align: center;
-        transition: transform 0.3s ease;
-      }
-
-      .mobile-nav-link:hover .mobile-nav-icon {
-        transform: scale(1.15);
-      }
-
-      /* Responsive navbar */
-      @media (max-width: 768px) {
-        .navbar {
-          padding: 0.875rem 1rem;
-        }
-
-        .navbar-nav {
-          display: none;
-        }
-
-        .hamburger-toggle {
-          display: flex;
-          /* Assicura visibilità e accessibilità su mobile */
-          order: 1;
-          margin-left: auto;
-        }
-
-        /* Migliora il contrasto su mobile per migliore visibilità */
-        .hamburger-toggle {
-          border-width: 1.5px;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-        }
-
-        .hamburger-toggle:focus-visible {
-          outline: 2px solid rgba(255, 255, 255, 0.8);
-          outline-offset: 2px;
-        }
-
-        .navbar-actions {
-          gap: 0.5rem;
-        }
-
-        .nav-icon-btn {
-          width: 40px;
-          height: 40px;
-          font-size: 1.1rem;
-        }
-
-        .navbar-brand {
-          gap: 0.75rem;
-        }
-
-        .navbar-logo-wrapper {
-          width: 56px;
-          height: 56px;
-        }
-
-        .logo-acronym {
-          font-size: 1.25rem;
-        }
-
-        .logo-text {
-          font-size: 0.8rem;
-        }
-      }
-
-      /* Spazio per navbar fissa - iOS 26 Style */
-      body {
-        padding-top: calc(80px + env(safe-area-inset-top));
-      }
-
-      @media (max-width: 768px) {
-        body {
-          padding-top: calc(70px + env(safe-area-inset-top));
-        }
-      }
-
-      /* Banner PWA Install - iOS 26 Style */
-      .pwa-install-banner {
-        margin: 2rem auto 1.5rem;
-        max-width: 600px;
-        padding: 0;
-        border-radius: 20px;
-        overflow: hidden;
-        background: linear-gradient(
-          135deg,
-          rgba(0, 123, 138, 0.95) 0%,
-          rgba(0, 123, 138, 0.85) 100%
-        );
-        backdrop-filter: blur(40px) saturate(180%);
-        -webkit-backdrop-filter: blur(40px) saturate(180%);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        box-shadow: 0 8px 32px rgba(0, 123, 138, 0.3),
-          0 0 0 1px rgba(255, 255, 255, 0.1) inset;
-        animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-
-      body.light .pwa-install-banner {
-        background: linear-gradient(
-          135deg,
-          rgba(0, 123, 138, 0.95) 0%,
-          rgba(0, 123, 138, 0.85) 100%
-        );
-        border-color: rgba(255, 255, 255, 0.3);
-        box-shadow: 0 8px 32px rgba(0, 123, 138, 0.25),
-          0 0 0 1px rgba(255, 255, 255, 0.2) inset;
-      }
-
-      .pwa-install-banner:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 12px 40px rgba(0, 123, 138, 0.4),
-          0 0 0 1px rgba(255, 255, 255, 0.2) inset;
-      }
-
-      .pwa-install-banner.closing {
-        transform: translateY(-20px);
-        opacity: 0;
-        margin-top: 0 !important;
-        margin-bottom: 0 !important;
-        max-height: 0 !important;
-        overflow: hidden;
-        padding: 0;
-      }
-
-      .pwa-install-content {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 1.5rem 1.75rem;
-        gap: 1.25rem;
-      }
-
-      .pwa-install-text {
-        display: flex;
-        flex-direction: column;
-        gap: 0.375rem;
-        flex: 1;
-      }
-
-      .pwa-install-title {
-        font-size: 1.15rem;
-        font-weight: 700;
-        color: white;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-      }
-
-      .pwa-install-subtitle {
-        font-size: 0.9rem;
-        color: rgba(255, 255, 255, 0.9);
-        font-weight: 400;
-      }
-
-      .pwa-install-actions {
-        display: flex;
-        gap: 0.75rem;
-        align-items: center;
-      }
-
-      .pwa-btn {
-        padding: 0.75rem 1.5rem;
-        border-radius: 12px;
-        border: none;
-        font-size: 0.95rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        white-space: nowrap;
-        position: relative;
-        overflow: hidden;
-      }
-
-      .pwa-btn::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(
-          90deg,
-          transparent,
-          rgba(255, 255, 255, 0.2),
-          transparent
-        );
-        transition: left 0.5s ease;
-      }
-
-      .pwa-btn:hover::before {
-        left: 100%;
-      }
-
-      .pwa-btn-primary {
-        background: rgba(255, 255, 255, 0.95);
-        color: rgba(0, 123, 138, 1);
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-      }
-
-      .pwa-btn-primary:hover {
-        background: white;
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
-      }
-
-      .pwa-btn-secondary {
-        background: rgba(255, 255, 255, 0.15);
-        color: white;
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-      }
-
-      .pwa-btn-secondary:hover {
-        background: rgba(255, 255, 255, 0.25);
-        border-color: rgba(255, 255, 255, 0.5);
-        transform: translateY(-2px);
-      }
-
-      .pwa-ios-hint,
-      .pwa-android-hint {
-        padding: 1.25rem 1.75rem;
-        background: rgba(0, 0, 0, 0.1);
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-      }
-
-      .ios-hint-title,
-      .android-hint-title {
-        font-size: 1rem;
-        font-weight: 600;
-        color: white;
-        margin-bottom: 1rem;
-      }
-
-      .ios-hint-steps,
-      .android-hint-steps {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-      }
-
-      .ios-hint-steps li,
-      .android-hint-steps li {
-        display: flex;
-        align-items: flex-start;
-        gap: 0.5rem;
-        color: rgba(255, 255, 255, 0.9);
-        font-size: 0.9rem;
-        line-height: 1.5;
-      }
-
-      .step-number {
-        font-weight: 700;
-        color: white;
-        min-width: 1.5rem;
-      }
-
-      .ios-hint-note,
-      .android-hint-note {
-        margin-top: 1rem;
-        padding: 0.75rem;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 10px;
-        color: rgba(255, 255, 255, 0.9);
-        font-size: 0.85rem;
-        line-height: 1.5;
-      }
-
-      @media (max-width: 768px) {
-        .pwa-install-banner {
-          margin: 1.5rem 1rem;
-          border-radius: 16px;
-        }
-
-        .pwa-install-content {
-          flex-direction: column;
-          align-items: stretch;
-          padding: 1.25rem 1.5rem;
-          gap: 1rem;
-        }
-
-        .pwa-install-actions {
-          flex-direction: column;
-          width: 100%;
-        }
-
-        .pwa-btn {
-          width: 100%;
-        }
-      }
-
-      /* Toast Notifications */
-      .toast-container {
-        position: fixed;
-        bottom: calc(1rem + env(safe-area-inset-bottom));
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 10000;
-        display: flex;
-        flex-direction: column-reverse;
-        gap: 0.75rem;
-        pointer-events: none;
-        max-width: 90%;
-        width: 100%;
-        max-width: 400px;
-      }
-
-      .toast {
-        padding: 1rem 1.25rem;
-        border-radius: 16px;
-        backdrop-filter: blur(20px) saturate(180%);
-        -webkit-backdrop-filter: blur(20px) saturate(180%);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        opacity: 0;
-        transform: translateY(20px) scale(0.95);
-        animation: toastSlideIn 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        pointer-events: auto;
-        font-size: 0.9rem;
-        font-weight: 500;
-      }
-
-      .toast.success {
-        background: rgba(52, 199, 89, 0.15);
-        border-color: rgba(52, 199, 89, 0.3);
-        color: rgba(255, 255, 255, 0.95);
-      }
-
-      .toast.error {
-        background: rgba(255, 59, 48, 0.15);
-        border-color: rgba(255, 59, 48, 0.3);
-        color: rgba(255, 255, 255, 0.95);
-      }
-
-      .toast.info {
-        background: rgba(0, 122, 255, 0.15);
-        border-color: rgba(0, 122, 255, 0.3);
-        color: rgba(255, 255, 255, 0.95);
-      }
-
-      body.light .toast.success {
-        background: rgba(52, 199, 89, 0.2);
-        border-color: rgba(52, 199, 89, 0.4);
-        color: #0a1f2f;
-      }
-
-      body.light .toast.error {
-        background: rgba(255, 59, 48, 0.2);
-        border-color: rgba(255, 59, 48, 0.4);
-        color: #0a1f2f;
-      }
-
-      body.light .toast.info {
-        background: rgba(0, 123, 138, 0.2);
-        border-color: rgba(0, 123, 138, 0.4);
-        color: #0a1f2f;
-      }
-
-      .toast-icon {
-        font-size: 1.2rem;
-        flex-shrink: 0;
-      }
-
-      .toast-message {
-        flex: 1;
-      }
-
-      @keyframes toastSlideIn {
-        to {
-          opacity: 1;
-          transform: translateY(0) scale(1);
-        }
-      }
-
-      @keyframes toastSlideOut {
-        to {
-          opacity: 0;
-          transform: translateY(10px) scale(0.95);
-        }
-      }
-
-      .toast.slide-out {
-        animation: toastSlideOut 0.15s ease forwards;
-      }
-
-      /* Modal iOS-style per selezione fermate */
-      .fermate-modal-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.5);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-        z-index: 9999;
-        opacity: 0;
-        transition: opacity 0.25s ease;
-        pointer-events: none;
-      }
-
-      .fermate-modal-overlay.active {
-        opacity: 1;
-        pointer-events: auto;
-      }
-
-      .fermate-modal {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: var(--ios-surface);
-        backdrop-filter: blur(40px) saturate(180%);
-        -webkit-backdrop-filter: blur(40px) saturate(180%);
-        border-top: 1px solid var(--ios-border);
-        border-radius: 28px 28px 0 0;
-        max-height: 80vh;
-        display: flex;
-        flex-direction: column;
-        transform: translateY(100%);
-        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        z-index: 10000;
-        box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.3);
-      }
-
-      body.light .fermate-modal {
-        background: var(--ios-surface-light);
-        border-color: var(--ios-border-light);
-      }
-
-      .fermate-modal.active {
-        transform: translateY(0);
-      }
-
-      .fermate-modal-handle {
-        width: 40px;
-        height: 4px;
-        background: rgba(255, 255, 255, 0.3);
-        border-radius: 2px;
-        margin: 0.75rem auto;
-        flex-shrink: 0;
-      }
-
-      body.light .fermate-modal-handle {
-        background: rgba(0, 0, 0, 0.2);
-      }
-
-      .fermate-modal-header {
-        padding: 1rem 1.5rem;
-        border-bottom: 1px solid var(--ios-border);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex-shrink: 0;
-      }
-
-      body.light .fermate-modal-header {
-        border-color: var(--ios-border-light);
-      }
-
-      .fermate-modal-title {
-        font-size: 1.25rem;
-        font-weight: 700;
-        color: var(--ios-text-primary);
-      }
-
-      body.light .fermate-modal-title {
-        color: var(--ios-text-primary-light);
-      }
-
-      .fermate-modal-close {
-        width: 32px;
-        height: 32px;
-        border-radius: 16px;
-        border: none;
-        background: rgba(255, 255, 255, 0.1);
-        color: var(--ios-text-primary);
-        font-size: 1.5rem;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.2s ease;
-        line-height: 1;
-      }
-
-      .fermate-modal-close:hover {
-        background: rgba(255, 255, 255, 0.2);
-        transform: scale(1.1);
-      }
-
-      body.light .fermate-modal-close {
-        background: rgba(0, 0, 0, 0.1);
-        color: var(--ios-text-primary-light);
-      }
-
-      .fermate-modal-content {
-        flex: 1;
-        overflow-y: auto;
-        padding: 0.5rem 0;
-        -webkit-overflow-scrolling: touch;
-      }
-
-      .fermate-modal-item {
-        padding: 1rem 1.5rem;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        cursor: pointer;
-        transition: all 0.2s ease;
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        position: relative;
-      }
-
-      body.light .fermate-modal-item {
-        border-color: rgba(0, 0, 0, 0.05);
-      }
-
-      .fermate-modal-item:hover {
-        background: rgba(255, 255, 255, 0.05);
-      }
-
-      body.light .fermate-modal-item:hover {
-        background: rgba(0, 0, 0, 0.05);
-      }
-
-      .fermate-modal-item:active {
-        background: rgba(255, 255, 255, 0.1);
-        transform: scale(0.98);
-      }
-
-      body.light .fermate-modal-item:active {
-        background: rgba(0, 0, 0, 0.1);
-      }
-
-      .fermate-modal-item-icon {
-        width: 40px;
-        height: 40px;
-        border-radius: 12px;
-        background: rgba(0, 123, 138, 0.2);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.2rem;
-        flex-shrink: 0;
-      }
-
-      .fermate-modal-item-name {
-        flex: 1;
-        font-size: 1rem;
-        font-weight: 500;
-        color: var(--ios-text-primary);
-      }
-
-      body.light .fermate-modal-item-name {
-        color: var(--ios-text-primary-light);
-      }
-
-      .fermate-modal-item-check {
-        opacity: 0;
-        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        color: var(--ios-success);
-        font-size: 1.2rem;
-        transform: scale(0);
-      }
-
-      .fermate-modal-item.selected .fermate-modal-item-check {
-        opacity: 1;
-        transform: scale(1);
-      }
-
-      .fermate-modal-item.selecting .fermate-modal-item-check {
-        animation: checkmarkPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-      }
-
-      @keyframes checkmarkPop {
-        0% {
-          opacity: 0;
-          transform: scale(0) rotate(-180deg);
-        }
-        50% {
-          transform: scale(1.3) rotate(10deg);
-        }
-        100% {
-          opacity: 1;
-          transform: scale(1) rotate(0deg);
-        }
-      }
-
-      /* Indicatori di completamento step */
-      .step-nav-button.completed::after {
-        content: "✓";
-        position: absolute;
-        top: -4px;
-        right: -4px;
-        width: 18px;
-        height: 18px;
-        background: var(--ios-success);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.7rem;
-        color: white;
-        border: 2px solid var(--ios-bg);
-        box-shadow: 0 2px 8px rgba(52, 199, 89, 0.4);
-      }
-
-      body.light .step-nav-button.completed::after {
-        border-color: var(--ios-bg-light);
-      }
-
-      @media (max-width: 768px) {
-        .toast-container {
-          bottom: calc(1rem + env(safe-area-inset-bottom));
-          padding: 0 1rem;
-        }
-
-        .fermate-modal {
-          border-radius: 24px 24px 0 0;
-        }
-      }
-    </style>
+    <!-- Preset CSS - Scegli uno: desktop, tablet, mobile, pwa -->
+    <!-- Per desktop: css/presets/desktop.css -->
+    <!-- Per tablet: css/presets/tablet.css -->
+    <!-- Per mobile: css/presets/mobile.css -->
+    <!-- Per PWA: css/presets/pwa.css -->
+    <link rel="stylesheet" href="css/presets/desktop.css" />
   </head>
   <body>
     <!-- Navbar -->
     <header class="navbar">
       <div class="navbar-content">
-        <a href="#" class="navbar-brand">
+        <a
+          href="home-ios26-prototype.html"
+          class="navbar-brand"
+          aria-label="Vai alla home TPL FVG"
+        >
           <div class="navbar-logo-wrapper">
             <img
               src="../src/logo.png"
@@ -2657,19 +32,51 @@
             />
           </div>
           <div class="navbar-title">
-            <div class="logo-acronym">tpl fvg</div>
-            <div class="logo-text">trasporto pubblico locale</div>
+            <div class="logo-acronym">
+              <span class="logo-line">tpl</span>
+              <span class="logo-line">fvg</span>
+            </div>
+            <div class="logo-text">
+              <span class="logo-text-line">trasporto</span>
+              <span class="logo-text-line">pubblico</span>
+              <span class="logo-text-line">locale</span>
+            </div>
           </div>
         </a>
 
         <nav class="navbar-nav">
-          <a href="welcome-ios26-prototype.html" class="nav-link">Benvenuto</a>
-          <a href="#" class="nav-link active" aria-current="page">Home</a>
-          <a href="#" class="nav-link">Fermate</a>
-          <a href="#" class="nav-link">Prezzi</a>
+          <a
+            href="home-ios26-prototype.html"
+            class="nav-link active"
+            aria-current="page"
+            >Home</a
+          >
+          <a href="fermate-ios26-prototype.html" class="nav-link">Fermate</a>
+          <a href="prezzi-ios26-prototype.html" class="nav-link">Prezzi</a>
         </nav>
 
         <div class="navbar-actions">
+          <button
+            class="settings-button"
+            aria-label="Impostazioni"
+            title="Impostazioni"
+          >
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"
+              ></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+          </button>
           <button
             class="hamburger-toggle"
             onclick="toggleMobileMenu()"
@@ -2677,52 +84,118 @@
             id="hamburger-toggle"
             data-section="home"
           >
-            <span class="hamburger-icon"></span>
+            <span class="hamburger-section-label">Home</span>
+            <span class="hamburger-separator"></span>
+            <div class="hamburger-icon-wrapper">
+              <div class="hamburger-icon">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
           </button>
         </div>
       </div>
     </header>
 
     <!-- Mobile Menu Overlay -->
-    <div
-      class="mobile-menu-overlay"
-      id="mobile-menu-overlay"
-      onclick="toggleMobileMenu()"
-    ></div>
+    <div class="mobile-menu-overlay" id="mobile-menu-overlay"></div>
 
-    <!-- Mobile Menu - Bottom Sheet iOS 26 Style -->
+    <!-- Mobile Menu - Popup iOS 26 Style -->
     <div class="mobile-menu" id="mobile-menu">
-      <div class="mobile-menu-handle"></div>
-      <div class="mobile-menu-header">
-        <span class="mobile-menu-title">Menu</span>
-        <button
-          class="mobile-menu-close"
-          onclick="toggleMobileMenu()"
-          aria-label="Chiudi menu"
-        >
-          ×
-        </button>
-      </div>
       <nav class="mobile-menu-nav">
-        <a href="welcome-ios26-prototype.html" class="mobile-nav-link">
-          <span class="mobile-nav-icon">✨</span>
-          <span>Benvenuto</span>
-        </a>
         <a href="home-ios26-prototype.html" class="mobile-nav-link active">
-          <span class="mobile-nav-icon">🏠</span>
+          <span class="mobile-nav-icon">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="0.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              width="20"
+              height="20"
+            >
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+          </span>
           <span>Home</span>
-          <span class="mobile-nav-state">Attivo</span>
         </a>
         <a href="fermate-ios26-prototype.html" class="mobile-nav-link">
-          <span class="mobile-nav-icon">🚌</span>
+          <span class="mobile-nav-icon">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="0.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              width="20"
+              height="20"
+            >
+              <rect x="6" y="5" width="12" height="14" rx="2" />
+              <line x1="6" y1="9" x2="18" y2="9" />
+              <line x1="6" y1="14" x2="18" y2="14" />
+              <line x1="8" y1="17" x2="9" y2="17" />
+              <line x1="15" y1="17" x2="16" y2="17" />
+              <path d="M6 8c-2 0 -3 1 -3 3v2" />
+              <path d="M18 8c2 0 3 1 3 3v2" />
+              <path d="M8 19v1a1.5 1.5 0 0 0 3 0v-1" />
+              <path d="M13 19v1a1.5 1.5 0 0 0 3 0v-1" />
+            </svg>
+          </span>
           <span>Fermate</span>
         </a>
-        <a href="#" class="mobile-nav-link">
-          <span class="mobile-nav-icon">💰</span>
+        <a href="prezzi-ios26-prototype.html" class="mobile-nav-link">
+          <span class="mobile-nav-icon">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="0.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              width="20"
+              height="20"
+            >
+              <path
+                d="M19 5H5a2 2 0 0 0-2 2v2.5a2.5 2.5 0 0 1 0 5V17a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-2.5a2.5 2.5 0 0 1 0-5V7a2 2 0 0 0-2-2z"
+              />
+              <circle cx="8" cy="9" r="1" fill="currentColor" stroke="none" />
+              <circle cx="8" cy="12" r="1" fill="currentColor" stroke="none" />
+              <circle cx="8" cy="15" r="1" fill="currentColor" stroke="none" />
+              <line x1="12" y1="9" x2="17" y2="9" />
+              <line x1="12" y1="12" x2="17" y2="12" />
+              <line x1="12" y1="15" x2="17" y2="15" />
+            </svg>
+          </span>
           <span>Prezzi</span>
         </a>
+        <div class="mobile-nav-separator"></div>
         <button class="mobile-nav-link" onclick="toggleTheme()">
-          <span class="mobile-nav-icon">🌓</span>
+          <span class="mobile-nav-icon">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              width="20"
+              height="20"
+            >
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+          </span>
           <span>Tema</span>
         </button>
       </nav>
@@ -2783,12 +256,63 @@
 
     <div class="container">
       <div class="main-card">
+        <!-- Desktop Tabs Navigation -->
+        <div class="desktop-step-tabs" aria-label="Navigazione step desktop">
+          <button
+            type="button"
+            class="desktop-tab active"
+            data-step-target="1"
+            onclick="handleStepNavClick(1)"
+          >
+            <span class="desktop-tab-number">1</span>
+            <div class="desktop-tab-label-wrapper">
+              <span class="desktop-tab-label">Linea</span>
+              <span
+                class="desktop-tab-selected"
+                id="selected-linea-tab-indicator"
+              ></span>
+            </div>
+          </button>
+          <button
+            type="button"
+            class="desktop-tab"
+            data-step-target="2"
+            onclick="handleStepNavClick(2)"
+          >
+            <span class="desktop-tab-number">2</span>
+            <div class="desktop-tab-label-wrapper">
+              <span class="desktop-tab-label">Percorso</span>
+              <span
+                class="desktop-tab-selected"
+                id="selected-partenza-tab-indicator"
+              ></span>
+              <span
+                class="desktop-tab-selected"
+                id="selected-destinazione-tab-indicator"
+              ></span>
+            </div>
+          </button>
+          <button
+            type="button"
+            class="desktop-tab"
+            data-step-target="3"
+            onclick="handleStepNavClick(3)"
+          >
+            <span class="desktop-tab-number">3</span>
+            <span class="desktop-tab-label">Codice</span>
+          </button>
+
+          <div class="desktop-tabs-actions">
+            <button class="desktop-tab-action" onclick="resetRoute()">
+              ↺ Cambia percorso
+            </button>
+            <button class="desktop-tab-action" onclick="resetAll()">
+              ⟲ Riparti da capo
+            </button>
+          </div>
+        </div>
         <!-- Step 1: Selezione Linea -->
         <div class="step-content active" data-step="1">
-          <div class="section-badge">
-            <span class="section-badge-icon">🏠</span>
-            <span>Home • Codici & Linee</span>
-          </div>
           <h1 class="step-title">Scegli la tua linea</h1>
           <p class="step-subtitle">Seleziona una linea per iniziare</p>
 
@@ -2796,43 +320,110 @@
             class="selection-button"
             onclick="selectLinea('400', 'Linea 400 Udine-Grado', event)"
           >
+            <div class="line-icon-badge">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="0.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                width="24"
+                height="24"
+              >
+                <rect x="6" y="5" width="12" height="14" rx="2" />
+                <line x1="6" y1="9" x2="18" y2="9" />
+                <line x1="6" y1="14" x2="18" y2="14" />
+                <line x1="8" y1="17" x2="9" y2="17" />
+                <line x1="15" y1="17" x2="16" y2="17" />
+                <path d="M6 8c-2 0 -3 1 -3 3v2" />
+                <path d="M18 8c2 0 3 1 3 3v2" />
+                <path d="M8 19v1a1.5 1.5 0 0 0 3 0v-1" />
+                <path d="M13 19v1a1.5 1.5 0 0 0 3 0v-1" />
+              </svg>
+              <span class="line-number">400</span>
+            </div>
             <div class="line-info">
-              <span class="line-name">Linea 400 Udine-Grado</span>
+              <span class="line-name">Udine-Grado</span>
               <span class="line-stops-badge">
-                <span class="stops-icon">📍</span>
                 <span class="stops-count">42 fermate</span>
               </span>
             </div>
-            <span class="arrow">→</span>
+            <span class="arrow">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                width="20"
+                height="20"
+              >
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </span>
           </button>
 
           <button
             class="selection-button"
             onclick="selectLinea('401', 'Linea 401 Udine-San Daniele', event)"
           >
+            <div class="line-icon-badge">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="0.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                width="24"
+                height="24"
+              >
+                <rect x="6" y="5" width="12" height="14" rx="2" />
+                <line x1="6" y1="9" x2="18" y2="9" />
+                <line x1="6" y1="14" x2="18" y2="14" />
+                <line x1="8" y1="17" x2="9" y2="17" />
+                <line x1="15" y1="17" x2="16" y2="17" />
+                <path d="M6 8c-2 0 -3 1 -3 3v2" />
+                <path d="M18 8c2 0 3 1 3 3v2" />
+                <path d="M8 19v1a1.5 1.5 0 0 0 3 0v-1" />
+                <path d="M13 19v1a1.5 1.5 0 0 0 3 0v-1" />
+              </svg>
+              <span class="line-number">401</span>
+            </div>
             <div class="line-info">
-              <span class="line-name">Linea 401 Udine-San Daniele</span>
+              <span class="line-name">Udine-San Daniele</span>
               <span class="line-stops-badge">
-                <span class="stops-icon">📍</span>
                 <span class="stops-count">31 fermate</span>
               </span>
             </div>
-            <span class="arrow">→</span>
+            <span class="arrow">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                width="20"
+                height="20"
+              >
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </span>
           </button>
         </div>
 
         <!-- Step 2: Selezione Partenza e Destinazione -->
         <div class="step-content" data-step="2">
-          <div class="section-badge">
-            <span class="section-badge-icon">🏠</span>
-            <span>Home • Codici & Linee</span>
-          </div>
-          <h1 class="step-title">Dove vuoi andare?</h1>
+          <h1 class="step-title">Dove vorresti andare?</h1>
           <p class="step-subtitle">
             Completa il percorso principale selezionando partenza e
             destinazione: otterrai il codice e il prezzo da mostrare
           </p>
-
           <div class="route-section">
             <div class="route-item">
               <div class="route-label">Partenza</div>
@@ -2842,16 +433,46 @@
                   onclick="openFermateModal('partenza')"
                 >
                   <span id="partenza-text">Seleziona partenza</span>
-                  <span class="arrow">→</span>
+                  <span class="arrow">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      width="20"
+                      height="20"
+                    >
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                      <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                  </span>
                 </button>
                 <button
-                  class="geolocation-button-small"
+                  class="route-action-button route-action-button--geo"
                   onclick="useMyLocation()"
                   id="geolocation-btn"
                   title="Usa la mia posizione"
                   aria-label="Usa la mia posizione per selezionare la partenza"
                 >
-                  <span class="geolocation-icon">📍</span>
+                  <span class="route-action-button__icon geolocation-icon">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="0.8"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      width="18"
+                      height="18"
+                    >
+                      <path
+                        d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"
+                      ></path>
+                      <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                  </span>
                 </button>
               </div>
             </div>
@@ -2864,81 +485,239 @@
                   onclick="openFermateModal('destinazione')"
                 >
                   <span id="destinazione-text">Seleziona destinazione</span>
-                  <span class="arrow">→</span>
-                </button>
-                <button
-                  class="swap-button-small"
-                  onclick="swapRoute()"
-                  id="swap-btn"
-                  title="Inverti partenza e destinazione"
-                  aria-label="Inverti partenza e destinazione"
-                  disabled
-                >
-                  <span class="swap-icon">⇅</span>
+                  <span class="arrow">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      width="20"
+                      height="20"
+                    >
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                      <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                  </span>
                 </button>
               </div>
             </div>
           </div>
 
-          <button class="reset-button" onclick="resetRoute()">
-            ↺ Cambia percorso
-          </button>
-          <button
-            class="reset-button"
-            onclick="resetAll()"
-            style="margin-top: 0.5rem"
+          <div
+            class="route-ready-banner"
+            id="route-ready-banner"
+            aria-live="polite"
           >
-            ⟲ Riparti da capo
-          </button>
+            <div class="route-ready-header">
+              <div class="route-ready-icon">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  width="20"
+                  height="20"
+                  aria-hidden="true"
+                >
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </div>
+              <div>
+                <p class="route-ready-title">Percorso pronto</p>
+                <p class="route-ready-summary" id="route-ready-summary">
+                  Seleziona partenza e destinazione per continuare
+                </p>
+              </div>
+            </div>
+            <div class="route-ready-actions">
+              <button
+                type="button"
+                class="route-ready-continue"
+                onclick="proceedToTicketStep()"
+                id="route-ready-continue"
+                disabled
+              >
+                Vai allo step 3
+              </button>
+            </div>
+          </div>
         </div>
 
         <!-- Step 3: Card Prezzo con Partenza e Destinazione -->
         <div class="step-content" data-step="3">
-          <div class="section-badge">
-            <span class="section-badge-icon">🏠</span>
-            <span>Home • Codici & Linee</span>
-          </div>
           <h1 class="step-title">Il tuo biglietto</h1>
           <p class="step-subtitle">Ecco il tuo percorso e il prezzo</p>
 
           <div class="price-card">
-            <div class="price-route-info">
-              <div class="price-route-item">
-                <div class="price-route-label">Da</div>
-                <div class="price-route-value" id="price-partenza">-</div>
+            <div class="price-card-content">
+              <!-- Logo a sinistra -->
+              <div class="price-card-logo-section">
+                <div class="price-card-logo-wrapper">
+                  <img
+                    src="../src/tpl.jpg"
+                    alt="TPL FVG"
+                    class="price-card-logo-icon"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                  />
+                  <div class="price-card-logo-fallback" style="display: none">
+                    <svg
+                      width="80"
+                      height="80"
+                      viewBox="0 0 80 80"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <circle
+                        cx="40"
+                        cy="40"
+                        r="35"
+                        stroke="white"
+                        stroke-width="3"
+                        fill="none"
+                      />
+                      <path
+                        d="M25 40 L35 50 L55 30"
+                        stroke="white"
+                        stroke-width="3"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                <div class="price-card-brand price-card-brand-mobile">
+                  <div class="price-card-acronym">
+                    <span class="price-card-line">tpl</span>
+                    <span class="price-card-line">fvg</span>
+                  </div>
+                  <div class="price-card-text">
+                    <span class="price-card-text-line">trasporto</span>
+                    <span class="price-card-text-line">pubblico</span>
+                    <span class="price-card-text-line">locale</span>
+                  </div>
+                </div>
               </div>
-              <div class="price-route-arrow">→</div>
-              <div class="price-route-item">
-                <div class="price-route-label">A</div>
-                <div class="price-route-value" id="price-destinazione">-</div>
-              </div>
-            </div>
 
-            <div class="price-divider"></div>
+              <!-- Contenuto a destra -->
+              <div class="price-card-info-section">
+                <div class="price-card-brand price-card-brand-desktop">
+                  <div class="price-card-acronym">
+                    <span class="price-card-line">tpl</span>
+                    <span class="price-card-line">fvg</span>
+                  </div>
+                  <div class="price-card-text">
+                    <span class="price-card-text-line">trasporto</span>
+                    <span class="price-card-text-line">pubblico</span>
+                    <span class="price-card-text-line">locale</span>
+                  </div>
+                </div>
 
-            <div class="price-info">
-              <div class="price-section">
-                <div class="price-label">Codice</div>
-                <div class="code-value" id="codice-value">-</div>
-              </div>
+                <div class="price-card-details">
+                  <div class="price-route-info">
+                    <div class="price-route-item">
+                      <div class="price-route-label">Partenza</div>
+                      <div class="price-route-value" id="price-partenza">-</div>
+                    </div>
+                    <div class="price-route-arrow">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        width="20"
+                        height="20"
+                      >
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                      </svg>
+                    </div>
+                    <div class="price-route-item">
+                      <div class="price-route-label">Destinazione</div>
+                      <div class="price-route-value" id="price-destinazione">
+                        -
+                      </div>
+                    </div>
+                  </div>
 
-              <div class="price-section">
-                <div class="price-label">Prezzo</div>
-                <div class="price-value" id="prezzo-value">-</div>
+                  <div class="price-info">
+                    <div class="price-section">
+                      <div class="price-label">Codice</div>
+                      <div class="code-value" id="codice-value">-</div>
+                    </div>
+                    <div class="price-section">
+                      <div class="price-label">Prezzo</div>
+                      <div class="price-value" id="prezzo-value">-</div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
-          <button class="reset-button" onclick="resetRoute()">
-            ↺ Cambia percorso
-          </button>
-          <button
-            class="reset-button"
-            onclick="resetAll()"
-            style="margin-top: 0.5rem"
-          >
-            ⟲ Riparti da capo
-          </button>
+          <div class="ticket-actions" aria-label="Azioni percorso">
+            <button
+              type="button"
+              class="ticket-action-button ticket-action-button--swap"
+              onclick="swapRoute()"
+              id="swap-btn"
+              title="Inverti partenza e destinazione"
+              aria-label="Inverti partenza e destinazione"
+              disabled
+            >
+              <span class="ticket-action-icon">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  width="20"
+                  height="20"
+                  aria-hidden="true"
+                >
+                  <path d="M3 8h13l-3-3"></path>
+                  <path d="M21 16H8l3 3"></path>
+                  <polyline points="7 12 3 8 7 4"></polyline>
+                  <polyline points="17 12 21 16 17 20"></polyline>
+                </svg>
+              </span>
+              <span class="ticket-action-label">Inverti fermate</span>
+            </button>
+            <button
+              type="button"
+              class="ticket-action-button ticket-action-button--edit"
+              onclick="goToStep(2)"
+              title="Modifica partenza o destinazione"
+              aria-label="Torna allo step 2 per modificare le fermate"
+            >
+              <span class="ticket-action-icon">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  width="18"
+                  height="18"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z"
+                  ></path>
+                  <path d="M14.06 4.94l3.75 3.75"></path>
+                </svg>
+              </span>
+              <span class="ticket-action-label">Modifica percorso</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -3044,18 +823,22 @@
       aria-modal="true"
       aria-labelledby="fermate-modal-title"
     >
-      <div class="fermate-modal-handle"></div>
       <div class="fermate-modal-header">
-        <h2 class="fermate-modal-title" id="fermate-modal-title">
-          Seleziona fermata
-        </h2>
-        <button
-          class="fermate-modal-close"
-          onclick="closeFermateModal()"
-          aria-label="Chiudi"
-        >
-          ×
-        </button>
+        <div class="fermate-modal-handle"></div>
+        <div class="fermate-modal-header-row">
+          <h2 class="fermate-modal-title" id="fermate-modal-title">
+            Seleziona
+          </h2>
+          <div class="fermate-modal-header-actions">
+            <button
+              class="fermate-modal-close"
+              onclick="closeFermateModal()"
+              aria-label="Chiudi"
+            >
+              ×
+            </button>
+          </div>
+        </div>
       </div>
       <div class="fermate-modal-content" id="fermate-modal-content">
         <!-- Popolato dinamicamente -->
@@ -3157,13 +940,21 @@
 
       // Modal Selezione Fermate
       function openFermateModal(type) {
+        // Previeni doppi click
+        if (currentModalType === type) {
+          return;
+        }
+
         currentModalType = type;
         const modal = document.getElementById("fermate-modal");
         const overlay = document.getElementById("fermate-modal-overlay");
         const title = document.getElementById("fermate-modal-title");
         const content = document.getElementById("fermate-modal-content");
 
-        if (!modal || !overlay || !content) return;
+        if (!modal || !overlay || !content) {
+          console.error("Elementi modale non trovati");
+          return;
+        }
 
         const fermate = [
           "Udine",
@@ -3181,8 +972,24 @@
         // Pulisci contenuto
         content.innerHTML = "";
 
+        // Aggiungi pulsante rilevamento posizione
+        const geolocationButton = document.createElement("button");
+        geolocationButton.className = "fermate-modal-geolocation-large";
+        geolocationButton.id = "fermate-modal-geolocation-btn";
+        geolocationButton.setAttribute("aria-label", "Rileva distanze");
+        geolocationButton.setAttribute("title", "Rileva distanze");
+        geolocationButton.onclick = detectDistances;
+        geolocationButton.innerHTML = `
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="24" height="24" aria-hidden="true">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+          <span>Rileva distanze</span>
+        `;
+        content.appendChild(geolocationButton);
+
         // Aggiungi items
-        fermate.forEach((fermata) => {
+        fermate.forEach((fermata, index) => {
           const item = document.createElement("div");
           item.className = "fermate-modal-item";
           item.setAttribute("role", "button");
@@ -3198,7 +1005,6 @@
           }
 
           item.innerHTML = `
-            <div class="fermate-modal-item-icon">🚌</div>
             <span class="fermate-modal-item-name">${fermata}</span>
             <span class="fermate-modal-item-check">✓</span>
           `;
@@ -3219,6 +1025,11 @@
         modal.classList.add("active");
         document.body.style.overflow = "hidden";
 
+        // Inizializza drag per mobile/PWA
+        setTimeout(() => {
+          initModalDrag();
+        }, 100);
+
         // Focus sul primo elemento
         setTimeout(() => {
           const firstItem = content.querySelector(".fermate-modal-item");
@@ -3231,12 +1042,130 @@
         const overlay = document.getElementById("fermate-modal-overlay");
 
         if (modal && overlay) {
+          // Rimuovi le classi active per avviare l'animazione di chiusura
           modal.classList.remove("active");
           overlay.classList.remove("active");
-          document.body.style.overflow = "";
-          currentModalType = null;
+
+          // Ripristina overflow dopo l'animazione
+          setTimeout(() => {
+            document.body.style.overflow = "";
+            currentModalType = null;
+          }, 300); // Tempo dell'animazione CSS
         }
       }
+
+      // Drag/Swipe per chiudere il bottom sheet (solo mobile/PWA)
+      let dragStartY = 0;
+      let dragCurrentY = 0;
+      let isDragging = false;
+      let modalInitialTransform = 0;
+
+      function initModalDrag() {
+        const modal = document.getElementById("fermate-modal");
+        if (!modal) return;
+
+        // Solo su mobile/PWA (non desktop/tablet)
+        const isMobile =
+          window.innerWidth < 768 ||
+          (window.matchMedia &&
+            window.matchMedia("(display-mode: standalone)").matches);
+
+        if (!isMobile) return;
+
+        modal.addEventListener("touchstart", handleTouchStart, {
+          passive: true,
+        });
+        modal.addEventListener("touchmove", handleTouchMove, {
+          passive: false,
+        });
+        modal.addEventListener("touchend", handleTouchEnd, { passive: true });
+      }
+
+      function handleTouchStart(e) {
+        const modal = document.getElementById("fermate-modal");
+        if (!modal || !modal.classList.contains("active")) return;
+
+        dragStartY = e.touches[0].clientY;
+        isDragging = false;
+        modalInitialTransform = 0;
+        modal.style.transition = "none";
+      }
+
+      function handleTouchMove(e) {
+        const modal = document.getElementById("fermate-modal");
+        if (!modal || !modal.classList.contains("active")) return;
+
+        dragCurrentY = e.touches[0].clientY;
+        const deltaY = dragCurrentY - dragStartY;
+
+        // Solo permettere drag verso il basso
+        if (deltaY > 0) {
+          isDragging = true;
+          e.preventDefault();
+
+          // Applica la trasformazione in tempo reale
+          const translateY = Math.max(0, deltaY);
+          modal.style.transform = `translateY(${translateY}px)`;
+
+          // Opacità dell'overlay basata sulla distanza
+          const overlay = document.getElementById("fermate-modal-overlay");
+          if (overlay) {
+            const opacity = Math.max(0, 1 - deltaY / 300);
+            overlay.style.opacity = opacity;
+          }
+        }
+      }
+
+      function handleTouchEnd(e) {
+        const modal = document.getElementById("fermate-modal");
+        if (!modal || !modal.classList.contains("active")) return;
+
+        modal.style.transition = "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)";
+
+        const deltaY = dragCurrentY - dragStartY;
+        const threshold = 100; // Soglia per chiudere (px)
+
+        if (isDragging && deltaY > threshold) {
+          // Chiudi il modale
+          closeFermateModal();
+        } else {
+          // Ripristina la posizione
+          modal.style.transform = "";
+          const overlay = document.getElementById("fermate-modal-overlay");
+          if (overlay) {
+            overlay.style.opacity = "";
+          }
+        }
+
+        isDragging = false;
+        dragStartY = 0;
+        dragCurrentY = 0;
+      }
+
+      // Chiudi modale quando si clicca sull'overlay
+      document.addEventListener("DOMContentLoaded", () => {
+        const overlay = document.getElementById("fermate-modal-overlay");
+        const modal = document.getElementById("fermate-modal");
+
+        if (overlay && modal) {
+          overlay.addEventListener("click", (e) => {
+            // Chiudi solo se si clicca direttamente sull'overlay, non sul modale
+            if (e.target === overlay) {
+              closeFermateModal();
+            }
+          });
+
+          // Inizializza drag al caricamento
+          initModalDrag();
+
+          // Chiudi modale con ESC
+          document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape" && modal.classList.contains("active")) {
+              closeFermateModal();
+            }
+          });
+        }
+      });
 
       function selectFermata(fermata) {
         if (!currentModalType) return;
@@ -3268,9 +1197,13 @@
           );
           if (partenzaBtn) {
             partenzaBtn.classList.add("selected");
+            partenzaBtn.classList.add("has-selection");
             setTimeout(() => partenzaBtn.classList.remove("selected"), 600);
           }
-          document.getElementById("partenza-text").textContent = fermata;
+          const partenzaText = document.getElementById("partenza-text");
+          if (partenzaText) {
+            partenzaText.textContent = fermata;
+          }
           showToast(`Partenza impostata: ${fermata}`, "success");
         } else {
           selectedDestinazione = fermata;
@@ -3279,34 +1212,32 @@
           );
           if (destinazioneBtn) {
             destinazioneBtn.classList.add("selected");
+            destinazioneBtn.classList.add("has-selection");
             setTimeout(() => destinazioneBtn.classList.remove("selected"), 600);
           }
-          document.getElementById("destinazione-text").textContent = fermata;
+          const destinazioneText = document.getElementById("destinazione-text");
+          if (destinazioneText) {
+            destinazioneText.textContent = fermata;
+          }
           showToast(`Destinazione impostata: ${fermata}`, "success");
         }
 
         // Aggiorna stato pulsanti
         updateButtonStates();
+        updateSelectedInfoSummary();
 
-        // Se entrambe selezionate, vai allo step 3
-        if (selectedPartenza && selectedDestinazione) {
-          document.getElementById("price-partenza").textContent =
-            selectedPartenza;
-          document.getElementById("price-destinazione").textContent =
-            selectedDestinazione;
-          calculatePrice();
+        updateRouteReadyBanner();
 
+        // Chiudi modal dopo un breve delay per mostrare l'animazione
+        setTimeout(() => {
           closeFermateModal();
+        }, 200);
 
-          setTimeout(() => {
-            goToStep(3);
-            showToast("Percorso completato!", "success");
-          }, 300);
-        } else {
-          // Chiudi modal dopo un breve delay per mostrare l'animazione
-          setTimeout(() => {
-            closeFermateModal();
-          }, 200);
+        if (selectedPartenza && selectedDestinazione) {
+          showToast(
+            "Percorso pronto! Puoi invertire o andare allo step 3.",
+            "success"
+          );
         }
       }
 
@@ -3423,9 +1354,60 @@
 
       function updateStepIndicator(step) {
         updateStepNav(step);
+        updateSelectedLineaIndicator();
+      }
+
+      function updateSelectedLineaIndicator() {
+        // Indicatore nel tab
+        const tabIndicator = document.getElementById(
+          "selected-linea-tab-indicator"
+        );
+
+        if (selectedLinea && tabIndicator) {
+          // Estrai solo la parte dopo "Linea XXX " (es. "Udine-Grado" da "Linea 400 Udine-Grado")
+          const nome = selectedLinea.nome;
+          const match = nome.match(/Linea \d+\s+(.+)/);
+          const displayText = match ? match[1] : nome;
+          tabIndicator.textContent = displayText;
+          tabIndicator.style.display = "block";
+        } else if (tabIndicator) {
+          tabIndicator.textContent = "";
+          tabIndicator.style.display = "none";
+        }
+
+        // Aggiorna anche il riepilogo
+        updateSelectedInfoSummary();
+      }
+
+      function updateSelectedInfoSummary() {
+        // Indicatori nel tab laterale
+        const partenzaTabIndicator = document.getElementById(
+          "selected-partenza-tab-indicator"
+        );
+        const destinazioneTabIndicator = document.getElementById(
+          "selected-destinazione-tab-indicator"
+        );
+
+        // Aggiorna indicatori nel tab
+        if (selectedPartenza && partenzaTabIndicator) {
+          partenzaTabIndicator.textContent = selectedPartenza;
+          partenzaTabIndicator.style.display = "block";
+        } else if (partenzaTabIndicator) {
+          partenzaTabIndicator.textContent = "";
+          partenzaTabIndicator.style.display = "none";
+        }
+
+        if (selectedDestinazione && destinazioneTabIndicator) {
+          destinazioneTabIndicator.textContent = selectedDestinazione;
+          destinazioneTabIndicator.style.display = "block";
+        } else if (destinazioneTabIndicator) {
+          destinazioneTabIndicator.textContent = "";
+          destinazioneTabIndicator.style.display = "none";
+        }
       }
 
       function updateStepNav(step) {
+        // Aggiorna pulsanti mobile (progress bar)
         const buttons = document.querySelectorAll(".step-nav-button");
         buttons.forEach((btn) => {
           const target = Number(btn.dataset.stepTarget);
@@ -3445,6 +1427,31 @@
             }
           }
         });
+
+        // Aggiorna tab desktop
+        const desktopTabs = document.querySelectorAll(".desktop-tab");
+        desktopTabs.forEach((tab) => {
+          const target = Number(tab.dataset.stepTarget);
+          if (target === step) {
+            tab.classList.add("active");
+            tab.setAttribute("aria-current", "step");
+          } else {
+            tab.classList.remove("active");
+            tab.removeAttribute("aria-current");
+          }
+        });
+
+        // Mostra/nascondi pulsanti azione in base allo step (solo da step 2 in poi)
+        const desktopTabsActions = document.querySelector(
+          ".desktop-tabs-actions"
+        );
+        if (desktopTabsActions) {
+          if (step >= 2) {
+            desktopTabsActions.classList.add("show");
+          } else {
+            desktopTabsActions.classList.remove("show");
+          }
+        }
       }
 
       // Aggiorna stati dei pulsanti (disabled/enabled)
@@ -3463,6 +1470,32 @@
               "aria-label",
               "Seleziona partenza e destinazione per invertire"
             );
+          }
+        }
+
+        updateRouteReadyBanner();
+      }
+
+      function updateRouteReadyBanner() {
+        const banner = document.getElementById("route-ready-banner");
+        const summary = document.getElementById("route-ready-summary");
+        const continueBtn = document.getElementById("route-ready-continue");
+        const isReady = Boolean(selectedPartenza && selectedDestinazione);
+
+        if (!banner) return;
+
+        if (isReady && currentStep === 2) {
+          banner.classList.add("active");
+          if (summary) {
+            summary.textContent = `${selectedPartenza} → ${selectedDestinazione}`;
+          }
+          if (continueBtn) {
+            continueBtn.disabled = false;
+          }
+        } else {
+          banner.classList.remove("active");
+          if (continueBtn) {
+            continueBtn.disabled = true;
           }
         }
       }
@@ -3498,6 +1531,10 @@
         // Aggiorna indicator
         updateStepIndicator(step);
 
+        // Aggiorna navigazione step (include visibilità pulsanti)
+        updateStepNav(step);
+        updateRouteReadyBanner();
+
         // Animazione
         newStep.style.animation = "none";
         setTimeout(() => {
@@ -3510,6 +1547,11 @@
         selectedLinea = { id, nome };
         console.log("Linea selezionata:", nome);
         showToast(`Linea selezionata: ${nome}`, "success");
+
+        // Aggiorna indicatore linea selezionata
+        updateSelectedLineaIndicator();
+        // Aggiorna riepilogo selezioni
+        updateSelectedInfoSummary();
 
         // Simula animazione del pulsante
         const button = event ? event.currentTarget : event.target;
@@ -3524,6 +1566,132 @@
           goToStep(2);
           updateButtonStates();
         }
+      }
+
+      function detectDistances() {
+        const btn = document.getElementById("fermate-modal-geolocation-btn");
+        if (!btn) return;
+
+        // Aggiungi la classe loading PRIMA di disabilitare per evitare il flash
+        btn.classList.add("loading");
+        // Usa requestAnimationFrame per assicurare che l'animazione parta subito
+        requestAnimationFrame(() => {
+          btn.disabled = true;
+        });
+
+        if (!navigator.geolocation) {
+          showToast(
+            "La geolocalizzazione non è supportata dal tuo browser.",
+            "error"
+          );
+          btn.disabled = false;
+          btn.classList.remove("loading");
+          return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+
+            // Coordinate delle fermate (simulate)
+            const fermate = [
+              { nome: "Udine", lat: 46.07, lng: 13.24 },
+              { nome: "Palmanova", lat: 45.906, lng: 13.31 },
+              { nome: "Cervignano FS", lat: 45.82, lng: 13.33 },
+              { nome: "Grado", lat: 45.68, lng: 13.4 },
+              { nome: "Aquileia", lat: 45.77, lng: 13.37 },
+              { nome: "Monfalcone", lat: 45.8, lng: 13.53 },
+            ];
+
+            // Calcola distanze e aggiorna gli item nel modale
+            const items = document.querySelectorAll(".fermate-modal-item");
+            items.forEach((item) => {
+              const itemName = item.querySelector(
+                ".fermate-modal-item-name"
+              )?.textContent;
+              const fermata = fermate.find((f) => f.nome === itemName);
+
+              if (fermata) {
+                // Formula Haversine semplificata per calcolare distanza in km
+                const R = 6371; // Raggio della Terra in km
+                const dLat = ((fermata.lat - lat) * Math.PI) / 180;
+                const dLng = ((fermata.lng - lng) * Math.PI) / 180;
+                const a =
+                  Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                  Math.cos((lat * Math.PI) / 180) *
+                    Math.cos((fermata.lat * Math.PI) / 180) *
+                    Math.sin(dLng / 2) *
+                    Math.sin(dLng / 2);
+                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                const distance = R * c;
+
+                // Aggiungi o aggiorna l'indicatore di distanza
+                let distanceBadge = item.querySelector(
+                  ".fermate-modal-item-distance"
+                );
+                if (!distanceBadge) {
+                  distanceBadge = document.createElement("span");
+                  distanceBadge.className = "fermate-modal-item-distance";
+                  item.appendChild(distanceBadge);
+                }
+
+                if (distance < 1) {
+                  distanceBadge.textContent = `${Math.round(distance * 1000)}m`;
+                } else {
+                  distanceBadge.textContent = `${distance.toFixed(1)}km`;
+                }
+
+                // Ordina gli item per distanza (più vicini prima)
+                item.dataset.distance = distance;
+              }
+            });
+
+            // Riordina gli item per distanza (preservando il pulsante geolocation)
+            const content = document.getElementById("fermate-modal-content");
+            if (content) {
+              const geolocationBtn = document.getElementById(
+                "fermate-modal-geolocation-btn"
+              );
+              const sortedItems = Array.from(items).sort((a, b) => {
+                const distA = parseFloat(a.dataset.distance) || Infinity;
+                const distB = parseFloat(b.dataset.distance) || Infinity;
+                return distA - distB;
+              });
+
+              // Rimuovi temporaneamente il pulsante se presente
+              if (geolocationBtn && geolocationBtn.parentNode === content) {
+                content.removeChild(geolocationBtn);
+              }
+
+              // Riordina gli item
+              sortedItems.forEach((item) => content.appendChild(item));
+
+              // Reinserisci il pulsante all'inizio
+              if (geolocationBtn) {
+                content.insertBefore(geolocationBtn, content.firstChild);
+              }
+            }
+
+            showToast("Distanze rilevate", "success");
+            btn.disabled = false;
+            btn.classList.remove("loading");
+          },
+          (error) => {
+            console.error("Errore geolocalizzazione:", error);
+            let errorMessage = "Impossibile ottenere la tua posizione.";
+            if (error.code === error.PERMISSION_DENIED) {
+              errorMessage = "Permesso di geolocalizzazione negato.";
+            } else if (error.code === error.POSITION_UNAVAILABLE) {
+              errorMessage = "Posizione non disponibile.";
+            } else if (error.code === error.TIMEOUT) {
+              errorMessage = "Timeout nella richiesta di posizione.";
+            }
+            showToast(errorMessage, "error");
+            btn.disabled = false;
+            btn.classList.remove("loading");
+          }
+        );
       }
 
       function useMyLocation() {
@@ -3676,6 +1844,23 @@
         }
       }
 
+      function proceedToTicketStep() {
+        if (!(selectedPartenza && selectedDestinazione)) {
+          showToast("Prima seleziona partenza e destinazione", "info");
+          return;
+        }
+
+        document.getElementById("price-partenza").textContent =
+          selectedPartenza;
+        document.getElementById("price-destinazione").textContent =
+          selectedDestinazione;
+
+        calculatePrice();
+        showToast("Percorso completato!", "success");
+        goToStep(3);
+        updateRouteReadyBanner();
+      }
+
       function swapRoute() {
         // Inverte partenza e destinazione solo se entrambe sono selezionate
         if (!selectedPartenza || !selectedDestinazione) {
@@ -3714,6 +1899,8 @@
 
         showToast("Percorso invertito", "success");
         updateButtonStates();
+        updateSelectedInfoSummary();
+        updateRouteReadyBanner();
         console.log("Percorso invertito:", {
           partenza: selectedPartenza,
           destinazione: selectedDestinazione,
@@ -3729,12 +1916,24 @@
 
           const partenzaText = document.getElementById("partenza-text");
           const destinazioneText = document.getElementById("destinazione-text");
+          const partenzaBtn = document.querySelector(
+            "[onclick*=\"openFermateModal('partenza')\"]"
+          );
+          const destinazioneBtn = document.querySelector(
+            "[onclick*=\"openFermateModal('destinazione')\"]"
+          );
 
           if (partenzaText) {
             partenzaText.textContent = "Seleziona partenza";
           }
           if (destinazioneText) {
             destinazioneText.textContent = "Seleziona destinazione";
+          }
+          if (partenzaBtn) {
+            partenzaBtn.classList.remove("has-selection");
+          }
+          if (destinazioneBtn) {
+            destinazioneBtn.classList.remove("has-selection");
           }
 
           // Reset valori nella card prezzo
@@ -3761,6 +1960,7 @@
 
       function resetAll() {
         selectedLinea = null;
+        updateSelectedLineaIndicator();
         selectedPartenza = null;
         selectedDestinazione = null;
         resetRoute();
@@ -3787,30 +1987,71 @@
         if (isOpen) {
           // Chiudi menu - animazione verso il basso
           menu.classList.remove("active");
+          menu.classList.add("closing");
           setTimeout(() => {
+            menu.classList.remove("closing");
             overlay.classList.remove("active");
-          }, 200);
-          if (hamburger) hamburger.classList.remove("active");
+          }, 250);
+          if (hamburger) {
+            hamburger.classList.remove("active");
+            hamburger.blur(); // Rimuovi il focus per evitare cambi di colore
+          }
         } else {
           // Apri menu - animazione dal basso
           overlay.classList.add("active");
           // Piccolo delay per permettere al overlay di apparire prima
           setTimeout(() => {
             menu.classList.add("active");
+            menu.classList.remove("closing");
           }, 10);
-          if (hamburger) hamburger.classList.add("active");
+          if (hamburger) {
+            hamburger.classList.add("active");
+            // Rimuovi il focus dopo un breve delay per evitare cambi di colore
+            setTimeout(() => {
+              hamburger.blur();
+            }, 100);
+          }
         }
       }
 
-      // Chiudi menu quando si clicca sull'overlay
+      // Previeni la chiusura quando si clicca sul menu stesso
+      const menu = document.getElementById("mobile-menu");
+      if (menu) {
+        menu.addEventListener("click", (e) => {
+          e.stopPropagation();
+        });
+      }
+
+      // Chiudi menu quando si clicca sull'overlay o fuori
       const overlay = document.getElementById("mobile-menu-overlay");
       if (overlay) {
         overlay.addEventListener("click", (e) => {
-          if (e.target.id === "mobile-menu-overlay") {
+          // Chiudi solo se si clicca direttamente sull'overlay (non su elementi figli)
+          if (e.target === overlay) {
             toggleMobileMenu();
           }
         });
       }
+
+      // Chiudi menu quando si clicca fuori dal menu e dal pulsante hamburger
+      document.addEventListener("click", (e) => {
+        const menu = document.getElementById("mobile-menu");
+        const hamburger = document.getElementById("hamburger-toggle");
+
+        // Se il menu è aperto e il click non è sul menu o sul pulsante hamburger
+        if (
+          menu &&
+          menu.classList.contains("active") &&
+          !menu.contains(e.target) &&
+          hamburger &&
+          !hamburger.contains(e.target)
+        ) {
+          // Se non è un click sull'overlay (che ha già il suo handler)
+          if (overlay && e.target !== overlay) {
+            toggleMobileMenu();
+          }
+        }
+      });
 
       // Chiudi menu mobile quando si clicca su un link
       document.querySelectorAll(".mobile-nav-link").forEach((link) => {

@@ -1,6 +1,6 @@
 {
-  "version": "1.8.8",
-  "versionDate": "20 Novembre 2025",
-  "versionTime": "16:00",
-  "updateNotes": "Controlli mappa avanzati (dimensioni, centra, posizione, fermate); geolocalizzazione migliorata con reverse geocoding e calcolo distanze reali OSRM; prototipi iOS 26 (home, fermate, welcome); miglioramenti UI/UX menu mobile e modali; ottimizzazioni performance e accessibilità."
+  "version": "1.8.9",
+  "versionDate": "26 Novembre 2025",
+  "versionTime": "11:00",
+  "updateNotes": "Allineamento card/tabs pagina fermate e home; pulsanti linea uniformati; nuova struttura CSS condivisa (presets/components); nuove icone e prototipi; ripristino layout mappa/fermate con animazioni migliorate."
 }
