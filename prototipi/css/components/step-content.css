@@ -3,7 +3,8 @@
    Gestione contenuti step e tipografia
    ======================================== */
 
-.step-content {
+/* Regola specifica solo per step-content dentro main-card (pagine home/fermate) */
+.main-card .step-content {
   display: none !important;
   animation: fadeInUp 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   opacity: 0;
@@ -12,13 +13,13 @@
   padding-top: 0;
 }
 
-.step-content.active {
+.main-card .step-content.active {
   display: block !important;
   opacity: 1;
   transform: translateY(0);
 }
 
-.step-content[data-step="1"] {
+.main-card .step-content[data-step="1"] {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -26,11 +27,11 @@
   text-align: center;
 }
 
-.step-content[data-step="2"] .step-title {
+.main-card .step-content[data-step="2"] .step-title {
   margin-top: 0;
 }
 
-.step-content[data-step="3"] .step-title {
+.main-card .step-content[data-step="3"] .step-title {
   margin-top: 0;
 }
 

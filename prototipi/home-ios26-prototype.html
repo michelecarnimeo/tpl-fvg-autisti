@@ -13,6 +13,7 @@
     <!-- Per mobile: css/presets/mobile.css -->
     <!-- Per PWA: css/presets/pwa.css -->
     <link rel="stylesheet" href="css/presets/desktop.css" />
+    <link rel="stylesheet" href="css/pages/home-page.css" />
   </head>
   <body>
     <!-- Navbar -->
@@ -318,7 +319,9 @@
 
           <button
             class="selection-button"
-            onclick="selectLinea('400', 'Linea 400 Udine-Grado', event)"
+            id="line-400-button"
+            data-linea-id="400"
+            data-linea-nome="Linea 400 Udine-Grado"
           >
             <div class="line-icon-badge">
               <svg
@@ -1544,6 +1547,12 @@
       }
 
       function selectLinea(id, nome, event) {
+        // Preveni il default e ferma la propagazione
+        if (event) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+
         selectedLinea = { id, nome };
         console.log("Linea selezionata:", nome);
         showToast(`Linea selezionata: ${nome}`, "success");
@@ -1553,8 +1562,16 @@
         // Aggiorna riepilogo selezioni
         updateSelectedInfoSummary();
 
-        // Simula animazione del pulsante
-        const button = event ? event.currentTarget : event.target;
+        // Trova il pulsante - cerca il button anche se l'evento proviene da un elemento interno
+        let button = null;
+        if (event) {
+          button = event.currentTarget || event.target;
+          // Se l'elemento cliccato non è il button, cerca il button padre
+          if (button && !button.classList.contains("selection-button")) {
+            button = button.closest(".selection-button");
+          }
+        }
+
         if (button) {
           button.style.transform = "scale(0.95)";
           setTimeout(() => {
@@ -2194,6 +2211,187 @@
           }, 3000);
         }
       })();
+    </script>
+
+    <script>
+      // Aggiunge la classe per triggerare le animazioni dei desktop-tab
+      (function () {
+        function triggerAnimations() {
+          const desktopStepTabs = document.querySelector(".desktop-step-tabs");
+          const mainCard = document.querySelector(".main-card");
+
+          if (desktopStepTabs) {
+            desktopStepTabs.classList.add("animate-tabs");
+          } else if (mainCard) {
+            mainCard.classList.add("animate-tabs");
+          }
+        }
+
+        // Prova quando il DOM è pronto
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", function () {
+            setTimeout(triggerAnimations, 100);
+          });
+        } else {
+          setTimeout(triggerAnimations, 100);
+        }
+      })();
+    </script>
+
+    <script>
+      // Fix per i pulsanti di selezione linea - assicura che siano completamente cliccabili
+      document.addEventListener("DOMContentLoaded", function () {
+        // Fix specifico per il primo pulsante (Linea 400) - approccio semplice
+        const firstButton = document.getElementById("line-400-button");
+        if (firstButton) {
+          // Rimuovi qualsiasi onclick esistente
+          firstButton.removeAttribute("onclick");
+
+          // Gestisci i click su QUALSIASI elemento del pulsante usando event delegation
+          // Aggiungi il listener sul pulsante stesso e lascia che catturi tutti i click interni
+          function handleClick(event) {
+            // Se il click è sul pulsante o su qualsiasi suo elemento figlio, procedi
+            if (
+              firstButton.contains(event.target) ||
+              event.target === firstButton
+            ) {
+              event.preventDefault();
+              event.stopPropagation();
+
+              if (typeof selectLinea === "function") {
+                const id = firstButton.getAttribute("data-linea-id") || "400";
+                const nome =
+                  firstButton.getAttribute("data-linea-nome") ||
+                  "Linea 400 Udine-Grado";
+                selectLinea(id, nome, event);
+              }
+            }
+          }
+
+          // Aggiungi listener sia in capture che in bubble phase per massima copertura
+          firstButton.addEventListener("click", handleClick, true); // Capture
+          firstButton.addEventListener("click", handleClick, false); // Bubble
+
+          // Aggiungi anche un listener sul document come fallback per catturare click nella parte superiore
+          document.addEventListener(
+            "click",
+            function (event) {
+              const clickedElement = event.target;
+              const rect = firstButton.getBoundingClientRect();
+              const clickX = event.clientX;
+              const clickY = event.clientY;
+
+              // Se il click è sul pulsante o sui suoi figli
+              if (
+                firstButton.contains(clickedElement) ||
+                clickedElement === firstButton
+              ) {
+                event.preventDefault();
+                event.stopPropagation();
+
+                if (typeof selectLinea === "function") {
+                  const id = firstButton.getAttribute("data-linea-id") || "400";
+                  const nome =
+                    firstButton.getAttribute("data-linea-nome") ||
+                    "Linea 400 Udine-Grado";
+                  selectLinea(id, nome, event);
+                }
+              }
+              // Se il click è sopra il pulsante (nell'area estesa della parte superiore)
+              else if (
+                clickX >= rect.left &&
+                clickX <= rect.right &&
+                clickY < rect.top &&
+                clickY > rect.top - 16
+              ) {
+                event.preventDefault();
+                event.stopPropagation();
+
+                if (typeof selectLinea === "function") {
+                  const id = firstButton.getAttribute("data-linea-id") || "400";
+                  const nome =
+                    firstButton.getAttribute("data-linea-nome") ||
+                    "Linea 400 Udine-Grado";
+                  selectLinea(id, nome, event);
+                }
+              }
+            },
+            true
+          ); // Capture phase
+
+          console.log(
+            "✅ Primo pulsante configurato con handler completo incluso area superiore"
+          );
+        }
+
+        // Trova tutti gli altri pulsanti di selezione linea
+        const selectionButtons = document.querySelectorAll(
+          '.step-content[data-step="1"] .selection-button:not(#line-400-button)'
+        );
+
+        selectionButtons.forEach(function (button, index) {
+          // Estrai i parametri dall'onclick o dagli attributi data
+          let id, nome;
+          const onclickAttr = button.getAttribute("onclick");
+          const dataId = button.getAttribute("data-linea-id");
+          const dataNome = button.getAttribute("data-linea-nome");
+
+          if (onclickAttr) {
+            const match = onclickAttr.match(
+              /selectLinea\(['"]([^'"]+)['"]\s*,\s*['"]([^'"]+)['"]\s*,\s*event\)/
+            );
+            if (match) {
+              id = match[1];
+              nome = match[2];
+            }
+          }
+
+          // Usa i dati dagli attributi data se disponibili
+          if (dataId) id = dataId;
+          if (dataNome) nome = dataNome;
+
+          // Se non abbiamo ancora id/nome, prova a estrarli dal contenuto
+          if (!id || !nome) {
+            const lineNameElement = button.querySelector(".line-name");
+            const lineNumberElement = button.querySelector(".line-number");
+            if (lineNumberElement) {
+              id = lineNumberElement.textContent.trim();
+            }
+            if (lineNameElement) {
+              nome = "Linea " + id + " " + lineNameElement.textContent.trim();
+            }
+          }
+
+          // Rimuovi l'onclick originale e sostituiscilo con un handler più robusto
+          if (onclickAttr) {
+            button.removeAttribute("onclick");
+          }
+
+          // Aggiungi un nuovo event listener che gestisce TUTTI i click
+          button.addEventListener(
+            "click",
+            function (event) {
+              // Previeni qualsiasi comportamento di default
+              event.preventDefault();
+              event.stopPropagation();
+
+              // Crea un evento sintetico
+              const syntheticEvent = {
+                currentTarget: button,
+                target: button,
+                preventDefault: function () {},
+                stopPropagation: function () {},
+              };
+
+              // Chiama la funzione selectLinea
+              if (typeof selectLinea === "function" && id && nome) {
+                selectLinea(id, nome, syntheticEvent);
+              }
+            },
+            true
+          ); // Capture phase per intercettare prima
+        });
+      });
     </script>
   </body>
 </html>

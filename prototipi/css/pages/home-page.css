@@ -1,0 +1,201 @@
+/* ========================================
+   HOME PAGE - Specific Styles
+   Prototipo iOS 26
+   ======================================== */
+
+/* Stile tab desktop - allineato alla pagina fermate */
+@media (min-width: 1024px) {
+  .main-card .desktop-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -0.875rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 2px;
+    background: rgba(0, 122, 255, 0.7);
+    border-radius: 1px;
+    box-shadow: 0 2px 8px rgba(0, 122, 255, 0.3);
+    z-index: 10;
+  }
+
+  /* Animazioni solo quando la classe .animate-tabs è presente - allineato alla pagina fermate */
+  html body .main-card .desktop-step-tabs.animate-tabs .desktop-tab,
+  html body .main-card.animate-tabs .desktop-step-tabs .desktop-tab,
+  body .main-card .desktop-step-tabs.animate-tabs .desktop-tab,
+  body .main-card.animate-tabs .desktop-step-tabs .desktop-tab {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  /* Animazione delay progressivo per le tabs - solo quando animate-tabs è presente */
+  html body .main-card .desktop-step-tabs.animate-tabs .desktop-tab:nth-child(1),
+  html body .main-card.animate-tabs .desktop-step-tabs .desktop-tab:nth-child(1),
+  body .main-card .desktop-step-tabs.animate-tabs .desktop-tab:nth-child(1),
+  body .main-card.animate-tabs .desktop-step-tabs .desktop-tab:nth-child(1) {
+    animation-delay: 0.2s;
+  }
+
+  html body .main-card .desktop-step-tabs.animate-tabs .desktop-tab:nth-child(2),
+  html body .main-card.animate-tabs .desktop-step-tabs .desktop-tab:nth-child(2),
+  body .main-card .desktop-step-tabs.animate-tabs .desktop-tab:nth-child(2),
+  body .main-card.animate-tabs .desktop-step-tabs .desktop-tab:nth-child(2) {
+    animation-delay: 0.35s;
+  }
+
+  html body .main-card .desktop-step-tabs.animate-tabs .desktop-tab:nth-child(3),
+  html body .main-card.animate-tabs .desktop-step-tabs .desktop-tab:nth-child(3),
+  body .main-card .desktop-step-tabs.animate-tabs .desktop-tab:nth-child(3),
+  body .main-card.animate-tabs .desktop-step-tabs .desktop-tab:nth-child(3) {
+    animation-delay: 0.5s;
+  }
+
+  /* Transizione per gli effetti hover */
+  html body .main-card .desktop-tab,
+  body .main-card .desktop-tab,
+  .main-card .desktop-tab {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Transizione per gli effetti hover - più fluida per il movimento */
+  html body .main-card .desktop-tab,
+  body .main-card .desktop-tab,
+  .main-card .desktop-tab {
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+  }
+
+  /* Hover effect - movimento più evidente e fluido */
+  html body .main-card .desktop-tab:hover,
+  body .main-card .desktop-tab:hover,
+  .main-card .desktop-tab:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.8);
+    transform: translateY(-3px) scale(1.02);
+  }
+
+  body.light html body .main-card .desktop-tab:hover,
+  body.light .main-card .desktop-tab:hover {
+    background: rgba(0, 0, 0, 0.04);
+    color: rgba(0, 0, 0, 0.8);
+  }
+}
+
+/* Fix per i pulsanti di selezione linea - assicura che siano completamente cliccabili */
+@media (min-width: 1024px) {
+  /* Assicura che il main-card e i suoi pseudo-elementi non blocchino i click */
+  html body .main-card::before,
+  body .main-card::before,
+  .main-card::before {
+    pointer-events: none !important;
+    z-index: 0;
+  }
+
+  /* Il pulsante deve essere completamente cliccabile - APPROCCIO SEMPLIFICATO */
+  .step-content[data-step="1"] .selection-button,
+  html body .main-card .step-content[data-step="1"] .selection-button,
+  body .main-card .step-content[data-step="1"] .selection-button,
+  #line-400-button {
+    position: relative !important;
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    z-index: 1000 !important;
+    isolation: isolate !important;
+  }
+
+  /* RIMUOVI COMPLETAMENTE le regole pointer-events: none che potrebbero bloccare */
+  /* Sovrascrivi qualsiasi regola da desktop.css o altri file */
+  html body .main-card .step-content[data-step="1"] .selection-button *,
+  html body .main-card .step-content[data-step="1"] .selection-button * *,
+  body .main-card .step-content[data-step="1"] .selection-button *,
+  body .main-card .step-content[data-step="1"] .selection-button * *,
+  #line-400-button *,
+  #line-400-button * *,
+  #line-400-button .line-icon-badge,
+  #line-400-button .line-info,
+  #line-400-button .arrow,
+  #line-400-button svg,
+  #line-400-button span {
+    pointer-events: none !important;
+  }
+
+  /* I pseudo-elementi non devono bloccare, TRANNE l'::after del primo pulsante */
+  .step-content[data-step="1"] .selection-button::before,
+  .step-content[data-step="1"] .selection-button:not(:first-child)::after,
+  #line-400-button::before {
+    pointer-events: none !important;
+    z-index: -1 !important;
+  }
+  
+  /* L'::after del primo pulsante è gestito sotto per estendere l'area cliccabile */
+  
+  /* IMPORTANTE: Assicura che il pulsante stesso riceva i click */
+  #line-400-button {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    z-index: 10000 !important;
+  }
+
+  /* Assicura che il titolo e sottotitolo non si sovrappongano e non blocchino i click */
+  .step-content[data-step="1"] .step-title,
+  .step-content[data-step="1"] .step-subtitle {
+    pointer-events: none !important;
+    position: relative !important;
+    z-index: 0 !important;
+    margin-bottom: 2.5rem !important;
+  }
+  
+  /* Il sottotitolo non deve sovrapporsi ai pulsanti - aumenta significativamente lo spazio */
+  .step-content[data-step="1"] .step-subtitle {
+    margin-bottom: 3.5rem !important;
+    padding-bottom: 0 !important;
+    display: block !important;
+  }
+  
+  /* Assicura che ci sia abbastanza spazio tra sottotitolo e pulsanti */
+  .step-content[data-step="1"] #linee-buttons-container {
+    position: relative !important;
+    z-index: 10 !important;
+    margin-top: 0 !important;
+    padding-top: 1rem !important; /* Aggiungi padding-top per più spazio */
+  }
+  
+  /* Il primo pulsante deve avere abbastanza spazio sopra e z-index più alto */
+  .step-content[data-step="1"] .selection-button:first-child,
+  #line-400-button {
+    margin-top: 0 !important;
+    margin-bottom: 0.875rem !important;
+    padding-top: 0.75rem !important; /* Aumenta padding-top per più area cliccabile */
+    position: relative !important;
+    z-index: 10000 !important;
+    pointer-events: auto !important;
+  }
+  
+  /* Estendi l'area cliccabile del pulsante anche nella parte superiore */
+  #line-400-button {
+    position: relative !important;
+    padding-top: 0.75rem !important; /* Aumenta padding-top per più area cliccabile */
+  }
+  
+  /* Crea un'area cliccabile invisibile sopra il pulsante usando ::after */
+  #line-400-button::after {
+    content: '' !important;
+    position: absolute !important;
+    top: -1rem !important; /* Estendi sopra il pulsante */
+    left: 0 !important;
+    right: 0 !important;
+    height: 1rem !important;
+    pointer-events: auto !important;
+    z-index: 10001 !important;
+    background: transparent !important;
+    display: block !important;
+  }
+  
+  /* Gestisci i click sull'::after nella parte superiore */
+  html body #line-400-button::after,
+  body #line-400-button::after {
+    pointer-events: auto !important;
+  }
+}
+

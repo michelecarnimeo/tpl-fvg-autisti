@@ -201,19 +201,34 @@ html {
 /* Dimensione icona logo su desktop - applicata sempre quando si usa questo preset */
 /* Usa selettori più specifici per assicurare che la regola venga applicata */
 /* Con border-box, la dimensione totale include il border, quindi per avere 50px visibili servono 54px totali */
-header.navbar .navbar-content .navbar-brand .navbar-logo-wrapper,
-.navbar .navbar-brand .navbar-logo-wrapper,
-.navbar-brand .navbar-logo-wrapper,
-.navbar-logo-wrapper {
-  width: 54px !important;
-  height: 54px !important;
-  max-width: 54px !important;
-  max-height: 54px !important;
-  min-width: 54px !important;
-  min-height: 54px !important;
-  box-sizing: border-box !important;
-  transform: none !important;
-  scale: 1 !important;
+/* Solo desktop: blocca transform per mantenere dimensione fissa */
+@media (min-width: 1024px) {
+  header.navbar .navbar-content .navbar-brand .navbar-logo-wrapper,
+  .navbar .navbar-brand .navbar-logo-wrapper,
+  .navbar-brand .navbar-logo-wrapper,
+  .navbar-logo-wrapper {
+    width: 54px !important;
+    height: 54px !important;
+    max-width: 54px !important;
+    max-height: 54px !important;
+    min-width: 54px !important;
+    min-height: 54px !important;
+    box-sizing: border-box !important;
+    /* Rimuovo transform: none per permettere animazione */
+    scale: 1 !important;
+  }
+  
+  /* Permetti animazione hover in desktop */
+  .navbar-brand:hover .navbar-logo-wrapper {
+    transform: scale(1.05) translateZ(0) !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28),
+      0 0 0 1px rgba(255, 255, 255, 0.1) inset !important;
+    border-color: rgba(255, 255, 255, 0.6) !important;
+  }
+  
+  .navbar-brand:hover .navbar-logo {
+    transform: scale(1.03) !important;
+  }
 }
 
 /* Assicura che anche l'immagine dentro il logo wrapper abbia la dimensione corretta */
@@ -225,12 +240,7 @@ header.navbar .navbar-content .navbar-brand .navbar-logo-wrapper,
   max-height: 100% !important;
 }
 
-/* Override della trasformazione su hover per mantenere la dimensione */
-.navbar-brand:hover .navbar-logo-wrapper {
-  transform: scale(1) rotate(0deg) !important;
-  width: 54px !important;
-  height: 54px !important;
-}
+/* Rimossa regola duplicata - l'animazione è gestita nella regola sopra */
 
 /* Su mobile, mostra la progress bar e rimuovi la card */
 @media (max-width: 1023px) {
@@ -539,9 +549,14 @@ header.navbar .navbar-content .navbar-brand .navbar-logo-wrapper,
     cursor: pointer !important;
   }
 
-  /* Gli elementi interni non devono intercettare i click */
-  .selection-button * {
+  /* Gli elementi interni non devono intercettare i click, TRANNE gli overlay */
+  .selection-button *:not(.button-click-overlay) {
     pointer-events: none !important;
+  }
+  
+  /* Gli overlay devono essere cliccabili */
+  .selection-button .button-click-overlay {
+    pointer-events: auto !important;
   }
 
   .selection-button::before,
@@ -623,6 +638,7 @@ header.navbar .navbar-content .navbar-brand .navbar-logo-wrapper,
       0 3px 12px rgba(0, 123, 138, 0.08);
   }
 
+  /* Regola generica - le regole per #linee-buttons-container sono in prezzi-page.css */
   html body .main-card .step-content[data-step="1"] .selection-button:hover,
   body .main-card .step-content[data-step="1"] .selection-button:hover {
     transform: translateY(-2px) scale(1.01);
@@ -693,10 +709,11 @@ header.navbar .navbar-content .navbar-brand .navbar-logo-wrapper,
     color: white !important;
   }
 
+  /* Rimuovo !important per permettere override in prezzi-page.css con selettori più specifici */
   .step-content[data-step="1"] .selection-button:hover .line-icon-badge {
-    transform: scale(1.05) !important;
+    transform: scale(1.05);
     box-shadow: 0 6px 20px rgba(0, 123, 138, 0.45),
-      0 0 0 2px rgba(255, 255, 255, 0.2) inset !important;
+      0 0 0 2px rgba(255, 255, 255, 0.2) inset;
   }
 
   .step-content[data-step="1"] .line-info {
@@ -735,10 +752,11 @@ header.navbar .navbar-content .navbar-brand .navbar-logo-wrapper,
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
   }
 
+  /* Rimuovo !important per permettere override in prezzi-page.css con selettori più specifici */
   .step-content[data-step="1"] .selection-button:hover .arrow {
-    transform: translateX(4px) !important;
-    background: rgba(0, 123, 138, 0.2) !important;
-    box-shadow: 0 3px 10px rgba(0, 123, 138, 0.25) !important;
+    transform: translateX(4px);
+    background: rgba(0, 123, 138, 0.2);
+    box-shadow: 0 3px 10px rgba(0, 123, 138, 0.25);
   }
 
   /* Allineamento titolo e sottotitolo su desktop per step 1 - layout a elenco */
@@ -879,14 +897,15 @@ header.navbar .navbar-content .navbar-brand .navbar-logo-wrapper,
     color: rgba(0, 0, 0, 0.6) !important;
   }
 
+  /* Rimuovo !important per permettere override in fermate-page.css */
   .desktop-tab:hover {
-    background: rgba(255, 255, 255, 0.06) !important;
-    color: rgba(255, 255, 255, 0.8) !important;
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.8);
   }
 
   body.light .desktop-tab:hover {
-    background: rgba(0, 0, 0, 0.04) !important;
-    color: rgba(0, 0, 0, 0.8) !important;
+    background: rgba(0, 0, 0, 0.04);
+    color: rgba(0, 0, 0, 0.8);
   }
 
   .desktop-tab.active {
@@ -956,19 +975,22 @@ header.navbar .navbar-content .navbar-brand .navbar-logo-wrapper,
     white-space: nowrap !important;
   }
 
-  /* Indicatore linea selezionata nel tab - layout orizzontale */
+  /* Indicatore linea selezionata nel tab - layout verticale */
   .desktop-tab-label-wrapper {
     display: flex;
-    flex-direction: row;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
     gap: 0;
     flex: 1;
+    line-height: 1.2;
   }
 
   .desktop-tab-selected {
     display: none;
     font-size: 0.75rem;
     font-weight: 500;
+    line-height: 1.2;
+    margin-top: 0.15rem;
     color: #007aff;
     opacity: 0.8;
     margin-top: 0.125rem;
@@ -1178,6 +1200,8 @@ header.navbar .navbar-content .navbar-brand .navbar-logo-wrapper,
     color: rgba(0, 0, 0, 0.6);
   }
 
+  /* Rimuovo queste regole per permettere override in fermate-page.css */
+  /* Le regole specifiche per .main-card .desktop-tab:hover sono in fermate-page.css */
   .desktop-tab:hover {
     background: rgba(255, 255, 255, 0.05);
     color: rgba(255, 255, 255, 0.8);

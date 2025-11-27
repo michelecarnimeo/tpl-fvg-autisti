@@ -42,6 +42,8 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15),
     0 0 0 1px rgba(255, 255, 255, 0.05) inset;
   box-sizing: border-box;
+  pointer-events: auto;
+  z-index: 1;
 }
 
 /* Stili migliorati solo per mobile */
@@ -352,6 +354,8 @@ body.light .stops-count {
     transparent
   );
   transition: left 0.5s ease;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .selection-button:hover::before {

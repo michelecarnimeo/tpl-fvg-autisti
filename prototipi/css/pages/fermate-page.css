@@ -83,8 +83,28 @@
     min-width: 54px;
     min-height: 54px;
     box-sizing: border-box;
-    transform: none;
+    /* Rimuovo transform: none per permettere animazione */
     scale: 1;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateZ(0);
+  }
+  
+  /* Animazione hover logo in desktop per pagina fermate */
+  html body header.navbar .navbar-content .navbar-brand:hover .navbar-logo-wrapper,
+  html body .navbar .navbar-content .navbar-brand:hover .navbar-logo-wrapper,
+  body header.navbar .navbar-content .navbar-brand:hover .navbar-logo-wrapper,
+  body .navbar .navbar-content .navbar-brand:hover .navbar-logo-wrapper {
+    transform: scale(1.05) translateZ(0);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28),
+      0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+    border-color: rgba(255, 255, 255, 0.6);
+  }
+  
+  html body header.navbar .navbar-content .navbar-brand:hover .navbar-logo,
+  html body .navbar .navbar-content .navbar-brand:hover .navbar-logo,
+  body header.navbar .navbar-content .navbar-brand:hover .navbar-logo,
+  body .navbar .navbar-content .navbar-brand:hover .navbar-logo {
+    transform: scale(1.03);
   }
 
   html body .navbar-logo-wrapper .navbar-logo,
@@ -474,7 +494,162 @@ body.light .stop-info {
 }
 
 /* Responsive */
+/* Nascondi main-card su mobile e tablet, come in home e prezzi */
+@media (max-width: 1023px) {
+  html body .container .main-card,
+  html body .main-card,
+  body .container .main-card,
+  body .main-card,
+  .container .main-card,
+  .main-card {
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .main-card::before {
+    display: none !important;
+  }
+}
+
+/* Tablet: aggiungi padding-top al contenuto per farlo scendere, come nella pagina home e prezzi */
+@media (min-width: 768px) and (max-width: 1023px) {
+  html body .main-card .step-content,
+  body .main-card .step-content,
+  .main-card .step-content,
+  .step-content {
+    padding-top: calc(var(--navbar-height) + 2.5rem);
+  }
+  
+  html body .main-card .step-content .step-title,
+  body .main-card .step-content .step-title,
+  .main-card .step-content .step-title,
+  .step-content .step-title {
+    margin-top: 0;
+  }
+  
+  /* Nascondi desktop-step-tabs in modalità tablet */
+  html body .main-card .desktop-step-tabs,
+  body .main-card .desktop-step-tabs,
+  .main-card .desktop-step-tabs,
+  .desktop-step-tabs {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+  
+  /* Ingrandisci contenuto step 2 in modalità tablet */
+  html body .main-card .step-content[data-step="2"] .step-title,
+  body .main-card .step-content[data-step="2"] .step-title,
+  .main-card .step-content[data-step="2"] .step-title,
+  .step-content[data-step="2"] .step-title {
+    font-size: 2.25rem;
+    margin-bottom: 1rem;
+  }
+  
+  html body .main-card .step-content[data-step="2"] .step-subtitle,
+  body .main-card .step-content[data-step="2"] .step-subtitle,
+  .main-card .step-content[data-step="2"] .step-subtitle,
+  .step-content[data-step="2"] .step-subtitle {
+    font-size: 1.15rem;
+    margin-bottom: 2.5rem;
+  }
+  
+  html body .main-card .map-container-wrapper,
+  body .main-card .map-container-wrapper,
+  .main-card .map-container-wrapper,
+  .map-container-wrapper {
+    padding: 2rem;
+    border-radius: 24px;
+    margin-bottom: 2rem;
+  }
+  
+  html body .main-card .map-container,
+  body .main-card .map-container,
+  .main-card .map-container,
+  .map-container {
+    height: 400px;
+    border-radius: 20px;
+  }
+  
+  html body .main-card .stop-item,
+  body .main-card .stop-item,
+  .main-card .stop-item,
+  .stop-item {
+    padding: 1.25rem 1.5rem;
+    min-height: 80px;
+    border-radius: 20px;
+    font-size: 1.05rem;
+  }
+}
+
 @media (max-width: 768px) {
+  /* Nascondi desktop-step-tabs in modalità mobile */
+  html body .main-card .desktop-step-tabs,
+  body .main-card .desktop-step-tabs,
+  .main-card .desktop-step-tabs,
+  .desktop-step-tabs {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+  
+  /* Aggiungi padding-top al contenuto step 2 per evitare sovrapposizione con progress bar */
+  html body .main-card .step-content[data-step="2"],
+  body .main-card .step-content[data-step="2"],
+  .main-card .step-content[data-step="2"],
+  .step-content[data-step="2"] {
+    padding-top: calc(var(--navbar-height) + 4rem);
+    max-width: 100%;
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  
+  /* Aumenta larghezza mappa e fermate in mobile - sfrutta tutto lo spazio */
+  html body .main-card .step-content[data-step="2"] .map-container-wrapper,
+  body .main-card .step-content[data-step="2"] .map-container-wrapper,
+  .main-card .step-content[data-step="2"] .map-container-wrapper,
+  .step-content[data-step="2"] .map-container-wrapper {
+    width: 100%;
+    max-width: 100%;
+    background: var(--ios-surface) !important;
+    backdrop-filter: blur(40px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(40px) saturate(180%) !important;
+    border: 1px solid var(--ios-border) !important;
+    border-radius: 20px !important;
+    padding: 1.5rem !important;
+    margin-bottom: 1.5rem !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3),
+      0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+      0 1px 0 rgba(255, 255, 255, 0.1) inset !important;
+  }
+  
+  body.light .main-card .step-content[data-step="2"] .map-container-wrapper,
+  body.light .step-content[data-step="2"] .map-container-wrapper {
+    background: var(--ios-surface-light) !important;
+    border-color: var(--ios-border-light) !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1),
+      0 0 0 1px rgba(0, 0, 0, 0.05) inset !important;
+  }
+  
+  html body .main-card .step-content[data-step="2"] .stops-section,
+  body .main-card .step-content[data-step="2"] .stops-section,
+  .main-card .step-content[data-step="2"] .stops-section,
+  .step-content[data-step="2"] .stops-section {
+    width: 100%;
+    max-width: 100%;
+  }
+  
   .map-container-wrapper,
   .stops-section {
     border-radius: 20px;
@@ -561,6 +736,12 @@ body.light .stop-info {
   }
 
   /* Tab singolo - stile più discreto e uniforme - layout orizzontale */
+  /* Specificità massima per sovrascrivere desktop.css */
+  html body .main-card .desktop-step-tabs .desktop-tab,
+  html body .main-card .desktop-tab,
+  body .main-card .desktop-step-tabs .desktop-tab,
+  body .main-card .desktop-tab,
+  .main-card .desktop-step-tabs .desktop-tab,
   .main-card .desktop-tab {
     display: flex;
     flex-direction: row;
@@ -577,19 +758,33 @@ body.light .stop-info {
     font-size: 0.8125rem;
     font-weight: 400;
     cursor: pointer;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     box-sizing: border-box;
+  }
+
+  /* Animazioni solo quando la classe .animate-tabs è presente */
+  html body .main-card .desktop-step-tabs.animate-tabs .desktop-tab,
+  html body .main-card.animate-tabs .desktop-step-tabs .desktop-tab,
+  body .main-card .desktop-step-tabs.animate-tabs .desktop-tab,
+  body .main-card.animate-tabs .desktop-step-tabs .desktop-tab {
     opacity: 0;
+    transform: translateY(20px);
     animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   }
 
-  /* Animazione delay progressivo per le tabs */
-  .main-card .desktop-tab:nth-child(1) {
+  /* Animazione delay progressivo per le tabs - solo quando animate-tabs è presente */
+  html body .main-card .desktop-step-tabs.animate-tabs .desktop-tab:nth-child(1),
+  html body .main-card.animate-tabs .desktop-step-tabs .desktop-tab:nth-child(1),
+  body .main-card .desktop-step-tabs.animate-tabs .desktop-tab:nth-child(1),
+  body .main-card.animate-tabs .desktop-step-tabs .desktop-tab:nth-child(1) {
     animation-delay: 0.2s;
   }
 
-  .main-card .desktop-tab:nth-child(2) {
+  html body .main-card .desktop-step-tabs.animate-tabs .desktop-tab:nth-child(2),
+  html body .main-card.animate-tabs .desktop-step-tabs .desktop-tab:nth-child(2),
+  body .main-card .desktop-step-tabs.animate-tabs .desktop-tab:nth-child(2),
+  body .main-card.animate-tabs .desktop-step-tabs .desktop-tab:nth-child(2) {
     animation-delay: 0.35s;
   }
 
@@ -597,13 +792,25 @@ body.light .stop-info {
     color: rgba(0, 0, 0, 0.6);
   }
 
-  /* Hover effect più discreto */
+  /* Assicura che la transition sia presente - più fluida per il movimento */
+  html body .main-card .desktop-tab,
+  body .main-card .desktop-tab,
+  .main-card .desktop-tab {
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+  }
+  
+  /* Hover effect - movimento più evidente e fluido */
+  /* Specificità: html(1) + body(1) + .main-card(1) + .desktop-tab(1) + :hover(1) = 5 */
+  html body .main-card .desktop-tab:hover,
+  body .main-card .desktop-tab:hover,
   .main-card .desktop-tab:hover {
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.05);
     color: rgba(255, 255, 255, 0.8);
-    transform: translateY(-1px);
+    transform: translateY(-3px) scale(1.02);
   }
 
+  body.light html body .main-card .desktop-tab:hover,
   body.light .main-card .desktop-tab:hover {
     background: rgba(0, 0, 0, 0.04);
     color: rgba(0, 0, 0, 0.8);

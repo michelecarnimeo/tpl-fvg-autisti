@@ -1,6 +1,6 @@
 {
-  "version": "1.8.9",
-  "versionDate": "26 Novembre 2025",
-  "versionTime": "11:00",
-  "updateNotes": "Allineamento card/tabs pagina fermate e home; pulsanti linea uniformati; nuova struttura CSS condivisa (presets/components); nuove icone e prototipi; ripristino layout mappa/fermate con animazioni migliorate."
+  "version": "1.9.0",
+  "versionDate": "27 Novembre 2025",
+  "versionTime": "09:30",
+  "updateNotes": "Preparazione integrazione UI: fix click pulsanti linea, rifinitura animazioni desktop tabs, nuovi layout tablet/mobile per fermate e prezzi, aggiornamento welcome iOS26."
 }

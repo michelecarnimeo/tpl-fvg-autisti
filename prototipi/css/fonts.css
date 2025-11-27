@@ -1,12 +1,9 @@
 /* ========================================
    FONTS MODULE
-   Importazione e definizione font
+   Stack tipografico condiviso (offline friendly)
    ======================================== */
 
-/* Import Roboto from Google Fonts (Free alternative to Univers Next) */
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
-
 :root {
-    /* Primary Stack: Roboto -> System */
-    --font-primary: 'Roboto', -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+  --font-primary: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+    "Segoe UI", "Helvetica Neue", Arial, sans-serif;
 }

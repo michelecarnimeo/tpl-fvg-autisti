@@ -4,6 +4,30 @@
 
 const changelogData = [
   {
+    version: '1.9.0',
+    date: '27 Novembre 2025',
+    time: '09:30',
+    title: 'Preparazione integrazione UI: tabs desktop uniformi + layout tablet/mobile (v1.9.0)',
+    hidden: false,
+    changes: [
+      '🎯 ALLINEAMENTO TAB/CARD:',
+      '  • Home, Fermate e Prezzi condividono ora le stesse desktop tabs con indicatori, micro-animazioni da 0.35s e badge progresso',
+      '  • Fix totale dei click sui pulsanti linea (pointer-events isolati, pseudo-elementi trasparenti, z-index dedicati)',
+      '📱 LAYOUT TABLET/MOBILE:',
+      '  • Nuovi fogli dedicati home-page.css e prezzi-page.css + refactor fermate-page.css per gestire layout responsive senza duplicare preset',
+      '  • Step nav sticky, card compatte e spacing ottimizzati per PWA/tablet, coerenti con i prototipi iOS26',
+      '🧩 COMPONENTI CSS AGGIORNATI:',
+      '  • base.css, navbar.css, selection-buttons.css, step-content.css e fonts.css ripuliti e sincronizzati con la nuova architettura',
+      '  • desktop.css preset aggiorna tokens, animazioni e gestione temi per la nuova gerarchia',
+      '🖼️ PROTOTIPI iOS26:',
+      '  • home/fermate/prezzi/welcome HTML ripassati con la nuova struttura tabs-card e CTA coerenti',
+      '  • welcome-ios26 riceve nuovo hero + asset `src/benvenuto.png` per l onboarding',
+      '⚙️ QUALITÀ/LOG:',
+      "  • Console log dedicati per l'installazione PWA e tracciamento step, ridotti log rumorosi",
+      "  • version.json impostato a 1.9.0 (27/11/2025 h09:30) con note sull'integrazione UI"
+    ]
+  },
+  {
     version: '1.8.8',
     date: '20 Novembre 2025',
     time: '16:00',

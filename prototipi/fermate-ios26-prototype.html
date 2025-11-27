@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="css/components/step-content.css">
   <link rel="stylesheet" href="css/components/selection-buttons.css">
   <link rel="stylesheet" href="css/components/progress-bar.css">
+  <link rel="stylesheet" href="css/components/toast.css">
   <link rel="stylesheet" href="css/pages/fermate-page.css">
   <style>
     /* Fix per visibilità pulsante hamburger nella pagina fermate */
@@ -171,7 +172,7 @@
       <nav class="navbar-nav">
         <a href="home-ios26-prototype.html" class="nav-link">Home</a>
         <a href="fermate-ios26-prototype.html" class="nav-link active">Fermate</a>
-        <a href="#" class="nav-link">Prezzi</a>
+        <a href="prezzi-ios26-prototype.html" class="nav-link">Prezzi</a>
       </nav>
 
       <div class="navbar-actions">
@@ -366,8 +367,8 @@
 
       <!-- Step 1: Selezione Linea -->
       <div class="step-content active" data-step="1">
-        <h1 class="step-title">Scegli la tua linea</h1>
-        <p class="step-subtitle">Seleziona una linea per visualizzare le fermate</p>
+        <h1 class="step-title">Linee e Fermate</h1>
+        <p class="step-subtitle">Seleziona una linea per visualizzare tutte le fermate disponibili</p>
 
         <button class="selection-button" onclick="selectLine('400', event)" id="line-400-btn">
           <div class="line-icon-badge">
@@ -645,6 +646,14 @@
       // Aggiorna pulsante "Cambia linea"
       updateChangeLineButton();
 
+      // Mostra toast notification
+      const lineNames = {
+        400: "Linea 400 Udine-Grado",
+        401: "Linea 401 Udine-San Daniele",
+      };
+      const lineName = lineNames[lineId] || `Linea ${lineId}`;
+      showToast(`${lineName} selezionata`, "success");
+
       // Simula animazione del pulsante
       const button = event ? event.currentTarget : event.target;
       if (button) {
@@ -661,13 +670,9 @@
       loadStops(lineId);
 
       // Aggiorna sottotitolo
-      const lineNames = {
-        400: "Linea 400 Udine-Grado",
-        401: "Linea 401 Udine-San Daniele",
-      };
       const subtitle = document.getElementById("line-subtitle");
       if (subtitle) {
-        subtitle.textContent = lineNames[lineId] || "Visualizza fermate e percorso";
+        subtitle.textContent = lineName || "Visualizza fermate e percorso";
       }
     }
 
@@ -702,6 +707,12 @@
             <div class="stop-name">${stop.name}</div>
             <div class="stop-info">${stop.info}</div>
           `;
+        
+        // Aggiungi event listener per il click sulla fermata
+        li.addEventListener("click", () => {
+          showToast(`Fermata selezionata: ${stop.name}`, "success");
+        });
+        
         stopsList.appendChild(li);
       });
     }
@@ -898,7 +909,87 @@
 
     // Inizializza
     updateStepIndicator(1);
+
+    // Funzione per mostrare toast notifications
+    function showToast(message, type = "info", duration = 3000) {
+      let container = document.getElementById("toast-container");
+      if (!container) {
+        container = document.createElement("div");
+        container.id = "toast-container";
+        container.className = "toast-container";
+        container.setAttribute("aria-live", "polite");
+        container.setAttribute("aria-atomic", "true");
+        document.body.appendChild(container);
+      }
+
+      const toast = document.createElement("div");
+      toast.className = `toast ${type}`;
+      toast.setAttribute("role", type === "error" ? "alert" : "status");
+
+      const icons = {
+        success: "✓",
+        error: "✕",
+        info: "ℹ",
+      };
+
+      toast.innerHTML = `
+        <span class="toast-icon">${icons[type] || icons.info}</span>
+        <span class="toast-message">${message}</span>
+      `;
+
+      container.appendChild(toast);
+
+      // Trigger animazione
+      setTimeout(() => {
+        toast.style.opacity = "1";
+        toast.style.transform = "translateY(0) scale(1)";
+      }, 10);
+
+      // Rimuovi dopo la durata
+      setTimeout(() => {
+        toast.classList.add("slide-out");
+        setTimeout(() => {
+          if (toast.parentNode) {
+            toast.parentNode.removeChild(toast);
+          }
+        }, 150);
+      }, duration);
+    }
   </script>
+
+  <!-- Toast Container -->
+  <div
+    class="toast-container"
+    id="toast-container"
+    aria-live="polite"
+    aria-atomic="true"
+  ></div>
+  
+  <script>
+    // Aggiunge la classe per triggerare le animazioni dei desktop-tab
+    (function() {
+      function triggerAnimations() {
+        const desktopStepTabs = document.querySelector('.desktop-step-tabs');
+        const mainCard = document.querySelector('.main-card');
+        
+        if (desktopStepTabs) {
+          desktopStepTabs.classList.add('animate-tabs');
+        } else if (mainCard) {
+          mainCard.classList.add('animate-tabs');
+        }
+      }
+      
+      // Prova quando il DOM è pronto
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+          setTimeout(triggerAnimations, 100);
+        });
+      } else {
+        setTimeout(triggerAnimations, 100);
+      }
+    })();
+  </script>
+  
 </body>
 
 </html>

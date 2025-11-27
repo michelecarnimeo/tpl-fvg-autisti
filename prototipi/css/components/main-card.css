@@ -46,7 +46,8 @@ body.light .main-card {
   );
   opacity: 0;
   transition: opacity 0.5s ease;
-  pointer-events: none;
+  pointer-events: none !important;
+  z-index: 0;
 }
 
 .main-card:hover::before {
@@ -86,11 +87,11 @@ body.light .page-context-breadcrumb .breadcrumb-dot {
 }
 
 /* ========================================
-   RESPONSIVE - MOBILE
-   Nascondi la card su mobile, visibile solo su tablet e desktop
+   RESPONSIVE - MOBILE E TABLET
+   Nascondi la card su mobile e tablet, visibile solo su desktop
    ======================================== */
 
-@media (max-width: 767px) {
+@media (max-width: 1023px) {
   .main-card {
     background: transparent !important;
     backdrop-filter: none !important;
