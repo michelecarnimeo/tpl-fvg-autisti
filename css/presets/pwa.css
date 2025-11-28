@@ -15,6 +15,7 @@
    ======================================== */
 @import url('../variables.css');
 @import url('../base.css');
+@import url('../font.css');
 @import url('../layout.css');
 @import url('../animations.css');
 @import url('../utilities.css?v=1.0.0');
@@ -99,7 +100,10 @@
 }
 
 /* Fallback per quando body ha classe pwa-mode (aggiunta da JS) */
-body.pwa-mode .navbar {
+body.pwa-mode .navbar,
+body.pwa-mode header.navbar,
+.pwa-mode .navbar,
+.pwa-mode header.navbar {
   display: none !important;
   visibility: hidden !important;
   opacity: 0 !important;
@@ -107,5 +111,24 @@ body.pwa-mode .navbar {
   padding: 0 !important;
   margin: 0 !important;
   overflow: hidden !important;
+  position: absolute !important;
+  pointer-events: none !important;
+}
+
+/* Assicura che la bottom nav PWA sia visibile in modalità PWA */
+body.pwa-mode #pwa-bottom-nav,
+.pwa-mode #pwa-bottom-nav {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: all !important;
+}
+
+body.pwa-mode #pwa-brand-header,
+.pwa-mode #pwa-brand-header {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: all !important;
 }
 

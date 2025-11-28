@@ -33,7 +33,8 @@ const STATIC_ASSETS = [
   
   // CSS - Ordine di caricamento: Variables → Base → Layout → Animations → Utilities → Themes → Components → Legacy
   './css/variables.css', // 1. Variabili CSS globali
-  './css/base.css', // 2. Reset e typography
+  './css/base.css', // 2. Reset CSS
+  './css/font.css', // 3. Sistema font modulare
   './css/layout.css', // 3. Layout globale (body, container, main-content)
   './css/animations.css', // 4. Animazioni e transizioni
   './css/utilities.css?v=1.0.0', // 5. Utility classes (.hidden, .inactive)

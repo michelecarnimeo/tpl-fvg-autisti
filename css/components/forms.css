@@ -33,7 +33,7 @@
 }
 
 .route-icon {
-    font-size: .9rem;
+    font-size: calc(0.9rem * var(--font-size-multiplier));
     font-weight: 600;
     color: var(--testo-secondario);
     text-transform: uppercase;

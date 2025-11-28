@@ -498,6 +498,26 @@
     if (lineaBtn) {
       lineaBtn.addEventListener('click', openLineeModalPrezzi);
     }
+
+    // Event listener per pulsante chiusura modal
+    const closeBtn = document.getElementById('linee-prezzi-modal-close');
+    if (closeBtn) {
+      // Rimuovi listener precedenti se esistono (clone pattern)
+      const newCloseBtn = closeBtn.cloneNode(true);
+      closeBtn.parentNode.replaceChild(newCloseBtn, closeBtn);
+      
+      newCloseBtn.addEventListener('click', closeLineeModalPrezzi);
+    }
+
+    // Chiudi modal cliccando fuori
+    const lineeModal = document.getElementById('linee-prezzi-modal');
+    if (lineeModal) {
+      lineeModal.addEventListener('click', (e) => {
+        if (e.target === lineeModal) {
+          closeLineeModalPrezzi();
+        }
+      });
+    }
   }
 
   /**

@@ -61,14 +61,14 @@
 }
 
 .card-title h1 {
-  font-size: 2rem;
+  font-size: calc(2rem * var(--font-size-multiplier));
   font-weight: 800;
   color: var(--testo-principale);
   text-shadow: 0 2px 10px rgba(255, 255, 255, 0.3);
 }
 
 .card-title p {
-  font-size: 1.05rem;
+  font-size: calc(1.05rem * var(--font-size-multiplier));
   color: var(--testo-principale);
   /* Usa colore principale senza opacità per migliore leggibilità */
   max-width: 90%;

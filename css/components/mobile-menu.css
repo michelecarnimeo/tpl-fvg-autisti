@@ -192,7 +192,7 @@
 }
 
 .mobile-menu-title {
-  font-size: 1.2rem;
+  font-size: calc(1.2rem * var(--font-size-multiplier));
   font-weight: 700;
   color: var(--testo-principale);
 }
@@ -231,7 +231,7 @@
   padding: 12px 20px;
   color: var(--testo-principale);
   text-decoration: none;
-  font-size: 1rem;
+  font-size: calc(1rem * var(--font-size-multiplier));
   font-weight: 500;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border: none;
@@ -304,7 +304,7 @@
 }
 
 .mobile-nav-icon {
-  font-size: 1.2rem;
+  font-size: calc(1.2rem * var(--font-size-multiplier));
   width: 24px;
   text-align: center;
   transition: transform 0.3s ease;

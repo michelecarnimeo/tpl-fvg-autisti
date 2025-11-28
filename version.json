@@ -1,6 +1,6 @@
 {
-  "version": "1.9.2",
+  "version": "1.9.3",
   "versionDate": "28 Novembre 2025",
-  "versionTime": "11:10",
-  "updateNotes": "Fix modal impostazioni su iPhone: margin-top dinamico (safe-area + navbar) per lasciare libero il pulsante di chiusura."
+  "versionTime": "15:45",
+  "updateNotes": "Sistemazione card tema: bordo verde completo e layout ottimizzato per migliore usabilità."
 }

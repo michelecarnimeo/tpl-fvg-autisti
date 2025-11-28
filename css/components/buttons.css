@@ -102,6 +102,15 @@
     align-items: center;
     justify-content: space-between;
     text-align: left;
+    font-size: calc(1rem * var(--font-size-multiplier));
+    /* Dimensione scalabile con il moltiplicatore */
+}
+
+/* Gli elementi dentro i pulsanti route ereditano la dimensione dal pulsante */
+.route-button *,
+.linea-select-btn * {
+    font-size: inherit;
+    /* Eredita la dimensione dal pulsante padre */
 }
 
 .route-button:hover {
@@ -146,8 +155,8 @@
 .location-btn-small:not(:disabled):hover,
 .small-btn:not(:disabled),
 .small-btn:not(:disabled):hover {
-    cursor: pointer !important;
-    opacity: 1 !important;
+    cursor: pointer;
+    opacity: 1;
 }
 
 .swap-btn:hover:not(:disabled),

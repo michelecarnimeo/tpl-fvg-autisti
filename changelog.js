@@ -4,6 +4,27 @@
 
 const changelogData = [
   {
+    version: '1.9.3',
+    date: '28 Novembre 2025',
+    time: '15:45',
+    title: 'Sistemazione card tema: bordo verde completo e layout ottimizzato (v1.9.3)',
+    hidden: false,
+    changes: [
+      '🎨 CARD TEMA OTTIMIZZATE:',
+      '  • Card tema (Sistema, Chiara, Scura) ora si estendono completamente in larghezza',
+      '  • Bordo verde quando selezionato copre tutti i lati della card (dall\'alto al basso)',
+      '  • Layout più compatto e proporzionato per migliore usabilità',
+      '  • Font system modulare per scalabilità accessibilità',
+      '📐 LAYOUT E PROPORZIONI:',
+      '  • Card ora usano flex: 1 per occupare tutto lo spazio disponibile',
+      '  • Box-sizing: border-box per calcolo corretto delle dimensioni con bordo',
+      '  • Bordo verde di 3px visibile su tutti i lati quando selezionato',
+      '🔄 CONSISTENZA CSS:',
+      '  • Allineate regole tra aspetto.css e settings-modal.css',
+      '  • Ottimizzazioni CSS per coerenza visiva tra tutte le card'
+    ]
+  },
+  {
     version: '1.9.2',
     date: '28 Novembre 2025',
     time: '11:10',

@@ -1,0 +1,181 @@
+/* ========================================
+   FONT MODULE
+   Sistema modulare per la gestione del font
+   ======================================== */
+
+/* ========================================
+   ACCESSIBILITÀ - DIMENSIONI TESTO
+   ======================================== */
+
+/* Classi per regolare la dimensione del testo */
+
+/* Dimensione normale (default) */
+body.font-size-normal {
+  --font-size-multiplier: 1;
+}
+
+/* Dimensione grande (+20%) */
+body.font-size-large {
+  --font-size-multiplier: 1.2;
+}
+
+/* Dimensione molto grande (+40%) */
+body.font-size-xlarge {
+  --font-size-multiplier: 1.4;
+}
+
+/* ========================================
+   TYPOGRAPHY - HEADINGS
+   ======================================== */
+
+h1 {
+  font-size: calc(2rem * var(--font-size-multiplier));
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: calc(1.5rem * var(--font-size-multiplier));
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+h3 {
+  font-size: calc(1.25rem * var(--font-size-multiplier));
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+h4,
+h5,
+h6 {
+  font-size: calc(1rem * var(--font-size-multiplier));
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+/* ========================================
+   TYPOGRAPHY - BODY TEXT
+   ======================================== */
+
+/* Sistema modulare: solo gli elementi di testo base scalano automaticamente.
+   I button e altri elementi interattivi NON scalano di default. */
+
+/* Elementi di testo che scalano automaticamente con il moltiplicatore */
+p,
+label,
+li {
+  font-size: calc(1rem * var(--font-size-multiplier));
+}
+
+/* Elementi inline dentro elementi di testo scalano relativamente */
+p span,
+p a,
+p div,
+label span,
+label a,
+li span,
+li a {
+  font-size: calc(1em * var(--font-size-multiplier));
+}
+
+/* Classe utility per applicare il moltiplicatore dove necessario */
+.text-scalable {
+  font-size: calc(1rem * var(--font-size-multiplier));
+}
+
+.text-scalable * {
+  font-size: calc(1em * var(--font-size-multiplier));
+}
+
+/* Input e form elements: NON scalano di default, solo se hanno .text-scalable */
+input,
+select,
+textarea {
+  font-size: 1rem;
+}
+
+input.text-scalable,
+select.text-scalable,
+textarea.text-scalable {
+  font-size: calc(1rem * var(--font-size-multiplier));
+}
+
+/* Button: NON scalano di default, solo se hanno .text-scalable */
+button {
+  font-size: 1rem;
+}
+
+button.text-scalable {
+  font-size: calc(1rem * var(--font-size-multiplier));
+}
+
+/* Pulsanti di selezione: dimensione scalabile ma limitata per mantenere proporzioni */
+.route-button,
+.route-button *,
+.route-button span,
+.route-button .route-arrow,
+.linea-select-btn,
+.linea-select-btn *,
+.linea-select-btn span,
+.selection-button,
+.selection-button *,
+.selection-button span,
+.route-button-container,
+.route-button-container .selection-button,
+.route-button-container .selection-button *,
+.route-button-container .selection-button span,
+#linea-prezzi-btn,
+#linea-prezzi-btn *,
+#linea-prezzi-btn span,
+#linea-fermate-btn,
+#linea-fermate-btn *,
+#linea-fermate-btn span,
+#partenza-btn,
+#partenza-btn *,
+#partenza-btn span,
+#destinazione-btn,
+#destinazione-btn *,
+#destinazione-btn span,
+#arrivo-btn,
+#arrivo-btn *,
+#arrivo-btn span {
+  font-size: calc(1rem * var(--font-size-multiplier));
+  /* Dimensione scalabile ma proporzionata */
+}
+
+/* ========================================
+   RESPONSIVE - MOBILE
+   ======================================== */
+
+/* Riduzione font-size base per dispositivi mobile */
+@media (max-width: 768px) {
+  body {
+    font-size: calc(15px * var(--font-size-multiplier));
+  }
+
+  h1 {
+    font-size: calc(1.75rem * var(--font-size-multiplier));
+  }
+
+  h2 {
+    font-size: calc(1.35rem * var(--font-size-multiplier));
+  }
+
+  h3 {
+    font-size: calc(1.15rem * var(--font-size-multiplier));
+  }
+
+  h4,
+  h5,
+  h6 {
+    font-size: calc(1rem * var(--font-size-multiplier));
+  }
+
+  p,
+  label,
+  li {
+    font-size: calc(14px * var(--font-size-multiplier));
+  }
+}
+

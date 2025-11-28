@@ -95,7 +95,7 @@ body {
   position: fixed;
   top: 1rem;
   right: 1rem;
-  z-index: 1000;
+  z-index: 999;
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
   color: var(--testo-principale);

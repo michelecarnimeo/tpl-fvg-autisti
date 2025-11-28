@@ -69,7 +69,7 @@
   }
 
   .fermate-modal-header h2 {
-    font-size: 1rem;
+    font-size: calc(1rem * var(--font-size-multiplier));
   }
 
   .fermate-modal-body {
@@ -78,19 +78,19 @@
 
   .fermate-search-box {
     padding: 8px 10px;
-    font-size: 0.95rem;
+    font-size: calc(0.95rem * var(--font-size-multiplier));
   }
 
   .fermate-modal-list li {
     padding: 12px 14px;
-    font-size: 0.95rem;
+    font-size: calc(0.95rem * var(--font-size-multiplier));
   }
 
   /* Ottimizzazione modale linee */
   .linea-modal-item {
     padding: 10px 12px;
     gap: 12px;
-    font-size: 0.95rem;
+    font-size: calc(0.95rem * var(--font-size-multiplier));
   }
 
   .linea-badge {
@@ -160,7 +160,7 @@
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: calc(0.9rem * var(--font-size-multiplier));
   font-weight: 500;
   transition: all 0.3s ease;
   box-shadow: 0 2px 6px rgba(0, 123, 138, 0.3);
@@ -180,7 +180,7 @@
 
 .fermate-modal-title,
 #fermate-modal-title {
-  font-size: 1rem;
+  font-size: calc(1rem * var(--font-size-multiplier));
   font-weight: 600;
   color: white !important;
   line-height: 32px;
@@ -265,13 +265,13 @@
   outline: none;
   background: transparent;
   color: var(--testo-principale);
-  font-size: 0.95rem;
+  font-size: calc(0.95rem * var(--font-size-multiplier));
   font-weight: 500;
   transition: all 0.3s ease;
 }
 
 .fermate-search-box:focus-within .fermate-search-input {
-  font-size: 1rem;
+  font-size: calc(1rem * var(--font-size-multiplier));
 }
 
 .fermate-search-input::placeholder {
@@ -412,6 +412,7 @@
   align-items: center;
   gap: 12px;
   color: var(--testo-principale);
+  font-size: calc(0.95rem * var(--font-size-multiplier));
   font-weight: 500;
 }
 
@@ -460,7 +461,7 @@
 #linee-modal-title {
   color: white !important;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: calc(1rem * var(--font-size-multiplier));
   line-height: 32px;
   margin: 0;
   /* Rimuove margini predefiniti */
@@ -522,6 +523,7 @@
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  font-size: calc(1rem * var(--font-size-multiplier));
 }
 
 .linea-modal-item:hover {
@@ -555,12 +557,12 @@
 }
 
 .linea-icon {
-  font-size: 24px;
+  font-size: calc(24px * var(--font-size-multiplier));
   margin-bottom: 2px;
 }
 
 .linea-number {
-  font-size: 14px;
+  font-size: calc(14px * var(--font-size-multiplier));
   font-weight: 700;
   color: white;
   letter-spacing: 0.5px;
@@ -575,21 +577,21 @@
 }
 
 .linea-route {
-  font-size: 16px;
+  font-size: calc(16px * var(--font-size-multiplier));
   font-weight: 600;
   color: var(--testo-principale);
   line-height: 1.3;
 }
 
 .linea-stops {
-  font-size: 13px;
+  font-size: calc(13px * var(--font-size-multiplier));
   color: var(--testo-secondario);
   font-weight: 500;
 }
 
 /* Freccia di selezione */
 .linea-arrow {
-  font-size: 28px;
+  font-size: calc(28px * var(--font-size-multiplier));
   color: var(--testo-secondario);
   transition: all 0.3s ease;
   opacity: 0.5;
@@ -635,23 +637,23 @@
   }
 
   .linea-icon {
-    font-size: 20px;
+    font-size: calc(20px * var(--font-size-multiplier));
   }
 
   .linea-number {
-    font-size: 12px;
+    font-size: calc(12px * var(--font-size-multiplier));
   }
 
   .linea-route {
-    font-size: 14px;
+    font-size: calc(14px * var(--font-size-multiplier));
   }
 
   .linea-stops {
-    font-size: 12px;
+    font-size: calc(12px * var(--font-size-multiplier));
   }
 
   .linea-arrow {
-    font-size: 24px;
+    font-size: calc(24px * var(--font-size-multiplier));
   }
 }
 

@@ -267,8 +267,9 @@ body.pwa-mode .main-content {
 
 /* Padding per footer quando in modalità PWA */
 body.pwa-mode .footer {
-  padding-bottom: calc(90px + env(safe-area-inset-bottom));
-  /* Mantiene padding-top per il divisore */
+  padding-bottom: calc(100px + env(safe-area-inset-bottom));
+  /* Spazio sufficiente per bottom nav (16px bottom + ~70px altezza nav + safe-area + margine) */
+  margin-bottom: 0;
 }
 
 /* ========================================
@@ -307,7 +308,8 @@ body.pwa-mode .footer {
   }
   
   body.pwa-mode .footer {
-    padding-bottom: calc(80px + env(safe-area-inset-bottom));
+    padding-bottom: calc(90px + env(safe-area-inset-bottom));
+    /* Spazio sufficiente per bottom nav su tablet */
   }
 }
 
@@ -338,7 +340,8 @@ body.pwa-mode .footer {
   }
   
   body.pwa-mode .footer {
-    padding-bottom: calc(75px + env(safe-area-inset-bottom));
+    padding-bottom: calc(85px + env(safe-area-inset-bottom));
+    /* Spazio sufficiente per bottom nav su mobile (12px bottom + ~70px altezza nav + safe-area + margine) */
   }
 }
 
