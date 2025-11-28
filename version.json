@@ -1,6 +1,6 @@
 {
-  "version": "1.9.1",
+  "version": "1.9.2",
   "versionDate": "28 Novembre 2025",
-  "versionTime": "10:15",
-  "updateNotes": "Fix pulsanti senza type, pulizia stili inline, mega dropdown fermate, miglior gestione reset cache e aggiornamenti."
+  "versionTime": "11:10",
+  "updateNotes": "Fix modal impostazioni su iPhone: margin-top dinamico (safe-area + navbar) per lasciare libero il pulsante di chiusura."
 }

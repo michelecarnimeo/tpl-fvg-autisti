@@ -4,6 +4,44 @@
 
 const changelogData = [
   {
+    version: '1.9.2',
+    date: '28 Novembre 2025',
+    time: '11:10',
+    title: 'Fix modal impostazioni su iPhone + bump versione (v1.9.2)',
+    hidden: false,
+    changes: [
+      '📱 MODAL IMPOSTAZIONI SU IPHONE:',
+      '  • Aggiunto margin-top dinamico (notch + 60px) per evitare che la navbar sticky copra il pulsante di chiusura',
+      '  • Il modal ora mantiene sempre il close button visibile anche su Safari/iOS con safe-area inset',
+      '🛠️ CONSISTENZA VERSIONE:',
+      '  • version.json aggiornato a 1.9.2 (28/11/2025 h11:10) per riflettere il fix',
+      '  • Changelog allineato: 1.9.1 rimane a storico, 1.9.2 racconta il fix specifico per mobile'
+    ]
+  },
+  {
+    version: '1.9.1',
+    date: '28 Novembre 2025',
+    time: '11:00',
+    title: 'Pulizia impostazioni, GPS e flusso aggiornamenti (v1.9.1)',
+    hidden: false,
+    changes: [
+      '⚙️ MODAL IMPOSTAZIONI ALLINEATO:',
+      '  • Tutti i tab, i pulsanti dimensione testo e le azioni rapide usano type="button" per evitare submit impliciti su ogni pagina',
+      '  • Lo stesso vale per i pulsanti delle card info (Verifica aggiornamenti / Riavvia app) così il modal resta sotto controllo',
+      '🐛 GPS DEBUG PANEL:',
+      '  • Pulsanti del menu dimensioni, toggle minimizza, chiudi e cancella log ora sono button espliciti e compatibili con Safari/Firefox',
+      '  • Dropdown dimensioni e azioni legate al pannello rispettano la stessa logica di accessibilità',
+      '🎨 PULIZIA INLINE STYLE:',
+      '  • Rimossi gli style="display: none" da elementi debug-only, menu dimensioni mappa e CTA PWA, demandando tutto ai CSS dedicati',
+      '  • Il menu dimensioni di fermate usa esclusivamente .map-size-menu/.is-open e il mega dropdown impostazioni è disponibile anche lì',
+      '🔄 UPDATE FLOW MIGLIORATO:',
+      '  • updates.js ripristina il display del pulsante Aggiorna Ora / Riavvia App dopo ogni check, evitando CTA invisibili',
+      '  • cache modal e reset mantengono ora etichette coerenti tra home e fermate',
+      '📦 VERSIONE:',
+      '  • version.json aggiornato a 1.9.1 (28/11/2025 h11:00) con note su pulizia impostazioni, GPS e flusso aggiornamenti'
+    ]
+  },
+  {
     version: '1.9.0',
     date: '27 Novembre 2025',
     time: '09:30',
