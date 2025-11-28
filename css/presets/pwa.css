@@ -80,3 +80,32 @@
    ======================================== */
 @import url('../../style1.css');
 
+/* ========================================
+   PWA MODE - NASCONDI NAVBAR
+   In modalità PWA, la navbar standard è nascosta
+   e viene usata la PWA bottom navigation
+   ======================================== */
+@media (display-mode: standalone),
+       (display-mode: fullscreen) {
+  .navbar {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+  }
+}
+
+/* Fallback per quando body ha classe pwa-mode (aggiunta da JS) */
+body.pwa-mode .navbar {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+}
+

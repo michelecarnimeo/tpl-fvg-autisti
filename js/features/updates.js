@@ -109,7 +109,10 @@ async function checkForUpdates() {
         </div>
       `;
       confirmBtn.textContent = 'Aggiorna Ora';
-      if (confirmBtn) confirmBtn.classList.remove('hidden');
+      if (confirmBtn) {
+        confirmBtn.classList.remove('hidden');
+        confirmBtn.style.display = ''; // Rimuovi stile inline se presente
+      }
       if (modalWarning) modalWarning.classList.add('hidden');
 
     } else if (isDifferentVersion) {
@@ -131,7 +134,10 @@ async function checkForUpdates() {
         </div>
       `;
       confirmBtn.textContent = 'Riavvia App';
-      if (confirmBtn) confirmBtn.classList.remove('hidden');
+      if (confirmBtn) {
+        confirmBtn.classList.remove('hidden');
+        confirmBtn.style.display = ''; // Rimuovi stile inline se presente
+      }
 
     } else {
       // App già aggiornata
@@ -157,7 +163,10 @@ async function checkForUpdates() {
         </div>
       `;
       confirmBtn.textContent = 'Riavvia App';
-      if (confirmBtn) confirmBtn.classList.remove('hidden');
+      if (confirmBtn) {
+        confirmBtn.classList.remove('hidden');
+        confirmBtn.style.display = ''; // Rimuovi stile inline se presente
+      }
     }
 
   } catch (error) {
@@ -193,7 +202,10 @@ async function checkForUpdates() {
       </div>
     `;
     confirmBtn.textContent = 'Riavvia App';
-    confirmBtn.style.display = 'block';
+    if (confirmBtn) {
+      confirmBtn.classList.remove('hidden');
+      confirmBtn.style.display = ''; // Rimuovi stile inline se presente
+    }
   }
 }
 

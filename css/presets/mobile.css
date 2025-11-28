@@ -80,3 +80,27 @@
    ======================================== */
 @import url('../../style1.css');
 
+/* ========================================
+   MOBILE NAVBAR VISIBILITY
+   Assicura che la navbar sia visibile su mobile
+   (solo logo e hamburger, i link nav sono nascosti)
+   ======================================== */
+@media (max-width: 768px) {
+  .navbar {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  
+  .navbar-content {
+    display: flex !important;
+    visibility: visible !important;
+  }
+  
+  .navbar-brand,
+  .navbar-brand-link {
+    display: flex !important;
+    visibility: visible !important;
+  }
+}
+

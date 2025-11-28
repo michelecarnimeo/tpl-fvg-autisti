@@ -1,6 +1,6 @@
 {
-  "version": "1.9.0",
-  "versionDate": "27 Novembre 2025",
-  "versionTime": "09:30",
-  "updateNotes": "Preparazione integrazione UI: fix click pulsanti linea, rifinitura animazioni desktop tabs, nuovi layout tablet/mobile per fermate e prezzi, aggiornamento welcome iOS26."
+  "version": "1.9.1",
+  "versionDate": "28 Novembre 2025",
+  "versionTime": "10:15",
+  "updateNotes": "Fix pulsanti senza type, pulizia stili inline, mega dropdown fermate, miglior gestione reset cache e aggiornamenti."
 }

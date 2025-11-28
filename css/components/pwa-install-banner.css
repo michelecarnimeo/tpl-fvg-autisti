@@ -166,10 +166,10 @@
   /* Sfondo bianco semi-trasparente */
   color: white;
   /* Testo bianco */
-  backdrop-filter: blur(10px);
-  /* Effetto blur glassmorphism */
   -webkit-backdrop-filter: blur(10px);
   /* Safari support */
+  backdrop-filter: blur(10px);
+  /* Effetto blur glassmorphism */
 }
 
 .pwa-btn-secondary:hover {
@@ -194,10 +194,10 @@
 .pwa-ios-hint {
   background: rgba(255, 255, 255, 0.15);
   /* Sfondo semi-trasparente */
-  backdrop-filter: blur(10px);
-  /* Effetto blur */
   -webkit-backdrop-filter: blur(10px);
   /* Safari support */
+  backdrop-filter: blur(10px);
+  /* Effetto blur */
   padding: 0;
   /* Padding iniziale 0 per animazione */
   border-top: 1px solid rgba(255, 255, 255, 0.2);
@@ -325,10 +325,10 @@
 .pwa-android-hint {
   background: rgba(255, 255, 255, 0.15);
   /* Sfondo semi-trasparente */
-  backdrop-filter: blur(10px);
-  /* Effetto blur */
   -webkit-backdrop-filter: blur(10px);
   /* Safari support */
+  backdrop-filter: blur(10px);
+  /* Effetto blur */
   padding: 1.25rem 1.5rem;
   /* Padding interno */
   border-top: 1px solid rgba(255, 255, 255, 0.2);

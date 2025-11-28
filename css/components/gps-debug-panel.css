@@ -15,8 +15,8 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 14px;
   transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
 
 /* Preset dimensioni */
@@ -105,8 +105,8 @@
   transform: translateY(-10px);
   transition: all 0.2s ease;
   z-index: 100000;
-  backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
 
 .gps-debug-size-dropdown.show {

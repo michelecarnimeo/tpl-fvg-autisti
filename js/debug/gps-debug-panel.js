@@ -56,20 +56,20 @@
           </div>
           <div class="gps-debug-actions">
             <div class="gps-debug-size-menu">
-              <button class="gps-debug-btn gps-debug-size-btn" title="Cambia dimensione">📐</button>
+              <button class="gps-debug-btn gps-debug-size-btn" type="button" title="Cambia dimensione">📐</button>
               <div class="gps-debug-size-dropdown" id="gps-debug-size-dropdown">
-                <button class="gps-debug-size-option" data-size="small">📱 Piccolo (240px)</button>
-                <button class="gps-debug-size-option" data-size="medium">📱 Medio (320px)</button>
-                <button class="gps-debug-size-option" data-size="large">💻 Grande (400px)</button>
-                <button class="gps-debug-size-option" data-size="xlarge">🖥️ Extra Large (500px)</button>
-                <button class="gps-debug-size-option" data-size="fullwidth">📺 Full Width (90%)</button>
+                <button class="gps-debug-size-option" type="button" data-size="small">📱 Piccolo (240px)</button>
+                <button class="gps-debug-size-option" type="button" data-size="medium">📱 Medio (320px)</button>
+                <button class="gps-debug-size-option" type="button" data-size="large">💻 Grande (400px)</button>
+                <button class="gps-debug-size-option" type="button" data-size="xlarge">🖥️ Extra Large (500px)</button>
+                <button class="gps-debug-size-option" type="button" data-size="fullwidth">📺 Full Width (90%)</button>
               </div>
             </div>
-            <button class="gps-debug-btn gps-debug-toggle" title="Minimizza/Espandi">
+            <button class="gps-debug-btn gps-debug-toggle" type="button" title="Minimizza/Espandi">
               <span class="icon-minimize">▼</span>
               <span class="icon-maximize">▲</span>
             </button>
-            <button class="gps-debug-btn gps-debug-close" title="Chiudi">✕</button>
+            <button class="gps-debug-btn gps-debug-close" type="button" title="Chiudi">✕</button>
           </div>
         </div>
         <div class="gps-debug-content">
@@ -77,7 +77,7 @@
             <div class="gps-debug-empty">In attesa di rilevamento GPS...</div>
           </div>
           <div class="gps-debug-footer">
-            <button class="gps-debug-btn-clear" id="gps-debug-clear">🗑️ Cancella log</button>
+            <button class="gps-debug-btn-clear" id="gps-debug-clear" type="button">🗑️ Cancella log</button>
           </div>
         </div>
       </div>

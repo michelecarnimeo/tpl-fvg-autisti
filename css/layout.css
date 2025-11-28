@@ -211,8 +211,8 @@ body:not(.fermate-page) .main-card {
 
 .main-card {
   background: var(--glass-bg);
-  backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
   border: 1px solid var(--glass-border);
   border-radius: 1rem;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
@@ -284,8 +284,8 @@ body.pwa-mode .footer {
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
-    backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
     padding: 0 !important;
   }
   
